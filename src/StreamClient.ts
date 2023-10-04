@@ -7,7 +7,6 @@ import {
   CreateGuestRequest,
   DefaultApi,
   DeleteDeviceRequest,
-  ErrorContext,
   JSONApiResponse,
   ListDevicesRequest,
   QueryCallsRequest,
@@ -15,7 +14,7 @@ import {
   ResponseContext,
   ServerSideApi,
   UpdateCallTypeRequest,
-} from "./gen";
+} from "./gen/video";
 import { createToken } from "./utils/create-token";
 import { v4 as uuidv4 } from "uuid";
 

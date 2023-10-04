@@ -6,7 +6,7 @@ import { StreamCall } from "../StreamCall";
 import {
   RecordSettingsRequestModeEnum,
   RecordSettingsRequestQualityEnum,
-} from "../gen";
+} from "../gen/video";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;

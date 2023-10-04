@@ -13,7 +13,7 @@ import {
   UpdateCallMembersRequest,
   UpdateCallRequest,
   UpdateUserPermissionsRequest,
-} from "./gen";
+} from "./gen/video";
 
 export type OmitCallTypeId<T> = Omit<T, "type" | "id" | "connectionId">;
 
