@@ -15,7 +15,7 @@ describe("call members API", () => {
   beforeAll(() => {
     client = new StreamClient(apiKey, secret);
 
-    call = client.call("default", callId);
+    call = client.video.call("default", callId);
   });
 
   it("create with members", async () => {

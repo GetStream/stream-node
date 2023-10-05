@@ -19,7 +19,7 @@ describe("call API", () => {
   beforeAll(() => {
     client = new StreamClient(apiKey, secret);
 
-    call = client.call("default", callId);
+    call = client.video.call("default", callId);
   });
 
   it("create", async () => {
@@ -62,7 +62,7 @@ describe("call API", () => {
   });
 
   it("query calls", async () => {
-    let response = await client.queryCalls();
+    let response = await client.video.queryCalls();
 
     let calls = response.calls;
     expect(calls.length).toBeGreaterThanOrEqual(1);
@@ -71,19 +71,19 @@ describe("call API", () => {
       sort: [{ field: "starts_at", direction: -1 }],
       limit: 2,
     };
-    response = await client.queryCalls(queryCallsReq);
+    response = await client.video.queryCalls(queryCallsReq);
 
     calls = response.calls;
     expect(calls.length).toBe(2);
 
-    response = await client.queryCalls({
+    response = await client.video.queryCalls({
       ...queryCallsReq,
       next: response.next,
     });
 
     expect(response.calls.length).toBeLessThanOrEqual(2);
 
-    response = await client.queryCalls({
+    response = await client.video.queryCalls({
       filter_conditions: { backstage: { $eq: false } },
     });
 

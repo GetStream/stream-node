@@ -20,7 +20,7 @@ describe("call types CRUD API", () => {
   });
 
   it("create", async () => {
-    const createResponse = await client.createCallType({
+    const createResponse = await client.video.createCallType({
       name: callTypeName,
       settings: {
         audio: { mic_default_on: true, default_device: "speaker" },
@@ -79,7 +79,7 @@ describe("call types CRUD API", () => {
   });
 
   it("read", async () => {
-    const readResponse = await client.listCallTypes();
+    const readResponse = await client.video.listCallTypes();
 
     expect(readResponse.call_types[callTypeName]).toContain({
       name: callTypeName,
@@ -87,7 +87,7 @@ describe("call types CRUD API", () => {
   });
 
   it("update", async () => {
-    const updateResponse = await client.updateCallType(callTypeName, {
+    const updateResponse = await client.video.updateCallType(callTypeName, {
       settings: {
         audio: { mic_default_on: false, default_device: "earpiece" },
         recording: {
@@ -108,7 +108,7 @@ describe("call types CRUD API", () => {
 
   it("delete", async () => {
     try {
-      await client.deleteCallType(callTypeName);
+      await client.video.deleteCallType(callTypeName);
     } catch (e) {
       // the first request fails on backend sometimes
       // retry it
@@ -116,9 +116,11 @@ describe("call types CRUD API", () => {
         setTimeout(() => resolve(), 2000);
       });
 
-      await client.deleteCallType(callTypeName);
+      await client.video.deleteCallType(callTypeName);
     }
 
-    await expect(() => client.getCallType(callTypeName)).rejects.toThrowError();
+    await expect(() =>
+      client.video.getCallType(callTypeName)
+    ).rejects.toThrowError();
   });
 });
