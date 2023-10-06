@@ -2,36 +2,41 @@ import { StreamChatClient } from "./StreamChatClient";
 import { StreamVideoClient } from "./StreamVideoClient";
 import {
   BanRequest,
+  CheckPushRequest,
+  CreateDeviceRequest,
   DeactivateUserRequest,
   DeactivateUsersRequest,
+  DeleteDeviceRequest,
+  DeletePushProviderRequest,
   DeleteUserRequest,
   DeleteUsersRequest,
+  DevicesApi,
   ExportUserRequest,
   ExportUsersRequest,
   FlagRequest,
   GuestRequest,
+  ListDevicesRequest,
   MuteUserRequest,
+  PushApi,
+  PushProviderRequest,
   QueryBannedUsersRequest,
   QueryUsersRequest,
   ReactivateUserRequest,
   ReactivateUsersRequest,
   RestoreUsersRequest,
+  ServerSideApi,
+  TestingApi,
   UnbanRequest,
   UnmuteUserRequest,
   UpdateUserPartialRequest,
   UpdateUsersRequest,
+  UpsertPushProviderRequest,
   UsersApi,
 } from "./gen/chat";
 import {
-  APIError,
   Configuration,
-  CreateDeviceRequest,
-  CreateGuestRequest,
-  DefaultApi,
-  DeleteDeviceRequest,
   HTTPQuery,
   JSONApiResponse,
-  ListDevicesRequest,
   RequestContext,
   ResponseContext,
 } from "./gen/video";
@@ -41,8 +46,11 @@ import { v4 as uuidv4 } from "uuid";
 export class StreamClient {
   public readonly video: StreamVideoClient;
   public readonly chat: StreamChatClient;
-  private readonly videoDefaultApi;
   private readonly usersApi: UsersApi;
+  private readonly devicesApi: DevicesApi;
+  private readonly pushApi: PushApi;
+  private readonly serversideApi: ServerSideApi;
+  private readonly testingApi: TestingApi;
   private token: string;
 
   constructor(
@@ -54,26 +62,47 @@ export class StreamClient {
     this.video = new StreamVideoClient(this);
     this.chat = new StreamChatClient(this);
 
-    const videoConfiguration = this.getConfiguration({
-      basePath: this.basePath || "https://video.stream-io-api.com/video",
-    });
-    this.videoDefaultApi = new DefaultApi(videoConfiguration);
     const chatConfiguration = this.getConfiguration();
     //@ts-expect-error typing problem
     this.usersApi = new UsersApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.devicesApi = new DevicesApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.pushApi = new PushApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.serversideApi = new ServerSideApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.testingApi = new TestingApi(chatConfiguration);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
-    return this.videoDefaultApi.createDevice({ createDeviceRequest });
-  };
-  createGuest = (guestRequest: GuestRequest) => {
-    return this.usersApi.createGuest({ guestRequest });
+    return this.devicesApi.createDevice({ createDeviceRequest });
   };
   deleteDevice = (requestParameters: DeleteDeviceRequest) => {
-    return this.videoDefaultApi.deleteDevice(requestParameters);
+    return this.devicesApi.deleteDevice(requestParameters);
   };
   listDevices = (requestParameters: ListDevicesRequest) => {
-    return this.videoDefaultApi.listDevices(requestParameters);
+    return this.devicesApi.listDevices(requestParameters);
+  };
+
+  listPushProviders= () => {
+    return this.pushApi.listPushProviders();
+  }
+
+  deletePushProvider = (request: DeletePushProviderRequest) => {
+    return this.pushApi.deletePushProvider(request);
+  }
+
+  upsertPushProvider = (request: PushProviderRequest) => {
+    return this.serversideApi.upsertPushProvider({upsertPushProviderRequest: {push_provider: request}});
+  }
+
+  checkPush = (checkPushRequest: CheckPushRequest) => {
+    return this.testingApi.checkPush({checkPushRequest});
+  }
+
+  createGuest = (guestRequest: GuestRequest) => {
+    return this.usersApi.createGuest({ guestRequest });
   };
 
   banUser = (banRequest: BanRequest) => {
