@@ -15,18 +15,18 @@
 
 import * as runtime from '../runtime';
 import type {
-  APIError,
-  CreateCallTypeRequest,
-  CreateCallTypeResponse,
-  GetCallTypeResponse,
-  ListCallTypeResponse,
-  Response,
-  UpdateCallTypeRequest,
-  UpdateCallTypeResponse,
+  VideoAPIError,
+  VideoCreateCallTypeRequest,
+  VideoCreateCallTypeResponse,
+  VideoGetCallTypeResponse,
+  VideoListCallTypeResponse,
+  VideoResponse,
+  VideoUpdateCallTypeRequest,
+  VideoUpdateCallTypeResponse,
 } from '../models';
 
-export interface CreateCallTypeOperationRequest {
-    createCallTypeRequest: CreateCallTypeRequest | null;
+export interface CreateCallTypeRequest {
+    videoCreateCallTypeRequest: VideoCreateCallTypeRequest | null;
 }
 
 export interface DeleteCallTypeRequest {
@@ -37,9 +37,9 @@ export interface GetCallTypeRequest {
     name: string;
 }
 
-export interface UpdateCallTypeOperationRequest {
+export interface UpdateCallTypeRequest {
     name: string;
-    updateCallTypeRequest: UpdateCallTypeRequest | null;
+    videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest | null;
 }
 
 /**
@@ -51,9 +51,9 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Create Call Type
      */
-    async createCallTypeRaw(requestParameters: CreateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCallTypeResponse>> {
-        if (requestParameters.createCallTypeRequest === null || requestParameters.createCallTypeRequest === undefined) {
-            throw new runtime.RequiredError('createCallTypeRequest','Required parameter requestParameters.createCallTypeRequest was null or undefined when calling createCallType.');
+    async createCallTypeRaw(requestParameters: CreateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCreateCallTypeResponse>> {
+        if (requestParameters.videoCreateCallTypeRequest === null || requestParameters.videoCreateCallTypeRequest === undefined) {
+            throw new runtime.RequiredError('videoCreateCallTypeRequest','Required parameter requestParameters.videoCreateCallTypeRequest was null or undefined when calling createCallType.');
         }
 
         const queryParameters: any = {};
@@ -79,7 +79,7 @@ export class ServerSideApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.createCallTypeRequest,
+            body: requestParameters.videoCreateCallTypeRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -89,7 +89,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Create Call Type
      */
-    async createCallType(requestParameters: CreateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCallTypeResponse> {
+    async createCallType(requestParameters: CreateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCreateCallTypeResponse> {
         const response = await this.createCallTypeRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -98,7 +98,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Delete Call Type
      */
-    async deleteCallTypeRaw(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Response>> {
+    async deleteCallTypeRaw(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoResponse>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling deleteCallType.');
         }
@@ -133,7 +133,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Delete Call Type
      */
-    async deleteCallType(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Response> {
+    async deleteCallType(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoResponse> {
         const response = await this.deleteCallTypeRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -142,7 +142,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Get Call Type
      */
-    async getCallTypeRaw(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCallTypeResponse>> {
+    async getCallTypeRaw(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetCallTypeResponse>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling getCallType.');
         }
@@ -177,7 +177,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Get Call Type
      */
-    async getCallType(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCallTypeResponse> {
+    async getCallType(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetCallTypeResponse> {
         const response = await this.getCallTypeRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -186,7 +186,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * List Call Type
      */
-    async listCallTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCallTypeResponse>> {
+    async listCallTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListCallTypeResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -217,7 +217,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * List Call Type
      */
-    async listCallTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCallTypeResponse> {
+    async listCallTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListCallTypeResponse> {
         const response = await this.listCallTypesRaw(initOverrides);
         return await response.value();
     }
@@ -226,13 +226,13 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Update Call Type
      */
-    async updateCallTypeRaw(requestParameters: UpdateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCallTypeResponse>> {
+    async updateCallTypeRaw(requestParameters: UpdateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateCallTypeResponse>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling updateCallType.');
         }
 
-        if (requestParameters.updateCallTypeRequest === null || requestParameters.updateCallTypeRequest === undefined) {
-            throw new runtime.RequiredError('updateCallTypeRequest','Required parameter requestParameters.updateCallTypeRequest was null or undefined when calling updateCallType.');
+        if (requestParameters.videoUpdateCallTypeRequest === null || requestParameters.videoUpdateCallTypeRequest === undefined) {
+            throw new runtime.RequiredError('videoUpdateCallTypeRequest','Required parameter requestParameters.videoUpdateCallTypeRequest was null or undefined when calling updateCallType.');
         }
 
         const queryParameters: any = {};
@@ -258,7 +258,7 @@ export class ServerSideApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.updateCallTypeRequest,
+            body: requestParameters.videoUpdateCallTypeRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -268,7 +268,7 @@ export class ServerSideApi extends runtime.BaseAPI {
      *  
      * Update Call Type
      */
-    async updateCallType(requestParameters: UpdateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCallTypeResponse> {
+    async updateCallType(requestParameters: UpdateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateCallTypeResponse> {
         const response = await this.updateCallTypeRaw(requestParameters, initOverrides);
         return await response.value();
     }

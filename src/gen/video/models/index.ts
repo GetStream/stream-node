@@ -3,143 +3,143 @@
 /**
  * 
  * @export
- * @interface APIError
+ * @interface VideoAPIError
  */
-export interface APIError {
+export interface VideoAPIError {
     /**
      * Response HTTP status code
      * @type {number}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     StatusCode: number;
     /**
      * API error code
      * @type {number}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     code: number;
     /**
      * Additional error-specific information
      * @type {Array<number>}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     details: Array<number>;
     /**
      * Request duration
      * @type {string}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     duration: string;
     /**
      * Additional error info
      * @type {{ [key: string]: string; }}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     exception_fields?: { [key: string]: string; };
     /**
      * Message describing an error
      * @type {string}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     message: string;
     /**
      * URL with additional information
      * @type {string}
-     * @memberof APIError
+     * @memberof VideoAPIError
      */
     more_info: string;
 }
 /**
  * 
  * @export
- * @interface APNS
+ * @interface VideoAPNS
  */
-export interface APNS {
+export interface VideoAPNS {
     /**
      * 
      * @type {string}
-     * @memberof APNS
+     * @memberof VideoAPNS
      */
     body: string;
     /**
      * 
      * @type {string}
-     * @memberof APNS
+     * @memberof VideoAPNS
      */
     title: string;
 }
 /**
  * 
  * @export
- * @interface APNSRequest
+ * @interface VideoAPNSRequest
  */
-export interface APNSRequest {
+export interface VideoAPNSRequest {
     /**
      * 
      * @type {string}
-     * @memberof APNSRequest
+     * @memberof VideoAPNSRequest
      */
     body?: string;
     /**
      * 
      * @type {string}
-     * @memberof APNSRequest
+     * @memberof VideoAPNSRequest
      */
     title?: string;
 }
 /**
  * 
  * @export
- * @interface AcceptCallResponse
+ * @interface VideoAcceptCallResponse
  */
-export interface AcceptCallResponse {
+export interface VideoAcceptCallResponse {
     /**
      * 
      * @type {string}
-     * @memberof AcceptCallResponse
+     * @memberof VideoAcceptCallResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface AudioSettings
+ * @interface VideoAudioSettings
  */
-export interface AudioSettings {
+export interface VideoAudioSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
     access_request_enabled: boolean;
     /**
      * 
      * @type {string}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
-    default_device: AudioSettingsDefaultDeviceEnum;
+    default_device: VideoAudioSettingsDefaultDeviceEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
     mic_default_on: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
     opus_dtx_enabled: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
     redundant_coding_enabled: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettings
+     * @memberof VideoAudioSettings
      */
     speaker_default_on: boolean;
 }
@@ -148,52 +148,52 @@ export interface AudioSettings {
 /**
  * @export
  */
-export const AudioSettingsDefaultDeviceEnum = {
+export const VideoAudioSettingsDefaultDeviceEnum = {
     SPEAKER: 'speaker',
     EARPIECE: 'earpiece'
 } as const;
-export type AudioSettingsDefaultDeviceEnum = typeof AudioSettingsDefaultDeviceEnum[keyof typeof AudioSettingsDefaultDeviceEnum];
+export type VideoAudioSettingsDefaultDeviceEnum = typeof VideoAudioSettingsDefaultDeviceEnum[keyof typeof VideoAudioSettingsDefaultDeviceEnum];
 
 /**
  * 
  * @export
- * @interface AudioSettingsRequest
+ * @interface VideoAudioSettingsRequest
  */
-export interface AudioSettingsRequest {
+export interface VideoAudioSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
     access_request_enabled?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
-    default_device: AudioSettingsRequestDefaultDeviceEnum;
+    default_device: VideoAudioSettingsRequestDefaultDeviceEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
     mic_default_on?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
     opus_dtx_enabled?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
     redundant_coding_enabled?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AudioSettingsRequest
+     * @memberof VideoAudioSettingsRequest
      */
     speaker_default_on?: boolean;
 }
@@ -202,61 +202,61 @@ export interface AudioSettingsRequest {
 /**
  * @export
  */
-export const AudioSettingsRequestDefaultDeviceEnum = {
+export const VideoAudioSettingsRequestDefaultDeviceEnum = {
     SPEAKER: 'speaker',
     EARPIECE: 'earpiece'
 } as const;
-export type AudioSettingsRequestDefaultDeviceEnum = typeof AudioSettingsRequestDefaultDeviceEnum[keyof typeof AudioSettingsRequestDefaultDeviceEnum];
+export type VideoAudioSettingsRequestDefaultDeviceEnum = typeof VideoAudioSettingsRequestDefaultDeviceEnum[keyof typeof VideoAudioSettingsRequestDefaultDeviceEnum];
 
 /**
  * 
  * @export
- * @interface BackstageSettings
+ * @interface VideoBackstageSettings
  */
-export interface BackstageSettings {
+export interface VideoBackstageSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof BackstageSettings
+     * @memberof VideoBackstageSettings
      */
     enabled: boolean;
 }
 /**
  * 
  * @export
- * @interface BackstageSettingsRequest
+ * @interface VideoBackstageSettingsRequest
  */
-export interface BackstageSettingsRequest {
+export interface VideoBackstageSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof BackstageSettingsRequest
+     * @memberof VideoBackstageSettingsRequest
      */
     enabled?: boolean;
 }
 /**
  * 
  * @export
- * @interface BlockUserRequest
+ * @interface VideoBlockUserRequest
  */
-export interface BlockUserRequest {
+export interface VideoBlockUserRequest {
     /**
      * the user to block
      * @type {string}
-     * @memberof BlockUserRequest
+     * @memberof VideoBlockUserRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface BlockUserResponse
+ * @interface VideoBlockUserResponse
  */
-export interface BlockUserResponse {
+export interface VideoBlockUserResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof BlockUserResponse
+     * @memberof VideoBlockUserResponse
      */
     duration: string;
 }
@@ -264,1368 +264,1368 @@ export interface BlockUserResponse {
  * This event is sent to call participants to notify when a user is blocked on a call, clients can use this event to show a notification. 
  * If the user is the current user, the client should leave the call screen as well
  * @export
- * @interface BlockedUserEvent
+ * @interface VideoBlockedUserEvent
  */
-export interface BlockedUserEvent {
+export interface VideoBlockedUserEvent {
     /**
      * 
-     * @type {UserResponse}
-     * @memberof BlockedUserEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoBlockedUserEvent
      */
-    blocked_by_user?: UserResponse;
+    blocked_by_user?: VideoUserResponse;
     /**
      * 
      * @type {string}
-     * @memberof BlockedUserEvent
+     * @memberof VideoBlockedUserEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof BlockedUserEvent
+     * @memberof VideoBlockedUserEvent
      */
     created_at: string;
     /**
      * The type of event: "call.blocked_user" in this case
      * @type {string}
-     * @memberof BlockedUserEvent
+     * @memberof VideoBlockedUserEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof BlockedUserEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoBlockedUserEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface BroadcastSettingsRequest
+ * @interface VideoBroadcastSettingsRequest
  */
-export interface BroadcastSettingsRequest {
+export interface VideoBroadcastSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof BroadcastSettingsRequest
+     * @memberof VideoBroadcastSettingsRequest
      */
     enabled?: boolean;
     /**
      * 
-     * @type {HLSSettingsRequest}
-     * @memberof BroadcastSettingsRequest
+     * @type {VideoHLSSettingsRequest}
+     * @memberof VideoBroadcastSettingsRequest
      */
-    hls?: HLSSettingsRequest;
+    hls?: VideoHLSSettingsRequest;
 }
 /**
  * 
  * @export
- * @interface BroadcastSettingsResponse
+ * @interface VideoBroadcastSettingsResponse
  */
-export interface BroadcastSettingsResponse {
+export interface VideoBroadcastSettingsResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof BroadcastSettingsResponse
+     * @memberof VideoBroadcastSettingsResponse
      */
     enabled: boolean;
     /**
      * 
-     * @type {HLSSettingsResponse}
-     * @memberof BroadcastSettingsResponse
+     * @type {VideoHLSSettingsResponse}
+     * @memberof VideoBroadcastSettingsResponse
      */
-    hls: HLSSettingsResponse;
+    hls: VideoHLSSettingsResponse;
 }
 /**
  * This event is sent when a user accepts a notification to join a call.
  * @export
- * @interface CallAcceptedEvent
+ * @interface VideoCallAcceptedEvent
  */
-export interface CallAcceptedEvent {
+export interface VideoCallAcceptedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallAcceptedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallAcceptedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallAcceptedEvent
+     * @memberof VideoCallAcceptedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallAcceptedEvent
+     * @memberof VideoCallAcceptedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.accepted" in this case
      * @type {string}
-     * @memberof CallAcceptedEvent
+     * @memberof VideoCallAcceptedEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallAcceptedEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCallAcceptedEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * This event is sent when a call is created. Clients receiving this event should check if the ringing 
  * field is set to true and if so, show the call screen
  * @export
- * @interface CallCreatedEvent
+ * @interface VideoCallCreatedEvent
  */
-export interface CallCreatedEvent {
+export interface VideoCallCreatedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallCreatedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallCreatedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallCreatedEvent
+     * @memberof VideoCallCreatedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallCreatedEvent
+     * @memberof VideoCallCreatedEvent
      */
     created_at: string;
     /**
      * the members added to this call
-     * @type {Array<MemberResponse>}
-     * @memberof CallCreatedEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallCreatedEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * The type of event: "call.created" in this case
      * @type {string}
-     * @memberof CallCreatedEvent
+     * @memberof VideoCallCreatedEvent
      */
     type: string;
 }
 /**
  * This event is sent when a call is mark as ended for all its participants. Clients receiving this event should leave the call screen
  * @export
- * @interface CallEndedEvent
+ * @interface VideoCallEndedEvent
  */
-export interface CallEndedEvent {
+export interface VideoCallEndedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallEndedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallEndedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallEndedEvent
+     * @memberof VideoCallEndedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallEndedEvent
+     * @memberof VideoCallEndedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.ended" in this case
      * @type {string}
-     * @memberof CallEndedEvent
+     * @memberof VideoCallEndedEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallEndedEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCallEndedEvent
      */
-    user?: UserResponse;
+    user?: VideoUserResponse;
 }
 /**
  * This event is sent when HLS broadcasting has started
  * @export
- * @interface CallHLSBroadcastingStartedEvent
+ * @interface VideoCallHLSBroadcastingStartedEvent
  */
-export interface CallHLSBroadcastingStartedEvent {
+export interface VideoCallHLSBroadcastingStartedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallHLSBroadcastingStartedEvent
+     * @memberof VideoCallHLSBroadcastingStartedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallHLSBroadcastingStartedEvent
+     * @memberof VideoCallHLSBroadcastingStartedEvent
      */
     created_at: string;
     /**
      * 
      * @type {string}
-     * @memberof CallHLSBroadcastingStartedEvent
+     * @memberof VideoCallHLSBroadcastingStartedEvent
      */
     hls_playlist_url: string;
     /**
      * The type of event: "call.hls_broadcasting_started" in this case
      * @type {string}
-     * @memberof CallHLSBroadcastingStartedEvent
+     * @memberof VideoCallHLSBroadcastingStartedEvent
      */
     type: string;
 }
 /**
  * This event is sent when HLS broadcasting has stopped
  * @export
- * @interface CallHLSBroadcastingStoppedEvent
+ * @interface VideoCallHLSBroadcastingStoppedEvent
  */
-export interface CallHLSBroadcastingStoppedEvent {
+export interface VideoCallHLSBroadcastingStoppedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallHLSBroadcastingStoppedEvent
+     * @memberof VideoCallHLSBroadcastingStoppedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallHLSBroadcastingStoppedEvent
+     * @memberof VideoCallHLSBroadcastingStoppedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.hls_broadcasting_stopped" in this case
      * @type {string}
-     * @memberof CallHLSBroadcastingStoppedEvent
+     * @memberof VideoCallHLSBroadcastingStoppedEvent
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface CallIngressResponse
+ * @interface VideoCallIngressResponse
  */
-export interface CallIngressResponse {
+export interface VideoCallIngressResponse {
     /**
      * 
-     * @type {RTMPIngress}
-     * @memberof CallIngressResponse
+     * @type {VideoRTMPIngress}
+     * @memberof VideoCallIngressResponse
      */
-    rtmp: RTMPIngress;
+    rtmp: VideoRTMPIngress;
 }
 /**
  * This event is sent when a call is started. Clients receiving this event should start the call.
  * @export
- * @interface CallLiveStartedEvent
+ * @interface VideoCallLiveStartedEvent
  */
-export interface CallLiveStartedEvent {
+export interface VideoCallLiveStartedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallLiveStartedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallLiveStartedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallLiveStartedEvent
+     * @memberof VideoCallLiveStartedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallLiveStartedEvent
+     * @memberof VideoCallLiveStartedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.live_started" in this case
      * @type {string}
-     * @memberof CallLiveStartedEvent
+     * @memberof VideoCallLiveStartedEvent
      */
     type: string;
 }
 /**
  * This event is sent when one or more members are added to a call
  * @export
- * @interface CallMemberAddedEvent
+ * @interface VideoCallMemberAddedEvent
  */
-export interface CallMemberAddedEvent {
+export interface VideoCallMemberAddedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallMemberAddedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallMemberAddedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberAddedEvent
+     * @memberof VideoCallMemberAddedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberAddedEvent
+     * @memberof VideoCallMemberAddedEvent
      */
     created_at: string;
     /**
      * the members added to this call
-     * @type {Array<MemberResponse>}
-     * @memberof CallMemberAddedEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallMemberAddedEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * The type of event: "call.member_added" in this case
      * @type {string}
-     * @memberof CallMemberAddedEvent
+     * @memberof VideoCallMemberAddedEvent
      */
     type: string;
 }
 /**
  * This event is sent when one or more members are removed from a call
  * @export
- * @interface CallMemberRemovedEvent
+ * @interface VideoCallMemberRemovedEvent
  */
-export interface CallMemberRemovedEvent {
+export interface VideoCallMemberRemovedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallMemberRemovedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallMemberRemovedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberRemovedEvent
+     * @memberof VideoCallMemberRemovedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberRemovedEvent
+     * @memberof VideoCallMemberRemovedEvent
      */
     created_at: string;
     /**
      * the list of member IDs removed from the call
      * @type {Array<string>}
-     * @memberof CallMemberRemovedEvent
+     * @memberof VideoCallMemberRemovedEvent
      */
     members: Array<string>;
     /**
      * The type of event: "call.member_removed" in this case
      * @type {string}
-     * @memberof CallMemberRemovedEvent
+     * @memberof VideoCallMemberRemovedEvent
      */
     type: string;
 }
 /**
  * This event is sent when one or more members are updated
  * @export
- * @interface CallMemberUpdatedEvent
+ * @interface VideoCallMemberUpdatedEvent
  */
-export interface CallMemberUpdatedEvent {
+export interface VideoCallMemberUpdatedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallMemberUpdatedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallMemberUpdatedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberUpdatedEvent
+     * @memberof VideoCallMemberUpdatedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberUpdatedEvent
+     * @memberof VideoCallMemberUpdatedEvent
      */
     created_at: string;
     /**
      * The list of members that were updated
-     * @type {Array<MemberResponse>}
-     * @memberof CallMemberUpdatedEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallMemberUpdatedEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * The type of event: "call.member_updated" in this case
      * @type {string}
-     * @memberof CallMemberUpdatedEvent
+     * @memberof VideoCallMemberUpdatedEvent
      */
     type: string;
 }
 /**
  * This event is sent when one or more members get its role updated
  * @export
- * @interface CallMemberUpdatedPermissionEvent
+ * @interface VideoCallMemberUpdatedPermissionEvent
  */
-export interface CallMemberUpdatedPermissionEvent {
+export interface VideoCallMemberUpdatedPermissionEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
     call_cid: string;
     /**
      * The capabilities by role for this call
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
     capabilities_by_role: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
     created_at: string;
     /**
      * The list of members that were updated
-     * @type {Array<MemberResponse>}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * The type of event: "call.member_added" in this case
      * @type {string}
-     * @memberof CallMemberUpdatedPermissionEvent
+     * @memberof VideoCallMemberUpdatedPermissionEvent
      */
     type: string;
 }
 /**
  * This event is sent to all call members to notify they are getting called
  * @export
- * @interface CallNotificationEvent
+ * @interface VideoCallNotificationEvent
  */
-export interface CallNotificationEvent {
+export interface VideoCallNotificationEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallNotificationEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallNotificationEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallNotificationEvent
+     * @memberof VideoCallNotificationEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallNotificationEvent
+     * @memberof VideoCallNotificationEvent
      */
     created_at: string;
     /**
      * Call members
-     * @type {Array<MemberResponse>}
-     * @memberof CallNotificationEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallNotificationEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallNotificationEvent
+     * @memberof VideoCallNotificationEvent
      */
     session_id: string;
     /**
      * The type of event: "call.notification" in this case
      * @type {string}
-     * @memberof CallNotificationEvent
+     * @memberof VideoCallNotificationEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallNotificationEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCallNotificationEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface CallParticipantResponse
+ * @interface VideoCallParticipantResponse
  */
-export interface CallParticipantResponse {
+export interface VideoCallParticipantResponse {
     /**
      * 
      * @type {string}
-     * @memberof CallParticipantResponse
+     * @memberof VideoCallParticipantResponse
      */
     joined_at: string;
     /**
      * 
      * @type {string}
-     * @memberof CallParticipantResponse
+     * @memberof VideoCallParticipantResponse
      */
     role: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallParticipantResponse
+     * @type {VideoUserResponse}
+     * @memberof VideoCallParticipantResponse
      */
-    user: UserResponse;
+    user: VideoUserResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallParticipantResponse
+     * @memberof VideoCallParticipantResponse
      */
     user_session_id: string;
 }
 /**
  * This event is sent when a reaction is sent in a call, clients should use this to show the reaction in the call screen
  * @export
- * @interface CallReactionEvent
+ * @interface VideoCallReactionEvent
  */
-export interface CallReactionEvent {
+export interface VideoCallReactionEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallReactionEvent
+     * @memberof VideoCallReactionEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallReactionEvent
+     * @memberof VideoCallReactionEvent
      */
     created_at: string;
     /**
      * 
-     * @type {ReactionResponse}
-     * @memberof CallReactionEvent
+     * @type {VideoReactionResponse}
+     * @memberof VideoCallReactionEvent
      */
-    reaction: ReactionResponse;
+    reaction: VideoReactionResponse;
     /**
      * The type of event: "call.reaction_new" in this case
      * @type {string}
-     * @memberof CallReactionEvent
+     * @memberof VideoCallReactionEvent
      */
     type: string;
 }
 /**
  * CallRecording represents a recording of a call.
  * @export
- * @interface CallRecording
+ * @interface VideoCallRecording
  */
-export interface CallRecording {
+export interface VideoCallRecording {
     /**
      * 
      * @type {string}
-     * @memberof CallRecording
+     * @memberof VideoCallRecording
      */
     end_time: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecording
+     * @memberof VideoCallRecording
      */
     filename: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecording
+     * @memberof VideoCallRecording
      */
     start_time: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecording
+     * @memberof VideoCallRecording
      */
     url: string;
 }
 /**
  * This event is sent when call recording has failed
  * @export
- * @interface CallRecordingFailedEvent
+ * @interface VideoCallRecordingFailedEvent
  */
-export interface CallRecordingFailedEvent {
+export interface VideoCallRecordingFailedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingFailedEvent
+     * @memberof VideoCallRecordingFailedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingFailedEvent
+     * @memberof VideoCallRecordingFailedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.recording_failed" in this case
      * @type {string}
-     * @memberof CallRecordingFailedEvent
+     * @memberof VideoCallRecordingFailedEvent
      */
     type: string;
 }
 /**
  * This event is sent when call recording is ready
  * @export
- * @interface CallRecordingReadyEvent
+ * @interface VideoCallRecordingReadyEvent
  */
-export interface CallRecordingReadyEvent {
+export interface VideoCallRecordingReadyEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingReadyEvent
+     * @memberof VideoCallRecordingReadyEvent
      */
     call_cid: string;
     /**
      * 
-     * @type {CallRecording}
-     * @memberof CallRecordingReadyEvent
+     * @type {VideoCallRecording}
+     * @memberof VideoCallRecordingReadyEvent
      */
-    call_recording: CallRecording;
+    call_recording: VideoCallRecording;
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingReadyEvent
+     * @memberof VideoCallRecordingReadyEvent
      */
     created_at: string;
     /**
      * The type of event: "call.recording_ready" in this case
      * @type {string}
-     * @memberof CallRecordingReadyEvent
+     * @memberof VideoCallRecordingReadyEvent
      */
     type: string;
 }
 /**
  * This event is sent when call recording has started
  * @export
- * @interface CallRecordingStartedEvent
+ * @interface VideoCallRecordingStartedEvent
  */
-export interface CallRecordingStartedEvent {
+export interface VideoCallRecordingStartedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingStartedEvent
+     * @memberof VideoCallRecordingStartedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingStartedEvent
+     * @memberof VideoCallRecordingStartedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.recording_started" in this case
      * @type {string}
-     * @memberof CallRecordingStartedEvent
+     * @memberof VideoCallRecordingStartedEvent
      */
     type: string;
 }
 /**
  * This event is sent when call recording has stopped
  * @export
- * @interface CallRecordingStoppedEvent
+ * @interface VideoCallRecordingStoppedEvent
  */
-export interface CallRecordingStoppedEvent {
+export interface VideoCallRecordingStoppedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingStoppedEvent
+     * @memberof VideoCallRecordingStoppedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRecordingStoppedEvent
+     * @memberof VideoCallRecordingStoppedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.recording_stopped" in this case
      * @type {string}
-     * @memberof CallRecordingStoppedEvent
+     * @memberof VideoCallRecordingStoppedEvent
      */
     type: string;
 }
 /**
  * This event is sent when a user rejects a notification to join a call.
  * @export
- * @interface CallRejectedEvent
+ * @interface VideoCallRejectedEvent
  */
-export interface CallRejectedEvent {
+export interface VideoCallRejectedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallRejectedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallRejectedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallRejectedEvent
+     * @memberof VideoCallRejectedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRejectedEvent
+     * @memberof VideoCallRejectedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.rejected" in this case
      * @type {string}
-     * @memberof CallRejectedEvent
+     * @memberof VideoCallRejectedEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallRejectedEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCallRejectedEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface CallRequest
+ * @interface VideoCallRequest
  */
-export interface CallRequest {
+export interface VideoCallRequest {
     /**
      * 
-     * @type {UserRequest}
-     * @memberof CallRequest
+     * @type {VideoUserRequest}
+     * @memberof VideoCallRequest
      */
-    created_by?: UserRequest;
+    created_by?: VideoUserRequest;
     /**
      * 
      * @type {string}
-     * @memberof CallRequest
+     * @memberof VideoCallRequest
      */
     created_by_id?: string;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof CallRequest
+     * @memberof VideoCallRequest
      */
     custom?: { [key: string]: any; };
     /**
      * 
-     * @type {Array<MemberRequest>}
-     * @memberof CallRequest
+     * @type {Array<VideoMemberRequest>}
+     * @memberof VideoCallRequest
      */
-    members?: Array<MemberRequest>;
+    members?: Array<VideoMemberRequest>;
     /**
      * 
-     * @type {CallSettingsRequest}
-     * @memberof CallRequest
+     * @type {VideoCallSettingsRequest}
+     * @memberof VideoCallRequest
      */
-    settings_override?: CallSettingsRequest;
+    settings_override?: VideoCallSettingsRequest;
     /**
      * 
      * @type {string}
-     * @memberof CallRequest
+     * @memberof VideoCallRequest
      */
     starts_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRequest
+     * @memberof VideoCallRequest
      */
     team?: string;
 }
 /**
  * Represents a call
  * @export
- * @interface CallResponse
+ * @interface VideoCallResponse
  */
-export interface CallResponse {
+export interface VideoCallResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     backstage: boolean;
     /**
      * 
      * @type {Array<string>}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     blocked_user_ids: Array<string>;
     /**
      * The unique identifier for a call (<type>:<id>)
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     cid: string;
     /**
      * Date/time of creation
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     created_at: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallResponse
+     * @type {VideoUserResponse}
+     * @memberof VideoCallResponse
      */
-    created_by: UserResponse;
+    created_by: VideoUserResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     current_session_id: string;
     /**
      * Custom data for this object
      * @type {{ [key: string]: any; }}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     custom: { [key: string]: any; };
     /**
      * 
-     * @type {EgressResponse}
-     * @memberof CallResponse
+     * @type {VideoEgressResponse}
+     * @memberof VideoCallResponse
      */
-    egress: EgressResponse;
+    egress: VideoEgressResponse;
     /**
      * Date/time when the call ended
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     ended_at?: string;
     /**
      * Call ID
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     id: string;
     /**
      * 
-     * @type {CallIngressResponse}
-     * @memberof CallResponse
+     * @type {VideoCallIngressResponse}
+     * @memberof VideoCallResponse
      */
-    ingress: CallIngressResponse;
+    ingress: VideoCallIngressResponse;
     /**
      * 
      * @type {boolean}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     recording: boolean;
     /**
      * 
-     * @type {CallSessionResponse}
-     * @memberof CallResponse
+     * @type {VideoCallSessionResponse}
+     * @memberof VideoCallResponse
      */
-    session?: CallSessionResponse;
+    session?: VideoCallSessionResponse;
     /**
      * 
-     * @type {CallSettingsResponse}
-     * @memberof CallResponse
+     * @type {VideoCallSettingsResponse}
+     * @memberof VideoCallResponse
      */
-    settings: CallSettingsResponse;
+    settings: VideoCallSettingsResponse;
     /**
      * Date/time when the call will start
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     starts_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     team?: string;
     /**
      * 
-     * @type {ThumbnailResponse}
-     * @memberof CallResponse
+     * @type {VideoThumbnailResponse}
+     * @memberof VideoCallResponse
      */
-    thumbnails?: ThumbnailResponse;
+    thumbnails?: VideoThumbnailResponse;
     /**
      * 
      * @type {boolean}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     transcribing: boolean;
     /**
      * The type of call
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     type: string;
     /**
      * Date/time of the last update
      * @type {string}
-     * @memberof CallResponse
+     * @memberof VideoCallResponse
      */
     updated_at: string;
 }
 /**
  * This event is sent to all call members to notify they are getting called
  * @export
- * @interface CallRingEvent
+ * @interface VideoCallRingEvent
  */
-export interface CallRingEvent {
+export interface VideoCallRingEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallRingEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallRingEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallRingEvent
+     * @memberof VideoCallRingEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallRingEvent
+     * @memberof VideoCallRingEvent
      */
     created_at: string;
     /**
      * Call members
-     * @type {Array<MemberResponse>}
-     * @memberof CallRingEvent
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallRingEvent
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallRingEvent
+     * @memberof VideoCallRingEvent
      */
     session_id: string;
     /**
      * The type of event: "call.notification" in this case
      * @type {string}
-     * @memberof CallRingEvent
+     * @memberof VideoCallRingEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CallRingEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCallRingEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * This event is sent when a call session ends
  * @export
- * @interface CallSessionEndedEvent
+ * @interface VideoCallSessionEndedEvent
  */
-export interface CallSessionEndedEvent {
+export interface VideoCallSessionEndedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallSessionEndedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallSessionEndedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionEndedEvent
+     * @memberof VideoCallSessionEndedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionEndedEvent
+     * @memberof VideoCallSessionEndedEvent
      */
     created_at: string;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallSessionEndedEvent
+     * @memberof VideoCallSessionEndedEvent
      */
     session_id: string;
     /**
      * The type of event: "call.session_ended" in this case
      * @type {string}
-     * @memberof CallSessionEndedEvent
+     * @memberof VideoCallSessionEndedEvent
      */
     type: string;
 }
 /**
  * This event is sent when a participant joins a call session
  * @export
- * @interface CallSessionParticipantJoinedEvent
+ * @interface VideoCallSessionParticipantJoinedEvent
  */
-export interface CallSessionParticipantJoinedEvent {
+export interface VideoCallSessionParticipantJoinedEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallSessionParticipantJoinedEvent
+     * @memberof VideoCallSessionParticipantJoinedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionParticipantJoinedEvent
+     * @memberof VideoCallSessionParticipantJoinedEvent
      */
     created_at: string;
     /**
      * 
-     * @type {CallParticipantResponse}
-     * @memberof CallSessionParticipantJoinedEvent
+     * @type {VideoCallParticipantResponse}
+     * @memberof VideoCallSessionParticipantJoinedEvent
      */
-    participant: CallParticipantResponse;
+    participant: VideoCallParticipantResponse;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallSessionParticipantJoinedEvent
+     * @memberof VideoCallSessionParticipantJoinedEvent
      */
     session_id: string;
     /**
      * The type of event: "call.session_participant_joined" in this case
      * @type {string}
-     * @memberof CallSessionParticipantJoinedEvent
+     * @memberof VideoCallSessionParticipantJoinedEvent
      */
     type: string;
 }
 /**
  * This event is sent when a participant leaves a call session
  * @export
- * @interface CallSessionParticipantLeftEvent
+ * @interface VideoCallSessionParticipantLeftEvent
  */
-export interface CallSessionParticipantLeftEvent {
+export interface VideoCallSessionParticipantLeftEvent {
     /**
      * 
      * @type {string}
-     * @memberof CallSessionParticipantLeftEvent
+     * @memberof VideoCallSessionParticipantLeftEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionParticipantLeftEvent
+     * @memberof VideoCallSessionParticipantLeftEvent
      */
     created_at: string;
     /**
      * 
-     * @type {CallParticipantResponse}
-     * @memberof CallSessionParticipantLeftEvent
+     * @type {VideoCallParticipantResponse}
+     * @memberof VideoCallSessionParticipantLeftEvent
      */
-    participant: CallParticipantResponse;
+    participant: VideoCallParticipantResponse;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallSessionParticipantLeftEvent
+     * @memberof VideoCallSessionParticipantLeftEvent
      */
     session_id: string;
     /**
      * The type of event: "call.session_participant_left" in this case
      * @type {string}
-     * @memberof CallSessionParticipantLeftEvent
+     * @memberof VideoCallSessionParticipantLeftEvent
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface CallSessionResponse
+ * @interface VideoCallSessionResponse
  */
-export interface CallSessionResponse {
+export interface VideoCallSessionResponse {
     /**
      * 
      * @type {{ [key: string]: string; }}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     accepted_by: { [key: string]: string; };
     /**
      * 
      * @type {string}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     ended_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     live_ended_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     live_started_at?: string;
     /**
      * 
-     * @type {Array<CallParticipantResponse>}
-     * @memberof CallSessionResponse
+     * @type {Array<VideoCallParticipantResponse>}
+     * @memberof VideoCallSessionResponse
      */
-    participants: Array<CallParticipantResponse>;
+    participants: Array<VideoCallParticipantResponse>;
     /**
      * 
      * @type {{ [key: string]: number; }}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     participants_count_by_role: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: string; }}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     rejected_by: { [key: string]: string; };
     /**
      * 
      * @type {string}
-     * @memberof CallSessionResponse
+     * @memberof VideoCallSessionResponse
      */
     started_at?: string;
 }
 /**
  * This event is sent when a call session starts
  * @export
- * @interface CallSessionStartedEvent
+ * @interface VideoCallSessionStartedEvent
  */
-export interface CallSessionStartedEvent {
+export interface VideoCallSessionStartedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallSessionStartedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallSessionStartedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionStartedEvent
+     * @memberof VideoCallSessionStartedEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallSessionStartedEvent
+     * @memberof VideoCallSessionStartedEvent
      */
     created_at: string;
     /**
      * Call session ID
      * @type {string}
-     * @memberof CallSessionStartedEvent
+     * @memberof VideoCallSessionStartedEvent
      */
     session_id: string;
     /**
      * The type of event: "call.session_started" in this case
      * @type {string}
-     * @memberof CallSessionStartedEvent
+     * @memberof VideoCallSessionStartedEvent
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface CallSettingsRequest
+ * @interface VideoCallSettingsRequest
  */
-export interface CallSettingsRequest {
+export interface VideoCallSettingsRequest {
     /**
      * 
-     * @type {AudioSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoAudioSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    audio?: AudioSettingsRequest;
+    audio?: VideoAudioSettingsRequest;
     /**
      * 
-     * @type {BackstageSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoBackstageSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    backstage?: BackstageSettingsRequest;
+    backstage?: VideoBackstageSettingsRequest;
     /**
      * 
-     * @type {BroadcastSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoBroadcastSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    broadcasting?: BroadcastSettingsRequest;
+    broadcasting?: VideoBroadcastSettingsRequest;
     /**
      * 
-     * @type {GeofenceSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoGeofenceSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    geofencing?: GeofenceSettingsRequest;
+    geofencing?: VideoGeofenceSettingsRequest;
     /**
      * 
-     * @type {RecordSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoRecordSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    recording?: RecordSettingsRequest;
+    recording?: VideoRecordSettingsRequest;
     /**
      * 
-     * @type {RingSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoRingSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    ring?: RingSettingsRequest;
+    ring?: VideoRingSettingsRequest;
     /**
      * 
-     * @type {ScreensharingSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoScreensharingSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    screensharing?: ScreensharingSettingsRequest;
+    screensharing?: VideoScreensharingSettingsRequest;
     /**
      * 
-     * @type {ThumbnailsSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoThumbnailsSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    thumbnails?: ThumbnailsSettingsRequest;
+    thumbnails?: VideoThumbnailsSettingsRequest;
     /**
      * 
-     * @type {TranscriptionSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoTranscriptionSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    transcription?: TranscriptionSettingsRequest;
+    transcription?: VideoTranscriptionSettingsRequest;
     /**
      * 
-     * @type {VideoSettingsRequest}
-     * @memberof CallSettingsRequest
+     * @type {VideoVideoSettingsRequest}
+     * @memberof VideoCallSettingsRequest
      */
-    video?: VideoSettingsRequest;
+    video?: VideoVideoSettingsRequest;
 }
 /**
  * 
  * @export
- * @interface CallSettingsResponse
+ * @interface VideoCallSettingsResponse
  */
-export interface CallSettingsResponse {
+export interface VideoCallSettingsResponse {
     /**
      * 
-     * @type {AudioSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoAudioSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    audio: AudioSettings;
+    audio: VideoAudioSettings;
     /**
      * 
-     * @type {BackstageSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoBackstageSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    backstage: BackstageSettings;
+    backstage: VideoBackstageSettings;
     /**
      * 
-     * @type {BroadcastSettingsResponse}
-     * @memberof CallSettingsResponse
+     * @type {VideoBroadcastSettingsResponse}
+     * @memberof VideoCallSettingsResponse
      */
-    broadcasting: BroadcastSettingsResponse;
+    broadcasting: VideoBroadcastSettingsResponse;
     /**
      * 
-     * @type {GeofenceSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoGeofenceSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    geofencing: GeofenceSettings;
+    geofencing: VideoGeofenceSettings;
     /**
      * 
-     * @type {RecordSettingsResponse}
-     * @memberof CallSettingsResponse
+     * @type {VideoRecordSettingsResponse}
+     * @memberof VideoCallSettingsResponse
      */
-    recording: RecordSettingsResponse;
+    recording: VideoRecordSettingsResponse;
     /**
      * 
-     * @type {RingSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoRingSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    ring: RingSettings;
+    ring: VideoRingSettings;
     /**
      * 
-     * @type {ScreensharingSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoScreensharingSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    screensharing: ScreensharingSettings;
+    screensharing: VideoScreensharingSettings;
     /**
      * 
-     * @type {ThumbnailsSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoThumbnailsSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    thumbnails: ThumbnailsSettings;
+    thumbnails: VideoThumbnailsSettings;
     /**
      * 
-     * @type {TranscriptionSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoTranscriptionSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    transcription: TranscriptionSettings;
+    transcription: VideoTranscriptionSettings;
     /**
      * 
-     * @type {VideoSettings}
-     * @memberof CallSettingsResponse
+     * @type {VideoVideoSettings}
+     * @memberof VideoCallSettingsResponse
      */
-    video: VideoSettings;
+    video: VideoVideoSettings;
 }
 /**
  * 
  * @export
- * @interface CallStateResponseFields
+ * @interface VideoCallStateResponseFields
  */
-export interface CallStateResponseFields {
+export interface VideoCallStateResponseFields {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallStateResponseFields
+     * @type {VideoCallResponse}
+     * @memberof VideoCallStateResponseFields
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * List of call members
-     * @type {Array<MemberResponse>}
-     * @memberof CallStateResponseFields
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoCallStateResponseFields
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {MemberResponse}
-     * @memberof CallStateResponseFields
+     * @type {VideoMemberResponse}
+     * @memberof VideoCallStateResponseFields
      */
-    membership?: MemberResponse;
+    membership?: VideoMemberResponse;
     /**
      * 
-     * @type {Array<OwnCapability>}
-     * @memberof CallStateResponseFields
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoCallStateResponseFields
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
 }
 /**
  * 
  * @export
- * @interface CallTypeResponse
+ * @interface VideoCallTypeResponse
  */
-export interface CallTypeResponse {
+export interface VideoCallTypeResponse {
     /**
      * 
      * @type {string}
-     * @memberof CallTypeResponse
+     * @memberof VideoCallTypeResponse
      */
     created_at: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof CallTypeResponse
+     * @memberof VideoCallTypeResponse
      */
     grants: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof CallTypeResponse
+     * @memberof VideoCallTypeResponse
      */
     name: string;
     /**
      * 
-     * @type {NotificationSettings}
-     * @memberof CallTypeResponse
+     * @type {VideoNotificationSettings}
+     * @memberof VideoCallTypeResponse
      */
-    notification_settings: NotificationSettings;
+    notification_settings: VideoNotificationSettings;
     /**
      * 
-     * @type {CallSettingsResponse}
-     * @memberof CallTypeResponse
+     * @type {VideoCallSettingsResponse}
+     * @memberof VideoCallTypeResponse
      */
-    settings: CallSettingsResponse;
+    settings: VideoCallSettingsResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallTypeResponse
+     * @memberof VideoCallTypeResponse
      */
     updated_at: string;
 }
@@ -1633,290 +1633,290 @@ export interface CallTypeResponse {
  * This event is sent when a call is updated, clients should use this update the local state of the call. 
  * This event also contains the capabilities by role for the call, clients should update the own_capability for the current.
  * @export
- * @interface CallUpdatedEvent
+ * @interface VideoCallUpdatedEvent
  */
-export interface CallUpdatedEvent {
+export interface VideoCallUpdatedEvent {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof CallUpdatedEvent
+     * @type {VideoCallResponse}
+     * @memberof VideoCallUpdatedEvent
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof CallUpdatedEvent
+     * @memberof VideoCallUpdatedEvent
      */
     call_cid: string;
     /**
      * The capabilities by role for this call
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof CallUpdatedEvent
+     * @memberof VideoCallUpdatedEvent
      */
     capabilities_by_role: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof CallUpdatedEvent
+     * @memberof VideoCallUpdatedEvent
      */
     created_at: string;
     /**
      * The type of event: "call.ended" in this case
      * @type {string}
-     * @memberof CallUpdatedEvent
+     * @memberof VideoCallUpdatedEvent
      */
     type: string;
 }
 /**
  * This event is sent when a call member is muted
  * @export
- * @interface CallUserMuted
+ * @interface VideoCallUserMuted
  */
-export interface CallUserMuted {
+export interface VideoCallUserMuted {
     /**
      * 
      * @type {string}
-     * @memberof CallUserMuted
+     * @memberof VideoCallUserMuted
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CallUserMuted
+     * @memberof VideoCallUserMuted
      */
     created_at: string;
     /**
      * 
      * @type {string}
-     * @memberof CallUserMuted
+     * @memberof VideoCallUserMuted
      */
     from_user_id: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof CallUserMuted
+     * @memberof VideoCallUserMuted
      */
     muted_user_ids: Array<string>;
     /**
      * The type of event: "call.user_muted" in this case
      * @type {string}
-     * @memberof CallUserMuted
+     * @memberof VideoCallUserMuted
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface ConnectUserDetailsRequest
+ * @interface VideoConnectUserDetailsRequest
  */
-export interface ConnectUserDetailsRequest {
+export interface VideoConnectUserDetailsRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof ConnectUserDetailsRequest
+     * @memberof VideoConnectUserDetailsRequest
      */
     custom?: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof ConnectUserDetailsRequest
+     * @memberof VideoConnectUserDetailsRequest
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ConnectUserDetailsRequest
+     * @memberof VideoConnectUserDetailsRequest
      */
     image?: string;
     /**
      * 
      * @type {string}
-     * @memberof ConnectUserDetailsRequest
+     * @memberof VideoConnectUserDetailsRequest
      */
     name?: string;
 }
 /**
  * This event is sent when the WS connection is established and authenticated, this event contains the full user object as it is stored on the server
  * @export
- * @interface ConnectedEvent
+ * @interface VideoConnectedEvent
  */
-export interface ConnectedEvent {
+export interface VideoConnectedEvent {
     /**
      * The connection_id for this client
      * @type {string}
-     * @memberof ConnectedEvent
+     * @memberof VideoConnectedEvent
      */
     connection_id: string;
     /**
      * 
      * @type {string}
-     * @memberof ConnectedEvent
+     * @memberof VideoConnectedEvent
      */
     created_at: string;
     /**
      * 
-     * @type {OwnUserResponse}
-     * @memberof ConnectedEvent
+     * @type {VideoOwnUserResponse}
+     * @memberof VideoConnectedEvent
      */
-    me: OwnUserResponse;
+    me: VideoOwnUserResponse;
     /**
      * The type of event: "connection.ok" in this case
      * @type {string}
-     * @memberof ConnectedEvent
+     * @memberof VideoConnectedEvent
      */
     type: string;
 }
 /**
  * This event is sent when the WS connection fails
  * @export
- * @interface ConnectionErrorEvent
+ * @interface VideoConnectionErrorEvent
  */
-export interface ConnectionErrorEvent {
+export interface VideoConnectionErrorEvent {
     /**
      * 
      * @type {string}
-     * @memberof ConnectionErrorEvent
+     * @memberof VideoConnectionErrorEvent
      */
     connection_id: string;
     /**
      * 
      * @type {string}
-     * @memberof ConnectionErrorEvent
+     * @memberof VideoConnectionErrorEvent
      */
     created_at: string;
     /**
      * 
-     * @type {APIError}
-     * @memberof ConnectionErrorEvent
+     * @type {VideoAPIError}
+     * @memberof VideoConnectionErrorEvent
      */
-    error: APIError | null;
+    error: VideoAPIError | null;
     /**
      * The type of event: "connection.ok" in this case
      * @type {string}
-     * @memberof ConnectionErrorEvent
+     * @memberof VideoConnectionErrorEvent
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface CreateCallTypeRequest
+ * @interface VideoCreateCallTypeRequest
  */
-export interface CreateCallTypeRequest {
+export interface VideoCreateCallTypeRequest {
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof CreateCallTypeRequest
+     * @memberof VideoCreateCallTypeRequest
      */
     grants?: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof CreateCallTypeRequest
+     * @memberof VideoCreateCallTypeRequest
      */
     name: string;
     /**
      * 
-     * @type {NotificationSettingsRequest}
-     * @memberof CreateCallTypeRequest
+     * @type {VideoNotificationSettingsRequest}
+     * @memberof VideoCreateCallTypeRequest
      */
-    notification_settings?: NotificationSettingsRequest;
+    notification_settings?: VideoNotificationSettingsRequest;
     /**
      * 
-     * @type {CallSettingsRequest}
-     * @memberof CreateCallTypeRequest
+     * @type {VideoCallSettingsRequest}
+     * @memberof VideoCreateCallTypeRequest
      */
-    settings?: CallSettingsRequest;
+    settings?: VideoCallSettingsRequest;
 }
 /**
  * 
  * @export
- * @interface CreateCallTypeResponse
+ * @interface VideoCreateCallTypeResponse
  */
-export interface CreateCallTypeResponse {
+export interface VideoCreateCallTypeResponse {
     /**
      * 
      * @type {string}
-     * @memberof CreateCallTypeResponse
+     * @memberof VideoCreateCallTypeResponse
      */
     created_at: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateCallTypeResponse
+     * @memberof VideoCreateCallTypeResponse
      */
     duration: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof CreateCallTypeResponse
+     * @memberof VideoCreateCallTypeResponse
      */
     grants: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof CreateCallTypeResponse
+     * @memberof VideoCreateCallTypeResponse
      */
     name: string;
     /**
      * 
-     * @type {NotificationSettings}
-     * @memberof CreateCallTypeResponse
+     * @type {VideoNotificationSettings}
+     * @memberof VideoCreateCallTypeResponse
      */
-    notification_settings: NotificationSettings;
+    notification_settings: VideoNotificationSettings;
     /**
      * 
-     * @type {CallSettingsResponse}
-     * @memberof CreateCallTypeResponse
+     * @type {VideoCallSettingsResponse}
+     * @memberof VideoCreateCallTypeResponse
      */
-    settings: CallSettingsResponse;
+    settings: VideoCallSettingsResponse;
     /**
      * 
      * @type {string}
-     * @memberof CreateCallTypeResponse
+     * @memberof VideoCreateCallTypeResponse
      */
     updated_at: string;
 }
 /**
  * 
  * @export
- * @interface CreateDeviceRequest
+ * @interface VideoCreateDeviceRequest
  */
-export interface CreateDeviceRequest {
+export interface VideoCreateDeviceRequest {
     /**
      * 
      * @type {string}
-     * @memberof CreateDeviceRequest
+     * @memberof VideoCreateDeviceRequest
      */
     id?: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateDeviceRequest
+     * @memberof VideoCreateDeviceRequest
      */
-    push_provider?: CreateDeviceRequestPushProviderEnum;
+    push_provider?: VideoCreateDeviceRequestPushProviderEnum;
     /**
      * 
      * @type {string}
-     * @memberof CreateDeviceRequest
+     * @memberof VideoCreateDeviceRequest
      */
     push_provider_name?: string;
     /**
      * 
-     * @type {UserRequest}
-     * @memberof CreateDeviceRequest
+     * @type {VideoUserRequest}
+     * @memberof VideoCreateDeviceRequest
      */
-    user?: UserRequest;
+    user?: VideoUserRequest;
     /**
      * 
      * @type {string}
-     * @memberof CreateDeviceRequest
+     * @memberof VideoCreateDeviceRequest
      */
     user_id?: string;
     /**
      * 
      * @type {boolean}
-     * @memberof CreateDeviceRequest
+     * @memberof VideoCreateDeviceRequest
      */
     voip_token?: boolean;
 }
@@ -1925,831 +1925,831 @@ export interface CreateDeviceRequest {
 /**
  * @export
  */
-export const CreateDeviceRequestPushProviderEnum = {
+export const VideoCreateDeviceRequestPushProviderEnum = {
     FIREBASE: 'firebase',
     APN: 'apn',
     HUAWEI: 'huawei',
     XIAOMI: 'xiaomi'
 } as const;
-export type CreateDeviceRequestPushProviderEnum = typeof CreateDeviceRequestPushProviderEnum[keyof typeof CreateDeviceRequestPushProviderEnum];
+export type VideoCreateDeviceRequestPushProviderEnum = typeof VideoCreateDeviceRequestPushProviderEnum[keyof typeof VideoCreateDeviceRequestPushProviderEnum];
 
 /**
  * 
  * @export
- * @interface CreateGuestRequest
+ * @interface VideoCreateGuestRequest
  */
-export interface CreateGuestRequest {
+export interface VideoCreateGuestRequest {
     /**
      * 
-     * @type {UserRequest}
-     * @memberof CreateGuestRequest
+     * @type {VideoUserRequest}
+     * @memberof VideoCreateGuestRequest
      */
-    user: UserRequest;
+    user: VideoUserRequest;
 }
 /**
  * 
  * @export
- * @interface CreateGuestResponse
+ * @interface VideoCreateGuestResponse
  */
-export interface CreateGuestResponse {
+export interface VideoCreateGuestResponse {
     /**
      * the access token to authenticate the user
      * @type {string}
-     * @memberof CreateGuestResponse
+     * @memberof VideoCreateGuestResponse
      */
     access_token: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateGuestResponse
+     * @memberof VideoCreateGuestResponse
      */
     duration: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CreateGuestResponse
+     * @type {VideoUserResponse}
+     * @memberof VideoCreateGuestResponse
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface Credentials
+ * @interface VideoCredentials
  */
-export interface Credentials {
+export interface VideoCredentials {
     /**
      * 
-     * @type {Array<ICEServer>}
-     * @memberof Credentials
+     * @type {Array<VideoICEServer>}
+     * @memberof VideoCredentials
      */
-    ice_servers: Array<ICEServer>;
+    ice_servers: Array<VideoICEServer>;
     /**
      * 
-     * @type {SFUResponse}
-     * @memberof Credentials
+     * @type {VideoSFUResponse}
+     * @memberof VideoCredentials
      */
-    server: SFUResponse;
+    server: VideoSFUResponse;
     /**
      * 
      * @type {string}
-     * @memberof Credentials
+     * @memberof VideoCredentials
      */
     token: string;
 }
 /**
  * A custom event, this event is used to send custom events to other participants in the call.
  * @export
- * @interface CustomVideoEvent
+ * @interface VideoCustomVideoEvent
  */
-export interface CustomVideoEvent {
+export interface VideoCustomVideoEvent {
     /**
      * 
      * @type {string}
-     * @memberof CustomVideoEvent
+     * @memberof VideoCustomVideoEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof CustomVideoEvent
+     * @memberof VideoCustomVideoEvent
      */
     created_at: string;
     /**
      * Custom data for this object
      * @type {{ [key: string]: any; }}
-     * @memberof CustomVideoEvent
+     * @memberof VideoCustomVideoEvent
      */
     custom: { [key: string]: any; };
     /**
      * The type of event, "custom" in this case
      * @type {string}
-     * @memberof CustomVideoEvent
+     * @memberof VideoCustomVideoEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof CustomVideoEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoCustomVideoEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface Device
+ * @interface VideoDevice
  */
-export interface Device {
+export interface VideoDevice {
     /**
      * Date/time of creation
      * @type {string}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     created_at: string;
     /**
      * Whether device is disabled or not
      * @type {boolean}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     disabled?: boolean;
     /**
      * Reason explaining why device had been disabled
      * @type {string}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     disabled_reason?: string;
     /**
      * 
      * @type {string}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     push_provider: string;
     /**
      * 
      * @type {string}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     push_provider_name?: string;
     /**
      * When true the token is for Apple VoIP push notifications
      * @type {boolean}
-     * @memberof Device
+     * @memberof VideoDevice
      */
     voip?: boolean;
 }
 /**
  * 
  * @export
- * @interface EdgeResponse
+ * @interface VideoEdgeResponse
  */
-export interface EdgeResponse {
+export interface VideoEdgeResponse {
     /**
      * 
      * @type {string}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     continent_code: string;
     /**
      * 
      * @type {string}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     country_iso_code: string;
     /**
      * 
      * @type {number}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     green: number;
     /**
      * 
      * @type {string}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     latency_test_url: string;
     /**
      * 
      * @type {number}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     latitude: number;
     /**
      * 
      * @type {number}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     longitude: number;
     /**
      * 
      * @type {number}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     red: number;
     /**
      * 
      * @type {string}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     subdivision_iso_code: string;
     /**
      * 
      * @type {number}
-     * @memberof EdgeResponse
+     * @memberof VideoEdgeResponse
      */
     yellow: number;
 }
 /**
  * 
  * @export
- * @interface EgressHLSResponse
+ * @interface VideoEgressHLSResponse
  */
-export interface EgressHLSResponse {
+export interface VideoEgressHLSResponse {
     /**
      * 
      * @type {string}
-     * @memberof EgressHLSResponse
+     * @memberof VideoEgressHLSResponse
      */
     playlist_url: string;
 }
 /**
  * 
  * @export
- * @interface EgressRTMPResponse
+ * @interface VideoEgressRTMPResponse
  */
-export interface EgressRTMPResponse {
+export interface VideoEgressRTMPResponse {
     /**
      * 
      * @type {string}
-     * @memberof EgressRTMPResponse
+     * @memberof VideoEgressRTMPResponse
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof EgressRTMPResponse
+     * @memberof VideoEgressRTMPResponse
      */
     stream_key: string;
     /**
      * 
      * @type {string}
-     * @memberof EgressRTMPResponse
+     * @memberof VideoEgressRTMPResponse
      */
     url: string;
 }
 /**
  * 
  * @export
- * @interface EgressResponse
+ * @interface VideoEgressResponse
  */
-export interface EgressResponse {
+export interface VideoEgressResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof EgressResponse
+     * @memberof VideoEgressResponse
      */
     broadcasting: boolean;
     /**
      * 
-     * @type {EgressHLSResponse}
-     * @memberof EgressResponse
+     * @type {VideoEgressHLSResponse}
+     * @memberof VideoEgressResponse
      */
-    hls?: EgressHLSResponse;
+    hls?: VideoEgressHLSResponse;
     /**
      * 
-     * @type {Array<EgressRTMPResponse>}
-     * @memberof EgressResponse
+     * @type {Array<VideoEgressRTMPResponse>}
+     * @memberof VideoEgressResponse
      */
-    rtmps: Array<EgressRTMPResponse>;
+    rtmps: Array<VideoEgressRTMPResponse>;
 }
 /**
  * 
  * @export
- * @interface EndCallResponse
+ * @interface VideoEndCallResponse
  */
-export interface EndCallResponse {
+export interface VideoEndCallResponse {
     /**
      * 
      * @type {string}
-     * @memberof EndCallResponse
+     * @memberof VideoEndCallResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface EventNotificationSettings
+ * @interface VideoEventNotificationSettings
  */
-export interface EventNotificationSettings {
+export interface VideoEventNotificationSettings {
     /**
      * 
-     * @type {APNS}
-     * @memberof EventNotificationSettings
+     * @type {VideoAPNS}
+     * @memberof VideoEventNotificationSettings
      */
-    apns: APNS;
+    apns: VideoAPNS;
     /**
      * 
      * @type {boolean}
-     * @memberof EventNotificationSettings
+     * @memberof VideoEventNotificationSettings
      */
     enabled: boolean;
 }
 /**
  * 
  * @export
- * @interface EventNotificationSettingsRequest
+ * @interface VideoEventNotificationSettingsRequest
  */
-export interface EventNotificationSettingsRequest {
+export interface VideoEventNotificationSettingsRequest {
     /**
      * 
-     * @type {APNSRequest}
-     * @memberof EventNotificationSettingsRequest
+     * @type {VideoAPNSRequest}
+     * @memberof VideoEventNotificationSettingsRequest
      */
-    apns?: APNSRequest;
+    apns?: VideoAPNSRequest;
     /**
      * 
      * @type {boolean}
-     * @memberof EventNotificationSettingsRequest
+     * @memberof VideoEventNotificationSettingsRequest
      */
     enabled?: boolean;
 }
 /**
  * 
  * @export
- * @interface GeofenceSettings
+ * @interface VideoGeofenceSettings
  */
-export interface GeofenceSettings {
+export interface VideoGeofenceSettings {
     /**
      * 
      * @type {Array<string>}
-     * @memberof GeofenceSettings
+     * @memberof VideoGeofenceSettings
      */
     names: Array<string>;
 }
 /**
  * 
  * @export
- * @interface GeofenceSettingsRequest
+ * @interface VideoGeofenceSettingsRequest
  */
-export interface GeofenceSettingsRequest {
+export interface VideoGeofenceSettingsRequest {
     /**
      * 
      * @type {Array<string>}
-     * @memberof GeofenceSettingsRequest
+     * @memberof VideoGeofenceSettingsRequest
      */
     names?: Array<string>;
 }
 /**
  * 
  * @export
- * @interface GetCallResponse
+ * @interface VideoGetCallResponse
  */
-export interface GetCallResponse {
+export interface VideoGetCallResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof GetCallResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoGetCallResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof GetCallResponse
+     * @memberof VideoGetCallResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof GetCallResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoGetCallResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {MemberResponse}
-     * @memberof GetCallResponse
+     * @type {VideoMemberResponse}
+     * @memberof VideoGetCallResponse
      */
-    membership?: MemberResponse;
+    membership?: VideoMemberResponse;
     /**
      * 
-     * @type {Array<OwnCapability>}
-     * @memberof GetCallResponse
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoGetCallResponse
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
 }
 /**
  * 
  * @export
- * @interface GetCallTypeResponse
+ * @interface VideoGetCallTypeResponse
  */
-export interface GetCallTypeResponse {
+export interface VideoGetCallTypeResponse {
     /**
      * 
      * @type {string}
-     * @memberof GetCallTypeResponse
+     * @memberof VideoGetCallTypeResponse
      */
     created_at: string;
     /**
      * 
      * @type {string}
-     * @memberof GetCallTypeResponse
+     * @memberof VideoGetCallTypeResponse
      */
     duration: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof GetCallTypeResponse
+     * @memberof VideoGetCallTypeResponse
      */
     grants: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof GetCallTypeResponse
+     * @memberof VideoGetCallTypeResponse
      */
     name: string;
     /**
      * 
-     * @type {NotificationSettings}
-     * @memberof GetCallTypeResponse
+     * @type {VideoNotificationSettings}
+     * @memberof VideoGetCallTypeResponse
      */
-    notification_settings: NotificationSettings;
+    notification_settings: VideoNotificationSettings;
     /**
      * 
-     * @type {CallSettingsResponse}
-     * @memberof GetCallTypeResponse
+     * @type {VideoCallSettingsResponse}
+     * @memberof VideoGetCallTypeResponse
      */
-    settings: CallSettingsResponse;
+    settings: VideoCallSettingsResponse;
     /**
      * 
      * @type {string}
-     * @memberof GetCallTypeResponse
+     * @memberof VideoGetCallTypeResponse
      */
     updated_at: string;
 }
 /**
  * 
  * @export
- * @interface GetEdgesResponse
+ * @interface VideoGetEdgesResponse
  */
-export interface GetEdgesResponse {
+export interface VideoGetEdgesResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof GetEdgesResponse
+     * @memberof VideoGetEdgesResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<EdgeResponse>}
-     * @memberof GetEdgesResponse
+     * @type {Array<VideoEdgeResponse>}
+     * @memberof VideoGetEdgesResponse
      */
-    edges: Array<EdgeResponse>;
+    edges: Array<VideoEdgeResponse>;
 }
 /**
  * 
  * @export
- * @interface GetOrCreateCallRequest
+ * @interface VideoGetOrCreateCallRequest
  */
-export interface GetOrCreateCallRequest {
+export interface VideoGetOrCreateCallRequest {
     /**
      * 
-     * @type {CallRequest}
-     * @memberof GetOrCreateCallRequest
+     * @type {VideoCallRequest}
+     * @memberof VideoGetOrCreateCallRequest
      */
-    data?: CallRequest;
+    data?: VideoCallRequest;
     /**
      * 
      * @type {number}
-     * @memberof GetOrCreateCallRequest
+     * @memberof VideoGetOrCreateCallRequest
      */
     members_limit?: number;
     /**
      * if provided it sends a notification event to the members for this call
      * @type {boolean}
-     * @memberof GetOrCreateCallRequest
+     * @memberof VideoGetOrCreateCallRequest
      */
     notify?: boolean;
     /**
      * if provided it sends a ring event to the members for this call
      * @type {boolean}
-     * @memberof GetOrCreateCallRequest
+     * @memberof VideoGetOrCreateCallRequest
      */
     ring?: boolean;
 }
 /**
  * 
  * @export
- * @interface GetOrCreateCallResponse
+ * @interface VideoGetOrCreateCallResponse
  */
-export interface GetOrCreateCallResponse {
+export interface VideoGetOrCreateCallResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof GetOrCreateCallResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoGetOrCreateCallResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {boolean}
-     * @memberof GetOrCreateCallResponse
+     * @memberof VideoGetOrCreateCallResponse
      */
     created: boolean;
     /**
      * 
      * @type {string}
-     * @memberof GetOrCreateCallResponse
+     * @memberof VideoGetOrCreateCallResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof GetOrCreateCallResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoGetOrCreateCallResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {MemberResponse}
-     * @memberof GetOrCreateCallResponse
+     * @type {VideoMemberResponse}
+     * @memberof VideoGetOrCreateCallResponse
      */
-    membership?: MemberResponse;
+    membership?: VideoMemberResponse;
     /**
      * 
-     * @type {Array<OwnCapability>}
-     * @memberof GetOrCreateCallResponse
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoGetOrCreateCallResponse
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
 }
 /**
  * 
  * @export
- * @interface GoLiveRequest
+ * @interface VideoGoLiveRequest
  */
-export interface GoLiveRequest {
+export interface VideoGoLiveRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof GoLiveRequest
+     * @memberof VideoGoLiveRequest
      */
     start_hls?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof GoLiveRequest
+     * @memberof VideoGoLiveRequest
      */
     start_recording?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof GoLiveRequest
+     * @memberof VideoGoLiveRequest
      */
     start_transcription?: boolean;
 }
 /**
  * 
  * @export
- * @interface GoLiveResponse
+ * @interface VideoGoLiveResponse
  */
-export interface GoLiveResponse {
+export interface VideoGoLiveResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof GoLiveResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoGoLiveResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof GoLiveResponse
+     * @memberof VideoGoLiveResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface HLSSettingsRequest
+ * @interface VideoHLSSettingsRequest
  */
-export interface HLSSettingsRequest {
+export interface VideoHLSSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof HLSSettingsRequest
+     * @memberof VideoHLSSettingsRequest
      */
     auto_on?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof HLSSettingsRequest
+     * @memberof VideoHLSSettingsRequest
      */
     enabled?: boolean;
     /**
      * 
-     * @type {LayoutSettingsRequest}
-     * @memberof HLSSettingsRequest
+     * @type {VideoLayoutSettingsRequest}
+     * @memberof VideoHLSSettingsRequest
      */
-    layout?: LayoutSettingsRequest;
+    layout?: VideoLayoutSettingsRequest;
     /**
      * 
      * @type {Array<string>}
-     * @memberof HLSSettingsRequest
+     * @memberof VideoHLSSettingsRequest
      */
     quality_tracks?: Array<string>;
 }
 /**
  * 
  * @export
- * @interface HLSSettingsResponse
+ * @interface VideoHLSSettingsResponse
  */
-export interface HLSSettingsResponse {
+export interface VideoHLSSettingsResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof HLSSettingsResponse
+     * @memberof VideoHLSSettingsResponse
      */
     auto_on: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof HLSSettingsResponse
+     * @memberof VideoHLSSettingsResponse
      */
     enabled: boolean;
     /**
      * 
-     * @type {LayoutSettings}
-     * @memberof HLSSettingsResponse
+     * @type {VideoLayoutSettings}
+     * @memberof VideoHLSSettingsResponse
      */
-    layout: LayoutSettings;
+    layout: VideoLayoutSettings;
     /**
      * 
      * @type {Array<string>}
-     * @memberof HLSSettingsResponse
+     * @memberof VideoHLSSettingsResponse
      */
     quality_tracks: Array<string>;
 }
 /**
  * 
  * @export
- * @interface HealthCheckEvent
+ * @interface VideoHealthCheckEvent
  */
-export interface HealthCheckEvent {
+export interface VideoHealthCheckEvent {
     /**
      * The connection_id for this client
      * @type {string}
-     * @memberof HealthCheckEvent
+     * @memberof VideoHealthCheckEvent
      */
     connection_id: string;
     /**
      * 
      * @type {string}
-     * @memberof HealthCheckEvent
+     * @memberof VideoHealthCheckEvent
      */
     created_at: string;
     /**
      * The type of event: "health.check" in this case
      * @type {string}
-     * @memberof HealthCheckEvent
+     * @memberof VideoHealthCheckEvent
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface ICEServer
+ * @interface VideoICEServer
  */
-export interface ICEServer {
+export interface VideoICEServer {
     /**
      * 
      * @type {string}
-     * @memberof ICEServer
+     * @memberof VideoICEServer
      */
     password: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof ICEServer
+     * @memberof VideoICEServer
      */
     urls: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof ICEServer
+     * @memberof VideoICEServer
      */
     username: string;
 }
 /**
  * 
  * @export
- * @interface JoinCallRequest
+ * @interface VideoJoinCallRequest
  */
-export interface JoinCallRequest {
+export interface VideoJoinCallRequest {
     /**
      * if true the call will be created if it doesn't exist
      * @type {boolean}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     create?: boolean;
     /**
      * 
-     * @type {CallRequest}
-     * @memberof JoinCallRequest
+     * @type {VideoCallRequest}
+     * @memberof VideoJoinCallRequest
      */
-    data?: CallRequest;
+    data?: VideoCallRequest;
     /**
      * 
      * @type {string}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     location: string;
     /**
      * 
      * @type {number}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     members_limit?: number;
     /**
      * If the participant is migrating from another SFU, then this is the ID of the previous SFU
      * @type {string}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     migrating_from?: string;
     /**
      * 
      * @type {boolean}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     notify?: boolean;
     /**
      * if true and the call is created, the notification will include ring=true
      * @type {boolean}
-     * @memberof JoinCallRequest
+     * @memberof VideoJoinCallRequest
      */
     ring?: boolean;
 }
 /**
  * 
  * @export
- * @interface JoinCallResponse
+ * @interface VideoJoinCallResponse
  */
-export interface JoinCallResponse {
+export interface VideoJoinCallResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof JoinCallResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoJoinCallResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {boolean}
-     * @memberof JoinCallResponse
+     * @memberof VideoJoinCallResponse
      */
     created: boolean;
     /**
      * 
-     * @type {Credentials}
-     * @memberof JoinCallResponse
+     * @type {VideoCredentials}
+     * @memberof VideoJoinCallResponse
      */
-    credentials: Credentials;
+    credentials: VideoCredentials;
     /**
      * 
      * @type {string}
-     * @memberof JoinCallResponse
+     * @memberof VideoJoinCallResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof JoinCallResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoJoinCallResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {MemberResponse}
-     * @memberof JoinCallResponse
+     * @type {VideoMemberResponse}
+     * @memberof VideoJoinCallResponse
      */
-    membership?: MemberResponse;
+    membership?: VideoMemberResponse;
     /**
      * 
-     * @type {Array<OwnCapability>}
-     * @memberof JoinCallResponse
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoJoinCallResponse
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
 }
 /**
  * 
  * @export
- * @interface LayoutSettings
+ * @interface VideoLayoutSettings
  */
-export interface LayoutSettings {
+export interface VideoLayoutSettings {
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettings
+     * @memberof VideoLayoutSettings
      */
     external_app_url: string;
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettings
+     * @memberof VideoLayoutSettings
      */
     external_css_url: string;
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettings
+     * @memberof VideoLayoutSettings
      */
-    name: LayoutSettingsNameEnum;
+    name: VideoLayoutSettingsNameEnum;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof LayoutSettings
+     * @memberof VideoLayoutSettings
      */
     options?: { [key: string]: any; };
 }
@@ -2758,43 +2758,43 @@ export interface LayoutSettings {
 /**
  * @export
  */
-export const LayoutSettingsNameEnum = {
+export const VideoLayoutSettingsNameEnum = {
     SPOTLIGHT: 'spotlight',
     GRID: 'grid',
     SINGLE_PARTICIPANT: 'single-participant',
     MOBILE: 'mobile',
     CUSTOM: 'custom'
 } as const;
-export type LayoutSettingsNameEnum = typeof LayoutSettingsNameEnum[keyof typeof LayoutSettingsNameEnum];
+export type VideoLayoutSettingsNameEnum = typeof VideoLayoutSettingsNameEnum[keyof typeof VideoLayoutSettingsNameEnum];
 
 /**
  * 
  * @export
- * @interface LayoutSettingsRequest
+ * @interface VideoLayoutSettingsRequest
  */
-export interface LayoutSettingsRequest {
+export interface VideoLayoutSettingsRequest {
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettingsRequest
+     * @memberof VideoLayoutSettingsRequest
      */
     external_app_url?: string;
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettingsRequest
+     * @memberof VideoLayoutSettingsRequest
      */
     external_css_url?: string;
     /**
      * 
      * @type {string}
-     * @memberof LayoutSettingsRequest
+     * @memberof VideoLayoutSettingsRequest
      */
-    name: LayoutSettingsRequestNameEnum;
+    name: VideoLayoutSettingsRequestNameEnum;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof LayoutSettingsRequest
+     * @memberof VideoLayoutSettingsRequest
      */
     options?: { [key: string]: any; };
 }
@@ -2803,276 +2803,276 @@ export interface LayoutSettingsRequest {
 /**
  * @export
  */
-export const LayoutSettingsRequestNameEnum = {
+export const VideoLayoutSettingsRequestNameEnum = {
     SPOTLIGHT: 'spotlight',
     GRID: 'grid',
     SINGLE_PARTICIPANT: 'single-participant',
     MOBILE: 'mobile',
     CUSTOM: 'custom'
 } as const;
-export type LayoutSettingsRequestNameEnum = typeof LayoutSettingsRequestNameEnum[keyof typeof LayoutSettingsRequestNameEnum];
+export type VideoLayoutSettingsRequestNameEnum = typeof VideoLayoutSettingsRequestNameEnum[keyof typeof VideoLayoutSettingsRequestNameEnum];
 
 /**
  * 
  * @export
- * @interface ListCallTypeResponse
+ * @interface VideoListCallTypeResponse
  */
-export interface ListCallTypeResponse {
+export interface VideoListCallTypeResponse {
     /**
      * 
-     * @type {{ [key: string]: CallTypeResponse; }}
-     * @memberof ListCallTypeResponse
+     * @type {{ [key: string]: VideoCallTypeResponse; }}
+     * @memberof VideoListCallTypeResponse
      */
-    call_types: { [key: string]: CallTypeResponse; };
+    call_types: { [key: string]: VideoCallTypeResponse; };
     /**
      * 
      * @type {string}
-     * @memberof ListCallTypeResponse
+     * @memberof VideoListCallTypeResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface ListDevicesResponse
+ * @interface VideoListDevicesResponse
  */
-export interface ListDevicesResponse {
+export interface VideoListDevicesResponse {
     /**
      * List of devices
-     * @type {Array<Device>}
-     * @memberof ListDevicesResponse
+     * @type {Array<VideoDevice>}
+     * @memberof VideoListDevicesResponse
      */
-    devices: Array<Device>;
+    devices: Array<VideoDevice>;
     /**
      * 
      * @type {string}
-     * @memberof ListDevicesResponse
+     * @memberof VideoListDevicesResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface ListRecordingsResponse
+ * @interface VideoListRecordingsResponse
  */
-export interface ListRecordingsResponse {
+export interface VideoListRecordingsResponse {
     /**
      * 
      * @type {string}
-     * @memberof ListRecordingsResponse
+     * @memberof VideoListRecordingsResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<CallRecording>}
-     * @memberof ListRecordingsResponse
+     * @type {Array<VideoCallRecording>}
+     * @memberof VideoListRecordingsResponse
      */
-    recordings: Array<CallRecording>;
+    recordings: Array<VideoCallRecording>;
 }
 /**
  * 
  * @export
- * @interface MemberRequest
+ * @interface VideoMemberRequest
  */
-export interface MemberRequest {
+export interface VideoMemberRequest {
     /**
      * Custom data for this object
      * @type {{ [key: string]: any; }}
-     * @memberof MemberRequest
+     * @memberof VideoMemberRequest
      */
     custom?: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof MemberRequest
+     * @memberof VideoMemberRequest
      */
     role?: string;
     /**
      * 
      * @type {string}
-     * @memberof MemberRequest
+     * @memberof VideoMemberRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface MemberResponse
+ * @interface VideoMemberResponse
  */
-export interface MemberResponse {
+export interface VideoMemberResponse {
     /**
      * Date/time of creation
      * @type {string}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     created_at: string;
     /**
      * Custom member response data
      * @type {{ [key: string]: any; }}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     custom: { [key: string]: any; };
     /**
      * Date/time of deletion
      * @type {string}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     deleted_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     role?: string;
     /**
      * Date/time of the last update
      * @type {string}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     updated_at: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof MemberResponse
+     * @type {VideoUserResponse}
+     * @memberof VideoMemberResponse
      */
-    user: UserResponse;
+    user: VideoUserResponse;
     /**
      * 
      * @type {string}
-     * @memberof MemberResponse
+     * @memberof VideoMemberResponse
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface MuteUsersRequest
+ * @interface VideoMuteUsersRequest
  */
-export interface MuteUsersRequest {
+export interface VideoMuteUsersRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof MuteUsersRequest
+     * @memberof VideoMuteUsersRequest
      */
     audio?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof MuteUsersRequest
+     * @memberof VideoMuteUsersRequest
      */
     mute_all_users?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof MuteUsersRequest
+     * @memberof VideoMuteUsersRequest
      */
     screenshare?: boolean;
     /**
      * 
      * @type {Array<string>}
-     * @memberof MuteUsersRequest
+     * @memberof VideoMuteUsersRequest
      */
     user_ids?: Array<string>;
     /**
      * 
      * @type {boolean}
-     * @memberof MuteUsersRequest
+     * @memberof VideoMuteUsersRequest
      */
     video?: boolean;
 }
 /**
  * 
  * @export
- * @interface MuteUsersResponse
+ * @interface VideoMuteUsersResponse
  */
-export interface MuteUsersResponse {
+export interface VideoMuteUsersResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof MuteUsersResponse
+     * @memberof VideoMuteUsersResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface NotificationSettings
+ * @interface VideoNotificationSettings
  */
-export interface NotificationSettings {
+export interface VideoNotificationSettings {
     /**
      * 
-     * @type {EventNotificationSettings}
-     * @memberof NotificationSettings
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
      */
-    call_live_started: EventNotificationSettings;
+    call_live_started: VideoEventNotificationSettings;
     /**
      * 
-     * @type {EventNotificationSettings}
-     * @memberof NotificationSettings
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
      */
-    call_notification: EventNotificationSettings;
+    call_notification: VideoEventNotificationSettings;
     /**
      * 
-     * @type {EventNotificationSettings}
-     * @memberof NotificationSettings
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
      */
-    call_ring: EventNotificationSettings;
+    call_ring: VideoEventNotificationSettings;
     /**
      * 
      * @type {boolean}
-     * @memberof NotificationSettings
+     * @memberof VideoNotificationSettings
      */
     enabled: boolean;
     /**
      * 
-     * @type {EventNotificationSettings}
-     * @memberof NotificationSettings
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
      */
-    session_started: EventNotificationSettings;
+    session_started: VideoEventNotificationSettings;
 }
 /**
  * 
  * @export
- * @interface NotificationSettingsRequest
+ * @interface VideoNotificationSettingsRequest
  */
-export interface NotificationSettingsRequest {
+export interface VideoNotificationSettingsRequest {
     /**
      * 
-     * @type {EventNotificationSettingsRequest}
-     * @memberof NotificationSettingsRequest
+     * @type {VideoEventNotificationSettingsRequest}
+     * @memberof VideoNotificationSettingsRequest
      */
-    call_live_started?: EventNotificationSettingsRequest;
+    call_live_started?: VideoEventNotificationSettingsRequest;
     /**
      * 
-     * @type {EventNotificationSettingsRequest}
-     * @memberof NotificationSettingsRequest
+     * @type {VideoEventNotificationSettingsRequest}
+     * @memberof VideoNotificationSettingsRequest
      */
-    call_notification?: EventNotificationSettingsRequest;
+    call_notification?: VideoEventNotificationSettingsRequest;
     /**
      * 
-     * @type {EventNotificationSettingsRequest}
-     * @memberof NotificationSettingsRequest
+     * @type {VideoEventNotificationSettingsRequest}
+     * @memberof VideoNotificationSettingsRequest
      */
-    call_ring?: EventNotificationSettingsRequest;
+    call_ring?: VideoEventNotificationSettingsRequest;
     /**
      * 
      * @type {boolean}
-     * @memberof NotificationSettingsRequest
+     * @memberof VideoNotificationSettingsRequest
      */
     enabled?: boolean;
     /**
      * 
-     * @type {EventNotificationSettingsRequest}
-     * @memberof NotificationSettingsRequest
+     * @type {VideoEventNotificationSettingsRequest}
+     * @memberof VideoNotificationSettingsRequest
      */
-    session_started?: EventNotificationSettingsRequest;
+    session_started?: VideoEventNotificationSettingsRequest;
 }
 
 /**
  * All possibility of string to use
  * @export
  */
-export const OwnCapability = {
+export const VideoOwnCapability = {
     BLOCK_USERS: 'block-users',
     CREATE_CALL: 'create-call',
     CREATE_REACTION: 'create-reaction',
@@ -3098,72 +3098,72 @@ export const OwnCapability = {
     UPDATE_CALL_PERMISSIONS: 'update-call-permissions',
     UPDATE_CALL_SETTINGS: 'update-call-settings'
 } as const;
-export type OwnCapability = typeof OwnCapability[keyof typeof OwnCapability];
+export type VideoOwnCapability = typeof VideoOwnCapability[keyof typeof VideoOwnCapability];
 
 /**
  * 
  * @export
- * @interface OwnUserResponse
+ * @interface VideoOwnUserResponse
  */
-export interface OwnUserResponse {
+export interface VideoOwnUserResponse {
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     created_at: string;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     custom: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     deleted_at?: string;
     /**
      * 
-     * @type {Array<Device>}
-     * @memberof OwnUserResponse
+     * @type {Array<VideoDevice>}
+     * @memberof VideoOwnUserResponse
      */
-    devices: Array<Device>;
+    devices: Array<VideoDevice>;
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     image?: string;
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     name?: string;
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     role: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     teams: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof OwnUserResponse
+     * @memberof VideoOwnUserResponse
      */
     updated_at: string;
 }
@@ -3171,875 +3171,875 @@ export interface OwnUserResponse {
  * This event is sent when a user requests access to a feature on a call,
  * clients receiving this event should display a permission request to the user
  * @export
- * @interface PermissionRequestEvent
+ * @interface VideoPermissionRequestEvent
  */
-export interface PermissionRequestEvent {
+export interface VideoPermissionRequestEvent {
     /**
      * 
      * @type {string}
-     * @memberof PermissionRequestEvent
+     * @memberof VideoPermissionRequestEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof PermissionRequestEvent
+     * @memberof VideoPermissionRequestEvent
      */
     created_at: string;
     /**
      * The list of permissions requested by the user
      * @type {Array<string>}
-     * @memberof PermissionRequestEvent
+     * @memberof VideoPermissionRequestEvent
      */
     permissions: Array<string>;
     /**
      * The type of event: "call.permission_request" in this case
      * @type {string}
-     * @memberof PermissionRequestEvent
+     * @memberof VideoPermissionRequestEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof PermissionRequestEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoPermissionRequestEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface PinRequest
+ * @interface VideoPinRequest
  */
-export interface PinRequest {
+export interface VideoPinRequest {
     /**
      * 
      * @type {string}
-     * @memberof PinRequest
+     * @memberof VideoPinRequest
      */
     session_id: string;
     /**
      * 
      * @type {string}
-     * @memberof PinRequest
+     * @memberof VideoPinRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface PinResponse
+ * @interface VideoPinResponse
  */
-export interface PinResponse {
+export interface VideoPinResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof PinResponse
+     * @memberof VideoPinResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface QueryCallsRequest
+ * @interface VideoQueryCallsRequest
  */
-export interface QueryCallsRequest {
+export interface VideoQueryCallsRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof QueryCallsRequest
+     * @memberof VideoQueryCallsRequest
      */
     filter_conditions?: { [key: string]: any; };
     /**
      * 
      * @type {number}
-     * @memberof QueryCallsRequest
+     * @memberof VideoQueryCallsRequest
      */
     limit?: number;
     /**
      * 
      * @type {string}
-     * @memberof QueryCallsRequest
+     * @memberof VideoQueryCallsRequest
      */
     next?: string;
     /**
      * 
      * @type {string}
-     * @memberof QueryCallsRequest
+     * @memberof VideoQueryCallsRequest
      */
     prev?: string;
     /**
      * 
-     * @type {Array<SortParamRequest>}
-     * @memberof QueryCallsRequest
+     * @type {Array<VideoSortParamRequest>}
+     * @memberof VideoQueryCallsRequest
      */
-    sort?: Array<SortParamRequest>;
+    sort?: Array<VideoSortParamRequest>;
     /**
      * 
      * @type {boolean}
-     * @memberof QueryCallsRequest
+     * @memberof VideoQueryCallsRequest
      */
     watch?: boolean;
 }
 /**
  * 
  * @export
- * @interface QueryCallsResponse
+ * @interface VideoQueryCallsResponse
  */
-export interface QueryCallsResponse {
+export interface VideoQueryCallsResponse {
     /**
      * 
-     * @type {Array<CallStateResponseFields>}
-     * @memberof QueryCallsResponse
+     * @type {Array<VideoCallStateResponseFields>}
+     * @memberof VideoQueryCallsResponse
      */
-    calls: Array<CallStateResponseFields>;
+    calls: Array<VideoCallStateResponseFields>;
     /**
      * 
      * @type {string}
-     * @memberof QueryCallsResponse
+     * @memberof VideoQueryCallsResponse
      */
     duration: string;
     /**
      * 
      * @type {string}
-     * @memberof QueryCallsResponse
+     * @memberof VideoQueryCallsResponse
      */
     next?: string;
     /**
      * 
      * @type {string}
-     * @memberof QueryCallsResponse
+     * @memberof VideoQueryCallsResponse
      */
     prev?: string;
 }
 /**
  * 
  * @export
- * @interface QueryMembersRequest
+ * @interface VideoQueryMembersRequest
  */
-export interface QueryMembersRequest {
+export interface VideoQueryMembersRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     filter_conditions?: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     id: string;
     /**
      * 
      * @type {number}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     limit?: number;
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     next?: string;
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     prev?: string;
     /**
      * 
-     * @type {Array<SortParamRequest>}
-     * @memberof QueryMembersRequest
+     * @type {Array<VideoSortParamRequest>}
+     * @memberof VideoQueryMembersRequest
      */
-    sort?: Array<SortParamRequest>;
+    sort?: Array<VideoSortParamRequest>;
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersRequest
+     * @memberof VideoQueryMembersRequest
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface QueryMembersResponse
+ * @interface VideoQueryMembersResponse
  */
-export interface QueryMembersResponse {
+export interface VideoQueryMembersResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof QueryMembersResponse
+     * @memberof VideoQueryMembersResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof QueryMembersResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoQueryMembersResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersResponse
+     * @memberof VideoQueryMembersResponse
      */
     next?: string;
     /**
      * 
      * @type {string}
-     * @memberof QueryMembersResponse
+     * @memberof VideoQueryMembersResponse
      */
     prev?: string;
 }
 /**
  * RTMP input settings
  * @export
- * @interface RTMPIngress
+ * @interface VideoRTMPIngress
  */
-export interface RTMPIngress {
+export interface VideoRTMPIngress {
     /**
      * 
      * @type {string}
-     * @memberof RTMPIngress
+     * @memberof VideoRTMPIngress
      */
     address: string;
 }
 /**
  * 
  * @export
- * @interface ReactionResponse
+ * @interface VideoReactionResponse
  */
-export interface ReactionResponse {
+export interface VideoReactionResponse {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof ReactionResponse
+     * @memberof VideoReactionResponse
      */
     custom?: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof ReactionResponse
+     * @memberof VideoReactionResponse
      */
     emoji_code?: string;
     /**
      * 
      * @type {string}
-     * @memberof ReactionResponse
+     * @memberof VideoReactionResponse
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof ReactionResponse
+     * @type {VideoUserResponse}
+     * @memberof VideoReactionResponse
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface RecordSettingsRequest
+ * @interface VideoRecordSettingsRequest
  */
-export interface RecordSettingsRequest {
+export interface VideoRecordSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof RecordSettingsRequest
+     * @memberof VideoRecordSettingsRequest
      */
     audio_only?: boolean;
     /**
      * 
-     * @type {LayoutSettingsRequest}
-     * @memberof RecordSettingsRequest
+     * @type {VideoLayoutSettingsRequest}
+     * @memberof VideoRecordSettingsRequest
      */
-    layout?: LayoutSettingsRequest;
+    layout?: VideoLayoutSettingsRequest;
     /**
      * 
      * @type {string}
-     * @memberof RecordSettingsRequest
+     * @memberof VideoRecordSettingsRequest
      */
-    mode: RecordSettingsRequestModeEnum;
+    mode: VideoRecordSettingsRequestModeEnum;
     /**
      * 
      * @type {string}
-     * @memberof RecordSettingsRequest
+     * @memberof VideoRecordSettingsRequest
      */
-    quality?: RecordSettingsRequestQualityEnum;
+    quality?: VideoRecordSettingsRequestQualityEnum;
 }
 
 
 /**
  * @export
  */
-export const RecordSettingsRequestModeEnum = {
+export const VideoRecordSettingsRequestModeEnum = {
     AVAILABLE: 'available',
     DISABLED: 'disabled',
     AUTO_ON: 'auto-on'
 } as const;
-export type RecordSettingsRequestModeEnum = typeof RecordSettingsRequestModeEnum[keyof typeof RecordSettingsRequestModeEnum];
+export type VideoRecordSettingsRequestModeEnum = typeof VideoRecordSettingsRequestModeEnum[keyof typeof VideoRecordSettingsRequestModeEnum];
 
 /**
  * @export
  */
-export const RecordSettingsRequestQualityEnum = {
+export const VideoRecordSettingsRequestQualityEnum = {
     _360P: '360p',
     _480P: '480p',
     _720P: '720p',
     _1080P: '1080p',
     _1440P: '1440p'
 } as const;
-export type RecordSettingsRequestQualityEnum = typeof RecordSettingsRequestQualityEnum[keyof typeof RecordSettingsRequestQualityEnum];
+export type VideoRecordSettingsRequestQualityEnum = typeof VideoRecordSettingsRequestQualityEnum[keyof typeof VideoRecordSettingsRequestQualityEnum];
 
 /**
  * 
  * @export
- * @interface RecordSettingsResponse
+ * @interface VideoRecordSettingsResponse
  */
-export interface RecordSettingsResponse {
+export interface VideoRecordSettingsResponse {
     /**
      * 
      * @type {boolean}
-     * @memberof RecordSettingsResponse
+     * @memberof VideoRecordSettingsResponse
      */
     audio_only: boolean;
     /**
      * 
-     * @type {LayoutSettings}
-     * @memberof RecordSettingsResponse
+     * @type {VideoLayoutSettings}
+     * @memberof VideoRecordSettingsResponse
      */
-    layout: LayoutSettings;
+    layout: VideoLayoutSettings;
     /**
      * 
      * @type {string}
-     * @memberof RecordSettingsResponse
+     * @memberof VideoRecordSettingsResponse
      */
     mode: string;
     /**
      * 
      * @type {string}
-     * @memberof RecordSettingsResponse
+     * @memberof VideoRecordSettingsResponse
      */
     quality: string;
 }
 /**
  * 
  * @export
- * @interface RejectCallResponse
+ * @interface VideoRejectCallResponse
  */
-export interface RejectCallResponse {
+export interface VideoRejectCallResponse {
     /**
      * 
      * @type {string}
-     * @memberof RejectCallResponse
+     * @memberof VideoRejectCallResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface RequestPermissionRequest
+ * @interface VideoRequestPermissionRequest
  */
-export interface RequestPermissionRequest {
+export interface VideoRequestPermissionRequest {
     /**
      * 
      * @type {Array<string>}
-     * @memberof RequestPermissionRequest
+     * @memberof VideoRequestPermissionRequest
      */
     permissions: Array<string>;
 }
 /**
  * 
  * @export
- * @interface RequestPermissionResponse
+ * @interface VideoRequestPermissionResponse
  */
-export interface RequestPermissionResponse {
+export interface VideoRequestPermissionResponse {
     /**
      * 
      * @type {string}
-     * @memberof RequestPermissionResponse
+     * @memberof VideoRequestPermissionResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface Response
+ * @interface VideoResponse
  */
-export interface Response {
+export interface VideoResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof Response
+     * @memberof VideoResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface RingSettings
+ * @interface VideoRingSettings
  */
-export interface RingSettings {
+export interface VideoRingSettings {
     /**
      * 
      * @type {number}
-     * @memberof RingSettings
+     * @memberof VideoRingSettings
      */
     auto_cancel_timeout_ms: number;
     /**
      * 
      * @type {number}
-     * @memberof RingSettings
+     * @memberof VideoRingSettings
      */
     incoming_call_timeout_ms: number;
 }
 /**
  * 
  * @export
- * @interface RingSettingsRequest
+ * @interface VideoRingSettingsRequest
  */
-export interface RingSettingsRequest {
+export interface VideoRingSettingsRequest {
     /**
      * 
      * @type {number}
-     * @memberof RingSettingsRequest
+     * @memberof VideoRingSettingsRequest
      */
     auto_cancel_timeout_ms?: number;
     /**
      * 
      * @type {number}
-     * @memberof RingSettingsRequest
+     * @memberof VideoRingSettingsRequest
      */
     incoming_call_timeout_ms?: number;
 }
 /**
  * 
  * @export
- * @interface SFUResponse
+ * @interface VideoSFUResponse
  */
-export interface SFUResponse {
+export interface VideoSFUResponse {
     /**
      * 
      * @type {string}
-     * @memberof SFUResponse
+     * @memberof VideoSFUResponse
      */
     edge_name: string;
     /**
      * 
      * @type {string}
-     * @memberof SFUResponse
+     * @memberof VideoSFUResponse
      */
     url: string;
     /**
      * 
      * @type {string}
-     * @memberof SFUResponse
+     * @memberof VideoSFUResponse
      */
     ws_endpoint: string;
 }
 /**
  * 
  * @export
- * @interface ScreensharingSettings
+ * @interface VideoScreensharingSettings
  */
-export interface ScreensharingSettings {
+export interface VideoScreensharingSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof ScreensharingSettings
+     * @memberof VideoScreensharingSettings
      */
     access_request_enabled: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof ScreensharingSettings
+     * @memberof VideoScreensharingSettings
      */
     enabled: boolean;
 }
 /**
  * 
  * @export
- * @interface ScreensharingSettingsRequest
+ * @interface VideoScreensharingSettingsRequest
  */
-export interface ScreensharingSettingsRequest {
+export interface VideoScreensharingSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof ScreensharingSettingsRequest
+     * @memberof VideoScreensharingSettingsRequest
      */
     access_request_enabled?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof ScreensharingSettingsRequest
+     * @memberof VideoScreensharingSettingsRequest
      */
     enabled?: boolean;
 }
 /**
  * 
  * @export
- * @interface SendEventRequest
+ * @interface VideoSendEventRequest
  */
-export interface SendEventRequest {
+export interface VideoSendEventRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof SendEventRequest
+     * @memberof VideoSendEventRequest
      */
     custom?: { [key: string]: any; };
 }
 /**
  * 
  * @export
- * @interface SendEventResponse
+ * @interface VideoSendEventResponse
  */
-export interface SendEventResponse {
+export interface VideoSendEventResponse {
     /**
      * 
      * @type {string}
-     * @memberof SendEventResponse
+     * @memberof VideoSendEventResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface SendReactionRequest
+ * @interface VideoSendReactionRequest
  */
-export interface SendReactionRequest {
+export interface VideoSendReactionRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof SendReactionRequest
+     * @memberof VideoSendReactionRequest
      */
     custom?: { [key: string]: any; };
     /**
      * 
      * @type {string}
-     * @memberof SendReactionRequest
+     * @memberof VideoSendReactionRequest
      */
     emoji_code?: string;
     /**
      * 
      * @type {string}
-     * @memberof SendReactionRequest
+     * @memberof VideoSendReactionRequest
      */
     type: string;
 }
 /**
  * 
  * @export
- * @interface SendReactionResponse
+ * @interface VideoSendReactionResponse
  */
-export interface SendReactionResponse {
+export interface VideoSendReactionResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof SendReactionResponse
+     * @memberof VideoSendReactionResponse
      */
     duration: string;
     /**
      * 
-     * @type {ReactionResponse}
-     * @memberof SendReactionResponse
+     * @type {VideoReactionResponse}
+     * @memberof VideoSendReactionResponse
      */
-    reaction: ReactionResponse;
+    reaction: VideoReactionResponse;
 }
 /**
  * 
  * @export
- * @interface SortParamRequest
+ * @interface VideoSortParamRequest
  */
-export interface SortParamRequest {
+export interface VideoSortParamRequest {
     /**
      * Direction of sorting, -1 for descending, 1 for ascending
      * @type {number}
-     * @memberof SortParamRequest
+     * @memberof VideoSortParamRequest
      */
     direction?: number;
     /**
      * Name of field to sort by
      * @type {string}
-     * @memberof SortParamRequest
+     * @memberof VideoSortParamRequest
      */
     field?: string;
 }
 /**
  * 
  * @export
- * @interface StartHLSBroadcastingResponse
+ * @interface VideoStartHLSBroadcastingResponse
  */
-export interface StartHLSBroadcastingResponse {
+export interface VideoStartHLSBroadcastingResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof StartHLSBroadcastingResponse
+     * @memberof VideoStartHLSBroadcastingResponse
      */
     duration: string;
     /**
      * 
      * @type {string}
-     * @memberof StartHLSBroadcastingResponse
+     * @memberof VideoStartHLSBroadcastingResponse
      */
     playlist_url: string;
 }
 /**
  * 
  * @export
- * @interface StartRecordingResponse
+ * @interface VideoStartRecordingResponse
  */
-export interface StartRecordingResponse {
+export interface VideoStartRecordingResponse {
     /**
      * 
      * @type {string}
-     * @memberof StartRecordingResponse
+     * @memberof VideoStartRecordingResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface StartTranscriptionResponse
+ * @interface VideoStartTranscriptionResponse
  */
-export interface StartTranscriptionResponse {
+export interface VideoStartTranscriptionResponse {
     /**
      * 
      * @type {string}
-     * @memberof StartTranscriptionResponse
+     * @memberof VideoStartTranscriptionResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface StopHLSBroadcastingResponse
+ * @interface VideoStopHLSBroadcastingResponse
  */
-export interface StopHLSBroadcastingResponse {
+export interface VideoStopHLSBroadcastingResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof StopHLSBroadcastingResponse
+     * @memberof VideoStopHLSBroadcastingResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface StopLiveResponse
+ * @interface VideoStopLiveResponse
  */
-export interface StopLiveResponse {
+export interface VideoStopLiveResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof StopLiveResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoStopLiveResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof StopLiveResponse
+     * @memberof VideoStopLiveResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface StopRecordingResponse
+ * @interface VideoStopRecordingResponse
  */
-export interface StopRecordingResponse {
+export interface VideoStopRecordingResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof StopRecordingResponse
+     * @memberof VideoStopRecordingResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface StopTranscriptionResponse
+ * @interface VideoStopTranscriptionResponse
  */
-export interface StopTranscriptionResponse {
+export interface VideoStopTranscriptionResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof StopTranscriptionResponse
+     * @memberof VideoStopTranscriptionResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface TargetResolution
+ * @interface VideoTargetResolution
  */
-export interface TargetResolution {
+export interface VideoTargetResolution {
     /**
      * 
      * @type {number}
-     * @memberof TargetResolution
+     * @memberof VideoTargetResolution
      */
     bitrate: number;
     /**
      * 
      * @type {number}
-     * @memberof TargetResolution
+     * @memberof VideoTargetResolution
      */
     height: number;
     /**
      * 
      * @type {number}
-     * @memberof TargetResolution
+     * @memberof VideoTargetResolution
      */
     width: number;
 }
 /**
  * 
  * @export
- * @interface TargetResolutionRequest
+ * @interface VideoTargetResolutionRequest
  */
-export interface TargetResolutionRequest {
+export interface VideoTargetResolutionRequest {
     /**
      * 
      * @type {number}
-     * @memberof TargetResolutionRequest
+     * @memberof VideoTargetResolutionRequest
      */
     bitrate?: number;
     /**
      * 
      * @type {number}
-     * @memberof TargetResolutionRequest
+     * @memberof VideoTargetResolutionRequest
      */
     height?: number;
     /**
      * 
      * @type {number}
-     * @memberof TargetResolutionRequest
+     * @memberof VideoTargetResolutionRequest
      */
     width?: number;
 }
 /**
  * 
  * @export
- * @interface ThumbnailResponse
+ * @interface VideoThumbnailResponse
  */
-export interface ThumbnailResponse {
+export interface VideoThumbnailResponse {
     /**
      * 
      * @type {string}
-     * @memberof ThumbnailResponse
+     * @memberof VideoThumbnailResponse
      */
     image_url: string;
 }
 /**
  * 
  * @export
- * @interface ThumbnailsSettings
+ * @interface VideoThumbnailsSettings
  */
-export interface ThumbnailsSettings {
+export interface VideoThumbnailsSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof ThumbnailsSettings
+     * @memberof VideoThumbnailsSettings
      */
     enabled: boolean;
 }
 /**
  * 
  * @export
- * @interface ThumbnailsSettingsRequest
+ * @interface VideoThumbnailsSettingsRequest
  */
-export interface ThumbnailsSettingsRequest {
+export interface VideoThumbnailsSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof ThumbnailsSettingsRequest
+     * @memberof VideoThumbnailsSettingsRequest
      */
     enabled?: boolean;
 }
 /**
  * 
  * @export
- * @interface TranscriptionSettings
+ * @interface VideoTranscriptionSettings
  */
-export interface TranscriptionSettings {
+export interface VideoTranscriptionSettings {
     /**
      * 
      * @type {string}
-     * @memberof TranscriptionSettings
+     * @memberof VideoTranscriptionSettings
      */
     closed_caption_mode: string;
     /**
      * 
      * @type {string}
-     * @memberof TranscriptionSettings
+     * @memberof VideoTranscriptionSettings
      */
-    mode: TranscriptionSettingsModeEnum;
+    mode: VideoTranscriptionSettingsModeEnum;
 }
 
 
 /**
  * @export
  */
-export const TranscriptionSettingsModeEnum = {
+export const VideoTranscriptionSettingsModeEnum = {
     AVAILABLE: 'available',
     DISABLED: 'disabled',
     AUTO_ON: 'auto-on'
 } as const;
-export type TranscriptionSettingsModeEnum = typeof TranscriptionSettingsModeEnum[keyof typeof TranscriptionSettingsModeEnum];
+export type VideoTranscriptionSettingsModeEnum = typeof VideoTranscriptionSettingsModeEnum[keyof typeof VideoTranscriptionSettingsModeEnum];
 
 /**
  * 
  * @export
- * @interface TranscriptionSettingsRequest
+ * @interface VideoTranscriptionSettingsRequest
  */
-export interface TranscriptionSettingsRequest {
+export interface VideoTranscriptionSettingsRequest {
     /**
      * 
      * @type {string}
-     * @memberof TranscriptionSettingsRequest
+     * @memberof VideoTranscriptionSettingsRequest
      */
     closed_caption_mode?: string;
     /**
      * 
      * @type {string}
-     * @memberof TranscriptionSettingsRequest
+     * @memberof VideoTranscriptionSettingsRequest
      */
-    mode?: TranscriptionSettingsRequestModeEnum;
+    mode?: VideoTranscriptionSettingsRequestModeEnum;
 }
 
 
 /**
  * @export
  */
-export const TranscriptionSettingsRequestModeEnum = {
+export const VideoTranscriptionSettingsRequestModeEnum = {
     AVAILABLE: 'available',
     DISABLED: 'disabled',
     AUTO_ON: 'auto-on'
 } as const;
-export type TranscriptionSettingsRequestModeEnum = typeof TranscriptionSettingsRequestModeEnum[keyof typeof TranscriptionSettingsRequestModeEnum];
+export type VideoTranscriptionSettingsRequestModeEnum = typeof VideoTranscriptionSettingsRequestModeEnum[keyof typeof VideoTranscriptionSettingsRequestModeEnum];
 
 /**
  * 
  * @export
- * @interface UnblockUserRequest
+ * @interface VideoUnblockUserRequest
  */
-export interface UnblockUserRequest {
+export interface VideoUnblockUserRequest {
     /**
      * the user to unblock
      * @type {string}
-     * @memberof UnblockUserRequest
+     * @memberof VideoUnblockUserRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface UnblockUserResponse
+ * @interface VideoUnblockUserResponse
  */
-export interface UnblockUserResponse {
+export interface VideoUnblockUserResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof UnblockUserResponse
+     * @memberof VideoUnblockUserResponse
      */
     duration: string;
 }
@@ -4047,565 +4047,565 @@ export interface UnblockUserResponse {
  * This event is sent when a user is unblocked on a call, 
  * this can be useful to notify the user that they can now join the call again
  * @export
- * @interface UnblockedUserEvent
+ * @interface VideoUnblockedUserEvent
  */
-export interface UnblockedUserEvent {
+export interface VideoUnblockedUserEvent {
     /**
      * 
      * @type {string}
-     * @memberof UnblockedUserEvent
+     * @memberof VideoUnblockedUserEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof UnblockedUserEvent
+     * @memberof VideoUnblockedUserEvent
      */
     created_at: string;
     /**
      * The type of event: "call.unblocked_user" in this case
      * @type {string}
-     * @memberof UnblockedUserEvent
+     * @memberof VideoUnblockedUserEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof UnblockedUserEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoUnblockedUserEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface UnpinRequest
+ * @interface VideoUnpinRequest
  */
-export interface UnpinRequest {
+export interface VideoUnpinRequest {
     /**
      * 
      * @type {string}
-     * @memberof UnpinRequest
+     * @memberof VideoUnpinRequest
      */
     session_id: string;
     /**
      * 
      * @type {string}
-     * @memberof UnpinRequest
+     * @memberof VideoUnpinRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface UnpinResponse
+ * @interface VideoUnpinResponse
  */
-export interface UnpinResponse {
+export interface VideoUnpinResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof UnpinResponse
+     * @memberof VideoUnpinResponse
      */
     duration: string;
 }
 /**
  * 
  * @export
- * @interface UpdateCallMembersRequest
+ * @interface VideoUpdateCallMembersRequest
  */
-export interface UpdateCallMembersRequest {
+export interface VideoUpdateCallMembersRequest {
     /**
      * List of userID to remove
      * @type {Array<string>}
-     * @memberof UpdateCallMembersRequest
+     * @memberof VideoUpdateCallMembersRequest
      */
     remove_members?: Array<string>;
     /**
      * List of members to update or insert
-     * @type {Array<MemberRequest>}
-     * @memberof UpdateCallMembersRequest
+     * @type {Array<VideoMemberRequest>}
+     * @memberof VideoUpdateCallMembersRequest
      */
-    update_members?: Array<MemberRequest>;
+    update_members?: Array<VideoMemberRequest>;
 }
 /**
  * 
  * @export
- * @interface UpdateCallMembersResponse
+ * @interface VideoUpdateCallMembersResponse
  */
-export interface UpdateCallMembersResponse {
+export interface VideoUpdateCallMembersResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof UpdateCallMembersResponse
+     * @memberof VideoUpdateCallMembersResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof UpdateCallMembersResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoUpdateCallMembersResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
 }
 /**
  * 
  * @export
- * @interface UpdateCallRequest
+ * @interface VideoUpdateCallRequest
  */
-export interface UpdateCallRequest {
+export interface VideoUpdateCallRequest {
     /**
      * Custom data for this object
      * @type {{ [key: string]: any; }}
-     * @memberof UpdateCallRequest
+     * @memberof VideoUpdateCallRequest
      */
     custom?: { [key: string]: any; };
     /**
      * 
-     * @type {CallSettingsRequest}
-     * @memberof UpdateCallRequest
+     * @type {VideoCallSettingsRequest}
+     * @memberof VideoUpdateCallRequest
      */
-    settings_override?: CallSettingsRequest;
+    settings_override?: VideoCallSettingsRequest;
     /**
      * the time the call is scheduled to start
      * @type {string}
-     * @memberof UpdateCallRequest
+     * @memberof VideoUpdateCallRequest
      */
     starts_at?: string;
 }
 /**
  * Represents a call
  * @export
- * @interface UpdateCallResponse
+ * @interface VideoUpdateCallResponse
  */
-export interface UpdateCallResponse {
+export interface VideoUpdateCallResponse {
     /**
      * 
-     * @type {CallResponse}
-     * @memberof UpdateCallResponse
+     * @type {VideoCallResponse}
+     * @memberof VideoUpdateCallResponse
      */
-    call: CallResponse;
+    call: VideoCallResponse;
     /**
      * 
      * @type {string}
-     * @memberof UpdateCallResponse
+     * @memberof VideoUpdateCallResponse
      */
     duration: string;
     /**
      * 
-     * @type {Array<MemberResponse>}
-     * @memberof UpdateCallResponse
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoUpdateCallResponse
      */
-    members: Array<MemberResponse>;
+    members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {MemberResponse}
-     * @memberof UpdateCallResponse
+     * @type {VideoMemberResponse}
+     * @memberof VideoUpdateCallResponse
      */
-    membership?: MemberResponse;
+    membership?: VideoMemberResponse;
     /**
      * 
-     * @type {Array<OwnCapability>}
-     * @memberof UpdateCallResponse
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoUpdateCallResponse
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
 }
 /**
  * 
  * @export
- * @interface UpdateCallTypeRequest
+ * @interface VideoUpdateCallTypeRequest
  */
-export interface UpdateCallTypeRequest {
+export interface VideoUpdateCallTypeRequest {
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof UpdateCallTypeRequest
+     * @memberof VideoUpdateCallTypeRequest
      */
     grants?: { [key: string]: Array<string>; };
     /**
      * 
-     * @type {NotificationSettingsRequest}
-     * @memberof UpdateCallTypeRequest
+     * @type {VideoNotificationSettingsRequest}
+     * @memberof VideoUpdateCallTypeRequest
      */
-    notification_settings?: NotificationSettingsRequest;
+    notification_settings?: VideoNotificationSettingsRequest;
     /**
      * 
-     * @type {CallSettingsRequest}
-     * @memberof UpdateCallTypeRequest
+     * @type {VideoCallSettingsRequest}
+     * @memberof VideoUpdateCallTypeRequest
      */
-    settings?: CallSettingsRequest;
+    settings?: VideoCallSettingsRequest;
 }
 /**
  * 
  * @export
- * @interface UpdateCallTypeResponse
+ * @interface VideoUpdateCallTypeResponse
  */
-export interface UpdateCallTypeResponse {
+export interface VideoUpdateCallTypeResponse {
     /**
      * 
      * @type {string}
-     * @memberof UpdateCallTypeResponse
+     * @memberof VideoUpdateCallTypeResponse
      */
     created_at: string;
     /**
      * 
      * @type {string}
-     * @memberof UpdateCallTypeResponse
+     * @memberof VideoUpdateCallTypeResponse
      */
     duration: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
-     * @memberof UpdateCallTypeResponse
+     * @memberof VideoUpdateCallTypeResponse
      */
     grants: { [key: string]: Array<string>; };
     /**
      * 
      * @type {string}
-     * @memberof UpdateCallTypeResponse
+     * @memberof VideoUpdateCallTypeResponse
      */
     name: string;
     /**
      * 
-     * @type {NotificationSettings}
-     * @memberof UpdateCallTypeResponse
+     * @type {VideoNotificationSettings}
+     * @memberof VideoUpdateCallTypeResponse
      */
-    notification_settings: NotificationSettings;
+    notification_settings: VideoNotificationSettings;
     /**
      * 
-     * @type {CallSettingsResponse}
-     * @memberof UpdateCallTypeResponse
+     * @type {VideoCallSettingsResponse}
+     * @memberof VideoUpdateCallTypeResponse
      */
-    settings: CallSettingsResponse;
+    settings: VideoCallSettingsResponse;
     /**
      * 
      * @type {string}
-     * @memberof UpdateCallTypeResponse
+     * @memberof VideoUpdateCallTypeResponse
      */
     updated_at: string;
 }
 /**
  * 
  * @export
- * @interface UpdateUserPermissionsRequest
+ * @interface VideoUpdateUserPermissionsRequest
  */
-export interface UpdateUserPermissionsRequest {
+export interface VideoUpdateUserPermissionsRequest {
     /**
      * 
      * @type {Array<string>}
-     * @memberof UpdateUserPermissionsRequest
+     * @memberof VideoUpdateUserPermissionsRequest
      */
     grant_permissions?: Array<string>;
     /**
      * 
      * @type {Array<string>}
-     * @memberof UpdateUserPermissionsRequest
+     * @memberof VideoUpdateUserPermissionsRequest
      */
     revoke_permissions?: Array<string>;
     /**
      * 
      * @type {string}
-     * @memberof UpdateUserPermissionsRequest
+     * @memberof VideoUpdateUserPermissionsRequest
      */
     user_id: string;
 }
 /**
  * 
  * @export
- * @interface UpdateUserPermissionsResponse
+ * @interface VideoUpdateUserPermissionsResponse
  */
-export interface UpdateUserPermissionsResponse {
+export interface VideoUpdateUserPermissionsResponse {
     /**
      * Duration of the request in human-readable format
      * @type {string}
-     * @memberof UpdateUserPermissionsResponse
+     * @memberof VideoUpdateUserPermissionsResponse
      */
     duration: string;
 }
 /**
  * This event is sent to notify about permission changes for a user, clients receiving this event should update their UI accordingly
  * @export
- * @interface UpdatedCallPermissionsEvent
+ * @interface VideoUpdatedCallPermissionsEvent
  */
-export interface UpdatedCallPermissionsEvent {
+export interface VideoUpdatedCallPermissionsEvent {
     /**
      * 
      * @type {string}
-     * @memberof UpdatedCallPermissionsEvent
+     * @memberof VideoUpdatedCallPermissionsEvent
      */
     call_cid: string;
     /**
      * 
      * @type {string}
-     * @memberof UpdatedCallPermissionsEvent
+     * @memberof VideoUpdatedCallPermissionsEvent
      */
     created_at: string;
     /**
      * The capabilities of the current user
-     * @type {Array<OwnCapability>}
-     * @memberof UpdatedCallPermissionsEvent
+     * @type {Array<VideoOwnCapability>}
+     * @memberof VideoUpdatedCallPermissionsEvent
      */
-    own_capabilities: Array<OwnCapability>;
+    own_capabilities: Array<VideoOwnCapability>;
     /**
      * The type of event: "call.permissions_updated" in this case
      * @type {string}
-     * @memberof UpdatedCallPermissionsEvent
+     * @memberof VideoUpdatedCallPermissionsEvent
      */
     type: string;
     /**
      * 
-     * @type {UserResponse}
-     * @memberof UpdatedCallPermissionsEvent
+     * @type {VideoUserResponse}
+     * @memberof VideoUpdatedCallPermissionsEvent
      */
-    user: UserResponse;
+    user: VideoUserResponse;
 }
 /**
  * 
  * @export
- * @interface UserRequest
+ * @interface VideoUserRequest
  */
-export interface UserRequest {
+export interface VideoUserRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     custom?: { [key: string]: any; };
     /**
      * User ID
      * @type {string}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     image?: string;
     /**
      * Optional name of user
      * @type {string}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     name?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     role?: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof UserRequest
+     * @memberof VideoUserRequest
      */
     teams?: Array<string>;
 }
 /**
  * 
  * @export
- * @interface UserResponse
+ * @interface VideoUserResponse
  */
-export interface UserResponse {
+export interface VideoUserResponse {
     /**
      * Date/time of creation
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     created_at: string;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     custom: { [key: string]: any; };
     /**
      * Date/time of deletion
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     deleted_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     image?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     name?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     role: string;
     /**
      * 
      * @type {Array<string>}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     teams: Array<string>;
     /**
      * Date/time of the last update
      * @type {string}
-     * @memberof UserResponse
+     * @memberof VideoUserResponse
      */
     updated_at: string;
 }
 /**
- * @type VideoEvent
+ * @type VideoVideoEvent
  * The discriminator object for all websocket events, you should use this to map event payloads to their own type
  * @export
  */
-export type VideoEvent = { type: 'call.accepted' } & CallAcceptedEvent | { type: 'call.blocked_user' } & BlockedUserEvent | { type: 'call.created' } & CallCreatedEvent | { type: 'call.ended' } & CallEndedEvent | { type: 'call.hls_broadcasting_started' } & CallHLSBroadcastingStartedEvent | { type: 'call.hls_broadcasting_stopped' } & CallHLSBroadcastingStoppedEvent | { type: 'call.live_started' } & CallLiveStartedEvent | { type: 'call.member_added' } & CallMemberAddedEvent | { type: 'call.member_removed' } & CallMemberRemovedEvent | { type: 'call.member_updated' } & CallMemberUpdatedEvent | { type: 'call.member_updated_permission' } & CallMemberUpdatedPermissionEvent | { type: 'call.notification' } & CallNotificationEvent | { type: 'call.permission_request' } & PermissionRequestEvent | { type: 'call.permissions_updated' } & UpdatedCallPermissionsEvent | { type: 'call.reaction_new' } & CallReactionEvent | { type: 'call.recording_failed' } & CallRecordingFailedEvent | { type: 'call.recording_ready' } & CallRecordingReadyEvent | { type: 'call.recording_started' } & CallRecordingStartedEvent | { type: 'call.recording_stopped' } & CallRecordingStoppedEvent | { type: 'call.rejected' } & CallRejectedEvent | { type: 'call.ring' } & CallRingEvent | { type: 'call.session_ended' } & CallSessionEndedEvent | { type: 'call.session_participant_joined' } & CallSessionParticipantJoinedEvent | { type: 'call.session_participant_left' } & CallSessionParticipantLeftEvent | { type: 'call.session_started' } & CallSessionStartedEvent | { type: 'call.unblocked_user' } & UnblockedUserEvent | { type: 'call.updated' } & CallUpdatedEvent | { type: 'call.user_muted' } & CallUserMuted | { type: 'connection.error' } & ConnectionErrorEvent | { type: 'connection.ok' } & ConnectedEvent | { type: 'custom' } & CustomVideoEvent | { type: 'health.check' } & HealthCheckEvent;
+export type VideoVideoEvent = { type: 'call.accepted' } & VideoCallAcceptedEvent | { type: 'call.blocked_user' } & VideoBlockedUserEvent | { type: 'call.created' } & VideoCallCreatedEvent | { type: 'call.ended' } & VideoCallEndedEvent | { type: 'call.hls_broadcasting_started' } & VideoCallHLSBroadcastingStartedEvent | { type: 'call.hls_broadcasting_stopped' } & VideoCallHLSBroadcastingStoppedEvent | { type: 'call.live_started' } & VideoCallLiveStartedEvent | { type: 'call.member_added' } & VideoCallMemberAddedEvent | { type: 'call.member_removed' } & VideoCallMemberRemovedEvent | { type: 'call.member_updated' } & VideoCallMemberUpdatedEvent | { type: 'call.member_updated_permission' } & VideoCallMemberUpdatedPermissionEvent | { type: 'call.notification' } & VideoCallNotificationEvent | { type: 'call.permission_request' } & VideoPermissionRequestEvent | { type: 'call.permissions_updated' } & VideoUpdatedCallPermissionsEvent | { type: 'call.reaction_new' } & VideoCallReactionEvent | { type: 'call.recording_failed' } & VideoCallRecordingFailedEvent | { type: 'call.recording_ready' } & VideoCallRecordingReadyEvent | { type: 'call.recording_started' } & VideoCallRecordingStartedEvent | { type: 'call.recording_stopped' } & VideoCallRecordingStoppedEvent | { type: 'call.rejected' } & VideoCallRejectedEvent | { type: 'call.ring' } & VideoCallRingEvent | { type: 'call.session_ended' } & VideoCallSessionEndedEvent | { type: 'call.session_participant_joined' } & VideoCallSessionParticipantJoinedEvent | { type: 'call.session_participant_left' } & VideoCallSessionParticipantLeftEvent | { type: 'call.session_started' } & VideoCallSessionStartedEvent | { type: 'call.unblocked_user' } & VideoUnblockedUserEvent | { type: 'call.updated' } & VideoCallUpdatedEvent | { type: 'call.user_muted' } & VideoCallUserMuted | { type: 'connection.error' } & VideoConnectionErrorEvent | { type: 'connection.ok' } & VideoConnectedEvent | { type: 'custom' } & VideoCustomVideoEvent | { type: 'health.check' } & VideoHealthCheckEvent;
 /**
  * 
  * @export
- * @interface VideoSettings
+ * @interface VideoVideoSettings
  */
-export interface VideoSettings {
+export interface VideoVideoSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettings
+     * @memberof VideoVideoSettings
      */
     access_request_enabled: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettings
+     * @memberof VideoVideoSettings
      */
     camera_default_on: boolean;
     /**
      * 
      * @type {string}
-     * @memberof VideoSettings
+     * @memberof VideoVideoSettings
      */
-    camera_facing: VideoSettingsCameraFacingEnum;
+    camera_facing: VideoVideoSettingsCameraFacingEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettings
+     * @memberof VideoVideoSettings
      */
     enabled: boolean;
     /**
      * 
-     * @type {TargetResolution}
-     * @memberof VideoSettings
+     * @type {VideoTargetResolution}
+     * @memberof VideoVideoSettings
      */
-    target_resolution: TargetResolution;
+    target_resolution: VideoTargetResolution;
 }
 
 
 /**
  * @export
  */
-export const VideoSettingsCameraFacingEnum = {
+export const VideoVideoSettingsCameraFacingEnum = {
     FRONT: 'front',
     BACK: 'back',
     EXTERNAL: 'external'
 } as const;
-export type VideoSettingsCameraFacingEnum = typeof VideoSettingsCameraFacingEnum[keyof typeof VideoSettingsCameraFacingEnum];
+export type VideoVideoSettingsCameraFacingEnum = typeof VideoVideoSettingsCameraFacingEnum[keyof typeof VideoVideoSettingsCameraFacingEnum];
 
 /**
  * 
  * @export
- * @interface VideoSettingsRequest
+ * @interface VideoVideoSettingsRequest
  */
-export interface VideoSettingsRequest {
+export interface VideoVideoSettingsRequest {
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettingsRequest
+     * @memberof VideoVideoSettingsRequest
      */
     access_request_enabled?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettingsRequest
+     * @memberof VideoVideoSettingsRequest
      */
     camera_default_on?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof VideoSettingsRequest
+     * @memberof VideoVideoSettingsRequest
      */
-    camera_facing?: VideoSettingsRequestCameraFacingEnum;
+    camera_facing?: VideoVideoSettingsRequestCameraFacingEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof VideoSettingsRequest
+     * @memberof VideoVideoSettingsRequest
      */
     enabled?: boolean;
     /**
      * 
-     * @type {TargetResolutionRequest}
-     * @memberof VideoSettingsRequest
+     * @type {VideoTargetResolutionRequest}
+     * @memberof VideoVideoSettingsRequest
      */
-    target_resolution?: TargetResolutionRequest;
+    target_resolution?: VideoTargetResolutionRequest;
 }
 
 
 /**
  * @export
  */
-export const VideoSettingsRequestCameraFacingEnum = {
+export const VideoVideoSettingsRequestCameraFacingEnum = {
     FRONT: 'front',
     BACK: 'back',
     EXTERNAL: 'external'
 } as const;
-export type VideoSettingsRequestCameraFacingEnum = typeof VideoSettingsRequestCameraFacingEnum[keyof typeof VideoSettingsRequestCameraFacingEnum];
+export type VideoVideoSettingsRequestCameraFacingEnum = typeof VideoVideoSettingsRequestCameraFacingEnum[keyof typeof VideoVideoSettingsRequestCameraFacingEnum];
 
 /**
  * 
  * @export
- * @interface WSAuthMessageRequest
+ * @interface VideoWSAuthMessageRequest
  */
-export interface WSAuthMessageRequest {
+export interface VideoWSAuthMessageRequest {
     /**
      * 
      * @type {string}
-     * @memberof WSAuthMessageRequest
+     * @memberof VideoWSAuthMessageRequest
      */
     token: string;
     /**
      * 
-     * @type {ConnectUserDetailsRequest}
-     * @memberof WSAuthMessageRequest
+     * @type {VideoConnectUserDetailsRequest}
+     * @memberof VideoWSAuthMessageRequest
      */
-    user_details: ConnectUserDetailsRequest;
+    user_details: VideoConnectUserDetailsRequest;
 }
 /**
  * This is just a placeholder for all client events
  * @export
- * @interface WSCallEvent
+ * @interface VideoWSCallEvent
  */
-export interface WSCallEvent {
+export interface VideoWSCallEvent {
     /**
      * 
      * @type {string}
-     * @memberof WSCallEvent
+     * @memberof VideoWSCallEvent
      */
     call_cid?: string;
 }
 /**
  * This is just a placeholder for all client events
  * @export
- * @interface WSClientEvent
+ * @interface VideoWSClientEvent
  */
-export interface WSClientEvent {
+export interface VideoWSClientEvent {
     /**
      * 
      * @type {string}
-     * @memberof WSClientEvent
+     * @memberof VideoWSClientEvent
      */
     connection_id?: string;
 }

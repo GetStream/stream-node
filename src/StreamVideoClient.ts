@@ -1,11 +1,11 @@
 import { StreamCall } from "./StreamCall";
 import { StreamClient } from "./StreamClient";
 import {
-  CreateCallTypeRequest,
   DefaultApi,
-  QueryCallsRequest,
   ServerSideApi,
-  UpdateCallTypeRequest,
+  VideoCreateCallTypeRequest,
+  VideoQueryCallsRequest,
+  VideoUpdateCallTypeRequest,
 } from "./gen/video";
 
 export class StreamVideoClient {
@@ -25,15 +25,15 @@ export class StreamVideoClient {
     return new StreamCall(this.streamClient, type, id);
   };
 
-  queryCalls = (request?: QueryCallsRequest) => {
+  queryCalls = (request?: VideoQueryCallsRequest) => {
     return this.apiClient.queryCalls({
-      queryCallsRequest: request || {},
+      videoQueryCallsRequest: request || {},
     });
   };
 
-  createCallType = (createCallTypeRequest: CreateCallTypeRequest) => {
+  createCallType = (videoCreateCallTypeRequest: VideoCreateCallTypeRequest) => {
     return this.videoServerSideApiClient.createCallType({
-      createCallTypeRequest,
+      videoCreateCallTypeRequest,
     });
   };
 
@@ -51,11 +51,11 @@ export class StreamVideoClient {
 
   updateCallType = (
     name: string,
-    updateCallTypeRequest: UpdateCallTypeRequest
+    videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest
   ) => {
     return this.videoServerSideApiClient.updateCallType({
       name,
-      updateCallTypeRequest,
+      videoUpdateCallTypeRequest,
     });
   };
 }

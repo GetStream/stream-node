@@ -1,12 +1,7 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient } from "../StreamClient";
-import { StreamCall } from "../StreamCall";
-import {
-  RecordSettingsRequestModeEnum,
-  RecordSettingsRequestQualityEnum,
-} from "../gen/video";
+import { StreamClient, StreamCall, VideoRecordSettingsRequestModeEnum, VideoRecordSettingsRequestQualityEnum } from "../";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
@@ -95,38 +90,38 @@ describe("call API", () => {
       let response = await call.update({
         settings_override: {
           recording: {
-            mode: RecordSettingsRequestModeEnum.DISABLED,
+            mode: VideoRecordSettingsRequestModeEnum.DISABLED,
           },
         },
       });
       let settings = response.call.settings.recording;
 
-      expect(settings.mode).toBe(RecordSettingsRequestModeEnum.DISABLED);
+      expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.DISABLED);
 
       response = await call.update({
         settings_override: {
           recording: {
-            mode: RecordSettingsRequestModeEnum.AVAILABLE,
+            mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
           },
         },
       });
 
       settings = response.call.settings.recording;
-      expect(settings.mode).toBe(RecordSettingsRequestModeEnum.AVAILABLE);
+      expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.AVAILABLE);
 
       response = await call.update({
         settings_override: {
           recording: {
             audio_only: false,
-            quality: RecordSettingsRequestQualityEnum._1080P,
-            mode: RecordSettingsRequestModeEnum.AUTO_ON,
+            quality: VideoRecordSettingsRequestQualityEnum._1080P,
+            mode: VideoRecordSettingsRequestModeEnum.AUTO_ON,
           },
         },
       });
 
       settings = response.call.settings.recording;
       expect(settings.audio_only).toBe(false);
-      expect(settings.quality).toBe(RecordSettingsRequestQualityEnum._1080P);
+      expect(settings.quality).toBe(VideoRecordSettingsRequestQualityEnum._1080P);
     });
 
     it("start recording", async () => {

@@ -37,7 +37,8 @@ yarn openapi-generator-cli generate \
   --additional-properties=supportsES6=true \
   --additional-properties=modelPropertyNaming=original \
   --additional-properties=enumPropertyNaming=UPPERCASE \
-  --additional-properties=withoutRuntimeChecks=true
+  --additional-properties=withoutRuntimeChecks=true \
+  --model-name-prefix=Video
 
 # Remove the generated API client, just keep the models
 cp -r $TEMP_OUTPUT_DIR $OUTPUT_DIR/video

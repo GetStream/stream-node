@@ -24,6 +24,7 @@
   "include": [
     "./src",
     "index.ts",
-    "version.ts"
+    "version.ts",
+    "__tests__"
   ]
 }

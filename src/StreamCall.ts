@@ -1,18 +1,19 @@
 import { StreamClient } from "./StreamClient";
 import {
-  BlockUserRequest,
   DefaultApi,
   GetCallRequest,
-  GetOrCreateCallRequest,
-  GoLiveRequest,
-  MuteUsersRequest,
-  PinRequest,
+  VideoPinRequest,
   QueryMembersRequest,
-  UnblockUserRequest,
-  UnpinRequest,
-  UpdateCallMembersRequest,
-  UpdateCallRequest,
-  UpdateUserPermissionsRequest,
+  VideoUnpinRequest,
+  VideoBlockUserRequest,
+  VideoGetOrCreateCallRequest,
+  VideoGoLiveRequest,
+  VideoMuteUsersRequest,
+  VideoUnblockUserRequest,
+  VideoUpdateCallRequest,
+  VideoUpdateCallMembersRequest,
+  VideoUpdateUserPermissionsRequest,
+  VideoQueryMembersRequest,
 } from "./gen/video";
 
 export type OmitCallTypeId<T> = Omit<T, "type" | "id" | "connectionId">;
@@ -38,10 +39,10 @@ export class StreamCall {
     return this.apiClient.acceptCall(this.baseRequest);
   };
 
-  blockUser = (blockUserRequest: BlockUserRequest) => {
+  blockUser = (videoBlockUserRequest: VideoBlockUserRequest) => {
     return this.apiClient.blockUser({
       ...this.baseRequest,
-      blockUserRequest,
+      videoBlockUserRequest,
     });
   };
 
@@ -53,21 +54,21 @@ export class StreamCall {
     return this.apiClient.getCall({ ...request, ...this.baseRequest });
   };
 
-  getOrCreate = (getOrCreateCallRequest?: GetOrCreateCallRequest) => {
+  getOrCreate = (videoGetOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
     return this.apiClient.getOrCreateCall({
       ...this.baseRequest,
-      getOrCreateCallRequest: getOrCreateCallRequest || {},
+      videoGetOrCreateCallRequest: videoGetOrCreateCallRequest || {},
     });
   };
 
-  create = (getOrCreateCallRequest?: GetOrCreateCallRequest) => {
+  create = (getOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
     return this.getOrCreate(getOrCreateCallRequest);
   };
 
-  goLive = (goLiveRequest?: GoLiveRequest) => {
+  goLive = (videoGoLiveRequest?: VideoGoLiveRequest) => {
     return this.apiClient.goLive({
       ...this.baseRequest,
-      goLiveRequest: goLiveRequest || null,
+      videoGoLiveRequest: videoGoLiveRequest || null,
     });
   };
 
@@ -84,19 +85,19 @@ export class StreamCall {
     }
   };
 
-  muteUsers = (muteUsersRequest: MuteUsersRequest) => {
-    return this.apiClient.muteUsers({ ...this.baseRequest, muteUsersRequest });
+  muteUsers = (videoMuteUsersRequest: VideoMuteUsersRequest) => {
+    return this.apiClient.muteUsers({ ...this.baseRequest, videoMuteUsersRequest });
   };
 
-  queryMembers = (request?: OmitCallTypeId<QueryMembersRequest>) => {
+  queryMembers = (request?: OmitCallTypeId<VideoQueryMembersRequest>) => {
     return this.apiClient.queryMembers({
-      queryMembersRequest: { ...(request || {}), ...this.baseRequest },
+      videoQueryMembersRequest: { ...(request || {}), ...this.baseRequest },
     });
   };
 
   sendCustomEvent = (event: { [key: string]: any }) => {
     return this.apiClient.sendEvent({
-      sendEventRequest: { custom: event },
+      videoSendEventRequest: { custom: event },
       ...this.baseRequest,
     });
   };
@@ -129,41 +130,41 @@ export class StreamCall {
     return this.apiClient.stopTranscription({ ...this.baseRequest });
   };
 
-  unblockUser = (unblockUserRequest: UnblockUserRequest) => {
+  unblockUser = (videoUnblockUserRequest: VideoUnblockUserRequest) => {
     return this.apiClient.unblockUser({
-      unblockUserRequest,
+      videoUnblockUserRequest,
       ...this.baseRequest,
     });
   };
 
-  update = (updateCallRequest: UpdateCallRequest) => {
+  update = (videoUpdateCallRequest: VideoUpdateCallRequest) => {
     return this.apiClient.updateCall({
-      updateCallRequest,
+      videoUpdateCallRequest,
       ...this.baseRequest,
     });
   };
 
-  updateCallMembers = (updateCallMembersRequest: UpdateCallMembersRequest) => {
+  updateCallMembers = (videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest) => {
     return this.apiClient.updateCallMembers({
-      updateCallMembersRequest,
+      videoUpdateCallMembersRequest,
       ...this.baseRequest,
     });
   };
 
   updateUserPermissions = (
-    updateUserPermissionsRequest: UpdateUserPermissionsRequest
+    videoUpdateUserPermissionsRequest: VideoUpdateUserPermissionsRequest
   ) => {
     return this.apiClient.updateUserPermissions({
-      updateUserPermissionsRequest,
+      videoUpdateUserPermissionsRequest,
       ...this.baseRequest,
     });
   };
 
-  pinVideo = (pinRequest: PinRequest) => {
-    return this.apiClient.videoPin({ pinRequest, ...this.baseRequest });
+  pinVideo = (videoPinRequest: VideoPinRequest) => {
+    return this.apiClient.videoPin({ videoPinRequest, ...this.baseRequest });
   };
 
-  unpinVideo = (unpinRequest: UnpinRequest) => {
-    return this.apiClient.videoUnpin({ unpinRequest, ...this.baseRequest });
+  unpinVideo = (videoUnpinRequest: VideoUnpinRequest) => {
+    return this.apiClient.videoUnpin({ videoUnpinRequest, ...this.baseRequest });
   };
 }
