@@ -2,6 +2,8 @@ import { StreamCall } from "./StreamCall";
 import { StreamClient } from "./StreamClient";
 import {
   DefaultApi,
+  DeleteCallTypeRequest,
+  GetCallTypeRequest,
   ServerSideApi,
   VideoCreateCallTypeRequest,
   VideoQueryCallsRequest,
@@ -37,12 +39,12 @@ export class StreamVideoClient {
     });
   };
 
-  deleteCallType = (name: string) => {
-    return this.videoServerSideApiClient.deleteCallType({ name });
+  deleteCallType = (request: DeleteCallTypeRequest) => {
+    return this.videoServerSideApiClient.deleteCallType(request);
   };
 
-  getCallType = (name: string) => {
-    return this.videoServerSideApiClient.getCallType({ name });
+  getCallType = (request: GetCallTypeRequest) => {
+    return this.videoServerSideApiClient.getCallType(request);
   };
 
   listCallTypes = () => {

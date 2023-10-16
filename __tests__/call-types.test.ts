@@ -106,7 +106,7 @@ describe("call types CRUD API", () => {
 
   it("delete", async () => {
     try {
-      await client.video.deleteCallType(callTypeName);
+      await client.video.deleteCallType({name: callTypeName});
     } catch (e) {
       // the first request fails on backend sometimes
       // retry it
@@ -114,11 +114,11 @@ describe("call types CRUD API", () => {
         setTimeout(() => resolve(), 2000);
       });
 
-      await client.video.deleteCallType(callTypeName);
+      await client.video.deleteCallType({name: callTypeName});
     }
 
     await expect(() =>
-      client.video.getCallType(callTypeName)
+      client.video.getCallType({name: callTypeName})
     ).rejects.toThrowError();
   });
 });
