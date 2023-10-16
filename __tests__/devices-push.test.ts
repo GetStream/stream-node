@@ -2,7 +2,7 @@ import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { CreateDeviceRequest, CreateDeviceRequestPushProviderEnum, StreamClient, UpsertPushProviderRequest, UserObjectRequest } from "..";
 import { v4 as uuidv4 } from "uuid";
-import { DeletePushProviderTypeEnum, PushProviderRequest } from "../src/gen/chat";
+import { PushProviderRequest } from "../src/gen/chat";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;

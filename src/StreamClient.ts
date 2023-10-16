@@ -4,19 +4,23 @@ import {
   BanRequest,
   CheckPushRequest,
   CreateDeviceRequest,
+  CreateRoleRequest,
   DeactivateUserRequest,
   DeactivateUsersRequest,
   DeleteDeviceRequest,
   DeletePushProviderRequest,
+  DeleteRoleRequest,
   DeleteUserRequest,
   DeleteUsersRequest,
   DevicesApi,
   ExportUserRequest,
   ExportUsersRequest,
   FlagRequest,
+  GetPermissionRequest,
   GuestRequest,
   ListDevicesRequest,
   MuteUserRequest,
+  PermissionsV2Api,
   PushApi,
   PushProviderRequest,
   QueryBannedUsersRequest,
@@ -51,6 +55,7 @@ export class StreamClient {
   private readonly pushApi: PushApi;
   private readonly serversideApi: ServerSideApi;
   private readonly testingApi: TestingApi;
+  private readonly permissionsApi: PermissionsV2Api;
   private token: string;
 
   constructor(
@@ -73,6 +78,8 @@ export class StreamClient {
     this.serversideApi = new ServerSideApi(chatConfiguration);
     //@ts-expect-error typing problem
     this.testingApi = new TestingApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.permissionsApi = new PermissionsV2Api(chatConfiguration);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
@@ -186,6 +193,26 @@ export class StreamClient {
   unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
     return this.usersApi.unmuteUser({ unmuteUserRequest });
   };
+
+  createRole = (createRoleRequest: CreateRoleRequest) => {
+    return this.permissionsApi.createRole({createRoleRequest});
+  }
+
+  deleteRole = (request: DeleteRoleRequest) => {
+    return this.permissionsApi.deleteRole(request);
+  }
+
+  getPermission = (request: GetPermissionRequest) => {
+    return this.permissionsApi.getPermission(request);
+  }
+
+  listPermissions = () => {
+    return this.permissionsApi.listPermissions();
+  }
+
+  listRoles = () => {
+    return this.permissionsApi.listRoles();
+  }
 
   getConfiguration = (options?: { basePath?: string }) => {
     return new Configuration({
