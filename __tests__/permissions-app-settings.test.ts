@@ -1,12 +1,12 @@
 import "dotenv/config";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { CreateRoleRequest, StreamClient } from "../";
+import { CreateRoleRequest, StreamClient, VideoOwnCapability } from "..";
 import { v4 as uuidv4 } from "uuid";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
 
-describe("permissions API", () => {
+describe("permissions and app settings API", () => {
   let client: StreamClient;
   let role: CreateRoleRequest;
 
@@ -41,7 +41,23 @@ describe("permissions API", () => {
     expect(response.roles.find(r => r.name === role.name)).toBeDefined();
   });
 
+  it("update role", async () => {
+    const response = await client.updateAppSettings({grants: {
+      [role.name]: [VideoOwnCapability.CREATE_CALL]
+    }});
+
+    expect(response).toBeDefined();
+
+    const appSettings = await client.getAppSettings();
+
+    expect(appSettings.app.grants[role.name].includes(VideoOwnCapability.CREATE_CALL)).toBe(true);
+  });
+
   it("delete role", async () => {
+    await client.updateAppSettings({grants: {
+      [role.name]: []
+    }});
+
     let response;
 
     try {
@@ -57,5 +73,11 @@ describe("permissions API", () => {
     }
 
     expect(response).toBeDefined();
-  });
+  }, 10000);
+
+  it('get rate limits', async () => {
+    const response = await client.getRateLimits();
+
+    expect(response.web).toBeDefined();
+  })
 });

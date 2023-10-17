@@ -29,9 +29,11 @@ import {
   ReactivateUsersRequest,
   RestoreUsersRequest,
   ServerSideApi,
+  SettingsApi,
   TestingApi,
   UnbanRequest,
   UnmuteUserRequest,
+  UpdateAppRequest,
   UpdateUserPartialRequest,
   UpdateUsersRequest,
   UpsertPushProviderRequest,
@@ -56,6 +58,7 @@ export class StreamClient {
   private readonly serversideApi: ServerSideApi;
   private readonly testingApi: TestingApi;
   private readonly permissionsApi: PermissionsV2Api;
+  private readonly settingsApi: SettingsApi;
   private token: string;
 
   constructor(
@@ -80,6 +83,8 @@ export class StreamClient {
     this.testingApi = new TestingApi(chatConfiguration);
     //@ts-expect-error typing problem
     this.permissionsApi = new PermissionsV2Api(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.settingsApi = new SettingsApi(chatConfiguration);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
@@ -212,6 +217,18 @@ export class StreamClient {
 
   listRoles = () => {
     return this.permissionsApi.listRoles();
+  }
+
+  getAppSettings = () => {
+    return this.settingsApi.getApp();
+  }
+
+  updateAppSettings = (updateAppRequest: UpdateAppRequest) => {
+    return this.settingsApi.updateApp({updateAppRequest});
+  }
+
+  getRateLimits = () => {
+    return this.settingsApi.getRateLimits();
   }
 
   getConfiguration = (options?: { basePath?: string }) => {
