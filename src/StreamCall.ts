@@ -3,7 +3,6 @@ import {
   DefaultApi,
   GetCallRequest,
   VideoPinRequest,
-  QueryMembersRequest,
   VideoUnpinRequest,
   VideoBlockUserRequest,
   VideoGetOrCreateCallRequest,
@@ -15,8 +14,7 @@ import {
   VideoUpdateUserPermissionsRequest,
   VideoQueryMembersRequest,
 } from "./gen/video";
-
-export type OmitCallTypeId<T> = Omit<T, "type" | "id" | "connectionId">;
+import { OmitTypeId } from "./types";
 
 export class StreamCall {
   private readonly baseRequest: { type: string; id: string };
@@ -50,7 +48,7 @@ export class StreamCall {
     return this.apiClient.endCall({ ...this.baseRequest });
   };
 
-  get = (request: OmitCallTypeId<GetCallRequest>) => {
+  get = (request: OmitTypeId<GetCallRequest>) => {
     return this.apiClient.getCall({ ...request, ...this.baseRequest });
   };
 
@@ -89,7 +87,7 @@ export class StreamCall {
     return this.apiClient.muteUsers({ ...this.baseRequest, videoMuteUsersRequest });
   };
 
-  queryMembers = (request?: OmitCallTypeId<VideoQueryMembersRequest>) => {
+  queryMembers = (request?: OmitTypeId<VideoQueryMembersRequest>) => {
     return this.apiClient.queryMembers({
       videoQueryMembersRequest: { ...(request || {}), ...this.baseRequest },
     });

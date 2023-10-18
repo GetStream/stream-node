@@ -1,9 +1,11 @@
+import { StreamChannel } from "./StreamChannel";
 import { StreamClient } from "./StreamClient";
-import { ChannelTypesApi, CreateBlockListRequest, CreateChannelTypeRequest, DeleteBlockListRequest, DeleteChannelTypeRequest, GetBlockListRequest, GetChannelTypeRequest, SettingsApi, UpdateBlockListRequest, UpdateChannelTypeRequest } from "./gen/chat";
+import { ChannelTypesApi, ChannelsApi, CreateBlockListRequest, CreateChannelTypeRequest, DeleteBlockListRequest, DeleteChannelTypeRequest, ExportChannelsRequest, GetBlockListRequest, GetChannelTypeRequest, GetExportChannelsStatusRequest, QueryChannelsRequest, SearchRequest, SettingsApi, UpdateBlockListRequest, UpdateChannelTypeRequest } from "./gen/chat";
 
 export class StreamChatClient {
   private settingsApi: SettingsApi;
   private channelTypesApi: ChannelTypesApi;
+  private channelsApi: ChannelsApi;
 
   constructor(private streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration();
@@ -11,6 +13,12 @@ export class StreamChatClient {
     this.settingsApi = new SettingsApi(configuration);
     //@ts-expect-error typing problem
     this.channelTypesApi = new ChannelTypesApi(configuration);
+    //@ts-expect-error typing problem
+    this.channelsApi = new ChannelsApi(configuration);
+  }
+
+  channel = (type: string, id?: string) => {
+    return new StreamChannel(this.streamClient, type, id);
   }
 
   createBlockList = (createBlockListRequest: CreateBlockListRequest) => {
@@ -51,5 +59,21 @@ export class StreamChatClient {
 
   updateChannelType = (name: string, updateChannelTypeRequest: UpdateChannelTypeRequest) => {
     return this.channelTypesApi.updateChannelType({name, updateChannelTypeRequest});
+  }
+
+  queryChannels = (queryChannelsRequest?: QueryChannelsRequest) => {
+    return this.channelsApi.queryChannels({queryChannelsRequest: queryChannelsRequest || null});
+  }
+
+  searchMessages = (payload?: SearchRequest) => {
+    return this.channelsApi.search({payload: payload});
+  }
+
+  exportChannels = (exportChannelsRequest?: ExportChannelsRequest) => {
+    return this.channelsApi.exportChannels({exportChannelsRequest: exportChannelsRequest || null});
+  }
+
+  getExportStatus = (request: GetExportChannelsStatusRequest) => {
+    return this.channelsApi.getExportChannelsStatus(request);
   }
 }
