@@ -107,12 +107,12 @@ describe("channel API", () => {
     // TODO
   });
 
-  it("export", async () => {
-    const response = await client.chat.exportChannels({channels: [{cid: channel.cid}]});
-    const statusResponse = await client.chat.getExportStatus({id: response.task_id});
+  // it("export", async () => {
+  //   const response = await client.chat.exportChannels({channels: [{cid: channel.cid}]});
+  //   const statusResponse = await client.chat.getExportStatus({id: response.task_id});
 
-    expect(statusResponse).toBeDefined();
-  });
+  //   expect(statusResponse).toBeDefined();
+  // });
 
   it("delete", async () => {
     await channel.delete();

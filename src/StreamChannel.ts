@@ -1,9 +1,10 @@
 import { StreamClient } from "./StreamClient";
-import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MuteChannelRequest, QueryMembersRequest, ShowChannelRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest } from "./gen/chat";
+import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, DeleteFileRequest, DeleteImageRequest, DeleteMessageRequest, GetManyMessagesRequest, GetMessageRequest, GetOGRequest, GetRepliesRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MessagesApi, MuteChannelRequest, QueryMembersRequest, SendMessageRequest, ShowChannelRequest, TranslateMessageRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest, UpdateMessagePartialRequest, UpdateMessageRequest, UploadFileRequest, UploadImageRequest } from "./gen/chat";
 import { OmitTypeId } from "./types";
 
 export class StreamChannel {
   private readonly channelsApi: ChannelsApi;
+  private readonly messagesApi: MessagesApi;
 
   constructor(
     private streamClient: StreamClient,
@@ -13,6 +14,8 @@ export class StreamChannel {
     const configuration = this.streamClient.getConfiguration();
     //@ts-expect-error typing problem
     this.channelsApi = new ChannelsApi(configuration);
+    //@ts-expect-error typing problem
+    this.messagesApi = new MessagesApi(configuration);
   }
 
   get cid() {
@@ -31,9 +34,9 @@ export class StreamChannel {
     return this.channelsApi.updateChannelPartial({...this.baseRequest, updateChannelPartialRequest});
   }
 
-  getOrCreate = async (channelGetOrCreateRequest?: ChannelGetOrCreateRequest) => {
+  getOrCreate = async (channelGetOrCreateRequest: ChannelGetOrCreateRequest) => {
     if (this.id) {
-      return this.channelsApi.getOrCreateChannelTypeId0({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || null});
+      return this.channelsApi.getOrCreateChannelTypeId0({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest});
     } else {
       if (!channelGetOrCreateRequest?.data?.members) {
         throw new Error('You need to provide members to create a channel without ID');
@@ -76,6 +79,58 @@ export class StreamChannel {
     return this.channelsApi.unmuteChannel({unmuteChannelRequest: {...unmuteChannelRequest, channel_cid: this.cid, channel_cids: []}});
   }
 
+  uploadFile = (options: Omit<OmitTypeId<UploadFileRequest>, 'file'>, file: Buffer) => {
+    return this.messagesApi.uploadFile({...options, ...this.baseRequest, file: file as any as string});
+  }
+
+  deleteFile = (request: OmitTypeId<DeleteFileRequest>) => {
+    return this.messagesApi.deleteFile({...request, ...this.baseRequest});
+  }
+
+  uploadImage = (request: OmitTypeId<UploadImageRequest>) => {
+    return this.messagesApi.uploadImage({...request, ...this.baseRequest});
+  }
+
+  deleteImage = (request: OmitTypeId<DeleteImageRequest>) => {
+    return this.messagesApi.deleteImage({...request, ...this.baseRequest});
+  }
+
+  sendMessage = (sendMessageRequest: SendMessageRequest) => {
+    return this.messagesApi.sendMessage({...this.baseRequest, sendMessageRequest});
+  }
+
+  deleteMessage = (request: DeleteMessageRequest) => {
+    return this.messagesApi.deleteMessage(request);
+  }
+
+  updateMessage = (id: string, updateMessageRequest: UpdateMessageRequest) => {
+    return this.messagesApi.updateMessage({id, updateMessageRequest});
+  }
+
+  updateMessagePartial = (id: string, updateMessagePartialRequest: UpdateMessagePartialRequest) => {
+    return this.messagesApi.updateMessagePartial({id, updateMessagePartialRequest});
+  }
+
+  getMessage = (request: GetMessageRequest) => {
+    return this.messagesApi.getMessage(request);
+  }
+
+  getManyMessages = (request: OmitTypeId<GetManyMessagesRequest>) => {
+    return this.messagesApi.getManyMessages({...request, ...this.baseRequest});
+  }
+
+  translateMessage = (id: string, translateMessageRequest: TranslateMessageRequest) => {
+    return this.messagesApi.translateMessage({id, translateMessageRequest});
+  }
+
+  getMessagesAround = (request: GetRepliesRequest) => {
+    return this.messagesApi.getReplies(request);
+  }
+
+  getOpenGraphData = (request: GetOGRequest) => {
+    return this.messagesApi.getOG(request);
+  }
+
   private get baseRequest() {
     if (!this.id) {
       throw new Error('You need to initialize the channel with `getOrCreate`');
@@ -85,5 +140,15 @@ export class StreamChannel {
       id: this.id,
       type: this.type
     }
+  }
+
+  private addFileToFormData(
+    uri: string | NodeJS.ReadableStream | Buffer | File,
+    name?: string,
+    contentType?: string,
+  ) {
+    const formData = this.addFileToFormData();
+  
+    return data;
   }
 }
