@@ -102,6 +102,12 @@ describe("channel API", () => {
   //   expect(statusResponse).toBeDefined();
   // });
 
+  it("custom event", async () => {
+    const response = await channel.sendCustomEvent({type: 'my-event', user_id: user.id});
+
+    expect(response.event?.type).toBe('my-event');
+  });
+
   it("delete", async () => {
     await channel.delete();
   });

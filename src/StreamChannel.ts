@@ -1,10 +1,11 @@
 import { StreamClient } from "./StreamClient";
-import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, DeleteFileRequest, DeleteImageRequest, DeleteMessageRequest, DeleteReactionRequest, GetManyMessagesRequest, GetMessageRequest, GetOGRequest, GetReactionsRequest, GetRepliesRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MessagesApi, MuteChannelRequest, QueryMembersRequest, SendMessageRequest, SendReactionRequest, ShowChannelRequest, TranslateMessageRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest, UpdateMessagePartialRequest, UpdateMessageRequest, UploadFileRequest, UploadImageRequest } from "./gen/chat";
+import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, DeleteFileRequest, DeleteImageRequest, DeleteMessageRequest, DeleteReactionRequest, EventRequest, EventsApi, GetManyMessagesRequest, GetMessageRequest, GetOGRequest, GetReactionsRequest, GetRepliesRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MessagesApi, MuteChannelRequest, QueryMembersRequest, SendMessageRequest, SendReactionRequest, ShowChannelRequest, TranslateMessageRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest, UpdateMessagePartialRequest, UpdateMessageRequest, UploadFileRequest, UploadImageRequest } from "./gen/chat";
 import { OmitTypeId } from "./types";
 
 export class StreamChannel {
   private readonly channelsApi: ChannelsApi;
   private readonly messagesApi: MessagesApi;
+  private readonly eventsApi: EventsApi;
 
   constructor(
     private streamClient: StreamClient,
@@ -16,6 +17,8 @@ export class StreamChannel {
     this.channelsApi = new ChannelsApi(configuration);
     //@ts-expect-error typing problem
     this.messagesApi = new MessagesApi(configuration);
+    //@ts-expect-error typing problem
+    this.eventsApi = new EventsApi(configuration);
   }
 
   get cid() {
@@ -142,6 +145,10 @@ export class StreamChannel {
 
   getMessageReactions = (messageId: string, request?: Omit<GetReactionsRequest, 'id'>) => {
     return this.messagesApi.getReactions({...(request || {}), id: messageId});
+  }
+
+  sendCustomEvent = (event: EventRequest) => {
+    return this.eventsApi.sendEvent({...this.baseRequest, sendEventRequest: {event}});
   }
 
   private get baseRequest() {

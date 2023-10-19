@@ -123,6 +123,12 @@ describe("user API", () => {
     expect(unmuteResponse).toBeDefined();
   });
 
+  it('send custom event', async () => {
+    const response = await client.sendCustomEventToUser(newUser.id, {type: 'my-custom-event'});
+
+    expect(response).toBeDefined();
+  });
+
   // TODO: open API spec seems to be faulty here
   //   it("update", async () => {
   //     const response = client.updateUserPartial({

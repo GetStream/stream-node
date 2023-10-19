@@ -13,6 +13,7 @@ import {
   DeleteUserRequest,
   DeleteUsersRequest,
   DevicesApi,
+  EventsApi,
   ExportUserRequest,
   ExportUsersRequest,
   FlagRequest,
@@ -36,7 +37,7 @@ import {
   UpdateAppRequest,
   UpdateUserPartialRequest,
   UpdateUsersRequest,
-  UpsertPushProviderRequest,
+  UserCustomEventRequest,
   UsersApi,
 } from "./gen/chat";
 import {
@@ -59,6 +60,7 @@ export class StreamClient {
   private readonly testingApi: TestingApi;
   private readonly permissionsApi: PermissionsV2Api;
   private readonly settingsApi: SettingsApi;
+  private readonly eventsApi: EventsApi;
   private token: string;
 
   constructor(
@@ -85,6 +87,8 @@ export class StreamClient {
     this.permissionsApi = new PermissionsV2Api(chatConfiguration);
     //@ts-expect-error typing problem
     this.settingsApi = new SettingsApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.eventsApi = new EventsApi(chatConfiguration);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
@@ -198,6 +202,10 @@ export class StreamClient {
   unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
     return this.usersApi.unmuteUser({ unmuteUserRequest });
   };
+
+  sendCustomEventToUser = (userId: string, event: UserCustomEventRequest) => {
+    return this.eventsApi.sendUserCustomEvent({userId, sendUserCustomEventRequest: {event}});
+  }
 
   createRole = (createRoleRequest: CreateRoleRequest) => {
     return this.permissionsApi.createRole({createRoleRequest});
