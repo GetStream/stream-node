@@ -95,18 +95,6 @@ describe("channel API", () => {
     expect(queryResponse.channels.length).toBe(0);
   });
 
-  it("read and unread", async () => {
-    const readResponse = await channel.markRead({user_id: user2.id});
-
-    expect(readResponse.event?.channel_id).toBe(channel.id);
-
-    // TODO
-  });
-
-  it("truncate", async () => {
-    // TODO
-  });
-
   // it("export", async () => {
   //   const response = await client.chat.exportChannels({channels: [{cid: channel.cid}]});
   //   const statusResponse = await client.chat.getExportStatus({id: response.task_id});

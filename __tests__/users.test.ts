@@ -106,22 +106,6 @@ describe("user API", () => {
     ).toBeUndefined();
   });
 
-  it("flag and unflag", async () => {
-    let response = await client.flag({
-      target_user_id: newUser.id,
-      user_id: user.id,
-    });
-
-    expect(response.flag?.target_user?.id).toBe(newUser.id);
-
-    response = await client.unflag({
-      target_user_id: newUser.id,
-    });
-
-    // There is no info in response about the action, so this is a dummy check
-    expect(response.flag).toBeDefined();
-  });
-
   it("mute and unmute", async () => {
     const muteResponse = await client.muteUser({
       target_ids: [newUser.id],

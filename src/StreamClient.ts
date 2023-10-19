@@ -148,10 +148,6 @@ export class StreamClient {
     return this.usersApi.exportUsers({ exportUsersRequest });
   };
 
-  flag = (flagRequest: FlagRequest) => {
-    return this.usersApi.flag({ flagRequest });
-  };
-
   queryBannedUsers = (payload: QueryBannedUsersRequest) => {
     return this.usersApi.queryBannedUsers({ payload });
   };
@@ -177,10 +173,6 @@ export class StreamClient {
 
   unbanUser = (request: UnbanRequest) => {
     return this.usersApi.unban(request);
-  };
-
-  unflag = (flagRequest: FlagRequest) => {
-    return this.usersApi.unflag({ flagRequest });
   };
 
   updateUsers = (updateUsersRequest: UpdateUsersRequest) => {

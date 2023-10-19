@@ -34,9 +34,9 @@ export class StreamChannel {
     return this.channelsApi.updateChannelPartial({...this.baseRequest, updateChannelPartialRequest});
   }
 
-  getOrCreate = async (channelGetOrCreateRequest: ChannelGetOrCreateRequest) => {
+  getOrCreate = async (channelGetOrCreateRequest?: ChannelGetOrCreateRequest) => {
     if (this.id) {
-      return this.channelsApi.getOrCreateChannelTypeId0({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest});
+      return this.channelsApi.getOrCreateChannelTypeId0({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || {}});
     } else {
       if (!channelGetOrCreateRequest?.data?.members) {
         throw new Error('You need to provide members to create a channel without ID');
@@ -79,21 +79,22 @@ export class StreamChannel {
     return this.channelsApi.unmuteChannel({unmuteChannelRequest: {...unmuteChannelRequest, channel_cid: this.cid, channel_cids: []}});
   }
 
-  uploadFile = (options: Omit<OmitTypeId<UploadFileRequest>, 'file'>, file: Buffer) => {
-    return this.messagesApi.uploadFile({...options, ...this.baseRequest, file: file as any as string});
-  }
+  // TODO: there is probably an issue with the generated code here
+  // uploadFile = (options: Omit<OmitTypeId<UploadFileRequest>, 'file'>, file: Buffer) => {
+  //   return this.messagesApi.uploadFile({...options, ...this.baseRequest, file: file as any as string});
+  // }
 
-  deleteFile = (request: OmitTypeId<DeleteFileRequest>) => {
-    return this.messagesApi.deleteFile({...request, ...this.baseRequest});
-  }
+  // deleteFile = (request: OmitTypeId<DeleteFileRequest>) => {
+  //   return this.messagesApi.deleteFile({...request, ...this.baseRequest});
+  // }
 
-  uploadImage = (request: OmitTypeId<UploadImageRequest>) => {
-    return this.messagesApi.uploadImage({...request, ...this.baseRequest});
-  }
+  // uploadImage = (request: OmitTypeId<UploadImageRequest>) => {
+  //   return this.messagesApi.uploadImage({...request, ...this.baseRequest});
+  // }
 
-  deleteImage = (request: OmitTypeId<DeleteImageRequest>) => {
-    return this.messagesApi.deleteImage({...request, ...this.baseRequest});
-  }
+  // deleteImage = (request: OmitTypeId<DeleteImageRequest>) => {
+  //   return this.messagesApi.deleteImage({...request, ...this.baseRequest});
+  // }
 
   sendMessage = (sendMessageRequest: SendMessageRequest) => {
     return this.messagesApi.sendMessage({...this.baseRequest, sendMessageRequest});
@@ -140,15 +141,5 @@ export class StreamChannel {
       id: this.id,
       type: this.type
     }
-  }
-
-  private addFileToFormData(
-    uri: string | NodeJS.ReadableStream | Buffer | File,
-    name?: string,
-    contentType?: string,
-  ) {
-    const formData = this.addFileToFormData();
-  
-    return data;
   }
 }
