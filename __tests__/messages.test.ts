@@ -83,6 +83,27 @@ describe("messages API", () => {
     expect(unreadResponse).toBeDefined();
   });
 
+  it('send reaction', async () => {
+    const response = await channel.sendMessageReaction(messageId!, {reaction: {type: 'like', user_id: user.id}});
+
+    expect(response.message?.id).toBe(messageId);
+    expect(response.reaction?.message_id).toBe(messageId);
+    expect(response.reaction?.type).toBe('like');
+  });
+
+  it('get reactions', async () => {
+    const response = await channel.getMessageReactions(messageId!);
+
+    expect(response.reactions.length).toBe(1);
+  });
+
+  it('delete reaction', async () => {
+    const response = await channel.deleteMessageReaction(messageId!, {type: 'like', userId: user.id});
+    
+    expect(response.message?.id).toBe(messageId);
+    expect(response.reaction?.type).toBe('like');
+  })
+
   it('search', async () => {
     const response = await client.chat.searchMessages({filter_conditions: {members: {$in: [user2.id]}}, message_filter_conditions: {text: {$autocomplete: 'check'}}});
 

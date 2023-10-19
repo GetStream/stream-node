@@ -1,5 +1,5 @@
 import { StreamClient } from "./StreamClient";
-import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, DeleteFileRequest, DeleteImageRequest, DeleteMessageRequest, GetManyMessagesRequest, GetMessageRequest, GetOGRequest, GetRepliesRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MessagesApi, MuteChannelRequest, QueryMembersRequest, SendMessageRequest, ShowChannelRequest, TranslateMessageRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest, UpdateMessagePartialRequest, UpdateMessageRequest, UploadFileRequest, UploadImageRequest } from "./gen/chat";
+import { ChannelGetOrCreateRequest, ChannelsApi, DeleteChannelRequest, DeleteFileRequest, DeleteImageRequest, DeleteMessageRequest, DeleteReactionRequest, GetManyMessagesRequest, GetMessageRequest, GetOGRequest, GetReactionsRequest, GetRepliesRequest, HideChannelRequest, MarkReadRequest, MarkUnreadRequest, MessagesApi, MuteChannelRequest, QueryMembersRequest, SendMessageRequest, SendReactionRequest, ShowChannelRequest, TranslateMessageRequest, TruncateChannelRequest, UnmuteChannelRequest, UpdateChannelPartialRequest, UpdateChannelRequest, UpdateMessagePartialRequest, UpdateMessageRequest, UploadFileRequest, UploadImageRequest } from "./gen/chat";
 import { OmitTypeId } from "./types";
 
 export class StreamChannel {
@@ -130,6 +130,18 @@ export class StreamChannel {
 
   getOpenGraphData = (request: GetOGRequest) => {
     return this.messagesApi.getOG(request);
+  }
+
+  sendMessageReaction = (messageId: string, sendReactionRequest: SendReactionRequest) => {
+    return this.messagesApi.sendReaction({id: messageId, sendReactionRequest});
+  }
+
+  deleteMessageReaction = (messageId: string, request: Omit<DeleteReactionRequest, 'id'>) => {
+    return this.messagesApi.deleteReaction({...request, id: messageId});
+  }
+
+  getMessageReactions = (messageId: string, request?: Omit<GetReactionsRequest, 'id'>) => {
+    return this.messagesApi.getReactions({...(request || {}), id: messageId});
   }
 
   private get baseRequest() {
