@@ -1,6 +1,7 @@
 import { StreamChatClient } from "./StreamChatClient";
 import { StreamVideoClient } from "./StreamVideoClient";
 import {
+  APIError,
   BanRequest,
   CheckPushRequest,
   CreateDeviceRequest,
