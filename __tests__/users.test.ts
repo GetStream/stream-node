@@ -13,7 +13,9 @@ describe("user API", () => {
     role: "user",
     custom: {
       color: 'red'
-    }
+    },
+    name: 'Test user' + uuidv4(),
+    image: ':)'
   };
   const user = {
     id: "stream-node-test-user",
@@ -71,6 +73,9 @@ describe("user API", () => {
 
     expect(queryResponse.users.length).toBe(1);
     expect(queryResponse.users[0].custom.color).toBe('red');
+    expect(queryResponse.users[0].id).toBe(newUser.id);
+    expect(queryResponse.users[0].name).toBe(newUser.name);
+    expect(queryResponse.users[0].image).toBe(newUser.image);
   });
 
   it("create guest", async () => {

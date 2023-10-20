@@ -379,7 +379,7 @@ export class StreamClient {
     });
   };
 
-  private reservedKeywords = ['ban_expires', 'banned', 'id', 'invisible', 'language', 'push_notifications', 'revoke_tokens_issued_before', 'role', 'teams', 'created_at', 'deactivated_at', 'deleted_at', 'last_active', 'online', 'updated_at', 'shadow_banned'];
+  private reservedKeywords = ['ban_expires', 'banned', 'id', 'invisible', 'language', 'push_notifications', 'revoke_tokens_issued_before', 'role', 'teams', 'created_at', 'deactivated_at', 'deleted_at', 'last_active', 'online', 'updated_at', 'shadow_banned', 'name', 'image'];
   private mapCustomDataBeforeSend = (user: UserObject | UserObjectRequest | UserResponse | undefined) => {
     if (!user) {
       return undefined;
