@@ -18,6 +18,7 @@ import {
   ExportUsersRequest,
   FlagRequest,
   GetPermissionRequest,
+  GetTaskRequest,
   GuestRequest,
   ListDevicesRequest,
   MuteUserRequest,
@@ -31,6 +32,7 @@ import {
   RestoreUsersRequest,
   ServerSideApi,
   SettingsApi,
+  TasksApi,
   TestingApi,
   UnbanRequest,
   UnmuteUserRequest,
@@ -61,6 +63,7 @@ export class StreamClient {
   private readonly permissionsApi: PermissionsV2Api;
   private readonly settingsApi: SettingsApi;
   private readonly eventsApi: EventsApi;
+  private readonly tasksApi: TasksApi;
   private token: string;
 
   constructor(
@@ -89,6 +92,8 @@ export class StreamClient {
     this.settingsApi = new SettingsApi(chatConfiguration);
     //@ts-expect-error typing problem
     this.eventsApi = new EventsApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.tasksApi = new TasksApi(chatConfiguration);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
@@ -237,6 +242,10 @@ export class StreamClient {
 
   getRateLimits = () => {
     return this.settingsApi.getRateLimits();
+  }
+
+  getTaskStatus = (request: GetTaskRequest) => {
+    return this.tasksApi.getTask(request);
   }
 
   getConfiguration = (options?: { basePath?: string }) => {
