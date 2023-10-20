@@ -1,12 +1,10 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient } from "../StreamClient";
-import {
-  OwnCapability,
-  RecordSettingsRequestModeEnum,
-  RecordSettingsRequestQualityEnum,
-} from "../gen";
+import { StreamClient,   VideoOwnCapability,
+  VideoRecordSettingsRequestModeEnum,
+  VideoRecordSettingsRequestQualityEnum, } from "../";
+
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
@@ -20,7 +18,7 @@ describe("call types CRUD API", () => {
   });
 
   it("create", async () => {
-    const createResponse = await client.createCallType({
+    const createResponse = await client.video.createCallType({
       name: callTypeName,
       settings: {
         audio: { mic_default_on: true, default_device: "speaker" },
@@ -46,11 +44,11 @@ describe("call types CRUD API", () => {
       },
       grants: {
         admin: [
-          OwnCapability.SEND_AUDIO,
-          OwnCapability.SEND_VIDEO,
-          OwnCapability.MUTE_USERS,
+          VideoOwnCapability.SEND_AUDIO,
+          VideoOwnCapability.SEND_VIDEO,
+          VideoOwnCapability.MUTE_USERS,
         ],
-        user: [OwnCapability.SEND_AUDIO, OwnCapability.SEND_VIDEO],
+        user: [VideoOwnCapability.SEND_AUDIO, VideoOwnCapability.SEND_VIDEO],
       },
     });
 
@@ -79,7 +77,7 @@ describe("call types CRUD API", () => {
   });
 
   it("read", async () => {
-    const readResponse = await client.listCallTypes();
+    const readResponse = await client.video.listCallTypes();
 
     expect(readResponse.call_types[callTypeName]).toContain({
       name: callTypeName,
@@ -87,14 +85,14 @@ describe("call types CRUD API", () => {
   });
 
   it("update", async () => {
-    const updateResponse = await client.updateCallType(callTypeName, {
+    const updateResponse = await client.video.updateCallType(callTypeName, {
       settings: {
         audio: { mic_default_on: false, default_device: "earpiece" },
         recording: {
-          mode: RecordSettingsRequestModeEnum.DISABLED,
+          mode: VideoRecordSettingsRequestModeEnum.DISABLED,
           // FIXME OL: these props shouldn't be required to be set when recording is disabled
           audio_only: false,
-          quality: RecordSettingsRequestQualityEnum._1080P,
+          quality: VideoRecordSettingsRequestQualityEnum._1080P,
         },
       },
     });
@@ -102,13 +100,13 @@ describe("call types CRUD API", () => {
     expect(updateResponse.settings.audio.mic_default_on).toBeFalsy();
     expect(updateResponse.settings.audio.default_device).toBe("earpiece");
     expect(updateResponse.settings.recording.mode).toBe(
-      RecordSettingsRequestModeEnum.DISABLED
+      VideoRecordSettingsRequestModeEnum.DISABLED
     );
   });
 
   it("delete", async () => {
     try {
-      await client.deleteCallType(callTypeName);
+      await client.video.deleteCallType({name: callTypeName});
     } catch (e) {
       // the first request fails on backend sometimes
       // retry it
@@ -116,9 +114,11 @@ describe("call types CRUD API", () => {
         setTimeout(() => resolve(), 2000);
       });
 
-      await client.deleteCallType(callTypeName);
+      await client.video.deleteCallType({name: callTypeName});
     }
 
-    await expect(() => client.getCallType(callTypeName)).rejects.toThrowError();
+    await expect(() =>
+      client.video.getCallType({name: callTypeName})
+    ).rejects.toThrowError();
   });
 });

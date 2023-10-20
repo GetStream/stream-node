@@ -1,90 +1,254 @@
-import { StreamCall } from "./StreamCall";
+import { StreamChatClient } from "./StreamChatClient";
+import { StreamVideoClient } from "./StreamVideoClient";
 import {
-  APIError,
-  Configuration,
-  CreateCallTypeRequest,
+  BanRequest,
+  CheckPushRequest,
   CreateDeviceRequest,
-  CreateGuestRequest,
-  DefaultApi,
+  CreateRoleRequest,
+  DeactivateUserRequest,
+  DeactivateUsersRequest,
   DeleteDeviceRequest,
-  ErrorContext,
-  JSONApiResponse,
+  DeletePushProviderRequest,
+  DeleteRoleRequest,
+  DeleteUserRequest,
+  DeleteUsersRequest,
+  DevicesApi,
+  EventsApi,
+  ExportUserRequest,
+  ExportUsersRequest,
+  FlagRequest,
+  GetPermissionRequest,
+  GetTaskRequest,
+  GuestRequest,
   ListDevicesRequest,
-  QueryCallsRequest,
+  MuteUserRequest,
+  PermissionsV2Api,
+  PushApi,
+  PushProviderRequest,
+  QueryBannedUsersRequest,
+  QueryUsersRequest,
+  ReactivateUserRequest,
+  ReactivateUsersRequest,
+  RestoreUsersRequest,
+  ServerSideApi,
+  SettingsApi,
+  TasksApi,
+  TestingApi,
+  UnbanRequest,
+  UnmuteUserRequest,
+  UpdateAppRequest,
+  UpdateUserPartialRequest,
+  UpdateUsersRequest,
+  UserCustomEventRequest,
+  UsersApi,
+} from "./gen/chat";
+import {
+  Configuration,
+  HTTPQuery,
+  JSONApiResponse,
   RequestContext,
   ResponseContext,
-  ServerSideApi,
-  UpdateCallTypeRequest,
-} from "./gen";
+} from "./gen/video";
 import { createToken } from "./utils/create-token";
 import { v4 as uuidv4 } from "uuid";
 
 export class StreamClient {
-  public readonly defaultApiClient;
-  public readonly serverSideApiClient;
+  public readonly video: StreamVideoClient;
+  public readonly chat: StreamChatClient;
+  private readonly usersApi: UsersApi;
+  private readonly devicesApi: DevicesApi;
+  private readonly pushApi: PushApi;
+  private readonly serversideApi: ServerSideApi;
+  private readonly testingApi: TestingApi;
+  private readonly permissionsApi: PermissionsV2Api;
+  private readonly settingsApi: SettingsApi;
+  private readonly eventsApi: EventsApi;
+  private readonly tasksApi: TasksApi;
   private token: string;
 
   constructor(
     private apiKey: string,
     private secret: string,
-    private basePath?: string
+    public readonly basePath?: string
   ) {
     this.token = createToken(this.secret);
+    this.video = new StreamVideoClient(this);
+    this.chat = new StreamChatClient(this);
 
-    const configuration = this.getConfiguration();
-    this.defaultApiClient = new DefaultApi(configuration);
-    this.serverSideApiClient = new ServerSideApi(configuration);
+    const chatConfiguration = this.getConfiguration();
+    //@ts-expect-error typing problem
+    this.usersApi = new UsersApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.devicesApi = new DevicesApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.pushApi = new PushApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.serversideApi = new ServerSideApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.testingApi = new TestingApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.permissionsApi = new PermissionsV2Api(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.settingsApi = new SettingsApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.eventsApi = new EventsApi(chatConfiguration);
+    //@ts-expect-error typing problem
+    this.tasksApi = new TasksApi(chatConfiguration);
   }
 
-  call = (type: string, id: string) => {
-    return new StreamCall(this, type, id);
-  };
-
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
-    return this.defaultApiClient.createDevice({ createDeviceRequest });
-  };
-  createGuest = (createGuestRequest: CreateGuestRequest) => {
-    return this.defaultApiClient.createGuest({ createGuestRequest });
+    return this.devicesApi.createDevice({ createDeviceRequest });
   };
   deleteDevice = (requestParameters: DeleteDeviceRequest) => {
-    return this.defaultApiClient.deleteDevice(requestParameters);
+    return this.devicesApi.deleteDevice(requestParameters);
   };
   listDevices = (requestParameters: ListDevicesRequest) => {
-    return this.defaultApiClient.listDevices(requestParameters);
+    return this.devicesApi.listDevices(requestParameters);
   };
-  queryCalls = (request?: QueryCallsRequest) => {
-    return this.defaultApiClient.queryCalls({
-      queryCallsRequest: request || {},
+
+  listPushProviders= () => {
+    return this.pushApi.listPushProviders();
+  }
+
+  deletePushProvider = (request: DeletePushProviderRequest) => {
+    return this.pushApi.deletePushProvider(request);
+  }
+
+  upsertPushProvider = (request: PushProviderRequest) => {
+    return this.serversideApi.upsertPushProvider({upsertPushProviderRequest: {push_provider: request}});
+  }
+
+  checkPush = (checkPushRequest: CheckPushRequest) => {
+    return this.testingApi.checkPush({checkPushRequest});
+  }
+
+  createGuest = (guestRequest: GuestRequest) => {
+    return this.usersApi.createGuest({ guestRequest });
+  };
+
+  banUser = (banRequest: BanRequest) => {
+    return this.usersApi.ban({ banRequest });
+  };
+
+  deactivateUser = (deactivateUserRequest: DeactivateUserRequest) => {
+    return this.usersApi.deactivateUser({
+      deactivateUserRequest,
+      userId: deactivateUserRequest.user_id,
     });
   };
 
-  createCallType = (createCallTypeRequest: CreateCallTypeRequest) => {
-    return this.serverSideApiClient.createCallType({ createCallTypeRequest });
+  deactivateUsers = (deactivateUsersRequest: DeactivateUsersRequest) => {
+    return this.usersApi.deactivateUsers({ deactivateUsersRequest });
   };
 
-  deleteCallType = (name: string) => {
-    return this.serverSideApiClient.deleteCallType({ name });
+  deleteUser = (request: DeleteUserRequest) => {
+    return this.usersApi.deleteUser(request);
   };
 
-  getCallType = (name: string) => {
-    return this.serverSideApiClient.getCallType({ name });
+  deleteUsers = (deleteUsersRequest: DeleteUsersRequest) => {
+    return this.usersApi.deleteUsers({ deleteUsersRequest });
   };
 
-  listCallTypes = () => {
-    return this.serverSideApiClient.listCallTypes();
+  exportUser = (request: ExportUserRequest) => {
+    return this.usersApi.exportUser(request);
   };
 
-  updateCallType = (
-    name: string,
-    updateCallTypeRequest: UpdateCallTypeRequest
-  ) => {
-    return this.serverSideApiClient.updateCallType({
-      name,
-      updateCallTypeRequest,
+  exportUsers = (exportUsersRequest: ExportUsersRequest) => {
+    return this.usersApi.exportUsers({ exportUsersRequest });
+  };
+
+  flag = (flagRequest: FlagRequest) => {
+    return this.usersApi.flag({ flagRequest });
+  };
+
+  queryBannedUsers = (payload: QueryBannedUsersRequest) => {
+    return this.usersApi.queryBannedUsers({ payload });
+  };
+
+  queryUsers = (payload: QueryUsersRequest) => {
+    return this.usersApi.queryUsers({ payload });
+  };
+
+  reactivateUser = (reactivateUserRequest: ReactivateUserRequest) => {
+    return this.usersApi.reactivateUser({
+      reactivateUserRequest,
+      userId: reactivateUserRequest.user_id,
     });
   };
 
-  private getConfiguration = () => {
+  reactivateUsers = (reactivateUsersRequest: ReactivateUsersRequest) => {
+    return this.usersApi.reactivateUsers({ reactivateUsersRequest });
+  };
+
+  restoreUsers = (restoreUsersRequest: RestoreUsersRequest) => {
+    return this.usersApi.restoreUsers({ restoreUsersRequest });
+  };
+
+  unbanUser = (request: UnbanRequest) => {
+    return this.usersApi.unban(request);
+  };
+
+  unflag = (flagRequest: FlagRequest) => {
+    return this.usersApi.unflag({ flagRequest });
+  };
+
+  updateUsers = (updateUsersRequest: UpdateUsersRequest) => {
+    return this.usersApi.updateUsers({ updateUsersRequest });
+  };
+
+  updateUserPartial = (updateUserPartialRequest: UpdateUserPartialRequest) => {
+    return this.usersApi.updateUsersPartial({ updateUserPartialRequest });
+  };
+
+  muteUser = (muteUserRequest: MuteUserRequest) => {
+    return this.usersApi.muteUser({ muteUserRequest });
+  };
+
+  unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
+    return this.usersApi.unmuteUser({ unmuteUserRequest });
+  };
+
+  sendCustomEventToUser = (userId: string, event: UserCustomEventRequest) => {
+    return this.eventsApi.sendUserCustomEvent({userId, sendUserCustomEventRequest: {event}});
+  }
+
+  createRole = (createRoleRequest: CreateRoleRequest) => {
+    return this.permissionsApi.createRole({createRoleRequest});
+  }
+
+  deleteRole = (request: DeleteRoleRequest) => {
+    return this.permissionsApi.deleteRole(request);
+  }
+
+  getPermission = (request: GetPermissionRequest) => {
+    return this.permissionsApi.getPermission(request);
+  }
+
+  listPermissions = () => {
+    return this.permissionsApi.listPermissions();
+  }
+
+  listRoles = () => {
+    return this.permissionsApi.listRoles();
+  }
+
+  getAppSettings = () => {
+    return this.settingsApi.getApp();
+  }
+
+  updateAppSettings = (updateAppRequest: UpdateAppRequest) => {
+    return this.settingsApi.updateApp({updateAppRequest});
+  }
+
+  getRateLimits = () => {
+    return this.settingsApi.getRateLimits();
+  }
+
+  getTaskStatus = (request: GetTaskRequest) => {
+    return this.tasksApi.getTask(request);
+  }
+
+  getConfiguration = (options?: { basePath?: string }) => {
     return new Configuration({
       apiKey: (name: string) => {
         const mapping: { [key: string]: string } = {
@@ -95,7 +259,7 @@ export class StreamClient {
 
         return mapping[name];
       },
-      basePath: this.basePath || "https://video.stream-io-api.com/video",
+      basePath: options?.basePath || this.basePath,
       headers: {
         "X-Stream-Client": "stream-node-" + process.env.PKG_VERSION,
       },
@@ -127,6 +291,28 @@ export class StreamClient {
           },
         },
       ],
+      // https://github.com/OpenAPITools/openapi-generator/issues/13222
+      queryParamsStringify: (params: HTTPQuery) => {
+        const newParams = [];
+        for (const k in params) {
+          if (Array.isArray(params[k]) || typeof params[k] === "object") {
+            newParams.push(
+              `${k}=${encodeURIComponent(JSON.stringify(params[k]))}`
+            );
+          } else {
+            const value = params[k];
+            if (
+              typeof value === "string" ||
+              typeof value === "number" ||
+              typeof value === "boolean"
+            ) {
+              newParams.push(`${k}=${encodeURIComponent(value)}`);
+            }
+          }
+        }
+
+        return newParams.join("&");
+      },
     });
   };
 }
