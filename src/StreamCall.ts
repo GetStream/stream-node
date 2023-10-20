@@ -71,7 +71,7 @@ export class StreamCall {
   };
 
   listRecordings = () => {
-    return this.apiClient.listRecordingsTypeId0({
+    return this.apiClient.listRecordings({
       ...this.baseRequest,
     });
   };

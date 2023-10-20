@@ -39,14 +39,15 @@ export class StreamChannel {
 
   getOrCreate = async (channelGetOrCreateRequest?: ChannelGetOrCreateRequest) => {
     if (this.id) {
-      return this.channelsApi.getOrCreateChannelTypeId0({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || {}});
+      return this.channelsApi.getOrCreateChannel({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || {}});
     } else {
-      if (!channelGetOrCreateRequest?.data?.members) {
-        throw new Error('You need to provide members to create a channel without ID');
-      }
-      const response = await this.channelsApi.getOrCreateChannelType1({type: this.type, channelGetOrCreateRequest});
-      this.id = response.channel?.id;
-      return response;
+      throw new Error(`This operation isn't yet implemented`);
+      // if (!channelGetOrCreateRequest?.data?.members) {
+      //   throw new Error('You need to provide members to create a channel without ID');
+      // }
+      // const response = await this.channelsApi.getOrCreateChannelType1({type: this.type, channelGetOrCreateRequest});
+      // this.id = response.channel?.id;
+      // return response;
     }
   }
 

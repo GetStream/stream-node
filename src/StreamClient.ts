@@ -245,7 +245,8 @@ export class StreamClient {
   };
 
   updateUserPartial = async (updateUserPartialRequest: UpdateUserPartialRequest) => {
-    return this.usersApi.updateUsersPartial({ updateUserPartialRequest });
+    throw new Error(`This method isn't yet implemented`);
+    // return this.usersApi.updateUsersPartial({ updateUserPartialRequest });
   };
 
   muteUser = async (muteUserRequest: MuteUserRequest) => {
@@ -333,6 +334,8 @@ export class StreamClient {
               ...context.init.headers,
               "x-client-request-id": uuidv4(),
             };
+
+            console.log(context.url);
 
             return Promise.resolve(context);
           },

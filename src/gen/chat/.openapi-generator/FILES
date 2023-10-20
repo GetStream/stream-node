@@ -1,5 +1,4 @@
 .openapi-generator-ignore
-apis/CampaignsApi.ts
 apis/ChannelTypesApi.ts
 apis/ChannelsApi.ts
 apis/CustomCommandsApi.ts

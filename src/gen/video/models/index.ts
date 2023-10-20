@@ -449,6 +449,31 @@ export interface VideoCallEndedEvent {
     user?: VideoUserResponse;
 }
 /**
+ * This event is sent when HLS broadcasting has failed
+ * @export
+ * @interface VideoCallHLSBroadcastingFailedEvent
+ */
+export interface VideoCallHLSBroadcastingFailedEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallHLSBroadcastingFailedEvent
+     */
+    call_cid: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallHLSBroadcastingFailedEvent
+     */
+    created_at: string;
+    /**
+     * The type of event: "call.hls_broadcasting_failed" in this case
+     * @type {string}
+     * @memberof VideoCallHLSBroadcastingFailedEvent
+     */
+    type: string;
+}
+/**
  * This event is sent when HLS broadcasting has started
  * @export
  * @interface VideoCallHLSBroadcastingStartedEvent
@@ -2969,6 +2994,12 @@ export interface VideoMuteUsersRequest {
     screenshare?: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof VideoMuteUsersRequest
+     */
+    screenshare_audio?: boolean;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof VideoMuteUsersRequest
      */
@@ -4465,7 +4496,7 @@ export interface VideoUserResponse {
  * The discriminator object for all websocket events, you should use this to map event payloads to their own type
  * @export
  */
-export type VideoVideoEvent = { type: 'call.accepted' } & VideoCallAcceptedEvent | { type: 'call.blocked_user' } & VideoBlockedUserEvent | { type: 'call.created' } & VideoCallCreatedEvent | { type: 'call.ended' } & VideoCallEndedEvent | { type: 'call.hls_broadcasting_started' } & VideoCallHLSBroadcastingStartedEvent | { type: 'call.hls_broadcasting_stopped' } & VideoCallHLSBroadcastingStoppedEvent | { type: 'call.live_started' } & VideoCallLiveStartedEvent | { type: 'call.member_added' } & VideoCallMemberAddedEvent | { type: 'call.member_removed' } & VideoCallMemberRemovedEvent | { type: 'call.member_updated' } & VideoCallMemberUpdatedEvent | { type: 'call.member_updated_permission' } & VideoCallMemberUpdatedPermissionEvent | { type: 'call.notification' } & VideoCallNotificationEvent | { type: 'call.permission_request' } & VideoPermissionRequestEvent | { type: 'call.permissions_updated' } & VideoUpdatedCallPermissionsEvent | { type: 'call.reaction_new' } & VideoCallReactionEvent | { type: 'call.recording_failed' } & VideoCallRecordingFailedEvent | { type: 'call.recording_ready' } & VideoCallRecordingReadyEvent | { type: 'call.recording_started' } & VideoCallRecordingStartedEvent | { type: 'call.recording_stopped' } & VideoCallRecordingStoppedEvent | { type: 'call.rejected' } & VideoCallRejectedEvent | { type: 'call.ring' } & VideoCallRingEvent | { type: 'call.session_ended' } & VideoCallSessionEndedEvent | { type: 'call.session_participant_joined' } & VideoCallSessionParticipantJoinedEvent | { type: 'call.session_participant_left' } & VideoCallSessionParticipantLeftEvent | { type: 'call.session_started' } & VideoCallSessionStartedEvent | { type: 'call.unblocked_user' } & VideoUnblockedUserEvent | { type: 'call.updated' } & VideoCallUpdatedEvent | { type: 'call.user_muted' } & VideoCallUserMuted | { type: 'connection.error' } & VideoConnectionErrorEvent | { type: 'connection.ok' } & VideoConnectedEvent | { type: 'custom' } & VideoCustomVideoEvent | { type: 'health.check' } & VideoHealthCheckEvent;
+export type VideoVideoEvent = { type: 'call.accepted' } & VideoCallAcceptedEvent | { type: 'call.blocked_user' } & VideoBlockedUserEvent | { type: 'call.created' } & VideoCallCreatedEvent | { type: 'call.ended' } & VideoCallEndedEvent | { type: 'call.hls_broadcasting_failed' } & VideoCallHLSBroadcastingFailedEvent | { type: 'call.hls_broadcasting_started' } & VideoCallHLSBroadcastingStartedEvent | { type: 'call.hls_broadcasting_stopped' } & VideoCallHLSBroadcastingStoppedEvent | { type: 'call.live_started' } & VideoCallLiveStartedEvent | { type: 'call.member_added' } & VideoCallMemberAddedEvent | { type: 'call.member_removed' } & VideoCallMemberRemovedEvent | { type: 'call.member_updated' } & VideoCallMemberUpdatedEvent | { type: 'call.member_updated_permission' } & VideoCallMemberUpdatedPermissionEvent | { type: 'call.notification' } & VideoCallNotificationEvent | { type: 'call.permission_request' } & VideoPermissionRequestEvent | { type: 'call.permissions_updated' } & VideoUpdatedCallPermissionsEvent | { type: 'call.reaction_new' } & VideoCallReactionEvent | { type: 'call.recording_failed' } & VideoCallRecordingFailedEvent | { type: 'call.recording_ready' } & VideoCallRecordingReadyEvent | { type: 'call.recording_started' } & VideoCallRecordingStartedEvent | { type: 'call.recording_stopped' } & VideoCallRecordingStoppedEvent | { type: 'call.rejected' } & VideoCallRejectedEvent | { type: 'call.ring' } & VideoCallRingEvent | { type: 'call.session_ended' } & VideoCallSessionEndedEvent | { type: 'call.session_participant_joined' } & VideoCallSessionParticipantJoinedEvent | { type: 'call.session_participant_left' } & VideoCallSessionParticipantLeftEvent | { type: 'call.session_started' } & VideoCallSessionStartedEvent | { type: 'call.unblocked_user' } & VideoUnblockedUserEvent | { type: 'call.updated' } & VideoCallUpdatedEvent | { type: 'call.user_muted' } & VideoCallUserMuted | { type: 'connection.error' } & VideoConnectionErrorEvent | { type: 'connection.ok' } & VideoConnectedEvent | { type: 'custom' } & VideoCustomVideoEvent | { type: 'health.check' } & VideoHealthCheckEvent;
 /**
  * 
  * @export

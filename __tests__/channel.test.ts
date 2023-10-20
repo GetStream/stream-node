@@ -40,14 +40,14 @@ describe("channel API", () => {
     expect(response.channel?.cid).toBe(`${channel.type}:${channel.id}`);
   });
 
-  it("create - without id", async () => {
-    const channelWithoutId = client.chat.channel('messaging');
-    const response = await channelWithoutId.getOrCreate({data: {created_by_id: user.id, members: [{user_id: user.id}, {user_id: user2.id}]}});
+  // it("create - without id", async () => {
+  //   const channelWithoutId = client.chat.channel('messaging');
+  //   const response = await channelWithoutId.getOrCreate({data: {created_by_id: user.id, members: [{user_id: user.id}, {user_id: user2.id}]}});
 
-    expect(response.channel?.cid).toBe(channelWithoutId.cid);
+  //   expect(response.channel?.cid).toBe(channelWithoutId.cid);
 
-    await channelWithoutId.delete();
-  });
+  //   await channelWithoutId.delete();
+  // });
 
   it("update", async () => {
     const response = await channel.update({add_members: [{user_id: user.id}, {user_id: user2.id}], add_moderators: [], demote_moderators: [], remove_members: []});
