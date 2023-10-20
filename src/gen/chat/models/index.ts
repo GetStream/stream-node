@@ -6382,12 +6382,6 @@ export interface Flag {
      * @type {UserObject}
      * @memberof Flag
      */
-    target_user?: UserObject;
-    /**
-     * Date/time of the last update
-     * @type {string}
-     * @memberof Flag
-     */
     updated_at: string;
     /**
      * 
@@ -6478,12 +6472,6 @@ export interface FlagRequest {
      * @memberof FlagRequest
      */
     target_message_id?: string;
-    /**
-     * ID of the user when reporting a user
-     * @type {string}
-     * @memberof FlagRequest
-     */
-    target_user_id?: string;
     /**
      * 
      * @type {UserObjectRequest}
@@ -15367,6 +15355,7 @@ export interface UserMutedEvent {
  * @interface UserObject
  */
 export interface UserObject {
+    custom?: any;
     [key: string]: any | any;
     /**
      * Expiration date of the ban
@@ -15465,6 +15454,7 @@ export interface UserObject {
  * @interface UserObjectRequest
  */
 export interface UserObjectRequest {
+    custom?: any;
     [key: string]: any | any;
     /**
      * Expiration date of the ban
@@ -15620,6 +15610,7 @@ export interface UserRequest {
  * @interface UserResponse
  */
 export interface UserResponse {
+    custom?: any;
     [key: string]: any | any;
     /**
      * 

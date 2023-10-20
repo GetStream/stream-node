@@ -11,6 +11,9 @@ describe("user API", () => {
   const newUser: UserObjectRequest = {
     id: uuidv4(),
     role: "user",
+    custom: {
+      color: 'red'
+    }
   };
   const user = {
     id: "stream-node-test-user",
@@ -57,6 +60,7 @@ describe("user API", () => {
 
     expect(createdUser.id).toBe(newUser.id);
     expect(createdUser.role).toBe(newUser.role);
+    expect(createdUser.custom.color).toBe('red');
 
     const queryResponse = await client.queryUsers({
       sort: [],
@@ -66,16 +70,21 @@ describe("user API", () => {
     });
 
     expect(queryResponse.users.length).toBe(1);
+    expect(queryResponse.users[0].custom.color).toBe('red');
   });
 
   it("create guest", async () => {
     const guest: UserObjectRequest = {
       id: uuidv4(),
+      custom: {
+        color: 'red'
+      }
     };
 
     const response = await client.createGuest({ user: guest });
 
     expect(response.user?.role).toBe("guest");
+    expect(response.user?.custom.color).toBe('red');
   });
 
   it("ban and unban", async () => {
@@ -169,5 +178,6 @@ describe("user API", () => {
     const response = await client.deleteUser({ userId: newUser.id });
 
     expect(response.user?.id).toBe(newUser.id);
+    expect(response.user?.custom.color).toBe('red');
   });
 });

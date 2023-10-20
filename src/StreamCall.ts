@@ -70,17 +70,10 @@ export class StreamCall {
     });
   };
 
-  listRecordings = (sessionId?: string) => {
-    if (sessionId) {
-      return this.apiClient.listRecordingsTypeIdSession1({
-        ...this.baseRequest,
-        session: sessionId,
-      });
-    } else {
-      return this.apiClient.listRecordingsTypeId0({
-        ...this.baseRequest,
-      });
-    }
+  listRecordings = () => {
+    return this.apiClient.listRecordingsTypeId0({
+      ...this.baseRequest,
+    });
   };
 
   muteUsers = (videoMuteUsersRequest: VideoMuteUsersRequest) => {

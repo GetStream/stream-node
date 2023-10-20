@@ -1,6 +1,7 @@
 import { StreamChatClient } from "./StreamChatClient";
 import { StreamVideoClient } from "./StreamVideoClient";
 import {
+  APIError,
   BanRequest,
   CheckPushRequest,
   CreateDeviceRequest,
@@ -40,6 +41,9 @@ import {
   UpdateUserPartialRequest,
   UpdateUsersRequest,
   UserCustomEventRequest,
+  UserObject,
+  UserObjectRequest,
+  UserResponse,
   UsersApi,
 } from "./gen/chat";
 import {
@@ -122,27 +126,39 @@ export class StreamClient {
     return this.testingApi.checkPush({checkPushRequest});
   }
 
-  createGuest = (guestRequest: GuestRequest) => {
-    return this.usersApi.createGuest({ guestRequest });
+  createGuest = async (guestRequest: GuestRequest) => {
+    guestRequest.user = this.mapCustomDataBeforeSend(guestRequest.user);
+    const response = await this.usersApi.createGuest({ guestRequest });
+    response.user = this.mapCustomDataAfterReceive(response.user);
+
+    return response;
   };
 
   banUser = (banRequest: BanRequest) => {
+    banRequest.user = this.mapCustomDataBeforeSend(banRequest.user);
+    banRequest.banned_by = this.mapCustomDataBeforeSend(banRequest.banned_by);
     return this.usersApi.ban({ banRequest });
   };
 
-  deactivateUser = (deactivateUserRequest: DeactivateUserRequest) => {
-    return this.usersApi.deactivateUser({
+  deactivateUser = async (deactivateUserRequest: DeactivateUserRequest) => {
+    const response = await this.usersApi.deactivateUser({
       deactivateUserRequest,
       userId: deactivateUserRequest.user_id,
     });
+    response.user = this.mapCustomDataAfterReceive(response.user);
+
+    return response;
   };
 
   deactivateUsers = (deactivateUsersRequest: DeactivateUsersRequest) => {
     return this.usersApi.deactivateUsers({ deactivateUsersRequest });
   };
 
-  deleteUser = (request: DeleteUserRequest) => {
-    return this.usersApi.deleteUser(request);
+  deleteUser = async (request: DeleteUserRequest) => {
+    const response = await this.usersApi.deleteUser(request);
+    response.user = this.mapCustomDataAfterReceive(response.user);
+
+    return response;
   };
 
   deleteUsers = (deleteUsersRequest: DeleteUsersRequest) => {
@@ -157,23 +173,42 @@ export class StreamClient {
     return this.usersApi.exportUsers({ exportUsersRequest });
   };
 
-  flag = (flagRequest: FlagRequest) => {
-    return this.usersApi.flag({ flagRequest });
+  flag = async (flagRequest: FlagRequest) => {
+    flagRequest.user = this.mapCustomDataBeforeSend(flagRequest.user);
+    const response = await this.usersApi.flag({ flagRequest });
+    if (response.flag?.user) {
+      response.flag.user = this.mapCustomDataAfterReceive(response.flag?.user);
+    }
+
+    return response;
   };
 
-  queryBannedUsers = (payload: QueryBannedUsersRequest) => {
-    return this.usersApi.queryBannedUsers({ payload });
+  queryBannedUsers = async (payload: QueryBannedUsersRequest) => {
+    payload.user = this.mapCustomDataBeforeSend(payload.user);
+    const response = await this.usersApi.queryBannedUsers({ payload });
+    response.bans.forEach(b => {
+      b.banned_by = this.mapCustomDataAfterReceive(b.banned_by);
+      b.user = this.mapCustomDataAfterReceive(b.user);
+    })
+
+    return response;
   };
 
-  queryUsers = (payload: QueryUsersRequest) => {
-    return this.usersApi.queryUsers({ payload });
+  queryUsers = async (payload: QueryUsersRequest) => {
+    payload.user = this.mapCustomDataBeforeSend(payload.user);
+    const response = await this.usersApi.queryUsers({ payload });
+    // @ts-expect-error
+    response.users = response.users.map(u => this.mapCustomDataAfterReceive(u)!);
+
+    return response;
   };
 
-  reactivateUser = (reactivateUserRequest: ReactivateUserRequest) => {
-    return this.usersApi.reactivateUser({
+  reactivateUser = async (reactivateUserRequest: ReactivateUserRequest) => {
+    const response = await this.usersApi.reactivateUser({
       reactivateUserRequest,
       userId: reactivateUserRequest.user_id,
     });
+    response.user = this.mapCustomDataAfterReceive(response.user);
   };
 
   reactivateUsers = (reactivateUsersRequest: ReactivateUsersRequest) => {
@@ -188,23 +223,51 @@ export class StreamClient {
     return this.usersApi.unban(request);
   };
 
-  unflag = (flagRequest: FlagRequest) => {
-    return this.usersApi.unflag({ flagRequest });
+  unflag = async (flagRequest: FlagRequest) => {
+    const response = await this.usersApi.unflag({ flagRequest });
+    if (response.flag?.user) {
+      response.flag.user = this.mapCustomDataAfterReceive(response.flag.user);
+    }
+
+    return response;
   };
 
-  updateUsers = (updateUsersRequest: UpdateUsersRequest) => {
-    return this.usersApi.updateUsers({ updateUsersRequest });
+  updateUsers = async (updateUsersRequest: UpdateUsersRequest) => {
+    Object.keys(updateUsersRequest.users).forEach(key => {
+      updateUsersRequest.users[key] = this.mapCustomDataBeforeSend(updateUsersRequest.users[key]);
+    })
+    const response = await this.usersApi.updateUsers({ updateUsersRequest });
+    Object.keys(response.users).forEach(key => {
+      response.users[key] = this.mapCustomDataAfterReceive(response.users[key])!;
+    });
+
+    return response;
   };
 
-  updateUserPartial = (updateUserPartialRequest: UpdateUserPartialRequest) => {
+  updateUserPartial = async (updateUserPartialRequest: UpdateUserPartialRequest) => {
     return this.usersApi.updateUsersPartial({ updateUserPartialRequest });
   };
 
-  muteUser = (muteUserRequest: MuteUserRequest) => {
-    return this.usersApi.muteUser({ muteUserRequest });
+  muteUser = async (muteUserRequest: MuteUserRequest) => {
+    muteUserRequest.user = this.mapCustomDataBeforeSend(muteUserRequest.user);
+    const response = await this.usersApi.muteUser({ muteUserRequest });
+    if (response.mute?.user) {
+      response.mute.user = this.mapCustomDataAfterReceive(response.mute?.user);
+    }
+    if (response.mutes) {
+      response.mutes = response.mutes.map(m => {
+        return {
+          ...m,
+          user: this.mapCustomDataAfterReceive(m.user)
+        }
+      });
+    }
+
+    return response;
   };
 
   unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
+    unmuteUserRequest.user = this.mapCustomDataBeforeSend(unmuteUserRequest.user);
     return this.usersApi.unmuteUser({ unmuteUserRequest });
   };
 
@@ -315,4 +378,34 @@ export class StreamClient {
       },
     });
   };
+
+  private reservedKeywords = ['ban_expires', 'banned', 'id', 'invisible', 'language', 'push_notifications', 'revoke_tokens_issued_before', 'role', 'teams', 'created_at', 'deactivated_at', 'deleted_at', 'last_active', 'online', 'updated_at', 'shadow_banned'];
+  private mapCustomDataBeforeSend = (user: UserObject | UserObjectRequest | UserResponse | undefined) => {
+    if (!user) {
+      return undefined;
+    }
+    const copy = {...user};
+    delete copy.custom;
+    return {...copy, ...user.custom}
+  }
+
+  private mapCustomDataAfterReceive = (user: UserObject | UserResponse | undefined) => {
+    if (!user) {
+      return undefined;
+    }
+    // @ts-expect-error
+    let result: UserObject | UserResponse = {};
+    Object.keys(user).forEach(key => {
+      if (!this.reservedKeywords.includes(key)) {
+        if (!result.custom) {
+          result.custom = {};
+        }
+        result.custom[key] = (user as any)[key];
+      } else {
+        result[key] = (user as any)[key];
+      }
+    });
+
+    return result;
+  }
 }

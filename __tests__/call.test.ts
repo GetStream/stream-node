@@ -143,10 +143,6 @@ describe("call API", () => {
       let response = await call.listRecordings();
 
       expect(response.recordings).toBeDefined();
-
-      response = await call.listRecordings("session123");
-
-      expect(response.recordings).toBeDefined();
     });
   });
 });
