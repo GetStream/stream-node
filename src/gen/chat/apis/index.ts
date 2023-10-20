@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './CampaignsApi';
 export * from './ChannelTypesApi';
 export * from './ChannelsApi';
 export * from './CustomCommandsApi';
