@@ -95,12 +95,12 @@ describe("channel API", () => {
     expect(queryResponse.channels.length).toBe(0);
   });
 
-  // it("export", async () => {
-  //   const response = await client.chat.exportChannels({channels: [{cid: channel.cid}]});
-  //   const statusResponse = await client.chat.getExportStatus({id: response.task_id});
+  it("export", async () => {
+    const response = await client.chat.exportChannels({channels: [{cid: channel.cid}]});
+    const statusResponse = await client.chat.getExportStatus({id: response.task_id});
 
-  //   expect(statusResponse).toBeDefined();
-  // });
+    expect(statusResponse).toBeDefined();
+  });
 
   it("custom event", async () => {
     const response = await channel.sendCustomEvent({type: 'my-event', user_id: user.id});

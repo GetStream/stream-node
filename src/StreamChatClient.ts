@@ -1,11 +1,12 @@
 import { StreamChannel } from "./StreamChannel";
 import { StreamClient } from "./StreamClient";
-import { ChannelTypesApi, ChannelsApi, CreateBlockListRequest, CreateChannelTypeRequest, DeleteBlockListRequest, DeleteChannelTypeRequest, ExportChannelsRequest, GetBlockListRequest, GetChannelTypeRequest, GetExportChannelsStatusRequest, QueryChannelsRequest, SearchRequest, SettingsApi, UpdateBlockListRequest, UpdateChannelTypeRequest } from "./gen/chat";
+import { ChannelTypesApi, ChannelsApi, CreateBlockListRequest, CreateChannelTypeRequest, CreateCommandRequest, CustomCommandsApi, DeleteBlockListRequest, DeleteChannelTypeRequest, DeleteCommandRequest, ExportChannelsRequest, GetBlockListRequest, GetChannelTypeRequest, GetCommandRequest, GetExportChannelsStatusRequest, QueryChannelsRequest, SearchRequest, SettingsApi, UpdateBlockListRequest, UpdateChannelTypeRequest, UpdateCommandRequest } from "./gen/chat";
 
 export class StreamChatClient {
   private settingsApi: SettingsApi;
   private channelTypesApi: ChannelTypesApi;
   private channelsApi: ChannelsApi;
+  private commandsApi: CustomCommandsApi;
 
   constructor(private streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration();
@@ -15,6 +16,8 @@ export class StreamChatClient {
     this.channelTypesApi = new ChannelTypesApi(configuration);
     //@ts-expect-error typing problem
     this.channelsApi = new ChannelsApi(configuration);
+    //@ts-expect-error typing problem
+    this.commandsApi = new CustomCommandsApi(configuration);
   }
 
   channel = (type: string, id?: string) => {
@@ -75,5 +78,25 @@ export class StreamChatClient {
 
   getExportStatus = (request: GetExportChannelsStatusRequest) => {
     return this.channelsApi.getExportChannelsStatus(request);
+  }
+
+  listCommands = () => {
+    return this.commandsApi.listCommands();
+  }
+
+  createCommand = (createCommandRequest: CreateCommandRequest) => {
+    return this.commandsApi.createCommand({createCommandRequest});
+  }
+
+  getCommand = (getCommandRequest: GetCommandRequest) => {
+    return this.commandsApi.getCommand(getCommandRequest);
+  }
+
+  updateCommand = (name: string, updateCommandRequest: UpdateCommandRequest) => {
+    return this.commandsApi.updateCommand({name, updateCommandRequest})
+  }
+
+  deleteCommand = (request: DeleteCommandRequest) => {
+    return this.commandsApi.deleteCommand(request);
   }
 }

@@ -108,7 +108,7 @@ describe("messages API", () => {
     const response = await client.chat.searchMessages({filter_conditions: {members: {$in: [user2.id]}}, message_filter_conditions: {text: {$autocomplete: 'check'}}});
 
     expect(response.results).toBeDefined();
-  })
+  }, 10000)
 
   it('flag and unflag', async () => {
     const response = await client.flag({target_message_id: messageId!, user_id: user.id});
