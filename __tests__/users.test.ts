@@ -143,19 +143,25 @@ describe("user API", () => {
     expect(response).toBeDefined();
   });
 
-  // TODO: open API spec seems to be faulty here
-  //   it("update", async () => {
-  //     const response = client.updateUserPartial({
-  //       id: newUser.id,
-  //       set: {
-  //         role: "admin",
-  //         name: "Test User" + newUser.id,
-  //       },
-  //       unset: [],
-  //     });
+    it("update", async () => {
+      const response = await client.updateUsersPartial({users: [
+        {
+          id: newUser.id,
+          set: {
+            role: "admin",
+            name: "Updated User" + newUser.id,
+            color: 'blue'
+          },
+          unset: [],
+        }
+      ]});
 
-  //     console.log(response);
-  //   });
+      const userResponse = response.users[newUser.id]
+
+      expect(userResponse.name).toBe("Updated User" + newUser.id);
+      expect(userResponse.role).toBe('admin');
+      expect(userResponse.custom.color).toBe('blue');
+    });
 
   it("deactivate and reactivate", async () => {
     const deactivateResponse = await client.deactivateUser({
@@ -183,6 +189,6 @@ describe("user API", () => {
     const response = await client.deleteUser({ userId: newUser.id });
 
     expect(response.user?.id).toBe(newUser.id);
-    expect(response.user?.custom.color).toBe('red');
+    expect(response.user?.custom.color).toBe('blue');
   });
 });

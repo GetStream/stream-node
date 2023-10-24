@@ -244,9 +244,14 @@ export class StreamClient {
     return response;
   };
 
-  updateUserPartial = async (updateUserPartialRequest: UpdateUserPartialRequest) => {
-    throw new Error(`This method isn't yet implemented`);
-    // return this.usersApi.updateUsersPartial({ updateUserPartialRequest });
+  updateUsersPartial = async (request: {users: UpdateUserPartialRequest[]}) => {
+    // @ts-expect-error typing error
+    const response = await this.usersApi.updateUsersPartial({ updateUserPartialRequest: request });
+    Object.keys(response.users).forEach(key => {
+      response.users[key] = this.mapCustomDataAfterReceive(response.users[key])!;
+    });
+
+    return response;
   };
 
   muteUser = async (muteUserRequest: MuteUserRequest) => {
@@ -334,8 +339,6 @@ export class StreamClient {
               ...context.init.headers,
               "x-client-request-id": uuidv4(),
             };
-
-            console.log(context.url);
 
             return Promise.resolve(context);
           },
