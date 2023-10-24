@@ -1,6 +1,6 @@
 {
-  "name": "stream-node",
-  "version": "1.0.0",
+  "name": "@stream-io/node-sdk",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
