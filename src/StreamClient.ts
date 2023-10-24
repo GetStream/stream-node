@@ -53,8 +53,8 @@ import {
   RequestContext,
   ResponseContext,
 } from "./gen/video";
-import { createToken } from "./utils/create-token";
 import { v4 as uuidv4 } from "uuid";
+import { JWTServerToken, JWTUserToken } from "./utils/create-token";
 
 export class StreamClient {
   public readonly video: StreamVideoClient;
@@ -75,7 +75,7 @@ export class StreamClient {
     private secret: string,
     public readonly basePath?: string
   ) {
-    this.token = createToken(this.secret);
+    this.token = JWTServerToken(this.secret);
     this.video = new StreamVideoClient(this);
     this.chat = new StreamChatClient(this);
 
@@ -98,6 +98,29 @@ export class StreamClient {
     this.eventsApi = new EventsApi(chatConfiguration);
     //@ts-expect-error typing problem
     this.tasksApi = new TasksApi(chatConfiguration);
+  }
+
+  createToken(
+    userID: string,
+    exp?: number,
+    iat?: number,
+    call_cids?: string[],
+  ) {
+    const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
+
+    if (exp) {
+      extra.exp = exp;
+    }
+
+    if (iat) {
+      extra.iat = iat;
+    }
+
+    if (call_cids) {
+      extra.call_cids = call_cids;
+    }
+
+    return JWTUserToken(this.secret, userID, extra);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
