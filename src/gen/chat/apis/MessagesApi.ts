@@ -24,6 +24,7 @@ import type {
   GetOGResponse,
   GetReactionsResponse,
   GetRepliesResponse,
+  //@ts-expect-error
   ImageSizeRequest,
   ImageUploadResponse,
   MarkChannelsReadRequest,
@@ -33,6 +34,7 @@ import type {
   MessageActionRequest,
   MessageResponse,
   MessageWithPendingMetadataResponse,
+  //@ts-expect-error
   OnlyUserIDRequest,
   QueryMessageFlagsRequest,
   QueryMessageFlagsResponse,

@@ -2,7 +2,9 @@
   "name": "stream-node",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "license": "See license in LICENSE",
   "scripts": {
     "test": "vitest",
@@ -11,6 +13,14 @@
     "generate:open-api": "./generate-openapi.sh protocol",
     "generate:open-api:dev": "./generate-openapi.sh chat"
   },
+  "files": [
+    "dist",
+    "src",
+    "index.ts",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "author": "",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
