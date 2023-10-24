@@ -24,7 +24,7 @@ describe("user API", () => {
 
   beforeAll(async () => {
     client = new StreamClient(apiKey, secret);
-    await client.updateUsers({
+    await client.upsertUsers({
       users: {
         [user.id]: { ...user },
       },
@@ -50,7 +50,7 @@ describe("user API", () => {
   });
 
   it("create", async () => {
-    const response = await client.updateUsers({
+    const response = await client.upsertUsers({
       users: {
         [newUser.id]: {
           ...newUser,
@@ -149,16 +149,15 @@ describe("user API", () => {
           id: newUser.id,
           set: {
             role: "admin",
-            name: "Updated User" + newUser.id,
             color: 'blue'
           },
-          unset: [],
+          unset: ['name'],
         }
       ]});
 
       const userResponse = response.users[newUser.id]
 
-      expect(userResponse.name).toBe("Updated User" + newUser.id);
+      expect(userResponse.name).toBe(undefined);
       expect(userResponse.role).toBe('admin');
       expect(userResponse.custom.color).toBe('blue');
     });

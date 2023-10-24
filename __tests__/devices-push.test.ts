@@ -28,7 +28,7 @@ describe('devices and push', () => {
 
     beforeAll(async () => {
         client = new StreamClient(apiKey, secret);
-        await client.updateUsers({
+        await client.upsertUsers({
             users: {
               [user.id]: { ...user },
             },

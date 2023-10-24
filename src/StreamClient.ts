@@ -255,7 +255,7 @@ export class StreamClient {
     return response;
   };
 
-  updateUsers = async (updateUsersRequest: UpdateUsersRequest) => {
+  upsertUsers = async (updateUsersRequest: UpdateUsersRequest) => {
     Object.keys(updateUsersRequest.users).forEach(key => {
       updateUsersRequest.users[key] = this.mapCustomDataBeforeSend(updateUsersRequest.users[key]);
     })

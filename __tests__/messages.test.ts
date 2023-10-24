@@ -25,7 +25,7 @@ describe("messages API", () => {
   beforeAll(async () => {
     client = new StreamClient(apiKey, secret);
 
-    await client.updateUsers({
+    await client.upsertUsers({
         users: {
           [user.id]: { ...user },
           [user2.id]: {...user2 }
