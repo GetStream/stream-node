@@ -5,7 +5,12 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "author": "https://getstream.io",
   "license": "See license in LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GetStream/stream-node.git"
+  },
   "scripts": {
     "test": "vitest",
     "start": "rollup -w -c",
@@ -19,9 +24,9 @@
     "index.ts",
     "package.json",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    ".readme-assets"
   ],
-  "author": "",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@rollup/plugin-replace": "^5.0.2",
