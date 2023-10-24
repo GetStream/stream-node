@@ -43,7 +43,6 @@ describe("messages API", () => {
 
     messageId = response.message?.id;
 
-    console.log('itt');
     const getResponse = await channel.getManyMessages({ids: [messageId!]});
 
     expect(getResponse.messages.length).toBe(1);
