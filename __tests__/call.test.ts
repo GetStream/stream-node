@@ -1,7 +1,12 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient, StreamCall, VideoRecordSettingsRequestModeEnum, VideoRecordSettingsRequestQualityEnum } from "../";
+import {
+  StreamClient,
+  StreamCall,
+  VideoRecordSettingsRequestModeEnum,
+  VideoRecordSettingsRequestQualityEnum,
+} from "../";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
@@ -91,6 +96,7 @@ describe("call API", () => {
         settings_override: {
           recording: {
             mode: VideoRecordSettingsRequestModeEnum.DISABLED,
+            audio_only: true,
           },
         },
       });
@@ -121,7 +127,9 @@ describe("call API", () => {
 
       settings = response.call.settings.recording;
       expect(settings.audio_only).toBe(false);
-      expect(settings.quality).toBe(VideoRecordSettingsRequestQualityEnum._1080P);
+      expect(settings.quality).toBe(
+        VideoRecordSettingsRequestQualityEnum._1080P
+      );
     });
 
     it("start recording", async () => {

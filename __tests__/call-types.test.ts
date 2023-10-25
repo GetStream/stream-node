@@ -1,10 +1,13 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient,   VideoOwnCapability,
+import {
+  StreamClient,
+  VideoLayoutSettingsNameEnum,
+  VideoOwnCapability,
   VideoRecordSettingsRequestModeEnum,
-  VideoRecordSettingsRequestQualityEnum, } from "../";
-
+  VideoRecordSettingsRequestQualityEnum,
+} from "../";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
@@ -104,9 +107,50 @@ describe("call types CRUD API", () => {
     );
   });
 
+  it("update layout options", async () => {
+    const layoutOptions = {
+      "logo.image_url":
+        "https://theme.zdassets.com/theme_assets/9442057/efc3820e436f9150bc8cf34267fff4df052a1f9c.png",
+      "logo.horizontal_position": "center",
+      "title.text": "Building Stream Video Q&A",
+      "title.horizontal_position": "center",
+      "title.color": "black",
+      "participant_label.border_radius": "0px",
+      "participant.border_radius": "0px",
+      "layout.spotlight.participants_bar_position": "top",
+      "layout.background_color": "#f2f2f2",
+      "participant.placeholder_background_color": "#1f1f1f",
+      "layout.single-participant.padding_inline": "20%",
+      "participant_label.background_color": "transparent",
+    };
+
+    const response = await client.video.updateCallType(callTypeName, {
+      settings: {
+        recording: {
+          mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
+          audio_only: false,
+          quality: VideoRecordSettingsRequestQualityEnum._1080P,
+          layout: {
+            name: VideoLayoutSettingsNameEnum.SPOTLIGHT,
+            options: layoutOptions,
+          },
+        },
+      },
+    });
+
+    expect(response.settings.recording.layout.name).toBe(
+      VideoLayoutSettingsNameEnum.SPOTLIGHT
+    );
+    Object.keys(layoutOptions).forEach((key) => {
+      expect(response.settings.recording.layout.options![key]).toEqual(
+        (layoutOptions as any)[key]
+      );
+    });
+  }, 10000);
+
   it("delete", async () => {
     try {
-      await client.video.deleteCallType({name: callTypeName});
+      await client.video.deleteCallType({ name: callTypeName });
     } catch (e) {
       // the first request fails on backend sometimes
       // retry it
@@ -114,11 +158,11 @@ describe("call types CRUD API", () => {
         setTimeout(() => resolve(), 2000);
       });
 
-      await client.video.deleteCallType({name: callTypeName});
+      await client.video.deleteCallType({ name: callTypeName });
     }
 
     await expect(() =>
-      client.video.getCallType({name: callTypeName})
+      client.video.getCallType({ name: callTypeName })
     ).rejects.toThrowError();
   });
 });
