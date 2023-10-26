@@ -6522,6 +6522,217 @@ export interface GetCallTokenResponse {
 /**
  * 
  * @export
+ * @interface GetChannelTypeResponse
+ */
+export interface GetChannelTypeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    automod: GetChannelTypeResponseAutomodEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    automod_behavior: GetChannelTypeResponseAutomodBehaviorEnum;
+    /**
+     * 
+     * @type {Thresholds}
+     * @memberof GetChannelTypeResponse
+     */
+    automod_thresholds?: Thresholds;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklist?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklist_behavior?: GetChannelTypeResponseBlocklistBehaviorEnum;
+    /**
+     * 
+     * @type {Array<BlockListOptions>}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklists?: Array<BlockListOptions>;
+    /**
+     * 
+     * @type {Array<Command>}
+     * @memberof GetChannelTypeResponse
+     */
+    commands: Array<Command>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    connect_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    custom_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof GetChannelTypeResponse
+     */
+    grants: { [key: string]: Array<string>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    mark_messages_pending: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetChannelTypeResponse
+     */
+    max_message_length: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    message_retention: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    mutes: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<PolicyRequest1>}
+     * @memberof GetChannelTypeResponse
+     */
+    permissions: Array<PolicyRequest1>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    push_notifications: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    quotes: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    reactions: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    read_events: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    reminders: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    replies: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    search: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    typing_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    updated_at: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    uploads: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    url_enrichment: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseAutomodEnum = {
+    DISABLED: 'disabled',
+    SIMPLE: 'simple',
+    AI: 'AI'
+} as const;
+export type GetChannelTypeResponseAutomodEnum = typeof GetChannelTypeResponseAutomodEnum[keyof typeof GetChannelTypeResponseAutomodEnum];
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseAutomodBehaviorEnum = {
+    FLAG: 'flag',
+    BLOCK: 'block'
+} as const;
+export type GetChannelTypeResponseAutomodBehaviorEnum = typeof GetChannelTypeResponseAutomodBehaviorEnum[keyof typeof GetChannelTypeResponseAutomodBehaviorEnum];
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseBlocklistBehaviorEnum = {
+    FLAG: 'flag',
+    BLOCK: 'block'
+} as const;
+export type GetChannelTypeResponseBlocklistBehaviorEnum = typeof GetChannelTypeResponseBlocklistBehaviorEnum[keyof typeof GetChannelTypeResponseBlocklistBehaviorEnum];
+
+/**
+ * 
+ * @export
  * @interface GetCommandResponse
  */
 export interface GetCommandResponse {
@@ -8762,7 +8973,7 @@ export interface MessageRequest {
      * @type {Array<AttachmentRequest>}
      * @memberof MessageRequest
      */
-    attachments: Array<AttachmentRequest>;
+    attachments?: Array<AttachmentRequest>;
     /**
      * Channel unique identifier in <type>:<id> format
      * @type {Array<number>}
@@ -8983,7 +9194,7 @@ export interface MessageRequest1 {
      * @type {string}
      * @memberof MessageRequest1
      */
-    mml: string;
+    mml?: string;
     /**
      * List of 10 latest reactions of authenticated user to this message
      * @type {Array<ReactionRequest>}
@@ -9073,7 +9284,7 @@ export interface MessageRequest1 {
      * @type {string}
      * @memberof MessageRequest1
      */
-    text: string;
+    text?: string;
     /**
      * List of users who participate in thread
      * @type {Array<UserObjectRequest>}
@@ -9343,11 +9554,17 @@ export interface ModerationResponseRequest {
  */
 export interface MuteChannelRequest {
     /**
-     * Channel CIDs to mute (if multiple channels)
+     * Channel CID to mute (if single channel). Can't be used with `channel_cids`
+     * @type {string}
+     * @memberof MuteChannelRequest
+     */
+    channel_cid?: string;
+    /**
+     * Channel CIDs to mute (if multiple channels). Can't be used with `channel_cid`
      * @type {Array<string>}
      * @memberof MuteChannelRequest
      */
-    channel_cids: Array<string>;
+    channel_cids?: Array<string>;
     /**
      * Duration of mute in milliseconds
      * @type {number}
@@ -9405,13 +9622,19 @@ export interface MuteChannelResponse {
  */
 export interface MuteUserRequest {
     /**
-     * User IDs to mute (if multiple users)
+     * ID of the user to mute (if single user). Cannot be used with `target_ids`
+     * @type {string}
+     * @memberof MuteUserRequest
+     */
+    target_id?: string;
+    /**
+     * IDs of the users to mute (if multiple users). Cannot be used with `target_id`
      * @type {Array<string>}
      * @memberof MuteUserRequest
      */
-    target_ids: Array<string>;
+    target_ids?: Array<string>;
     /**
-     * Duration of mute in minutes
+     * 
      * @type {number}
      * @memberof MuteUserRequest
      */
@@ -10828,31 +11051,31 @@ export interface PushNotificationSettingsRequest {
  */
 export interface PushProvider {
     /**
-     * 
+     * APN auth key
      * @type {string}
      * @memberof PushProvider
      */
     apn_auth_key?: string;
     /**
-     * 
+     * APN auth type
      * @type {string}
      * @memberof PushProvider
      */
     apn_auth_type?: string;
     /**
-     * 
+     * APN development
      * @type {boolean}
      * @memberof PushProvider
      */
     apn_development?: boolean;
     /**
-     * 
+     * APN host
      * @type {string}
      * @memberof PushProvider
      */
     apn_host?: string;
     /**
-     * 
+     * APN key id
      * @type {string}
      * @memberof PushProvider
      */
@@ -10870,13 +11093,13 @@ export interface PushProvider {
      */
     apn_p12_cert?: string;
     /**
-     * 
+     * APN team id
      * @type {string}
      * @memberof PushProvider
      */
     apn_team_id?: string;
     /**
-     * 
+     * APN topic
      * @type {string}
      * @memberof PushProvider
      */
@@ -10888,83 +11111,83 @@ export interface PushProvider {
      */
     created_at: string;
     /**
-     * 
+     * Description of push provider
      * @type {string}
      * @memberof PushProvider
      */
     description?: string;
     /**
-     * 
+     * Disabled at
      * @type {string}
      * @memberof PushProvider
      */
     disabled_at?: string;
     /**
-     * 
+     * Disabled reason
      * @type {string}
      * @memberof PushProvider
      */
     disabled_reason?: string;
     /**
-     * 
+     * Firebase APN template
      * @type {string}
      * @memberof PushProvider
      */
     firebase_apn_template?: string;
     /**
-     * 
+     * Firebase credentials
      * @type {string}
      * @memberof PushProvider
      */
     firebase_credentials?: string;
     /**
-     * 
+     * Firebase data template
      * @type {string}
      * @memberof PushProvider
      */
     firebase_data_template?: string;
     /**
-     * 
+     * Firebase host
      * @type {string}
      * @memberof PushProvider
      */
     firebase_host?: string;
     /**
-     * 
+     * Firebase notification template
      * @type {string}
      * @memberof PushProvider
      */
     firebase_notification_template?: string;
     /**
-     * 
+     * Firebase server key
      * @type {string}
      * @memberof PushProvider
      */
     firebase_server_key?: string;
     /**
-     * 
+     * Huawei app id
      * @type {string}
      * @memberof PushProvider
      */
     huawei_app_id?: string;
     /**
-     * 
+     * Huawei app secret
      * @type {string}
      * @memberof PushProvider
      */
     huawei_app_secret?: string;
     /**
-     * 
+     * Name of push provider
      * @type {string}
      * @memberof PushProvider
      */
     name: string;
     /**
-     * 
-     * @type {number}
+     * Push provider type
+     * @type {string}
      * @memberof PushProvider
      */
-    type: number;
+    type: PushProviderTypeEnum;
     /**
      * 
      * @type {string}
@@ -10972,18 +11195,31 @@ export interface PushProvider {
      */
     updated_at: string;
     /**
-     * 
+     * Xiaomi app secret
      * @type {string}
      * @memberof PushProvider
      */
     xiaomi_app_secret?: string;
     /**
-     * 
+     * Xiaomi package name
      * @type {string}
      * @memberof PushProvider
      */
     xiaomi_package_name?: string;
 }
+
+
+/**
+ * @export
+ */
+export const PushProviderTypeEnum = {
+    FIREBASE: 'firebase',
+    APN: 'apn',
+    HUAWEI: 'huawei',
+    XIAOMI: 'xiaomi'
+} as const;
+export type PushProviderTypeEnum = typeof PushProviderTypeEnum[keyof typeof PushProviderTypeEnum];
+
 /**
  * 
  * @export
@@ -10991,31 +11227,31 @@ export interface PushProvider {
  */
 export interface PushProviderRequest {
     /**
-     * 
+     * APN auth key
      * @type {string}
      * @memberof PushProviderRequest
      */
     apn_auth_key?: string;
     /**
-     * 
+     * APN auth type
      * @type {string}
      * @memberof PushProviderRequest
      */
     apn_auth_type?: string;
     /**
-     * 
+     * APN development
      * @type {boolean}
      * @memberof PushProviderRequest
      */
     apn_development?: boolean;
     /**
-     * 
+     * APN host
      * @type {string}
      * @memberof PushProviderRequest
      */
     apn_host?: string;
     /**
-     * 
+     * APN key id
      * @type {string}
      * @memberof PushProviderRequest
      */
@@ -11033,13 +11269,13 @@ export interface PushProviderRequest {
      */
     apn_p12_cert?: string;
     /**
-     * 
+     * APN team id
      * @type {string}
      * @memberof PushProviderRequest
      */
     apn_team_id?: string;
     /**
-     * 
+     * APN topic
      * @type {string}
      * @memberof PushProviderRequest
      */
@@ -11051,83 +11287,83 @@ export interface PushProviderRequest {
      */
     created_at?: string;
     /**
-     * 
+     * Description of push provider
      * @type {string}
      * @memberof PushProviderRequest
      */
     description?: string;
     /**
-     * 
+     * Disabled at
      * @type {string}
      * @memberof PushProviderRequest
      */
     disabled_at?: string;
     /**
-     * 
+     * Disabled reason
      * @type {string}
      * @memberof PushProviderRequest
      */
     disabled_reason?: string;
     /**
-     * 
+     * Firebase APN template
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_apn_template?: string;
     /**
-     * 
+     * Firebase credentials
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_credentials?: string;
     /**
-     * 
+     * Firebase data template
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_data_template?: string;
     /**
-     * 
+     * Firebase host
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_host?: string;
     /**
-     * 
+     * Firebase notification template
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_notification_template?: string;
     /**
-     * 
+     * Firebase server key
      * @type {string}
      * @memberof PushProviderRequest
      */
     firebase_server_key?: string;
     /**
-     * 
+     * Huawei app id
      * @type {string}
      * @memberof PushProviderRequest
      */
     huawei_app_id?: string;
     /**
-     * 
+     * Huawei app secret
      * @type {string}
      * @memberof PushProviderRequest
      */
     huawei_app_secret?: string;
     /**
-     * 
+     * Name of push provider
      * @type {string}
      * @memberof PushProviderRequest
      */
     name: string;
     /**
-     * 
-     * @type {number}
+     * Push provider type
+     * @type {string}
      * @memberof PushProviderRequest
      */
-    type?: number;
+    type?: PushProviderRequestTypeEnum;
     /**
      * 
      * @type {string}
@@ -11135,18 +11371,31 @@ export interface PushProviderRequest {
      */
     updated_at?: string;
     /**
-     * 
+     * Xiaomi app secret
      * @type {string}
      * @memberof PushProviderRequest
      */
     xiaomi_app_secret?: string;
     /**
-     * 
+     * Xiaomi package name
      * @type {string}
      * @memberof PushProviderRequest
      */
     xiaomi_package_name?: string;
 }
+
+
+/**
+ * @export
+ */
+export const PushProviderRequestTypeEnum = {
+    FIREBASE: 'firebase',
+    APN: 'apn',
+    HUAWEI: 'huawei',
+    XIAOMI: 'xiaomi'
+} as const;
+export type PushProviderRequestTypeEnum = typeof PushProviderRequestTypeEnum[keyof typeof PushProviderRequestTypeEnum];
+
 /**
  * 
  * @export
@@ -13335,13 +13584,13 @@ export interface UnmuteChannelRequest {
      * @type {string}
      * @memberof UnmuteChannelRequest
      */
-    channel_cid: string;
+    channel_cid?: string;
     /**
      * 
      * @type {Array<string>}
      * @memberof UnmuteChannelRequest
      */
-    channel_cids: Array<string>;
+    channel_cids?: Array<string>;
     /**
      * 
      * @type {number}
@@ -13385,13 +13634,13 @@ export interface UnmuteUserRequest {
      * @type {string}
      * @memberof UnmuteUserRequest
      */
-    target_id: string;
+    target_id?: string;
     /**
      * 
      * @type {Array<string>}
      * @memberof UnmuteUserRequest
      */
-    target_ids: Array<string>;
+    target_ids?: Array<string>;
     /**
      * 
      * @type {number}
@@ -13706,13 +13955,13 @@ export interface UpdateChannelPartialRequest {
      * @type {{ [key: string]: any; }}
      * @memberof UpdateChannelPartialRequest
      */
-    set: { [key: string]: any; };
+    set?: { [key: string]: any; };
     /**
      * 
      * @type {Array<string>}
      * @memberof UpdateChannelPartialRequest
      */
-    unset: Array<string>;
+    unset?: Array<string>;
     /**
      * 
      * @type {UserObjectRequest}
@@ -13774,7 +14023,7 @@ export interface UpdateChannelRequest {
      * @type {Array<string>}
      * @memberof UpdateChannelRequest
      */
-    add_moderators: Array<string>;
+    add_moderators?: Array<string>;
     /**
      * List of channel member role assignments. If any specified user is not part of the channel, the request will fail
      * @type {Array<ChannelMemberRequest>}
@@ -13798,7 +14047,7 @@ export interface UpdateChannelRequest {
      * @type {Array<string>}
      * @memberof UpdateChannelRequest
      */
-    demote_moderators: Array<string>;
+    demote_moderators?: Array<string>;
     /**
      * Set to `true` to hide channel's history when adding new members
      * @type {boolean}
@@ -13828,7 +14077,7 @@ export interface UpdateChannelRequest {
      * @type {Array<string>}
      * @memberof UpdateChannelRequest
      */
-    remove_members: Array<string>;
+    remove_members?: Array<string>;
     /**
      * When `message` is set disables all push notifications for it
      * @type {boolean}
@@ -14344,7 +14593,7 @@ export interface UpdateMessagePartialRequest {
      * @type {{ [key: string]: any; }}
      * @memberof UpdateMessagePartialRequest
      */
-    set: { [key: string]: any; };
+    set?: { [key: string]: any; };
     /**
      * Do not try to enrich the links within message
      * @type {boolean}
@@ -14356,7 +14605,7 @@ export interface UpdateMessagePartialRequest {
      * @type {Array<string>}
      * @memberof UpdateMessagePartialRequest
      */
-    unset: Array<string>;
+    unset?: Array<string>;
     /**
      * 
      * @type {UserObjectRequest}
@@ -14412,13 +14661,26 @@ export interface UpdateUserPartialRequest {
      * @type {{ [key: string]: any; }}
      * @memberof UpdateUserPartialRequest
      */
-    set: { [key: string]: any; };
+    set?: { [key: string]: any; };
     /**
      * 
      * @type {Array<string>}
      * @memberof UpdateUserPartialRequest
      */
-    unset: Array<string>;
+    unset?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateUsersPartialRequest
+ */
+export interface UpdateUsersPartialRequest {
+    /**
+     * 
+     * @type {Array<UpdateUserPartialRequest>}
+     * @memberof UpdateUsersPartialRequest
+     */
+    users: Array<UpdateUserPartialRequest>;
 }
 /**
  * 

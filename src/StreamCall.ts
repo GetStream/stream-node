@@ -26,10 +26,7 @@ export class StreamCall {
     private id: string
   ) {
     this.baseRequest = { id: this.id, type: this.type };
-    const configuration = this.streamClient.getConfiguration({
-      basePath:
-        this.streamClient.basePath || "https://video.stream-io-api.com/video",
-    });
+    const configuration = this.streamClient.getConfiguration("video");
     this.apiClient = new DefaultApi(configuration);
   }
 
@@ -71,13 +68,16 @@ export class StreamCall {
   };
 
   listRecordings = () => {
-    return this.apiClient.listRecordings({
+    return this.apiClient.listRecordings0({
       ...this.baseRequest,
     });
   };
 
   muteUsers = (videoMuteUsersRequest: VideoMuteUsersRequest) => {
-    return this.apiClient.muteUsers({ ...this.baseRequest, videoMuteUsersRequest });
+    return this.apiClient.muteUsers({
+      ...this.baseRequest,
+      videoMuteUsersRequest,
+    });
   };
 
   queryMembers = (request?: OmitTypeId<VideoQueryMembersRequest>) => {
@@ -135,7 +135,9 @@ export class StreamCall {
     });
   };
 
-  updateCallMembers = (videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest) => {
+  updateCallMembers = (
+    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest
+  ) => {
     return this.apiClient.updateCallMembers({
       videoUpdateCallMembersRequest,
       ...this.baseRequest,
@@ -156,6 +158,9 @@ export class StreamCall {
   };
 
   unpinVideo = (videoUnpinRequest: VideoUnpinRequest) => {
-    return this.apiClient.videoUnpin({ videoUnpinRequest, ...this.baseRequest });
+    return this.apiClient.videoUnpin({
+      videoUnpinRequest,
+      ...this.baseRequest,
+    });
   };
 }

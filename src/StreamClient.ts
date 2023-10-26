@@ -1,6 +1,7 @@
 import { StreamChatClient } from "./StreamChatClient";
 import { StreamVideoClient } from "./StreamVideoClient";
 import {
+  BASE_PATH as CHAT_BASE_PATH,
   APIError,
   BanRequest,
   CheckPushRequest,
@@ -45,8 +46,10 @@ import {
   UserObjectRequest,
   UserResponse,
   UsersApi,
+  UpdateUsersPartialRequest,
 } from "./gen/chat";
 import {
+  BASE_PATH as VIDEO_BASE_PATH,
   Configuration,
   HTTPQuery,
   JSONApiResponse,
@@ -73,7 +76,8 @@ export class StreamClient {
   constructor(
     private apiKey: string,
     private secret: string,
-    public readonly basePath?: string
+    public readonly chatBasePath?: string,
+    public readonly videoBasePath?: string
   ) {
     this.token = JWTServerToken(this.secret);
     this.video = new StreamVideoClient(this);
@@ -307,12 +311,11 @@ export class StreamClient {
     return response;
   };
 
-  updateUsersPartial = async (request: {
-    users: UpdateUserPartialRequest[];
-  }) => {
+  updateUsersPartial = async (
+    updateUsersPartialRequest: UpdateUsersPartialRequest
+  ) => {
     const response = await this.usersApi.updateUsersPartial({
-      // @ts-expect-error typing error
-      updateUserPartialRequest: request,
+      updateUsersPartialRequest,
     });
     Object.keys(response.users).forEach((key) => {
       response.users[key] = this.mapCustomDataAfterReceive(
@@ -391,7 +394,7 @@ export class StreamClient {
     return this.tasksApi.getTask(request);
   };
 
-  getConfiguration = (options?: { basePath?: string }) => {
+  getConfiguration = (product: "chat" | "video" = "chat") => {
     return new Configuration({
       apiKey: (name: string) => {
         const mapping: { [key: string]: string } = {
@@ -402,7 +405,10 @@ export class StreamClient {
 
         return mapping[name];
       },
-      basePath: options?.basePath || this.basePath,
+      basePath:
+        product === "chat"
+          ? this.chatBasePath || CHAT_BASE_PATH
+          : this.videoBasePath || VIDEO_BASE_PATH,
       headers: {
         "X-Stream-Client": "stream-node-" + process.env.PKG_VERSION,
       },
