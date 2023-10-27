@@ -100,11 +100,19 @@ export class StreamClient {
     this.tasksApi = new TasksApi(chatConfiguration);
   }
 
+  /**
+   *
+   * @param userID
+   * @param exp
+   * @param iat
+   * @param call_cids this parameter is deprecated use `createCallToken` for call tokens
+   * @returns
+   */
   createToken(
     userID: string,
     exp?: number,
-    iat?: number,
-    call_cids?: string[],
+    iat = Math.round(Date.now() / 1000),
+    call_cids?: string[]
   ) {
     const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
 
@@ -117,8 +125,32 @@ export class StreamClient {
     }
 
     if (call_cids) {
+      console.warn(
+        `Use createCallToken method for creating call tokens, the "call_cids" param will be removed from the createToken method with version 0.2.0`
+      );
       extra.call_cids = call_cids;
     }
+
+    return JWTUserToken(this.secret, userID, extra);
+  }
+
+  createCallToken(
+    userID: string,
+    call_cids: string[],
+    exp?: number,
+    iat = Math.round(Date.now() / 1000)
+  ) {
+    const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
+
+    if (exp) {
+      extra.exp = exp;
+    }
+
+    if (iat) {
+      extra.iat = iat;
+    }
+
+    extra.call_cids = call_cids;
 
     return JWTUserToken(this.secret, userID, extra);
   }
@@ -133,21 +165,23 @@ export class StreamClient {
     return this.devicesApi.listDevices(requestParameters);
   };
 
-  listPushProviders= () => {
+  listPushProviders = () => {
     return this.pushApi.listPushProviders();
-  }
+  };
 
   deletePushProvider = (request: DeletePushProviderRequest) => {
     return this.pushApi.deletePushProvider(request);
-  }
+  };
 
   upsertPushProvider = (request: PushProviderRequest) => {
-    return this.serversideApi.upsertPushProvider({upsertPushProviderRequest: {push_provider: request}});
-  }
+    return this.serversideApi.upsertPushProvider({
+      upsertPushProviderRequest: { push_provider: request },
+    });
+  };
 
   checkPush = (checkPushRequest: CheckPushRequest) => {
-    return this.testingApi.checkPush({checkPushRequest});
-  }
+    return this.testingApi.checkPush({ checkPushRequest });
+  };
 
   createGuest = async (guestRequest: GuestRequest) => {
     guestRequest.user = this.mapCustomDataBeforeSend(guestRequest.user);
@@ -209,10 +243,10 @@ export class StreamClient {
   queryBannedUsers = async (payload: QueryBannedUsersRequest) => {
     payload.user = this.mapCustomDataBeforeSend(payload.user);
     const response = await this.usersApi.queryBannedUsers({ payload });
-    response.bans.forEach(b => {
+    response.bans.forEach((b) => {
       b.banned_by = this.mapCustomDataAfterReceive(b.banned_by);
       b.user = this.mapCustomDataAfterReceive(b.user);
-    })
+    });
 
     return response;
   };
@@ -221,7 +255,9 @@ export class StreamClient {
     payload.user = this.mapCustomDataBeforeSend(payload.user);
     const response = await this.usersApi.queryUsers({ payload });
     // @ts-expect-error
-    response.users = response.users.map(u => this.mapCustomDataAfterReceive(u)!);
+    response.users = response.users.map(
+      (u) => this.mapCustomDataAfterReceive(u)!
+    );
 
     return response;
   };
@@ -256,22 +292,32 @@ export class StreamClient {
   };
 
   upsertUsers = async (updateUsersRequest: UpdateUsersRequest) => {
-    Object.keys(updateUsersRequest.users).forEach(key => {
-      updateUsersRequest.users[key] = this.mapCustomDataBeforeSend(updateUsersRequest.users[key]);
-    })
+    Object.keys(updateUsersRequest.users).forEach((key) => {
+      updateUsersRequest.users[key] = this.mapCustomDataBeforeSend(
+        updateUsersRequest.users[key]
+      );
+    });
     const response = await this.usersApi.updateUsers({ updateUsersRequest });
-    Object.keys(response.users).forEach(key => {
-      response.users[key] = this.mapCustomDataAfterReceive(response.users[key])!;
+    Object.keys(response.users).forEach((key) => {
+      response.users[key] = this.mapCustomDataAfterReceive(
+        response.users[key]
+      )!;
     });
 
     return response;
   };
 
-  updateUsersPartial = async (request: {users: UpdateUserPartialRequest[]}) => {
+  updateUsersPartial = async (request: {
+    users: UpdateUserPartialRequest[];
+  }) => {
     // @ts-expect-error typing error
-    const response = await this.usersApi.updateUsersPartial({ updateUserPartialRequest: request });
-    Object.keys(response.users).forEach(key => {
-      response.users[key] = this.mapCustomDataAfterReceive(response.users[key])!;
+    const response = await this.usersApi.updateUsersPartial({
+      updateUserPartialRequest: request,
+    });
+    Object.keys(response.users).forEach((key) => {
+      response.users[key] = this.mapCustomDataAfterReceive(
+        response.users[key]
+      )!;
     });
 
     return response;
@@ -284,11 +330,11 @@ export class StreamClient {
       response.mute.user = this.mapCustomDataAfterReceive(response.mute?.user);
     }
     if (response.mutes) {
-      response.mutes = response.mutes.map(m => {
+      response.mutes = response.mutes.map((m) => {
         return {
           ...m,
-          user: this.mapCustomDataAfterReceive(m.user)
-        }
+          user: this.mapCustomDataAfterReceive(m.user),
+        };
       });
     }
 
@@ -296,49 +342,54 @@ export class StreamClient {
   };
 
   unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
-    unmuteUserRequest.user = this.mapCustomDataBeforeSend(unmuteUserRequest.user);
+    unmuteUserRequest.user = this.mapCustomDataBeforeSend(
+      unmuteUserRequest.user
+    );
     return this.usersApi.unmuteUser({ unmuteUserRequest });
   };
 
   sendCustomEventToUser = (userId: string, event: UserCustomEventRequest) => {
-    return this.eventsApi.sendUserCustomEvent({userId, sendUserCustomEventRequest: {event}});
-  }
+    return this.eventsApi.sendUserCustomEvent({
+      userId,
+      sendUserCustomEventRequest: { event },
+    });
+  };
 
   createRole = (createRoleRequest: CreateRoleRequest) => {
-    return this.permissionsApi.createRole({createRoleRequest});
-  }
+    return this.permissionsApi.createRole({ createRoleRequest });
+  };
 
   deleteRole = (request: DeleteRoleRequest) => {
     return this.permissionsApi.deleteRole(request);
-  }
+  };
 
   getPermission = (request: GetPermissionRequest) => {
     return this.permissionsApi.getPermission(request);
-  }
+  };
 
   listPermissions = () => {
     return this.permissionsApi.listPermissions();
-  }
+  };
 
   listRoles = () => {
     return this.permissionsApi.listRoles();
-  }
+  };
 
   getAppSettings = () => {
     return this.settingsApi.getApp();
-  }
+  };
 
   updateAppSettings = (updateAppRequest: UpdateAppRequest) => {
-    return this.settingsApi.updateApp({updateAppRequest});
-  }
+    return this.settingsApi.updateApp({ updateAppRequest });
+  };
 
   getRateLimits = () => {
     return this.settingsApi.getRateLimits();
-  }
+  };
 
   getTaskStatus = (request: GetTaskRequest) => {
     return this.tasksApi.getTask(request);
-  }
+  };
 
   getConfiguration = (options?: { basePath?: string }) => {
     return new Configuration({
@@ -408,23 +459,46 @@ export class StreamClient {
     });
   };
 
-  private reservedKeywords = ['ban_expires', 'banned', 'id', 'invisible', 'language', 'push_notifications', 'revoke_tokens_issued_before', 'role', 'teams', 'created_at', 'deactivated_at', 'deleted_at', 'last_active', 'online', 'updated_at', 'shadow_banned', 'name', 'image'];
-  private mapCustomDataBeforeSend = (user: UserObject | UserObjectRequest | UserResponse | undefined) => {
+  private reservedKeywords = [
+    "ban_expires",
+    "banned",
+    "id",
+    "invisible",
+    "language",
+    "push_notifications",
+    "revoke_tokens_issued_before",
+    "role",
+    "teams",
+    "created_at",
+    "deactivated_at",
+    "deleted_at",
+    "last_active",
+    "online",
+    "updated_at",
+    "shadow_banned",
+    "name",
+    "image",
+  ];
+  private mapCustomDataBeforeSend = (
+    user: UserObject | UserObjectRequest | UserResponse | undefined
+  ) => {
     if (!user) {
       return undefined;
     }
-    const copy = {...user};
+    const copy = { ...user };
     delete copy.custom;
-    return {...copy, ...user.custom}
-  }
+    return { ...copy, ...user.custom };
+  };
 
-  private mapCustomDataAfterReceive = (user: UserObject | UserResponse | undefined) => {
+  private mapCustomDataAfterReceive = (
+    user: UserObject | UserResponse | undefined
+  ) => {
     if (!user) {
       return undefined;
     }
     // @ts-expect-error
     let result: UserObject | UserResponse = {};
-    Object.keys(user).forEach(key => {
+    Object.keys(user).forEach((key) => {
       if (!this.reservedKeywords.includes(key)) {
         if (!result.custom) {
           result.custom = {};
@@ -436,5 +510,5 @@ export class StreamClient {
     });
 
     return result;
-  }
+  };
 }
