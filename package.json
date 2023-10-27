@@ -12,9 +12,10 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
+    "prepublish": "yarn build",
     "test": "vitest",
     "start": "rollup -w -c",
-    "build": "rollup -c",
+    "build": "rm -rf dist && rollup -c",
     "generate:open-api": "./generate-openapi.sh protocol",
     "generate:open-api:dev": "./generate-openapi.sh chat"
   },

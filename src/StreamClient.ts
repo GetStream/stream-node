@@ -310,8 +310,8 @@ export class StreamClient {
   updateUsersPartial = async (request: {
     users: UpdateUserPartialRequest[];
   }) => {
-    // @ts-expect-error typing error
     const response = await this.usersApi.updateUsersPartial({
+      // @ts-expect-error typing error
       updateUserPartialRequest: request,
     });
     Object.keys(response.users).forEach((key) => {
