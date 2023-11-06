@@ -48,6 +48,8 @@ import {
 } from "./gen/chat";
 import {
   Configuration,
+  ErrorContext,
+  FetchError,
   HTTPQuery,
   JSONApiResponse,
   RequestContext,
@@ -55,6 +57,10 @@ import {
 } from "./gen/video";
 import { v4 as uuidv4 } from "uuid";
 import { JWTServerToken, JWTUserToken } from "./utils/create-token";
+
+export type StreamClientOptions = {
+  timeout?: number;
+};
 
 export class StreamClient {
   public readonly video: StreamVideoClient;
@@ -69,15 +75,21 @@ export class StreamClient {
   private readonly eventsApi: EventsApi;
   private readonly tasksApi: TasksApi;
   private token: string;
+  private static readonly defaultTimeout = 3000;
 
   constructor(
     private apiKey: string,
     private secret: string,
-    public readonly basePath?: string
+    public readonly basePath?: string,
+    public readonly options: StreamClientOptions = {}
   ) {
     this.token = JWTServerToken(this.secret);
     this.video = new StreamVideoClient(this);
     this.chat = new StreamChatClient(this);
+
+    if (!options.timeout) {
+      options.timeout = StreamClient.defaultTimeout;
+    }
 
     const chatConfiguration = this.getConfiguration();
     //@ts-expect-error typing problem
@@ -121,9 +133,6 @@ export class StreamClient {
     }
 
     if (iat) {
-      console.warn(
-        `This parameter is deprecated, and will be removed method with version 0.2.0, the client will set this to the current date by deault`
-      );
       extra.iat = iat;
     }
 
@@ -158,9 +167,6 @@ export class StreamClient {
     }
 
     if (iat) {
-      console.warn(
-        `This parameter is deprecated, and will be removed method with version 0.2.0, the client will set this to the current date by deault`
-      );
       extra.iat = iat;
     }
 
@@ -445,6 +451,24 @@ export class StreamClient {
                 `Stream error code ${value.code}: ${value.message}`
               );
             }
+          },
+        },
+        {
+          pre: (context: RequestContext) => {
+            context.init.signal = AbortSignal.timeout(this.options.timeout!);
+
+            return Promise.resolve(context);
+          },
+          onError: (context: ErrorContext) => {
+            const error = context.error as DOMException;
+            if (error.name === "AbortError") {
+              throw new FetchError(
+                error,
+                `The request was aborted due to to the ${this.options.timeout}ms timeout, you can set the timeout in the StreamClient constructor`
+              );
+            }
+
+            return Promise.resolve(context.response);
           },
         },
       ],
