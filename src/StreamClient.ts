@@ -461,7 +461,7 @@ export class StreamClient {
           },
           onError: (context: ErrorContext) => {
             const error = context.error as DOMException;
-            if (error.name === "AbortError") {
+            if (error.name === "AbortError" || error.name === "TimeoutError") {
               throw new FetchError(
                 error,
                 `The request was aborted due to to the ${this.options.timeout}ms timeout, you can set the timeout in the StreamClient constructor`
