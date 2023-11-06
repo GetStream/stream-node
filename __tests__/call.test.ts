@@ -34,12 +34,16 @@ describe("call API", () => {
             enabled: false,
           },
         },
+        custom: {
+          color: "blue",
+        },
       },
     });
 
     expect(response.call.created_by.id).toBe("john");
     expect(response.call.settings.geofencing.names).toEqual(["canada"]);
     expect(response.call.settings.screensharing.enabled).toBe(false);
+    expect(response.call.custom.color).toBe("blue");
   });
 
   it("update", async () => {

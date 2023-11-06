@@ -104,13 +104,13 @@ export class StreamClient {
    *
    * @param userID
    * @param exp
-   * @param iat
+   * @param iat deprecated, the default date will be set internally
    * @param call_cids this parameter is deprecated use `createCallToken` for call tokens
    * @returns
    */
   createToken(
     userID: string,
-    exp?: number,
+    exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
     iat = Math.round(Date.now() / 1000),
     call_cids?: string[]
   ) {
@@ -121,6 +121,9 @@ export class StreamClient {
     }
 
     if (iat) {
+      console.warn(
+        `This parameter is deprecated, and will be removed method with version 0.2.0, the client will set this to the current date by deault`
+      );
       extra.iat = iat;
     }
 
@@ -134,10 +137,18 @@ export class StreamClient {
     return JWTUserToken(this.secret, userID, extra);
   }
 
+  /**
+   *
+   * @param userID
+   * @param call_cids
+   * @param exp
+   * @param iat this is deprecated, the current date will be set internally
+   * @returns
+   */
   createCallToken(
     userID: string,
     call_cids: string[],
-    exp?: number,
+    exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
     iat = Math.round(Date.now() / 1000)
   ) {
     const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
@@ -147,6 +158,9 @@ export class StreamClient {
     }
 
     if (iat) {
+      console.warn(
+        `This parameter is deprecated, and will be removed method with version 0.2.0, the client will set this to the current date by deault`
+      );
       extra.iat = iat;
     }
 

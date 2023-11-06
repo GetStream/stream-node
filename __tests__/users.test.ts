@@ -12,10 +12,10 @@ describe("user API", () => {
     id: uuidv4(),
     role: "user",
     custom: {
-      color: 'red'
+      color: "red",
     },
-    name: 'Test user' + uuidv4(),
-    image: ':)'
+    name: "Test user" + uuidv4(),
+    image: ":)",
   };
   const user = {
     id: "stream-node-test-user",
@@ -62,7 +62,7 @@ describe("user API", () => {
 
     expect(createdUser.id).toBe(newUser.id);
     expect(createdUser.role).toBe(newUser.role);
-    expect(createdUser.custom.color).toBe('red');
+    expect(createdUser.custom.color).toBe("red");
 
     const queryResponse = await client.queryUsers({
       sort: [],
@@ -72,7 +72,7 @@ describe("user API", () => {
     });
 
     expect(queryResponse.users.length).toBe(1);
-    expect(queryResponse.users[0].custom.color).toBe('red');
+    expect(queryResponse.users[0].custom.color).toBe("red");
     expect(queryResponse.users[0].id).toBe(newUser.id);
     expect(queryResponse.users[0].name).toBe(newUser.name);
     expect(queryResponse.users[0].image).toBe(newUser.image);
@@ -82,14 +82,14 @@ describe("user API", () => {
     const guest: UserObjectRequest = {
       id: uuidv4(),
       custom: {
-        color: 'red'
-      }
+        color: "red",
+      },
     };
 
     const response = await client.createGuest({ user: guest });
 
     expect(response.user?.role).toBe("guest");
-    expect(response.user?.custom.color).toBe('red');
+    expect(response.user?.custom.color).toBe("red");
   });
 
   it("ban and unban", async () => {
@@ -137,30 +137,34 @@ describe("user API", () => {
     expect(unmuteResponse).toBeDefined();
   });
 
-  it('send custom event', async () => {
-    const response = await client.sendCustomEventToUser(newUser.id, {type: 'my-custom-event'});
+  it("send custom event", async () => {
+    const response = await client.sendCustomEventToUser(newUser.id, {
+      type: "my-custom-event",
+    });
 
     expect(response).toBeDefined();
   });
 
-    it("update", async () => {
-      const response = await client.updateUsersPartial({users: [
+  it("update", async () => {
+    const response = await client.updateUsersPartial({
+      users: [
         {
           id: newUser.id,
           set: {
             role: "admin",
-            color: 'blue'
+            color: "blue",
           },
-          unset: ['name'],
-        }
-      ]});
-
-      const userResponse = response.users[newUser.id]
-
-      expect(userResponse.name).toBe(undefined);
-      expect(userResponse.role).toBe('admin');
-      expect(userResponse.custom.color).toBe('blue');
+          unset: ["name"],
+        },
+      ],
     });
+
+    const userResponse = response.users[newUser.id];
+
+    expect(userResponse.name).toBe(undefined);
+    expect(userResponse.role).toBe("admin");
+    expect(userResponse.custom.color).toBe("blue");
+  });
 
   it("deactivate and reactivate", async () => {
     const deactivateResponse = await client.deactivateUser({
@@ -188,6 +192,6 @@ describe("user API", () => {
     const response = await client.deleteUser({ userId: newUser.id });
 
     expect(response.user?.id).toBe(newUser.id);
-    expect(response.user?.custom.color).toBe('blue');
+    expect(response.user?.custom.color).toBe("blue");
   });
 });

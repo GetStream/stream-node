@@ -14,25 +14,26 @@ describe("creating tokens", () => {
     client = new StreamClient(apiKey, secret);
   });
 
-  it("with no expiration", () => {
+  it("with default expiration", () => {
     const token = client.createToken(userId);
     const decodedToken = jwt.verify(token, secret) as any;
 
     expect(decodedToken.user_id).toBe(userId);
-    expect(decodedToken.exp).toBeUndefined();
+    expect(
+      new Date(decodedToken.iat * 1000).getTime() -
+        (Date.now() + 60 * 60 * 1000)
+    ).toBeLessThan(1000);
     expect(
       new Date(decodedToken.iat * 1000).getTime() - Date.now()
     ).toBeLessThan(1000);
   });
 
-  it("with expiration and issued at provided", () => {
-    const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
-    const iat = Math.round(new Date().getTime() / 1000);
-    const token = client.createToken(userId, exp, iat);
+  it("with expiration provided", () => {
+    const exp = Math.round(new Date().getTime() / 1000) + 58 * 60;
+    const token = client.createToken(userId, exp);
     const decodedToken = jwt.verify(token, secret) as any;
 
     expect(decodedToken.exp).toBe(exp);
-    expect(decodedToken.iat).toBe(iat);
   });
 
   it("with call IDs provided", () => {
