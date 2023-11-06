@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamCall, StreamClient } from "../";
+import { StreamCall, StreamClient, VideoOwnCapability } from "../";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
@@ -44,6 +44,51 @@ describe("call members API", () => {
     expect(response.members[1].role).toBe("admin");
     expect(response.members[2].user_id).toBe("john");
     expect(response.members[2].role).toBe("user");
+  });
+
+  it("block and unblock users", async () => {
+    const response = await call.blockUser({ user_id: "sara" });
+
+    expect(response).toBeDefined();
+
+    const unblockResponse = await call.unblockUser({ user_id: "sara" });
+
+    expect(unblockResponse).toBeDefined();
+  });
+
+  it("mute one or many users", async () => {
+    const muteAllResponse = await call.muteUsers({
+      mute_all_users: true,
+      audio: true,
+    });
+
+    expect(muteAllResponse).toBeDefined();
+
+    const muteUserResponse = await call.muteUsers({
+      user_ids: ["sara"],
+      audio: true,
+      video: true,
+      screenshare: true,
+      screenshare_audio: true,
+    });
+
+    expect(muteUserResponse).toBeDefined();
+  });
+
+  it("grant and revoke permissions", async () => {
+    const revokeResponse = await call.updateUserPermissions({
+      user_id: "sara",
+      revoke_permissions: [VideoOwnCapability.SEND_AUDIO],
+    });
+
+    expect(revokeResponse).toBeDefined();
+
+    const grantResponse = await call.updateUserPermissions({
+      user_id: "sara",
+      grant_permissions: [VideoOwnCapability.SEND_AUDIO],
+    });
+
+    expect(grantResponse).toBeDefined();
   });
 
   it("remove members", async () => {

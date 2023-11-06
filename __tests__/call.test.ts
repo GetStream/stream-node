@@ -46,6 +46,7 @@ describe("call API", () => {
     const response = await call.update({
       settings_override: {
         audio: { mic_default_on: true, default_device: "speaker" },
+        screensharing: { enabled: true, access_request_enabled: true },
       },
       custom: { color: "red" },
     });
