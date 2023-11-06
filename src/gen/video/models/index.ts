@@ -3198,30 +3198,6 @@ export interface VideoOwnUserResponse {
      */
     updated_at: string;
 }
-
-/**
- * All possibility of string to use
- * @export
- */
-export const VideoPermission = {
-    SCREENSHARE: 'screenshare',
-    SEND_AUDIO: 'send-audio',
-    SEND_VIDEO: 'send-video'
-} as const;
-export type VideoPermission = typeof VideoPermission[keyof typeof VideoPermission];
-
-
-/**
- * All possibility of string to use
- * @export
- */
-export const VideoPermissionRequest = {
-    SCREENSHARE: 'screenshare',
-    SEND_AUDIO: 'send-audio',
-    SEND_VIDEO: 'send-video'
-} as const;
-export type VideoPermissionRequest = typeof VideoPermissionRequest[keyof typeof VideoPermissionRequest];
-
 /**
  * This event is sent when a user requests access to a feature on a call,
  * clients receiving this event should display a permission request to the user
@@ -3243,10 +3219,10 @@ export interface VideoPermissionRequestEvent {
     created_at: string;
     /**
      * The list of permissions requested by the user
-     * @type {Array<VideoPermission>}
+     * @type {Array<string>}
      * @memberof VideoPermissionRequestEvent
      */
-    permissions: Array<VideoPermission>;
+    permissions: Array<string>;
     /**
      * The type of event: "call.permission_request" in this case
      * @type {string}
@@ -3568,38 +3544,14 @@ export interface VideoRecordSettingsResponse {
      * @type {string}
      * @memberof VideoRecordSettingsResponse
      */
-    mode: VideoRecordSettingsResponseModeEnum;
+    mode: string;
     /**
      * 
      * @type {string}
      * @memberof VideoRecordSettingsResponse
      */
-    quality: VideoRecordSettingsResponseQualityEnum;
+    quality: string;
 }
-
-
-/**
- * @export
- */
-export const VideoRecordSettingsResponseModeEnum = {
-    AVAILABLE: 'available',
-    DISABLED: 'disabled',
-    AUTO_ON: 'auto-on'
-} as const;
-export type VideoRecordSettingsResponseModeEnum = typeof VideoRecordSettingsResponseModeEnum[keyof typeof VideoRecordSettingsResponseModeEnum];
-
-/**
- * @export
- */
-export const VideoRecordSettingsResponseQualityEnum = {
-    _360P: '360p',
-    _480P: '480p',
-    _720P: '720p',
-    _1080P: '1080p',
-    _1440P: '1440p'
-} as const;
-export type VideoRecordSettingsResponseQualityEnum = typeof VideoRecordSettingsResponseQualityEnum[keyof typeof VideoRecordSettingsResponseQualityEnum];
-
 /**
  * 
  * @export
@@ -3621,10 +3573,10 @@ export interface VideoRejectCallResponse {
 export interface VideoRequestPermissionRequest {
     /**
      * 
-     * @type {Array<VideoPermission>}
+     * @type {Array<string>}
      * @memberof VideoRequestPermissionRequest
      */
-    permissions: Array<VideoPermission>;
+    permissions: Array<string>;
 }
 /**
  * 
@@ -4368,16 +4320,16 @@ export interface VideoUpdateCallTypeResponse {
 export interface VideoUpdateUserPermissionsRequest {
     /**
      * 
-     * @type {Array<VideoPermission>}
+     * @type {Array<string>}
      * @memberof VideoUpdateUserPermissionsRequest
      */
-    grant_permissions?: Array<VideoPermission>;
+    grant_permissions?: Array<string>;
     /**
      * 
-     * @type {Array<VideoPermission>}
+     * @type {Array<string>}
      * @memberof VideoUpdateUserPermissionsRequest
      */
-    revoke_permissions?: Array<VideoPermission>;
+    revoke_permissions?: Array<string>;
     /**
      * 
      * @type {string}
