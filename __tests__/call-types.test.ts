@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -8,16 +7,14 @@ import {
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
 } from "../";
-
-const apiKey = process.env.STREAM_API_KEY!;
-const secret = process.env.STREAM_SECRET!;
+import { createTestClient } from "./create-test-client";
 
 describe("call types CRUD API", () => {
   let client: StreamClient;
   const callTypeName = `streamnodetest${uuidv4()}`;
 
   beforeAll(() => {
-    client = new StreamClient(apiKey, secret);
+    client = createTestClient();
   });
 
   it("create", async () => {

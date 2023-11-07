@@ -2,8 +2,8 @@ import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { beforeAll, describe, expect, it } from "vitest";
 import { StreamClient } from "../src/StreamClient";
+import { createTestClient } from "./create-test-client";
 
-const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;
 
 describe("creating tokens", () => {
@@ -11,7 +11,7 @@ describe("creating tokens", () => {
   const userId = "john";
 
   beforeAll(() => {
-    client = new StreamClient(apiKey, secret);
+    client = createTestClient();
   });
 
   it("with default expiration", () => {

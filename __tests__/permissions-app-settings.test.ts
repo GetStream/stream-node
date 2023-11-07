@@ -1,10 +1,7 @@
-import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { CreateRoleRequest, StreamClient, VideoOwnCapability } from "..";
 import { v4 as uuidv4 } from "uuid";
-
-const apiKey = process.env.STREAM_API_KEY!;
-const secret = process.env.STREAM_SECRET!;
+import { createTestClient } from "./create-test-client";
 
 describe("permissions and app settings API", () => {
   let client: StreamClient;
@@ -14,7 +11,7 @@ describe("permissions and app settings API", () => {
     role = {
       name: "streamnodetest" + uuidv4(),
     };
-    client = new StreamClient(apiKey, secret);
+    client = createTestClient();
   });
 
   it("list permissions", async () => {

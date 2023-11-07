@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   DeleteUsersRequestUserEnum,
@@ -6,9 +5,7 @@ import {
   UserObjectRequest,
 } from "../";
 import { v4 as uuidv4 } from "uuid";
-
-const apiKey = process.env.STREAM_API_KEY!;
-const secret = process.env.STREAM_SECRET!;
+import { createTestClient } from "./create-test-client";
 
 describe("user API", () => {
   let client: StreamClient;
@@ -28,7 +25,7 @@ describe("user API", () => {
   };
 
   beforeAll(async () => {
-    client = new StreamClient(apiKey, secret);
+    client = createTestClient();
     await client.upsertUsers({
       users: {
         [user.id]: { ...user },

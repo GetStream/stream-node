@@ -1,17 +1,14 @@
-import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import { CreateChannelTypeRequestAutomodEnum, StreamClient } from "../";
-
-const apiKey = process.env.STREAM_API_KEY!;
-const secret = process.env.STREAM_SECRET!;
+import { createTestClient } from "./create-test-client";
 
 describe("channel types CRUD API", () => {
   let client: StreamClient;
   const channelType = "streamnodetest" + uuidv4();
 
   beforeAll(() => {
-    client = new StreamClient(apiKey, secret);
+    client = createTestClient();
   });
 
   it("create", async () => {
@@ -49,16 +46,19 @@ describe("channel types CRUD API", () => {
     expect(response).toBeDefined();
   });
 
-  afterAll(async () => {
-    const channelTypes = (await client.chat.listChannelTypes()).channel_types;
-    const customChannelTypes = Object.keys(channelTypes).filter((type) =>
-      type.startsWith("streamnodetest")
-    );
+  // TODO: why does this doesn't work?
+  // afterAll(async () => {
+  //   await new Promise((resolve) => setTimeout(resolve, 5000));
 
-    await Promise.all(
-      customChannelTypes.map((t) =>
-        client.chat.deleteChannelType({ name: channelType })
-      )
-    );
-  });
+  //   const channelTypes = (await client.chat.listChannelTypes()).channel_types;
+  //   const customChannelTypes = Object.keys(channelTypes).filter((type) =>
+  //     type.startsWith("streamnodetest")
+  //   );
+
+  //   await Promise.all(
+  //     customChannelTypes.map((t) =>
+  //       client.chat.deleteChannelType({ name: channelType })
+  //     )
+  //   );
+  // });
 });
