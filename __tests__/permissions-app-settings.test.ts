@@ -12,8 +12,8 @@ describe("permissions and app settings API", () => {
 
   beforeAll(() => {
     role = {
-        name: uuidv4()
-    }
+      name: uuidv4(),
+    };
     client = new StreamClient(apiKey, secret);
   });
 
@@ -24,7 +24,7 @@ describe("permissions and app settings API", () => {
 
     const permission = response.permissions[0];
 
-    const getResponse = await client.getPermission({id: permission.id});
+    const getResponse = await client.getPermission({ id: permission.id });
 
     expect(getResponse.permission.id).toBe(permission.id);
   });
@@ -38,46 +38,52 @@ describe("permissions and app settings API", () => {
   it("list roles", async () => {
     const response = await client.listRoles();
 
-    expect(response.roles.find(r => r.name === role.name)).toBeDefined();
+    expect(response.roles.find((r) => r.name === role.name)).toBeDefined();
   });
 
   it("update role", async () => {
-    const response = await client.updateAppSettings({grants: {
-      [role.name]: [VideoOwnCapability.CREATE_CALL]
-    }});
+    const response = await client.updateAppSettings({
+      grants: {
+        [role.name]: [VideoOwnCapability.CREATE_CALL],
+      },
+    });
 
     expect(response).toBeDefined();
 
     const appSettings = await client.getAppSettings();
 
-    expect(appSettings.app.grants[role.name].includes(VideoOwnCapability.CREATE_CALL)).toBe(true);
+    expect(
+      appSettings.app.grants[role.name].includes(VideoOwnCapability.CREATE_CALL)
+    ).toBe(true);
   });
 
   it("delete role", async () => {
-    await client.updateAppSettings({grants: {
-      [role.name]: []
-    }});
+    await client.updateAppSettings({
+      grants: {
+        [role.name]: [],
+      },
+    });
 
     let response;
 
     try {
-        response = await client.deleteRole({name: role.name});
-      } catch (e) {
-        // the first request fails on backend sometimes
-        // retry it
-        await new Promise<void>((resolve) => {
-          setTimeout(() => resolve(), 3000);
-        });
-  
-        response = await client.deleteRole({name: role.name});
+      response = await client.deleteRole({ name: role.name });
+    } catch (e) {
+      // the first request fails on backend sometimes
+      // retry it
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 3000);
+      });
+
+      response = await client.deleteRole({ name: role.name });
     }
 
     expect(response).toBeDefined();
-  }, 10000);
+  });
 
-  it('get rate limits', async () => {
+  it("get rate limits", async () => {
     const response = await client.getRateLimits();
 
     expect(response.web).toBeDefined();
-  })
+  });
 });

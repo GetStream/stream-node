@@ -146,7 +146,7 @@ describe("call types CRUD API", () => {
         (layoutOptions as any)[key]
       );
     });
-  }, 10000);
+  });
 
   it("delete", async () => {
     try {
