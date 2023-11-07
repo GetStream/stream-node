@@ -60,11 +60,13 @@ import { JWTServerToken, JWTUserToken } from "./utils/create-token";
 
 export type StreamClientOptions = {
   timeout?: number;
+  basePath?: string;
 };
 
 export class StreamClient {
   public readonly video: StreamVideoClient;
   public readonly chat: StreamChatClient;
+  public readonly options: StreamClientOptions = {};
   private readonly usersApi: UsersApi;
   private readonly devicesApi: DevicesApi;
   private readonly pushApi: PushApi;
@@ -75,20 +77,28 @@ export class StreamClient {
   private readonly eventsApi: EventsApi;
   private readonly tasksApi: TasksApi;
   private token: string;
-  private static readonly defaultTimeout = 3000;
+  private static readonly DEFAULT_TIMEOUT = 3000;
 
+  /**
+   *
+   * @param apiKey
+   * @param secret
+   * @param config can be a string, which will be interpreted as base path (deprecated), or a config object
+   */
   constructor(
     private apiKey: string,
     private secret: string,
-    public readonly basePath?: string,
-    public readonly options: StreamClientOptions = {}
+    readonly config?: string | StreamClientOptions
   ) {
     this.token = JWTServerToken(this.secret);
     this.video = new StreamVideoClient(this);
     this.chat = new StreamChatClient(this);
 
-    if (!options.timeout) {
-      options.timeout = StreamClient.defaultTimeout;
+    if (typeof config === "string") {
+      this.options.basePath = config;
+      this.options.timeout = StreamClient.DEFAULT_TIMEOUT;
+    } else {
+      this.options.timeout = config?.timeout || StreamClient.DEFAULT_TIMEOUT;
     }
 
     const chatConfiguration = this.getConfiguration();
@@ -422,7 +432,7 @@ export class StreamClient {
 
         return mapping[name];
       },
-      basePath: options?.basePath || this.basePath,
+      basePath: options?.basePath || this.options.basePath,
       headers: {
         "X-Stream-Client": "stream-node-" + process.env.PKG_VERSION,
       },

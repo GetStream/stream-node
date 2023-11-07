@@ -28,7 +28,8 @@ export class StreamCall {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration({
       basePath:
-        this.streamClient.basePath || "https://video.stream-io-api.com/video",
+        this.streamClient.options.basePath ||
+        "https://video.stream-io-api.com/video",
     });
     this.apiClient = new DefaultApi(configuration);
   }
@@ -77,7 +78,10 @@ export class StreamCall {
   };
 
   muteUsers = (videoMuteUsersRequest: VideoMuteUsersRequest) => {
-    return this.apiClient.muteUsers({ ...this.baseRequest, videoMuteUsersRequest });
+    return this.apiClient.muteUsers({
+      ...this.baseRequest,
+      videoMuteUsersRequest,
+    });
   };
 
   queryMembers = (request?: OmitTypeId<VideoQueryMembersRequest>) => {
@@ -135,7 +139,9 @@ export class StreamCall {
     });
   };
 
-  updateCallMembers = (videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest) => {
+  updateCallMembers = (
+    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest
+  ) => {
     return this.apiClient.updateCallMembers({
       videoUpdateCallMembersRequest,
       ...this.baseRequest,
@@ -156,6 +162,9 @@ export class StreamCall {
   };
 
   unpinVideo = (videoUnpinRequest: VideoUnpinRequest) => {
-    return this.apiClient.videoUnpin({ videoUnpinRequest, ...this.baseRequest });
+    return this.apiClient.videoUnpin({
+      videoUnpinRequest,
+      ...this.baseRequest,
+    });
   };
 }

@@ -17,7 +17,8 @@ export class StreamVideoClient {
   constructor(private streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration({
       basePath:
-        this.streamClient.basePath || "https://video.stream-io-api.com/video",
+        this.streamClient.options.basePath ||
+        "https://video.stream-io-api.com/video",
     });
     this.apiClient = new DefaultApi(configuration);
     this.videoServerSideApiClient = new ServerSideApi(configuration);
