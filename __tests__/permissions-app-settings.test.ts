@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { CreateRoleRequest, StreamClient, VideoOwnCapability } from "..";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,7 +12,7 @@ describe("permissions and app settings API", () => {
 
   beforeAll(() => {
     role = {
-      name: uuidv4(),
+      name: "streamnodetest" + uuidv4(),
     };
     client = new StreamClient(apiKey, secret);
   });
@@ -85,5 +85,16 @@ describe("permissions and app settings API", () => {
     const response = await client.getRateLimits();
 
     expect(response.web).toBeDefined();
+  });
+
+  afterAll(async () => {
+    const roles = (await client.listRoles()).roles;
+    const customRoles = roles.filter((r) =>
+      r.name.startsWith("streamnodetest")
+    );
+
+    await Promise.all(
+      customRoles.map((r) => client.deleteRole({ name: r.name }))
+    );
   });
 });

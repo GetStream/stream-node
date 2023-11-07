@@ -75,7 +75,7 @@ export class StreamClient {
   private readonly eventsApi: EventsApi;
   private readonly tasksApi: TasksApi;
   private token: string;
-  private static readonly defaultTimeout = 3000;
+  private static readonly defaultTimeout = 5000;
 
   constructor(
     private apiKey: string,

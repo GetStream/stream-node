@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { BlockList, StreamClient } from "../";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,15 +10,12 @@ describe("block lists CRUD API", () => {
   let client: StreamClient;
   let blockList: BlockList;
 
-  beforeEach(() => {
-    blockList = {
-      name: "F1" + uuidv4(),
-      words: ["Ricciardo should retire"],
-    };
-  });
-
   beforeAll(() => {
     client = new StreamClient(apiKey, secret);
+    blockList = {
+      name: "streamnodetest-F1" + uuidv4(),
+      words: ["Ricciardo should retire"],
+    };
   });
 
   it("create", async () => {
@@ -59,7 +56,17 @@ describe("block lists CRUD API", () => {
     const response = await client.chat.deleteBlockList({
       name: blockList.name,
     });
-
     expect(response).toBeDefined();
+  });
+
+  afterAll(async () => {
+    const blockLists = (await client.chat.listBlockLists()).blocklists;
+    const customBlockLists = blockLists.filter((b) =>
+      b.name.startsWith("streamnodetest-F1")
+    );
+
+    await Promise.all(
+      customBlockLists.map((b) => client.chat.deleteBlockList({ name: b.name }))
+    );
   });
 });

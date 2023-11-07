@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import {
   StreamClient,
@@ -14,7 +14,7 @@ const secret = process.env.STREAM_SECRET!;
 
 describe("call types CRUD API", () => {
   let client: StreamClient;
-  const callTypeName = `calltype${uuidv4()}`;
+  const callTypeName = `streamnodetest${uuidv4()}`;
 
   beforeAll(() => {
     client = new StreamClient(apiKey, secret);
@@ -164,5 +164,16 @@ describe("call types CRUD API", () => {
     await expect(() =>
       client.video.getCallType({ name: callTypeName })
     ).rejects.toThrowError();
+  });
+
+  afterAll(async () => {
+    const callTypes = (await client.video.listCallTypes()).call_types;
+    const customCallTypes = Object.keys(callTypes).filter(
+      (t) => t.startsWith("streamnodetest") || t.startsWith("calltype")
+    );
+
+    await Promise.all(
+      customCallTypes.map((t) => client.video.deleteCallType({ name: t }))
+    );
   });
 });

@@ -1,6 +1,10 @@
 import "dotenv/config";
-import { beforeAll, describe, expect, it } from "vitest";
-import { StreamClient, UserObjectRequest } from "../";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import {
+  DeleteUsersRequestUserEnum,
+  StreamClient,
+  UserObjectRequest,
+} from "../";
 import { v4 as uuidv4 } from "uuid";
 
 const apiKey = process.env.STREAM_API_KEY!;
@@ -8,13 +12,14 @@ const secret = process.env.STREAM_SECRET!;
 
 describe("user API", () => {
   let client: StreamClient;
+  const userId = "streamnodetest" + uuidv4();
   const newUser: UserObjectRequest = {
-    id: uuidv4(),
+    id: userId,
     role: "user",
     custom: {
       color: "red",
     },
-    name: "Test user" + uuidv4(),
+    name: userId,
     image: ":)",
   };
   const user = {
@@ -193,5 +198,20 @@ describe("user API", () => {
 
     expect(response.user?.id).toBe(newUser.id);
     expect(response.user?.custom.color).toBe("blue");
+  });
+
+  afterAll(async () => {
+    const users = (
+      await client.queryUsers({
+        filter_conditions: { name: { $autocomplete: "streamnodetest" } },
+      })
+    ).users;
+
+    if (users.length > 0) {
+      await client.deleteUsers({
+        user_ids: users.map((u) => u.id),
+        user: DeleteUsersRequestUserEnum.HARD,
+      });
+    }
   });
 });
