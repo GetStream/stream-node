@@ -241,6 +241,11 @@ export class StreamClient {
     return this.usersApi.deactivateUsers({ deactivateUsersRequest });
   };
 
+  /**
+   * @deprecated use `deleteUsers` instead
+   * @param deleteUsersRequest
+   * @returns
+   */
   deleteUser = async (request: DeleteUserRequest) => {
     const response = await this.usersApi.deleteUser(request);
     response.user = this.mapCustomDataAfterReceive(response.user);

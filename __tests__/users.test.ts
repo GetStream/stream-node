@@ -191,10 +191,9 @@ describe("user API", () => {
   });
 
   it("delete", async () => {
-    const response = await client.deleteUser({ userId: newUser.id });
+    const response = await client.deleteUsers({ user_ids: [newUser.id] });
 
-    expect(response.user?.id).toBe(newUser.id);
-    expect(response.user?.custom.color).toBe("blue");
+    expect(response).toBeDefined();
   });
 
   afterAll(async () => {
