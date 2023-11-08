@@ -108,8 +108,12 @@ describe("call API", () => {
   });
 
   it("query calls - upcoming", async () => {
+    const mins30 = 1000 * 60 * 60 * 30;
+    const inNext30mins = new Date(Date.now() + mins30);
     const response = await client.video.queryCalls({
-      filter_conditions: { starts_at: { $gt: new Date().toISOString() } },
+      filter_conditions: {
+        starts_at: { $gt: inNext30mins.toISOString() },
+      },
     });
 
     // Dummy test
