@@ -98,6 +98,24 @@ describe("call API", () => {
     expect(response.calls.length).toBeGreaterThanOrEqual(1);
   });
 
+  it("query calls - ongoing", async () => {
+    const response = await client.video.queryCalls({
+      filter_conditions: { ongoing: { $eq: true } },
+    });
+
+    // Dummy test
+    expect(response.calls).toBeDefined();
+  });
+
+  it("query calls - upcoming", async () => {
+    const response = await client.video.queryCalls({
+      filter_conditions: { starts_at: { $gt: new Date().toISOString() } },
+    });
+
+    // Dummy test
+    expect(response.calls).toBeDefined();
+  });
+
   describe("recording", () => {
     it("enable call recording", async () => {
       let response = await call.update({

@@ -52,6 +52,16 @@ describe("call members API", () => {
     expect(response.members[2].role).toBe("user");
   });
 
+  it("query calls - filter by call members", async () => {
+    const response = await client.video.queryCalls({
+      filter_conditions: {
+        members: { $in: ["sara"] },
+      },
+    });
+
+    expect(response.calls.length).toBeGreaterThanOrEqual(1);
+  });
+
   it("block and unblock users", async () => {
     const response = await call.blockUser({ user_id: "sara" });
 
