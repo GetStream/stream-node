@@ -65,7 +65,7 @@ describe("call API", () => {
   });
 
   it("RTMP address", async () => {
-    const resp = await call.getOrCreate();
+    const resp = await call.get();
 
     // userId of existing user
     const userId = "jane";
@@ -77,10 +77,10 @@ describe("call API", () => {
       },
     });
     const token = client.createToken(userId);
-    const address = resp.call.ingress.rtmp.address;
-    const streamKey = `${apiKey}/${token}`;
+    const rtmpURL = resp.call.ingress.rtmp.address;
+    const streamKey = token;
 
-    expect(address).toBeDefined();
+    expect(rtmpURL).toBeDefined();
     expect(streamKey).toBeDefined();
   });
 

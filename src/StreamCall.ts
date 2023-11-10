@@ -49,8 +49,8 @@ export class StreamCall {
     return this.apiClient.endCall({ ...this.baseRequest });
   };
 
-  get = (request: OmitTypeId<GetCallRequest>) => {
-    return this.apiClient.getCall({ ...request, ...this.baseRequest });
+  get = (request?: OmitTypeId<GetCallRequest>) => {
+    return this.apiClient.getCall({ ...(request || {}), ...this.baseRequest });
   };
 
   getOrCreate = (videoGetOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
