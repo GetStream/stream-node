@@ -8,6 +8,8 @@ import {
 } from "../";
 import { createTestClient } from "./create-test-client";
 
+const apiKey = process.env.STREAM_API_KEY!;
+
 describe("call API", () => {
   let client: StreamClient;
   const callId = `call${uuidv4()}`;
@@ -64,9 +66,22 @@ describe("call API", () => {
 
   it("RTMP address", async () => {
     const resp = await call.getOrCreate();
+
+    // userId of existing user
+    const userId = "jane";
+    await client.upsertUsers({
+      users: {
+        [userId]: {
+          id: userId,
+        },
+      },
+    });
+    const token = client.createToken(userId);
     const address = resp.call.ingress.rtmp.address;
+    const streamKey = `${apiKey}/${token}`;
 
     expect(address).toBeDefined();
+    expect(streamKey).toBeDefined();
   });
 
   it("query calls", async () => {
@@ -181,6 +196,32 @@ describe("call API", () => {
       let response = await call.listRecordings();
 
       expect(response.recordings).toBeDefined();
+    });
+
+    describe("streaming", () => {
+      it("enable backstage mode", async () => {
+        const response = await call.update({
+          settings_override: {
+            backstage: {
+              enabled: true,
+            },
+          },
+        });
+
+        expect(response.call.settings.backstage.enabled).toBe(true);
+      });
+
+      it("go live", async () => {
+        const response = await call.goLive();
+
+        expect(response.call.backstage).toBe(false);
+      });
+
+      it("stop live", async () => {
+        const response = await call.stopLive();
+
+        expect(response.call.backstage).toBe(true);
+      });
     });
   });
 });

@@ -67,7 +67,7 @@ export class StreamCall {
   goLive = (videoGoLiveRequest?: VideoGoLiveRequest) => {
     return this.apiClient.goLive({
       ...this.baseRequest,
-      videoGoLiveRequest: videoGoLiveRequest || null,
+      videoGoLiveRequest: videoGoLiveRequest || {},
     });
   };
 
