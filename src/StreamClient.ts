@@ -447,6 +447,7 @@ export class StreamClient {
             context.init.headers = {
               ...context.init.headers,
               "x-client-request-id": uuidv4(),
+              "Accept-Encoding": "gzip",
             };
 
             return Promise.resolve(context);
