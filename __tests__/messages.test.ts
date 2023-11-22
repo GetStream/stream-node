@@ -4,10 +4,11 @@ import { createTestClient } from "./create-test-client";
 import { StreamChannel } from "../src/StreamChannel";
 import { StreamClient } from "../src/StreamClient";
 import { TranslateMessageRequestLanguageEnum } from "../src/gen/chat";
+import { v4 as uuidv4 } from "uuid";
 
 describe("messages API", () => {
   let client: StreamClient;
-  const channelId = "stream-node-test-channel";
+  const channelId = "streamnodetest" + uuidv4();
   let channel: StreamChannel;
   const user = {
     id: "stream-node-test-user",
