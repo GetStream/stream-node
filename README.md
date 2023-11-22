@@ -7,6 +7,14 @@
 - [Register](https://getstream.io/chat/trial/) to get an API key for Stream
 - [Docs](https://getstream.io/video/docs/api/)
 
+## Package requirements
+
+The package is tested against these environments:
+
+- Node@18
+- Node@20
+- Bun@1
+
 ## What is Stream?
 
 Stream allows developers to rapidly deploy scalable feeds, chat messaging and video with an industry leading 99.999% uptime SLA guarantee.
