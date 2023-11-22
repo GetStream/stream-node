@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it } from "vitest";
+import { v4 as uuidv4 } from "uuid";
 import {
   CreateDeviceRequest,
   CreateDeviceRequestPushProviderEnum,
-  StreamClient,
-} from "..";
-import { v4 as uuidv4 } from "uuid";
-import { PushProviderRequest } from "../src/gen/chat";
+  PushProviderRequest,
+} from "../src/gen/chat";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
 
 describe("devices and push", () => {
   let client: StreamClient;

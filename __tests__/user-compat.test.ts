@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { StreamClient } from "../";
 import { v4 as uuidv4 } from "uuid";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
 
 describe("user-video compatibility API", () => {
   let client: StreamClient;

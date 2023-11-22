@@ -1,11 +1,9 @@
 import "dotenv/config";
 import { beforeAll, describe, expect, it } from "vitest";
-import {
-  StreamClient,
-  StreamChannel,
-  TranslateMessageRequestLanguageEnum,
-} from "../";
 import { createTestClient } from "./create-test-client";
+import { StreamChannel } from "../src/StreamChannel";
+import { StreamClient } from "../src/StreamClient";
+import { TranslateMessageRequestLanguageEnum } from "../src/gen/chat";
 
 describe("messages API", () => {
   let client: StreamClient;

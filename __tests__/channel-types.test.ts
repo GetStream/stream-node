@@ -1,7 +1,8 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { CreateChannelTypeRequestAutomodEnum, StreamClient } from "../";
 import { createTestClient } from "./create-test-client";
+import { CreateChannelTypeRequestAutomodEnum } from "../src/gen/chat/models";
+import { StreamClient } from "../src/StreamClient";
 
 describe("channel types CRUD API", () => {
   let client: StreamClient;
@@ -45,20 +46,4 @@ describe("channel types CRUD API", () => {
     const response = await client.chat.deleteChannelType({ name: channelType });
     expect(response).toBeDefined();
   });
-
-  // TODO: why does this doesn't work?
-  // afterAll(async () => {
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-
-  //   const channelTypes = (await client.chat.listChannelTypes()).channel_types;
-  //   const customChannelTypes = Object.keys(channelTypes).filter((type) =>
-  //     type.startsWith("streamnodetest")
-  //   );
-
-  //   await Promise.all(
-  //     customChannelTypes.map((t) =>
-  //       client.chat.deleteChannelType({ name: channelType })
-  //     )
-  //   );
-  // });
 });

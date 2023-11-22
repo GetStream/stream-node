@@ -25,6 +25,5 @@
     "./src",
     "index.ts",
     "version.ts",
-    "__tests__"
   ]
 }

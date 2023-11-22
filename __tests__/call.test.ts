@@ -1,14 +1,12 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
+import { createTestClient } from "./create-test-client";
+import { StreamCall } from "../src/StreamCall";
+import { StreamClient } from "../src/StreamClient";
 import {
-  StreamClient,
-  StreamCall,
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
-} from "../";
-import { createTestClient } from "./create-test-client";
-
-const apiKey = process.env.STREAM_API_KEY!;
+} from "../src/gen/video";
 
 describe("call API", () => {
   let client: StreamClient;

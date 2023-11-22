@@ -1,7 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient } from "../";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
 
 describe("commands CRUD API", () => {
   let client: StreamClient;
@@ -44,16 +44,5 @@ describe("commands CRUD API", () => {
     await expect(() =>
       client.chat.getCommand({ name: commandName })
     ).rejects.toThrowError();
-  });
-
-  afterAll(async () => {
-    const commands = (await client.chat.listCommands()).commands;
-    const customCommands = commands.filter((c) =>
-      c.name.startsWith("stream-node-test-command")
-    );
-
-    await Promise.all(
-      customCommands.map((c) => client.chat.deleteCommand({ name: c.name }))
-    );
   });
 });

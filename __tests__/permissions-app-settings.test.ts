@@ -1,7 +1,9 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { CreateRoleRequest, StreamClient, VideoOwnCapability } from "..";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
+import { CreateRoleRequest } from "../src/gen/chat";
+import { VideoOwnCapability } from "../src/gen/video";
 
 describe("permissions and app settings API", () => {
   let client: StreamClient;
@@ -83,16 +85,5 @@ describe("permissions and app settings API", () => {
     const response = await client.getRateLimits();
 
     expect(response.web).toBeDefined();
-  });
-
-  afterAll(async () => {
-    const roles = (await client.listRoles()).roles;
-    const customRoles = roles.filter((r) =>
-      r.name.startsWith("streamnodetest")
-    );
-
-    await Promise.all(
-      customRoles.map((r) => client.deleteRole({ name: r.name }))
-    );
   });
 });

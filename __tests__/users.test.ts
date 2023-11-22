@@ -1,11 +1,8 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import {
-  DeleteUsersRequestUserEnum,
-  StreamClient,
-  UserObjectRequest,
-} from "../";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
+import { UserObjectRequest } from "../src/gen/chat";
 
 describe("user API", () => {
   let client: StreamClient;
@@ -194,20 +191,5 @@ describe("user API", () => {
     const response = await client.deleteUsers({ user_ids: [newUser.id] });
 
     expect(response).toBeDefined();
-  });
-
-  afterAll(async () => {
-    const users = (
-      await client.queryUsers({
-        filter_conditions: { name: { $autocomplete: "streamnodetest" } },
-      })
-    ).users;
-
-    if (users.length > 0) {
-      await client.deleteUsers({
-        user_ids: users.map((u) => u.id),
-        user: DeleteUsersRequestUserEnum.HARD,
-      });
-    }
   });
 });

@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { BlockList, StreamClient } from "../";
 import { v4 as uuidv4 } from "uuid";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
+import { BlockList } from "../src/gen/chat";
 
 describe("block lists CRUD API", () => {
   let client: StreamClient;
@@ -54,16 +55,5 @@ describe("block lists CRUD API", () => {
       name: blockList.name,
     });
     expect(response).toBeDefined();
-  });
-
-  afterAll(async () => {
-    const blockLists = (await client.chat.listBlockLists()).blocklists;
-    const customBlockLists = blockLists.filter((b) =>
-      b.name.startsWith("streamnodetest-F1")
-    );
-
-    await Promise.all(
-      customBlockLists.map((b) => client.chat.deleteBlockList({ name: b.name }))
-    );
   });
 });

@@ -1,13 +1,13 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
+import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
 import {
-  StreamClient,
-  VideoLayoutSettingsNameEnum,
   VideoOwnCapability,
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
-} from "../";
-import { createTestClient } from "./create-test-client";
+  VideoLayoutSettingsNameEnum,
+} from "../src/gen/video";
 
 describe("call types CRUD API", () => {
   let client: StreamClient;
@@ -161,16 +161,5 @@ describe("call types CRUD API", () => {
     await expect(() =>
       client.video.getCallType({ name: callTypeName })
     ).rejects.toThrowError();
-  });
-
-  afterAll(async () => {
-    const callTypes = (await client.video.listCallTypes()).call_types;
-    const customCallTypes = Object.keys(callTypes).filter(
-      (t) => t.startsWith("streamnodetest") || t.startsWith("calltype")
-    );
-
-    await Promise.all(
-      customCallTypes.map((t) => client.video.deleteCallType({ name: t }))
-    );
   });
 });

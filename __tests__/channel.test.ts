@@ -1,7 +1,8 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamClient, StreamChannel } from "../";
 import { createTestClient } from "./create-test-client";
+import { StreamClient } from "../src/StreamClient";
+import { StreamChannel } from "../src/StreamChannel";
 
 describe("channel API", () => {
   let client: StreamClient;
@@ -136,19 +137,5 @@ describe("channel API", () => {
 
   it("delete", async () => {
     await channel.delete();
-  });
-
-  afterAll(async () => {
-    const channels = (
-      await client.chat.queryChannels({
-        filter_conditions: { name: { $autocomplete: "streamnodetest" } },
-      })
-    ).channels;
-
-    await Promise.all(
-      channels.map((c) =>
-        client.chat.channel(c.channel!.type, c.channel!.id).delete()
-      )
-    );
   });
 });

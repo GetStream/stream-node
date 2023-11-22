@@ -1,7 +1,9 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
-import { StreamCall, StreamClient, VideoOwnCapability } from "../";
 import { createTestClient } from "./create-test-client";
+import { StreamCall } from "../src/StreamCall";
+import { StreamClient } from "../src/StreamClient";
+import { VideoOwnCapability } from "../src/gen/video";
 
 describe("call members API", () => {
   let client: StreamClient;
