@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { v4 as uuidv4 } from "uuid";
 import { createTestClient } from "./create-test-client";
 import { StreamClient } from "../src/StreamClient";
