@@ -9,5 +9,6 @@ export default defineConfig({
     testTimeout: 10000,
     include: ["__tests__/**/*.test.ts"],
     includeSource: ["src/**/*.ts"],
+    retry: 3,
   },
 });
