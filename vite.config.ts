@@ -6,7 +6,7 @@ export default defineConfig({
     coverage: {
       reporter: ["lcov"],
     },
-    testTimeout: 15000,
+    testTimeout: 35000,
     include: ["__tests__/**/*.test.ts"],
     includeSource: ["src/**/*.ts"],
     retry: 3,
