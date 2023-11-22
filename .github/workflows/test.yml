@@ -1,4 +1,4 @@
-name: Test with Node.js
+name: Test
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   STREAM_API_KEY: ${{ vars.TEST_API_KEY }}
@@ -12,11 +12,10 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  test-and-build:
+  test-node:
     strategy:
       matrix:
         version: [18, 20]
-    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,3 +35,28 @@ jobs:
 
       - name: Test
         run: yarn test
+  test-bun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Bun@1
+        uses: oven-sh/setup-bun@v1
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "yarn"
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test
+
+      - name: Test
+        run: bun run vitest
