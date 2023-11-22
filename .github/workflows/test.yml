@@ -63,6 +63,7 @@ jobs:
   cleanup:
     if: ${{ always() }}
     needs: [test-node, test-bun]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
