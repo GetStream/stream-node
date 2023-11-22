@@ -79,9 +79,7 @@ describe("call types CRUD API", () => {
   it("read", async () => {
     const readResponse = await client.video.listCallTypes();
 
-    expect(readResponse.call_types[callTypeName]).toContain({
-      name: callTypeName,
-    });
+    expect(readResponse.call_types[callTypeName].name).toBe(callTypeName);
   });
 
   it("update", async () => {
