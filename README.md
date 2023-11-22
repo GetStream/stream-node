@@ -11,8 +11,8 @@
 
 The package is tested against these environments:
 
-- Node@18
-- Node@20
+- Node.js@18
+- Node.js@20
 - Bun@1
 
 ## What is Stream?
@@ -28,8 +28,6 @@ Stream is free for most side and hobby projects. To qualify, your project/compan
 ## Repo Overview 😎
 
 This repo contains the Node server-side SDK developed by the team and Stream community. For a feature overview please visit our [roadmap](https://github.com/GetStream/protocol/discussions/177).
-
-Minimum supported Node version: v18.
 
 ## Contributing
 
