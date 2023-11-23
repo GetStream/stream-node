@@ -12,6 +12,7 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
+    "prepare": "husky install",
     "prepublish": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
@@ -22,6 +23,11 @@
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "prettier:fix": "prettier . --write"
+  },
+  "lint-staged": {
+    "**/*": [
+      "prettier --write --ignore-unknown"
+    ]
   },
   "files": [
     "dist",
@@ -46,6 +52,8 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "rollup": "^3.29.3",
     "typescript": "^5.2.2",
