@@ -1,5 +1,8 @@
 require("dotenv/config");
-const { StreamClient, DeleteUsersRequestUserEnum } = require("./dist/index.cjs.js");
+const {
+  StreamClient,
+  DeleteUsersRequestUserEnum,
+} = require("./dist/index.cjs.js");
 
 const apiKey = process.env.STREAM_API_KEY;
 const secret = process.env.STREAM_SECRET;
@@ -13,35 +16,35 @@ const client = createTestClient();
 const cleanupBlockLists = async () => {
   const blockLists = (await client.chat.listBlockLists()).blocklists;
   const customBlockLists = blockLists.filter((b) =>
-    b.name.startsWith("streamnodetest-F1")
+    b.name.startsWith("streamnodetest-F1"),
   );
 
   await Promise.all(
-    customBlockLists.map((b) => client.chat.deleteBlockList({ name: b.name }))
+    customBlockLists.map((b) => client.chat.deleteBlockList({ name: b.name })),
   );
 };
 
 const cleanupCallTypes = async () => {
   const callTypes = (await client.video.listCallTypes()).call_types;
   const customCallTypes = Object.keys(callTypes).filter(
-    (t) => t.startsWith("streamnodetest") || t.startsWith("calltype")
+    (t) => t.startsWith("streamnodetest") || t.startsWith("calltype"),
   );
 
   await Promise.all(
-    customCallTypes.map((t) => client.video.deleteCallType({ name: t }))
+    customCallTypes.map((t) => client.video.deleteCallType({ name: t })),
   );
 };
 
 const cleanUpChannelTypes = async () => {
   const channelTypes = (await client.chat.listChannelTypes()).channel_types;
   const customChannelTypes = Object.keys(channelTypes).filter((type) =>
-    type.startsWith("streamnodetest")
+    type.startsWith("streamnodetest"),
   );
 
   await Promise.all(
     customChannelTypes.map((channelType) =>
-      client.chat.deleteChannelType({ name: channelType })
-    )
+      client.chat.deleteChannelType({ name: channelType }),
+    ),
   );
 };
 
@@ -54,19 +57,19 @@ const cleanUpChannels = async () => {
 
   await Promise.all(
     channels.map((c) =>
-      client.chat.channel(c.channel.type, c.channel.id).delete()
-    )
+      client.chat.channel(c.channel.type, c.channel.id).delete(),
+    ),
   );
 };
 
 const cleanUpCommands = async () => {
   const commands = (await client.chat.listCommands()).commands;
   const customCommands = commands.filter((c) =>
-    c.name.startsWith("stream-node-test-command")
+    c.name.startsWith("stream-node-test-command"),
   );
 
   await Promise.all(
-    customCommands.map((c) => client.chat.deleteCommand({ name: c.name }))
+    customCommands.map((c) => client.chat.deleteCommand({ name: c.name })),
   );
 };
 
@@ -75,15 +78,15 @@ const cleanUpRoles = async () => {
   const customRoles = roles.filter((r) => r.name.startsWith("streamnodetest"));
 
   let grants = {};
-  customRoles.forEach(r => {
-    grants[r.name] = []
+  customRoles.forEach((r) => {
+    grants[r.name] = [];
   });
   await client.updateAppSettings({
-    grants
+    grants,
   });
 
   await Promise.all(
-    customRoles.map((r) => client.deleteRole({ name: r.name }))
+    customRoles.map((r) => client.deleteRole({ name: r.name })),
   );
 };
 
@@ -113,6 +116,6 @@ const cleanup = async () => {
 };
 
 cleanup().then(() => {
-  console.log('cleanup done');
+  console.log("cleanup done");
   process.exit();
 });

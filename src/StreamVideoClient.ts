@@ -1,5 +1,5 @@
-import { StreamCall } from "./StreamCall";
-import { StreamClient } from "./StreamClient";
+import { StreamCall } from './StreamCall';
+import { StreamClient } from './StreamClient';
 import {
   DefaultApi,
   DeleteCallTypeRequest,
@@ -8,7 +8,7 @@ import {
   VideoCreateCallTypeRequest,
   VideoQueryCallsRequest,
   VideoUpdateCallTypeRequest,
-} from "./gen/video";
+} from './gen/video';
 
 export class StreamVideoClient {
   private readonly apiClient: DefaultApi;
@@ -18,7 +18,7 @@ export class StreamVideoClient {
     const configuration = this.streamClient.getConfiguration({
       basePath:
         this.streamClient.options.basePath ??
-        "https://video.stream-io-api.com/video",
+        'https://video.stream-io-api.com/video',
     });
     this.apiClient = new DefaultApi(configuration);
     this.videoServerSideApiClient = new ServerSideApi(configuration);
@@ -54,7 +54,7 @@ export class StreamVideoClient {
 
   updateCallType = (
     name: string,
-    videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest
+    videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest,
   ) => {
     return this.videoServerSideApiClient.updateCallType({
       name,

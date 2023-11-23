@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { StreamClient } from "../src/StreamClient";
+import 'dotenv/config';
+import { StreamClient } from '../src/StreamClient';
 
 const apiKey = process.env.STREAM_API_KEY!;
 const secret = process.env.STREAM_SECRET!;

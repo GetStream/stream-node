@@ -1,24 +1,24 @@
-import { beforeAll, describe, expect, it } from "vitest";
-import { v4 as uuidv4 } from "uuid";
-import { createTestClient } from "./create-test-client";
-import { StreamClient } from "../src/StreamClient";
-import { UserObjectRequest } from "../src/gen/chat";
+import { beforeAll, describe, expect, it } from 'vitest';
+import { v4 as uuidv4 } from 'uuid';
+import { createTestClient } from './create-test-client';
+import { StreamClient } from '../src/StreamClient';
+import { UserObjectRequest } from '../src/gen/chat';
 
-describe("user API", () => {
+describe('user API', () => {
   let client: StreamClient;
-  const userId = "streamnodetest" + uuidv4();
+  const userId = 'streamnodetest' + uuidv4();
   const newUser: UserObjectRequest = {
     id: userId,
-    role: "user",
+    role: 'user',
     custom: {
-      color: "red",
+      color: 'red',
     },
     name: userId,
-    image: ":)",
+    image: ':)',
   };
   const user = {
-    id: "stream-node-test-user",
-    role: "admin",
+    id: 'stream-node-test-user',
+    role: 'admin',
   };
 
   beforeAll(async () => {
@@ -30,25 +30,25 @@ describe("user API", () => {
     });
   });
 
-  it("query users", async () => {
+  it('query users', async () => {
     let response = await client.queryUsers({
-      sort: [{ field: "name", direction: 1 }],
+      sort: [{ field: 'name', direction: 1 }],
       filter_conditions: {},
     });
 
     expect(response.users).toBeDefined();
 
     response = await client.queryUsers({
-      sort: [{ field: "name", direction: 1 }],
+      sort: [{ field: 'name', direction: 1 }],
       filter_conditions: {
-        id: { $eq: "zitaszuperagetstreamio" },
+        id: { $eq: 'zitaszuperagetstreamio' },
       },
     });
 
     expect(response.users.length).toBe(1);
   });
 
-  it("create", async () => {
+  it('create', async () => {
     const response = await client.upsertUsers({
       users: {
         [newUser.id]: {
@@ -61,7 +61,7 @@ describe("user API", () => {
 
     expect(createdUser.id).toBe(newUser.id);
     expect(createdUser.role).toBe(newUser.role);
-    expect(createdUser.custom.color).toBe("red");
+    expect(createdUser.custom.color).toBe('red');
 
     const queryResponse = await client.queryUsers({
       sort: [],
@@ -71,27 +71,27 @@ describe("user API", () => {
     });
 
     expect(queryResponse.users.length).toBe(1);
-    expect(queryResponse.users[0].custom.color).toBe("red");
+    expect(queryResponse.users[0].custom.color).toBe('red');
     expect(queryResponse.users[0].id).toBe(newUser.id);
     expect(queryResponse.users[0].name).toBe(newUser.name);
     expect(queryResponse.users[0].image).toBe(newUser.image);
   });
 
-  it("create guest", async () => {
+  it('create guest', async () => {
     const guest: UserObjectRequest = {
       id: uuidv4(),
       custom: {
-        color: "red",
+        color: 'red',
       },
     };
 
     const response = await client.createGuest({ user: guest });
 
-    expect(response.user?.role).toBe("guest");
-    expect(response.user?.custom.color).toBe("red");
+    expect(response.user?.role).toBe('guest');
+    expect(response.user?.custom.color).toBe('red');
   });
 
-  it("ban and unban", async () => {
+  it('ban and unban', async () => {
     await client.banUser({
       target_user_id: newUser.id,
       user_id: user.id,
@@ -102,7 +102,7 @@ describe("user API", () => {
     });
 
     expect(
-      queryResponse.bans.find((b) => b.user?.id === newUser.id)
+      queryResponse.bans.find((b) => b.user?.id === newUser.id),
     ).toBeDefined();
 
     await client.unbanUser({
@@ -115,11 +115,11 @@ describe("user API", () => {
     });
 
     expect(
-      queryResponse.bans.find((b) => b.user?.id === newUser.id)
+      queryResponse.bans.find((b) => b.user?.id === newUser.id),
     ).toBeUndefined();
   });
 
-  it("mute and unmute", async () => {
+  it('mute and unmute', async () => {
     const muteResponse = await client.muteUser({
       target_ids: [newUser.id],
       user_id: user.id,
@@ -136,24 +136,24 @@ describe("user API", () => {
     expect(unmuteResponse).toBeDefined();
   });
 
-  it("send custom event", async () => {
+  it('send custom event', async () => {
     const response = await client.sendCustomEventToUser(newUser.id, {
-      type: "my-custom-event",
+      type: 'my-custom-event',
     });
 
     expect(response).toBeDefined();
   });
 
-  it("update", async () => {
+  it('update', async () => {
     const response = await client.updateUsersPartial({
       users: [
         {
           id: newUser.id,
           set: {
-            role: "admin",
-            color: "blue",
+            role: 'admin',
+            color: 'blue',
           },
-          unset: ["name"],
+          unset: ['name'],
         },
       ],
     });
@@ -161,11 +161,11 @@ describe("user API", () => {
     const userResponse = response.users[newUser.id];
 
     expect(userResponse.name).toBe(undefined);
-    expect(userResponse.role).toBe("admin");
-    expect(userResponse.custom.color).toBe("blue");
+    expect(userResponse.role).toBe('admin');
+    expect(userResponse.custom.color).toBe('blue');
   });
 
-  it("deactivate and reactivate", async () => {
+  it('deactivate and reactivate', async () => {
     const deactivateResponse = await client.deactivateUser({
       user_id: newUser.id,
     });
@@ -179,15 +179,15 @@ describe("user API", () => {
     expect(reactivateResponse.task_id).toBeDefined();
   });
 
-  it("restore", async () => {
+  it('restore', async () => {
     await expect(() =>
-      client.restoreUsers({ user_ids: [newUser.id] })
+      client.restoreUsers({ user_ids: [newUser.id] }),
     ).rejects.toThrowError(
-      `Stream error code 4: RestoreUsers failed with error: "user "${newUser.id}" is not deleted, it can't be restored"`
+      `Stream error code 4: RestoreUsers failed with error: "user "${newUser.id}" is not deleted, it can't be restored"`,
     );
   });
 
-  it("delete", async () => {
+  it('delete', async () => {
     const response = await client.deleteUsers({ user_ids: [newUser.id] });
 
     expect(response).toBeDefined();

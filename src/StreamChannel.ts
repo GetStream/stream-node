@@ -1,4 +1,4 @@
-import { StreamClient } from "./StreamClient";
+import { StreamClient } from './StreamClient';
 import {
   ChannelGetOrCreateRequest,
   ChannelsApi,
@@ -28,8 +28,8 @@ import {
   UpdateChannelRequest,
   UpdateMessagePartialRequest,
   UpdateMessageRequest,
-} from "./gen/chat";
-import { OmitTypeId } from "./types";
+} from './gen/chat';
+import { OmitTypeId } from './types';
 
 export class StreamChannel {
   private readonly channelsApi: ChannelsApi;
@@ -39,7 +39,7 @@ export class StreamChannel {
   constructor(
     private readonly streamClient: StreamClient,
     public readonly type: string,
-    public id?: string
+    public id?: string,
   ) {
     const configuration = this.streamClient.getConfiguration();
     // @ts-expect-error typing problem
@@ -69,7 +69,7 @@ export class StreamChannel {
   };
 
   updatePartial = (
-    updateChannelPartialRequest: OmitTypeId<UpdateChannelPartialRequest>
+    updateChannelPartialRequest: OmitTypeId<UpdateChannelPartialRequest>,
   ) => {
     return this.channelsApi.updateChannelPartial({
       ...this.baseRequest,
@@ -78,7 +78,7 @@ export class StreamChannel {
   };
 
   getOrCreate = async (
-    channelGetOrCreateRequest?: ChannelGetOrCreateRequest
+    channelGetOrCreateRequest?: ChannelGetOrCreateRequest,
   ) => {
     if (this.id) {
       return await this.channelsApi.getOrCreateChannel({
@@ -134,7 +134,7 @@ export class StreamChannel {
     });
   };
 
-  mute = (muteChannelRequest: Omit<MuteChannelRequest, "channel_cids">) => {
+  mute = (muteChannelRequest: Omit<MuteChannelRequest, 'channel_cids'>) => {
     return this.channelsApi.muteChannel({
       muteChannelRequest: { ...muteChannelRequest, channel_cids: [this.cid] },
     });
@@ -143,8 +143,8 @@ export class StreamChannel {
   unmute = (
     unmuteChannelRequest: Omit<
       UnmuteChannelRequest,
-      "channel_cids" | "channel_cid"
-    >
+      'channel_cids' | 'channel_cid'
+    >,
   ) => {
     return this.channelsApi.unmuteChannel({
       unmuteChannelRequest: {
@@ -189,7 +189,7 @@ export class StreamChannel {
 
   updateMessagePartial = (
     id: string,
-    updateMessagePartialRequest: UpdateMessagePartialRequest
+    updateMessagePartialRequest: UpdateMessagePartialRequest,
   ) => {
     return this.messagesApi.updateMessagePartial({
       id,
@@ -210,7 +210,7 @@ export class StreamChannel {
 
   translateMessage = (
     id: string,
-    translateMessageRequest: TranslateMessageRequest
+    translateMessageRequest: TranslateMessageRequest,
   ) => {
     return this.messagesApi.translateMessage({ id, translateMessageRequest });
   };
@@ -225,7 +225,7 @@ export class StreamChannel {
 
   sendMessageReaction = (
     messageId: string,
-    sendReactionRequest: SendReactionRequest
+    sendReactionRequest: SendReactionRequest,
   ) => {
     return this.messagesApi.sendReaction({
       id: messageId,
@@ -235,14 +235,14 @@ export class StreamChannel {
 
   deleteMessageReaction = (
     messageId: string,
-    request: Omit<DeleteReactionRequest, "id">
+    request: Omit<DeleteReactionRequest, 'id'>,
   ) => {
     return this.messagesApi.deleteReaction({ ...request, id: messageId });
   };
 
   getMessageReactions = (
     messageId: string,
-    request?: Omit<GetReactionsRequest, "id">
+    request?: Omit<GetReactionsRequest, 'id'>,
   ) => {
     return this.messagesApi.getReactions({ ...(request ?? {}), id: messageId });
   };
@@ -256,7 +256,7 @@ export class StreamChannel {
 
   private get baseRequest() {
     if (!this.id) {
-      throw new Error("You need to initialize the channel with `getOrCreate`");
+      throw new Error('You need to initialize the channel with `getOrCreate`');
     }
 
     return {

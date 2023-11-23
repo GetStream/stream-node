@@ -20,7 +20,8 @@
     "generate:open-api": "./generate-openapi.sh protocol",
     "generate:open-api:dev": "./generate-openapi.sh chat",
     "lint": "eslint **/*.ts",
-    "lint:fix": "eslint --fix **/*.ts"
+    "lint:fix": "eslint --fix **/*.ts",
+    "prettier:fix": "prettier . --write"
   },
   "files": [
     "dist",

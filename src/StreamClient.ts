@@ -1,5 +1,5 @@
-import { StreamChatClient } from "./StreamChatClient";
-import { StreamVideoClient } from "./StreamVideoClient";
+import { StreamChatClient } from './StreamChatClient';
+import { StreamVideoClient } from './StreamVideoClient';
 import {
   APIError,
   BanRequest,
@@ -45,7 +45,7 @@ import {
   UserObjectRequest,
   UserResponse,
   UsersApi,
-} from "./gen/chat";
+} from './gen/chat';
 import {
   Configuration,
   ErrorContext,
@@ -54,9 +54,9 @@ import {
   JSONApiResponse,
   RequestContext,
   ResponseContext,
-} from "./gen/video";
-import { v4 as uuidv4 } from "uuid";
-import { JWTServerToken, JWTUserToken } from "./utils/create-token";
+} from './gen/video';
+import { v4 as uuidv4 } from 'uuid';
+import { JWTServerToken, JWTUserToken } from './utils/create-token';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -88,13 +88,13 @@ export class StreamClient {
   constructor(
     private readonly apiKey: string,
     private readonly secret: string,
-    readonly config?: string | StreamClientOptions
+    readonly config?: string | StreamClientOptions,
   ) {
     this.token = JWTServerToken(this.secret);
     this.video = new StreamVideoClient(this);
     this.chat = new StreamChatClient(this);
 
-    if (typeof config === "string") {
+    if (typeof config === 'string') {
       this.options.basePath = config;
       this.options.timeout = StreamClient.DEFAULT_TIMEOUT;
     } else {
@@ -134,7 +134,7 @@ export class StreamClient {
     userID: string,
     exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
     iat = Math.round(Date.now() / 1000),
-    call_cids?: string[]
+    call_cids?: string[],
   ) {
     const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
 
@@ -148,7 +148,7 @@ export class StreamClient {
 
     if (call_cids) {
       console.warn(
-        `Use createCallToken method for creating call tokens, the "call_cids" param will be removed from the createToken method with version 0.2.0`
+        `Use createCallToken method for creating call tokens, the "call_cids" param will be removed from the createToken method with version 0.2.0`,
       );
       extra.call_cids = call_cids;
     }
@@ -168,7 +168,7 @@ export class StreamClient {
     userID: string,
     call_cids: string[],
     exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
-    iat = Math.round(Date.now() / 1000)
+    iat = Math.round(Date.now() / 1000),
   ) {
     const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
 
@@ -293,7 +293,7 @@ export class StreamClient {
     const response = await this.usersApi.queryUsers({ payload });
     // @ts-expect-error typing problem
     response.users = response.users.map((u) =>
-      this.mapCustomDataAfterReceive(u)
+      this.mapCustomDataAfterReceive(u),
     );
 
     return response;
@@ -331,13 +331,13 @@ export class StreamClient {
   upsertUsers = async (updateUsersRequest: UpdateUsersRequest) => {
     Object.keys(updateUsersRequest.users).forEach((key) => {
       updateUsersRequest.users[key] = this.mapCustomDataBeforeSend(
-        updateUsersRequest.users[key]
+        updateUsersRequest.users[key],
       );
     });
     const response = await this.usersApi.updateUsers({ updateUsersRequest });
     Object.keys(response.users).forEach((key) => {
       response.users[key] = this.mapCustomDataAfterReceive(
-        response.users[key]
+        response.users[key],
       )!;
     });
 
@@ -353,7 +353,7 @@ export class StreamClient {
     });
     Object.keys(response.users).forEach((key) => {
       response.users[key] = this.mapCustomDataAfterReceive(
-        response.users[key]
+        response.users[key],
       )!;
     });
 
@@ -380,7 +380,7 @@ export class StreamClient {
 
   unmuteUser = (unmuteUserRequest: UnmuteUserRequest) => {
     unmuteUserRequest.user = this.mapCustomDataBeforeSend(
-      unmuteUserRequest.user
+      unmuteUserRequest.user,
     );
     return this.usersApi.unmuteUser({ unmuteUserRequest });
   };
@@ -432,7 +432,7 @@ export class StreamClient {
     return new Configuration({
       apiKey: (name: string) => {
         const mapping: Record<string, string> = {
-          "Stream-Auth-Type": "jwt",
+          'Stream-Auth-Type': 'jwt',
           api_key: this.apiKey,
           Authorization: this.token,
         };
@@ -441,15 +441,15 @@ export class StreamClient {
       },
       basePath: options?.basePath ?? this.options.basePath,
       headers: {
-        "X-Stream-Client": "stream-node-" + process.env.PKG_VERSION,
+        'X-Stream-Client': 'stream-node-' + process.env.PKG_VERSION,
       },
       middleware: [
         {
           pre: (context: RequestContext) => {
             context.init.headers = {
               ...context.init.headers,
-              "x-client-request-id": uuidv4(),
-              "Accept-Encoding": "gzip",
+              'x-client-request-id': uuidv4(),
+              'Accept-Encoding': 'gzip',
             };
 
             return Promise.resolve(context);
@@ -466,7 +466,7 @@ export class StreamClient {
               const response = new JSONApiResponse(context.response);
               const value = (await response.value()) as APIError;
               throw new Error(
-                `Stream error code ${value.code}: ${value.message}`
+                `Stream error code ${value.code}: ${value.message}`,
               );
             }
           },
@@ -479,10 +479,10 @@ export class StreamClient {
           },
           onError: (context: ErrorContext) => {
             const error = context.error as DOMException;
-            if (error.name === "AbortError" || error.name === "TimeoutError") {
+            if (error.name === 'AbortError' || error.name === 'TimeoutError') {
               throw new FetchError(
                 error,
-                `The request was aborted due to to the ${this.options.timeout}ms timeout, you can set the timeout in the StreamClient constructor`
+                `The request was aborted due to to the ${this.options.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
               );
             }
 
@@ -494,50 +494,50 @@ export class StreamClient {
       queryParamsStringify: (params: HTTPQuery) => {
         const newParams = [];
         for (const k in params) {
-          if (Array.isArray(params[k]) || typeof params[k] === "object") {
+          if (Array.isArray(params[k]) || typeof params[k] === 'object') {
             newParams.push(
-              `${k}=${encodeURIComponent(JSON.stringify(params[k]))}`
+              `${k}=${encodeURIComponent(JSON.stringify(params[k]))}`,
             );
           } else {
             const value = params[k];
             if (
-              typeof value === "string" ||
-              typeof value === "number" ||
-              typeof value === "boolean"
+              typeof value === 'string' ||
+              typeof value === 'number' ||
+              typeof value === 'boolean'
             ) {
               newParams.push(`${k}=${encodeURIComponent(value)}`);
             }
           }
         }
 
-        return newParams.join("&");
+        return newParams.join('&');
       },
     });
   };
 
   private readonly reservedKeywords = [
-    "ban_expires",
-    "banned",
-    "id",
-    "invisible",
-    "language",
-    "push_notifications",
-    "revoke_tokens_issued_before",
-    "role",
-    "teams",
-    "created_at",
-    "deactivated_at",
-    "deleted_at",
-    "last_active",
-    "online",
-    "updated_at",
-    "shadow_banned",
-    "name",
-    "image",
+    'ban_expires',
+    'banned',
+    'id',
+    'invisible',
+    'language',
+    'push_notifications',
+    'revoke_tokens_issued_before',
+    'role',
+    'teams',
+    'created_at',
+    'deactivated_at',
+    'deleted_at',
+    'last_active',
+    'online',
+    'updated_at',
+    'shadow_banned',
+    'name',
+    'image',
   ];
 
   private readonly mapCustomDataBeforeSend = (
-    user: UserObject | UserObjectRequest | UserResponse | undefined
+    user: UserObject | UserObjectRequest | UserResponse | undefined,
   ) => {
     if (!user) {
       return undefined;
@@ -548,7 +548,7 @@ export class StreamClient {
   };
 
   private mapCustomDataAfterReceive<T = UserObject | UserResponse | undefined>(
-    user: T
+    user: T,
   ) {
     if (!user) {
       return undefined;

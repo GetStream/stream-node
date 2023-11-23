@@ -1,1 +1,1 @@
-export type OmitTypeId<T> = Omit<T, 'type' | 'id' | 'connection_id'>
+export type OmitTypeId<T> = Omit<T, 'type' | 'id' | 'connection_id'>;

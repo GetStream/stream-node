@@ -1,5 +1,5 @@
-import { StreamChannel } from "./StreamChannel";
-import { StreamClient } from "./StreamClient";
+import { StreamChannel } from './StreamChannel';
+import { StreamClient } from './StreamClient';
 import {
   ChannelTypesApi,
   ChannelsApi,
@@ -21,7 +21,7 @@ import {
   UpdateBlockListRequest,
   UpdateChannelTypeRequest,
   UpdateCommandRequest,
-} from "./gen/chat";
+} from './gen/chat';
 
 export class StreamChatClient {
   private readonly settingsApi: SettingsApi;
@@ -59,7 +59,7 @@ export class StreamChatClient {
 
   updateBlockList = (
     name: string,
-    updateBlockListRequest: UpdateBlockListRequest
+    updateBlockListRequest: UpdateBlockListRequest,
   ) => {
     return this.settingsApi.updateBlockList({ name, updateBlockListRequest });
   };
@@ -86,7 +86,7 @@ export class StreamChatClient {
 
   updateChannelType = (
     name: string,
-    updateChannelTypeRequest: UpdateChannelTypeRequest
+    updateChannelTypeRequest: UpdateChannelTypeRequest,
   ) => {
     return this.channelTypesApi.updateChannelType({
       name,
@@ -128,7 +128,7 @@ export class StreamChatClient {
 
   updateCommand = (
     name: string,
-    updateCommandRequest: UpdateCommandRequest
+    updateCommandRequest: UpdateCommandRequest,
   ) => {
     return this.commandsApi.updateCommand({ name, updateCommandRequest });
   };

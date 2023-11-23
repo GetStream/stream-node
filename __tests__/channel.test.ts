@@ -1,22 +1,22 @@
-import { beforeAll, describe, expect, it } from "vitest";
-import { v4 as uuidv4 } from "uuid";
-import { createTestClient } from "./create-test-client";
-import { StreamClient } from "../src/StreamClient";
-import { StreamChannel } from "../src/StreamChannel";
+import { beforeAll, describe, expect, it } from 'vitest';
+import { v4 as uuidv4 } from 'uuid';
+import { createTestClient } from './create-test-client';
+import { StreamClient } from '../src/StreamClient';
+import { StreamChannel } from '../src/StreamChannel';
 
-describe("channel API", () => {
+describe('channel API', () => {
   let client: StreamClient;
-  const channelId = "streamnodetest" + uuidv4();
+  const channelId = 'streamnodetest' + uuidv4();
   let channel: StreamChannel;
   const user = {
-    id: "stream-node-test-user",
-    name: "Stream Node Test User",
-    role: "admin",
+    id: 'stream-node-test-user',
+    name: 'Stream Node Test User',
+    role: 'admin',
   };
   const user2 = {
-    id: "stream-node-test-user2",
-    name: "Stream Node Test User 2",
-    role: "admin",
+    id: 'stream-node-test-user2',
+    name: 'Stream Node Test User 2',
+    role: 'admin',
   };
 
   beforeAll(async () => {
@@ -29,10 +29,10 @@ describe("channel API", () => {
       },
     });
 
-    channel = client.chat.channel("messaging", channelId);
+    channel = client.chat.channel('messaging', channelId);
   });
 
-  it("create", async () => {
+  it('create', async () => {
     const response = await channel.getOrCreate({
       data: { created_by_id: user.id, name: channelId },
     });
@@ -49,7 +49,7 @@ describe("channel API", () => {
   //   await channelWithoutId.delete();
   // });
 
-  it("update", async () => {
+  it('update', async () => {
     const response = await channel.update({
       add_members: [{ user_id: user.id }, { user_id: user2.id }],
       add_moderators: [],
@@ -60,7 +60,7 @@ describe("channel API", () => {
     expect(response.members.length).toBe(2);
   });
 
-  it("update partial", async () => {
+  it('update partial', async () => {
     const response = await channel.updatePartial({
       set: { cooldown: 100 },
       unset: [],
@@ -69,17 +69,17 @@ describe("channel API", () => {
     expect(response.channel?.cooldown).toBe(100);
   });
 
-  it("query members", async () => {
+  it('query members', async () => {
     const response = await channel.queryMembers({
       filter_conditions: {
-        name: { $autocomplete: "2" },
+        name: { $autocomplete: '2' },
       },
     });
 
     expect(response.members.length).toBe(1);
   });
 
-  it("show and hide", async () => {
+  it('show and hide', async () => {
     const hideResponse = await channel.hide({ user_id: user2.id });
 
     expect(hideResponse).toBeDefined();
@@ -91,7 +91,7 @@ describe("channel API", () => {
     });
 
     expect(
-      queryResponse.channels.find((c) => c.channel?.id === channel.id)
+      queryResponse.channels.find((c) => c.channel?.id === channel.id),
     ).toBeDefined();
 
     const showResponse = await channel.show({ user_id: user2.id });
@@ -99,7 +99,7 @@ describe("channel API", () => {
     expect(showResponse).toBeDefined();
   });
 
-  it("mute and unmute", async () => {
+  it('mute and unmute', async () => {
     const muteResponse = await channel.mute({ user_id: user2.id });
 
     expect(muteResponse.channel_mute?.channel?.id).toBe(channel.id);
@@ -115,7 +115,7 @@ describe("channel API", () => {
     expect(queryResponse.channels.length).toBe(0);
   });
 
-  it("export", async () => {
+  it('export', async () => {
     const response = await client.chat.exportChannels({
       channels: [{ cid: channel.cid }],
     });
@@ -126,16 +126,16 @@ describe("channel API", () => {
     expect(statusResponse).toBeDefined();
   });
 
-  it("custom event", async () => {
+  it('custom event', async () => {
     const response = await channel.sendCustomEvent({
-      type: "my-event",
+      type: 'my-event',
       user_id: user.id,
     });
 
-    expect(response.event?.type).toBe("my-event");
+    expect(response.event?.type).toBe('my-event');
   });
 
-  it("delete", async () => {
+  it('delete', async () => {
     await channel.delete();
   });
 });

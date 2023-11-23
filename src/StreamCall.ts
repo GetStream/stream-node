@@ -1,4 +1,4 @@
-import { StreamClient } from "./StreamClient";
+import { StreamClient } from './StreamClient';
 import {
   DefaultApi,
   GetCallRequest,
@@ -13,8 +13,8 @@ import {
   VideoUpdateCallMembersRequest,
   VideoUpdateUserPermissionsRequest,
   VideoQueryMembersRequest,
-} from "./gen/video";
-import { OmitTypeId } from "./types";
+} from './gen/video';
+import { OmitTypeId } from './types';
 
 export class StreamCall {
   private readonly baseRequest: { type: string; id: string };
@@ -23,13 +23,13 @@ export class StreamCall {
   constructor(
     private readonly streamClient: StreamClient,
     private readonly type: string,
-    private readonly id: string
+    private readonly id: string,
   ) {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration({
       basePath:
         this.streamClient.options.basePath ??
-        "https://video.stream-io-api.com/video",
+        'https://video.stream-io-api.com/video',
     });
     this.apiClient = new DefaultApi(configuration);
   }
@@ -140,7 +140,7 @@ export class StreamCall {
   };
 
   updateCallMembers = (
-    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest
+    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest,
   ) => {
     return this.apiClient.updateCallMembers({
       videoUpdateCallMembersRequest,
@@ -149,7 +149,7 @@ export class StreamCall {
   };
 
   updateUserPermissions = (
-    videoUpdateUserPermissionsRequest: VideoUpdateUserPermissionsRequest
+    videoUpdateUserPermissionsRequest: VideoUpdateUserPermissionsRequest,
   ) => {
     return this.apiClient.updateUserPermissions({
       videoUpdateUserPermissionsRequest,

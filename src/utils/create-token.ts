@@ -1,4 +1,4 @@
-import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 export function JWTUserToken(
   apiSecret: Secret,

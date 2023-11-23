@@ -1,24 +1,24 @@
-import "dotenv/config";
-import { beforeAll, describe, expect, it } from "vitest";
-import { createTestClient } from "./create-test-client";
-import { StreamChannel } from "../src/StreamChannel";
-import { StreamClient } from "../src/StreamClient";
-import { TranslateMessageRequestLanguageEnum } from "../src/gen/chat";
-import { v4 as uuidv4 } from "uuid";
+import 'dotenv/config';
+import { beforeAll, describe, expect, it } from 'vitest';
+import { createTestClient } from './create-test-client';
+import { StreamChannel } from '../src/StreamChannel';
+import { StreamClient } from '../src/StreamClient';
+import { TranslateMessageRequestLanguageEnum } from '../src/gen/chat';
+import { v4 as uuidv4 } from 'uuid';
 
-describe("messages API", () => {
+describe('messages API', () => {
   let client: StreamClient;
-  const channelId = "streamnodetest" + uuidv4();
+  const channelId = 'streamnodetest' + uuidv4();
   let channel: StreamChannel;
   const user = {
-    id: "stream-node-test-user",
-    name: "Stream Node Test User",
-    role: "admin",
+    id: 'stream-node-test-user',
+    name: 'Stream Node Test User',
+    role: 'admin',
   };
   const user2 = {
-    id: "stream-node-test-user2",
-    name: "Stream Node Test User 2",
-    role: "admin",
+    id: 'stream-node-test-user2',
+    name: 'Stream Node Test User 2',
+    role: 'admin',
   };
   let messageId: string | undefined;
 
@@ -32,7 +32,7 @@ describe("messages API", () => {
       },
     });
 
-    channel = client.chat.channel("messaging", channelId);
+    channel = client.chat.channel('messaging', channelId);
     await channel.getOrCreate({
       data: {
         created_by: { id: user.id },
@@ -41,16 +41,16 @@ describe("messages API", () => {
     });
   });
 
-  it("send message", async () => {
+  it('send message', async () => {
     const response = await channel.sendMessage({
       message: {
-        text: "Hello from Stream Node SDK",
+        text: 'Hello from Stream Node SDK',
         attachments: [],
         user_id: user.id,
       },
     });
 
-    expect(response.message?.text).toBe("Hello from Stream Node SDK");
+    expect(response.message?.text).toBe('Hello from Stream Node SDK');
 
     messageId = response.message?.id;
 
@@ -59,42 +59,42 @@ describe("messages API", () => {
     expect(getResponse.messages.length).toBe(1);
   });
 
-  it("update message", async () => {
+  it('update message', async () => {
     const urlAttachment = await channel.getOpenGraphData({
-      url: "https://getstream.io/",
+      url: 'https://getstream.io/',
     });
     const response = await channel.updateMessage(messageId!, {
       message: {
-        text: "https://getstream.io/",
+        text: 'https://getstream.io/',
         attachments: [urlAttachment],
         user_id: user.id,
       },
     });
 
-    expect(response.message?.text).toBe("https://getstream.io/");
+    expect(response.message?.text).toBe('https://getstream.io/');
     expect(response.message?.attachments[0].title_link).toBe(
-      "https://getstream.io/"
+      'https://getstream.io/',
     );
   });
 
-  it("update partial", async () => {
+  it('update partial', async () => {
     const response = await channel.updateMessagePartial(messageId!, {
       set: {
-        text: "check this out: https://getstream.io/",
+        text: 'check this out: https://getstream.io/',
       },
       unset: [],
       user_id: user.id,
     });
 
     expect(response.message?.text).toBe(
-      "check this out: https://getstream.io/"
+      'check this out: https://getstream.io/',
     );
     expect(response.message?.attachments[0].title_link).toBe(
-      "https://getstream.io/"
+      'https://getstream.io/',
     );
   });
 
-  it("translate", async () => {
+  it('translate', async () => {
     const response = await channel.translateMessage(messageId!, {
       language: TranslateMessageRequestLanguageEnum.HU,
     });
@@ -102,7 +102,7 @@ describe("messages API", () => {
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
-  it("read and unread", async () => {
+  it('read and unread', async () => {
     const readResponse = await channel.markRead({ user_id: user2.id });
 
     expect(readResponse.event?.channel_id).toBe(channel.id);
@@ -115,42 +115,42 @@ describe("messages API", () => {
     expect(unreadResponse).toBeDefined();
   });
 
-  it("send reaction", async () => {
+  it('send reaction', async () => {
     const response = await channel.sendMessageReaction(messageId!, {
-      reaction: { type: "like", user_id: user.id },
+      reaction: { type: 'like', user_id: user.id },
     });
 
     expect(response.message?.id).toBe(messageId);
     expect(response.reaction?.message_id).toBe(messageId);
-    expect(response.reaction?.type).toBe("like");
+    expect(response.reaction?.type).toBe('like');
   });
 
-  it("get reactions", async () => {
+  it('get reactions', async () => {
     const response = await channel.getMessageReactions(messageId!);
 
     expect(response.reactions.length).toBe(1);
   });
 
-  it("delete reaction", async () => {
+  it('delete reaction', async () => {
     const response = await channel.deleteMessageReaction(messageId!, {
-      type: "like",
+      type: 'like',
       userId: user.id,
     });
 
     expect(response.message?.id).toBe(messageId);
-    expect(response.reaction?.type).toBe("like");
+    expect(response.reaction?.type).toBe('like');
   });
 
-  it("search", async () => {
+  it('search', async () => {
     const response = await client.chat.searchMessages({
       filter_conditions: { members: { $in: [user2.id] } },
-      message_filter_conditions: { text: { $autocomplete: "check" } },
+      message_filter_conditions: { text: { $autocomplete: 'check' } },
     });
 
     expect(response.results).toBeDefined();
   });
 
-  it("flag and unflag", async () => {
+  it('flag and unflag', async () => {
     const response = await client.flag({
       target_message_id: messageId!,
       user_id: user.id,
@@ -166,7 +166,7 @@ describe("messages API", () => {
     expect(unflagResponse).toBeDefined();
   });
 
-  it("truncate", async () => {
+  it('truncate', async () => {
     await channel.truncate({ user_id: user.id });
 
     const response = await channel.getOrCreate();
@@ -174,7 +174,7 @@ describe("messages API", () => {
     expect(response.messages.length).toBe(0);
   });
 
-  it("delete message", async () => {
+  it('delete message', async () => {
     const response = await channel.deleteMessage({
       id: messageId!,
       hard: true,
@@ -183,9 +183,9 @@ describe("messages API", () => {
     expect(response.message?.id).toBe(messageId);
 
     await expect(() =>
-      channel.getMessage({ id: messageId! })
+      channel.getMessage({ id: messageId! }),
     ).rejects.toThrowError(
-      `Stream error code 4: GetMessage failed with error: "Message with id ${messageId} doesn't exist"`
+      `Stream error code 4: GetMessage failed with error: "Message with id ${messageId} doesn't exist"`,
     );
   });
 });
