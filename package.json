@@ -35,7 +35,13 @@
     "@rollup/plugin-typescript": "^11.1.4",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/uuid": "^9.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
     "dotenv": "^16.3.1",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^40.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
     "rollup": "^3.29.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
@@ -43,7 +49,7 @@
     "vitest-mock-extended": "^1.2.1"
   },
   "dependencies": {
-    "uuid": "^9.0.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^9.0.1"
   }
 }
