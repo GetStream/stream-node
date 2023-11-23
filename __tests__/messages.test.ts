@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamChannel } from '../src/StreamChannel';
 import { StreamClient } from '../src/StreamClient';
@@ -187,5 +187,9 @@ describe('messages API', () => {
     ).rejects.toThrowError(
       `Stream error code 4: GetMessage failed with error: "Message with id ${messageId} doesn't exist"`,
     );
+  });
+
+  afterAll(async () => {
+    await channel.delete({ hardDelete: true });
   });
 });

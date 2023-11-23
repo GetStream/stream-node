@@ -1,0 +1,32 @@
+name: Cleanup after tests
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  STREAM_API_KEY: ${{ vars.TEST_API_KEY }}
+  STREAM_SECRET: ${{ secrets.TEST_SECRET }}
+
+# Runs midnight at every Sunday https://crontab.guru/weekly
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+
+cleanup:
+  runs-on: ubuntu-latest
+  concurrency:
+    group: test-workflow
+    cancel-in-progress: true
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: "yarn"
+
+    - name: Install Dependencies
+      run: yarn install --immutable
+    - name: Build
+      run: yarn build
+    - name: Cleanup
+      run: node test-cleanup.js

@@ -57,7 +57,9 @@ const cleanUpChannels = async () => {
 
   await Promise.all(
     channels.map((c) =>
-      client.chat.channel(c.channel.type, c.channel.id).delete(),
+      client.chat
+        .channel(c.channel.type, c.channel.id)
+        .delete({ hardDelete: true }),
     ),
   );
 };
