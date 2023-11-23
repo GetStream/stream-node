@@ -28,7 +28,7 @@ export class StreamCall {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration({
       basePath:
-        this.streamClient.options.basePath ||
+        this.streamClient.options.basePath ??
         "https://video.stream-io-api.com/video",
     });
     this.apiClient = new DefaultApi(configuration);
@@ -50,13 +50,13 @@ export class StreamCall {
   };
 
   get = (request?: OmitTypeId<GetCallRequest>) => {
-    return this.apiClient.getCall({ ...(request || {}), ...this.baseRequest });
+    return this.apiClient.getCall({ ...(request ?? {}), ...this.baseRequest });
   };
 
   getOrCreate = (videoGetOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
     return this.apiClient.getOrCreateCall({
       ...this.baseRequest,
-      videoGetOrCreateCallRequest: videoGetOrCreateCallRequest || {},
+      videoGetOrCreateCallRequest: videoGetOrCreateCallRequest ?? {},
     });
   };
 
@@ -67,7 +67,7 @@ export class StreamCall {
   goLive = (videoGoLiveRequest?: VideoGoLiveRequest) => {
     return this.apiClient.goLive({
       ...this.baseRequest,
-      videoGoLiveRequest: videoGoLiveRequest || {},
+      videoGoLiveRequest: videoGoLiveRequest ?? {},
     });
   };
 
@@ -86,7 +86,7 @@ export class StreamCall {
 
   queryMembers = (request?: OmitTypeId<VideoQueryMembersRequest>) => {
     return this.apiClient.queryMembers({
-      videoQueryMembersRequest: { ...(request || {}), ...this.baseRequest },
+      videoQueryMembersRequest: { ...(request ?? {}), ...this.baseRequest },
     });
   };
 

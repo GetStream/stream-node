@@ -17,7 +17,7 @@ export class StreamVideoClient {
   constructor(private readonly streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration({
       basePath:
-        this.streamClient.options.basePath ||
+        this.streamClient.options.basePath ??
         "https://video.stream-io-api.com/video",
     });
     this.apiClient = new DefaultApi(configuration);
@@ -30,7 +30,7 @@ export class StreamVideoClient {
 
   queryCalls = (request?: VideoQueryCallsRequest) => {
     return this.apiClient.queryCalls({
-      videoQueryCallsRequest: request || {},
+      videoQueryCallsRequest: request ?? {},
     });
   };
 

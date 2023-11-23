@@ -98,7 +98,7 @@ export class StreamClient {
       this.options.basePath = config;
       this.options.timeout = StreamClient.DEFAULT_TIMEOUT;
     } else {
-      this.options.timeout = config?.timeout || StreamClient.DEFAULT_TIMEOUT;
+      this.options.timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     }
 
     const chatConfiguration = this.getConfiguration();
@@ -291,9 +291,9 @@ export class StreamClient {
   queryUsers = async (payload: QueryUsersRequest) => {
     payload.user = this.mapCustomDataBeforeSend(payload.user);
     const response = await this.usersApi.queryUsers({ payload });
-    // @ts-expect-error
-    response.users = response.users.map(
-      (u) => this.mapCustomDataAfterReceive(u)!
+    // @ts-expect-error typing problem
+    response.users = response.users.map((u) =>
+      this.mapCustomDataAfterReceive(u)
     );
 
     return response;
@@ -439,7 +439,7 @@ export class StreamClient {
 
         return mapping[name];
       },
-      basePath: options?.basePath || this.options.basePath,
+      basePath: options?.basePath ?? this.options.basePath,
       headers: {
         "X-Stream-Client": "stream-node-" + process.env.PKG_VERSION,
       },
@@ -547,13 +547,13 @@ export class StreamClient {
     return { ...copy, ...user.custom };
   };
 
-  private readonly mapCustomDataAfterReceive = (
-    user: UserObject | UserResponse | undefined
-  ) => {
+  private mapCustomDataAfterReceive<T = UserObject | UserResponse | undefined>(
+    user: T
+  ) {
     if (!user) {
       return undefined;
     }
-    // @ts-expect-error
+    // @ts-expect-error typing problem
     const result: UserObject | UserResponse = {};
     Object.keys(user).forEach((key) => {
       if (!this.reservedKeywords.includes(key)) {
@@ -567,5 +567,5 @@ export class StreamClient {
     });
 
     return result;
-  };
+  }
 }

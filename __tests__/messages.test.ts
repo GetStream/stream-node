@@ -36,7 +36,7 @@ describe("messages API", () => {
     await channel.getOrCreate({
       data: {
         created_by: { id: user.id },
-        members: [{ user: user }, { user: user2 }],
+        members: [{ user }, { user: user2 }],
       },
     });
   });

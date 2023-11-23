@@ -36,7 +36,7 @@ describe("channel types CRUD API", () => {
 
     const getResponse = await client.chat.getChannelType({ name: channelType });
 
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     expect(getResponse.automod).toBe(
       CreateChannelTypeRequestAutomodEnum.SIMPLE
     );

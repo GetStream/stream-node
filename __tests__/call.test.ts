@@ -191,7 +191,7 @@ describe("call API", () => {
 
     it("query recordings", async () => {
       // somewhat dummy test, we should do a proper test in the future
-      let response = await call.listRecordings();
+      const response = await call.listRecordings();
 
       expect(response.recordings).toBeDefined();
     });
