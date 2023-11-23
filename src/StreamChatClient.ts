@@ -3,20 +3,20 @@ import { StreamClient } from "./StreamClient";
 import { ChannelTypesApi, ChannelsApi, CreateBlockListRequest, CreateChannelTypeRequest, CreateCommandRequest, CustomCommandsApi, DeleteBlockListRequest, DeleteChannelTypeRequest, DeleteCommandRequest, ExportChannelsRequest, GetBlockListRequest, GetChannelTypeRequest, GetCommandRequest, GetExportChannelsStatusRequest, QueryChannelsRequest, SearchRequest, SettingsApi, UpdateBlockListRequest, UpdateChannelTypeRequest, UpdateCommandRequest } from "./gen/chat";
 
 export class StreamChatClient {
-  private settingsApi: SettingsApi;
-  private channelTypesApi: ChannelTypesApi;
-  private channelsApi: ChannelsApi;
-  private commandsApi: CustomCommandsApi;
+  private readonly settingsApi: SettingsApi;
+  private readonly channelTypesApi: ChannelTypesApi;
+  private readonly channelsApi: ChannelsApi;
+  private readonly commandsApi: CustomCommandsApi;
 
-  constructor(private streamClient: StreamClient) {
+  constructor(private readonly streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration();
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.settingsApi = new SettingsApi(configuration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.channelTypesApi = new ChannelTypesApi(configuration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.channelsApi = new ChannelsApi(configuration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.commandsApi = new CustomCommandsApi(configuration);
   }
 
@@ -69,7 +69,7 @@ export class StreamChatClient {
   }
 
   searchMessages = (payload?: SearchRequest) => {
-    return this.channelsApi.search({payload: payload});
+    return this.channelsApi.search({payload});
   }
 
   exportChannels = (exportChannelsRequest?: ExportChannelsRequest) => {

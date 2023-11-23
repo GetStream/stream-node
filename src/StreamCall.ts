@@ -21,9 +21,9 @@ export class StreamCall {
   private readonly apiClient: DefaultApi;
 
   constructor(
-    private streamClient: StreamClient,
-    private type: string,
-    private id: string
+    private readonly streamClient: StreamClient,
+    private readonly type: string,
+    private readonly id: string
   ) {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration({
@@ -90,7 +90,7 @@ export class StreamCall {
     });
   };
 
-  sendCustomEvent = (event: { [key: string]: any }) => {
+  sendCustomEvent = (event: Record<string, any>) => {
     return this.apiClient.sendEvent({
       videoSendEventRequest: { custom: event },
       ...this.baseRequest,

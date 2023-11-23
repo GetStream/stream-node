@@ -14,7 +14,7 @@ export class StreamVideoClient {
   private readonly apiClient: DefaultApi;
   private readonly videoServerSideApiClient: ServerSideApi;
 
-  constructor(private streamClient: StreamClient) {
+  constructor(private readonly streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration({
       basePath:
         this.streamClient.options.basePath ||

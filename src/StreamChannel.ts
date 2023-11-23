@@ -8,16 +8,16 @@ export class StreamChannel {
   private readonly eventsApi: EventsApi;
 
   constructor(
-    private streamClient: StreamClient,
+    private readonly streamClient: StreamClient,
     public readonly type: string,
     public id?: string
   ) {
     const configuration = this.streamClient.getConfiguration();
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.channelsApi = new ChannelsApi(configuration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.messagesApi = new MessagesApi(configuration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.eventsApi = new EventsApi(configuration);
   }
 
@@ -39,7 +39,7 @@ export class StreamChannel {
 
   getOrCreate = async (channelGetOrCreateRequest?: ChannelGetOrCreateRequest) => {
     if (this.id) {
-      return this.channelsApi.getOrCreateChannel({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || {}});
+      return await this.channelsApi.getOrCreateChannel({...this.baseRequest, channelGetOrCreateRequest: channelGetOrCreateRequest || {}});
     } else {
       throw new Error(`This operation isn't yet implemented`);
       // if (!channelGetOrCreateRequest?.data?.members) {

@@ -58,10 +58,10 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { JWTServerToken, JWTUserToken } from "./utils/create-token";
 
-export type StreamClientOptions = {
+export interface StreamClientOptions {
   timeout?: number;
   basePath?: string;
-};
+}
 
 export class StreamClient {
   public readonly video: StreamVideoClient;
@@ -76,7 +76,7 @@ export class StreamClient {
   private readonly settingsApi: SettingsApi;
   private readonly eventsApi: EventsApi;
   private readonly tasksApi: TasksApi;
-  private token: string;
+  private readonly token: string;
   private static readonly DEFAULT_TIMEOUT = 3000;
 
   /**
@@ -86,8 +86,8 @@ export class StreamClient {
    * @param config can be a string, which will be interpreted as base path (deprecated), or a config object
    */
   constructor(
-    private apiKey: string,
-    private secret: string,
+    private readonly apiKey: string,
+    private readonly secret: string,
     readonly config?: string | StreamClientOptions
   ) {
     this.token = JWTServerToken(this.secret);
@@ -102,23 +102,23 @@ export class StreamClient {
     }
 
     const chatConfiguration = this.getConfiguration();
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.usersApi = new UsersApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.devicesApi = new DevicesApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.pushApi = new PushApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.serversideApi = new ServerSideApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.testingApi = new TestingApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.permissionsApi = new PermissionsV2Api(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.settingsApi = new SettingsApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.eventsApi = new EventsApi(chatConfiguration);
-    //@ts-expect-error typing problem
+    // @ts-expect-error typing problem
     this.tasksApi = new TasksApi(chatConfiguration);
   }
 
@@ -188,9 +188,11 @@ export class StreamClient {
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
     return this.devicesApi.createDevice({ createDeviceRequest });
   };
+
   deleteDevice = (requestParameters: DeleteDeviceRequest) => {
     return this.devicesApi.deleteDevice(requestParameters);
   };
+
   listDevices = (requestParameters: ListDevicesRequest) => {
     return this.devicesApi.listDevices(requestParameters);
   };
@@ -429,7 +431,7 @@ export class StreamClient {
   getConfiguration = (options?: { basePath?: string }) => {
     return new Configuration({
       apiKey: (name: string) => {
-        const mapping: { [key: string]: string } = {
+        const mapping: Record<string, string> = {
           "Stream-Auth-Type": "jwt",
           api_key: this.apiKey,
           Authorization: this.token,
@@ -513,7 +515,7 @@ export class StreamClient {
     });
   };
 
-  private reservedKeywords = [
+  private readonly reservedKeywords = [
     "ban_expires",
     "banned",
     "id",
@@ -533,7 +535,8 @@ export class StreamClient {
     "name",
     "image",
   ];
-  private mapCustomDataBeforeSend = (
+
+  private readonly mapCustomDataBeforeSend = (
     user: UserObject | UserObjectRequest | UserResponse | undefined
   ) => {
     if (!user) {
@@ -544,14 +547,14 @@ export class StreamClient {
     return { ...copy, ...user.custom };
   };
 
-  private mapCustomDataAfterReceive = (
+  private readonly mapCustomDataAfterReceive = (
     user: UserObject | UserResponse | undefined
   ) => {
     if (!user) {
       return undefined;
     }
     // @ts-expect-error
-    let result: UserObject | UserResponse = {};
+    const result: UserObject | UserResponse = {};
     Object.keys(user).forEach((key) => {
       if (!this.reservedKeywords.includes(key)) {
         if (!result.custom) {
