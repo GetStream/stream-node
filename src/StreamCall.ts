@@ -34,10 +34,6 @@ export class StreamCall {
     this.apiClient = new DefaultApi(configuration);
   }
 
-  accept = () => {
-    return this.apiClient.acceptCall(this.baseRequest);
-  };
-
   blockUser = (videoBlockUserRequest: VideoBlockUserRequest) => {
     return this.apiClient.blockUser({
       ...this.baseRequest,
