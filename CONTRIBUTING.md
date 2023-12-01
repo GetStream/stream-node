@@ -22,8 +22,11 @@ We use [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier
 
 ## Commit message convention
 
-Since we're autogenerating our [CHANGELOG](./CHANGELOG.md), we need to follow a specific commit message convention.
-You can read about conventional commits [here](https://www.conventionalcommits.org/). Here's how a usual commit message looks like for a new feature: `feat: allow provided config object to extend other configs`. A bugfix: `fix: prevent racing of requests`.
+Since we're autogenerating our [CHANGELOG](./CHANGELOG.md) and version bump, we need to follow a specific commit message convention on the `main` branch.
+
+The recommended approach is to use "Squash and merge" and make sure the **PR title** follows the [conventional commits format](https://www.conventionalcommits.org/). Here's how a usual PR title looks like for a new feature: `feat: allow provided config object to extend other configs`. A bugfix: `fix: prevent racing of requests`. We have a CI action to make sure the PR title follows the necessary format.
+
+If you don't want to squash your commits, make sure that your commits follow the above format.
 
 ## Generating code from Open API
 
