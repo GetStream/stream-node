@@ -381,6 +381,12 @@ export interface App {
     custom_action_handler_url: string;
     /**
      * 
+     * @type {DataDogInfo}
+     * @memberof App
+     */
+    datadog_info?: DataDogInfo;
+    /**
+     * 
      * @type {boolean}
      * @memberof App
      */
@@ -4930,6 +4936,44 @@ export interface CreateRoleResponse {
      * @memberof CreateRoleResponse
      */
     role: Role;
+}
+/**
+ * 
+ * @export
+ * @interface DataDogInfo
+ */
+export interface DataDogInfo {
+    /**
+     * 
+     * @type {string}
+     * @memberof DataDogInfo
+     */
+    api_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DataDogInfo
+     */
+    site: string;
+}
+/**
+ * 
+ * @export
+ * @interface DataDogInfoRequest
+ */
+export interface DataDogInfoRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof DataDogInfoRequest
+     */
+    api_key?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DataDogInfoRequest
+     */
+    site?: string;
 }
 /**
  * 
@@ -13446,6 +13490,12 @@ export interface UpdateAppRequest {
      * @memberof UpdateAppRequest
      */
     custom_action_handler_url?: string;
+    /**
+     * 
+     * @type {DataDogInfoRequest}
+     * @memberof UpdateAppRequest
+     */
+    datadog_info?: DataDogInfoRequest;
     /**
      * 
      * @type {boolean}
