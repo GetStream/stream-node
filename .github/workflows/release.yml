@@ -26,6 +26,6 @@ jobs:
         run: yarn install --immutable
 
       - name: Publish package
-        run:
+        run: |
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           npm publish
