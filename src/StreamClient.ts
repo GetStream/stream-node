@@ -57,6 +57,7 @@ import {
 } from './gen/video';
 import { v4 as uuidv4 } from 'uuid';
 import { JWTServerToken, JWTUserToken } from './utils/create-token';
+import crypto from 'crypto';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -426,6 +427,20 @@ export class StreamClient {
 
   getTaskStatus = (request: GetTaskRequest) => {
     return this.tasksApi.getTask(request);
+  };
+
+  verifyWebhook = (requestBody: string | Buffer, xSignature: string) => {
+    const key = Buffer.from(this.secret, 'utf8');
+    const hash = crypto
+      .createHmac('sha256', key)
+      .update(requestBody)
+      .digest('hex');
+
+    try {
+      return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(xSignature));
+    } catch (err) {
+      return false;
+    }
   };
 
   getConfiguration = (options?: { basePath?: string }) => {
