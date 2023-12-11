@@ -81,32 +81,31 @@ describe('call types CRUD API', () => {
     expect(readResponse.call_types[callTypeName].name).toBe(callTypeName);
   });
 
-  // TODO: fix backend error
-  // it('restrict call access', async () => {
-  //   let callType = (await client.video.listCallTypes()).call_types[
-  //     callTypeName
-  //   ];
-  //   const userGrants = callType.grants['user'].filter(
-  //     (c) => c !== VideoOwnCapability.JOIN_CALL,
-  //   );
-  //   const callMemberGrants = callType.grants['call_member'];
-  //   if (!callMemberGrants.includes(VideoOwnCapability.JOIN_CALL)) {
-  //     callMemberGrants.push(VideoOwnCapability.JOIN_CALL);
-  //   }
+  it('restrict call access', async () => {
+    let callType = (await client.video.listCallTypes()).call_types[
+      callTypeName
+    ];
+    const userGrants = callType.grants['user'].filter(
+      (c) => c !== VideoOwnCapability.JOIN_CALL,
+    );
+    const callMemberGrants = callType.grants['call_member'];
+    if (!callMemberGrants.includes(VideoOwnCapability.JOIN_CALL)) {
+      callMemberGrants.push(VideoOwnCapability.JOIN_CALL);
+    }
 
-  //   await client.video.updateCallType(callTypeName, {
-  //     grants: { call_member: callMemberGrants },
-  //   });
+    await client.video.updateCallType(callTypeName, {
+      grants: { user: userGrants, call_member: callMemberGrants },
+    });
 
-  //   callType = (await client.video.listCallTypes()).call_types[callTypeName];
+    callType = (await client.video.listCallTypes()).call_types[callTypeName];
 
-  //   expect(callType.grants.user.includes(VideoOwnCapability.JOIN_CALL)).toBe(
-  //     false,
-  //   );
-  //   expect(
-  //     callType.grants.call_member.includes(VideoOwnCapability.JOIN_CALL),
-  //   ).toBe(true);
-  // });
+    expect(callType.grants.user.includes(VideoOwnCapability.JOIN_CALL)).toBe(
+      false,
+    );
+    expect(
+      callType.grants.call_member.includes(VideoOwnCapability.JOIN_CALL),
+    ).toBe(true);
+  });
 
   it('update', async () => {
     const updateResponse = await client.video.updateCallType(callTypeName, {
