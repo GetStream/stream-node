@@ -85,10 +85,10 @@ describe('call types CRUD API', () => {
     let callType = (await client.video.listCallTypes()).call_types[
       callTypeName
     ];
-    const userGrants = callType.grants['user'].filter(
+    const userGrants = callType.grants.user.filter(
       (c) => c !== VideoOwnCapability.JOIN_CALL,
     );
-    const callMemberGrants = callType.grants['call_member'];
+    const callMemberGrants = callType.grants.call_member;
     if (!callMemberGrants.includes(VideoOwnCapability.JOIN_CALL)) {
       callMemberGrants.push(VideoOwnCapability.JOIN_CALL);
     }
