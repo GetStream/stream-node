@@ -443,7 +443,7 @@ export class StreamClient {
     }
   };
 
-  getConfiguration = (options?: { basePath?: string }) => {
+  getConfiguration = (product: 'chat' | 'video' = 'chat') => {
     return new Configuration({
       apiKey: (name: string) => {
         const mapping: Record<string, string> = {
@@ -454,7 +454,11 @@ export class StreamClient {
 
         return mapping[name];
       },
-      basePath: options?.basePath ?? this.options.basePath,
+      basePath:
+        this.options.basePath ||
+        (product === 'chat'
+          ? 'https://chat.stream-io-api.com'
+          : 'https://video.stream-io-api.com'),
       headers: {
         'X-Stream-Client': 'stream-node-' + process.env.PKG_VERSION,
       },

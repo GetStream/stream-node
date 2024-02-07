@@ -26,11 +26,7 @@ export class StreamCall {
     private readonly id: string,
   ) {
     this.baseRequest = { id: this.id, type: this.type };
-    const configuration = this.streamClient.getConfiguration({
-      basePath:
-        this.streamClient.options.basePath ??
-        'https://video.stream-io-api.com/video',
-    });
+    const configuration = this.streamClient.getConfiguration('video');
     this.apiClient = new DefaultApi(configuration);
   }
 
