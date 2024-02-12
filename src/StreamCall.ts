@@ -13,6 +13,7 @@ import {
   VideoUpdateCallMembersRequest,
   VideoUpdateUserPermissionsRequest,
   VideoQueryMembersRequest,
+  VideoStartRecordingRequest,
 } from './gen/video';
 import { OmitTypeId } from './types';
 
@@ -26,11 +27,7 @@ export class StreamCall {
     private readonly id: string,
   ) {
     this.baseRequest = { id: this.id, type: this.type };
-    const configuration = this.streamClient.getConfiguration({
-      basePath:
-        this.streamClient.options.basePath ??
-        'https://video.stream-io-api.com/video',
-    });
+    const configuration = this.streamClient.getConfiguration('video');
     this.apiClient = new DefaultApi(configuration);
   }
 
@@ -97,8 +94,11 @@ export class StreamCall {
     return this.apiClient.startHLSBroadcasting({ ...this.baseRequest });
   };
 
-  startRecording = () => {
-    return this.apiClient.startRecording({ ...this.baseRequest });
+  startRecording = (request?: VideoStartRecordingRequest) => {
+    return this.apiClient.startRecording({
+      ...this.baseRequest,
+      videoStartRecordingRequest: request ?? {},
+    });
   };
 
   startTranscription = () => {

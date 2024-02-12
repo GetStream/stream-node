@@ -198,6 +198,37 @@ export type VideoAudioSettingsRequestDefaultDeviceEnum = typeof VideoAudioSettin
 /**
  * 
  * @export
+ * @interface VideoAzureRequest
+ */
+export interface VideoAzureRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_account_name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_client_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_client_secret: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_tenant_id: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoBackstageSettings
  */
 export interface VideoBackstageSettings {
@@ -248,44 +279,6 @@ export interface VideoBlockUserResponse {
     duration: string;
 }
 /**
- * This event is sent to call participants to notify when a user is blocked on a call, clients can use this event to show a notification. 
- * If the user is the current user, the client should leave the call screen as well
- * @export
- * @interface VideoBlockedUserEvent
- */
-export interface VideoBlockedUserEvent {
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoBlockedUserEvent
-     */
-    blocked_by_user?: VideoUserResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoBlockedUserEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoBlockedUserEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.blocked_user" in this case
-     * @type {string}
-     * @memberof VideoBlockedUserEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoBlockedUserEvent
-     */
-    user: VideoUserResponse;
-}
-/**
  * 
  * @export
  * @interface VideoBroadcastSettingsRequest
@@ -324,199 +317,6 @@ export interface VideoBroadcastSettingsResponse {
     hls: VideoHLSSettingsResponse;
 }
 /**
- * This event is sent when a user accepts a notification to join a call.
- * @export
- * @interface VideoCallAcceptedEvent
- */
-export interface VideoCallAcceptedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallAcceptedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallAcceptedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallAcceptedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.accepted" in this case
-     * @type {string}
-     * @memberof VideoCallAcceptedEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCallAcceptedEvent
-     */
-    user: VideoUserResponse;
-}
-/**
- * This event is sent when a call is created. Clients receiving this event should check if the ringing 
- * field is set to true and if so, show the call screen
- * @export
- * @interface VideoCallCreatedEvent
- */
-export interface VideoCallCreatedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallCreatedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallCreatedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallCreatedEvent
-     */
-    created_at: string;
-    /**
-     * the members added to this call
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallCreatedEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * The type of event: "call.created" in this case
-     * @type {string}
-     * @memberof VideoCallCreatedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when a call is mark as ended for all its participants. Clients receiving this event should leave the call screen
- * @export
- * @interface VideoCallEndedEvent
- */
-export interface VideoCallEndedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallEndedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallEndedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallEndedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.ended" in this case
-     * @type {string}
-     * @memberof VideoCallEndedEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCallEndedEvent
-     */
-    user?: VideoUserResponse;
-}
-/**
- * This event is sent when HLS broadcasting has failed
- * @export
- * @interface VideoCallHLSBroadcastingFailedEvent
- */
-export interface VideoCallHLSBroadcastingFailedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingFailedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingFailedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.hls_broadcasting_failed" in this case
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingFailedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when HLS broadcasting has started
- * @export
- * @interface VideoCallHLSBroadcastingStartedEvent
- */
-export interface VideoCallHLSBroadcastingStartedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStartedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStartedEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStartedEvent
-     */
-    hls_playlist_url: string;
-    /**
-     * The type of event: "call.hls_broadcasting_started" in this case
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStartedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when HLS broadcasting has stopped
- * @export
- * @interface VideoCallHLSBroadcastingStoppedEvent
- */
-export interface VideoCallHLSBroadcastingStoppedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStoppedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStoppedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.hls_broadcasting_stopped" in this case
-     * @type {string}
-     * @memberof VideoCallHLSBroadcastingStoppedEvent
-     */
-    type: string;
-}
-/**
  * 
  * @export
  * @interface VideoCallIngressResponse
@@ -528,240 +328,6 @@ export interface VideoCallIngressResponse {
      * @memberof VideoCallIngressResponse
      */
     rtmp: VideoRTMPIngress;
-}
-/**
- * This event is sent when a call is started. Clients receiving this event should start the call.
- * @export
- * @interface VideoCallLiveStartedEvent
- */
-export interface VideoCallLiveStartedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallLiveStartedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallLiveStartedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallLiveStartedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.live_started" in this case
-     * @type {string}
-     * @memberof VideoCallLiveStartedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when one or more members are added to a call
- * @export
- * @interface VideoCallMemberAddedEvent
- */
-export interface VideoCallMemberAddedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallMemberAddedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberAddedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberAddedEvent
-     */
-    created_at: string;
-    /**
-     * the members added to this call
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallMemberAddedEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * The type of event: "call.member_added" in this case
-     * @type {string}
-     * @memberof VideoCallMemberAddedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when one or more members are removed from a call
- * @export
- * @interface VideoCallMemberRemovedEvent
- */
-export interface VideoCallMemberRemovedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallMemberRemovedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberRemovedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberRemovedEvent
-     */
-    created_at: string;
-    /**
-     * the list of member IDs removed from the call
-     * @type {Array<string>}
-     * @memberof VideoCallMemberRemovedEvent
-     */
-    members: Array<string>;
-    /**
-     * The type of event: "call.member_removed" in this case
-     * @type {string}
-     * @memberof VideoCallMemberRemovedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when one or more members are updated
- * @export
- * @interface VideoCallMemberUpdatedEvent
- */
-export interface VideoCallMemberUpdatedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallMemberUpdatedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedEvent
-     */
-    created_at: string;
-    /**
-     * The list of members that were updated
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallMemberUpdatedEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * The type of event: "call.member_updated" in this case
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when one or more members get its role updated
- * @export
- * @interface VideoCallMemberUpdatedPermissionEvent
- */
-export interface VideoCallMemberUpdatedPermissionEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    call_cid: string;
-    /**
-     * The capabilities by role for this call
-     * @type {{ [key: string]: Array<string>; }}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    capabilities_by_role: { [key: string]: Array<string>; };
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    created_at: string;
-    /**
-     * The list of members that were updated
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * The type of event: "call.member_added" in this case
-     * @type {string}
-     * @memberof VideoCallMemberUpdatedPermissionEvent
-     */
-    type: string;
-}
-/**
- * This event is sent to all call members to notify they are getting called
- * @export
- * @interface VideoCallNotificationEvent
- */
-export interface VideoCallNotificationEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallNotificationEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallNotificationEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallNotificationEvent
-     */
-    created_at: string;
-    /**
-     * Call members
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallNotificationEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallNotificationEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.notification" in this case
-     * @type {string}
-     * @memberof VideoCallNotificationEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCallNotificationEvent
-     */
-    user: VideoUserResponse;
 }
 /**
  * 
@@ -795,37 +361,6 @@ export interface VideoCallParticipantResponse {
     user_session_id: string;
 }
 /**
- * This event is sent when a reaction is sent in a call, clients should use this to show the reaction in the call screen
- * @export
- * @interface VideoCallReactionEvent
- */
-export interface VideoCallReactionEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallReactionEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallReactionEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {VideoReactionResponse}
-     * @memberof VideoCallReactionEvent
-     */
-    reaction: VideoReactionResponse;
-    /**
-     * The type of event: "call.reaction_new" in this case
-     * @type {string}
-     * @memberof VideoCallReactionEvent
-     */
-    type: string;
-}
-/**
  * CallRecording represents a recording of a call.
  * @export
  * @interface VideoCallRecording
@@ -857,149 +392,6 @@ export interface VideoCallRecording {
     url: string;
 }
 /**
- * This event is sent when call recording has failed
- * @export
- * @interface VideoCallRecordingFailedEvent
- */
-export interface VideoCallRecordingFailedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingFailedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingFailedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.recording_failed" in this case
-     * @type {string}
-     * @memberof VideoCallRecordingFailedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when call recording is ready
- * @export
- * @interface VideoCallRecordingReadyEvent
- */
-export interface VideoCallRecordingReadyEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingReadyEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {VideoCallRecording}
-     * @memberof VideoCallRecordingReadyEvent
-     */
-    call_recording: VideoCallRecording;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingReadyEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.recording_ready" in this case
-     * @type {string}
-     * @memberof VideoCallRecordingReadyEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when call recording has started
- * @export
- * @interface VideoCallRecordingStartedEvent
- */
-export interface VideoCallRecordingStartedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingStartedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingStartedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.recording_started" in this case
-     * @type {string}
-     * @memberof VideoCallRecordingStartedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when call recording has stopped
- * @export
- * @interface VideoCallRecordingStoppedEvent
- */
-export interface VideoCallRecordingStoppedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingStoppedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRecordingStoppedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.recording_stopped" in this case
-     * @type {string}
-     * @memberof VideoCallRecordingStoppedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when a user rejects a notification to join a call.
- * @export
- * @interface VideoCallRejectedEvent
- */
-export interface VideoCallRejectedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallRejectedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRejectedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRejectedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.rejected" in this case
-     * @type {string}
-     * @memberof VideoCallRejectedEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCallRejectedEvent
-     */
-    user: VideoUserResponse;
-}
-/**
  * 
  * @export
  * @interface VideoCallRequest
@@ -1019,10 +411,10 @@ export interface VideoCallRequest {
     created_by_id?: string;
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoCallRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
     /**
      * 
      * @type {Array<VideoMemberRequest>}
@@ -1092,10 +484,10 @@ export interface VideoCallResponse {
     current_session_id: string;
     /**
      * Custom data for this object
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoCallResponse
      */
-    custom: { [key: string]: any; };
+    custom: object;
     /**
      * 
      * @type {VideoEgressResponse}
@@ -1176,166 +568,6 @@ export interface VideoCallResponse {
     updated_at: string;
 }
 /**
- * This event is sent to all call members to notify they are getting called
- * @export
- * @interface VideoCallRingEvent
- */
-export interface VideoCallRingEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallRingEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRingEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallRingEvent
-     */
-    created_at: string;
-    /**
-     * Call members
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoCallRingEvent
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallRingEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.notification" in this case
-     * @type {string}
-     * @memberof VideoCallRingEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCallRingEvent
-     */
-    user: VideoUserResponse;
-}
-/**
- * This event is sent when a call session ends
- * @export
- * @interface VideoCallSessionEndedEvent
- */
-export interface VideoCallSessionEndedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallSessionEndedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionEndedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionEndedEvent
-     */
-    created_at: string;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallSessionEndedEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.session_ended" in this case
-     * @type {string}
-     * @memberof VideoCallSessionEndedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when a participant joins a call session
- * @export
- * @interface VideoCallSessionParticipantJoinedEvent
- */
-export interface VideoCallSessionParticipantJoinedEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionParticipantJoinedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionParticipantJoinedEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {VideoCallParticipantResponse}
-     * @memberof VideoCallSessionParticipantJoinedEvent
-     */
-    participant: VideoCallParticipantResponse;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallSessionParticipantJoinedEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.session_participant_joined" in this case
-     * @type {string}
-     * @memberof VideoCallSessionParticipantJoinedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when a participant leaves a call session
- * @export
- * @interface VideoCallSessionParticipantLeftEvent
- */
-export interface VideoCallSessionParticipantLeftEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionParticipantLeftEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionParticipantLeftEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {VideoCallParticipantResponse}
-     * @memberof VideoCallSessionParticipantLeftEvent
-     */
-    participant: VideoCallParticipantResponse;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallSessionParticipantLeftEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.session_participant_left" in this case
-     * @type {string}
-     * @memberof VideoCallSessionParticipantLeftEvent
-     */
-    type: string;
-}
-/**
  * 
  * @export
  * @interface VideoCallSessionResponse
@@ -1395,43 +627,6 @@ export interface VideoCallSessionResponse {
      * @memberof VideoCallSessionResponse
      */
     started_at?: string;
-}
-/**
- * This event is sent when a call session starts
- * @export
- * @interface VideoCallSessionStartedEvent
- */
-export interface VideoCallSessionStartedEvent {
-    /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallSessionStartedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionStartedEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallSessionStartedEvent
-     */
-    created_at: string;
-    /**
-     * Call session ID
-     * @type {string}
-     * @memberof VideoCallSessionStartedEvent
-     */
-    session_id: string;
-    /**
-     * The type of event: "call.session_started" in this case
-     * @type {string}
-     * @memberof VideoCallSessionStartedEvent
-     */
-    type: string;
 }
 /**
  * 
@@ -1612,6 +807,12 @@ export interface VideoCallTypeResponse {
     created_at: string;
     /**
      * 
+     * @type {string}
+     * @memberof VideoCallTypeResponse
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoCallTypeResponse
      */
@@ -1642,79 +843,17 @@ export interface VideoCallTypeResponse {
     updated_at: string;
 }
 /**
- * This event is sent when a call is updated, clients should use this update the local state of the call. 
- * This event also contains the capabilities by role for the call, clients should update the own_capability for the current.
+ * 
  * @export
- * @interface VideoCallUpdatedEvent
+ * @interface VideoCheckExternalStorageResponse
  */
-export interface VideoCallUpdatedEvent {
+export interface VideoCheckExternalStorageResponse {
     /**
-     * 
-     * @type {VideoCallResponse}
-     * @memberof VideoCallUpdatedEvent
-     */
-    call: VideoCallResponse;
-    /**
-     * 
+     * Duration of the request in human-readable format
      * @type {string}
-     * @memberof VideoCallUpdatedEvent
+     * @memberof VideoCheckExternalStorageResponse
      */
-    call_cid: string;
-    /**
-     * The capabilities by role for this call
-     * @type {{ [key: string]: Array<string>; }}
-     * @memberof VideoCallUpdatedEvent
-     */
-    capabilities_by_role: { [key: string]: Array<string>; };
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallUpdatedEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.ended" in this case
-     * @type {string}
-     * @memberof VideoCallUpdatedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when a call member is muted
- * @export
- * @interface VideoCallUserMuted
- */
-export interface VideoCallUserMuted {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallUserMuted
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallUserMuted
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCallUserMuted
-     */
-    from_user_id: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VideoCallUserMuted
-     */
-    muted_user_ids: Array<string>;
-    /**
-     * The type of event: "call.user_muted" in this case
-     * @type {string}
-     * @memberof VideoCallUserMuted
-     */
-    type: string;
+    duration: string;
 }
 /**
  * 
@@ -1724,10 +863,10 @@ export interface VideoCallUserMuted {
 export interface VideoConnectUserDetailsRequest {
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoConnectUserDetailsRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
     /**
      * 
      * @type {string}
@@ -1745,69 +884,13 @@ export interface VideoConnectUserDetailsRequest {
      * @type {string}
      * @memberof VideoConnectUserDetailsRequest
      */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoConnectUserDetailsRequest
+     */
     name?: string;
-}
-/**
- * This event is sent when the WS connection is established and authenticated, this event contains the full user object as it is stored on the server
- * @export
- * @interface VideoConnectedEvent
- */
-export interface VideoConnectedEvent {
-    /**
-     * The connection_id for this client
-     * @type {string}
-     * @memberof VideoConnectedEvent
-     */
-    connection_id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoConnectedEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {VideoOwnUserResponse}
-     * @memberof VideoConnectedEvent
-     */
-    me: VideoOwnUserResponse;
-    /**
-     * The type of event: "connection.ok" in this case
-     * @type {string}
-     * @memberof VideoConnectedEvent
-     */
-    type: string;
-}
-/**
- * This event is sent when the WS connection fails
- * @export
- * @interface VideoConnectionErrorEvent
- */
-export interface VideoConnectionErrorEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoConnectionErrorEvent
-     */
-    connection_id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoConnectionErrorEvent
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {VideoAPIError}
-     * @memberof VideoConnectionErrorEvent
-     */
-    error: VideoAPIError | null;
-    /**
-     * The type of event: "connection.ok" in this case
-     * @type {string}
-     * @memberof VideoConnectionErrorEvent
-     */
-    type: string;
 }
 /**
  * 
@@ -1815,6 +898,12 @@ export interface VideoConnectionErrorEvent {
  * @interface VideoCreateCallTypeRequest
  */
 export interface VideoCreateCallTypeRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateCallTypeRequest
+     */
+    external_storage?: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
@@ -1858,6 +947,12 @@ export interface VideoCreateCallTypeResponse {
      * @memberof VideoCreateCallTypeResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateCallTypeResponse
+     */
+    external_storage?: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
@@ -1948,6 +1043,68 @@ export type VideoCreateDeviceRequestPushProviderEnum = typeof VideoCreateDeviceR
 /**
  * 
  * @export
+ * @interface VideoCreateExternalStorageRequest
+ */
+export interface VideoCreateExternalStorageRequest {
+    /**
+     * 
+     * @type {VideoS3Request}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    aws_s3?: VideoS3Request;
+    /**
+     * 
+     * @type {VideoAzureRequest}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    azure_blob?: VideoAzureRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    gcs_credentials?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    storage_type: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCreateExternalStorageResponse
+ */
+export interface VideoCreateExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoCreateExternalStorageResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoCreateGuestRequest
  */
 export interface VideoCreateGuestRequest {
@@ -1984,41 +1141,17 @@ export interface VideoCreateGuestResponse {
     user: VideoUserResponse;
 }
 /**
- * A custom event, this event is used to send custom events to other participants in the call.
+ * 
  * @export
- * @interface VideoCustomVideoEvent
+ * @interface VideoDeleteExternalStorageResponse
  */
-export interface VideoCustomVideoEvent {
+export interface VideoDeleteExternalStorageResponse {
     /**
-     * 
+     * Duration of the request in human-readable format
      * @type {string}
-     * @memberof VideoCustomVideoEvent
+     * @memberof VideoDeleteExternalStorageResponse
      */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoCustomVideoEvent
-     */
-    created_at: string;
-    /**
-     * Custom data for this object
-     * @type {{ [key: string]: any; }}
-     * @memberof VideoCustomVideoEvent
-     */
-    custom: { [key: string]: any; };
-    /**
-     * The type of event, "custom" in this case
-     * @type {string}
-     * @memberof VideoCustomVideoEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoCustomVideoEvent
-     */
-    user: VideoUserResponse;
+    duration: string;
 }
 /**
  * 
@@ -2253,6 +1386,37 @@ export interface VideoEventNotificationSettingsRequest {
 /**
  * 
  * @export
+ * @interface VideoExternalStorageResponse
+ */
+export interface VideoExternalStorageResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    path: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    type: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoGeofenceSettings
  */
 export interface VideoGeofenceSettings {
@@ -2331,6 +1495,12 @@ export interface VideoGetCallTypeResponse {
      * @memberof VideoGetCallTypeResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGetCallTypeResponse
+     */
+    external_storage?: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
@@ -2463,6 +1633,12 @@ export interface VideoGetOrCreateCallResponse {
 export interface VideoGoLiveRequest {
     /**
      * 
+     * @type {string}
+     * @memberof VideoGoLiveRequest
+     */
+    recording_storage_name?: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof VideoGoLiveRequest
      */
@@ -2564,31 +1740,6 @@ export interface VideoHLSSettingsResponse {
 /**
  * 
  * @export
- * @interface VideoHealthCheckEvent
- */
-export interface VideoHealthCheckEvent {
-    /**
-     * The connection_id for this client
-     * @type {string}
-     * @memberof VideoHealthCheckEvent
-     */
-    connection_id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoHealthCheckEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "health.check" in this case
-     * @type {string}
-     * @memberof VideoHealthCheckEvent
-     */
-    type: string;
-}
-/**
- * 
- * @export
  * @interface VideoLayoutSettings
  */
 export interface VideoLayoutSettings {
@@ -2612,10 +1763,10 @@ export interface VideoLayoutSettings {
     name: VideoLayoutSettingsNameEnum;
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoLayoutSettings
      */
-    options?: { [key: string]: any; };
+    options?: object;
 }
 
 
@@ -2657,10 +1808,10 @@ export interface VideoLayoutSettingsRequest {
     name: VideoLayoutSettingsRequestNameEnum;
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoLayoutSettingsRequest
      */
-    options?: { [key: string]: any; };
+    options?: object;
 }
 
 
@@ -2717,6 +1868,25 @@ export interface VideoListDevicesResponse {
 /**
  * 
  * @export
+ * @interface VideoListExternalStorageResponse
+ */
+export interface VideoListExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoListExternalStorageResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {{ [key: string]: VideoExternalStorageResponse; }}
+     * @memberof VideoListExternalStorageResponse
+     */
+    external_storages: { [key: string]: VideoExternalStorageResponse; };
+}
+/**
+ * 
+ * @export
  * @interface VideoListRecordingsResponse
  */
 export interface VideoListRecordingsResponse {
@@ -2741,10 +1911,10 @@ export interface VideoListRecordingsResponse {
 export interface VideoMemberRequest {
     /**
      * Custom data for this object
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoMemberRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
     /**
      * 
      * @type {string}
@@ -2772,10 +1942,10 @@ export interface VideoMemberResponse {
     created_at: string;
     /**
      * Custom member response data
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoMemberResponse
      */
-    custom: { [key: string]: any; };
+    custom: object;
     /**
      * Date/time of deletion
      * @type {string}
@@ -2973,111 +2143,6 @@ export type VideoOwnCapability = typeof VideoOwnCapability[keyof typeof VideoOwn
 /**
  * 
  * @export
- * @interface VideoOwnUserResponse
- */
-export interface VideoOwnUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof VideoOwnUserResponse
-     */
-    custom: { [key: string]: any; };
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    deleted_at?: string;
-    /**
-     * 
-     * @type {Array<VideoDevice>}
-     * @memberof VideoOwnUserResponse
-     */
-    devices: Array<VideoDevice>;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    image?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    role: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VideoOwnUserResponse
-     */
-    teams: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoOwnUserResponse
-     */
-    updated_at: string;
-}
-/**
- * This event is sent when a user requests access to a feature on a call,
- * clients receiving this event should display a permission request to the user
- * @export
- * @interface VideoPermissionRequestEvent
- */
-export interface VideoPermissionRequestEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoPermissionRequestEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoPermissionRequestEvent
-     */
-    created_at: string;
-    /**
-     * The list of permissions requested by the user
-     * @type {Array<string>}
-     * @memberof VideoPermissionRequestEvent
-     */
-    permissions: Array<string>;
-    /**
-     * The type of event: "call.permission_request" in this case
-     * @type {string}
-     * @memberof VideoPermissionRequestEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoPermissionRequestEvent
-     */
-    user: VideoUserResponse;
-}
-/**
- * 
- * @export
  * @interface VideoPinRequest
  */
 export interface VideoPinRequest {
@@ -3115,10 +2180,10 @@ export interface VideoPinResponse {
 export interface VideoQueryCallsRequest {
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoQueryCallsRequest
      */
-    filter_conditions?: { [key: string]: any; };
+    filter_conditions?: object;
     /**
      * 
      * @type {number}
@@ -3189,10 +2254,10 @@ export interface VideoQueryCallsResponse {
 export interface VideoQueryMembersRequest {
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoQueryMembersRequest
      */
-    filter_conditions?: { [key: string]: any; };
+    filter_conditions?: object;
     /**
      * 
      * @type {string}
@@ -3273,37 +2338,6 @@ export interface VideoRTMPIngress {
      * @memberof VideoRTMPIngress
      */
     address: string;
-}
-/**
- * 
- * @export
- * @interface VideoReactionResponse
- */
-export interface VideoReactionResponse {
-    /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof VideoReactionResponse
-     */
-    custom?: { [key: string]: any; };
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoReactionResponse
-     */
-    emoji_code?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoReactionResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoReactionResponse
-     */
-    user: VideoUserResponse;
 }
 /**
  * 
@@ -3445,6 +2479,31 @@ export interface VideoRingSettingsRequest {
 /**
  * 
  * @export
+ * @interface VideoS3Request
+ */
+export interface VideoS3Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_api_key?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_region: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_secret?: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoScreensharingSettings
  */
 export interface VideoScreensharingSettings {
@@ -3488,10 +2547,10 @@ export interface VideoScreensharingSettingsRequest {
 export interface VideoSendEventRequest {
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoSendEventRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
 }
 /**
  * 
@@ -3543,6 +2602,19 @@ export interface VideoStartHLSBroadcastingResponse {
      * @memberof VideoStartHLSBroadcastingResponse
      */
     playlist_url: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoStartRecordingRequest
+ */
+export interface VideoStartRecordingRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoStartRecordingRequest
+     */
+    recording_external_storage?: string;
 }
 /**
  * 
@@ -3806,38 +2878,6 @@ export interface VideoUnblockUserResponse {
     duration: string;
 }
 /**
- * This event is sent when a user is unblocked on a call, 
- * this can be useful to notify the user that they can now join the call again
- * @export
- * @interface VideoUnblockedUserEvent
- */
-export interface VideoUnblockedUserEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoUnblockedUserEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoUnblockedUserEvent
-     */
-    created_at: string;
-    /**
-     * The type of event: "call.unblocked_user" in this case
-     * @type {string}
-     * @memberof VideoUnblockedUserEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoUnblockedUserEvent
-     */
-    user: VideoUserResponse;
-}
-/**
  * 
  * @export
  * @interface VideoUnpinRequest
@@ -3915,10 +2955,10 @@ export interface VideoUpdateCallMembersResponse {
 export interface VideoUpdateCallRequest {
     /**
      * Custom data for this object
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoUpdateCallRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
     /**
      * 
      * @type {VideoCallSettingsRequest}
@@ -3977,6 +3017,12 @@ export interface VideoUpdateCallResponse {
 export interface VideoUpdateCallTypeRequest {
     /**
      * 
+     * @type {string}
+     * @memberof VideoUpdateCallTypeRequest
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoUpdateCallTypeRequest
      */
@@ -4014,6 +3060,12 @@ export interface VideoUpdateCallTypeResponse {
     duration: string;
     /**
      * 
+     * @type {string}
+     * @memberof VideoUpdateCallTypeResponse
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoUpdateCallTypeResponse
      */
@@ -4042,6 +3094,86 @@ export interface VideoUpdateCallTypeResponse {
      * @memberof VideoUpdateCallTypeResponse
      */
     updated_at: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUpdateExternalStorageRequest
+ */
+export interface VideoUpdateExternalStorageRequest {
+    /**
+     * 
+     * @type {VideoS3Request}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    aws_s3?: VideoS3Request;
+    /**
+     * 
+     * @type {VideoAzureRequest}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    azure_blob?: VideoAzureRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    gcs_credentials?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    storage_type: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUpdateExternalStorageResponse
+ */
+export interface VideoUpdateExternalStorageResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    bucket: string;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    path: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    type: string;
 }
 /**
  * 
@@ -4082,43 +3214,6 @@ export interface VideoUpdateUserPermissionsResponse {
     duration: string;
 }
 /**
- * This event is sent to notify about permission changes for a user, clients receiving this event should update their UI accordingly
- * @export
- * @interface VideoUpdatedCallPermissionsEvent
- */
-export interface VideoUpdatedCallPermissionsEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoUpdatedCallPermissionsEvent
-     */
-    call_cid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoUpdatedCallPermissionsEvent
-     */
-    created_at: string;
-    /**
-     * The capabilities of the current user
-     * @type {Array<VideoOwnCapability>}
-     * @memberof VideoUpdatedCallPermissionsEvent
-     */
-    own_capabilities: Array<VideoOwnCapability>;
-    /**
-     * The type of event: "call.permissions_updated" in this case
-     * @type {string}
-     * @memberof VideoUpdatedCallPermissionsEvent
-     */
-    type: string;
-    /**
-     * 
-     * @type {VideoUserResponse}
-     * @memberof VideoUpdatedCallPermissionsEvent
-     */
-    user: VideoUserResponse;
-}
-/**
  * 
  * @export
  * @interface VideoUserRequest
@@ -4126,10 +3221,10 @@ export interface VideoUpdatedCallPermissionsEvent {
 export interface VideoUserRequest {
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoUserRequest
      */
-    custom?: { [key: string]: any; };
+    custom?: object;
     /**
      * User ID
      * @type {string}
@@ -4142,6 +3237,12 @@ export interface VideoUserRequest {
      * @memberof VideoUserRequest
      */
     image?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserRequest
+     */
+    language?: string;
     /**
      * Optional name of user
      * @type {string}
@@ -4175,10 +3276,10 @@ export interface VideoUserResponse {
     created_at: string;
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {object}
      * @memberof VideoUserResponse
      */
-    custom: { [key: string]: any; };
+    custom: object;
     /**
      * Date/time of deletion
      * @type {string}
@@ -4197,6 +3298,12 @@ export interface VideoUserResponse {
      * @memberof VideoUserResponse
      */
     image?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserResponse
+     */
+    language: string;
     /**
      * 
      * @type {string}
@@ -4222,12 +3329,6 @@ export interface VideoUserResponse {
      */
     updated_at: string;
 }
-/**
- * @type VideoVideoEvent
- * The discriminator object for all websocket events, you should use this to map event payloads to their own type
- * @export
- */
-export type VideoVideoEvent = { type: 'call.accepted' } & VideoCallAcceptedEvent | { type: 'call.blocked_user' } & VideoBlockedUserEvent | { type: 'call.created' } & VideoCallCreatedEvent | { type: 'call.ended' } & VideoCallEndedEvent | { type: 'call.hls_broadcasting_failed' } & VideoCallHLSBroadcastingFailedEvent | { type: 'call.hls_broadcasting_started' } & VideoCallHLSBroadcastingStartedEvent | { type: 'call.hls_broadcasting_stopped' } & VideoCallHLSBroadcastingStoppedEvent | { type: 'call.live_started' } & VideoCallLiveStartedEvent | { type: 'call.member_added' } & VideoCallMemberAddedEvent | { type: 'call.member_removed' } & VideoCallMemberRemovedEvent | { type: 'call.member_updated' } & VideoCallMemberUpdatedEvent | { type: 'call.member_updated_permission' } & VideoCallMemberUpdatedPermissionEvent | { type: 'call.notification' } & VideoCallNotificationEvent | { type: 'call.permission_request' } & VideoPermissionRequestEvent | { type: 'call.permissions_updated' } & VideoUpdatedCallPermissionsEvent | { type: 'call.reaction_new' } & VideoCallReactionEvent | { type: 'call.recording_failed' } & VideoCallRecordingFailedEvent | { type: 'call.recording_ready' } & VideoCallRecordingReadyEvent | { type: 'call.recording_started' } & VideoCallRecordingStartedEvent | { type: 'call.recording_stopped' } & VideoCallRecordingStoppedEvent | { type: 'call.rejected' } & VideoCallRejectedEvent | { type: 'call.ring' } & VideoCallRingEvent | { type: 'call.session_ended' } & VideoCallSessionEndedEvent | { type: 'call.session_participant_joined' } & VideoCallSessionParticipantJoinedEvent | { type: 'call.session_participant_left' } & VideoCallSessionParticipantLeftEvent | { type: 'call.session_started' } & VideoCallSessionStartedEvent | { type: 'call.unblocked_user' } & VideoUnblockedUserEvent | { type: 'call.updated' } & VideoCallUpdatedEvent | { type: 'call.user_muted' } & VideoCallUserMuted | { type: 'connection.error' } & VideoConnectionErrorEvent | { type: 'connection.ok' } & VideoConnectedEvent | { type: 'custom' } & VideoCustomVideoEvent | { type: 'health.check' } & VideoHealthCheckEvent;
 /**
  * 
  * @export
@@ -4344,30 +3445,4 @@ export interface VideoWSAuthMessageRequest {
      * @memberof VideoWSAuthMessageRequest
      */
     user_details: VideoConnectUserDetailsRequest;
-}
-/**
- * This is just a placeholder for all client events
- * @export
- * @interface VideoWSCallEvent
- */
-export interface VideoWSCallEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoWSCallEvent
-     */
-    call_cid?: string;
-}
-/**
- * This is just a placeholder for all client events
- * @export
- * @interface VideoWSClientEvent
- */
-export interface VideoWSClientEvent {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoWSClientEvent
-     */
-    connection_id?: string;
 }
