@@ -35,6 +35,17 @@ const cleanupCallTypes = async () => {
   );
 };
 
+const cleanupExternalStorage = async () => {
+  const storage = (await client.video.listExternalStorages()).external_storages;
+  const customStorage = Object.keys(storage).filter((k) =>
+    k.startsWith("streamnodetest"),
+  );
+
+  await Promise.all(
+    customStorage.map((s) => client.video.deleteExternalStorage({ name: s })),
+  );
+};
+
 const cleanUpChannelTypes = async () => {
   const channelTypes = (await client.chat.listChannelTypes()).channel_types;
   const customChannelTypes = Object.keys(channelTypes).filter((type) =>
@@ -115,6 +126,7 @@ const cleanup = async () => {
   await cleanUpCommands();
   await cleanUpRoles();
   await cleanUpUsers();
+  await cleanupExternalStorage();
 };
 
 cleanup().then(() => {

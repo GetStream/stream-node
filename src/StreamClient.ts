@@ -455,7 +455,7 @@ export class StreamClient {
         return mapping[name];
       },
       basePath:
-        this.options.basePath ||
+        this.options.basePath ??
         (product === 'chat'
           ? 'https://chat.stream-io-api.com'
           : 'https://video.stream-io-api.com'),

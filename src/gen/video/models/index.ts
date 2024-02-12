@@ -198,6 +198,37 @@ export type VideoAudioSettingsRequestDefaultDeviceEnum = typeof VideoAudioSettin
 /**
  * 
  * @export
+ * @interface VideoAzureRequest
+ */
+export interface VideoAzureRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_account_name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_client_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_client_secret: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAzureRequest
+     */
+    abs_tenant_id: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoBackstageSettings
  */
 export interface VideoBackstageSettings {
@@ -776,6 +807,12 @@ export interface VideoCallTypeResponse {
     created_at: string;
     /**
      * 
+     * @type {string}
+     * @memberof VideoCallTypeResponse
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoCallTypeResponse
      */
@@ -804,6 +841,19 @@ export interface VideoCallTypeResponse {
      * @memberof VideoCallTypeResponse
      */
     updated_at: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCheckExternalStorageResponse
+ */
+export interface VideoCheckExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoCheckExternalStorageResponse
+     */
+    duration: string;
 }
 /**
  * 
@@ -850,6 +900,12 @@ export interface VideoConnectUserDetailsRequest {
 export interface VideoCreateCallTypeRequest {
     /**
      * 
+     * @type {string}
+     * @memberof VideoCreateCallTypeRequest
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoCreateCallTypeRequest
      */
@@ -891,6 +947,12 @@ export interface VideoCreateCallTypeResponse {
      * @memberof VideoCreateCallTypeResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateCallTypeResponse
+     */
+    external_storage?: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
@@ -981,6 +1043,68 @@ export type VideoCreateDeviceRequestPushProviderEnum = typeof VideoCreateDeviceR
 /**
  * 
  * @export
+ * @interface VideoCreateExternalStorageRequest
+ */
+export interface VideoCreateExternalStorageRequest {
+    /**
+     * 
+     * @type {VideoS3Request}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    aws_s3?: VideoS3Request;
+    /**
+     * 
+     * @type {VideoAzureRequest}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    azure_blob?: VideoAzureRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    gcs_credentials?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCreateExternalStorageRequest
+     */
+    storage_type: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCreateExternalStorageResponse
+ */
+export interface VideoCreateExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoCreateExternalStorageResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoCreateGuestRequest
  */
 export interface VideoCreateGuestRequest {
@@ -1015,6 +1139,19 @@ export interface VideoCreateGuestResponse {
      * @memberof VideoCreateGuestResponse
      */
     user: VideoUserResponse;
+}
+/**
+ * 
+ * @export
+ * @interface VideoDeleteExternalStorageResponse
+ */
+export interface VideoDeleteExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoDeleteExternalStorageResponse
+     */
+    duration: string;
 }
 /**
  * 
@@ -1249,6 +1386,37 @@ export interface VideoEventNotificationSettingsRequest {
 /**
  * 
  * @export
+ * @interface VideoExternalStorageResponse
+ */
+export interface VideoExternalStorageResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    path: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoExternalStorageResponse
+     */
+    type: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoGeofenceSettings
  */
 export interface VideoGeofenceSettings {
@@ -1327,6 +1495,12 @@ export interface VideoGetCallTypeResponse {
      * @memberof VideoGetCallTypeResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGetCallTypeResponse
+     */
+    external_storage?: string;
     /**
      * 
      * @type {{ [key: string]: Array<string>; }}
@@ -1457,6 +1631,12 @@ export interface VideoGetOrCreateCallResponse {
  * @interface VideoGoLiveRequest
  */
 export interface VideoGoLiveRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGoLiveRequest
+     */
+    recording_storage_name?: string;
     /**
      * 
      * @type {boolean}
@@ -1684,6 +1864,25 @@ export interface VideoListDevicesResponse {
      * @memberof VideoListDevicesResponse
      */
     duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoListExternalStorageResponse
+ */
+export interface VideoListExternalStorageResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoListExternalStorageResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {{ [key: string]: VideoExternalStorageResponse; }}
+     * @memberof VideoListExternalStorageResponse
+     */
+    external_storages: { [key: string]: VideoExternalStorageResponse; };
 }
 /**
  * 
@@ -2280,6 +2479,31 @@ export interface VideoRingSettingsRequest {
 /**
  * 
  * @export
+ * @interface VideoS3Request
+ */
+export interface VideoS3Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_api_key?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_region: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoS3Request
+     */
+    s3_secret?: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoScreensharingSettings
  */
 export interface VideoScreensharingSettings {
@@ -2378,6 +2602,19 @@ export interface VideoStartHLSBroadcastingResponse {
      * @memberof VideoStartHLSBroadcastingResponse
      */
     playlist_url: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoStartRecordingRequest
+ */
+export interface VideoStartRecordingRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoStartRecordingRequest
+     */
+    recording_external_storage?: string;
 }
 /**
  * 
@@ -2780,6 +3017,12 @@ export interface VideoUpdateCallResponse {
 export interface VideoUpdateCallTypeRequest {
     /**
      * 
+     * @type {string}
+     * @memberof VideoUpdateCallTypeRequest
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoUpdateCallTypeRequest
      */
@@ -2817,6 +3060,12 @@ export interface VideoUpdateCallTypeResponse {
     duration: string;
     /**
      * 
+     * @type {string}
+     * @memberof VideoUpdateCallTypeResponse
+     */
+    external_storage?: string;
+    /**
+     * 
      * @type {{ [key: string]: Array<string>; }}
      * @memberof VideoUpdateCallTypeResponse
      */
@@ -2845,6 +3094,86 @@ export interface VideoUpdateCallTypeResponse {
      * @memberof VideoUpdateCallTypeResponse
      */
     updated_at: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUpdateExternalStorageRequest
+ */
+export interface VideoUpdateExternalStorageRequest {
+    /**
+     * 
+     * @type {VideoS3Request}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    aws_s3?: VideoS3Request;
+    /**
+     * 
+     * @type {VideoAzureRequest}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    azure_blob?: VideoAzureRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    gcs_credentials?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageRequest
+     */
+    storage_type: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUpdateExternalStorageResponse
+ */
+export interface VideoUpdateExternalStorageResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    bucket: string;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    path: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUpdateExternalStorageResponse
+     */
+    type: string;
 }
 /**
  * 
