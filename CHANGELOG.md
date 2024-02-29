@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.11](https://github.com/GetStream/stream-node/compare/v0.1.10...v0.1.11) (2024-02-29)
+
+
+### Bug Fixes
+
+* add missing dependencies ([#18](https://github.com/GetStream/stream-node/issues/18)) ([5a1a75b](https://github.com/GetStream/stream-node/commit/5a1a75b8125be825788f3f520f29ac1d6024b2b7))
+* persist [@ts-expect-error](https://github.com/ts-expect-error) comments in typing files ([#16](https://github.com/GetStream/stream-node/issues/16)) ([b1d3051](https://github.com/GetStream/stream-node/commit/b1d3051d8146031f7cb6b5f88bc07ee5a916d921))
+
 ## [0.1.10](https://github.com/GetStream/stream-node/compare/v0.1.9...v0.1.10) (2024-02-12)
 
 
