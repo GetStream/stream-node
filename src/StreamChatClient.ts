@@ -31,13 +31,13 @@ export class StreamChatClient {
 
   constructor(private readonly streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration();
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.settingsApi = new SettingsApi(configuration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.channelTypesApi = new ChannelTypesApi(configuration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.channelsApi = new ChannelsApi(configuration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.commandsApi = new CustomCommandsApi(configuration);
   }
 
