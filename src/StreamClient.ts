@@ -103,23 +103,23 @@ export class StreamClient {
     }
 
     const chatConfiguration = this.getConfiguration();
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.usersApi = new UsersApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.devicesApi = new DevicesApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.pushApi = new PushApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.serversideApi = new ServerSideApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.testingApi = new TestingApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.permissionsApi = new PermissionsV2Api(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.settingsApi = new SettingsApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.eventsApi = new EventsApi(chatConfiguration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.tasksApi = new TasksApi(chatConfiguration);
   }
 
@@ -292,7 +292,7 @@ export class StreamClient {
   queryUsers = async (payload: QueryUsersRequest) => {
     payload.user = this.mapCustomDataBeforeSend(payload.user);
     const response = await this.usersApi.queryUsers({ payload });
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     response.users = response.users.map((u) =>
       this.mapCustomDataAfterReceive(u),
     );
@@ -349,7 +349,7 @@ export class StreamClient {
     users: UpdateUserPartialRequest[];
   }) => {
     const response = await this.usersApi.updateUsersPartial({
-      // @ts-expect-error typing error
+      /** @ts-expect-error */
       updateUserPartialRequest: request,
     });
     Object.keys(response.users).forEach((key) => {
@@ -572,7 +572,7 @@ export class StreamClient {
     if (!user) {
       return undefined;
     }
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     const result: UserObject | UserResponse = {};
     Object.keys(user).forEach((key) => {
       if (!this.reservedKeywords.includes(key)) {

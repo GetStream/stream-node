@@ -41,8 +41,8 @@ $ yarn generate:open-api:dev
 
 Fix manually the known issues issues in the generated code:
 
-- Add `// @ts-expect-error` for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
-- Add `// @ts-expect-error` for duplicate exports in `gen/chat/index.ts`
+- Add `/** @ts-expect-error */ ` for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
+- Add `/** @ts-expect-error */ ` for duplicate exports in `gen/chat/index.ts`
 - Fix the query param serizalization in the `gen/chat/MessagesApi.ts` file's `getManyMessagesRaw` function. This is the correct serialization:
 
 ```typescript

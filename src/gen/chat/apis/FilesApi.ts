@@ -18,10 +18,10 @@ import type {
   APIError,
   FileDeleteResponse,
   FileUploadResponse,
-  // @ts-expect-error
+  /** @ts-expect-error */
   ImageSizeRequest,
   ImageUploadResponse,
-  // @ts-expect-error
+  /** @ts-expect-error */
   OnlyUserIDRequest,
 } from '../models';
 

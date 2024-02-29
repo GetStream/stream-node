@@ -42,11 +42,11 @@ export class StreamChannel {
     public id?: string,
   ) {
     const configuration = this.streamClient.getConfiguration();
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.channelsApi = new ChannelsApi(configuration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.messagesApi = new MessagesApi(configuration);
-    // @ts-expect-error typing problem
+    /** @ts-expect-error */
     this.eventsApi = new EventsApi(configuration);
   }
 
