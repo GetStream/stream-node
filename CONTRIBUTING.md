@@ -30,6 +30,8 @@ If you don't want to squash your commits, make sure that your commits follow the
 
 ## Generating code from Open API
 
+### Commands
+
 Checkout the [protocol](https://github.com/GetStream/protocol) or [chat](https://github.com/GetStream/chat) reporisitories and run one of the following commands:
 
 ```shell
@@ -39,10 +41,19 @@ $ yarn generate:open-api
 $ yarn generate:open-api:dev
 ```
 
-Fix manually the known issues issues in the generated code:
+If you want to update only chat or video you need to define the `PRODUCT` env variable like this:
 
-- Add `/** @ts-expect-error */ ` for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
-- Add `/** @ts-expect-error */ ` for duplicate exports in `gen/chat/index.ts`
+```shell
+$ PRODUCT=video yarn generate:open-api
+$ PRODUCT=chat yarn generate:open-api:dev
+```
+
+### Fix issues in chat code
+
+If you have updated the generated chat code you'll have to fix the following issues manually in the generated code:
+
+- Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
+- Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for duplicate exports in `gen/chat/index.ts`
 - Fix the query param serizalization in the `gen/chat/MessagesApi.ts` file's `getManyMessagesRaw` function. This is the correct serialization:
 
 ```typescript
@@ -50,6 +61,8 @@ if (requestParameters.ids) {
   queryParameters["ids"] = requestParameters.ids.join(",");
 }
 ```
+
+### Validate that the generated code works
 
 To check your work, run the following commands:
 
