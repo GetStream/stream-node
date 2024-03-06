@@ -18,8 +18,8 @@
     "test:bun": "bun run vitest",
     "start": "rollup -w -c",
     "build": "rm -rf dist && rollup -c",
-    "generate:open-api": "./generate-openapi.sh protocol",
-    "generate:open-api:dev": "./generate-openapi.sh chat",
+    "generate:open-api": "./generate-openapi.sh protocol $PRODUCT",
+    "generate:open-api:dev": "./generate-openapi.sh chat $PRODUCT",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "prettier:fix": "prettier . --write"
