@@ -92,15 +92,19 @@ export class StreamClient {
     readonly config?: string | StreamClientOptions,
   ) {
     this.token = JWTServerToken(this.secret);
-    this.video = new StreamVideoClient(this);
-    this.chat = new StreamChatClient(this);
 
     if (typeof config === 'string') {
       this.options.basePath = config;
       this.options.timeout = StreamClient.DEFAULT_TIMEOUT;
     } else {
+      if (config) {
+        this.options = config;
+      }
       this.options.timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     }
+
+    this.video = new StreamVideoClient(this);
+    this.chat = new StreamChatClient(this);
 
     const chatConfiguration = this.getConfiguration();
     /** @ts-expect-error */
