@@ -794,6 +794,37 @@ export interface VideoCallStateResponseFields {
     own_capabilities: Array<VideoOwnCapability>;
 }
 /**
+ * CallTranscription represents a transcription of a call.
+ * @export
+ * @interface VideoCallTranscription
+ */
+export interface VideoCallTranscription {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallTranscription
+     */
+    end_time: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallTranscription
+     */
+    filename: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallTranscription
+     */
+    start_time: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallTranscription
+     */
+    url: string;
+}
+/**
  * 
  * @export
  * @interface VideoCallTypeResponse
@@ -1655,6 +1686,12 @@ export interface VideoGoLiveRequest {
      * @memberof VideoGoLiveRequest
      */
     start_transcription?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGoLiveRequest
+     */
+    transcription_storage_name?: string;
 }
 /**
  * 
@@ -1902,6 +1939,25 @@ export interface VideoListRecordingsResponse {
      * @memberof VideoListRecordingsResponse
      */
     recordings: Array<VideoCallRecording>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoListTranscriptionsResponse
+ */
+export interface VideoListTranscriptionsResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoListTranscriptionsResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {Array<VideoCallTranscription>}
+     * @memberof VideoListTranscriptionsResponse
+     */
+    transcriptions: Array<VideoCallTranscription>;
 }
 /**
  * 
@@ -2628,6 +2684,19 @@ export interface VideoStartRecordingResponse {
      * @memberof VideoStartRecordingResponse
      */
     duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoStartTranscriptionRequest
+ */
+export interface VideoStartTranscriptionRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoStartTranscriptionRequest
+     */
+    transcription_external_storage?: string;
 }
 /**
  * 

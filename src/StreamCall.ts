@@ -14,6 +14,7 @@ import {
   VideoUpdateUserPermissionsRequest,
   VideoQueryMembersRequest,
   VideoStartRecordingRequest,
+  VideoStartTranscriptionRequest,
 } from './gen/video';
 import { OmitTypeId } from './types';
 
@@ -101,8 +102,13 @@ export class StreamCall {
     });
   };
 
-  startTranscription = () => {
-    return this.apiClient.startTranscription({ ...this.baseRequest });
+  startTranscription = (
+    videoStartTranscriptionRequest: VideoStartTranscriptionRequest = {},
+  ) => {
+    return this.apiClient.startTranscription({
+      ...this.baseRequest,
+      videoStartTranscriptionRequest,
+    });
   };
 
   stopHLSBroadcasting = () => {
