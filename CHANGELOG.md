@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.12](https://github.com/GetStream/stream-node/compare/v0.1.11...v0.1.12) (2024-03-08)
+
+
+### Features
+
+* update video to api v100.4.3 ([#22](https://github.com/GetStream/stream-node/issues/22)) ([2424b2d](https://github.com/GetStream/stream-node/commit/2424b2db10353dc46cd9c78c543666732228d5c7))
+
+
+### Bug Fixes
+
+* basePath not stored properly ([#20](https://github.com/GetStream/stream-node/issues/20)) ([3221ba0](https://github.com/GetStream/stream-node/commit/3221ba0ec1fe0bf002c6cf21794f23f1d6a818fd))
+
 ## [0.1.11](https://github.com/GetStream/stream-node/compare/v0.1.10...v0.1.11) (2024-02-29)
 
 
