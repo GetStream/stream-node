@@ -319,6 +319,37 @@ export interface VideoBroadcastSettingsResponse {
 /**
  * 
  * @export
+ * @interface VideoCallEvent
+ */
+export interface VideoCallEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallEvent
+     */
+    description: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallEvent
+     */
+    severity: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallEvent
+     */
+    timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallEvent
+     */
+    type: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoCallIngressResponse
  */
 export interface VideoCallIngressResponse {
@@ -794,6 +825,19 @@ export interface VideoCallStateResponseFields {
     own_capabilities: Array<VideoOwnCapability>;
 }
 /**
+ * 
+ * @export
+ * @interface VideoCallTimeline
+ */
+export interface VideoCallTimeline {
+    /**
+     * 
+     * @type {Array<VideoCallEvent>}
+     * @memberof VideoCallTimeline
+     */
+    events: Array<VideoCallEvent>;
+}
+/**
  * CallTranscription represents a transcription of a call.
  * @export
  * @interface VideoCallTranscription
@@ -922,6 +966,25 @@ export interface VideoConnectUserDetailsRequest {
      * @memberof VideoConnectUserDetailsRequest
      */
     name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCoordinates
+ */
+export interface VideoCoordinates {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCoordinates
+     */
+    latitude: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCoordinates
+     */
+    longitude: number;
 }
 /**
  * 
@@ -1511,6 +1574,91 @@ export interface VideoGetCallResponse {
 /**
  * 
  * @export
+ * @interface VideoGetCallStatsResponse
+ */
+export interface VideoGetCallStatsResponse {
+    /**
+     * 
+     * @type {{ [key: string]: VideoUserStats; }}
+     * @memberof VideoGetCallStatsResponse
+     */
+    ParticipantReport: { [key: string]: VideoUserStats; };
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    average_jitter: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    average_latency: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    call_duration_seconds: number;
+    /**
+     * 
+     * @type {VideoCallTimeline}
+     * @memberof VideoGetCallStatsResponse
+     */
+    call_timeline?: VideoCallTimeline;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoGetCallStatsResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    max_participants: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    publishing_participants: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    quality_score: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    sfu_count: number;
+    /**
+     * 
+     * @type {Array<VideoSFULocationResponse>}
+     * @memberof VideoGetCallStatsResponse
+     */
+    sfus: Array<VideoSFULocationResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    total_freezes_duration: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    total_quality_limitation_duration: number;
+}
+/**
+ * 
+ * @export
  * @interface VideoGetCallTypeResponse
  */
 export interface VideoGetCallTypeResponse {
@@ -1958,6 +2106,31 @@ export interface VideoListTranscriptionsResponse {
      * @memberof VideoListTranscriptionsResponse
      */
     transcriptions: Array<VideoCallTranscription>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoLocation
+ */
+export interface VideoLocation {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    continent_code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    country_iso_code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    subdivision_iso_code: string;
 }
 /**
  * 
@@ -2556,6 +2729,37 @@ export interface VideoS3Request {
      * @memberof VideoS3Request
      */
     s3_secret?: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoSFULocationResponse
+ */
+export interface VideoSFULocationResponse {
+    /**
+     * 
+     * @type {VideoCoordinates}
+     * @memberof VideoSFULocationResponse
+     */
+    coordinates: VideoCoordinates;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoSFULocationResponse
+     */
+    datacenter: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoSFULocationResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {VideoLocation}
+     * @memberof VideoSFULocationResponse
+     */
+    location: VideoLocation;
 }
 /**
  * 
@@ -3285,6 +3489,31 @@ export interface VideoUpdateUserPermissionsResponse {
 /**
  * 
  * @export
+ * @interface VideoUserInfoResponse
+ */
+export interface VideoUserInfoResponse {
+    /**
+     * 
+     * @type {object}
+     * @memberof VideoUserInfoResponse
+     */
+    Custom: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserInfoResponse
+     */
+    Image: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserInfoResponse
+     */
+    Name: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoUserRequest
  */
 export interface VideoUserRequest {
@@ -3397,6 +3626,62 @@ export interface VideoUserResponse {
      * @memberof VideoUserResponse
      */
     updated_at: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUserSessionStats
+ */
+export interface VideoUserSessionStats {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    os: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    sdk: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    sdk_version: string;
+    /**
+     * 
+     * @type {VideoCallTimeline}
+     * @memberof VideoUserSessionStats
+     */
+    timeline?: VideoCallTimeline;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    webrtc_version: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoUserStats
+ */
+export interface VideoUserStats {
+    /**
+     * 
+     * @type {VideoUserInfoResponse}
+     * @memberof VideoUserStats
+     */
+    info: VideoUserInfoResponse;
+    /**
+     * 
+     * @type {{ [key: string]: VideoUserSessionStats; }}
+     * @memberof VideoUserStats
+     */
+    session_stats: { [key: string]: VideoUserSessionStats; };
 }
 /**
  * 

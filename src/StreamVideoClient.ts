@@ -5,6 +5,7 @@ import {
   DefaultApi,
   DeleteCallTypeRequest,
   DeleteExternalStorageRequest,
+  GetCallStatsRequest,
   GetCallTypeRequest,
   ServerSideApi,
   SettingsApi,
@@ -94,4 +95,8 @@ export class StreamVideoClient {
   checkExternalStorage = (request: CheckExternalStorageRequest) => {
     return this.videoServerSideApiClient.checkExternalStorage(request);
   };
+
+  getCallStats = (request: GetCallStatsRequest) => {
+    return this.videoServerSideApiClient.getCallStats(request);
+  }
 }
