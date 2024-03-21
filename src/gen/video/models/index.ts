@@ -1579,12 +1579,6 @@ export interface VideoGetCallResponse {
 export interface VideoGetCallStatsResponse {
     /**
      * 
-     * @type {{ [key: string]: VideoUserStats; }}
-     * @memberof VideoGetCallStatsResponse
-     */
-    ParticipantReport: { [key: string]: VideoUserStats; };
-    /**
-     * 
      * @type {number}
      * @memberof VideoGetCallStatsResponse
      */
@@ -1619,6 +1613,12 @@ export interface VideoGetCallStatsResponse {
      * @memberof VideoGetCallStatsResponse
      */
     max_participants: number;
+    /**
+     * 
+     * @type {{ [key: string]: VideoUserStats; }}
+     * @memberof VideoGetCallStatsResponse
+     */
+    participant_report: { [key: string]: VideoUserStats; };
     /**
      * 
      * @type {number}
