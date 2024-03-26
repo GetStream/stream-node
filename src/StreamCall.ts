@@ -2,19 +2,19 @@ import { StreamClient } from './StreamClient';
 import {
   DefaultApi,
   GetCallRequest,
-  VideoPinRequest,
-  VideoUnpinRequest,
   VideoBlockUserRequest,
   VideoGetOrCreateCallRequest,
   VideoGoLiveRequest,
   VideoMuteUsersRequest,
-  VideoUnblockUserRequest,
-  VideoUpdateCallRequest,
-  VideoUpdateCallMembersRequest,
-  VideoUpdateUserPermissionsRequest,
+  VideoPinRequest,
   VideoQueryMembersRequest,
   VideoStartRecordingRequest,
   VideoStartTranscriptionRequest,
+  VideoUnblockUserRequest,
+  VideoUnpinRequest,
+  VideoUpdateCallMembersRequest,
+  VideoUpdateCallRequest,
+  VideoUpdateUserPermissionsRequest,
 } from './gen/video';
 import { OmitTypeId } from './types';
 
@@ -67,6 +67,12 @@ export class StreamCall {
 
   listRecordings = () => {
     return this.apiClient.listRecordings({
+      ...this.baseRequest,
+    });
+  };
+
+  listTranscriptions = () => {
+    return this.apiClient.listTranscriptions({
       ...this.baseRequest,
     });
   };
