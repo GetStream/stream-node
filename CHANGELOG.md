@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/GetStream/stream-node/compare/v0.1.12...v0.1.13) (2024-03-26)
+
+
+### Features
+
+* listTranscriptions API ([#24](https://github.com/GetStream/stream-node/issues/24)) ([a170fd6](https://github.com/GetStream/stream-node/commit/a170fd6133b1fbeb01ba27987ffb8b50dd2c95fc))
+
 ## [0.1.12](https://github.com/GetStream/stream-node/compare/v0.1.11...v0.1.12) (2024-03-08)
 
 
