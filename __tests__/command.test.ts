@@ -29,7 +29,8 @@ describe('commands CRUD API', () => {
   });
 
   it('update', async () => {
-    const response = await client.chat.updateCommand(commandName, {
+    const response = await client.chat.updateCommand({
+      name: commandName,
       description: 'Updated descrpition',
     });
 

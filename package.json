@@ -25,11 +25,11 @@
     "test:bun": "bun run vitest",
     "start": "rollup -w -c",
     "build": "rm -rf dist && rollup -c",
-    "generate:open-api": "./generate-openapi.sh protocol $PRODUCT",
-    "generate:open-api:dev": "./generate-openapi.sh chat $PRODUCT",
+    "generate:open-api": "./generate-openapi.sh",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
-    "prettier:fix": "prettier . --write"
+    "prettier:fix": "prettier . --write",
+    "lint:gen": "eslint --fix src/gen/**/*ts && prettier src/gen/**/*.ts --write"
   },
   "lint-staged": {
     "**/*": [
@@ -58,6 +58,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-unused-imports": "^4.0.1",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",

@@ -1,12 +1,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  CreateDeviceRequest,
-  CreateDeviceRequestPushProviderEnum,
-  PushProvider,
-} from '../src/gen/chat';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
+import { CreateDeviceRequest, PushProvider } from '../src/gen/models';
 
 describe('devices and push', () => {
   let client: StreamClient;
@@ -16,12 +12,10 @@ describe('devices and push', () => {
   };
   const device: CreateDeviceRequest = {
     id: uuidv4(),
-    push_provider: CreateDeviceRequestPushProviderEnum.FIREBASE,
+    push_provider: 'firebase',
     push_provider_name: 'firebase',
     user_id: user.id,
   };
-  // Type '{ name: string; type: string; xiaomi_app_secret: string; xiaomi_package_name: string; }'
-  // is missing the following properties from type 'PushProvider': created_at, updated_at
   const pushProvider: PushProvider = {
     name: 'test-push-provider',
     type: 'xiaomi',
@@ -31,11 +25,7 @@ describe('devices and push', () => {
 
   beforeAll(async () => {
     client = createTestClient();
-    await client.upsertUsers({
-      users: {
-        [user.id]: { ...user },
-      },
-    });
+    await client.upsertUsers([user]);
   });
 
   it('create device', async () => {
@@ -43,7 +33,7 @@ describe('devices and push', () => {
   });
 
   it('list devices', async () => {
-    const response = await client.listDevices({ userId: user.id });
+    const response = await client.listDevices({ user_id: user.id });
 
     expect(response.devices.find((d) => d.id === device.id)).toBeDefined();
   });
@@ -51,7 +41,7 @@ describe('devices and push', () => {
   it('delete device', async () => {
     const response = await client.deleteDevice({
       id: device.id,
-      userId: user.id,
+      user_id: user.id,
     });
 
     expect(response).toBeDefined();
@@ -60,7 +50,7 @@ describe('devices and push', () => {
   it('create push provider', async () => {
     // Can't properly test upsert without valid credentials
     await expect(() =>
-      client.upsertPushProvider(pushProvider),
+      client.upsertPushProvider({ push_provider: pushProvider }),
     ).rejects.toThrowError(
       'Stream error code 4: UpsertPushProvider failed with error: "xiaomi credentials are invalid"',
     );
