@@ -517,18 +517,18 @@ export class StreamClient {
       queryParamsStringify: (params: HTTPQuery) => {
         const newParams = [];
         for (const k in params) {
-          if (Array.isArray(params[k]) || typeof params[k] === 'object') {
-            newParams.push(
-              `${k}=${encodeURIComponent(JSON.stringify(params[k]))}`,
-            );
+          const param = params[k];
+          if (Array.isArray(param)) {
+            newParams.push(`${k}=${encodeURIComponent(param.join(','))}`);
+          } else if (typeof param === 'object') {
+            newParams.push(`${k}=${encodeURIComponent(JSON.stringify(param))}`);
           } else {
-            const value = params[k];
             if (
-              typeof value === 'string' ||
-              typeof value === 'number' ||
-              typeof value === 'boolean'
+              typeof param === 'string' ||
+              typeof param === 'number' ||
+              typeof param === 'boolean'
             ) {
-              newParams.push(`${k}=${encodeURIComponent(value)}`);
+              newParams.push(`${k}=${encodeURIComponent(param)}`);
             }
           }
         }
