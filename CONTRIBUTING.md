@@ -54,13 +54,6 @@ If you have updated the generated chat code you'll have to fix the following iss
 
 - Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
 - Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for duplicate exports in `gen/chat/index.ts`
-- Fix the query param serizalization in the `gen/chat/MessagesApi.ts` file's `getManyMessagesRaw` function. This is the correct serialization:
-
-```typescript
-if (requestParameters.ids) {
-  queryParameters["ids"] = requestParameters.ids.join(",");
-}
-```
 
 ### Validate that the generated code works
 

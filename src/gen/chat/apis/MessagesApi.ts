@@ -462,7 +462,7 @@ export class MessagesApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         if (requestParameters.ids) {
-            queryParameters['ids'] = requestParameters.ids.join(',');
+            queryParameters['ids'] = requestParameters.ids;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
