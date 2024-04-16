@@ -1,12 +1,9 @@
 import { StreamChannel } from './StreamChannel';
 import { StreamClient } from './StreamClient';
 import {
-  ChannelTypesApi,
-  ChannelsApi,
   CreateBlockListRequest,
   CreateChannelTypeRequest,
   CreateCommandRequest,
-  CustomCommandsApi,
   DeleteBlockListRequest,
   DeleteChannelTypeRequest,
   DeleteCommandRequest,
@@ -15,30 +12,23 @@ import {
   GetChannelTypeRequest,
   GetCommandRequest,
   GetExportChannelsStatusRequest,
+  GetOGRequest,
+  ProductchatApi,
+  ProductcommonApi,
   QueryChannelsRequest,
   SearchRequest,
-  SettingsApi,
   UpdateBlockListRequest,
   UpdateChannelTypeRequest,
   UpdateCommandRequest,
-} from './gen/chat';
+} from './gen';
 
 export class StreamChatClient {
-  private readonly settingsApi: SettingsApi;
-  private readonly channelTypesApi: ChannelTypesApi;
-  private readonly channelsApi: ChannelsApi;
-  private readonly commandsApi: CustomCommandsApi;
+  private readonly chatApi: ProductchatApi;
+  private readonly commonApi: ProductcommonApi;
 
   constructor(private readonly streamClient: StreamClient) {
-    const configuration = this.streamClient.getConfiguration();
-    /** @ts-expect-error */
-    this.settingsApi = new SettingsApi(configuration);
-    /** @ts-expect-error */
-    this.channelTypesApi = new ChannelTypesApi(configuration);
-    /** @ts-expect-error */
-    this.channelsApi = new ChannelsApi(configuration);
-    /** @ts-expect-error */
-    this.commandsApi = new CustomCommandsApi(configuration);
+    this.chatApi = this.streamClient.chatApi;
+    this.commonApi = this.streamClient.commonApi;
   }
 
   channel = (type: string, id?: string) => {
@@ -46,94 +36,98 @@ export class StreamChatClient {
   };
 
   createBlockList = (createBlockListRequest: CreateBlockListRequest) => {
-    return this.settingsApi.createBlockList({ createBlockListRequest });
+    return this.commonApi.createBlockList({ createBlockListRequest });
   };
 
   listBlockLists = () => {
-    return this.settingsApi.listBlockLists();
+    return this.commonApi.listBlockLists();
   };
 
   getBlockList = (request: GetBlockListRequest) => {
-    return this.settingsApi.getBlockList(request);
+    return this.commonApi.getBlockList(request);
   };
 
   updateBlockList = (
     name: string,
     updateBlockListRequest: UpdateBlockListRequest,
   ) => {
-    return this.settingsApi.updateBlockList({ name, updateBlockListRequest });
+    return this.commonApi.updateBlockList({ name, updateBlockListRequest });
   };
 
   deleteBlockList = (request: DeleteBlockListRequest) => {
-    return this.settingsApi.deleteBlockList(request);
+    return this.commonApi.deleteBlockList(request);
   };
 
   createChannelType = (createChannelTypeRequest: CreateChannelTypeRequest) => {
-    return this.channelTypesApi.createChannelType({ createChannelTypeRequest });
+    return this.chatApi.createChannelType({ createChannelTypeRequest });
   };
 
   deleteChannelType = (request: DeleteChannelTypeRequest) => {
-    return this.channelTypesApi.deleteChannelType(request);
+    return this.chatApi.deleteChannelType(request);
   };
 
   getChannelType = (request: GetChannelTypeRequest) => {
-    return this.channelTypesApi.getChannelType(request);
+    return this.chatApi.getChannelType(request);
   };
 
   listChannelTypes = () => {
-    return this.channelTypesApi.listChannelTypes();
+    return this.chatApi.listChannelTypes();
+  };
+
+  getOpenGraphData = (request: GetOGRequest) => {
+    return this.commonApi.getOG(request);
   };
 
   updateChannelType = (
     name: string,
     updateChannelTypeRequest: UpdateChannelTypeRequest,
   ) => {
-    return this.channelTypesApi.updateChannelType({
+    return this.chatApi.updateChannelType({
       name,
       updateChannelTypeRequest,
     });
   };
 
   queryChannels = (queryChannelsRequest?: QueryChannelsRequest) => {
-    return this.channelsApi.queryChannels({
+    return this.chatApi.queryChannels({
       queryChannelsRequest: queryChannelsRequest ?? null,
     });
   };
 
   searchMessages = (payload?: SearchRequest) => {
-    return this.channelsApi.search({ payload });
+    return this.chatApi.search({ payload });
   };
 
   exportChannels = (exportChannelsRequest?: ExportChannelsRequest) => {
-    return this.channelsApi.exportChannels({
+    return this.chatApi.exportChannels({
       exportChannelsRequest: exportChannelsRequest ?? null,
     });
   };
 
   getExportStatus = (request: GetExportChannelsStatusRequest) => {
-    return this.channelsApi.getExportChannelsStatus(request);
+    return this.chatApi.getExportChannelsStatus(request);
   };
 
   listCommands = () => {
-    return this.commandsApi.listCommands();
+    return this.chatApi.listCommands();
   };
 
   createCommand = (createCommandRequest: CreateCommandRequest) => {
-    return this.commandsApi.createCommand({ createCommandRequest });
+    return this.chatApi.createCommand({ createCommandRequest });
   };
 
   getCommand = (getCommandRequest: GetCommandRequest) => {
-    return this.commandsApi.getCommand(getCommandRequest);
+    return this.chatApi.getCommand(getCommandRequest);
   };
 
   updateCommand = (
     name: string,
     updateCommandRequest: UpdateCommandRequest,
   ) => {
-    return this.commandsApi.updateCommand({ name, updateCommandRequest });
+    return this.chatApi.updateCommand({ name, updateCommandRequest });
   };
 
   deleteCommand = (request: DeleteCommandRequest) => {
-    return this.commandsApi.deleteCommand(request);
+    return this.chatApi.deleteCommand(request);
   };
 }

@@ -2,11 +2,11 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { BlockList } from '../src/gen/chat';
+import { CreateBlockListRequest } from '../src/gen';
 
 describe('block lists CRUD API', () => {
   let client: StreamClient;
-  let blockList: BlockList;
+  let blockList: CreateBlockListRequest;
 
   beforeAll(() => {
     client = createTestClient();

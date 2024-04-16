@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamChannel } from '../src/StreamChannel';
 import { StreamClient } from '../src/StreamClient';
-import { TranslateMessageRequestLanguageEnum } from '../src/gen/chat';
+import { TranslateMessageRequestLanguageEnum } from '../src/gen';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('messages API', () => {
@@ -52,21 +52,23 @@ describe('messages API', () => {
 
     expect(response.message?.text).toBe('Hello from Stream Node SDK');
 
-    messageId = response.message?.id;
+    messageId = response.message.id;
 
-    const getResponse = await channel.getManyMessages({ ids: [messageId!] });
+    const getResponse = await channel.getManyMessages({
+      ids: [messageId, messageId],
+    });
 
     expect(getResponse.messages.length).toBe(1);
   });
 
   it('update message', async () => {
-    const urlAttachment = await channel.getOpenGraphData({
+    const urlAttachment = await client.chat.getOpenGraphData({
       url: 'https://getstream.io/',
     });
     const response = await channel.updateMessage(messageId!, {
       message: {
         text: 'https://getstream.io/',
-        attachments: [urlAttachment],
+        attachments: [{ title_link: urlAttachment.title_link }],
         user_id: user.id,
       },
     });
@@ -99,6 +101,7 @@ describe('messages API', () => {
       language: TranslateMessageRequestLanguageEnum.HU,
     });
 
+    // @ts-expect-error
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
@@ -157,13 +160,6 @@ describe('messages API', () => {
     });
 
     expect(response.flag?.target_message_id).toBe(messageId!);
-
-    const unflagResponse = await client.unflag({
-      target_message_id: messageId!,
-      user_id: user.id,
-    });
-
-    expect(unflagResponse).toBeDefined();
   });
 
   it('truncate', async () => {

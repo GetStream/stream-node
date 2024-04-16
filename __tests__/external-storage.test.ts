@@ -12,7 +12,7 @@ describe('external storage CRUD API', () => {
   });
 
   it('create', async () => {
-    const response = await client.video.createExternalStorage({
+    const response = await client.createExternalStorage({
       name: storageName,
       bucket: 'test',
       storage_type: 'test',
@@ -22,7 +22,7 @@ describe('external storage CRUD API', () => {
   });
 
   it('read', async () => {
-    const readResponse = await client.video.listExternalStorages();
+    const readResponse = await client.listExternalStorages();
 
     expect(readResponse.external_storages).toBeDefined();
     expect(readResponse.external_storages[storageName]).toBeDefined();
@@ -30,7 +30,7 @@ describe('external storage CRUD API', () => {
 
   it('update', async () => {
     const newBucket = 'new bucket';
-    const response = await client.video.updateExternalStorage(storageName, {
+    const response = await client.updateExternalStorage(storageName, {
       bucket: newBucket,
       storage_type: 'test',
     });
@@ -39,7 +39,7 @@ describe('external storage CRUD API', () => {
   });
 
   it('delete', async () => {
-    const response = await client.video.deleteExternalStorage({
+    const response = await client.deleteExternalStorage({
       name: storageName,
     });
 

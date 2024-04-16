@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
-import { CreateChannelTypeRequestAutomodEnum } from '../src/gen/chat/models';
+import { CreateChannelTypeRequestAutomodEnum } from '../src/gen';
 import { StreamClient } from '../src/StreamClient';
 
 describe('channel types CRUD API', () => {
@@ -16,6 +16,8 @@ describe('channel types CRUD API', () => {
     const response = await client.chat.createChannelType({
       name: channelType,
       automod: CreateChannelTypeRequestAutomodEnum.DISABLED,
+      automod_behavior: 'block',
+      max_message_length: 30000,
     });
 
     expect(response.name).toBe(channelType);
@@ -30,6 +32,8 @@ describe('channel types CRUD API', () => {
   it('update', async () => {
     const response = await client.chat.updateChannelType(channelType, {
       automod: CreateChannelTypeRequestAutomodEnum.SIMPLE,
+      automod_behavior: 'block',
+      max_message_length: 20000,
     });
 
     expect(response.automod).toBe(CreateChannelTypeRequestAutomodEnum.SIMPLE);

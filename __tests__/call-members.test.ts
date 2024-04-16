@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
-import { VideoOwnCapability } from '../src/gen/video';
+import { OwnCapability } from '../src/gen';
 
 describe('call members API', () => {
   let client: StreamClient;
@@ -98,14 +98,14 @@ describe('call members API', () => {
   it('grant and revoke permissions', async () => {
     const revokeResponse = await call.updateUserPermissions({
       user_id: 'sara',
-      revoke_permissions: [VideoOwnCapability.SEND_AUDIO],
+      revoke_permissions: [OwnCapability.SEND_AUDIO],
     });
 
     expect(revokeResponse).toBeDefined();
 
     const grantResponse = await call.updateUserPermissions({
       user_id: 'sara',
-      grant_permissions: [VideoOwnCapability.SEND_AUDIO],
+      grant_permissions: [OwnCapability.SEND_AUDIO],
     });
 
     expect(grantResponse).toBeDefined();
@@ -126,6 +126,7 @@ describe('call members API', () => {
     expect(members.length).toBe(3);
 
     const queryMembersReq = {
+      filter_conditions: {},
       sort: [{ field: 'user_id', direction: 1 }],
       limit: 2,
     };
