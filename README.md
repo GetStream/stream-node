@@ -13,6 +13,7 @@ The package is tested against these environments:
 
 - Node.js@18
 - Node.js@20
+- Node.js@22
 - Bun@1
 
 ## What is Stream?

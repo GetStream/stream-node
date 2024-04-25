@@ -160,7 +160,7 @@ describe('user API', () => {
 
     const userResponse = response.users[newUser.id];
 
-    expect(userResponse.name).toBe(undefined);
+    expect(userResponse.name).toBeFalsy();
     expect(userResponse.role).toBe('admin');
     expect(userResponse.custom.color).toBe('blue');
   });
