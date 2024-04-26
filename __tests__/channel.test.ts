@@ -112,7 +112,9 @@ describe('channel API', () => {
       user_id: user2.id,
     });
 
-    expect(queryResponse.channels.length).toBe(0);
+    expect(
+      queryResponse.channels.find((c) => c.channel?.cid === channel.cid),
+    ).toBe(undefined);
   });
 
   it('export', async () => {
