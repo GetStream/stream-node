@@ -189,6 +189,15 @@ describe('call API', () => {
       );
     });
 
+    it('delete recording', async () => {
+      // somewhat dummy test, we should do a proper test in the future
+      await expect(() =>
+        call.deleteRecording({ session: 'test', filename: 'test' }),
+      ).rejects.toThrowError(
+        `Stream error code 16: DeleteRecording failed with error: "recording doesn't exist"`,
+      );
+    });
+
     it('query recordings', async () => {
       // somewhat dummy test, we should do a proper test in the future
       const response = await call.listRecordings();
@@ -219,6 +228,31 @@ describe('call API', () => {
         const response = await call.stopLive();
 
         expect(response.call.backstage).toBe(true);
+      });
+    });
+
+    describe('transcriptions', () => {
+      it('start transcribing', async () => {
+        // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+        await expect(() => call.startTranscription()).rejects.toThrowError(
+          'Stream error code 4: StartTranscription failed with error: "cannot transcribe inactive call"',
+        );
+      });
+
+      it('stop transcribing', async () => {
+        // somewhat dummy test, we should do a proper test in the future
+        await expect(() => call.stopTranscription()).rejects.toThrowError(
+          'Stream error code 4: StopTranscription failed with error: "call is not being transcribed"',
+        );
+      });
+
+      it('delete transcription', async () => {
+        // somewhat dummy test, we should do a proper test in the future
+        await expect(() =>
+          call.deleteTranscription({ session: 'test', filename: 'test' }),
+        ).rejects.toThrowError(
+          `Stream error code 16: DeleteTranscription failed with error: "transcription doesn't exist"`,
+        );
       });
     });
   });

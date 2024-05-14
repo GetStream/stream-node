@@ -1,5 +1,7 @@
 import { StreamClient } from './StreamClient';
 import {
+  DeleteRecordingRequest,
+  DeleteTranscriptionRequest,
   GetCallRequest,
   ProductvideoApi,
   VideoBlockUserRequest,
@@ -71,6 +73,10 @@ export class StreamCall {
     });
   };
 
+  deleteRecording = (request: OmitTypeId<DeleteRecordingRequest>) => {
+    return this.apiClient.deleteRecording({ ...this.baseRequest, ...request });
+  };
+
   listTranscriptions = () => {
     return this.apiClient.listTranscriptions({
       ...this.baseRequest,
@@ -114,6 +120,13 @@ export class StreamCall {
     return this.apiClient.startTranscription({
       ...this.baseRequest,
       videoStartTranscriptionRequest,
+    });
+  };
+
+  deleteTranscription = (request: OmitTypeId<DeleteTranscriptionRequest>) => {
+    return this.apiClient.deleteTranscription({
+      ...this.baseRequest,
+      ...request,
     });
   };
 
