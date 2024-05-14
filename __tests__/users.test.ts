@@ -181,6 +181,12 @@ describe('user API', () => {
     });
 
     expect(reactivateResponse.task_id).toBeDefined();
+
+    const response = await client.getTaskStatus({
+      id: reactivateResponse.task_id,
+    });
+
+    expect(response.status).toBeDefined();
   });
 
   it('restore', async () => {
