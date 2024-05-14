@@ -78,6 +78,8 @@ describe('user API', () => {
   });
 
   it('create guest', async () => {
+    await client.updateAppSettings({ multi_tenant_enabled: false });
+
     const guest: UserObjectRequest = {
       id: uuidv4(),
       custom: {
@@ -89,6 +91,8 @@ describe('user API', () => {
 
     expect(response.user?.role).toBe('guest');
     expect(response.user?.custom.color).toBe('red');
+
+    await client.updateAppSettings({ multi_tenant_enabled: true });
   });
 
   it('ban and unban', async () => {

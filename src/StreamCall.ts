@@ -1,13 +1,13 @@
 import { StreamClient } from './StreamClient';
 import {
-  DefaultApi,
   GetCallRequest,
+  ProductvideoApi,
   VideoBlockUserRequest,
   VideoGetOrCreateCallRequest,
   VideoGoLiveRequest,
   VideoMuteUsersRequest,
   VideoPinRequest,
-  VideoQueryMembersRequest,
+  VideoQueryCallMembersRequest,
   VideoStartRecordingRequest,
   VideoStartTranscriptionRequest,
   VideoUnblockUserRequest,
@@ -20,7 +20,7 @@ import { OmitTypeId } from './types';
 
 export class StreamCall {
   private readonly baseRequest: { type: string; id: string };
-  private readonly apiClient: DefaultApi;
+  private readonly apiClient: ProductvideoApi;
 
   constructor(
     private readonly streamClient: StreamClient,
@@ -29,7 +29,7 @@ export class StreamCall {
   ) {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration('video');
-    this.apiClient = new DefaultApi(configuration);
+    this.apiClient = new ProductvideoApi(configuration);
   }
 
   blockUser = (videoBlockUserRequest: VideoBlockUserRequest) => {
@@ -84,14 +84,14 @@ export class StreamCall {
     });
   };
 
-  queryMembers = (request?: OmitTypeId<VideoQueryMembersRequest>) => {
-    return this.apiClient.queryMembers({
-      videoQueryMembersRequest: { ...(request ?? {}), ...this.baseRequest },
+  queryMembers = (request?: OmitTypeId<VideoQueryCallMembersRequest>) => {
+    return this.apiClient.queryCallMembers({
+      videoQueryCallMembersRequest: { ...(request ?? {}), ...this.baseRequest },
     });
   };
 
   sendCustomEvent = (event: Record<string, any>) => {
-    return this.apiClient.sendEvent({
+    return this.apiClient.sendCallEvent({
       videoSendEventRequest: { custom: event },
       ...this.baseRequest,
     });

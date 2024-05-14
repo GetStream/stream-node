@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import {
+  VideoLayoutSettingsRequestNameEnum,
   VideoOwnCapability,
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
-  VideoLayoutSettingsNameEnum,
 } from '../src/gen/video';
 
 describe('call types CRUD API', () => {
@@ -64,14 +64,14 @@ describe('call types CRUD API', () => {
     );
     expect(createResponse.settings.screensharing.enabled).toBe(true);
     expect(createResponse.notification_settings.enabled).toBe(true);
-    expect(createResponse.notification_settings.session_started.enabled).toBe(
+    expect(createResponse.notification_settings.session_started?.enabled).toBe(
       false,
     );
-    expect(createResponse.notification_settings.call_notification.enabled).toBe(
-      true,
-    );
     expect(
-      createResponse.notification_settings.call_notification.apns.title,
+      createResponse.notification_settings.call_notification?.enabled,
+    ).toBe(true);
+    expect(
+      createResponse.notification_settings.call_notification?.apns?.title,
     ).toBe('{{ user.display_name }} invites you to a call');
   });
 
@@ -151,7 +151,7 @@ describe('call types CRUD API', () => {
           audio_only: false,
           quality: VideoRecordSettingsRequestQualityEnum._1080P,
           layout: {
-            name: VideoLayoutSettingsNameEnum.SPOTLIGHT,
+            name: VideoLayoutSettingsRequestNameEnum.SPOTLIGHT,
             options: layoutOptions,
           },
         },
@@ -159,7 +159,7 @@ describe('call types CRUD API', () => {
     });
 
     expect(response.settings.recording.layout.name).toBe(
-      VideoLayoutSettingsNameEnum.SPOTLIGHT,
+      VideoLayoutSettingsRequestNameEnum.SPOTLIGHT,
     );
     Object.keys(layoutOptions).forEach((key) => {
       expect(response.settings.recording.layout.options![key]).toEqual(
