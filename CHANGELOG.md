@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/GetStream/stream-node/compare/v0.1.13...v0.2.0) (2024-05-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to API v113.0.0 ([#28](https://github.com/GetStream/stream-node/issues/28))
+
+### Features
+
+* delete recording and transcription methods ([#30](https://github.com/GetStream/stream-node/issues/30)) ([beb89ac](https://github.com/GetStream/stream-node/commit/beb89ac2f4470e0255b4a8c99cc5e1f5e9bb27d8))
+* upgrade to API v113.0.0 ([#28](https://github.com/GetStream/stream-node/issues/28)) ([cc0d00d](https://github.com/GetStream/stream-node/commit/cc0d00ddfa18eaa01907310382cbce125655f586))
+
 ## [0.1.13](https://github.com/GetStream/stream-node/compare/v0.1.12...v0.1.13) (2024-03-26)
 
 
