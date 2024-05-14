@@ -1,7 +1,5 @@
 .openapi-generator-ignore
-apis/DefaultApi.ts
-apis/ServerSideApi.ts
-apis/SettingsApi.ts
+apis/ProductvideoApi.ts
 apis/index.ts
 index.ts
 models/index.ts

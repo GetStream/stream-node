@@ -2,12 +2,10 @@ import { StreamCall } from './StreamCall';
 import { StreamClient } from './StreamClient';
 import {
   CheckExternalStorageRequest,
-  DefaultApi,
   DeleteCallTypeRequest,
   DeleteExternalStorageRequest,
   GetCallTypeRequest,
-  ServerSideApi,
-  SettingsApi,
+  ProductvideoApi,
   VideoCreateCallTypeRequest,
   VideoCreateExternalStorageRequest,
   VideoQueryCallsRequest,
@@ -16,15 +14,11 @@ import {
 } from './gen/video';
 
 export class StreamVideoClient {
-  private readonly apiClient: DefaultApi;
-  private readonly videoServerSideApiClient: ServerSideApi;
-  private readonly settingsApi: SettingsApi;
+  private readonly apiClient: ProductvideoApi;
 
   constructor(private readonly streamClient: StreamClient) {
     const configuration = this.streamClient.getConfiguration('video');
-    this.apiClient = new DefaultApi(configuration);
-    this.settingsApi = new SettingsApi(configuration);
-    this.videoServerSideApiClient = new ServerSideApi(configuration);
+    this.apiClient = new ProductvideoApi(configuration);
   }
 
   call = (type: string, id: string) => {
@@ -38,60 +32,60 @@ export class StreamVideoClient {
   };
 
   createCallType = (videoCreateCallTypeRequest: VideoCreateCallTypeRequest) => {
-    return this.videoServerSideApiClient.createCallType({
+    return this.apiClient.createCallType({
       videoCreateCallTypeRequest,
     });
   };
 
   deleteCallType = (request: DeleteCallTypeRequest) => {
-    return this.videoServerSideApiClient.deleteCallType(request);
+    return this.apiClient.deleteCallType(request);
   };
 
   getCallType = (request: GetCallTypeRequest) => {
-    return this.videoServerSideApiClient.getCallType(request);
+    return this.apiClient.getCallType(request);
   };
 
   listCallTypes = () => {
-    return this.videoServerSideApiClient.listCallTypes();
+    return this.apiClient.listCallTypes();
   };
 
   updateCallType = (
     name: string,
     videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest,
   ) => {
-    return this.videoServerSideApiClient.updateCallType({
+    return this.apiClient.updateCallType({
       name,
       videoUpdateCallTypeRequest,
     });
   };
 
   listExternalStorages = () => {
-    return this.settingsApi.listExternalStorage();
+    return this.apiClient.listExternalStorage();
   };
 
   createExternalStorage = (
     videoCreateExternalStorageRequest: VideoCreateExternalStorageRequest,
   ) => {
-    return this.settingsApi.createExternalStorage({
+    return this.apiClient.createExternalStorage({
       videoCreateExternalStorageRequest,
     });
   };
 
   deleteExternalStorage = (request: DeleteExternalStorageRequest) => {
-    return this.settingsApi.deleteExternalStorage(request);
+    return this.apiClient.deleteExternalStorage(request);
   };
 
   updateExternalStorage = (
     name: string,
     videoUpdateExternalStorageRequest: VideoUpdateExternalStorageRequest,
   ) => {
-    return this.videoServerSideApiClient.updateExternalStorage({
+    return this.apiClient.updateExternalStorage({
       name,
       videoUpdateExternalStorageRequest,
     });
   };
 
   checkExternalStorage = (request: CheckExternalStorageRequest) => {
-    return this.videoServerSideApiClient.checkExternalStorage(request);
+    return this.apiClient.checkExternalStorage(request);
   };
 }

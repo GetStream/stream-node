@@ -32,6 +32,7 @@ describe('teams', () => {
         [user.id]: { ...user },
       },
     });
+    await client.updateAppSettings({ multi_tenant_enabled: true });
     call = client.video.call('default', callId);
   });
 

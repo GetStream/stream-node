@@ -60,87 +60,14 @@ export interface VideoAPNS {
      * @type {string}
      * @memberof VideoAPNS
      */
-    body: string;
+    body?: string;
     /**
      * 
      * @type {string}
      * @memberof VideoAPNS
      */
-    title: string;
-}
-/**
- * 
- * @export
- * @interface VideoAPNSRequest
- */
-export interface VideoAPNSRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoAPNSRequest
-     */
-    body?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoAPNSRequest
-     */
     title?: string;
 }
-/**
- * 
- * @export
- * @interface VideoAudioSettings
- */
-export interface VideoAudioSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoAudioSettings
-     */
-    access_request_enabled: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoAudioSettings
-     */
-    default_device: VideoAudioSettingsDefaultDeviceEnum;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoAudioSettings
-     */
-    mic_default_on: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoAudioSettings
-     */
-    opus_dtx_enabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoAudioSettings
-     */
-    redundant_coding_enabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoAudioSettings
-     */
-    speaker_default_on: boolean;
-}
-
-
-/**
- * @export
- */
-export const VideoAudioSettingsDefaultDeviceEnum = {
-    SPEAKER: 'speaker',
-    EARPIECE: 'earpiece'
-} as const;
-export type VideoAudioSettingsDefaultDeviceEnum = typeof VideoAudioSettingsDefaultDeviceEnum[keyof typeof VideoAudioSettingsDefaultDeviceEnum];
-
 /**
  * 
  * @export
@@ -165,6 +92,12 @@ export interface VideoAudioSettingsRequest {
      * @memberof VideoAudioSettingsRequest
      */
     mic_default_on?: boolean;
+    /**
+     * 
+     * @type {VideoNoiseCancellationSettings}
+     * @memberof VideoAudioSettingsRequest
+     */
+    noise_cancellation?: VideoNoiseCancellationSettings;
     /**
      * 
      * @type {boolean}
@@ -194,6 +127,66 @@ export const VideoAudioSettingsRequestDefaultDeviceEnum = {
     EARPIECE: 'earpiece'
 } as const;
 export type VideoAudioSettingsRequestDefaultDeviceEnum = typeof VideoAudioSettingsRequestDefaultDeviceEnum[keyof typeof VideoAudioSettingsRequestDefaultDeviceEnum];
+
+/**
+ * 
+ * @export
+ * @interface VideoAudioSettingsResponse
+ */
+export interface VideoAudioSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoAudioSettingsResponse
+     */
+    access_request_enabled: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoAudioSettingsResponse
+     */
+    default_device: VideoAudioSettingsResponseDefaultDeviceEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoAudioSettingsResponse
+     */
+    mic_default_on: boolean;
+    /**
+     * 
+     * @type {VideoNoiseCancellationSettings}
+     * @memberof VideoAudioSettingsResponse
+     */
+    noise_cancellation?: VideoNoiseCancellationSettings;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoAudioSettingsResponse
+     */
+    opus_dtx_enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoAudioSettingsResponse
+     */
+    redundant_coding_enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoAudioSettingsResponse
+     */
+    speaker_default_on: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const VideoAudioSettingsResponseDefaultDeviceEnum = {
+    SPEAKER: 'speaker',
+    EARPIECE: 'earpiece'
+} as const;
+export type VideoAudioSettingsResponseDefaultDeviceEnum = typeof VideoAudioSettingsResponseDefaultDeviceEnum[keyof typeof VideoAudioSettingsResponseDefaultDeviceEnum];
 
 /**
  * 
@@ -229,19 +222,6 @@ export interface VideoAzureRequest {
 /**
  * 
  * @export
- * @interface VideoBackstageSettings
- */
-export interface VideoBackstageSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoBackstageSettings
-     */
-    enabled: boolean;
-}
-/**
- * 
- * @export
  * @interface VideoBackstageSettingsRequest
  */
 export interface VideoBackstageSettingsRequest {
@@ -251,6 +231,19 @@ export interface VideoBackstageSettingsRequest {
      * @memberof VideoBackstageSettingsRequest
      */
     enabled?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VideoBackstageSettingsResponse
+ */
+export interface VideoBackstageSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoBackstageSettingsResponse
+     */
+    enabled: boolean;
 }
 /**
  * 
@@ -315,6 +308,43 @@ export interface VideoBroadcastSettingsResponse {
      * @memberof VideoBroadcastSettingsResponse
      */
     hls: VideoHLSSettingsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCallEvent
+ */
+export interface VideoCallEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallEvent
+     */
+    description: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallEvent
+     */
+    end_timestamp: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallEvent
+     */
+    severity: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallEvent
+     */
+    timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallEvent
+     */
+    type: string;
 }
 /**
  * 
@@ -411,10 +441,10 @@ export interface VideoCallRequest {
     created_by_id?: string;
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoCallRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
     /**
      * 
      * @type {Array<VideoMemberRequest>}
@@ -484,10 +514,10 @@ export interface VideoCallResponse {
     current_session_id: string;
     /**
      * Custom data for this object
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoCallResponse
      */
-    custom: object;
+    custom: { [key: string]: any; };
     /**
      * 
      * @type {VideoEgressResponse}
@@ -703,16 +733,16 @@ export interface VideoCallSettingsRequest {
 export interface VideoCallSettingsResponse {
     /**
      * 
-     * @type {VideoAudioSettings}
+     * @type {VideoAudioSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    audio: VideoAudioSettings;
+    audio: VideoAudioSettingsResponse;
     /**
      * 
-     * @type {VideoBackstageSettings}
+     * @type {VideoBackstageSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    backstage: VideoBackstageSettings;
+    backstage: VideoBackstageSettingsResponse;
     /**
      * 
      * @type {VideoBroadcastSettingsResponse}
@@ -721,10 +751,10 @@ export interface VideoCallSettingsResponse {
     broadcasting: VideoBroadcastSettingsResponse;
     /**
      * 
-     * @type {VideoGeofenceSettings}
+     * @type {VideoGeofenceSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    geofencing: VideoGeofenceSettings;
+    geofencing: VideoGeofenceSettingsResponse;
     /**
      * 
      * @type {VideoRecordSettingsResponse}
@@ -733,34 +763,34 @@ export interface VideoCallSettingsResponse {
     recording: VideoRecordSettingsResponse;
     /**
      * 
-     * @type {VideoRingSettings}
+     * @type {VideoRingSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    ring: VideoRingSettings;
+    ring: VideoRingSettingsResponse;
     /**
      * 
-     * @type {VideoScreensharingSettings}
+     * @type {VideoScreensharingSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    screensharing: VideoScreensharingSettings;
+    screensharing: VideoScreensharingSettingsResponse;
     /**
      * 
-     * @type {VideoThumbnailsSettings}
+     * @type {VideoThumbnailsSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    thumbnails: VideoThumbnailsSettings;
+    thumbnails: VideoThumbnailsSettingsResponse;
     /**
      * 
-     * @type {VideoTranscriptionSettings}
+     * @type {VideoTranscriptionSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    transcription: VideoTranscriptionSettings;
+    transcription: VideoTranscriptionSettingsResponse;
     /**
      * 
-     * @type {VideoVideoSettings}
+     * @type {VideoVideoSettingsResponse}
      * @memberof VideoCallSettingsResponse
      */
-    video: VideoVideoSettings;
+    video: VideoVideoSettingsResponse;
 }
 /**
  * 
@@ -782,16 +812,72 @@ export interface VideoCallStateResponseFields {
     members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {VideoMemberResponse}
-     * @memberof VideoCallStateResponseFields
-     */
-    membership?: VideoMemberResponse;
-    /**
-     * 
      * @type {Array<VideoOwnCapability>}
      * @memberof VideoCallStateResponseFields
      */
     own_capabilities: Array<VideoOwnCapability>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCallStatsReportSummaryResponse
+ */
+export interface VideoCallStatsReportSummaryResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    call_cid: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    call_duration_seconds: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    call_session_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    call_status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    created_at?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    first_stats_time: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCallStatsReportSummaryResponse
+     */
+    quality_score?: number;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCallTimeline
+ */
+export interface VideoCallTimeline {
+    /**
+     * 
+     * @type {Array<VideoCallEvent>}
+     * @memberof VideoCallTimeline
+     */
+    events: Array<VideoCallEvent>;
 }
 /**
  * CallTranscription represents a transcription of a call.
@@ -889,39 +975,77 @@ export interface VideoCheckExternalStorageResponse {
 /**
  * 
  * @export
- * @interface VideoConnectUserDetailsRequest
+ * @interface VideoCollectUserFeedbackRequest
  */
-export interface VideoConnectUserDetailsRequest {
+export interface VideoCollectUserFeedbackRequest {
     /**
      * 
-     * @type {object}
-     * @memberof VideoConnectUserDetailsRequest
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoCollectUserFeedbackRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
     /**
      * 
-     * @type {string}
-     * @memberof VideoConnectUserDetailsRequest
+     * @type {number}
+     * @memberof VideoCollectUserFeedbackRequest
      */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoConnectUserDetailsRequest
-     */
-    image?: string;
+    rating: number;
     /**
      * 
      * @type {string}
-     * @memberof VideoConnectUserDetailsRequest
+     * @memberof VideoCollectUserFeedbackRequest
      */
-    language?: string;
+    reason?: string;
     /**
      * 
      * @type {string}
-     * @memberof VideoConnectUserDetailsRequest
+     * @memberof VideoCollectUserFeedbackRequest
      */
-    name?: string;
+    sdk: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCollectUserFeedbackRequest
+     */
+    sdk_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCollectUserFeedbackRequest
+     */
+    user_session_id: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCollectUserFeedbackResponse
+ */
+export interface VideoCollectUserFeedbackResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoCollectUserFeedbackResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCoordinates
+ */
+export interface VideoCoordinates {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCoordinates
+     */
+    latitude: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCoordinates
+     */
+    longitude: number;
 }
 /**
  * 
@@ -949,10 +1073,10 @@ export interface VideoCreateCallTypeRequest {
     name: string;
     /**
      * 
-     * @type {VideoNotificationSettingsRequest}
+     * @type {VideoNotificationSettings}
      * @memberof VideoCreateCallTypeRequest
      */
-    notification_settings?: VideoNotificationSettingsRequest;
+    notification_settings?: VideoNotificationSettings;
     /**
      * 
      * @type {VideoCallSettingsRequest}
@@ -1026,13 +1150,13 @@ export interface VideoCreateDeviceRequest {
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
-    push_provider?: VideoCreateDeviceRequestPushProviderEnum;
+    push_provider: VideoCreateDeviceRequestPushProviderEnum;
     /**
      * 
      * @type {string}
@@ -1187,29 +1311,55 @@ export interface VideoDeleteExternalStorageResponse {
 /**
  * 
  * @export
+ * @interface VideoDeleteRecordingResponse
+ */
+export interface VideoDeleteRecordingResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDeleteRecordingResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoDeleteTranscriptionResponse
+ */
+export interface VideoDeleteTranscriptionResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDeleteTranscriptionResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoDevice
  */
 export interface VideoDevice {
     /**
-     * Date/time of creation
+     * 
      * @type {string}
      * @memberof VideoDevice
      */
     created_at: string;
     /**
-     * Whether device is disabled or not
+     * 
      * @type {boolean}
      * @memberof VideoDevice
      */
     disabled?: boolean;
     /**
-     * Reason explaining why device had been disabled
+     * 
      * @type {string}
      * @memberof VideoDevice
      */
     disabled_reason?: string;
     /**
-     * 
+     * Device ID
      * @type {string}
      * @memberof VideoDevice
      */
@@ -1219,20 +1369,39 @@ export interface VideoDevice {
      * @type {string}
      * @memberof VideoDevice
      */
-    push_provider: string;
+    push_provider: VideoDevicePushProviderEnum;
     /**
-     * 
+     * Name of the push provider configuration
      * @type {string}
      * @memberof VideoDevice
      */
     push_provider_name?: string;
     /**
-     * When true the token is for Apple VoIP push notifications
+     * 
+     * @type {string}
+     * @memberof VideoDevice
+     */
+    user_id: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof VideoDevice
      */
     voip?: boolean;
 }
+
+
+/**
+ * @export
+ */
+export const VideoDevicePushProviderEnum = {
+    FIREBASE: 'firebase',
+    APN: 'apn',
+    HUAWEI: 'huawei',
+    XIAOMI: 'xiaomi'
+} as const;
+export type VideoDevicePushProviderEnum = typeof VideoDevicePushProviderEnum[keyof typeof VideoDevicePushProviderEnum];
+
 /**
  * 
  * @export
@@ -1387,30 +1556,11 @@ export interface VideoEventNotificationSettings {
      * @type {VideoAPNS}
      * @memberof VideoEventNotificationSettings
      */
-    apns: VideoAPNS;
+    apns?: VideoAPNS;
     /**
      * 
      * @type {boolean}
      * @memberof VideoEventNotificationSettings
-     */
-    enabled: boolean;
-}
-/**
- * 
- * @export
- * @interface VideoEventNotificationSettingsRequest
- */
-export interface VideoEventNotificationSettingsRequest {
-    /**
-     * 
-     * @type {VideoAPNSRequest}
-     * @memberof VideoEventNotificationSettingsRequest
-     */
-    apns?: VideoAPNSRequest;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoEventNotificationSettingsRequest
      */
     enabled?: boolean;
 }
@@ -1448,19 +1598,6 @@ export interface VideoExternalStorageResponse {
 /**
  * 
  * @export
- * @interface VideoGeofenceSettings
- */
-export interface VideoGeofenceSettings {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof VideoGeofenceSettings
-     */
-    names: Array<string>;
-}
-/**
- * 
- * @export
  * @interface VideoGeofenceSettingsRequest
  */
 export interface VideoGeofenceSettingsRequest {
@@ -1470,6 +1607,86 @@ export interface VideoGeofenceSettingsRequest {
      * @memberof VideoGeofenceSettingsRequest
      */
     names?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoGeofenceSettingsResponse
+ */
+export interface VideoGeofenceSettingsResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VideoGeofenceSettingsResponse
+     */
+    names: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoGeolocationResult
+ */
+export interface VideoGeolocationResult {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGeolocationResult
+     */
+    accuracy_radius: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    city: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    continent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    continent_code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    country: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    country_iso_code: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGeolocationResult
+     */
+    latitude: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGeolocationResult
+     */
+    longitude: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    subdivision: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoGeolocationResult
+     */
+    subdivision_iso_code: string;
 }
 /**
  * 
@@ -1497,16 +1714,95 @@ export interface VideoGetCallResponse {
     members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {VideoMemberResponse}
-     * @memberof VideoGetCallResponse
-     */
-    membership?: VideoMemberResponse;
-    /**
-     * 
      * @type {Array<VideoOwnCapability>}
      * @memberof VideoGetCallResponse
      */
     own_capabilities: Array<VideoOwnCapability>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoGetCallStatsResponse
+ */
+export interface VideoGetCallStatsResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    call_duration_seconds: number;
+    /**
+     * 
+     * @type {VideoCallTimeline}
+     * @memberof VideoGetCallStatsResponse
+     */
+    call_timeline?: VideoCallTimeline;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoGetCallStatsResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoGetCallStatsResponse
+     */
+    jitter?: VideoStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoGetCallStatsResponse
+     */
+    latency?: VideoStats;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    max_freezes_duration_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    max_participants: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    max_total_quality_limitation_duration_seconds: number;
+    /**
+     * 
+     * @type {Array<VideoUserStats>}
+     * @memberof VideoGetCallStatsResponse
+     */
+    participant_report: Array<VideoUserStats>;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    publishing_participants: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    quality_score: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoGetCallStatsResponse
+     */
+    sfu_count: number;
+    /**
+     * 
+     * @type {Array<VideoSFULocationResponse>}
+     * @memberof VideoGetCallStatsResponse
+     */
+    sfus: Array<VideoSFULocationResponse>;
 }
 /**
  * 
@@ -1645,12 +1941,6 @@ export interface VideoGetOrCreateCallResponse {
     members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {VideoMemberResponse}
-     * @memberof VideoGetOrCreateCallResponse
-     */
-    membership?: VideoMemberResponse;
-    /**
-     * 
      * @type {Array<VideoOwnCapability>}
      * @memberof VideoGetOrCreateCallResponse
      */
@@ -1741,7 +2031,7 @@ export interface VideoHLSSettingsRequest {
      * @type {Array<string>}
      * @memberof VideoHLSSettingsRequest
      */
-    quality_tracks?: Array<string>;
+    quality_tracks: Array<string>;
 }
 /**
  * 
@@ -1763,10 +2053,10 @@ export interface VideoHLSSettingsResponse {
     enabled: boolean;
     /**
      * 
-     * @type {VideoLayoutSettings}
+     * @type {VideoLayoutSettingsResponse}
      * @memberof VideoHLSSettingsResponse
      */
-    layout: VideoLayoutSettings;
+    layout: VideoLayoutSettingsResponse;
     /**
      * 
      * @type {Array<string>}
@@ -1774,51 +2064,6 @@ export interface VideoHLSSettingsResponse {
      */
     quality_tracks: Array<string>;
 }
-/**
- * 
- * @export
- * @interface VideoLayoutSettings
- */
-export interface VideoLayoutSettings {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoLayoutSettings
-     */
-    external_app_url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoLayoutSettings
-     */
-    external_css_url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoLayoutSettings
-     */
-    name: VideoLayoutSettingsNameEnum;
-    /**
-     * 
-     * @type {object}
-     * @memberof VideoLayoutSettings
-     */
-    options?: object;
-}
-
-
-/**
- * @export
- */
-export const VideoLayoutSettingsNameEnum = {
-    SPOTLIGHT: 'spotlight',
-    GRID: 'grid',
-    SINGLE_PARTICIPANT: 'single-participant',
-    MOBILE: 'mobile',
-    CUSTOM: 'custom'
-} as const;
-export type VideoLayoutSettingsNameEnum = typeof VideoLayoutSettingsNameEnum[keyof typeof VideoLayoutSettingsNameEnum];
-
 /**
  * 
  * @export
@@ -1845,10 +2090,10 @@ export interface VideoLayoutSettingsRequest {
     name: VideoLayoutSettingsRequestNameEnum;
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoLayoutSettingsRequest
      */
-    options?: object;
+    options?: { [key: string]: any; };
 }
 
 
@@ -1863,6 +2108,51 @@ export const VideoLayoutSettingsRequestNameEnum = {
     CUSTOM: 'custom'
 } as const;
 export type VideoLayoutSettingsRequestNameEnum = typeof VideoLayoutSettingsRequestNameEnum[keyof typeof VideoLayoutSettingsRequestNameEnum];
+
+/**
+ * 
+ * @export
+ * @interface VideoLayoutSettingsResponse
+ */
+export interface VideoLayoutSettingsResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLayoutSettingsResponse
+     */
+    external_app_url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLayoutSettingsResponse
+     */
+    external_css_url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLayoutSettingsResponse
+     */
+    name: VideoLayoutSettingsResponseNameEnum;
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoLayoutSettingsResponse
+     */
+    options?: { [key: string]: any; };
+}
+
+
+/**
+ * @export
+ */
+export const VideoLayoutSettingsResponseNameEnum = {
+    SPOTLIGHT: 'spotlight',
+    GRID: 'grid',
+    SINGLE_PARTICIPANT: 'single-participant',
+    MOBILE: 'mobile',
+    CUSTOM: 'custom'
+} as const;
+export type VideoLayoutSettingsResponseNameEnum = typeof VideoLayoutSettingsResponseNameEnum[keyof typeof VideoLayoutSettingsResponseNameEnum];
 
 /**
  * 
@@ -1962,15 +2252,102 @@ export interface VideoListTranscriptionsResponse {
 /**
  * 
  * @export
+ * @interface VideoLocation
+ */
+export interface VideoLocation {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    continent_code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    country_iso_code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoLocation
+     */
+    subdivision_iso_code: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoMOSStats
+ */
+export interface VideoMOSStats {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoMOSStats
+     */
+    average_score: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof VideoMOSStats
+     */
+    histogram_duration_seconds: Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoMOSStats
+     */
+    max_score: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoMOSStats
+     */
+    min_score: number;
+}
+/**
+ * 
+ * @export
+ * @interface VideoMediaPubSubHint
+ */
+export interface VideoMediaPubSubHint {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoMediaPubSubHint
+     */
+    audio_published: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoMediaPubSubHint
+     */
+    audio_subscribed: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoMediaPubSubHint
+     */
+    video_published: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoMediaPubSubHint
+     */
+    video_subscribed: boolean;
+}
+/**
+ * 
+ * @export
  * @interface VideoMemberRequest
  */
 export interface VideoMemberRequest {
     /**
      * Custom data for this object
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoMemberRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
     /**
      * 
      * @type {string}
@@ -1998,10 +2375,10 @@ export interface VideoMemberResponse {
     created_at: string;
     /**
      * Custom member response data
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoMemberResponse
      */
-    custom: object;
+    custom: { [key: string]: any; };
     /**
      * Date/time of deletion
      * @type {string}
@@ -2053,6 +2430,18 @@ export interface VideoMuteUsersRequest {
     mute_all_users?: boolean;
     /**
      * 
+     * @type {VideoUserRequest}
+     * @memberof VideoMuteUsersRequest
+     */
+    muted_by?: VideoUserRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoMuteUsersRequest
+     */
+    muted_by_id?: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof VideoMuteUsersRequest
      */
@@ -2092,6 +2481,31 @@ export interface VideoMuteUsersResponse {
 /**
  * 
  * @export
+ * @interface VideoNoiseCancellationSettings
+ */
+export interface VideoNoiseCancellationSettings {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoNoiseCancellationSettings
+     */
+    mode: VideoNoiseCancellationSettingsModeEnum;
+}
+
+
+/**
+ * @export
+ */
+export const VideoNoiseCancellationSettingsModeEnum = {
+    AVAILABLE: 'available',
+    DISABLED: 'disabled',
+    AUTO_ON: 'auto-on'
+} as const;
+export type VideoNoiseCancellationSettingsModeEnum = typeof VideoNoiseCancellationSettingsModeEnum[keyof typeof VideoNoiseCancellationSettingsModeEnum];
+
+/**
+ * 
+ * @export
  * @interface VideoNotificationSettings
  */
 export interface VideoNotificationSettings {
@@ -2100,68 +2514,69 @@ export interface VideoNotificationSettings {
      * @type {VideoEventNotificationSettings}
      * @memberof VideoNotificationSettings
      */
-    call_live_started: VideoEventNotificationSettings;
+    call_live_started?: VideoEventNotificationSettings;
     /**
      * 
      * @type {VideoEventNotificationSettings}
      * @memberof VideoNotificationSettings
      */
-    call_notification: VideoEventNotificationSettings;
+    call_notification?: VideoEventNotificationSettings;
     /**
      * 
      * @type {VideoEventNotificationSettings}
      * @memberof VideoNotificationSettings
      */
-    call_ring: VideoEventNotificationSettings;
+    call_ring?: VideoEventNotificationSettings;
     /**
      * 
      * @type {boolean}
      * @memberof VideoNotificationSettings
-     */
-    enabled: boolean;
-    /**
-     * 
-     * @type {VideoEventNotificationSettings}
-     * @memberof VideoNotificationSettings
-     */
-    session_started: VideoEventNotificationSettings;
-}
-/**
- * 
- * @export
- * @interface VideoNotificationSettingsRequest
- */
-export interface VideoNotificationSettingsRequest {
-    /**
-     * 
-     * @type {VideoEventNotificationSettingsRequest}
-     * @memberof VideoNotificationSettingsRequest
-     */
-    call_live_started?: VideoEventNotificationSettingsRequest;
-    /**
-     * 
-     * @type {VideoEventNotificationSettingsRequest}
-     * @memberof VideoNotificationSettingsRequest
-     */
-    call_notification?: VideoEventNotificationSettingsRequest;
-    /**
-     * 
-     * @type {VideoEventNotificationSettingsRequest}
-     * @memberof VideoNotificationSettingsRequest
-     */
-    call_ring?: VideoEventNotificationSettingsRequest;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoNotificationSettingsRequest
      */
     enabled?: boolean;
     /**
      * 
-     * @type {VideoEventNotificationSettingsRequest}
-     * @memberof VideoNotificationSettingsRequest
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
      */
-    session_started?: VideoEventNotificationSettingsRequest;
+    session_started?: VideoEventNotificationSettings;
+}
+/**
+ * 
+ * @export
+ * @interface VideoNullBool
+ */
+export interface VideoNullBool {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoNullBool
+     */
+    HasValue?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoNullBool
+     */
+    Value?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VideoNullTime
+ */
+export interface VideoNullTime {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoNullTime
+     */
+    HasValue?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoNullTime
+     */
+    Value?: string;
 }
 
 /**
@@ -2172,6 +2587,7 @@ export const VideoOwnCapability = {
     BLOCK_USERS: 'block-users',
     CREATE_CALL: 'create-call',
     CREATE_REACTION: 'create-reaction',
+    ENABLE_NOISE_CANCELLATION: 'enable-noise-cancellation',
     END_CALL: 'end-call',
     JOIN_BACKSTAGE: 'join-backstage',
     JOIN_CALL: 'join-call',
@@ -2231,15 +2647,220 @@ export interface VideoPinResponse {
 /**
  * 
  * @export
+ * @interface VideoPrivacySettings
+ */
+export interface VideoPrivacySettings {
+    /**
+     * 
+     * @type {VideoReadReceipts}
+     * @memberof VideoPrivacySettings
+     */
+    read_receipts?: VideoReadReceipts;
+    /**
+     * 
+     * @type {VideoTypingIndicators}
+     * @memberof VideoPrivacySettings
+     */
+    typing_indicators?: VideoTypingIndicators;
+}
+/**
+ * 
+ * @export
+ * @interface VideoPushNotificationSettings
+ */
+export interface VideoPushNotificationSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoPushNotificationSettings
+     */
+    disabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoPushNotificationSettings
+     */
+    disabled_until?: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoPushNotificationSettingsInput
+ */
+export interface VideoPushNotificationSettingsInput {
+    /**
+     * 
+     * @type {VideoNullBool}
+     * @memberof VideoPushNotificationSettingsInput
+     */
+    disabled?: VideoNullBool;
+    /**
+     * 
+     * @type {VideoNullTime}
+     * @memberof VideoPushNotificationSettingsInput
+     */
+    disabled_until?: VideoNullTime;
+}
+/**
+ * 
+ * @export
+ * @interface VideoQueryCallMembersRequest
+ */
+export interface VideoQueryCallMembersRequest {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    filter_conditions?: { [key: string]: any; };
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    id: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    limit?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    prev?: string;
+    /**
+     * 
+     * @type {Array<VideoSortParam>}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    sort?: Array<VideoSortParam>;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersRequest
+     */
+    type: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoQueryCallMembersResponse
+ */
+export interface VideoQueryCallMembersResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoQueryCallMembersResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {Array<VideoMemberResponse>}
+     * @memberof VideoQueryCallMembersResponse
+     */
+    members: Array<VideoMemberResponse>;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersResponse
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallMembersResponse
+     */
+    prev?: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoQueryCallStatsRequest
+ */
+export interface VideoQueryCallStatsRequest {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoQueryCallStatsRequest
+     */
+    filter_conditions?: { [key: string]: any; };
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoQueryCallStatsRequest
+     */
+    limit?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallStatsRequest
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallStatsRequest
+     */
+    prev?: string;
+    /**
+     * 
+     * @type {Array<VideoSortParam>}
+     * @memberof VideoQueryCallStatsRequest
+     */
+    sort?: Array<VideoSortParam>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoQueryCallStatsResponse
+ */
+export interface VideoQueryCallStatsResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoQueryCallStatsResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallStatsResponse
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoQueryCallStatsResponse
+     */
+    prev?: string;
+    /**
+     * 
+     * @type {Array<VideoCallStatsReportSummaryResponse>}
+     * @memberof VideoQueryCallStatsResponse
+     */
+    reports: Array<VideoCallStatsReportSummaryResponse>;
+}
+/**
+ * 
+ * @export
  * @interface VideoQueryCallsRequest
  */
 export interface VideoQueryCallsRequest {
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoQueryCallsRequest
      */
-    filter_conditions?: object;
+    filter_conditions?: { [key: string]: any; };
     /**
      * 
      * @type {number}
@@ -2260,16 +2881,10 @@ export interface VideoQueryCallsRequest {
     prev?: string;
     /**
      * 
-     * @type {Array<VideoSortParamRequest>}
+     * @type {Array<VideoSortParam>}
      * @memberof VideoQueryCallsRequest
      */
-    sort?: Array<VideoSortParamRequest>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoQueryCallsRequest
-     */
-    watch?: boolean;
+    sort?: Array<VideoSortParam>;
 }
 /**
  * 
@@ -2303,86 +2918,6 @@ export interface VideoQueryCallsResponse {
     prev?: string;
 }
 /**
- * 
- * @export
- * @interface VideoQueryMembersRequest
- */
-export interface VideoQueryMembersRequest {
-    /**
-     * 
-     * @type {object}
-     * @memberof VideoQueryMembersRequest
-     */
-    filter_conditions?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersRequest
-     */
-    id: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoQueryMembersRequest
-     */
-    limit?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersRequest
-     */
-    next?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersRequest
-     */
-    prev?: string;
-    /**
-     * 
-     * @type {Array<VideoSortParamRequest>}
-     * @memberof VideoQueryMembersRequest
-     */
-    sort?: Array<VideoSortParamRequest>;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersRequest
-     */
-    type: string;
-}
-/**
- * 
- * @export
- * @interface VideoQueryMembersResponse
- */
-export interface VideoQueryMembersResponse {
-    /**
-     * Duration of the request in human-readable format
-     * @type {string}
-     * @memberof VideoQueryMembersResponse
-     */
-    duration: string;
-    /**
-     * 
-     * @type {Array<VideoMemberResponse>}
-     * @memberof VideoQueryMembersResponse
-     */
-    members: Array<VideoMemberResponse>;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersResponse
-     */
-    next?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoQueryMembersResponse
-     */
-    prev?: string;
-}
-/**
  * RTMP input settings
  * @export
  * @interface VideoRTMPIngress
@@ -2394,6 +2929,19 @@ export interface VideoRTMPIngress {
      * @memberof VideoRTMPIngress
      */
     address: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoReadReceipts
+ */
+export interface VideoReadReceipts {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoReadReceipts
+     */
+    enabled?: boolean;
 }
 /**
  * 
@@ -2464,10 +3012,10 @@ export interface VideoRecordSettingsResponse {
     audio_only: boolean;
     /**
      * 
-     * @type {VideoLayoutSettings}
+     * @type {VideoLayoutSettingsResponse}
      * @memberof VideoRecordSettingsResponse
      */
-    layout: VideoLayoutSettings;
+    layout: VideoLayoutSettingsResponse;
     /**
      * 
      * @type {string}
@@ -2497,25 +3045,6 @@ export interface VideoResponse {
 /**
  * 
  * @export
- * @interface VideoRingSettings
- */
-export interface VideoRingSettings {
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoRingSettings
-     */
-    auto_cancel_timeout_ms: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoRingSettings
-     */
-    incoming_call_timeout_ms: number;
-}
-/**
- * 
- * @export
  * @interface VideoRingSettingsRequest
  */
 export interface VideoRingSettingsRequest {
@@ -2524,13 +3053,32 @@ export interface VideoRingSettingsRequest {
      * @type {number}
      * @memberof VideoRingSettingsRequest
      */
-    auto_cancel_timeout_ms?: number;
+    auto_cancel_timeout_ms: number;
     /**
      * 
      * @type {number}
      * @memberof VideoRingSettingsRequest
      */
-    incoming_call_timeout_ms?: number;
+    incoming_call_timeout_ms: number;
+}
+/**
+ * 
+ * @export
+ * @interface VideoRingSettingsResponse
+ */
+export interface VideoRingSettingsResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoRingSettingsResponse
+     */
+    auto_cancel_timeout_ms: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoRingSettingsResponse
+     */
+    incoming_call_timeout_ms: number;
 }
 /**
  * 
@@ -2560,21 +3108,33 @@ export interface VideoS3Request {
 /**
  * 
  * @export
- * @interface VideoScreensharingSettings
+ * @interface VideoSFULocationResponse
  */
-export interface VideoScreensharingSettings {
+export interface VideoSFULocationResponse {
     /**
      * 
-     * @type {boolean}
-     * @memberof VideoScreensharingSettings
+     * @type {VideoCoordinates}
+     * @memberof VideoSFULocationResponse
      */
-    access_request_enabled: boolean;
+    coordinates: VideoCoordinates;
     /**
      * 
-     * @type {boolean}
-     * @memberof VideoScreensharingSettings
+     * @type {string}
+     * @memberof VideoSFULocationResponse
      */
-    enabled: boolean;
+    datacenter: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoSFULocationResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {VideoLocation}
+     * @memberof VideoSFULocationResponse
+     */
+    location: VideoLocation;
 }
 /**
  * 
@@ -2594,6 +3154,37 @@ export interface VideoScreensharingSettingsRequest {
      * @memberof VideoScreensharingSettingsRequest
      */
     enabled?: boolean;
+    /**
+     * 
+     * @type {VideoTargetResolution}
+     * @memberof VideoScreensharingSettingsRequest
+     */
+    target_resolution?: VideoTargetResolution;
+}
+/**
+ * 
+ * @export
+ * @interface VideoScreensharingSettingsResponse
+ */
+export interface VideoScreensharingSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoScreensharingSettingsResponse
+     */
+    access_request_enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoScreensharingSettingsResponse
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {VideoTargetResolution}
+     * @memberof VideoScreensharingSettingsResponse
+     */
+    target_resolution?: VideoTargetResolution;
 }
 /**
  * 
@@ -2603,10 +3194,10 @@ export interface VideoScreensharingSettingsRequest {
 export interface VideoSendEventRequest {
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoSendEventRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
 }
 /**
  * 
@@ -2624,19 +3215,19 @@ export interface VideoSendEventResponse {
 /**
  * 
  * @export
- * @interface VideoSortParamRequest
+ * @interface VideoSortParam
  */
-export interface VideoSortParamRequest {
+export interface VideoSortParam {
     /**
      * Direction of sorting, -1 for descending, 1 for ascending
      * @type {number}
-     * @memberof VideoSortParamRequest
+     * @memberof VideoSortParam
      */
     direction?: number;
     /**
      * Name of field to sort by
      * @type {string}
-     * @memberof VideoSortParamRequest
+     * @memberof VideoSortParam
      */
     field?: string;
 }
@@ -2714,6 +3305,25 @@ export interface VideoStartTranscriptionResponse {
 /**
  * 
  * @export
+ * @interface VideoStats
+ */
+export interface VideoStats {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoStats
+     */
+    average_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoStats
+     */
+    max_seconds: number;
+}
+/**
+ * 
+ * @export
  * @interface VideoStopHLSBroadcastingResponse
  */
 export interface VideoStopHLSBroadcastingResponse {
@@ -2772,6 +3382,37 @@ export interface VideoStopTranscriptionResponse {
 /**
  * 
  * @export
+ * @interface VideoSubsession
+ */
+export interface VideoSubsession {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoSubsession
+     */
+    ended_at: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoSubsession
+     */
+    joined_at: number;
+    /**
+     * 
+     * @type {VideoMediaPubSubHint}
+     * @memberof VideoSubsession
+     */
+    pub_sub_hint?: VideoMediaPubSubHint;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoSubsession
+     */
+    sfu_id: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoTargetResolution
  */
 export interface VideoTargetResolution {
@@ -2780,7 +3421,7 @@ export interface VideoTargetResolution {
      * @type {number}
      * @memberof VideoTargetResolution
      */
-    bitrate: number;
+    bitrate?: number;
     /**
      * 
      * @type {number}
@@ -2793,31 +3434,6 @@ export interface VideoTargetResolution {
      * @memberof VideoTargetResolution
      */
     width: number;
-}
-/**
- * 
- * @export
- * @interface VideoTargetResolutionRequest
- */
-export interface VideoTargetResolutionRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoTargetResolutionRequest
-     */
-    bitrate?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoTargetResolutionRequest
-     */
-    height?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoTargetResolutionRequest
-     */
-    width?: number;
 }
 /**
  * 
@@ -2835,19 +3451,6 @@ export interface VideoThumbnailResponse {
 /**
  * 
  * @export
- * @interface VideoThumbnailsSettings
- */
-export interface VideoThumbnailsSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoThumbnailsSettings
-     */
-    enabled: boolean;
-}
-/**
- * 
- * @export
  * @interface VideoThumbnailsSettingsRequest
  */
 export interface VideoThumbnailsSettingsRequest {
@@ -2861,34 +3464,16 @@ export interface VideoThumbnailsSettingsRequest {
 /**
  * 
  * @export
- * @interface VideoTranscriptionSettings
+ * @interface VideoThumbnailsSettingsResponse
  */
-export interface VideoTranscriptionSettings {
+export interface VideoThumbnailsSettingsResponse {
     /**
      * 
-     * @type {string}
-     * @memberof VideoTranscriptionSettings
+     * @type {boolean}
+     * @memberof VideoThumbnailsSettingsResponse
      */
-    closed_caption_mode: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoTranscriptionSettings
-     */
-    mode: VideoTranscriptionSettingsModeEnum;
+    enabled: boolean;
 }
-
-
-/**
- * @export
- */
-export const VideoTranscriptionSettingsModeEnum = {
-    AVAILABLE: 'available',
-    DISABLED: 'disabled',
-    AUTO_ON: 'auto-on'
-} as const;
-export type VideoTranscriptionSettingsModeEnum = typeof VideoTranscriptionSettingsModeEnum[keyof typeof VideoTranscriptionSettingsModeEnum];
-
 /**
  * 
  * @export
@@ -2903,10 +3488,16 @@ export interface VideoTranscriptionSettingsRequest {
     closed_caption_mode?: string;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof VideoTranscriptionSettingsRequest
+     */
+    languages?: Array<string>;
+    /**
+     * 
      * @type {string}
      * @memberof VideoTranscriptionSettingsRequest
      */
-    mode?: VideoTranscriptionSettingsRequestModeEnum;
+    mode: VideoTranscriptionSettingsRequestModeEnum;
 }
 
 
@@ -2920,6 +3511,56 @@ export const VideoTranscriptionSettingsRequestModeEnum = {
 } as const;
 export type VideoTranscriptionSettingsRequestModeEnum = typeof VideoTranscriptionSettingsRequestModeEnum[keyof typeof VideoTranscriptionSettingsRequestModeEnum];
 
+/**
+ * 
+ * @export
+ * @interface VideoTranscriptionSettingsResponse
+ */
+export interface VideoTranscriptionSettingsResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoTranscriptionSettingsResponse
+     */
+    closed_caption_mode: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VideoTranscriptionSettingsResponse
+     */
+    languages: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoTranscriptionSettingsResponse
+     */
+    mode: VideoTranscriptionSettingsResponseModeEnum;
+}
+
+
+/**
+ * @export
+ */
+export const VideoTranscriptionSettingsResponseModeEnum = {
+    AVAILABLE: 'available',
+    DISABLED: 'disabled',
+    AUTO_ON: 'auto-on'
+} as const;
+export type VideoTranscriptionSettingsResponseModeEnum = typeof VideoTranscriptionSettingsResponseModeEnum[keyof typeof VideoTranscriptionSettingsResponseModeEnum];
+
+/**
+ * 
+ * @export
+ * @interface VideoTypingIndicators
+ */
+export interface VideoTypingIndicators {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoTypingIndicators
+     */
+    enabled?: boolean;
+}
 /**
  * 
  * @export
@@ -3024,10 +3665,10 @@ export interface VideoUpdateCallMembersResponse {
 export interface VideoUpdateCallRequest {
     /**
      * Custom data for this object
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoUpdateCallRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
     /**
      * 
      * @type {VideoCallSettingsRequest}
@@ -3067,12 +3708,6 @@ export interface VideoUpdateCallResponse {
     members: Array<VideoMemberResponse>;
     /**
      * 
-     * @type {VideoMemberResponse}
-     * @memberof VideoUpdateCallResponse
-     */
-    membership?: VideoMemberResponse;
-    /**
-     * 
      * @type {Array<VideoOwnCapability>}
      * @memberof VideoUpdateCallResponse
      */
@@ -3098,10 +3733,10 @@ export interface VideoUpdateCallTypeRequest {
     grants?: { [key: string]: Array<string>; };
     /**
      * 
-     * @type {VideoNotificationSettingsRequest}
+     * @type {VideoNotificationSettings}
      * @memberof VideoUpdateCallTypeRequest
      */
-    notification_settings?: VideoNotificationSettingsRequest;
+    notification_settings?: VideoNotificationSettings;
     /**
      * 
      * @type {VideoCallSettingsRequest}
@@ -3285,15 +3920,46 @@ export interface VideoUpdateUserPermissionsResponse {
 /**
  * 
  * @export
+ * @interface VideoUserInfoResponse
+ */
+export interface VideoUserInfoResponse {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoUserInfoResponse
+     */
+    custom: { [key: string]: any; };
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserInfoResponse
+     */
+    image: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserInfoResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VideoUserInfoResponse
+     */
+    roles: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface VideoUserRequest
  */
 export interface VideoUserRequest {
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoUserRequest
      */
-    custom?: object;
+    custom?: { [key: string]: any; };
     /**
      * User ID
      * @type {string}
@@ -3308,6 +3974,12 @@ export interface VideoUserRequest {
     image?: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof VideoUserRequest
+     */
+    invisible?: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof VideoUserRequest
      */
@@ -3318,6 +3990,18 @@ export interface VideoUserRequest {
      * @memberof VideoUserRequest
      */
     name?: string;
+    /**
+     * 
+     * @type {VideoPrivacySettings}
+     * @memberof VideoUserRequest
+     */
+    privacy_settings?: VideoPrivacySettings;
+    /**
+     * 
+     * @type {VideoPushNotificationSettingsInput}
+     * @memberof VideoUserRequest
+     */
+    push_notifications?: VideoPushNotificationSettingsInput;
     /**
      * 
      * @type {string}
@@ -3338,6 +4022,12 @@ export interface VideoUserRequest {
  */
 export interface VideoUserResponse {
     /**
+     * 
+     * @type {boolean}
+     * @memberof VideoUserResponse
+     */
+    banned: boolean;
+    /**
      * Date/time of creation
      * @type {string}
      * @memberof VideoUserResponse
@@ -3345,16 +4035,28 @@ export interface VideoUserResponse {
     created_at: string;
     /**
      * 
-     * @type {object}
+     * @type {{ [key: string]: any; }}
      * @memberof VideoUserResponse
      */
-    custom: object;
+    custom: { [key: string]: any; };
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserResponse
+     */
+    deactivated_at?: string;
     /**
      * Date/time of deletion
      * @type {string}
      * @memberof VideoUserResponse
      */
     deleted_at?: string;
+    /**
+     * 
+     * @type {Array<VideoDevice>}
+     * @memberof VideoUserResponse
+     */
+    devices: Array<VideoDevice>;
     /**
      * 
      * @type {string}
@@ -3369,6 +4071,12 @@ export interface VideoUserResponse {
     image?: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof VideoUserResponse
+     */
+    invisible: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof VideoUserResponse
      */
@@ -3378,13 +4086,43 @@ export interface VideoUserResponse {
      * @type {string}
      * @memberof VideoUserResponse
      */
+    last_active?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserResponse
+     */
     name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoUserResponse
+     */
+    online: boolean;
+    /**
+     * 
+     * @type {VideoPushNotificationSettings}
+     * @memberof VideoUserResponse
+     */
+    push_notifications?: VideoPushNotificationSettings;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserResponse
+     */
+    revoke_tokens_issued_before?: string;
     /**
      * 
      * @type {string}
      * @memberof VideoUserResponse
      */
     role: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoUserResponse
+     */
+    shadow_banned: boolean;
     /**
      * 
      * @type {Array<string>}
@@ -3401,52 +4139,331 @@ export interface VideoUserResponse {
 /**
  * 
  * @export
- * @interface VideoVideoSettings
+ * @interface VideoUserSessionStats
  */
-export interface VideoVideoSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoVideoSettings
-     */
-    access_request_enabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoVideoSettings
-     */
-    camera_default_on: boolean;
+export interface VideoUserSessionStats {
     /**
      * 
      * @type {string}
-     * @memberof VideoVideoSettings
+     * @memberof VideoUserSessionStats
      */
-    camera_facing: VideoVideoSettingsCameraFacingEnum;
+    browser?: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof VideoVideoSettings
+     * @type {string}
+     * @memberof VideoUserSessionStats
      */
-    enabled: boolean;
+    browser_version?: string;
     /**
      * 
-     * @type {VideoTargetResolution}
-     * @memberof VideoVideoSettings
+     * @type {string}
+     * @memberof VideoUserSessionStats
      */
-    target_resolution: VideoTargetResolution;
+    current_ip?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    current_sfu?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    device_model?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    device_version?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    distance_to_sfu_kilometers?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    freeze_duration_seconds: number;
+    /**
+     * 
+     * @type {VideoGeolocationResult}
+     * @memberof VideoUserSessionStats
+     */
+    geolocation?: VideoGeolocationResult;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    jitter?: VideoStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    latency?: VideoStats;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_fir_per_second?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_freeze_fraction: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_freezes_duration_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_freezes_per_second?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_nack_per_second?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    max_pli_per_second?: number;
+    /**
+     * 
+     * @type {VideoVideoQuality}
+     * @memberof VideoUserSessionStats
+     */
+    max_publishing_video_quality?: VideoVideoQuality;
+    /**
+     * 
+     * @type {VideoVideoQuality}
+     * @memberof VideoUserSessionStats
+     */
+    max_receiving_video_quality?: VideoVideoQuality;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    os?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    os_version?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    packet_loss_fraction: number;
+    /**
+     * 
+     * @type {VideoMediaPubSubHint}
+     * @memberof VideoUserSessionStats
+     */
+    pub_sub_hints?: VideoMediaPubSubHint;
+    /**
+     * 
+     * @type {VideoMOSStats}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_audio_mos?: VideoMOSStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_jitter?: VideoStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_latency?: VideoStats;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_packet_loss_fraction: number;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_video_quality_limitation_duration_seconds?: { [key: string]: number; };
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    publishing_audio_codec?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    publishing_duration_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    quality_score: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    receiving_audio_codec?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    receiving_duration_seconds: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    sdk?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    sdk_version?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    session_id: string;
+    /**
+     * 
+     * @type {VideoMOSStats}
+     * @memberof VideoUserSessionStats
+     */
+    subscriber_audio_mos?: VideoMOSStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    subscriber_jitter?: VideoStats;
+    /**
+     * 
+     * @type {VideoStats}
+     * @memberof VideoUserSessionStats
+     */
+    subscriber_latency?: VideoStats;
+    /**
+     * 
+     * @type {Array<VideoSubsession>}
+     * @memberof VideoUserSessionStats
+     */
+    subsessions?: Array<VideoSubsession>;
+    /**
+     * 
+     * @type {VideoCallTimeline}
+     * @memberof VideoUserSessionStats
+     */
+    timeline?: VideoCallTimeline;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    total_pixels_in: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    total_pixels_out: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    webrtc_version?: string;
 }
-
-
 /**
+ * 
  * @export
+ * @interface VideoUserStats
  */
-export const VideoVideoSettingsCameraFacingEnum = {
-    FRONT: 'front',
-    BACK: 'back',
-    EXTERNAL: 'external'
-} as const;
-export type VideoVideoSettingsCameraFacingEnum = typeof VideoVideoSettingsCameraFacingEnum[keyof typeof VideoVideoSettingsCameraFacingEnum];
-
+export interface VideoUserStats {
+    /**
+     * 
+     * @type {VideoUserInfoResponse}
+     * @memberof VideoUserStats
+     */
+    info: VideoUserInfoResponse;
+    /**
+     * 
+     * @type {Array<VideoUserSessionStats>}
+     * @memberof VideoUserStats
+     */
+    session_stats: Array<VideoUserSessionStats>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoVideoQuality
+ */
+export interface VideoVideoQuality {
+    /**
+     * 
+     * @type {VideoVideoResolution}
+     * @memberof VideoVideoQuality
+     */
+    resolution?: VideoVideoResolution;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoVideoQuality
+     */
+    usage_type?: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoVideoResolution
+ */
+export interface VideoVideoResolution {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoVideoResolution
+     */
+    height: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoVideoResolution
+     */
+    width: number;
+}
 /**
  * 
  * @export
@@ -3479,10 +4496,10 @@ export interface VideoVideoSettingsRequest {
     enabled?: boolean;
     /**
      * 
-     * @type {VideoTargetResolutionRequest}
+     * @type {VideoTargetResolution}
      * @memberof VideoVideoSettingsRequest
      */
-    target_resolution?: VideoTargetResolutionRequest;
+    target_resolution?: VideoTargetResolution;
 }
 
 
@@ -3499,19 +4516,49 @@ export type VideoVideoSettingsRequestCameraFacingEnum = typeof VideoVideoSetting
 /**
  * 
  * @export
- * @interface VideoWSAuthMessageRequest
+ * @interface VideoVideoSettingsResponse
  */
-export interface VideoWSAuthMessageRequest {
+export interface VideoVideoSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoVideoSettingsResponse
+     */
+    access_request_enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoVideoSettingsResponse
+     */
+    camera_default_on: boolean;
     /**
      * 
      * @type {string}
-     * @memberof VideoWSAuthMessageRequest
+     * @memberof VideoVideoSettingsResponse
      */
-    token: string;
+    camera_facing: VideoVideoSettingsResponseCameraFacingEnum;
     /**
      * 
-     * @type {VideoConnectUserDetailsRequest}
-     * @memberof VideoWSAuthMessageRequest
+     * @type {boolean}
+     * @memberof VideoVideoSettingsResponse
      */
-    user_details: VideoConnectUserDetailsRequest;
+    enabled: boolean;
+    /**
+     * 
+     * @type {VideoTargetResolution}
+     * @memberof VideoVideoSettingsResponse
+     */
+    target_resolution: VideoTargetResolution;
 }
+
+
+/**
+ * @export
+ */
+export const VideoVideoSettingsResponseCameraFacingEnum = {
+    FRONT: 'front',
+    BACK: 'back',
+    EXTERNAL: 'external'
+} as const;
+export type VideoVideoSettingsResponseCameraFacingEnum = typeof VideoVideoSettingsResponseCameraFacingEnum[keyof typeof VideoVideoSettingsResponseCameraFacingEnum];
+
