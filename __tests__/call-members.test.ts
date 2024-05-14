@@ -74,25 +74,26 @@ describe('call members API', () => {
     expect(unblockResponse).toBeDefined();
   });
 
-  // backend issue
-  // it("mute one or many users", async () => {
-  //   const muteAllResponse = await call.muteUsers({
-  //     mute_all_users: true,
-  //     audio: true,
-  //   });
+  it('mute one or many users', async () => {
+    const muteAllResponse = await call.muteUsers({
+      mute_all_users: true,
+      audio: true,
+      muted_by_id: 'john',
+    });
 
-  //   expect(muteAllResponse).toBeDefined();
+    expect(muteAllResponse).toBeDefined();
 
-  //   const muteUserResponse = await call.muteUsers({
-  //     user_ids: ["sara"],
-  //     audio: true,
-  //     video: true,
-  //     screenshare: true,
-  //     screenshare_audio: true,
-  //   });
+    const muteUserResponse = await call.muteUsers({
+      user_ids: ['sara'],
+      audio: true,
+      video: true,
+      screenshare: true,
+      screenshare_audio: true,
+      muted_by_id: 'john',
+    });
 
-  //   expect(muteUserResponse).toBeDefined();
-  // });
+    expect(muteUserResponse).toBeDefined();
+  });
 
   it('grant and revoke permissions', async () => {
     const revokeResponse = await call.updateUserPermissions({

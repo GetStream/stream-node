@@ -94,12 +94,11 @@ describe('teams', () => {
 
     expect(response.calls.length).toBeGreaterThan(0);
 
-    // TODO: backend issue
-    // response = await client.video.queryCalls({
-    //   filter_conditions: {
-    //     team: null,
-    //   },
-    // });
+    response = await client.video.queryCalls({
+      filter_conditions: {
+        team: null,
+      },
+    });
 
     response = await client.video.queryCalls({
       filter_conditions: {
