@@ -49,6 +49,17 @@ describe('call API', () => {
     expect(response.call.custom.color).toBe('blue');
   });
 
+  it('send custom event', async () => {
+    const response = await call.sendCustomEvent({
+      custom: {
+        'render-animation': 'balloons',
+      },
+      user_id: 'john',
+    });
+
+    expect(response.duration).toBeDefined();
+  });
+
   it('update', async () => {
     const response = await call.update({
       settings_override: {

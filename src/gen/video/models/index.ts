@@ -1733,6 +1733,12 @@ export interface VideoGetCallStatsResponse {
     call_duration_seconds: number;
     /**
      * 
+     * @type {string}
+     * @memberof VideoGetCallStatsResponse
+     */
+    call_status: string;
+    /**
+     * 
      * @type {VideoCallTimeline}
      * @memberof VideoGetCallStatsResponse
      */
@@ -2666,6 +2672,31 @@ export interface VideoPrivacySettings {
 /**
  * 
  * @export
+ * @interface VideoPublishedTrackInfo
+ */
+export interface VideoPublishedTrackInfo {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoPublishedTrackInfo
+     */
+    codec_mime_type?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoPublishedTrackInfo
+     */
+    duration_seconds?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoPublishedTrackInfo
+     */
+    track_type?: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoPushNotificationSettings
  */
 export interface VideoPushNotificationSettings {
@@ -3189,26 +3220,38 @@ export interface VideoScreensharingSettingsResponse {
 /**
  * 
  * @export
- * @interface VideoSendEventRequest
+ * @interface VideoSendCallEventRequest
  */
-export interface VideoSendEventRequest {
+export interface VideoSendCallEventRequest {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof VideoSendEventRequest
+     * @memberof VideoSendCallEventRequest
      */
     custom?: { [key: string]: any; };
+    /**
+     * 
+     * @type {VideoUserRequest}
+     * @memberof VideoSendCallEventRequest
+     */
+    user?: VideoUserRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoSendCallEventRequest
+     */
+    user_id?: string;
 }
 /**
  * 
  * @export
- * @interface VideoSendEventResponse
+ * @interface VideoSendCallEventResponse
  */
-export interface VideoSendEventResponse {
+export interface VideoSendCallEventResponse {
     /**
      * 
      * @type {string}
-     * @memberof VideoSendEventResponse
+     * @memberof VideoSendCallEventResponse
      */
     duration: string;
 }
@@ -4282,6 +4325,12 @@ export interface VideoUserSessionStats {
     pub_sub_hints?: VideoMediaPubSubHint;
     /**
      * 
+     * @type {Array<VideoPublishedTrackInfo>}
+     * @memberof VideoUserSessionStats
+     */
+    published_tracks?: Array<VideoPublishedTrackInfo>;
+    /**
+     * 
      * @type {VideoMOSStats}
      * @memberof VideoUserSessionStats
      */
@@ -4303,7 +4352,19 @@ export interface VideoUserSessionStats {
      * @type {number}
      * @memberof VideoUserSessionStats
      */
+    publisher_noise_cancellation_seconds?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
     publisher_packet_loss_fraction: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    publisher_quality_limitation_fraction?: number;
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -4324,6 +4385,12 @@ export interface VideoUserSessionStats {
     publishing_duration_seconds: number;
     /**
      * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    publishing_video_codec?: string;
+    /**
+     * 
      * @type {number}
      * @memberof VideoUserSessionStats
      */
@@ -4340,6 +4407,12 @@ export interface VideoUserSessionStats {
      * @memberof VideoUserSessionStats
      */
     receiving_duration_seconds: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoUserSessionStats
+     */
+    receiving_video_codec?: string;
     /**
      * 
      * @type {string}
@@ -4376,6 +4449,12 @@ export interface VideoUserSessionStats {
      * @memberof VideoUserSessionStats
      */
     subscriber_latency?: VideoStats;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserSessionStats
+     */
+    subscriber_video_quality_throttled_duration_seconds?: number;
     /**
      * 
      * @type {Array<VideoSubsession>}
@@ -4419,6 +4498,12 @@ export interface VideoUserStats {
      * @memberof VideoUserStats
      */
     info: VideoUserInfoResponse;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserStats
+     */
+    rating?: number;
     /**
      * 
      * @type {Array<VideoUserSessionStats>}
