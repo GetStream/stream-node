@@ -10,6 +10,7 @@ import {
   VideoMuteUsersRequest,
   VideoPinRequest,
   VideoQueryCallMembersRequest,
+  VideoSendCallEventRequest,
   VideoStartRecordingRequest,
   VideoStartTranscriptionRequest,
   VideoUnblockUserRequest,
@@ -96,9 +97,9 @@ export class StreamCall {
     });
   };
 
-  sendCustomEvent = (event: Record<string, any>) => {
+  sendCustomEvent = (videoSendCallEventRequest: VideoSendCallEventRequest) => {
     return this.apiClient.sendCallEvent({
-      videoSendEventRequest: { custom: event },
+      videoSendCallEventRequest,
       ...this.baseRequest,
     });
   };
