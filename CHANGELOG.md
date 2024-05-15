@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/GetStream/stream-node/compare/v0.2.0...v0.2.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* custom event signature ([#32](https://github.com/GetStream/stream-node/issues/32)) ([5e02b9b](https://github.com/GetStream/stream-node/commit/5e02b9bb333c5f7fa2a171e60a02ce997091c2ad))
+
 ## [0.2.0](https://github.com/GetStream/stream-node/compare/v0.1.13...v0.2.0) (2024-05-14)
 
 
