@@ -15,117 +15,81 @@
 
 import * as runtime from '../runtime';
 import type {
-  VideoAPIError,
-  VideoBlockUserRequest,
-  VideoBlockUserResponse,
-  VideoCheckExternalStorageResponse,
-  VideoCollectUserFeedbackRequest,
-  VideoCollectUserFeedbackResponse,
-  VideoCreateCallTypeRequest,
-  VideoCreateCallTypeResponse,
-  VideoCreateDeviceRequest,
-  VideoCreateExternalStorageRequest,
-  VideoCreateExternalStorageResponse,
-  VideoCreateGuestRequest,
-  VideoCreateGuestResponse,
-  VideoDeleteExternalStorageResponse,
-  VideoDeleteRecordingResponse,
-  VideoDeleteTranscriptionResponse,
-  VideoEndCallResponse,
-  VideoGetCallResponse,
-  VideoGetCallStatsResponse,
-  VideoGetCallTypeResponse,
-  VideoGetEdgesResponse,
-  VideoGetOrCreateCallRequest,
-  VideoGetOrCreateCallResponse,
-  VideoGoLiveRequest,
-  VideoGoLiveResponse,
-  VideoListCallTypeResponse,
-  VideoListDevicesResponse,
-  VideoListExternalStorageResponse,
-  VideoListRecordingsResponse,
-  VideoListTranscriptionsResponse,
-  VideoMuteUsersRequest,
-  VideoMuteUsersResponse,
-  VideoPinRequest,
-  VideoPinResponse,
-  VideoQueryCallMembersRequest,
-  VideoQueryCallMembersResponse,
-  VideoQueryCallStatsRequest,
-  VideoQueryCallStatsResponse,
-  VideoQueryCallsRequest,
-  VideoQueryCallsResponse,
-  VideoResponse,
-  VideoSendCallEventRequest,
-  VideoSendCallEventResponse,
-  VideoStartHLSBroadcastingResponse,
-  VideoStartRecordingRequest,
-  VideoStartRecordingResponse,
-  VideoStartTranscriptionRequest,
-  VideoStartTranscriptionResponse,
-  VideoStopHLSBroadcastingResponse,
-  VideoStopLiveResponse,
-  VideoStopRecordingResponse,
-  VideoStopTranscriptionResponse,
-  VideoUnblockUserRequest,
-  VideoUnblockUserResponse,
-  VideoUnpinRequest,
-  VideoUnpinResponse,
-  VideoUpdateCallMembersRequest,
-  VideoUpdateCallMembersResponse,
-  VideoUpdateCallRequest,
-  VideoUpdateCallResponse,
-  VideoUpdateCallTypeRequest,
-  VideoUpdateCallTypeResponse,
-  VideoUpdateExternalStorageRequest,
-  VideoUpdateExternalStorageResponse,
-  VideoUpdateUserPermissionsRequest,
-  VideoUpdateUserPermissionsResponse,
+  APIError,
+  BlockUserRequest,
+  BlockUserResponse,
+  CollectUserFeedbackRequest,
+  CollectUserFeedbackResponse,
+  CreateCallTypeRequest,
+  CreateCallTypeResponse,
+  DeleteRecordingResponse,
+  DeleteTranscriptionResponse,
+  EndCallResponse,
+  GetCallResponse,
+  GetCallStatsResponse,
+  GetCallTypeResponse,
+  GetEdgesResponse,
+  GetOrCreateCallRequest,
+  GetOrCreateCallResponse,
+  GoLiveRequest,
+  GoLiveResponse,
+  ListCallTypeResponse,
+  ListRecordingsResponse,
+  ListTranscriptionsResponse,
+  MuteUsersRequest,
+  MuteUsersResponse,
+  PinRequest,
+  PinResponse,
+  QueryCallMembersRequest,
+  QueryCallMembersResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
+  Response,
+  SendCallEventRequest,
+  SendCallEventResponse,
+  StartHLSBroadcastingResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
+  StartTranscriptionRequest,
+  StartTranscriptionResponse,
+  StopHLSBroadcastingResponse,
+  StopLiveResponse,
+  StopRecordingResponse,
+  StopTranscriptionResponse,
+  UnblockUserRequest,
+  UnblockUserResponse,
+  UnpinRequest,
+  UnpinResponse,
+  UpdateCallMembersRequest,
+  UpdateCallMembersResponse,
+  UpdateCallRequest,
+  UpdateCallResponse,
+  UpdateCallTypeRequest,
+  UpdateCallTypeResponse,
+  UpdateUserPermissionsRequest,
+  UpdateUserPermissionsResponse,
 } from '../models';
 
-export interface BlockUserRequest {
+export interface BlockUserOperationRequest {
     type: string;
     id: string;
-    videoBlockUserRequest: VideoBlockUserRequest | null;
+    blockUserRequest: BlockUserRequest | null;
 }
 
-export interface CheckExternalStorageRequest {
-    name: string;
-}
-
-export interface CollectUserFeedbackRequest {
+export interface CollectUserFeedbackOperationRequest {
     type: string;
     id: string;
     session: string;
-    videoCollectUserFeedbackRequest: VideoCollectUserFeedbackRequest | null;
+    collectUserFeedbackRequest: CollectUserFeedbackRequest | null;
 }
 
-export interface CreateCallTypeRequest {
-    videoCreateCallTypeRequest: VideoCreateCallTypeRequest | null;
-}
-
-export interface CreateDeviceRequest {
-    videoCreateDeviceRequest: VideoCreateDeviceRequest | null;
-}
-
-export interface CreateExternalStorageRequest {
-    videoCreateExternalStorageRequest: VideoCreateExternalStorageRequest | null;
-}
-
-export interface CreateGuestRequest {
-    videoCreateGuestRequest: VideoCreateGuestRequest | null;
+export interface CreateCallTypeOperationRequest {
+    createCallTypeRequest: CreateCallTypeRequest | null;
 }
 
 export interface DeleteCallTypeRequest {
-    name: string;
-}
-
-export interface DeleteDeviceRequest {
-    id: string;
-    userId?: string;
-}
-
-export interface DeleteExternalStorageRequest {
     name: string;
 }
 
@@ -166,20 +130,16 @@ export interface GetCallTypeRequest {
     name: string;
 }
 
-export interface GetOrCreateCallRequest {
+export interface GetOrCreateCallOperationRequest {
     type: string;
     id: string;
-    videoGetOrCreateCallRequest: VideoGetOrCreateCallRequest | null;
+    getOrCreateCallRequest: GetOrCreateCallRequest | null;
 }
 
-export interface GoLiveRequest {
+export interface GoLiveOperationRequest {
     type: string;
     id: string;
-    videoGoLiveRequest: VideoGoLiveRequest | null;
-}
-
-export interface ListDevicesRequest {
-    userId?: string;
+    goLiveRequest: GoLiveRequest | null;
 }
 
 export interface ListRecordingsRequest {
@@ -192,28 +152,28 @@ export interface ListTranscriptionsRequest {
     id: string;
 }
 
-export interface MuteUsersRequest {
+export interface MuteUsersOperationRequest {
     type: string;
     id: string;
-    videoMuteUsersRequest: VideoMuteUsersRequest | null;
+    muteUsersRequest: MuteUsersRequest | null;
 }
 
-export interface QueryCallMembersRequest {
-    videoQueryCallMembersRequest: VideoQueryCallMembersRequest | null;
+export interface QueryCallMembersOperationRequest {
+    queryCallMembersRequest: QueryCallMembersRequest | null;
 }
 
-export interface QueryCallStatsRequest {
-    videoQueryCallStatsRequest: VideoQueryCallStatsRequest | null;
+export interface QueryCallStatsOperationRequest {
+    queryCallStatsRequest: QueryCallStatsRequest | null;
 }
 
-export interface QueryCallsRequest {
-    videoQueryCallsRequest: VideoQueryCallsRequest | null;
+export interface QueryCallsOperationRequest {
+    queryCallsRequest: QueryCallsRequest | null;
 }
 
-export interface SendCallEventRequest {
+export interface SendCallEventOperationRequest {
     type: string;
     id: string;
-    videoSendCallEventRequest: VideoSendCallEventRequest | null;
+    sendCallEventRequest: SendCallEventRequest | null;
 }
 
 export interface StartHLSBroadcastingRequest {
@@ -221,16 +181,16 @@ export interface StartHLSBroadcastingRequest {
     id: string;
 }
 
-export interface StartRecordingRequest {
+export interface StartRecordingOperationRequest {
     type: string;
     id: string;
-    videoStartRecordingRequest: VideoStartRecordingRequest | null;
+    startRecordingRequest: StartRecordingRequest | null;
 }
 
-export interface StartTranscriptionRequest {
+export interface StartTranscriptionOperationRequest {
     type: string;
     id: string;
-    videoStartTranscriptionRequest: VideoStartTranscriptionRequest | null;
+    startTranscriptionRequest: StartTranscriptionRequest | null;
 }
 
 export interface StopHLSBroadcastingRequest {
@@ -253,50 +213,45 @@ export interface StopTranscriptionRequest {
     id: string;
 }
 
-export interface UnblockUserRequest {
+export interface UnblockUserOperationRequest {
     type: string;
     id: string;
-    videoUnblockUserRequest: VideoUnblockUserRequest | null;
+    unblockUserRequest: UnblockUserRequest | null;
 }
 
-export interface UpdateCallRequest {
+export interface UpdateCallOperationRequest {
     type: string;
     id: string;
-    videoUpdateCallRequest: VideoUpdateCallRequest | null;
+    updateCallRequest: UpdateCallRequest | null;
 }
 
-export interface UpdateCallMembersRequest {
+export interface UpdateCallMembersOperationRequest {
     type: string;
     id: string;
-    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest | null;
+    updateCallMembersRequest: UpdateCallMembersRequest | null;
 }
 
-export interface UpdateCallTypeRequest {
+export interface UpdateCallTypeOperationRequest {
     name: string;
-    videoUpdateCallTypeRequest: VideoUpdateCallTypeRequest | null;
+    updateCallTypeRequest: UpdateCallTypeRequest | null;
 }
 
-export interface UpdateExternalStorageRequest {
-    name: string;
-    videoUpdateExternalStorageRequest: VideoUpdateExternalStorageRequest | null;
-}
-
-export interface UpdateUserPermissionsRequest {
+export interface UpdateUserPermissionsOperationRequest {
     type: string;
     id: string;
-    videoUpdateUserPermissionsRequest: VideoUpdateUserPermissionsRequest | null;
+    updateUserPermissionsRequest: UpdateUserPermissionsRequest | null;
 }
 
-export interface VideoPinOperationRequest {
+export interface VideoPinRequest {
     type: string;
     id: string;
-    videoPinRequest: VideoPinRequest | null;
+    pinRequest: PinRequest | null;
 }
 
-export interface VideoUnpinOperationRequest {
+export interface VideoUnpinRequest {
     type: string;
     id: string;
-    videoUnpinRequest: VideoUnpinRequest | null;
+    unpinRequest: UnpinRequest | null;
 }
 
 /**
@@ -308,7 +263,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Block a user, preventing them from joining the call until they are unblocked.  Sends events: - call.blocked_user  Required permissions: - BlockUser 
      * Block user on a call
      */
-    async blockUserRaw(requestParameters: BlockUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoBlockUserResponse>> {
+    async blockUserRaw(requestParameters: BlockUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BlockUserResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling blockUser.');
         }
@@ -317,8 +272,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling blockUser.');
         }
 
-        if (requestParameters.videoBlockUserRequest === null || requestParameters.videoBlockUserRequest === undefined) {
-            throw new runtime.RequiredError('videoBlockUserRequest','Required parameter requestParameters.videoBlockUserRequest was null or undefined when calling blockUser.');
+        if (requestParameters.blockUserRequest === null || requestParameters.blockUserRequest === undefined) {
+            throw new runtime.RequiredError('blockUserRequest','Required parameter requestParameters.blockUserRequest was null or undefined when calling blockUser.');
         }
 
         const queryParameters: any = {};
@@ -340,11 +295,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/block`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/block`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoBlockUserRequest,
+            body: requestParameters.blockUserRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -354,52 +309,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Block a user, preventing them from joining the call until they are unblocked.  Sends events: - call.blocked_user  Required permissions: - BlockUser 
      * Block user on a call
      */
-    async blockUser(requestParameters: BlockUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoBlockUserResponse> {
+    async blockUser(requestParameters: BlockUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BlockUserResponse> {
         const response = await this.blockUserRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     *  
-     * Check External Storage
-     */
-    async checkExternalStorageRaw(requestParameters: CheckExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCheckExternalStorageResponse>> {
-        if (requestParameters.name === null || requestParameters.name === undefined) {
-            throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling checkExternalStorage.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/external_storage/{name}/check`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     *  
-     * Check External Storage
-     */
-    async checkExternalStorage(requestParameters: CheckExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCheckExternalStorageResponse> {
-        const response = await this.checkExternalStorageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -407,7 +318,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - JoinCall 
      * Collect user feedback
      */
-    async collectUserFeedbackRaw(requestParameters: CollectUserFeedbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCollectUserFeedbackResponse>> {
+    async collectUserFeedbackRaw(requestParameters: CollectUserFeedbackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectUserFeedbackResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling collectUserFeedback.');
         }
@@ -420,8 +331,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('session','Required parameter requestParameters.session was null or undefined when calling collectUserFeedback.');
         }
 
-        if (requestParameters.videoCollectUserFeedbackRequest === null || requestParameters.videoCollectUserFeedbackRequest === undefined) {
-            throw new runtime.RequiredError('videoCollectUserFeedbackRequest','Required parameter requestParameters.videoCollectUserFeedbackRequest was null or undefined when calling collectUserFeedback.');
+        if (requestParameters.collectUserFeedbackRequest === null || requestParameters.collectUserFeedbackRequest === undefined) {
+            throw new runtime.RequiredError('collectUserFeedbackRequest','Required parameter requestParameters.collectUserFeedbackRequest was null or undefined when calling collectUserFeedback.');
         }
 
         const queryParameters: any = {};
@@ -443,11 +354,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/feedback/{session}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))),
+            path: `/api/v2/video/call/{type}/{id}/feedback/{session}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoCollectUserFeedbackRequest,
+            body: requestParameters.collectUserFeedbackRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -457,7 +368,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - JoinCall 
      * Collect user feedback
      */
-    async collectUserFeedback(requestParameters: CollectUserFeedbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCollectUserFeedbackResponse> {
+    async collectUserFeedback(requestParameters: CollectUserFeedbackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectUserFeedbackResponse> {
         const response = await this.collectUserFeedbackRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -466,9 +377,9 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Create Call Type
      */
-    async createCallTypeRaw(requestParameters: CreateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCreateCallTypeResponse>> {
-        if (requestParameters.videoCreateCallTypeRequest === null || requestParameters.videoCreateCallTypeRequest === undefined) {
-            throw new runtime.RequiredError('videoCreateCallTypeRequest','Required parameter requestParameters.videoCreateCallTypeRequest was null or undefined when calling createCallType.');
+    async createCallTypeRaw(requestParameters: CreateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCallTypeResponse>> {
+        if (requestParameters.createCallTypeRequest === null || requestParameters.createCallTypeRequest === undefined) {
+            throw new runtime.RequiredError('createCallTypeRequest','Required parameter requestParameters.createCallTypeRequest was null or undefined when calling createCallType.');
         }
 
         const queryParameters: any = {};
@@ -490,11 +401,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calltypes`,
+            path: `/api/v2/video/calltypes`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoCreateCallTypeRequest,
+            body: requestParameters.createCallTypeRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -504,149 +415,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Create Call Type
      */
-    async createCallType(requestParameters: CreateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCreateCallTypeResponse> {
+    async createCallType(requestParameters: CreateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCallTypeResponse> {
         const response = await this.createCallTypeRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Adds a new device to a user, if the same device already exists the call will have no effect 
-     * Create device
-     */
-    async createDeviceRaw(requestParameters: CreateDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoResponse>> {
-        if (requestParameters.videoCreateDeviceRequest === null || requestParameters.videoCreateDeviceRequest === undefined) {
-            throw new runtime.RequiredError('videoCreateDeviceRequest','Required parameter requestParameters.videoCreateDeviceRequest was null or undefined when calling createDevice.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/devices`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.videoCreateDeviceRequest,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Adds a new device to a user, if the same device already exists the call will have no effect 
-     * Create device
-     */
-    async createDevice(requestParameters: CreateDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoResponse> {
-        const response = await this.createDeviceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates new external storage 
-     * Create external storage
-     */
-    async createExternalStorageRaw(requestParameters: CreateExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCreateExternalStorageResponse>> {
-        if (requestParameters.videoCreateExternalStorageRequest === null || requestParameters.videoCreateExternalStorageRequest === undefined) {
-            throw new runtime.RequiredError('videoCreateExternalStorageRequest','Required parameter requestParameters.videoCreateExternalStorageRequest was null or undefined when calling createExternalStorage.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/external_storage`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.videoCreateExternalStorageRequest,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Creates new external storage 
-     * Create external storage
-     */
-    async createExternalStorage(requestParameters: CreateExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCreateExternalStorageResponse> {
-        const response = await this.createExternalStorageRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     *  
-     * Create Guest
-     */
-    async createGuestRaw(requestParameters: CreateGuestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoCreateGuestResponse>> {
-        if (requestParameters.videoCreateGuestRequest === null || requestParameters.videoCreateGuestRequest === undefined) {
-            throw new runtime.RequiredError('videoCreateGuestRequest','Required parameter requestParameters.videoCreateGuestRequest was null or undefined when calling createGuest.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/guest`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.videoCreateGuestRequest,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     *  
-     * Create Guest
-     */
-    async createGuest(requestParameters: CreateGuestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoCreateGuestResponse> {
-        const response = await this.createGuestRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -654,7 +424,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Delete Call Type
      */
-    async deleteCallTypeRaw(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoResponse>> {
+    async deleteCallTypeRaw(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Response>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling deleteCallType.');
         }
@@ -676,7 +446,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
+            path: `/api/v2/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -689,104 +459,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Delete Call Type
      */
-    async deleteCallType(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoResponse> {
+    async deleteCallType(requestParameters: DeleteCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Response> {
         const response = await this.deleteCallTypeRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes one device 
-     * Delete device
-     */
-    async deleteDeviceRaw(requestParameters: DeleteDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoResponse>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteDevice.');
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters.id !== undefined) {
-            queryParameters['id'] = requestParameters.id;
-        }
-
-        if (requestParameters.userId !== undefined) {
-            queryParameters['user_id'] = requestParameters.userId;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/devices`,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Deletes one device 
-     * Delete device
-     */
-    async deleteDevice(requestParameters: DeleteDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoResponse> {
-        const response = await this.deleteDeviceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deletes external storage 
-     * Delete external storage
-     */
-    async deleteExternalStorageRaw(requestParameters: DeleteExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoDeleteExternalStorageResponse>> {
-        if (requestParameters.name === null || requestParameters.name === undefined) {
-            throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling deleteExternalStorage.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/external_storage/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Deletes external storage 
-     * Delete external storage
-     */
-    async deleteExternalStorage(requestParameters: DeleteExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoDeleteExternalStorageResponse> {
-        const response = await this.deleteExternalStorageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -794,7 +468,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Deletes recording  Required permissions: - DeleteRecording 
      * Delete recording
      */
-    async deleteRecordingRaw(requestParameters: DeleteRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoDeleteRecordingResponse>> {
+    async deleteRecordingRaw(requestParameters: DeleteRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteRecordingResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling deleteRecording.');
         }
@@ -828,7 +502,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/{session}/recordings/{filename}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
+            path: `/api/v2/video/call/{type}/{id}/{session}/recordings/{filename}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -841,7 +515,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Deletes recording  Required permissions: - DeleteRecording 
      * Delete recording
      */
-    async deleteRecording(requestParameters: DeleteRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoDeleteRecordingResponse> {
+    async deleteRecording(requestParameters: DeleteRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeleteRecordingResponse> {
         const response = await this.deleteRecordingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -850,7 +524,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Deletes transcription  Required permissions: - DeleteTranscription 
      * Delete transcription
      */
-    async deleteTranscriptionRaw(requestParameters: DeleteTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoDeleteTranscriptionResponse>> {
+    async deleteTranscriptionRaw(requestParameters: DeleteTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteTranscriptionResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling deleteTranscription.');
         }
@@ -884,7 +558,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/{session}/transcriptions/{filename}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
+            path: `/api/v2/video/call/{type}/{id}/{session}/transcriptions/{filename}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))).replace(`{${"filename"}}`, encodeURIComponent(String(requestParameters.filename))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -897,7 +571,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Deletes transcription  Required permissions: - DeleteTranscription 
      * Delete transcription
      */
-    async deleteTranscription(requestParameters: DeleteTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoDeleteTranscriptionResponse> {
+    async deleteTranscription(requestParameters: DeleteTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeleteTranscriptionResponse> {
         const response = await this.deleteTranscriptionRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -906,7 +580,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.ended  Required permissions: - EndCall 
      * End call
      */
-    async endCallRaw(requestParameters: EndCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoEndCallResponse>> {
+    async endCallRaw(requestParameters: EndCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EndCallResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling endCall.');
         }
@@ -932,7 +606,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/mark_ended`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/mark_ended`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -945,7 +619,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.ended  Required permissions: - EndCall 
      * End call
      */
-    async endCall(requestParameters: EndCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoEndCallResponse> {
+    async endCall(requestParameters: EndCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EndCallResponse> {
         const response = await this.endCallRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -954,7 +628,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCall 
      * Get Call
      */
-    async getCallRaw(requestParameters: GetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetCallResponse>> {
+    async getCallRaw(requestParameters: GetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCallResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling getCall.');
         }
@@ -992,7 +666,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1005,7 +679,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCall 
      * Get Call
      */
-    async getCall(requestParameters: GetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetCallResponse> {
+    async getCall(requestParameters: GetCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCallResponse> {
         const response = await this.getCallRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1014,7 +688,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCallStats 
      * Get Call Stats
      */
-    async getCallStatsRaw(requestParameters: GetCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetCallStatsResponse>> {
+    async getCallStatsRaw(requestParameters: GetCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCallStatsResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling getCallStats.');
         }
@@ -1044,7 +718,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/stats/{session}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))),
+            path: `/api/v2/video/call/{type}/{id}/stats/{session}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"session"}}`, encodeURIComponent(String(requestParameters.session))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1057,7 +731,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCallStats 
      * Get Call Stats
      */
-    async getCallStats(requestParameters: GetCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetCallStatsResponse> {
+    async getCallStats(requestParameters: GetCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCallStatsResponse> {
         const response = await this.getCallStatsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1066,7 +740,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Get Call Type
      */
-    async getCallTypeRaw(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetCallTypeResponse>> {
+    async getCallTypeRaw(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCallTypeResponse>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling getCallType.');
         }
@@ -1088,7 +762,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
+            path: `/api/v2/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1101,7 +775,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Get Call Type
      */
-    async getCallType(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetCallTypeResponse> {
+    async getCallType(requestParameters: GetCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCallTypeResponse> {
         const response = await this.getCallTypeRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1110,7 +784,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Returns the list of all edges available for video calls. 
      * Get Edges
      */
-    async getEdgesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetEdgesResponse>> {
+    async getEdgesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetEdgesResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1128,7 +802,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/edges`,
+            path: `/api/v2/video/edges`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1141,7 +815,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Returns the list of all edges available for video calls. 
      * Get Edges
      */
-    async getEdges(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetEdgesResponse> {
+    async getEdges(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetEdgesResponse> {
         const response = await this.getEdgesRaw(initOverrides);
         return await response.value();
     }
@@ -1150,7 +824,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Gets or creates a new call  Sends events: - call.created - call.notification - call.ring  Required permissions: - CreateCall - ReadCall - UpdateCallSettings 
      * Get or create a call
      */
-    async getOrCreateCallRaw(requestParameters: GetOrCreateCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGetOrCreateCallResponse>> {
+    async getOrCreateCallRaw(requestParameters: GetOrCreateCallOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetOrCreateCallResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling getOrCreateCall.');
         }
@@ -1159,8 +833,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getOrCreateCall.');
         }
 
-        if (requestParameters.videoGetOrCreateCallRequest === null || requestParameters.videoGetOrCreateCallRequest === undefined) {
-            throw new runtime.RequiredError('videoGetOrCreateCallRequest','Required parameter requestParameters.videoGetOrCreateCallRequest was null or undefined when calling getOrCreateCall.');
+        if (requestParameters.getOrCreateCallRequest === null || requestParameters.getOrCreateCallRequest === undefined) {
+            throw new runtime.RequiredError('getOrCreateCallRequest','Required parameter requestParameters.getOrCreateCallRequest was null or undefined when calling getOrCreateCall.');
         }
 
         const queryParameters: any = {};
@@ -1182,11 +856,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoGetOrCreateCallRequest,
+            body: requestParameters.getOrCreateCallRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1196,7 +870,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Gets or creates a new call  Sends events: - call.created - call.notification - call.ring  Required permissions: - CreateCall - ReadCall - UpdateCallSettings 
      * Get or create a call
      */
-    async getOrCreateCall(requestParameters: GetOrCreateCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGetOrCreateCallResponse> {
+    async getOrCreateCall(requestParameters: GetOrCreateCallOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetOrCreateCallResponse> {
         const response = await this.getOrCreateCallRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1205,7 +879,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.live_started  Required permissions: - UpdateCall 
      * Set call as live
      */
-    async goLiveRaw(requestParameters: GoLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoGoLiveResponse>> {
+    async goLiveRaw(requestParameters: GoLiveOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GoLiveResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling goLive.');
         }
@@ -1214,8 +888,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling goLive.');
         }
 
-        if (requestParameters.videoGoLiveRequest === null || requestParameters.videoGoLiveRequest === undefined) {
-            throw new runtime.RequiredError('videoGoLiveRequest','Required parameter requestParameters.videoGoLiveRequest was null or undefined when calling goLive.');
+        if (requestParameters.goLiveRequest === null || requestParameters.goLiveRequest === undefined) {
+            throw new runtime.RequiredError('goLiveRequest','Required parameter requestParameters.goLiveRequest was null or undefined when calling goLive.');
         }
 
         const queryParameters: any = {};
@@ -1237,11 +911,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/go_live`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/go_live`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoGoLiveRequest,
+            body: requestParameters.goLiveRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1251,7 +925,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.live_started  Required permissions: - UpdateCall 
      * Set call as live
      */
-    async goLive(requestParameters: GoLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoGoLiveResponse> {
+    async goLive(requestParameters: GoLiveOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GoLiveResponse> {
         const response = await this.goLiveRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1260,7 +934,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * List Call Type
      */
-    async listCallTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListCallTypeResponse>> {
+    async listCallTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCallTypeResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1278,7 +952,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calltypes`,
+            path: `/api/v2/video/calltypes`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1291,92 +965,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * List Call Type
      */
-    async listCallTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListCallTypeResponse> {
+    async listCallTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCallTypeResponse> {
         const response = await this.listCallTypesRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns all available devices 
-     * List devices
-     */
-    async listDevicesRaw(requestParameters: ListDevicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListDevicesResponse>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.userId !== undefined) {
-            queryParameters['user_id'] = requestParameters.userId;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/devices`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Returns all available devices 
-     * List devices
-     */
-    async listDevices(requestParameters: ListDevicesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListDevicesResponse> {
-        const response = await this.listDevicesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Lists external storage 
-     * List external storage
-     */
-    async listExternalStorageRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListExternalStorageResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/external_storage`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Lists external storage 
-     * List external storage
-     */
-    async listExternalStorage(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListExternalStorageResponse> {
-        const response = await this.listExternalStorageRaw(initOverrides);
         return await response.value();
     }
 
@@ -1384,7 +974,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Lists recordings  Required permissions: - ListRecordings 
      * List recordings
      */
-    async listRecordingsRaw(requestParameters: ListRecordingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListRecordingsResponse>> {
+    async listRecordingsRaw(requestParameters: ListRecordingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListRecordingsResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling listRecordings.');
         }
@@ -1410,7 +1000,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/recordings`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/recordings`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1423,7 +1013,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Lists recordings  Required permissions: - ListRecordings 
      * List recordings
      */
-    async listRecordings(requestParameters: ListRecordingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListRecordingsResponse> {
+    async listRecordings(requestParameters: ListRecordingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListRecordingsResponse> {
         const response = await this.listRecordingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1432,7 +1022,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Lists transcriptions  Required permissions: - ListTranscriptions 
      * List transcriptions
      */
-    async listTranscriptionsRaw(requestParameters: ListTranscriptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoListTranscriptionsResponse>> {
+    async listTranscriptionsRaw(requestParameters: ListTranscriptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTranscriptionsResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling listTranscriptions.');
         }
@@ -1458,7 +1048,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/transcriptions`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/transcriptions`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1471,7 +1061,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Lists transcriptions  Required permissions: - ListTranscriptions 
      * List transcriptions
      */
-    async listTranscriptions(requestParameters: ListTranscriptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoListTranscriptionsResponse> {
+    async listTranscriptions(requestParameters: ListTranscriptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTranscriptionsResponse> {
         const response = await this.listTranscriptionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1480,7 +1070,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Mutes users in a call  Required permissions: - MuteUsers 
      * Mute users
      */
-    async muteUsersRaw(requestParameters: MuteUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoMuteUsersResponse>> {
+    async muteUsersRaw(requestParameters: MuteUsersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MuteUsersResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling muteUsers.');
         }
@@ -1489,8 +1079,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling muteUsers.');
         }
 
-        if (requestParameters.videoMuteUsersRequest === null || requestParameters.videoMuteUsersRequest === undefined) {
-            throw new runtime.RequiredError('videoMuteUsersRequest','Required parameter requestParameters.videoMuteUsersRequest was null or undefined when calling muteUsers.');
+        if (requestParameters.muteUsersRequest === null || requestParameters.muteUsersRequest === undefined) {
+            throw new runtime.RequiredError('muteUsersRequest','Required parameter requestParameters.muteUsersRequest was null or undefined when calling muteUsers.');
         }
 
         const queryParameters: any = {};
@@ -1512,11 +1102,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/mute_users`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/mute_users`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoMuteUsersRequest,
+            body: requestParameters.muteUsersRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1526,7 +1116,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Mutes users in a call  Required permissions: - MuteUsers 
      * Mute users
      */
-    async muteUsers(requestParameters: MuteUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoMuteUsersResponse> {
+    async muteUsers(requestParameters: MuteUsersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MuteUsersResponse> {
         const response = await this.muteUsersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1535,9 +1125,9 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Query call members with filter query  Required permissions: - ReadCall 
      * Query call members
      */
-    async queryCallMembersRaw(requestParameters: QueryCallMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoQueryCallMembersResponse>> {
-        if (requestParameters.videoQueryCallMembersRequest === null || requestParameters.videoQueryCallMembersRequest === undefined) {
-            throw new runtime.RequiredError('videoQueryCallMembersRequest','Required parameter requestParameters.videoQueryCallMembersRequest was null or undefined when calling queryCallMembers.');
+    async queryCallMembersRaw(requestParameters: QueryCallMembersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QueryCallMembersResponse>> {
+        if (requestParameters.queryCallMembersRequest === null || requestParameters.queryCallMembersRequest === undefined) {
+            throw new runtime.RequiredError('queryCallMembersRequest','Required parameter requestParameters.queryCallMembersRequest was null or undefined when calling queryCallMembers.');
         }
 
         const queryParameters: any = {};
@@ -1559,11 +1149,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/members`,
+            path: `/api/v2/video/call/members`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoQueryCallMembersRequest,
+            body: requestParameters.queryCallMembersRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1573,7 +1163,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Query call members with filter query  Required permissions: - ReadCall 
      * Query call members
      */
-    async queryCallMembers(requestParameters: QueryCallMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoQueryCallMembersResponse> {
+    async queryCallMembers(requestParameters: QueryCallMembersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QueryCallMembersResponse> {
         const response = await this.queryCallMembersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1582,9 +1172,9 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCallStats 
      * Query Call Stats
      */
-    async queryCallStatsRaw(requestParameters: QueryCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoQueryCallStatsResponse>> {
-        if (requestParameters.videoQueryCallStatsRequest === null || requestParameters.videoQueryCallStatsRequest === undefined) {
-            throw new runtime.RequiredError('videoQueryCallStatsRequest','Required parameter requestParameters.videoQueryCallStatsRequest was null or undefined when calling queryCallStats.');
+    async queryCallStatsRaw(requestParameters: QueryCallStatsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QueryCallStatsResponse>> {
+        if (requestParameters.queryCallStatsRequest === null || requestParameters.queryCallStatsRequest === undefined) {
+            throw new runtime.RequiredError('queryCallStatsRequest','Required parameter requestParameters.queryCallStatsRequest was null or undefined when calling queryCallStats.');
         }
 
         const queryParameters: any = {};
@@ -1606,11 +1196,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/stats`,
+            path: `/api/v2/video/call/stats`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoQueryCallStatsRequest,
+            body: requestParameters.queryCallStatsRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1620,7 +1210,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Required permissions: - ReadCallStats 
      * Query Call Stats
      */
-    async queryCallStats(requestParameters: QueryCallStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoQueryCallStatsResponse> {
+    async queryCallStats(requestParameters: QueryCallStatsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QueryCallStatsResponse> {
         const response = await this.queryCallStatsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1629,9 +1219,9 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Query calls with filter query  Required permissions: - ReadCall 
      * Query call
      */
-    async queryCallsRaw(requestParameters: QueryCallsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoQueryCallsResponse>> {
-        if (requestParameters.videoQueryCallsRequest === null || requestParameters.videoQueryCallsRequest === undefined) {
-            throw new runtime.RequiredError('videoQueryCallsRequest','Required parameter requestParameters.videoQueryCallsRequest was null or undefined when calling queryCalls.');
+    async queryCallsRaw(requestParameters: QueryCallsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QueryCallsResponse>> {
+        if (requestParameters.queryCallsRequest === null || requestParameters.queryCallsRequest === undefined) {
+            throw new runtime.RequiredError('queryCallsRequest','Required parameter requestParameters.queryCallsRequest was null or undefined when calling queryCalls.');
         }
 
         const queryParameters: any = {};
@@ -1653,11 +1243,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calls`,
+            path: `/api/v2/video/calls`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoQueryCallsRequest,
+            body: requestParameters.queryCallsRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1667,7 +1257,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Query calls with filter query  Required permissions: - ReadCall 
      * Query call
      */
-    async queryCalls(requestParameters: QueryCallsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoQueryCallsResponse> {
+    async queryCalls(requestParameters: QueryCallsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QueryCallsResponse> {
         const response = await this.queryCallsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1676,7 +1266,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Sends custom event to the call  Sends events: - custom  Required permissions: - SendEvent 
      * Send custom event
      */
-    async sendCallEventRaw(requestParameters: SendCallEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoSendCallEventResponse>> {
+    async sendCallEventRaw(requestParameters: SendCallEventOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SendCallEventResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling sendCallEvent.');
         }
@@ -1685,8 +1275,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling sendCallEvent.');
         }
 
-        if (requestParameters.videoSendCallEventRequest === null || requestParameters.videoSendCallEventRequest === undefined) {
-            throw new runtime.RequiredError('videoSendCallEventRequest','Required parameter requestParameters.videoSendCallEventRequest was null or undefined when calling sendCallEvent.');
+        if (requestParameters.sendCallEventRequest === null || requestParameters.sendCallEventRequest === undefined) {
+            throw new runtime.RequiredError('sendCallEventRequest','Required parameter requestParameters.sendCallEventRequest was null or undefined when calling sendCallEvent.');
         }
 
         const queryParameters: any = {};
@@ -1708,11 +1298,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/event`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/event`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoSendCallEventRequest,
+            body: requestParameters.sendCallEventRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1722,7 +1312,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Sends custom event to the call  Sends events: - custom  Required permissions: - SendEvent 
      * Send custom event
      */
-    async sendCallEvent(requestParameters: SendCallEventRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoSendCallEventResponse> {
+    async sendCallEvent(requestParameters: SendCallEventOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SendCallEventResponse> {
         const response = await this.sendCallEventRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1731,7 +1321,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts HLS broadcasting  Required permissions: - StartBroadcasting 
      * Start HLS broadcasting
      */
-    async startHLSBroadcastingRaw(requestParameters: StartHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStartHLSBroadcastingResponse>> {
+    async startHLSBroadcastingRaw(requestParameters: StartHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartHLSBroadcastingResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling startHLSBroadcasting.');
         }
@@ -1757,7 +1347,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/start_broadcasting`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/start_broadcasting`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -1770,7 +1360,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts HLS broadcasting  Required permissions: - StartBroadcasting 
      * Start HLS broadcasting
      */
-    async startHLSBroadcasting(requestParameters: StartHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStartHLSBroadcastingResponse> {
+    async startHLSBroadcasting(requestParameters: StartHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartHLSBroadcastingResponse> {
         const response = await this.startHLSBroadcastingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1779,7 +1369,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts recording  Sends events: - call.recording_started  Required permissions: - StartRecording 
      * Start recording
      */
-    async startRecordingRaw(requestParameters: StartRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStartRecordingResponse>> {
+    async startRecordingRaw(requestParameters: StartRecordingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartRecordingResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling startRecording.');
         }
@@ -1788,8 +1378,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling startRecording.');
         }
 
-        if (requestParameters.videoStartRecordingRequest === null || requestParameters.videoStartRecordingRequest === undefined) {
-            throw new runtime.RequiredError('videoStartRecordingRequest','Required parameter requestParameters.videoStartRecordingRequest was null or undefined when calling startRecording.');
+        if (requestParameters.startRecordingRequest === null || requestParameters.startRecordingRequest === undefined) {
+            throw new runtime.RequiredError('startRecordingRequest','Required parameter requestParameters.startRecordingRequest was null or undefined when calling startRecording.');
         }
 
         const queryParameters: any = {};
@@ -1811,11 +1401,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/start_recording`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/start_recording`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoStartRecordingRequest,
+            body: requestParameters.startRecordingRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1825,7 +1415,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts recording  Sends events: - call.recording_started  Required permissions: - StartRecording 
      * Start recording
      */
-    async startRecording(requestParameters: StartRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStartRecordingResponse> {
+    async startRecording(requestParameters: StartRecordingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartRecordingResponse> {
         const response = await this.startRecordingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1834,7 +1424,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts transcription  Required permissions: - StartTranscription 
      * Start transcription
      */
-    async startTranscriptionRaw(requestParameters: StartTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStartTranscriptionResponse>> {
+    async startTranscriptionRaw(requestParameters: StartTranscriptionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartTranscriptionResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling startTranscription.');
         }
@@ -1843,8 +1433,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling startTranscription.');
         }
 
-        if (requestParameters.videoStartTranscriptionRequest === null || requestParameters.videoStartTranscriptionRequest === undefined) {
-            throw new runtime.RequiredError('videoStartTranscriptionRequest','Required parameter requestParameters.videoStartTranscriptionRequest was null or undefined when calling startTranscription.');
+        if (requestParameters.startTranscriptionRequest === null || requestParameters.startTranscriptionRequest === undefined) {
+            throw new runtime.RequiredError('startTranscriptionRequest','Required parameter requestParameters.startTranscriptionRequest was null or undefined when calling startTranscription.');
         }
 
         const queryParameters: any = {};
@@ -1866,11 +1456,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/start_transcription`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/start_transcription`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoStartTranscriptionRequest,
+            body: requestParameters.startTranscriptionRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1880,7 +1470,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Starts transcription  Required permissions: - StartTranscription 
      * Start transcription
      */
-    async startTranscription(requestParameters: StartTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStartTranscriptionResponse> {
+    async startTranscription(requestParameters: StartTranscriptionOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartTranscriptionResponse> {
         const response = await this.startTranscriptionRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1889,7 +1479,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops HLS broadcasting  Required permissions: - StopBroadcasting 
      * Stop HLS broadcasting
      */
-    async stopHLSBroadcastingRaw(requestParameters: StopHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStopHLSBroadcastingResponse>> {
+    async stopHLSBroadcastingRaw(requestParameters: StopHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StopHLSBroadcastingResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling stopHLSBroadcasting.');
         }
@@ -1915,7 +1505,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/stop_broadcasting`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/stop_broadcasting`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -1928,7 +1518,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops HLS broadcasting  Required permissions: - StopBroadcasting 
      * Stop HLS broadcasting
      */
-    async stopHLSBroadcasting(requestParameters: StopHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStopHLSBroadcastingResponse> {
+    async stopHLSBroadcasting(requestParameters: StopHLSBroadcastingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StopHLSBroadcastingResponse> {
         const response = await this.stopHLSBroadcastingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1937,7 +1527,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.updated  Required permissions: - UpdateCall 
      * Set call as not live
      */
-    async stopLiveRaw(requestParameters: StopLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStopLiveResponse>> {
+    async stopLiveRaw(requestParameters: StopLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StopLiveResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling stopLive.');
         }
@@ -1963,7 +1553,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/stop_live`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/stop_live`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -1976,7 +1566,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.updated  Required permissions: - UpdateCall 
      * Set call as not live
      */
-    async stopLive(requestParameters: StopLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStopLiveResponse> {
+    async stopLive(requestParameters: StopLiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StopLiveResponse> {
         const response = await this.stopLiveRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1985,7 +1575,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops recording  Sends events: - call.recording_stopped  Required permissions: - StopRecording 
      * Stop recording
      */
-    async stopRecordingRaw(requestParameters: StopRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStopRecordingResponse>> {
+    async stopRecordingRaw(requestParameters: StopRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StopRecordingResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling stopRecording.');
         }
@@ -2011,7 +1601,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/stop_recording`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/stop_recording`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -2024,7 +1614,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops recording  Sends events: - call.recording_stopped  Required permissions: - StopRecording 
      * Stop recording
      */
-    async stopRecording(requestParameters: StopRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStopRecordingResponse> {
+    async stopRecording(requestParameters: StopRecordingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StopRecordingResponse> {
         const response = await this.stopRecordingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2033,7 +1623,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops transcription  Sends events: - call.transcription_stopped  Required permissions: - StopTranscription 
      * Stop transcription
      */
-    async stopTranscriptionRaw(requestParameters: StopTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoStopTranscriptionResponse>> {
+    async stopTranscriptionRaw(requestParameters: StopTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StopTranscriptionResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling stopTranscription.');
         }
@@ -2059,7 +1649,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/stop_transcription`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/stop_transcription`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -2072,7 +1662,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Stops transcription  Sends events: - call.transcription_stopped  Required permissions: - StopTranscription 
      * Stop transcription
      */
-    async stopTranscription(requestParameters: StopTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoStopTranscriptionResponse> {
+    async stopTranscription(requestParameters: StopTranscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StopTranscriptionResponse> {
         const response = await this.stopTranscriptionRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2081,7 +1671,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Removes the block for a user on a call. The user will be able to join the call again.  Sends events: - call.unblocked_user  Required permissions: - BlockUser 
      * Unblocks user on a call
      */
-    async unblockUserRaw(requestParameters: UnblockUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUnblockUserResponse>> {
+    async unblockUserRaw(requestParameters: UnblockUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UnblockUserResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling unblockUser.');
         }
@@ -2090,8 +1680,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling unblockUser.');
         }
 
-        if (requestParameters.videoUnblockUserRequest === null || requestParameters.videoUnblockUserRequest === undefined) {
-            throw new runtime.RequiredError('videoUnblockUserRequest','Required parameter requestParameters.videoUnblockUserRequest was null or undefined when calling unblockUser.');
+        if (requestParameters.unblockUserRequest === null || requestParameters.unblockUserRequest === undefined) {
+            throw new runtime.RequiredError('unblockUserRequest','Required parameter requestParameters.unblockUserRequest was null or undefined when calling unblockUser.');
         }
 
         const queryParameters: any = {};
@@ -2113,11 +1703,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/unblock`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/unblock`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUnblockUserRequest,
+            body: requestParameters.unblockUserRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2127,7 +1717,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Removes the block for a user on a call. The user will be able to join the call again.  Sends events: - call.unblocked_user  Required permissions: - BlockUser 
      * Unblocks user on a call
      */
-    async unblockUser(requestParameters: UnblockUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUnblockUserResponse> {
+    async unblockUser(requestParameters: UnblockUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UnblockUserResponse> {
         const response = await this.unblockUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2136,7 +1726,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.updated  Required permissions: - UpdateCall 
      * Update Call
      */
-    async updateCallRaw(requestParameters: UpdateCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateCallResponse>> {
+    async updateCallRaw(requestParameters: UpdateCallOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCallResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling updateCall.');
         }
@@ -2145,8 +1735,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateCall.');
         }
 
-        if (requestParameters.videoUpdateCallRequest === null || requestParameters.videoUpdateCallRequest === undefined) {
-            throw new runtime.RequiredError('videoUpdateCallRequest','Required parameter requestParameters.videoUpdateCallRequest was null or undefined when calling updateCall.');
+        if (requestParameters.updateCallRequest === null || requestParameters.updateCallRequest === undefined) {
+            throw new runtime.RequiredError('updateCallRequest','Required parameter requestParameters.updateCallRequest was null or undefined when calling updateCall.');
         }
 
         const queryParameters: any = {};
@@ -2168,11 +1758,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUpdateCallRequest,
+            body: requestParameters.updateCallRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2182,7 +1772,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.updated  Required permissions: - UpdateCall 
      * Update Call
      */
-    async updateCall(requestParameters: UpdateCallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateCallResponse> {
+    async updateCall(requestParameters: UpdateCallOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCallResponse> {
         const response = await this.updateCallRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2191,7 +1781,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.member_added - call.member_removed - call.member_updated  Required permissions: - RemoveCallMember - UpdateCallMember - UpdateCallMemberRole 
      * Update Call Member
      */
-    async updateCallMembersRaw(requestParameters: UpdateCallMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateCallMembersResponse>> {
+    async updateCallMembersRaw(requestParameters: UpdateCallMembersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCallMembersResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling updateCallMembers.');
         }
@@ -2200,8 +1790,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateCallMembers.');
         }
 
-        if (requestParameters.videoUpdateCallMembersRequest === null || requestParameters.videoUpdateCallMembersRequest === undefined) {
-            throw new runtime.RequiredError('videoUpdateCallMembersRequest','Required parameter requestParameters.videoUpdateCallMembersRequest was null or undefined when calling updateCallMembers.');
+        if (requestParameters.updateCallMembersRequest === null || requestParameters.updateCallMembersRequest === undefined) {
+            throw new runtime.RequiredError('updateCallMembersRequest','Required parameter requestParameters.updateCallMembersRequest was null or undefined when calling updateCallMembers.');
         }
 
         const queryParameters: any = {};
@@ -2223,11 +1813,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/members`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/members`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUpdateCallMembersRequest,
+            body: requestParameters.updateCallMembersRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2237,7 +1827,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *   Sends events: - call.member_added - call.member_removed - call.member_updated  Required permissions: - RemoveCallMember - UpdateCallMember - UpdateCallMemberRole 
      * Update Call Member
      */
-    async updateCallMembers(requestParameters: UpdateCallMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateCallMembersResponse> {
+    async updateCallMembers(requestParameters: UpdateCallMembersOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCallMembersResponse> {
         const response = await this.updateCallMembersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2246,13 +1836,13 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Update Call Type
      */
-    async updateCallTypeRaw(requestParameters: UpdateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateCallTypeResponse>> {
+    async updateCallTypeRaw(requestParameters: UpdateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCallTypeResponse>> {
         if (requestParameters.name === null || requestParameters.name === undefined) {
             throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling updateCallType.');
         }
 
-        if (requestParameters.videoUpdateCallTypeRequest === null || requestParameters.videoUpdateCallTypeRequest === undefined) {
-            throw new runtime.RequiredError('videoUpdateCallTypeRequest','Required parameter requestParameters.videoUpdateCallTypeRequest was null or undefined when calling updateCallType.');
+        if (requestParameters.updateCallTypeRequest === null || requestParameters.updateCallTypeRequest === undefined) {
+            throw new runtime.RequiredError('updateCallTypeRequest','Required parameter requestParameters.updateCallTypeRequest was null or undefined when calling updateCallType.');
         }
 
         const queryParameters: any = {};
@@ -2274,11 +1864,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
+            path: `/api/v2/video/calltypes/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUpdateCallTypeRequest,
+            body: requestParameters.updateCallTypeRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2288,59 +1878,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
      *  
      * Update Call Type
      */
-    async updateCallType(requestParameters: UpdateCallTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateCallTypeResponse> {
+    async updateCallType(requestParameters: UpdateCallTypeOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCallTypeResponse> {
         const response = await this.updateCallTypeRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     *  
-     * Update External Storage
-     */
-    async updateExternalStorageRaw(requestParameters: UpdateExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateExternalStorageResponse>> {
-        if (requestParameters.name === null || requestParameters.name === undefined) {
-            throw new runtime.RequiredError('name','Required parameter requestParameters.name was null or undefined when calling updateExternalStorage.');
-        }
-
-        if (requestParameters.videoUpdateExternalStorageRequest === null || requestParameters.videoUpdateExternalStorageRequest === undefined) {
-            throw new runtime.RequiredError('videoUpdateExternalStorageRequest','Required parameter requestParameters.videoUpdateExternalStorageRequest was null or undefined when calling updateExternalStorage.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Stream-Auth-Type"] = this.configuration.apiKey("Stream-Auth-Type"); // stream-auth-type authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["api_key"] = this.configuration.apiKey("api_key"); // api_key authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // JWT authentication
-        }
-
-        const response = await this.request({
-            path: `/video/external_storage/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters.name))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.videoUpdateExternalStorageRequest,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     *  
-     * Update External Storage
-     */
-    async updateExternalStorage(requestParameters: UpdateExternalStorageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateExternalStorageResponse> {
-        const response = await this.updateExternalStorageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2348,7 +1887,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Updates user permissions  Sends events: - call.permissions_updated  Required permissions: - UpdateCallPermissions 
      * Update user permissions
      */
-    async updateUserPermissionsRaw(requestParameters: UpdateUserPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUpdateUserPermissionsResponse>> {
+    async updateUserPermissionsRaw(requestParameters: UpdateUserPermissionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateUserPermissionsResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling updateUserPermissions.');
         }
@@ -2357,8 +1896,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateUserPermissions.');
         }
 
-        if (requestParameters.videoUpdateUserPermissionsRequest === null || requestParameters.videoUpdateUserPermissionsRequest === undefined) {
-            throw new runtime.RequiredError('videoUpdateUserPermissionsRequest','Required parameter requestParameters.videoUpdateUserPermissionsRequest was null or undefined when calling updateUserPermissions.');
+        if (requestParameters.updateUserPermissionsRequest === null || requestParameters.updateUserPermissionsRequest === undefined) {
+            throw new runtime.RequiredError('updateUserPermissionsRequest','Required parameter requestParameters.updateUserPermissionsRequest was null or undefined when calling updateUserPermissions.');
         }
 
         const queryParameters: any = {};
@@ -2380,11 +1919,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/user_permissions`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/user_permissions`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUpdateUserPermissionsRequest,
+            body: requestParameters.updateUserPermissionsRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2394,7 +1933,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Updates user permissions  Sends events: - call.permissions_updated  Required permissions: - UpdateCallPermissions 
      * Update user permissions
      */
-    async updateUserPermissions(requestParameters: UpdateUserPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUpdateUserPermissionsResponse> {
+    async updateUserPermissions(requestParameters: UpdateUserPermissionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateUserPermissionsResponse> {
         const response = await this.updateUserPermissionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2403,7 +1942,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Pins a track for all users in the call.  Required permissions: - PinCallTrack 
      * Pin
      */
-    async videoPinRaw(requestParameters: VideoPinOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoPinResponse>> {
+    async videoPinRaw(requestParameters: VideoPinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PinResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling videoPin.');
         }
@@ -2412,8 +1951,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling videoPin.');
         }
 
-        if (requestParameters.videoPinRequest === null || requestParameters.videoPinRequest === undefined) {
-            throw new runtime.RequiredError('videoPinRequest','Required parameter requestParameters.videoPinRequest was null or undefined when calling videoPin.');
+        if (requestParameters.pinRequest === null || requestParameters.pinRequest === undefined) {
+            throw new runtime.RequiredError('pinRequest','Required parameter requestParameters.pinRequest was null or undefined when calling videoPin.');
         }
 
         const queryParameters: any = {};
@@ -2435,11 +1974,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/pin`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/pin`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoPinRequest,
+            body: requestParameters.pinRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2449,7 +1988,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Pins a track for all users in the call.  Required permissions: - PinCallTrack 
      * Pin
      */
-    async videoPin(requestParameters: VideoPinOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoPinResponse> {
+    async videoPin(requestParameters: VideoPinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PinResponse> {
         const response = await this.videoPinRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2458,7 +1997,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Unpins a track for all users in the call.  Required permissions: - PinCallTrack 
      * Unpin
      */
-    async videoUnpinRaw(requestParameters: VideoUnpinOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<VideoUnpinResponse>> {
+    async videoUnpinRaw(requestParameters: VideoUnpinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UnpinResponse>> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling videoUnpin.');
         }
@@ -2467,8 +2006,8 @@ export class ProductvideoApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling videoUnpin.');
         }
 
-        if (requestParameters.videoUnpinRequest === null || requestParameters.videoUnpinRequest === undefined) {
-            throw new runtime.RequiredError('videoUnpinRequest','Required parameter requestParameters.videoUnpinRequest was null or undefined when calling videoUnpin.');
+        if (requestParameters.unpinRequest === null || requestParameters.unpinRequest === undefined) {
+            throw new runtime.RequiredError('unpinRequest','Required parameter requestParameters.unpinRequest was null or undefined when calling videoUnpin.');
         }
 
         const queryParameters: any = {};
@@ -2490,11 +2029,11 @@ export class ProductvideoApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/video/call/{type}/{id}/unpin`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/api/v2/video/call/{type}/{id}/unpin`.replace(`{${"type"}}`, encodeURIComponent(String(requestParameters.type))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.videoUnpinRequest,
+            body: requestParameters.unpinRequest,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -2504,7 +2043,7 @@ export class ProductvideoApi extends runtime.BaseAPI {
      * Unpins a track for all users in the call.  Required permissions: - PinCallTrack 
      * Unpin
      */
-    async videoUnpin(requestParameters: VideoUnpinOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<VideoUnpinResponse> {
+    async videoUnpin(requestParameters: VideoUnpinRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UnpinResponse> {
         const response = await this.videoUnpinRaw(requestParameters, initOverrides);
         return await response.value();
     }

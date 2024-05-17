@@ -2,12 +2,12 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { UserObjectRequest } from '../src/gen/chat';
+import { UserRequest } from '../src/gen';
 
 describe('user API', () => {
   let client: StreamClient;
   const userId = 'streamnodetest' + uuidv4();
-  const newUser: UserObjectRequest = {
+  const newUser: UserRequest = {
     id: userId,
     role: 'user',
     custom: {
@@ -61,6 +61,8 @@ describe('user API', () => {
 
     expect(createdUser.id).toBe(newUser.id);
     expect(createdUser.role).toBe(newUser.role);
+    expect(createdUser.name).toBe(newUser.name);
+    expect(createdUser.image).toBe(newUser.image);
     expect(createdUser.custom.color).toBe('red');
 
     const queryResponse = await client.queryUsers({
@@ -80,8 +82,10 @@ describe('user API', () => {
   it('create guest', async () => {
     await client.updateAppSettings({ multi_tenant_enabled: false });
 
-    const guest: UserObjectRequest = {
+    const guest: UserRequest = {
       id: uuidv4(),
+      name: 'Guest 3',
+      image: ': )',
       custom: {
         color: 'red',
       },
@@ -90,7 +94,9 @@ describe('user API', () => {
     const response = await client.createGuest({ user: guest });
 
     expect(response.user?.role).toBe('guest');
-    expect(response.user?.custom.color).toBe('red');
+    expect(response.user?.custom.color).toBe('red');    
+    expect(response.user?.name).toBe('Guest 3');
+    expect(response.user?.image).toBe(': )');
 
     await client.updateAppSettings({ multi_tenant_enabled: true });
   });
@@ -127,14 +133,15 @@ describe('user API', () => {
     const muteResponse = await client.muteUser({
       target_ids: [newUser.id],
       user_id: user.id,
+      timeout: 5,
     });
 
     expect(muteResponse.mute?.target?.id).toBe(newUser.id);
 
     const unmuteResponse = await client.unmuteUser({
-      target_id: newUser.id,
-      target_ids: [],
+      target_ids: [newUser.id],
       user_id: user.id,
+      timeout: 5,
     });
 
     expect(unmuteResponse).toBeDefined();

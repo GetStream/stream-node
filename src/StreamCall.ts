@@ -1,29 +1,32 @@
 import { StreamClient } from './StreamClient';
 import {
+  BlockUserRequest,
+  GetOrCreateCallRequest,
+  GoLiveRequest,
+  MuteUsersRequest,
+  PinRequest,
+  QueryCallMembersRequest,
+  SendCallEventRequest,
+  StartRecordingRequest,
+  StartTranscriptionRequest,
+  UnblockUserRequest,
+  UnpinRequest,
+  UpdateCallMembersRequest,
+  UpdateCallRequest,
+  UpdateUserPermissionsRequest,
+} from './gen';
+import {
   DeleteRecordingRequest,
   DeleteTranscriptionRequest,
   GetCallRequest,
   ProductvideoApi,
-  VideoBlockUserRequest,
-  VideoGetOrCreateCallRequest,
-  VideoGoLiveRequest,
-  VideoMuteUsersRequest,
-  VideoPinRequest,
-  VideoQueryCallMembersRequest,
-  VideoSendCallEventRequest,
-  VideoStartRecordingRequest,
-  VideoStartTranscriptionRequest,
-  VideoUnblockUserRequest,
-  VideoUnpinRequest,
-  VideoUpdateCallMembersRequest,
-  VideoUpdateCallRequest,
-  VideoUpdateUserPermissionsRequest,
-} from './gen/video';
+} from './gen/apis';
+
 import { OmitTypeId } from './types';
 
 export class StreamCall {
   private readonly baseRequest: { type: string; id: string };
-  private readonly apiClient: ProductvideoApi;
+  private readonly videoApi: ProductvideoApi;
 
   constructor(
     private readonly streamClient: StreamClient,
@@ -31,161 +34,158 @@ export class StreamCall {
     private readonly id: string,
   ) {
     this.baseRequest = { id: this.id, type: this.type };
-    const configuration = this.streamClient.getConfiguration('video');
-    this.apiClient = new ProductvideoApi(configuration);
+    this.videoApi = this.streamClient.videoApi;
   }
 
-  blockUser = (videoBlockUserRequest: VideoBlockUserRequest) => {
-    return this.apiClient.blockUser({
+  blockUser = (blockUserRequest: BlockUserRequest) => {
+    return this.videoApi.blockUser({
       ...this.baseRequest,
-      videoBlockUserRequest,
+      blockUserRequest,
     });
   };
 
   endCall = () => {
-    return this.apiClient.endCall({ ...this.baseRequest });
+    return this.videoApi.endCall({ ...this.baseRequest });
   };
 
   get = (request?: OmitTypeId<GetCallRequest>) => {
-    return this.apiClient.getCall({ ...(request ?? {}), ...this.baseRequest });
+    return this.videoApi.getCall({ ...(request ?? {}), ...this.baseRequest });
   };
 
-  getOrCreate = (videoGetOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
-    return this.apiClient.getOrCreateCall({
+  getOrCreate = (getOrCreateCallRequest?: GetOrCreateCallRequest) => {
+    return this.videoApi.getOrCreateCall({
       ...this.baseRequest,
-      videoGetOrCreateCallRequest: videoGetOrCreateCallRequest ?? {},
+      getOrCreateCallRequest: getOrCreateCallRequest ?? {},
     });
   };
 
-  create = (getOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
+  create = (getOrCreateCallRequest?: GetOrCreateCallRequest) => {
     return this.getOrCreate(getOrCreateCallRequest);
   };
 
-  goLive = (videoGoLiveRequest?: VideoGoLiveRequest) => {
-    return this.apiClient.goLive({
+  goLive = (goLiveRequest?: GoLiveRequest) => {
+    return this.videoApi.goLive({
       ...this.baseRequest,
-      videoGoLiveRequest: videoGoLiveRequest ?? {},
+      goLiveRequest: goLiveRequest ?? {},
     });
   };
 
   listRecordings = () => {
-    return this.apiClient.listRecordings({
+    return this.videoApi.listRecordings({
       ...this.baseRequest,
     });
   };
 
   deleteRecording = (request: OmitTypeId<DeleteRecordingRequest>) => {
-    return this.apiClient.deleteRecording({ ...this.baseRequest, ...request });
+    return this.videoApi.deleteRecording({ ...this.baseRequest, ...request });
   };
 
   listTranscriptions = () => {
-    return this.apiClient.listTranscriptions({
+    return this.videoApi.listTranscriptions({
       ...this.baseRequest,
     });
   };
 
-  muteUsers = (videoMuteUsersRequest: VideoMuteUsersRequest) => {
-    return this.apiClient.muteUsers({
+  muteUsers = (muteUsersRequest: MuteUsersRequest) => {
+    return this.videoApi.muteUsers({
       ...this.baseRequest,
-      videoMuteUsersRequest,
+      muteUsersRequest,
     });
   };
 
-  queryMembers = (request?: OmitTypeId<VideoQueryCallMembersRequest>) => {
-    return this.apiClient.queryCallMembers({
-      videoQueryCallMembersRequest: { ...(request ?? {}), ...this.baseRequest },
+  queryMembers = (request?: OmitTypeId<QueryCallMembersRequest>) => {
+    return this.videoApi.queryCallMembers({
+      queryCallMembersRequest: { ...(request ?? {}), ...this.baseRequest },
     });
   };
 
-  sendCustomEvent = (videoSendCallEventRequest: VideoSendCallEventRequest) => {
-    return this.apiClient.sendCallEvent({
-      videoSendCallEventRequest,
+  sendCustomEvent = (sendCallEventRequest: SendCallEventRequest) => {
+    return this.videoApi.sendCallEvent({
+      sendCallEventRequest,
       ...this.baseRequest,
     });
   };
 
   startHLSBroadcasting = () => {
-    return this.apiClient.startHLSBroadcasting({ ...this.baseRequest });
+    return this.videoApi.startHLSBroadcasting({ ...this.baseRequest });
   };
 
-  startRecording = (request?: VideoStartRecordingRequest) => {
-    return this.apiClient.startRecording({
+  startRecording = (request?: StartRecordingRequest) => {
+    return this.videoApi.startRecording({
       ...this.baseRequest,
-      videoStartRecordingRequest: request ?? {},
+      startRecordingRequest: request ?? {},
     });
   };
 
   startTranscription = (
-    videoStartTranscriptionRequest: VideoStartTranscriptionRequest = {},
+    startTranscriptionRequest: StartTranscriptionRequest = {},
   ) => {
-    return this.apiClient.startTranscription({
+    return this.videoApi.startTranscription({
       ...this.baseRequest,
-      videoStartTranscriptionRequest,
+      startTranscriptionRequest,
     });
   };
 
   deleteTranscription = (request: OmitTypeId<DeleteTranscriptionRequest>) => {
-    return this.apiClient.deleteTranscription({
+    return this.videoApi.deleteTranscription({
       ...this.baseRequest,
       ...request,
     });
   };
 
   stopHLSBroadcasting = () => {
-    return this.apiClient.stopHLSBroadcasting({ ...this.baseRequest });
+    return this.videoApi.stopHLSBroadcasting({ ...this.baseRequest });
   };
 
   stopLive = () => {
-    return this.apiClient.stopLive({ ...this.baseRequest });
+    return this.videoApi.stopLive({ ...this.baseRequest });
   };
 
   stopRecording = () => {
-    return this.apiClient.stopRecording({ ...this.baseRequest });
+    return this.videoApi.stopRecording({ ...this.baseRequest });
   };
 
   stopTranscription = () => {
-    return this.apiClient.stopTranscription({ ...this.baseRequest });
+    return this.videoApi.stopTranscription({ ...this.baseRequest });
   };
 
-  unblockUser = (videoUnblockUserRequest: VideoUnblockUserRequest) => {
-    return this.apiClient.unblockUser({
-      videoUnblockUserRequest,
+  unblockUser = (unblockUserRequest: UnblockUserRequest) => {
+    return this.videoApi.unblockUser({
+      unblockUserRequest,
       ...this.baseRequest,
     });
   };
 
-  update = (videoUpdateCallRequest: VideoUpdateCallRequest) => {
-    return this.apiClient.updateCall({
-      videoUpdateCallRequest,
+  update = (updateCallRequest: UpdateCallRequest) => {
+    return this.videoApi.updateCall({
+      updateCallRequest,
       ...this.baseRequest,
     });
   };
 
-  updateCallMembers = (
-    videoUpdateCallMembersRequest: VideoUpdateCallMembersRequest,
-  ) => {
-    return this.apiClient.updateCallMembers({
-      videoUpdateCallMembersRequest,
+  updateCallMembers = (updateCallMembersRequest: UpdateCallMembersRequest) => {
+    return this.videoApi.updateCallMembers({
+      updateCallMembersRequest,
       ...this.baseRequest,
     });
   };
 
   updateUserPermissions = (
-    videoUpdateUserPermissionsRequest: VideoUpdateUserPermissionsRequest,
+    updateUserPermissionsRequest: UpdateUserPermissionsRequest,
   ) => {
-    return this.apiClient.updateUserPermissions({
-      videoUpdateUserPermissionsRequest,
+    return this.videoApi.updateUserPermissions({
+      updateUserPermissionsRequest,
       ...this.baseRequest,
     });
   };
 
-  pinVideo = (videoPinRequest: VideoPinRequest) => {
-    return this.apiClient.videoPin({ videoPinRequest, ...this.baseRequest });
+  pinVideo = (pinRequest: PinRequest) => {
+    return this.videoApi.videoPin({ pinRequest, ...this.baseRequest });
   };
 
-  unpinVideo = (videoUnpinRequest: VideoUnpinRequest) => {
-    return this.apiClient.videoUnpin({
-      videoUnpinRequest,
+  unpinVideo = (unpinRequest: UnpinRequest) => {
+    return this.videoApi.videoUnpin({
+      unpinRequest,
       ...this.baseRequest,
     });
   };

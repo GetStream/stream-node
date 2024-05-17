@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import {
-  VideoLayoutSettingsRequestNameEnum,
-  VideoOwnCapability,
-  VideoRecordSettingsRequestModeEnum,
-  VideoRecordSettingsRequestQualityEnum,
-} from '../src/gen/video';
+  OwnCapability,
+  RecordSettingsRequestQualityEnum,
+  LayoutSettingsNameEnum,
+  RecordSettingsRequestModeEnum,
+} from '../src/gen';
 
 describe('call types CRUD API', () => {
   let client: StreamClient;
@@ -44,9 +44,9 @@ describe('call types CRUD API', () => {
       },
       grants: {
         admin: [
-          VideoOwnCapability.SEND_AUDIO,
-          VideoOwnCapability.SEND_VIDEO,
-          VideoOwnCapability.MUTE_USERS,
+          OwnCapability.SEND_AUDIO,
+          OwnCapability.SEND_VIDEO,
+          OwnCapability.MUTE_USERS,
         ],
       },
     });
@@ -86,11 +86,11 @@ describe('call types CRUD API', () => {
       callTypeName
     ];
     const userGrants = callType.grants.user.filter(
-      (c) => c !== VideoOwnCapability.JOIN_CALL,
+      (c) => c !== OwnCapability.JOIN_CALL,
     );
     const callMemberGrants = callType.grants.call_member;
-    if (!callMemberGrants.includes(VideoOwnCapability.JOIN_CALL)) {
-      callMemberGrants.push(VideoOwnCapability.JOIN_CALL);
+    if (!callMemberGrants.includes(OwnCapability.JOIN_CALL)) {
+      callMemberGrants.push(OwnCapability.JOIN_CALL);
     }
 
     await client.video.updateCallType(callTypeName, {
@@ -99,12 +99,10 @@ describe('call types CRUD API', () => {
 
     callType = (await client.video.listCallTypes()).call_types[callTypeName];
 
-    expect(callType.grants.user.includes(VideoOwnCapability.JOIN_CALL)).toBe(
-      false,
+    expect(callType.grants.user.includes(OwnCapability.JOIN_CALL)).toBe(false);
+    expect(callType.grants.call_member.includes(OwnCapability.JOIN_CALL)).toBe(
+      true,
     );
-    expect(
-      callType.grants.call_member.includes(VideoOwnCapability.JOIN_CALL),
-    ).toBe(true);
   });
 
   it('update', async () => {
@@ -112,10 +110,10 @@ describe('call types CRUD API', () => {
       settings: {
         audio: { mic_default_on: false, default_device: 'earpiece' },
         recording: {
-          mode: VideoRecordSettingsRequestModeEnum.DISABLED,
+          mode: RecordSettingsRequestModeEnum.DISABLED,
           // FIXME OL: these props shouldn't be required to be set when recording is disabled
           audio_only: false,
-          quality: VideoRecordSettingsRequestQualityEnum._1080P,
+          quality: RecordSettingsRequestQualityEnum._1080P,
         },
       },
     });
@@ -123,7 +121,7 @@ describe('call types CRUD API', () => {
     expect(updateResponse.settings.audio.mic_default_on).toBeFalsy();
     expect(updateResponse.settings.audio.default_device).toBe('earpiece');
     expect(updateResponse.settings.recording.mode).toBe(
-      VideoRecordSettingsRequestModeEnum.DISABLED,
+      RecordSettingsRequestModeEnum.DISABLED,
     );
   });
 
@@ -147,11 +145,11 @@ describe('call types CRUD API', () => {
     const response = await client.video.updateCallType(callTypeName, {
       settings: {
         recording: {
-          mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
+          mode: RecordSettingsRequestModeEnum.AVAILABLE,
           audio_only: false,
-          quality: VideoRecordSettingsRequestQualityEnum._1080P,
+          quality: RecordSettingsRequestQualityEnum._1080P,
           layout: {
-            name: VideoLayoutSettingsRequestNameEnum.SPOTLIGHT,
+            name: LayoutSettingsNameEnum.SPOTLIGHT,
             options: layoutOptions,
           },
         },
@@ -159,7 +157,7 @@ describe('call types CRUD API', () => {
     });
 
     expect(response.settings.recording.layout.name).toBe(
-      VideoLayoutSettingsRequestNameEnum.SPOTLIGHT,
+      LayoutSettingsNameEnum.SPOTLIGHT,
     );
     Object.keys(layoutOptions).forEach((key) => {
       expect(response.settings.recording.layout.options![key]).toEqual(

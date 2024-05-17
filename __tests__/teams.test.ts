@@ -2,13 +2,13 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { UserObjectRequest } from '../src/gen/chat';
 import { StreamCall } from '../src/StreamCall';
+import { UserRequest } from '../src/gen';
 
 describe('teams', () => {
   let client: StreamClient;
   const userId = 'streamnodetest' + uuidv4();
-  const newUser: UserObjectRequest = {
+  const newUser: UserRequest = {
     id: userId,
     role: 'user',
     custom: {

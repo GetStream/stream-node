@@ -1,4 +1,6 @@
 .openapi-generator-ignore
+apis/ProductchatApi.ts
+apis/ProductcommonApi.ts
 apis/ProductvideoApi.ts
 apis/index.ts
 index.ts
