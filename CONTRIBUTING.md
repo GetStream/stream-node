@@ -41,28 +41,6 @@ $ yarn generate:open-api
 $ yarn generate:open-api:dev
 ```
 
-### Fix issues
-
-If you have updated the generated chat code you'll have to fix the following issues manually in the generated code:
-
-In the `src/gen/apis/ProductchatApi.ts` file add a `/** @ts-expect-error */` (make sure to use this exact format) annotation:
-
-```ts
-/** @ts-expect-error */
-OnlyUserID;
-```
-
-### Validate that the generated code works
-
-To check your work, run the following commands:
-
-```
-yarn start
-yarn test
-```
-
-If these commands run fine, we're good to go.
-
 ## Release (for Stream developers)
 
 Releasing this package involves two GitHub Action steps:

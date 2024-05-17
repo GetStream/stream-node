@@ -27,6 +27,7 @@ yarn openapi-generator-cli generate \
   --additional-properties=modelPropertyNaming=original \
   --additional-properties=enumPropertyNaming=UPPERCASE \
   --additional-properties=withoutRuntimeChecks=true \
+  --global-property=skipFormModel=false
 
 # Remove the generated API client, just keep the models
 cp -r $TEMP_OUTPUT_DIR/ $OUTPUT_DIR

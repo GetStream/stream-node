@@ -57,7 +57,6 @@ import type {
   MessageResponse,
   MuteChannelRequest,
   MuteChannelResponse,
-  /** @ts-expect-error */
   OnlyUserID,
   PollOptionResponse,
   PollResponse,

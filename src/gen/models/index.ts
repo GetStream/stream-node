@@ -5833,6 +5833,25 @@ export interface FileUploadConfig {
 /**
  * 
  * @export
+ * @interface FileUploadRequest
+ */
+export interface FileUploadRequest {
+    /**
+     * file field
+     * @type {string}
+     * @memberof FileUploadRequest
+     */
+    file?: string;
+    /**
+     * 
+     * @type {OnlyUserID}
+     * @memberof FileUploadRequest
+     */
+    user?: OnlyUserID;
+}
+/**
+ * 
+ * @export
  * @interface FileUploadResponse
  */
 export interface FileUploadResponse {
@@ -7575,6 +7594,31 @@ export const ImageSizeResizeEnum = {
 } as const;
 export type ImageSizeResizeEnum = typeof ImageSizeResizeEnum[keyof typeof ImageSizeResizeEnum];
 
+/**
+ * 
+ * @export
+ * @interface ImageUploadRequest
+ */
+export interface ImageUploadRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageUploadRequest
+     */
+    file?: string;
+    /**
+     * field with JSON-encoded array of image size configurations
+     * @type {Array<ImageSize>}
+     * @memberof ImageUploadRequest
+     */
+    upload_sizes?: Array<ImageSize>;
+    /**
+     * 
+     * @type {OnlyUserID}
+     * @memberof ImageUploadRequest
+     */
+    user?: OnlyUserID;
+}
 /**
  * 
  * @export
@@ -9970,6 +10014,19 @@ export interface NullTime {
      * @memberof NullTime
      */
     Value?: number;
+}
+/**
+ * 
+ * @export
+ * @interface OnlyUserID
+ */
+export interface OnlyUserID {
+    /**
+     * 
+     * @type {string}
+     * @memberof OnlyUserID
+     */
+    id: string;
 }
 
 /**
