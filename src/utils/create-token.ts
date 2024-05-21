@@ -2,19 +2,8 @@ import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 export function JWTUserToken(
   apiSecret: Secret,
-  userId: string,
-  extraData = {},
-  jwtOptions: SignOptions = {},
+  payload: { user_id: string; exp: number; iat: number; call_cids?: string[] },
 ) {
-  if (typeof userId !== 'string') {
-    throw new TypeError('userId should be a string');
-  }
-
-  const payload: { user_id: string } & any = {
-    user_id: userId,
-    ...extraData,
-  };
-
   // make sure we return a clear error when jwt is shimmed (ie. browser build)
   if (jwt == null || jwt.sign == null) {
     throw Error(
@@ -22,10 +11,10 @@ export function JWTUserToken(
     );
   }
 
-  const opts: SignOptions = Object.assign(
-    { algorithm: 'HS256', noTimestamp: true },
-    jwtOptions,
-  );
+  const opts: SignOptions = Object.assign({
+    algorithm: 'HS256',
+    noTimestamp: true,
+  });
 
   if (payload.iat) {
     opts.noTimestamp = false;

@@ -58,6 +58,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { JWTServerToken, JWTUserToken } from './utils/create-token';
 import crypto from 'crypto';
+import { CallTokenPayload, UserTokenPayload } from './types';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -141,24 +142,20 @@ export class StreamClient {
     iat = Math.round(Date.now() / 1000),
     call_cids?: string[],
   ) {
-    const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
-
-    if (exp) {
-      extra.exp = exp;
-    }
-
-    if (iat) {
-      extra.iat = iat;
-    }
+    const payload: UserTokenPayload = {
+      user_id: userID,
+      exp,
+      iat,
+    };
 
     if (call_cids) {
       console.warn(
         `Use createCallToken method for creating call tokens, the "call_cids" param will be removed from the createToken method with version 0.2.0`,
       );
-      extra.call_cids = call_cids;
+      payload.call_cids = call_cids;
     }
 
-    return JWTUserToken(this.secret, userID, extra);
+    return JWTUserToken(this.secret, payload);
   }
 
   /**
@@ -170,24 +167,26 @@ export class StreamClient {
    * @returns
    */
   createCallToken(
-    userID: string,
+    userIdOrObject: string | { user_id: string; role?: string },
     call_cids: string[],
     exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
     iat = Math.round(Date.now() / 1000),
   ) {
-    const extra: { exp?: number; iat?: number; call_cids?: string[] } = {};
+    const payload: CallTokenPayload = {
+      exp,
+      iat,
+      call_cids,
+      user_id:
+        typeof userIdOrObject === 'string'
+          ? userIdOrObject
+          : userIdOrObject.user_id,
+    };
 
-    if (exp) {
-      extra.exp = exp;
+    if (typeof userIdOrObject === 'object' && userIdOrObject.role) {
+      payload.role = userIdOrObject.role;
     }
 
-    if (iat) {
-      extra.iat = iat;
-    }
-
-    extra.call_cids = call_cids;
-
-    return JWTUserToken(this.secret, userID, extra);
+    return JWTUserToken(this.secret, payload);
   }
 
   createDevice = (createDeviceRequest: CreateDeviceRequest) => {
