@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/GetStream/stream-node/compare/v0.2.1...v0.2.2) (2024-05-21)
+
+
+### Features
+
+* add option to provide role for call token ([#35](https://github.com/GetStream/stream-node/issues/35)) ([befe685](https://github.com/GetStream/stream-node/commit/befe68549f9e5fc4c43d63377098de57b39ca1c4))
+
 ## [0.2.1](https://github.com/GetStream/stream-node/compare/v0.2.0...v0.2.1) (2024-05-15)
 
 
