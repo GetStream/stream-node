@@ -38,14 +38,27 @@ describe('creating tokens', () => {
 
   it('with call IDs provided', () => {
     const call_cids = ['default:call1', 'livestream:call2'];
+    const token = client.createCallToken(userId, call_cids);
+    const decodedToken = jwt.verify(token, secret) as any;
+
+    expect(decodedToken.user_id).toEqual(userId);
+    expect(decodedToken.call_cids).toEqual(call_cids);
+    expect(decodedToken.iat).toBeDefined();
+    expect(decodedToken.exp).toBeDefined();
+  });
+
+  it('with call IDs and role provided', () => {
+    const call_cids = ['default:call1', 'livestream:call2'];
     const token = client.createCallToken(
-      userId,
+      { user_id: userId, role: 'admin' },
       call_cids,
-      undefined,
-      undefined,
     );
     const decodedToken = jwt.verify(token, secret) as any;
 
     expect(decodedToken.call_cids).toEqual(call_cids);
+    expect(decodedToken.role).toEqual('admin');
+    expect(decodedToken.user_id).toEqual(userId);
+    expect(decodedToken.iat).toBeDefined();
+    expect(decodedToken.exp).toBeDefined();
   });
 });
