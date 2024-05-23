@@ -144,6 +144,20 @@ describe('call API', () => {
     expect(response.calls).toBeDefined();
   });
 
+  it('query call stats', async () => {
+    const response = await client.video.queryCallStatistics();
+
+    expect(response.reports.length).toBeGreaterThan(0);
+
+    await expect(() =>
+      call.getSessionStatistics({
+        session: '<session id>',
+      }),
+    ).rejects.toThrowError(
+      `Stream error code 16: GetCallStats failed with error: "call report not found for cid:default:${callId} session_id:<session id>"`,
+    );
+  });
+
   describe('recording', () => {
     it('enable call recording', async () => {
       let response = await call.update({

@@ -3,6 +3,7 @@ import {
   DeleteRecordingRequest,
   DeleteTranscriptionRequest,
   GetCallRequest,
+  GetCallStatsRequest,
   ProductvideoApi,
   VideoBlockUserRequest,
   VideoGetOrCreateCallRequest,
@@ -55,6 +56,10 @@ export class StreamCall {
       ...this.baseRequest,
       videoGetOrCreateCallRequest: videoGetOrCreateCallRequest ?? {},
     });
+  };
+
+  getSessionStatistics = (request: OmitTypeId<GetCallStatsRequest>) => {
+    return this.apiClient.getCallStats({ ...this.baseRequest, ...request });
   };
 
   create = (getOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {

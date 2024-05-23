@@ -8,6 +8,7 @@ import {
   ProductvideoApi,
   VideoCreateCallTypeRequest,
   VideoCreateExternalStorageRequest,
+  VideoQueryCallStatsRequest,
   VideoQueryCallsRequest,
   VideoUpdateCallTypeRequest,
   VideoUpdateExternalStorageRequest,
@@ -28,6 +29,14 @@ export class StreamVideoClient {
   queryCalls = (request?: VideoQueryCallsRequest) => {
     return this.apiClient.queryCalls({
       videoQueryCallsRequest: request ?? {},
+    });
+  };
+
+  queryCallStatistics = (
+    videoQueryCallStatsRequest?: VideoQueryCallStatsRequest,
+  ) => {
+    return this.apiClient.queryCallStats({
+      videoQueryCallStatsRequest: videoQueryCallStatsRequest ?? {},
     });
   };
 
