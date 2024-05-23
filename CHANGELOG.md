@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/GetStream/stream-node/compare/v0.2.2...v0.2.3) (2024-05-23)
+
+
+### Features
+
+* add call stats query endpoints ([#37](https://github.com/GetStream/stream-node/issues/37)) ([f2c3ec9](https://github.com/GetStream/stream-node/commit/f2c3ec981bc42c4741cf23cffe571eef68b345af))
+
 ## [0.2.2](https://github.com/GetStream/stream-node/compare/v0.2.1...v0.2.2) (2024-05-21)
 
 
