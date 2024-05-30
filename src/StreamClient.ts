@@ -138,8 +138,8 @@ export class StreamClient {
    */
   createToken(
     userID: string,
-    exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
-    iat = Math.round(Date.now() / 1000),
+    exp = Math.round(Date.now() / 1000) + 60 * 60,
+    iat = Math.floor((Date.now() - 1000) / 1000),
     call_cids?: string[],
   ) {
     const payload: UserTokenPayload = {
@@ -169,8 +169,8 @@ export class StreamClient {
   createCallToken(
     userIdOrObject: string | { user_id: string; role?: string },
     call_cids: string[],
-    exp = Math.round(new Date().getTime() / 1000) + 60 * 60,
-    iat = Math.round(Date.now() / 1000),
+    exp = Math.round(Date.now() / 1000) + 60 * 60,
+    iat = Math.floor((Date.now() - 1000) / 1000),
   ) {
     const payload: CallTokenPayload = {
       exp,
