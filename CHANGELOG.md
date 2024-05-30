@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/GetStream/stream-node/compare/v0.2.3...v0.2.4) (2024-05-30)
+
+
+### Bug Fixes
+
+* iat can be in the future ([#40](https://github.com/GetStream/stream-node/issues/40)) ([483d4c4](https://github.com/GetStream/stream-node/commit/483d4c4b01e313520a872fb91d906b2d8144b581))
+
 ## [0.2.3](https://github.com/GetStream/stream-node/compare/v0.2.2...v0.2.3) (2024-05-23)
 
 
