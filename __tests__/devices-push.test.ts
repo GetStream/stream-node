@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   CreateDeviceRequest,
   CreateDeviceRequestPushProviderEnum,
-  PushProviderRequest,
+  PushProvider,
 } from '../src/gen/chat';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
@@ -20,11 +20,13 @@ describe('devices and push', () => {
     push_provider_name: 'firebase',
     user_id: user.id,
   };
-  const pushProvider: PushProviderRequest = {
+  const pushProvider: PushProvider = {
     name: 'test-push-provider',
-    type: 'xiaomi' as any as number,
+    type: 'xiaomi',
     xiaomi_app_secret: '',
     xiaomi_package_name: '',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   };
 
   beforeAll(async () => {

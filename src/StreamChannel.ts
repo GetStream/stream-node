@@ -1,12 +1,10 @@
 import { StreamClient } from './StreamClient';
 import {
   ChannelGetOrCreateRequest,
-  ChannelsApi,
   DeleteChannelRequest,
   DeleteMessageRequest,
   DeleteReactionRequest,
   EventRequest,
-  EventsApi,
   GetManyMessagesRequest,
   GetMessageRequest,
   GetOGRequest,
@@ -15,8 +13,8 @@ import {
   HideChannelRequest,
   MarkReadRequest,
   MarkUnreadRequest,
-  MessagesApi,
   MuteChannelRequest,
+  ProductchatApi,
   QueryMembersRequest,
   SendMessageRequest,
   SendReactionRequest,
@@ -32,9 +30,7 @@ import {
 import { OmitTypeId } from './types';
 
 export class StreamChannel {
-  private readonly channelsApi: ChannelsApi;
-  private readonly messagesApi: MessagesApi;
-  private readonly eventsApi: EventsApi;
+  private readonly chatApi: ProductchatApi;
 
   constructor(
     private readonly streamClient: StreamClient,
@@ -43,11 +39,7 @@ export class StreamChannel {
   ) {
     const configuration = this.streamClient.getConfiguration();
     /** @ts-expect-error */
-    this.channelsApi = new ChannelsApi(configuration);
-    /** @ts-expect-error */
-    this.messagesApi = new MessagesApi(configuration);
-    /** @ts-expect-error */
-    this.eventsApi = new EventsApi(configuration);
+    this.chatApi = new ProductchatApi(configuration);
   }
 
   get cid() {
@@ -55,14 +47,14 @@ export class StreamChannel {
   }
 
   delete = (request?: OmitTypeId<DeleteChannelRequest>) => {
-    return this.channelsApi.deleteChannel({
+    return this.chatApi.deleteChannel({
       ...this.baseRequest,
       ...(request ?? {}),
     });
   };
 
   update = (updateChannelRequest: OmitTypeId<UpdateChannelRequest>) => {
-    return this.channelsApi.updateChannel({
+    return this.chatApi.updateChannel({
       ...this.baseRequest,
       updateChannelRequest,
     });
@@ -71,7 +63,7 @@ export class StreamChannel {
   updatePartial = (
     updateChannelPartialRequest: OmitTypeId<UpdateChannelPartialRequest>,
   ) => {
-    return this.channelsApi.updateChannelPartial({
+    return this.chatApi.updateChannelPartial({
       ...this.baseRequest,
       updateChannelPartialRequest,
     });
@@ -81,7 +73,7 @@ export class StreamChannel {
     channelGetOrCreateRequest?: ChannelGetOrCreateRequest,
   ) => {
     if (this.id) {
-      return await this.channelsApi.getOrCreateChannel({
+      return await this.chatApi.getOrCreateChannel({
         ...this.baseRequest,
         channelGetOrCreateRequest: channelGetOrCreateRequest ?? {},
       });
@@ -90,52 +82,52 @@ export class StreamChannel {
       // if (!channelGetOrCreateRequest?.data?.members) {
       //   throw new Error('You need to provide members to create a channel without ID');
       // }
-      // const response = await this.channelsApi.getOrCreateChannelType1({type: this.type, channelGetOrCreateRequest});
+      // const response = await this.chatApi.getOrCreateChannelType1({type: this.type, channelGetOrCreateRequest});
       // this.id = response.channel?.id;
       // return response;
     }
   };
 
   markRead = (markReadRequest: MarkReadRequest) => {
-    return this.channelsApi.markRead({ ...this.baseRequest, markReadRequest });
+    return this.chatApi.markRead({ ...this.baseRequest, markReadRequest });
   };
 
   markUnread = (markUnreadRequest: MarkUnreadRequest) => {
-    return this.channelsApi.markUnread({
+    return this.chatApi.markUnread({
       ...this.baseRequest,
       markUnreadRequest,
     });
   };
 
   show = (showChannelRequest: ShowChannelRequest) => {
-    return this.channelsApi.showChannel({
+    return this.chatApi.showChannel({
       ...this.baseRequest,
       showChannelRequest,
     });
   };
 
   hide = (hideChannelRequest: HideChannelRequest) => {
-    return this.channelsApi.hideChannel({
+    return this.chatApi.hideChannel({
       ...this.baseRequest,
       hideChannelRequest,
     });
   };
 
   truncate = (truncateChannelRequest: TruncateChannelRequest) => {
-    return this.channelsApi.truncateChannel({
+    return this.chatApi.truncateChannel({
       ...this.baseRequest,
       truncateChannelRequest,
     });
   };
 
   queryMembers = (request: OmitTypeId<QueryMembersRequest>) => {
-    return this.channelsApi.queryMembers({
+    return this.chatApi.queryMembers({
       payload: { ...this.baseRequest, ...request },
     });
   };
 
   mute = (muteChannelRequest: Omit<MuteChannelRequest, 'channel_cids'>) => {
-    return this.channelsApi.muteChannel({
+    return this.chatApi.muteChannel({
       muteChannelRequest: { ...muteChannelRequest, channel_cids: [this.cid] },
     });
   };
@@ -146,63 +138,62 @@ export class StreamChannel {
       'channel_cids' | 'channel_cid'
     >,
   ) => {
-    return this.channelsApi.unmuteChannel({
+    return this.chatApi.unmuteChannel({
       unmuteChannelRequest: {
         ...unmuteChannelRequest,
-        channel_cid: this.cid,
-        channel_cids: [],
+        channel_cids: [this.cid],
       },
     });
   };
 
   // TODO: there is probably an issue with the generated code here
   // uploadFile = (options: Omit<OmitTypeId<UploadFileRequest>, 'file'>, file: Buffer) => {
-  //   return this.messagesApi.uploadFile({...options, ...this.baseRequest, file: file as any as string});
+  //   return this.chatApi.uploadFile({...options, ...this.baseRequest, file: file as any as string});
   // }
 
   // deleteFile = (request: OmitTypeId<DeleteFileRequest>) => {
-  //   return this.messagesApi.deleteFile({...request, ...this.baseRequest});
+  //   return this.chatApi.deleteFile({...request, ...this.baseRequest});
   // }
 
   // uploadImage = (request: OmitTypeId<UploadImageRequest>) => {
-  //   return this.messagesApi.uploadImage({...request, ...this.baseRequest});
+  //   return this.chatApi.uploadImage({...request, ...this.baseRequest});
   // }
 
   // deleteImage = (request: OmitTypeId<DeleteImageRequest>) => {
-  //   return this.messagesApi.deleteImage({...request, ...this.baseRequest});
+  //   return this.chatApi.deleteImage({...request, ...this.baseRequest});
   // }
 
   sendMessage = (sendMessageRequest: SendMessageRequest) => {
-    return this.messagesApi.sendMessage({
+    return this.chatApi.sendMessage({
       ...this.baseRequest,
       sendMessageRequest,
     });
   };
 
   deleteMessage = (request: DeleteMessageRequest) => {
-    return this.messagesApi.deleteMessage(request);
+    return this.chatApi.deleteMessage(request);
   };
 
   updateMessage = (id: string, updateMessageRequest: UpdateMessageRequest) => {
-    return this.messagesApi.updateMessage({ id, updateMessageRequest });
+    return this.chatApi.updateMessage({ id, updateMessageRequest });
   };
 
   updateMessagePartial = (
     id: string,
     updateMessagePartialRequest: UpdateMessagePartialRequest,
   ) => {
-    return this.messagesApi.updateMessagePartial({
+    return this.chatApi.updateMessagePartial({
       id,
       updateMessagePartialRequest,
     });
   };
 
   getMessage = (request: GetMessageRequest) => {
-    return this.messagesApi.getMessage(request);
+    return this.chatApi.getMessage(request);
   };
 
   getManyMessages = (request: OmitTypeId<GetManyMessagesRequest>) => {
-    return this.messagesApi.getManyMessages({
+    return this.chatApi.getManyMessages({
       ...request,
       ...this.baseRequest,
     });
@@ -212,22 +203,22 @@ export class StreamChannel {
     id: string,
     translateMessageRequest: TranslateMessageRequest,
   ) => {
-    return this.messagesApi.translateMessage({ id, translateMessageRequest });
+    return this.chatApi.translateMessage({ id, translateMessageRequest });
   };
 
   getMessagesAround = (request: GetRepliesRequest) => {
-    return this.messagesApi.getReplies(request);
+    return this.chatApi.getReplies(request);
   };
 
   getOpenGraphData = (request: GetOGRequest) => {
-    return this.messagesApi.getOG(request);
+    return this.chatApi.getOG(request);
   };
 
   sendMessageReaction = (
     messageId: string,
     sendReactionRequest: SendReactionRequest,
   ) => {
-    return this.messagesApi.sendReaction({
+    return this.chatApi.sendReaction({
       id: messageId,
       sendReactionRequest,
     });
@@ -237,18 +228,18 @@ export class StreamChannel {
     messageId: string,
     request: Omit<DeleteReactionRequest, 'id'>,
   ) => {
-    return this.messagesApi.deleteReaction({ ...request, id: messageId });
+    return this.chatApi.deleteReaction({ ...request, id: messageId });
   };
 
   getMessageReactions = (
     messageId: string,
     request?: Omit<GetReactionsRequest, 'id'>,
   ) => {
-    return this.messagesApi.getReactions({ ...(request ?? {}), id: messageId });
+    return this.chatApi.getReactions({ ...(request ?? {}), id: messageId });
   };
 
   sendCustomEvent = (event: EventRequest) => {
-    return this.eventsApi.sendEvent({
+    return this.chatApi.sendEvent({
       ...this.baseRequest,
       sendEventRequest: { event },
     });

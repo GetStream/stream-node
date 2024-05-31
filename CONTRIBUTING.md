@@ -48,24 +48,6 @@ $ PRODUCT=video yarn generate:open-api
 $ PRODUCT=chat yarn generate:open-api:dev
 ```
 
-### Fix issues in chat code
-
-If you have updated the generated chat code you'll have to fix the following issues manually in the generated code:
-
-- Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for imports for `ImageSizeRequest`, `OnlyUserIDRequest` in the `gen/chat/FilesApi.ts` and `gen/chat/MessagesApi.ts` files
-- Add `/** @ts-expect-error */ ` (make sure to use this exact comment format otherwise they will be missing from `d.ts` files) for duplicate exports in `gen/chat/index.ts`
-
-### Validate that the generated code works
-
-To check your work, run the following commands:
-
-```
-yarn start
-yarn test
-```
-
-If these commands run fine, we're good to go.
-
 ## Release (for Stream developers)
 
 Releasing this package involves two GitHub Action steps:

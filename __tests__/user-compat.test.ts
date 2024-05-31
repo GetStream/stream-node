@@ -16,17 +16,20 @@ describe('user-video compatibility API', () => {
 
   beforeAll(async () => {
     client = createTestClient();
-    await client.upsertUsers({
+    const response = await client.upsertUsers({
       users: {
         [user.id]: { ...user },
       },
     });
+
+    console.log(response.users[user.id].custom);
   });
 
   it('create call', async () => {
     const call = client.video.call('default', uuidv4());
     const response = await call.create({ data: { created_by: user } });
 
+    console.log(response.call.created_by);
     expect(response.call.created_by.custom.note).toBe('compatibilty test');
     expect(response.call.created_by.name).toBe(
       'Test User for user API compatibily',

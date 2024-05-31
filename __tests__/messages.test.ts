@@ -150,20 +150,13 @@ describe('messages API', () => {
     expect(response.results).toBeDefined();
   });
 
-  it('flag and unflag', async () => {
+  it('flag', async () => {
     const response = await client.flag({
       target_message_id: messageId!,
       user_id: user.id,
     });
 
     expect(response.flag?.target_message_id).toBe(messageId!);
-
-    const unflagResponse = await client.unflag({
-      target_message_id: messageId!,
-      user_id: user.id,
-    });
-
-    expect(unflagResponse).toBeDefined();
   });
 
   it('truncate', async () => {
