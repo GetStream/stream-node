@@ -11,7 +11,8 @@ else
   PROTOCOL_REPO_DIR="../protocol"
 fi
 if  [ "$FROM_REPO" == 'chat' ]; then
-  SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/serverside-api.yaml"
+  make -C $PROTOCOL_REPO_DIR openapi
+  SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/v2/serverside-api.yaml"
 else
   SCHEMA_FILE="$PROTOCOL_REPO_DIR/openapi/serverside-api.yaml"
 fi

@@ -2653,10 +2653,10 @@ export interface ChannelGetOrCreateRequest {
     members?: PaginationParams;
     /**
      * 
-     * @type {MessagePaginationParams}
+     * @type {object}
      * @memberof ChannelGetOrCreateRequest
      */
-    messages?: MessagePaginationParams;
+    messages?: object;
     /**
      * Refresh channel state
      * @type {boolean}
@@ -6259,7 +6259,7 @@ export interface FullUserResponse {
      * @type {boolean}
      * @memberof FullUserResponse
      */
-    invisible?: boolean;
+    invisible: boolean;
     /**
      * 
      * @type {string}
@@ -8927,6 +8927,49 @@ export interface MessageFlag {
 /**
  * 
  * @export
+ * @interface MessageHistoryEntry
+ */
+export interface MessageHistoryEntry {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof MessageHistoryEntry
+     */
+    Custom: { [key: string]: any; };
+    /**
+     * 
+     * @type {Array<Attachment>}
+     * @memberof MessageHistoryEntry
+     */
+    attachments: Array<Attachment>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageHistoryEntry
+     */
+    message_id: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageHistoryEntry
+     */
+    message_updated_at: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageHistoryEntry
+     */
+    message_updated_by_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageHistoryEntry
+     */
+    text: string;
+}
+/**
+ * 
+ * @export
  * @interface MessageModerationResult
  */
 export interface MessageModerationResult {
@@ -8996,25 +9039,6 @@ export interface MessageModerationResult {
      * @memberof MessageModerationResult
      */
     user_karma: number;
-}
-/**
- * 
- * @export
- * @interface MessagePaginationParams
- */
-export interface MessagePaginationParams {
-    /**
-     * 
-     * @type {number}
-     * @memberof MessagePaginationParams
-     */
-    limit?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MessagePaginationParams
-     */
-    offset?: number;
 }
 /**
  * 
@@ -12006,6 +12030,74 @@ export interface QueryMessageFlagsResponse {
      * @memberof QueryMessageFlagsResponse
      */
     flags: Array<MessageFlag>;
+}
+/**
+ * 
+ * @export
+ * @interface QueryMessageHistoryRequest
+ */
+export interface QueryMessageHistoryRequest {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof QueryMessageHistoryRequest
+     */
+    filter: { [key: string]: any; };
+    /**
+     * 
+     * @type {number}
+     * @memberof QueryMessageHistoryRequest
+     */
+    limit?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueryMessageHistoryRequest
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueryMessageHistoryRequest
+     */
+    prev?: string;
+    /**
+     * 
+     * @type {Array<SortParam>}
+     * @memberof QueryMessageHistoryRequest
+     */
+    sort?: Array<SortParam>;
+}
+/**
+ * 
+ * @export
+ * @interface QueryMessageHistoryResponse
+ */
+export interface QueryMessageHistoryResponse {
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof QueryMessageHistoryResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {Array<MessageHistoryEntry>}
+     * @memberof QueryMessageHistoryResponse
+     */
+    message_history: Array<MessageHistoryEntry>;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueryMessageHistoryResponse
+     */
+    next?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueryMessageHistoryResponse
+     */
+    prev?: string;
 }
 /**
  * 
@@ -17388,6 +17480,12 @@ export interface UserStats {
      * @memberof UserStats
      */
     info: UserInfoResponse;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserStats
+     */
+    min_event_ts: number;
     /**
      * 
      * @type {number}
