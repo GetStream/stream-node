@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/GetStream/stream-node/compare/v0.2.4...v0.2.5) (2024-06-04)
+
+
+### Features
+
+* session timers ([#43](https://github.com/GetStream/stream-node/issues/43)) ([68d8c0d](https://github.com/GetStream/stream-node/commit/68d8c0d1348fc12ccca07446ac69606b01f859d9))
+
 ## [0.2.4](https://github.com/GetStream/stream-node/compare/v0.2.3...v0.2.4) (2024-05-30)
 
 
