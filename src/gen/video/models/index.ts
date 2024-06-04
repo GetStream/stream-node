@@ -657,6 +657,12 @@ export interface VideoCallSessionResponse {
      * @memberof VideoCallSessionResponse
      */
     started_at?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallSessionResponse
+     */
+    timer_ends_at?: string;
 }
 /**
  * 
@@ -688,6 +694,12 @@ export interface VideoCallSettingsRequest {
      * @memberof VideoCallSettingsRequest
      */
     geofencing?: VideoGeofenceSettingsRequest;
+    /**
+     * 
+     * @type {VideoLimitsSettingsRequest}
+     * @memberof VideoCallSettingsRequest
+     */
+    limits?: VideoLimitsSettingsRequest;
     /**
      * 
      * @type {VideoRecordSettingsRequest}
@@ -755,6 +767,12 @@ export interface VideoCallSettingsResponse {
      * @memberof VideoCallSettingsResponse
      */
     geofencing: VideoGeofenceSettingsResponse;
+    /**
+     * 
+     * @type {VideoLimitsSettingsResponse}
+     * @memberof VideoCallSettingsResponse
+     */
+    limits: VideoLimitsSettingsResponse;
     /**
      * 
      * @type {VideoRecordSettingsResponse}
@@ -2163,6 +2181,44 @@ export type VideoLayoutSettingsResponseNameEnum = typeof VideoLayoutSettingsResp
 /**
  * 
  * @export
+ * @interface VideoLimitsSettingsRequest
+ */
+export interface VideoLimitsSettingsRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoLimitsSettingsRequest
+     */
+    max_duration_seconds?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoLimitsSettingsRequest
+     */
+    max_participants?: number;
+}
+/**
+ * 
+ * @export
+ * @interface VideoLimitsSettingsResponse
+ */
+export interface VideoLimitsSettingsResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoLimitsSettingsResponse
+     */
+    max_duration_seconds?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoLimitsSettingsResponse
+     */
+    max_participants?: number;
+}
+/**
+ * 
+ * @export
  * @interface VideoListCallTypeResponse
  */
 export interface VideoListCallTypeResponse {
@@ -2591,6 +2647,7 @@ export interface VideoNullTime {
  */
 export const VideoOwnCapability = {
     BLOCK_USERS: 'block-users',
+    CHANGE_MAX_DURATION: 'change-max-duration',
     CREATE_CALL: 'create-call',
     CREATE_REACTION: 'create-reaction',
     ENABLE_NOISE_CANCELLATION: 'enable-noise-cancellation',
@@ -4498,6 +4555,12 @@ export interface VideoUserStats {
      * @memberof VideoUserStats
      */
     info: VideoUserInfoResponse;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoUserStats
+     */
+    min_event_ts: number;
     /**
      * 
      * @type {number}
