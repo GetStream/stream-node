@@ -6,7 +6,7 @@ import { StreamClient } from '../src/StreamClient';
 describe('user-video compatibility API', () => {
   let client: StreamClient;
   const user = {
-    id: 'stream-node-test-user',
+    id: uuidv4(),
     role: 'admin',
     name: 'Test User for user API compatibily',
     custom: {
@@ -14,22 +14,25 @@ describe('user-video compatibility API', () => {
     },
   };
 
-  beforeAll(async () => {
+  beforeAll(() => {
     client = createTestClient();
+  });
+
+  it('upsert user', async () => {
     const response = await client.upsertUsers({
       users: {
         [user.id]: { ...user },
       },
     });
 
-    console.log(response.users[user.id].custom);
+    expect(response.users[user.id].custom.note).toBe('compatibilty test');
   });
 
   it('create call', async () => {
     const call = client.video.call('default', uuidv4());
     const response = await call.create({ data: { created_by: user } });
 
-    console.log(response.call.created_by);
+    // Backend returns: {custom: { custom: { note: 'compatibilty test' } }}
     expect(response.call.created_by.custom.note).toBe('compatibilty test');
     expect(response.call.created_by.name).toBe(
       'Test User for user API compatibily',

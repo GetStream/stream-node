@@ -1039,6 +1039,87 @@ export type BlockListOptionsBehaviorEnum = typeof BlockListOptionsBehaviorEnum[k
 /**
  * 
  * @export
+ * @interface BlockUsersRequest
+ */
+export interface BlockUsersRequest {
+    /**
+     * User id to block
+     * @type {string}
+     * @memberof BlockUsersRequest
+     */
+    blocked_user_id: string;
+    /**
+     * 
+     * @type {UserRequest}
+     * @memberof BlockUsersRequest
+     */
+    user?: UserRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlockUsersRequest
+     */
+    user_id?: string;
+}
+/**
+ * 
+ * @export
+ * @interface BlockUsersResponse
+ */
+export interface BlockUsersResponse {
+    /**
+     * 
+     * @type {Array<UserBlock>}
+     * @memberof BlockUsersResponse
+     */
+    blocked_users: Array<UserBlock>;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof BlockUsersResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface BlockedUserResponse
+ */
+export interface BlockedUserResponse {
+    /**
+     * 
+     * @type {UserResponse}
+     * @memberof BlockedUserResponse
+     */
+    blocked_user: UserResponse;
+    /**
+     * ID of the user who got blocked
+     * @type {string}
+     * @memberof BlockedUserResponse
+     */
+    blocked_user_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlockedUserResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {UserResponse}
+     * @memberof BlockedUserResponse
+     */
+    user: UserResponse;
+    /**
+     * ID of the user who blocked another user
+     * @type {string}
+     * @memberof BlockedUserResponse
+     */
+    user_id: string;
+}
+/**
+ * 
+ * @export
  * @interface BroadcastSettings
  */
 export interface BroadcastSettings {
@@ -2103,6 +2184,12 @@ export interface ChannelResponse {
      * @memberof ChannelResponse
      */
     auto_translation_language?: string;
+    /**
+     * Whether this channel is blocked by current user or not
+     * @type {boolean}
+     * @memberof ChannelResponse
+     */
+    blocked?: boolean;
     /**
      * Channel CID (<type>:<id>)
      * @type {string}
@@ -5387,6 +5474,25 @@ export interface GetBlockListResponse {
 /**
  * 
  * @export
+ * @interface GetBlockedUsersResponse
+ */
+export interface GetBlockedUsersResponse {
+    /**
+     * Array of blocked user object
+     * @type {Array<BlockedUserResponse>}
+     * @memberof GetBlockedUsersResponse
+     */
+    blocks: Array<BlockedUserResponse>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetBlockedUsersResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface GetCallTokenRequest
  */
 export interface GetCallTokenRequest {
@@ -8163,6 +8269,12 @@ export interface NotificationSettings {
      * @type {EventNotificationSettings}
      * @memberof NotificationSettings
      */
+    call_missed: EventNotificationSettings;
+    /**
+     * 
+     * @type {EventNotificationSettings}
+     * @memberof NotificationSettings
+     */
     call_notification: EventNotificationSettings;
     /**
      * 
@@ -8246,6 +8358,12 @@ export interface OwnUser {
      * @memberof OwnUser
      */
     banned: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OwnUser
+     */
+    blocked_user_ids?: Array<string>;
     /**
      * 
      * @type {Array<ChannelMute>}
@@ -10778,6 +10896,12 @@ export interface RingSettings {
      * @memberof RingSettings
      */
     incoming_call_timeout_ms: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RingSettings
+     */
+    missed_call_timeout_ms: number;
 }
 /**
  * 
@@ -12162,6 +12286,44 @@ export interface TypingIndicators {
      * @memberof TypingIndicators
      */
     enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UnblockUsersRequest
+ */
+export interface UnblockUsersRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof UnblockUsersRequest
+     */
+    blocked_user_id: string;
+    /**
+     * 
+     * @type {UserRequest}
+     * @memberof UnblockUsersRequest
+     */
+    user?: UserRequest;
+    /**
+     * 
+     * @type {string}
+     * @memberof UnblockUsersRequest
+     */
+    user_id?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UnblockUsersResponse
+ */
+export interface UnblockUsersResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UnblockUsersResponse
+     */
+    duration: string;
 }
 /**
  * 
@@ -13833,6 +13995,49 @@ export interface UpsertPushProviderResponse {
      * @memberof UpsertPushProviderResponse
      */
     push_provider: PushProviderResponse;
+}
+/**
+ * 
+ * @export
+ * @interface UserBlock
+ */
+export interface UserBlock {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserBlock
+     */
+    AppPK: number;
+    /**
+     * 
+     * @type {UserObject}
+     * @memberof UserBlock
+     */
+    BlockedByUser?: UserObject;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserBlock
+     */
+    BlockedByUserID: string;
+    /**
+     * 
+     * @type {UserObject}
+     * @memberof UserBlock
+     */
+    BlockedUser?: UserObject;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserBlock
+     */
+    BlockedUserID: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserBlock
+     */
+    CreatedAt: string;
 }
 /**
  * 

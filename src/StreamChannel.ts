@@ -78,13 +78,17 @@ export class StreamChannel {
         channelGetOrCreateRequest: channelGetOrCreateRequest ?? {},
       });
     } else {
-      throw new Error(`This operation isn't yet implemented`);
-      // if (!channelGetOrCreateRequest?.data?.members) {
-      //   throw new Error('You need to provide members to create a channel without ID');
-      // }
-      // const response = await this.chatApi.getOrCreateChannelType1({type: this.type, channelGetOrCreateRequest});
-      // this.id = response.channel?.id;
-      // return response;
+      if (!channelGetOrCreateRequest?.data?.members) {
+        throw new Error(
+          'You need to provide members to create a channel without ID',
+        );
+      }
+      const response = await this.chatApi.getOrCreateDistinctChannel({
+        type: this.type,
+        channelGetOrCreateRequest,
+      });
+      this.id = response.channel?.id;
+      return response;
     }
   };
 

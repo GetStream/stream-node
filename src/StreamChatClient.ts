@@ -84,7 +84,7 @@ export class StreamChatClient {
 
   queryChannels = (queryChannelsRequest?: QueryChannelsRequest) => {
     return this.chatApi.queryChannels({
-      queryChannelsRequest: queryChannelsRequest ?? null,
+      queryChannelsRequest: queryChannelsRequest ?? {},
     });
   };
 
