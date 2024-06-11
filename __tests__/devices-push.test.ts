@@ -20,13 +20,13 @@ describe('devices and push', () => {
     push_provider_name: 'firebase',
     user_id: user.id,
   };
+  // Type '{ name: string; type: string; xiaomi_app_secret: string; xiaomi_package_name: string; }'
+  // is missing the following properties from type 'PushProvider': created_at, updated_at
   const pushProvider: PushProvider = {
     name: 'test-push-provider',
     type: 'xiaomi',
     xiaomi_app_secret: '',
     xiaomi_package_name: '',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
   };
 
   beforeAll(async () => {

@@ -40,7 +40,7 @@ describe('channel types CRUD API', () => {
 
     const getResponse = await client.chat.getChannelType({ name: channelType });
 
-    // @ts-expect-error typing problem
+    // Property 'automod' does not exist on type 'Response'.
     expect(getResponse.automod).toBe(
       CreateChannelTypeRequestAutomodEnum.SIMPLE,
     );

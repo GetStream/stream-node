@@ -1072,7 +1072,7 @@ export interface BlockUsersResponse {
      * @type {Array<UserBlock>}
      * @memberof BlockUsersResponse
      */
-    blocked_users: Array<UserBlock>;
+    blocks: Array<UserBlock>;
     /**
      * Duration of the request in human-readable format
      * @type {string}
@@ -2718,6 +2718,12 @@ export interface CheckExternalStorageResponse {
      * @memberof CheckExternalStorageResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CheckExternalStorageResponse
+     */
+    file_url: string;
 }
 /**
  * 
@@ -3740,8 +3746,20 @@ export interface CreateExternalStorageRequest {
      * @type {string}
      * @memberof CreateExternalStorageRequest
      */
-    storage_type: string;
+    storage_type: CreateExternalStorageRequestStorageTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const CreateExternalStorageRequestStorageTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type CreateExternalStorageRequestStorageTypeEnum = typeof CreateExternalStorageRequestStorageTypeEnum[keyof typeof CreateExternalStorageRequestStorageTypeEnum];
+
 /**
  * 
  * @export
@@ -4785,8 +4803,20 @@ export interface ExternalStorageResponse {
      * @type {string}
      * @memberof ExternalStorageResponse
      */
-    type: string;
+    type: ExternalStorageResponseTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const ExternalStorageResponseTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type ExternalStorageResponseTypeEnum = typeof ExternalStorageResponseTypeEnum[keyof typeof ExternalStorageResponseTypeEnum];
+
 /**
  * 
  * @export
@@ -5238,6 +5268,12 @@ export interface FullUserResponse {
      * @memberof FullUserResponse
      */
     banned: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof FullUserResponse
+     */
+    blocked_user_ids: Array<string>;
     /**
      * 
      * @type {Array<ChannelMute>}
@@ -13529,8 +13565,20 @@ export interface UpdateExternalStorageRequest {
      * @type {string}
      * @memberof UpdateExternalStorageRequest
      */
-    storage_type: string;
+    storage_type: UpdateExternalStorageRequestStorageTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateExternalStorageRequestStorageTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type UpdateExternalStorageRequestStorageTypeEnum = typeof UpdateExternalStorageRequestStorageTypeEnum[keyof typeof UpdateExternalStorageRequestStorageTypeEnum];
+
 /**
  * 
  * @export
@@ -13566,8 +13614,20 @@ export interface UpdateExternalStorageResponse {
      * @type {string}
      * @memberof UpdateExternalStorageResponse
      */
-    type: string;
+    type: UpdateExternalStorageResponseTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateExternalStorageResponseTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type UpdateExternalStorageResponseTypeEnum = typeof UpdateExternalStorageResponseTypeEnum[keyof typeof UpdateExternalStorageResponseTypeEnum];
+
 /**
  * 
  * @export
@@ -14004,40 +14064,22 @@ export interface UpsertPushProviderResponse {
 export interface UserBlock {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UserBlock
      */
-    AppPK: number;
-    /**
-     * 
-     * @type {UserObject}
-     * @memberof UserBlock
-     */
-    BlockedByUser?: UserObject;
+    blocked_by_user_id: string;
     /**
      * 
      * @type {string}
      * @memberof UserBlock
      */
-    BlockedByUserID: string;
-    /**
-     * 
-     * @type {UserObject}
-     * @memberof UserBlock
-     */
-    BlockedUser?: UserObject;
+    blocked_user_id: string;
     /**
      * 
      * @type {string}
      * @memberof UserBlock
      */
-    BlockedUserID: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserBlock
-     */
-    CreatedAt: string;
+    created_at: string;
 }
 /**
  * 
@@ -14283,6 +14325,12 @@ export interface UserResponse {
      * @memberof UserResponse
      */
     banned: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserResponse
+     */
+    blocked_user_ids: Array<string>;
     /**
      * Date/time of creation
      * @type {string}

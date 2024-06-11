@@ -19,6 +19,15 @@ describe('user-video compatibility API', () => {
   });
 
   it('upsert user', async () => {
+    const user = {
+      id: uuidv4(),
+      role: 'admin',
+      name: 'Test User for user API compatibily',
+      custom: {
+        note: 'compatibilty test',
+      },
+    };
+
     const response = await client.upsertUsers({
       users: {
         [user.id]: { ...user },

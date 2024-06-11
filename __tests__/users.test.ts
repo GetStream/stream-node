@@ -132,12 +132,41 @@ describe('user API', () => {
     expect(muteResponse.mute?.target?.id).toBe(newUser.id);
 
     const unmuteResponse = await client.unmuteUser({
-      target_id: newUser.id,
-      target_ids: [],
+      target_ids: [newUser.id],
       user_id: user.id,
     });
 
     expect(unmuteResponse).toBeDefined();
+  });
+
+  it('block and unblock', async () => {
+    const badUser: UserRequest = {
+      id: 'bad-alice',
+      name: 'Alice',
+    };
+    await client.upsertUsers({ users: { [badUser.id]: badUser } });
+
+    const blockResponse = await client.blockUsers({
+      blocked_user_id: badUser.id,
+      user_id: user.id,
+    });
+
+    expect(
+      blockResponse.blocks.find((b) => b.blocked_user_id === badUser.id),
+    ).toBeDefined();
+
+    const blockedUsers = await client.getBlockedUsers({ userId: user.id });
+
+    expect(
+      blockedUsers.blocks.find((b) => b.blocked_user_id === badUser.id),
+    ).toBeDefined();
+
+    const unblockResponse = await client.unblockUsers({
+      blocked_user_id: badUser.id,
+      user_id: user.id,
+    });
+
+    expect(unblockResponse.duration).toBeDefined();
   });
 
   it('send custom event', async () => {

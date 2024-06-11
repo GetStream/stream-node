@@ -3,6 +3,7 @@ import { StreamVideoClient } from './StreamVideoClient';
 import {
   APIError,
   BanRequest,
+  BlockUsersRequest,
   CheckPushRequest,
   CreateDeviceRequest,
   CreateGuestRequest,
@@ -16,6 +17,7 @@ import {
   ExportUserRequest,
   ExportUsersRequest,
   FlagRequest,
+  GetBlockedUsersRequest,
   GetPermissionRequest,
   GetTaskRequest,
   ListDevicesRequest,
@@ -28,6 +30,7 @@ import {
   ReactivateUsersRequest,
   RestoreUsersRequest,
   UnbanRequest,
+  UnblockUsersRequest,
   UnmuteUserRequest,
   UpdateAppRequest,
   UpdateUserPartialRequest,
@@ -324,6 +327,18 @@ export class StreamClient {
     } catch (err) {
       return false;
     }
+  };
+
+  blockUsers = (blockUsersRequest: BlockUsersRequest) => {
+    return this.chatApi.blockUsers({ blockUsersRequest });
+  };
+
+  unblockUsers = (unblockUsersRequest: UnblockUsersRequest) => {
+    return this.chatApi.unblockUsers({ unblockUsersRequest });
+  };
+
+  getBlockedUsers = (request: GetBlockedUsersRequest) => {
+    return this.chatApi.getBlockedUsers(request);
   };
 
   getConfiguration = (product: 'chat' | 'video' = 'chat') => {

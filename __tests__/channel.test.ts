@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { StreamChannel } from '../src/StreamChannel';
-import exp from 'constants';
 
 describe('channel API', () => {
   let client: StreamClient;
@@ -35,10 +34,12 @@ describe('channel API', () => {
 
   it('create', async () => {
     const response = await channel.getOrCreate({
+      // Type error: Object literal may only specify known properties, and 'name' does not exist in type 'ChannelInput'.
       data: { created_by_id: user.id, name: channelId },
     });
 
     expect(response.channel?.cid).toBe(`${channel.type}:${channel.id}`);
+    // Type error: Property 'name' does not exist on type 'ChannelResponse'
     expect(response.channel?.name).toBe(channelId);
   });
 
@@ -47,6 +48,8 @@ describe('channel API', () => {
     const response = await channelWithoutId.getOrCreate({
       data: {
         created_by_id: user.id,
+        // Type error: Type '{ user_id: string; }' is missing the following properties from type 'ChannelMember':
+        // banned, channel_role, created_at, notifications_muted, and 2 more.
         members: [{ user_id: user.id }, { user_id: user2.id }],
       },
     });
@@ -82,7 +85,7 @@ describe('channel API', () => {
     expect(unfilteredResponse.channels.length).toBeGreaterThan(1);
 
     const filteredResponse = await client.chat.queryChannels({
-      filter_conditions: { id: channelId },
+      filter_conditions: { cid: channel.cid },
     });
 
     expect(filteredResponse.channels.length).toBe(1);

@@ -35,6 +35,7 @@ describe('messages API', () => {
     channel = client.chat.channel('messaging', channelId);
     await channel.getOrCreate({
       data: {
+        // Type '{ id: string; }' is missing the following properties from type 'UserObject': banned, custom, online, role
         created_by: { id: user.id },
         members: [{ user }, { user: user2 }],
       },
@@ -63,9 +64,11 @@ describe('messages API', () => {
     const urlAttachment = await channel.getOpenGraphData({
       url: 'https://getstream.io/',
     });
+    delete urlAttachment.custom;
     const response = await channel.updateMessage(messageId!, {
       message: {
         text: 'https://getstream.io/',
+        // Property 'custom' is missing in type '{ image_url: string; }' but required in type 'Attachment'
         attachments: [urlAttachment],
         user_id: user.id,
       },
@@ -99,6 +102,7 @@ describe('messages API', () => {
       language: TranslateMessageRequestLanguageEnum.HU,
     });
 
+    // Property 'message' does not exist on type 'MessageResponse'.
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
