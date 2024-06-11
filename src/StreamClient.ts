@@ -186,7 +186,7 @@ export class StreamClient {
     return this.chatApi.checkPush({ checkPushRequest });
   };
 
-  createGuest = async (createGuestRequest: CreateGuestRequest) => {
+  createGuest = (createGuestRequest: CreateGuestRequest) => {
     return this.chatApi.createGuest({ createGuestRequest });
   };
 
@@ -194,7 +194,7 @@ export class StreamClient {
     return this.chatApi.ban({ banRequest });
   };
 
-  deactivateUser = async (
+  deactivateUser = (
     deactivateUserRequest: DeactivateUserRequest & { user_id: string },
   ) => {
     return this.chatApi.deactivateUser({
@@ -219,19 +219,19 @@ export class StreamClient {
     return this.chatApi.exportUsers({ exportUsersRequest });
   };
 
-  flag = async (flagRequest: FlagRequest) => {
+  flag = (flagRequest: FlagRequest) => {
     return this.chatApi.flag({ flagRequest });
   };
 
-  queryBannedUsers = async (payload: QueryBannedUsersRequest) => {
+  queryBannedUsers = (payload: QueryBannedUsersRequest) => {
     return this.chatApi.queryBannedUsers({ payload });
   };
 
-  queryUsers = async (payload: QueryUsersPayload) => {
+  queryUsers = (payload: QueryUsersPayload) => {
     return this.chatApi.queryUsers({ payload });
   };
 
-  reactivateUser = async (
+  reactivateUser = (
     reactivateUserRequest: ReactivateUserRequest & { user_id: string },
   ) => {
     return this.chatApi.reactivateUser({
@@ -252,19 +252,17 @@ export class StreamClient {
     return this.chatApi.unban(request);
   };
 
-  upsertUsers = async (updateUsersRequest: UpdateUsersRequest) => {
+  upsertUsers = (updateUsersRequest: UpdateUsersRequest) => {
     return this.chatApi.updateUsers({ updateUsersRequest });
   };
 
-  updateUsersPartial = async (request: {
-    users: UpdateUserPartialRequest[];
-  }) => {
+  updateUsersPartial = (request: { users: UpdateUserPartialRequest[] }) => {
     return this.chatApi.updateUsersPartial({
       updateUsersPartialRequest: request,
     });
   };
 
-  muteUser = async (muteUserRequest: MuteUserRequest) => {
+  muteUser = (muteUserRequest: MuteUserRequest) => {
     return this.chatApi.muteUser({ muteUserRequest });
   };
 

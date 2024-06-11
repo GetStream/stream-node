@@ -55,7 +55,7 @@ describe('messages API', () => {
 
     messageId = response.message?.id;
 
-    const getResponse = await channel.getManyMessages({ ids: [messageId!] });
+    const getResponse = await channel.getManyMessages({ ids: [messageId] });
 
     expect(getResponse.messages.length).toBe(1);
   });
@@ -64,7 +64,6 @@ describe('messages API', () => {
     const urlAttachment = await channel.getOpenGraphData({
       url: 'https://getstream.io/',
     });
-    delete urlAttachment.custom;
     const response = await channel.updateMessage(messageId!, {
       message: {
         text: 'https://getstream.io/',
