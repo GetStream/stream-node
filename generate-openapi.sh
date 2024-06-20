@@ -21,7 +21,7 @@ if [ "$PRODUCT" == 'video' ] || [ "$PRODUCT" == 'all' ] ; then
     PROTOCOL_REPO_DIR="../protocol"
   fi
   if  [ "$FROM_REPO" == 'chat' ]; then
-    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/video-openapi.yaml"
+    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/v2/video-openapi.yaml"
   else
     SCHEMA_FILE="$PROTOCOL_REPO_DIR/openapi/video-openapi.yaml"
   fi
@@ -64,7 +64,7 @@ if [ "$PRODUCT" == 'chat' ] || [ "$PRODUCT" == 'all' ]; then
     PROTOCOL_REPO_DIR="../protocol"
   fi
   if  [ "$FROM_REPO" == 'chat' ]; then
-    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/chat-openapi.yaml"
+    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/v2/chat-serverside-api.yaml"
   else
     SCHEMA_FILE="$PROTOCOL_REPO_DIR/openapi/chat-openapi.yaml"
   fi
