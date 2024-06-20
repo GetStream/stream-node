@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.6](https://github.com/GetStream/stream-node/compare/v0.2.5...v0.2.6) (2024-06-20)
+
+
+### Features
+
+* implement delete call endpoint ([#45](https://github.com/GetStream/stream-node/issues/45)) ([96884a3](https://github.com/GetStream/stream-node/commit/96884a3ec4da1901dd9f135d6c7ab0111851d5d1))
+
 ## [0.2.5](https://github.com/GetStream/stream-node/compare/v0.2.4...v0.2.5) (2024-06-04)
 
 
