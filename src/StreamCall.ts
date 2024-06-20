@@ -63,6 +63,13 @@ export class StreamCall {
     return this.apiClient.getCall({ ...(request ?? {}), ...this.baseRequest });
   };
 
+  delete = (videoDeleteCallRequest?: VideoDeleteCallRequest) => {
+    return this.apiClient.deleteCall({
+      ...this.baseRequest,
+      videoDeleteCallRequest: videoDeleteCallRequest || null,
+    });
+  };
+
   getOrCreate = (videoGetOrCreateCallRequest?: VideoGetOrCreateCallRequest) => {
     return this.apiClient.getOrCreateCall({
       ...this.baseRequest,

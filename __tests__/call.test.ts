@@ -11,7 +11,7 @@ import {
 
 describe('call API', () => {
   let client: StreamClient;
-  const callId = `call${uuidv4()}`;
+  const callId = `callnodetest${uuidv4()}`;
   let call: StreamCall;
 
   beforeAll(async () => {
