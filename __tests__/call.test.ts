@@ -4,6 +4,7 @@ import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
 import {
+  VideoDeleteCallResponse,
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
 } from '../src/gen/video';
@@ -158,127 +159,136 @@ describe('call API', () => {
     );
   });
 
-  describe('recording', () => {
-    it('enable call recording', async () => {
-      let response = await call.update({
-        settings_override: {
-          recording: {
-            mode: VideoRecordSettingsRequestModeEnum.DISABLED,
-            audio_only: true,
-          },
+  it('enable call recording', async () => {
+    let response = await call.update({
+      settings_override: {
+        recording: {
+          mode: VideoRecordSettingsRequestModeEnum.DISABLED,
+          audio_only: true,
         },
-      });
-      let settings = response.call.settings.recording;
+      },
+    });
+    let settings = response.call.settings.recording;
 
-      expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.DISABLED);
+    expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.DISABLED);
 
-      response = await call.update({
-        settings_override: {
-          recording: {
-            mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
-          },
+    response = await call.update({
+      settings_override: {
+        recording: {
+          mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
         },
-      });
+      },
+    });
 
-      settings = response.call.settings.recording;
-      expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.AVAILABLE);
+    settings = response.call.settings.recording;
+    expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.AVAILABLE);
 
-      response = await call.update({
-        settings_override: {
-          recording: {
-            audio_only: false,
-            quality: VideoRecordSettingsRequestQualityEnum._1080P,
-            mode: VideoRecordSettingsRequestModeEnum.AUTO_ON,
-          },
+    response = await call.update({
+      settings_override: {
+        recording: {
+          audio_only: false,
+          quality: VideoRecordSettingsRequestQualityEnum._1080P,
+          mode: VideoRecordSettingsRequestModeEnum.AUTO_ON,
         },
-      });
-
-      settings = response.call.settings.recording;
-      expect(settings.audio_only).toBe(false);
-      expect(settings.quality).toBe(
-        VideoRecordSettingsRequestQualityEnum._1080P,
-      );
+      },
     });
 
-    it('start recording', async () => {
-      // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
-      await expect(() => call.startRecording()).rejects.toThrowError(
-        'Stream error code 4: StartRecording failed with error: "cannot record inactive call"',
-      );
+    settings = response.call.settings.recording;
+    expect(settings.audio_only).toBe(false);
+    expect(settings.quality).toBe(VideoRecordSettingsRequestQualityEnum._1080P);
+  });
+
+  it('start recording', async () => {
+    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+    await expect(() => call.startRecording()).rejects.toThrowError(
+      'Stream error code 4: StartRecording failed with error: "cannot record inactive call"',
+    );
+  });
+
+  it('stop recording', async () => {
+    // somewhat dummy test, we should do a proper test in the future
+    await expect(() => call.stopRecording()).rejects.toThrowError(
+      'Stream error code 4: StopRecording failed with error: "call is not being recorded"',
+    );
+  });
+
+  it('delete recording', async () => {
+    // somewhat dummy test, we should do a proper test in the future
+    await expect(() =>
+      call.deleteRecording({ session: 'test', filename: 'test' }),
+    ).rejects.toThrowError(
+      `Stream error code 16: DeleteRecording failed with error: "recording doesn't exist"`,
+    );
+  });
+
+  it('query recordings', async () => {
+    // somewhat dummy test, we should do a proper test in the future
+    const response = await call.listRecordings();
+
+    expect(response.recordings).toBeDefined();
+  });
+
+  it('enable backstage mode', async () => {
+    const response = await call.update({
+      settings_override: {
+        backstage: {
+          enabled: true,
+        },
+      },
     });
 
-    it('stop recording', async () => {
-      // somewhat dummy test, we should do a proper test in the future
-      await expect(() => call.stopRecording()).rejects.toThrowError(
-        'Stream error code 4: StopRecording failed with error: "call is not being recorded"',
-      );
-    });
+    expect(response.call.settings.backstage.enabled).toBe(true);
+  });
 
-    it('delete recording', async () => {
-      // somewhat dummy test, we should do a proper test in the future
-      await expect(() =>
-        call.deleteRecording({ session: 'test', filename: 'test' }),
-      ).rejects.toThrowError(
-        `Stream error code 16: DeleteRecording failed with error: "recording doesn't exist"`,
-      );
-    });
+  it('go live', async () => {
+    const response = await call.goLive();
 
-    it('query recordings', async () => {
-      // somewhat dummy test, we should do a proper test in the future
-      const response = await call.listRecordings();
+    expect(response.call.backstage).toBe(false);
+  });
 
-      expect(response.recordings).toBeDefined();
-    });
+  it('stop live', async () => {
+    const response = await call.stopLive();
 
-    describe('streaming', () => {
-      it('enable backstage mode', async () => {
-        const response = await call.update({
-          settings_override: {
-            backstage: {
-              enabled: true,
-            },
-          },
-        });
+    expect(response.call.backstage).toBe(true);
+  });
 
-        expect(response.call.settings.backstage.enabled).toBe(true);
+  it('start transcribing', async () => {
+    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+    await expect(() => call.startTranscription()).rejects.toThrowError(
+      'Stream error code 4: StartTranscription failed with error: "cannot transcribe inactive call"',
+    );
+  });
+
+  it('stop transcribing', async () => {
+    // somewhat dummy test, we should do a proper test in the future
+    await expect(() => call.stopTranscription()).rejects.toThrowError(
+      'Stream error code 4: StopTranscription failed with error: "call is not being transcribed"',
+    );
+  });
+
+  it('delete transcription', async () => {
+    // somewhat dummy test, we should do a proper test in the future
+    await expect(() =>
+      call.deleteTranscription({ session: 'test', filename: 'test' }),
+    ).rejects.toThrowError(
+      `Stream error code 16: DeleteTranscription failed with error: "transcription doesn't exist"`,
+    );
+  });
+
+  it('delete call', async () => {
+    let response: VideoDeleteCallResponse;
+    try {
+      response = await call.delete({ hard: true });
+    } catch (e) {
+      // the first request fails on backend sometimes
+      // retry it
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 2000);
       });
 
-      it('go live', async () => {
-        const response = await call.goLive();
+      response = await call.delete({ hard: true });
+    }
 
-        expect(response.call.backstage).toBe(false);
-      });
-
-      it('stop live', async () => {
-        const response = await call.stopLive();
-
-        expect(response.call.backstage).toBe(true);
-      });
-    });
-
-    describe('transcriptions', () => {
-      it('start transcribing', async () => {
-        // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
-        await expect(() => call.startTranscription()).rejects.toThrowError(
-          'Stream error code 4: StartTranscription failed with error: "cannot transcribe inactive call"',
-        );
-      });
-
-      it('stop transcribing', async () => {
-        // somewhat dummy test, we should do a proper test in the future
-        await expect(() => call.stopTranscription()).rejects.toThrowError(
-          'Stream error code 4: StopTranscription failed with error: "call is not being transcribed"',
-        );
-      });
-
-      it('delete transcription', async () => {
-        // somewhat dummy test, we should do a proper test in the future
-        await expect(() =>
-          call.deleteTranscription({ session: 'test', filename: 'test' }),
-        ).rejects.toThrowError(
-          `Stream error code 16: DeleteTranscription failed with error: "transcription doesn't exist"`,
-        );
-      });
-    });
+    expect(response.duration).toBeDefined();
   });
 });
