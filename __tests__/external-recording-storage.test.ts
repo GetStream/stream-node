@@ -15,7 +15,7 @@ describe('external storage CRUD API', () => {
     const response = await client.video.createExternalStorage({
       name: storageName,
       bucket: 'test',
-      storage_type: 'test',
+      storage_type: 'abs',
     });
 
     expect(response).toBeDefined();
@@ -32,7 +32,7 @@ describe('external storage CRUD API', () => {
     const newBucket = 'new bucket';
     const response = await client.video.updateExternalStorage(storageName, {
       bucket: newBucket,
-      storage_type: 'test',
+      storage_type: 'abs',
     });
 
     expect(response.bucket).toBe('new bucket');

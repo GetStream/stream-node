@@ -231,6 +231,12 @@ export interface VideoBackstageSettingsRequest {
      * @memberof VideoBackstageSettingsRequest
      */
     enabled?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoBackstageSettingsRequest
+     */
+    join_ahead_time_seconds?: number;
 }
 /**
  * 
@@ -244,6 +250,12 @@ export interface VideoBackstageSettingsResponse {
      * @memberof VideoBackstageSettingsResponse
      */
     enabled: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoBackstageSettingsResponse
+     */
+    join_ahead_time_seconds?: number;
 }
 /**
  * 
@@ -544,6 +556,12 @@ export interface VideoCallResponse {
     ingress: VideoCallIngressResponse;
     /**
      * 
+     * @type {number}
+     * @memberof VideoCallResponse
+     */
+    join_ahead_time_seconds?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof VideoCallResponse
      */
@@ -633,6 +651,12 @@ export interface VideoCallSessionResponse {
      * @memberof VideoCallSessionResponse
      */
     live_started_at?: string;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof VideoCallSessionResponse
+     */
+    missed_by: { [key: string]: string; };
     /**
      * 
      * @type {Array<VideoCallParticipantResponse>}
@@ -989,6 +1013,12 @@ export interface VideoCheckExternalStorageResponse {
      * @memberof VideoCheckExternalStorageResponse
      */
     duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCheckExternalStorageResponse
+     */
+    file_url: string;
 }
 /**
  * 
@@ -1260,8 +1290,20 @@ export interface VideoCreateExternalStorageRequest {
      * @type {string}
      * @memberof VideoCreateExternalStorageRequest
      */
-    storage_type: string;
+    storage_type: VideoCreateExternalStorageRequestStorageTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const VideoCreateExternalStorageRequestStorageTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type VideoCreateExternalStorageRequestStorageTypeEnum = typeof VideoCreateExternalStorageRequestStorageTypeEnum[keyof typeof VideoCreateExternalStorageRequestStorageTypeEnum];
+
 /**
  * 
  * @export
@@ -1312,6 +1354,44 @@ export interface VideoCreateGuestResponse {
      * @memberof VideoCreateGuestResponse
      */
     user: VideoUserResponse;
+}
+/**
+ * 
+ * @export
+ * @interface VideoDeleteCallRequest
+ */
+export interface VideoDeleteCallRequest {
+    /**
+     * if true the call will be hard deleted along with all related data
+     * @type {boolean}
+     * @memberof VideoDeleteCallRequest
+     */
+    hard?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VideoDeleteCallResponse
+ */
+export interface VideoDeleteCallResponse {
+    /**
+     * 
+     * @type {VideoCallResponse}
+     * @memberof VideoDeleteCallResponse
+     */
+    call: VideoCallResponse;
+    /**
+     * Duration of the request in human-readable format
+     * @type {string}
+     * @memberof VideoDeleteCallResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDeleteCallResponse
+     */
+    task_id?: string;
 }
 /**
  * 
@@ -1611,8 +1691,20 @@ export interface VideoExternalStorageResponse {
      * @type {string}
      * @memberof VideoExternalStorageResponse
      */
-    type: string;
+    type: VideoExternalStorageResponseTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const VideoExternalStorageResponseTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type VideoExternalStorageResponseTypeEnum = typeof VideoExternalStorageResponseTypeEnum[keyof typeof VideoExternalStorageResponseTypeEnum];
+
 /**
  * 
  * @export
@@ -2582,6 +2674,12 @@ export interface VideoNotificationSettings {
      * @type {VideoEventNotificationSettings}
      * @memberof VideoNotificationSettings
      */
+    call_missed?: VideoEventNotificationSettings;
+    /**
+     * 
+     * @type {VideoEventNotificationSettings}
+     * @memberof VideoNotificationSettings
+     */
     call_notification?: VideoEventNotificationSettings;
     /**
      * 
@@ -3148,6 +3246,12 @@ export interface VideoRingSettingsRequest {
      * @memberof VideoRingSettingsRequest
      */
     incoming_call_timeout_ms: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoRingSettingsRequest
+     */
+    missed_call_timeout_ms?: number;
 }
 /**
  * 
@@ -3167,6 +3271,12 @@ export interface VideoRingSettingsResponse {
      * @memberof VideoRingSettingsResponse
      */
     incoming_call_timeout_ms: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoRingSettingsResponse
+     */
+    missed_call_timeout_ms: number;
 }
 /**
  * 
@@ -3940,8 +4050,20 @@ export interface VideoUpdateExternalStorageRequest {
      * @type {string}
      * @memberof VideoUpdateExternalStorageRequest
      */
-    storage_type: string;
+    storage_type: VideoUpdateExternalStorageRequestStorageTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const VideoUpdateExternalStorageRequestStorageTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type VideoUpdateExternalStorageRequestStorageTypeEnum = typeof VideoUpdateExternalStorageRequestStorageTypeEnum[keyof typeof VideoUpdateExternalStorageRequestStorageTypeEnum];
+
 /**
  * 
  * @export
@@ -3977,8 +4099,20 @@ export interface VideoUpdateExternalStorageResponse {
      * @type {string}
      * @memberof VideoUpdateExternalStorageResponse
      */
-    type: string;
+    type: VideoUpdateExternalStorageResponseTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const VideoUpdateExternalStorageResponseTypeEnum = {
+    S3: 's3',
+    GCS: 'gcs',
+    ABS: 'abs'
+} as const;
+export type VideoUpdateExternalStorageResponseTypeEnum = typeof VideoUpdateExternalStorageResponseTypeEnum[keyof typeof VideoUpdateExternalStorageResponseTypeEnum];
+
 /**
  * 
  * @export
@@ -4127,6 +4261,12 @@ export interface VideoUserResponse {
      * @memberof VideoUserResponse
      */
     banned: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VideoUserResponse
+     */
+    blocked_user_ids: Array<string>;
     /**
      * Date/time of creation
      * @type {string}

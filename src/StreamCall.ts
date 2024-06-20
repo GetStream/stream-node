@@ -6,6 +6,7 @@ import {
   GetCallStatsRequest,
   ProductvideoApi,
   VideoBlockUserRequest,
+  VideoDeleteCallRequest,
   VideoGetOrCreateCallRequest,
   VideoGoLiveRequest,
   VideoMuteUsersRequest,
@@ -28,18 +29,29 @@ export class StreamCall {
 
   constructor(
     private readonly streamClient: StreamClient,
-    private readonly type: string,
-    private readonly id: string,
+    public readonly type: string,
+    public readonly id: string,
   ) {
     this.baseRequest = { id: this.id, type: this.type };
     const configuration = this.streamClient.getConfiguration('video');
     this.apiClient = new ProductvideoApi(configuration);
   }
 
+  get cid() {
+    return `${this.type}:${this.id}`;
+  }
+
   blockUser = (videoBlockUserRequest: VideoBlockUserRequest) => {
     return this.apiClient.blockUser({
       ...this.baseRequest,
       videoBlockUserRequest,
+    });
+  };
+
+  delete = (videoDeleteCallRequest?: VideoDeleteCallRequest) => {
+    return this.apiClient.deleteCall({
+      ...this.baseRequest,
+      videoDeleteCallRequest: videoDeleteCallRequest ?? null,
     });
   };
 
