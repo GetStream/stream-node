@@ -48,13 +48,6 @@ export class StreamCall {
     });
   };
 
-  delete = (videoDeleteCallRequest?: VideoDeleteCallRequest) => {
-    return this.apiClient.deleteCall({
-      ...this.baseRequest,
-      videoDeleteCallRequest: videoDeleteCallRequest ?? null,
-    });
-  };
-
   endCall = () => {
     return this.apiClient.endCall({ ...this.baseRequest });
   };
