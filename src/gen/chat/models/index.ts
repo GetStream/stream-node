@@ -1959,6 +1959,7 @@ export interface ChannelGetOrCreateRequest {
  * @interface ChannelInput
  */
 export interface ChannelInput {
+    [key: string]: any;
     /**
      * Enable or disable auto translation
      * @type {boolean}
@@ -2018,7 +2019,7 @@ export interface ChannelInput {
      * @type {Array<ChannelMember>}
      * @memberof ChannelInput
      */
-    members?: Array<ChannelMember>;
+    members?: Array<Partial<ChannelMember>>;
     /**
      * Team the channel belongs to (if multi-tenant mode is enabled)
      * @type {string}
@@ -2172,6 +2173,7 @@ export interface ChannelMute {
  * @interface ChannelResponse
  */
 export interface ChannelResponse {
+    [key: string]: any;
     /**
      * Whether auto translation is enabled or not
      * @type {boolean}
@@ -2279,7 +2281,7 @@ export interface ChannelResponse {
      * @type {Array<ChannelMember>}
      * @memberof ChannelResponse
      */
-    members?: Array<ChannelMember>;
+    members?: Array<Partial<ChannelMember>>;
     /**
      * Date of mute expiration
      * @type {string}
@@ -12955,7 +12957,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    add_members?: Array<ChannelMember>;
+    add_members?: Array<Partial<ChannelMember>>;
     /**
      * List of user IDs to make channel moderators
      * @type {Array<string>}
@@ -12967,7 +12969,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    assign_roles?: Array<ChannelMember>;
+    assign_roles?: Array<Partial<ChannelMember>>;
     /**
      * Sets cool down period for the channel in seconds
      * @type {number}
@@ -12997,7 +12999,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    invites?: Array<ChannelMember>;
+    invites?: Array<Partial<ChannelMember>>;
     /**
      * 
      * @type {MessageRequest}
@@ -14154,7 +14156,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    banned: boolean;
+    banned?: boolean;
     /**
      * Date/time of creation
      * @type {string}
@@ -14166,7 +14168,7 @@ export interface UserObject {
      * @type {{ [key: string]: any; }}
      * @memberof UserObject
      */
-    custom: { [key: string]: any; };
+    custom?: { [key: string]: any; };
     /**
      * Date of deactivation
      * @type {string}
@@ -14208,7 +14210,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    readonly online: boolean;
+    readonly online?: boolean;
     /**
      * 
      * @type {PrivacySettings}
@@ -14232,7 +14234,7 @@ export interface UserObject {
      * @type {string}
      * @memberof UserObject
      */
-    role: string;
+    role?: string;
     /**
      * List of teams user is a part of
      * @type {Array<string>}
