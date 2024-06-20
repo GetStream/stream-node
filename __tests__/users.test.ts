@@ -151,9 +151,7 @@ describe('user API', () => {
       user_id: user.id,
     });
 
-    expect(
-      blockResponse.blocks.find((b) => b.blocked_user_id === badUser.id),
-    ).toBeDefined();
+    expect(blockResponse.blocked_user_id).toBe(badUser.id);
 
     const blockedUsers = await client.getBlockedUsers({ userId: user.id });
 

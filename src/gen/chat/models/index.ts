@@ -851,6 +851,12 @@ export interface BackstageSettings {
      * @memberof BackstageSettings
      */
     enabled: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackstageSettings
+     */
+    join_ahead_time_seconds?: number;
 }
 /**
  * 
@@ -1069,10 +1075,22 @@ export interface BlockUsersRequest {
 export interface BlockUsersResponse {
     /**
      * 
-     * @type {Array<UserBlock>}
+     * @type {string}
      * @memberof BlockUsersResponse
      */
-    blocks: Array<UserBlock>;
+    blocked_by_user_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlockUsersResponse
+     */
+    blocked_user_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BlockUsersResponse
+     */
+    created_at: string;
     /**
      * Duration of the request in human-readable format
      * @type {string}
@@ -1959,7 +1977,6 @@ export interface ChannelGetOrCreateRequest {
  * @interface ChannelInput
  */
 export interface ChannelInput {
-    [key: string]: any;
     /**
      * Enable or disable auto translation
      * @type {boolean}
@@ -2019,7 +2036,7 @@ export interface ChannelInput {
      * @type {Array<ChannelMember>}
      * @memberof ChannelInput
      */
-    members?: Array<Partial<ChannelMember>>;
+    members?: Array<ChannelMember>;
     /**
      * Team the channel belongs to (if multi-tenant mode is enabled)
      * @type {string}
@@ -2173,7 +2190,6 @@ export interface ChannelMute {
  * @interface ChannelResponse
  */
 export interface ChannelResponse {
-    [key: string]: any;
     /**
      * Whether auto translation is enabled or not
      * @type {boolean}
@@ -2281,7 +2297,7 @@ export interface ChannelResponse {
      * @type {Array<ChannelMember>}
      * @memberof ChannelResponse
      */
-    members?: Array<Partial<ChannelMember>>;
+    members?: Array<ChannelMember>;
     /**
      * Date of mute expiration
      * @type {string}
@@ -4318,7 +4334,12 @@ export interface DeleteMessageResponse {
  */
 export interface DeleteUsersRequest {
     /**
+     * Calls delete mode.
+     * Affected calls are those that include exactly two members, one of whom is the user being deleted.
      * 
+     * * null or empty string - doesn't delete any calls
+     * * soft - marks user's calls and their related data as deleted (soft-delete)
+     * * hard - deletes user's calls and their data completely (hard-delete)
      * @type {string}
      * @memberof DeleteUsersRequest
      */
@@ -12957,7 +12978,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    add_members?: Array<Partial<ChannelMember>>;
+    add_members?: Array<ChannelMember>;
     /**
      * List of user IDs to make channel moderators
      * @type {Array<string>}
@@ -12969,7 +12990,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    assign_roles?: Array<Partial<ChannelMember>>;
+    assign_roles?: Array<ChannelMember>;
     /**
      * Sets cool down period for the channel in seconds
      * @type {number}
@@ -12999,7 +13020,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    invites?: Array<Partial<ChannelMember>>;
+    invites?: Array<ChannelMember>;
     /**
      * 
      * @type {MessageRequest}
@@ -14061,31 +14082,6 @@ export interface UpsertPushProviderResponse {
 /**
  * 
  * @export
- * @interface UserBlock
- */
-export interface UserBlock {
-    /**
-     * 
-     * @type {string}
-     * @memberof UserBlock
-     */
-    blocked_by_user_id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserBlock
-     */
-    blocked_user_id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserBlock
-     */
-    created_at: string;
-}
-/**
- * 
- * @export
  * @interface UserCustomEventRequest
  */
 export interface UserCustomEventRequest {
@@ -14156,7 +14152,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    banned?: boolean;
+    banned: boolean;
     /**
      * Date/time of creation
      * @type {string}
@@ -14168,7 +14164,7 @@ export interface UserObject {
      * @type {{ [key: string]: any; }}
      * @memberof UserObject
      */
-    custom?: { [key: string]: any; };
+    custom: { [key: string]: any; };
     /**
      * Date of deactivation
      * @type {string}
@@ -14210,7 +14206,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    readonly online?: boolean;
+    readonly online: boolean;
     /**
      * 
      * @type {PrivacySettings}
@@ -14234,7 +14230,7 @@ export interface UserObject {
      * @type {string}
      * @memberof UserObject
      */
-    role?: string;
+    role: string;
     /**
      * List of teams user is a part of
      * @type {Array<string>}
