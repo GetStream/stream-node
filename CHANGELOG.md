@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/GetStream/stream-node/compare/v0.2.6...v0.3.0) (2024-06-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42))
+
+### Features
+
+* update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42)) ([73df541](https://github.com/GetStream/stream-node/commit/73df541301e383cf2fc38538f2d588a07537688a))
+
 ## [0.2.6](https://github.com/GetStream/stream-node/compare/v0.2.5...v0.2.6) (2024-06-20)
 
 
