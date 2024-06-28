@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   CreateDeviceRequest,
   CreateDeviceRequestPushProviderEnum,
-  PushProviderRequest,
+  PushProvider,
 } from '../src/gen/chat';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
@@ -20,9 +20,11 @@ describe('devices and push', () => {
     push_provider_name: 'firebase',
     user_id: user.id,
   };
-  const pushProvider: PushProviderRequest = {
+  // Type '{ name: string; type: string; xiaomi_app_secret: string; xiaomi_package_name: string; }'
+  // is missing the following properties from type 'PushProvider': created_at, updated_at
+  const pushProvider: PushProvider = {
     name: 'test-push-provider',
-    type: 'xiaomi' as any as number,
+    type: 'xiaomi',
     xiaomi_app_secret: '',
     xiaomi_package_name: '',
   };

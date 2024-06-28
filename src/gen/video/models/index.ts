@@ -71,6 +71,31 @@ export interface VideoAPNS {
 /**
  * 
  * @export
+ * @interface VideoAggregatedStats
+ */
+export interface VideoAggregatedStats {
+    /**
+     * 
+     * @type {{ [key: string]: VideoCountrywiseAggregateStats; }}
+     * @memberof VideoAggregatedStats
+     */
+    countrywise_aggregate_stats?: { [key: string]: VideoCountrywiseAggregateStats; };
+    /**
+     * 
+     * @type {VideoPublisherAggregateStats}
+     * @memberof VideoAggregatedStats
+     */
+    publisher_aggregate_stats?: VideoPublisherAggregateStats;
+    /**
+     * 
+     * @type {VideoTURNAggregatedStats}
+     * @memberof VideoAggregatedStats
+     */
+    turn?: VideoTURNAggregatedStats;
+}
+/**
+ * 
+ * @export
  * @interface VideoAudioSettingsRequest
  */
 export interface VideoAudioSettingsRequest {
@@ -327,6 +352,18 @@ export interface VideoBroadcastSettingsResponse {
  * @interface VideoCallEvent
  */
 export interface VideoCallEvent {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof VideoCallEvent
+     */
+    additional?: { [key: string]: any; };
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoCallEvent
+     */
+    component?: string;
     /**
      * 
      * @type {string}
@@ -1098,6 +1135,62 @@ export interface VideoCoordinates {
 /**
  * 
  * @export
+ * @interface VideoCount
+ */
+export interface VideoCount {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoCount
+     */
+    approximate: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoCount
+     */
+    value: number;
+}
+/**
+ * 
+ * @export
+ * @interface VideoCountrywiseAggregateStats
+ */
+export interface VideoCountrywiseAggregateStats {
+    /**
+     * 
+     * @type {VideoCount}
+     * @memberof VideoCountrywiseAggregateStats
+     */
+    participant_count?: VideoCount;
+    /**
+     * 
+     * @type {VideoTimeStats}
+     * @memberof VideoCountrywiseAggregateStats
+     */
+    publisher_jitter?: VideoTimeStats;
+    /**
+     * 
+     * @type {VideoTimeStats}
+     * @memberof VideoCountrywiseAggregateStats
+     */
+    publisher_latency?: VideoTimeStats;
+    /**
+     * 
+     * @type {VideoTimeStats}
+     * @memberof VideoCountrywiseAggregateStats
+     */
+    subscriber_jitter?: VideoTimeStats;
+    /**
+     * 
+     * @type {VideoTimeStats}
+     * @memberof VideoCountrywiseAggregateStats
+     */
+    subscriber_latency?: VideoTimeStats;
+}
+/**
+ * 
+ * @export
  * @interface VideoCreateCallTypeRequest
  */
 export interface VideoCreateCallTypeRequest {
@@ -1837,6 +1930,12 @@ export interface VideoGetCallResponse {
 export interface VideoGetCallStatsResponse {
     /**
      * 
+     * @type {VideoAggregatedStats}
+     * @memberof VideoGetCallStatsResponse
+     */
+    aggregated?: VideoAggregatedStats;
+    /**
+     * 
      * @type {number}
      * @memberof VideoGetCallStatsResponse
      */
@@ -1861,16 +1960,16 @@ export interface VideoGetCallStatsResponse {
     duration: string;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoGetCallStatsResponse
      */
-    jitter?: VideoStats;
+    jitter?: VideoTimeStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoGetCallStatsResponse
      */
-    latency?: VideoStats;
+    latency?: VideoTimeStats;
     /**
      * 
      * @type {number}
@@ -2852,6 +2951,25 @@ export interface VideoPublishedTrackInfo {
 /**
  * 
  * @export
+ * @interface VideoPublisherAggregateStats
+ */
+export interface VideoPublisherAggregateStats {
+    /**
+     * 
+     * @type {{ [key: string]: VideoCount; }}
+     * @memberof VideoPublisherAggregateStats
+     */
+    by_track_type?: { [key: string]: VideoCount; };
+    /**
+     * 
+     * @type {VideoCount}
+     * @memberof VideoPublisherAggregateStats
+     */
+    total?: VideoCount;
+}
+/**
+ * 
+ * @export
  * @interface VideoPushNotificationSettings
  */
 export interface VideoPushNotificationSettings {
@@ -3180,7 +3298,12 @@ export const VideoRecordSettingsRequestQualityEnum = {
     _480P: '480p',
     _720P: '720p',
     _1080P: '1080p',
-    _1440P: '1440p'
+    _1440P: '1440p',
+    PORTRAIT_360X640: 'portrait-360x640',
+    PORTRAIT_480X854: 'portrait-480x854',
+    PORTRAIT_720X1280: 'portrait-720x1280',
+    PORTRAIT_1080X1920: 'portrait-1080x1920',
+    PORTRAIT_1440X2560: 'portrait-1440x2560'
 } as const;
 export type VideoRecordSettingsRequestQualityEnum = typeof VideoRecordSettingsRequestQualityEnum[keyof typeof VideoRecordSettingsRequestQualityEnum];
 
@@ -3515,25 +3638,6 @@ export interface VideoStartTranscriptionResponse {
 /**
  * 
  * @export
- * @interface VideoStats
- */
-export interface VideoStats {
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoStats
-     */
-    average_seconds: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof VideoStats
-     */
-    max_seconds: number;
-}
-/**
- * 
- * @export
  * @interface VideoStopHLSBroadcastingResponse
  */
 export interface VideoStopHLSBroadcastingResponse {
@@ -3623,6 +3727,25 @@ export interface VideoSubsession {
 /**
  * 
  * @export
+ * @interface VideoTURNAggregatedStats
+ */
+export interface VideoTURNAggregatedStats {
+    /**
+     * 
+     * @type {VideoCount}
+     * @memberof VideoTURNAggregatedStats
+     */
+    tcp?: VideoCount;
+    /**
+     * 
+     * @type {VideoCount}
+     * @memberof VideoTURNAggregatedStats
+     */
+    total?: VideoCount;
+}
+/**
+ * 
+ * @export
  * @interface VideoTargetResolution
  */
 export interface VideoTargetResolution {
@@ -3683,6 +3806,25 @@ export interface VideoThumbnailsSettingsResponse {
      * @memberof VideoThumbnailsSettingsResponse
      */
     enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VideoTimeStats
+ */
+export interface VideoTimeStats {
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoTimeStats
+     */
+    average_seconds: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VideoTimeStats
+     */
+    max_seconds: number;
 }
 /**
  * 
@@ -4438,16 +4580,16 @@ export interface VideoUserSessionStats {
     geolocation?: VideoGeolocationResult;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    jitter?: VideoStats;
+    jitter?: VideoTimeStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    latency?: VideoStats;
+    latency?: VideoTimeStats;
     /**
      * 
      * @type {number}
@@ -4534,16 +4676,16 @@ export interface VideoUserSessionStats {
     publisher_audio_mos?: VideoMOSStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    publisher_jitter?: VideoStats;
+    publisher_jitter?: VideoTimeStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    publisher_latency?: VideoStats;
+    publisher_latency?: VideoTimeStats;
     /**
      * 
      * @type {number}
@@ -4636,16 +4778,16 @@ export interface VideoUserSessionStats {
     subscriber_audio_mos?: VideoMOSStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    subscriber_jitter?: VideoStats;
+    subscriber_jitter?: VideoTimeStats;
     /**
      * 
-     * @type {VideoStats}
+     * @type {VideoTimeStats}
      * @memberof VideoUserSessionStats
      */
-    subscriber_latency?: VideoStats;
+    subscriber_latency?: VideoTimeStats;
     /**
      * 
      * @type {number}
@@ -4676,6 +4818,12 @@ export interface VideoUserSessionStats {
      * @memberof VideoUserSessionStats
      */
     total_pixels_out: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoUserSessionStats
+     */
+    truncated?: boolean;
     /**
      * 
      * @type {string}

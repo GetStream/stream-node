@@ -24,6 +24,19 @@ const cleanupBlockLists = async () => {
   );
 };
 
+const cleanupCalls = async () => {
+  const calls = (await client.video.queryCalls()).calls;
+  const testCalls = Object.keys(calls).filter((t) =>
+    t.startsWith("callnodetest"),
+  );
+
+  await Promise.all(
+    testCalls.map((t) =>
+      client.video.call(t.call.type, t.call.id).delete({ hard: true }),
+    ),
+  );
+};
+
 const cleanupCallTypes = async () => {
   const callTypes = (await client.video.listCallTypes()).call_types;
   const customCallTypes = Object.keys(callTypes).filter(
@@ -127,6 +140,7 @@ const cleanup = async () => {
   await cleanUpRoles();
   await cleanUpUsers();
   await cleanupExternalStorage();
+  await cleanupCalls();
 };
 
 cleanup().then(() => {

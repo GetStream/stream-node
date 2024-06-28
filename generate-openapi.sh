@@ -21,14 +21,14 @@ if [ "$PRODUCT" == 'video' ] || [ "$PRODUCT" == 'all' ] ; then
     PROTOCOL_REPO_DIR="../protocol"
   fi
   if  [ "$FROM_REPO" == 'chat' ]; then
-    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/video-openapi.yaml"
+    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/v2/video-openapi.yaml"
   else
     SCHEMA_FILE="$PROTOCOL_REPO_DIR/openapi/video-openapi.yaml"
   fi
 
   if  [ "$FROM_REPO" == 'chat' ]; then
     # Generate the Coordinator OpenAPI schema
-    make -C $PROTOCOL_REPO_DIR video-openapi
+    make -C $PROTOCOL_REPO_DIR openapi
   fi
 
   OUTPUT_DIR="./src/gen/video"
@@ -64,14 +64,14 @@ if [ "$PRODUCT" == 'chat' ] || [ "$PRODUCT" == 'all' ]; then
     PROTOCOL_REPO_DIR="../protocol"
   fi
   if  [ "$FROM_REPO" == 'chat' ]; then
-    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/chat-openapi.yaml"
+    SCHEMA_FILE="$PROTOCOL_REPO_DIR/releases/v2/chat-serverside-api.yaml"
   else
     SCHEMA_FILE="$PROTOCOL_REPO_DIR/openapi/chat-openapi.yaml"
   fi
 
   if  [ "$FROM_REPO" == 'chat' ]; then
     # Generate the Coordinator OpenAPI schema
-    make -C $PROTOCOL_REPO_DIR chat-openapi
+    make -C $PROTOCOL_REPO_DIR openapi
   fi
 
   OUTPUT_DIR="./src/gen/chat"
@@ -91,7 +91,9 @@ if [ "$PRODUCT" == 'chat' ] || [ "$PRODUCT" == 'all' ]; then
     --additional-properties=supportsES6=true \
     --additional-properties=modelPropertyNaming=original \
     --additional-properties=enumPropertyNaming=UPPERCASE \
-    --additional-properties=withoutRuntimeChecks=true
+    --additional-properties=withoutRuntimeChecks=true \
+    --global-property=skipFormModel=false \
+    --skip-validate-spec
 
   # Remove the generated API client, just keep the models
   cp -r $TEMP_OUTPUT_DIR/ $OUTPUT_DIR

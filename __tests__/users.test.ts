@@ -2,12 +2,12 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { UserObjectRequest } from '../src/gen/chat';
+import { UserRequest } from '../src/gen/chat';
 
 describe('user API', () => {
   let client: StreamClient;
   const userId = 'streamnodetest' + uuidv4();
-  const newUser: UserObjectRequest = {
+  const newUser: UserRequest = {
     id: userId,
     role: 'user',
     custom: {
@@ -80,7 +80,7 @@ describe('user API', () => {
   it('create guest', async () => {
     await client.updateAppSettings({ multi_tenant_enabled: false });
 
-    const guest: UserObjectRequest = {
+    const guest: UserRequest = {
       id: uuidv4(),
       custom: {
         color: 'red',
@@ -132,12 +132,39 @@ describe('user API', () => {
     expect(muteResponse.mute?.target?.id).toBe(newUser.id);
 
     const unmuteResponse = await client.unmuteUser({
-      target_id: newUser.id,
-      target_ids: [],
+      target_ids: [newUser.id],
       user_id: user.id,
     });
 
     expect(unmuteResponse).toBeDefined();
+  });
+
+  it('block and unblock', async () => {
+    const badUser: UserRequest = {
+      id: 'bad-alice',
+      name: 'Alice',
+    };
+    await client.upsertUsers({ users: { [badUser.id]: badUser } });
+
+    const blockResponse = await client.blockUsers({
+      blocked_user_id: badUser.id,
+      user_id: user.id,
+    });
+
+    expect(blockResponse.blocked_user_id).toBe(badUser.id);
+
+    const blockedUsers = await client.getBlockedUsers({ userId: user.id });
+
+    expect(
+      blockedUsers.blocks.find((b) => b.blocked_user_id === badUser.id),
+    ).toBeDefined();
+
+    const unblockResponse = await client.unblockUsers({
+      blocked_user_id: badUser.id,
+      user_id: user.id,
+    });
+
+    expect(unblockResponse.duration).toBeDefined();
   });
 
   it('send custom event', async () => {
@@ -155,7 +182,9 @@ describe('user API', () => {
           id: newUser.id,
           set: {
             role: 'admin',
-            color: 'blue',
+            custom: {
+              color: 'blue',
+            },
           },
           unset: ['name'],
         },

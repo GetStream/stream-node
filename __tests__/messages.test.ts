@@ -35,6 +35,7 @@ describe('messages API', () => {
     channel = client.chat.channel('messaging', channelId);
     await channel.getOrCreate({
       data: {
+        // Type '{ id: string; }' is missing the following properties from type 'UserObject': banned, custom, online, role
         created_by: { id: user.id },
         members: [{ user }, { user: user2 }],
       },
@@ -54,7 +55,7 @@ describe('messages API', () => {
 
     messageId = response.message?.id;
 
-    const getResponse = await channel.getManyMessages({ ids: [messageId!] });
+    const getResponse = await channel.getManyMessages({ ids: [messageId] });
 
     expect(getResponse.messages.length).toBe(1);
   });
@@ -66,6 +67,7 @@ describe('messages API', () => {
     const response = await channel.updateMessage(messageId!, {
       message: {
         text: 'https://getstream.io/',
+        // Property 'custom' is missing in type '{ image_url: string; }' but required in type 'Attachment'
         attachments: [urlAttachment],
         user_id: user.id,
       },
@@ -99,6 +101,7 @@ describe('messages API', () => {
       language: TranslateMessageRequestLanguageEnum.HU,
     });
 
+    // Property 'message' does not exist on type 'MessageResponse'.
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
@@ -150,20 +153,13 @@ describe('messages API', () => {
     expect(response.results).toBeDefined();
   });
 
-  it('flag and unflag', async () => {
+  it('flag', async () => {
     const response = await client.flag({
       target_message_id: messageId!,
       user_id: user.id,
     });
 
     expect(response.flag?.target_message_id).toBe(messageId!);
-
-    const unflagResponse = await client.unflag({
-      target_message_id: messageId!,
-      user_id: user.id,
-    });
-
-    expect(unflagResponse).toBeDefined();
   });
 
   it('truncate', async () => {

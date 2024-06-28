@@ -16,6 +16,8 @@ describe('channel types CRUD API', () => {
     const response = await client.chat.createChannelType({
       name: channelType,
       automod: CreateChannelTypeRequestAutomodEnum.DISABLED,
+      automod_behavior: 'block',
+      max_message_length: 1200,
     });
 
     expect(response.name).toBe(channelType);
@@ -30,13 +32,15 @@ describe('channel types CRUD API', () => {
   it('update', async () => {
     const response = await client.chat.updateChannelType(channelType, {
       automod: CreateChannelTypeRequestAutomodEnum.SIMPLE,
+      automod_behavior: 'block',
+      max_message_length: 1200,
     });
 
     expect(response.automod).toBe(CreateChannelTypeRequestAutomodEnum.SIMPLE);
 
     const getResponse = await client.chat.getChannelType({ name: channelType });
 
-    // @ts-expect-error typing problem
+    // Property 'automod' does not exist on type 'Response'.
     expect(getResponse.automod).toBe(
       CreateChannelTypeRequestAutomodEnum.SIMPLE,
     );
