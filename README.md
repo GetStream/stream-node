@@ -26,7 +26,7 @@ Stream provides UI components and state handling that make it easy to build vide
 
 Stream is free for most side and hobby projects. To qualify, your project/company needs to have < 5 team members and < $10k in monthly revenue. Makers get $100 in monthly credit for video for free.
 
-## Repo Overview 😎
+## 😎 Repo Overview 😎
 
 This repo contains the Node server-side SDK developed by the team and Stream community. For a feature overview please visit our [roadmap](https://github.com/GetStream/protocol/discussions/177).
 
