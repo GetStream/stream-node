@@ -56,6 +56,35 @@ describe('messages API', () => {
     expect(getResponse.messages.length).toBe(1);
   });
 
+  it('thread replies', async () => {
+    const now = new Date();
+    const response = await channel.sendMessage({
+      message: {
+        text: 'Hello from Stream Node SDK',
+        attachments: [],
+        user_id: user.id,
+      },
+    });
+
+    const threadResponse = await channel.sendMessage({
+      message: {
+        parent_id: response.message.id,
+        text: 'Hello from a thread',
+        attachments: [],
+        user_id: user.id,
+      },
+    });
+
+    const getResponse = await client.chat.getReplies({
+      parent_id: response.message.id,
+      created_at_after: now,
+    });
+
+    expect(
+      getResponse.messages.find((m) => m.id === threadResponse.message.id),
+    ).toBeDefined();
+  });
+
   it('update message', async () => {
     const urlAttachment = await client.getOG({ url: 'https://getstream.io/' });
 

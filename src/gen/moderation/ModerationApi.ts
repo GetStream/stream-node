@@ -7,6 +7,7 @@ import {
   CheckResponse,
   CustomCheckRequest,
   CustomCheckResponse,
+  DeleteModerationTemplateResponse,
   FlagRequest,
   FlagResponse,
   GetConfigResponse,
@@ -15,6 +16,7 @@ import {
   ModeratorStatsResponse,
   MuteRequest,
   MuteResponse,
+  QueryFeedModerationTemplatesResponse,
   QueryModerationLogsRequest,
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
@@ -156,7 +158,41 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  upsertFeedsModerationTemplate = async (
+  v2DeleteTemplate = async (): Promise<
+    StreamResponse<DeleteModerationTemplateResponse>
+  > => {
+    const response = await this.sendRequest<
+      StreamResponse<DeleteModerationTemplateResponse>
+    >(
+      'DELETE',
+      '/api/v2/moderation/feeds_moderation_template',
+      undefined,
+      undefined,
+    );
+
+    decoders.DeleteModerationTemplateResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  v2QueryTemplates = async (): Promise<
+    StreamResponse<QueryFeedModerationTemplatesResponse>
+  > => {
+    const response = await this.sendRequest<
+      StreamResponse<QueryFeedModerationTemplatesResponse>
+    >(
+      'GET',
+      '/api/v2/moderation/feeds_moderation_template',
+      undefined,
+      undefined,
+    );
+
+    decoders.QueryFeedModerationTemplatesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  v2UpsertTemplate = async (
     request: UpsertModerationTemplateRequest,
   ): Promise<StreamResponse<UpsertModerationTemplateResponse>> => {
     const body = {

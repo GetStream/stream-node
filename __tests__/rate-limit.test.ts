@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
+import exp from 'constants';
 
 describe('rate limit', () => {
   let client: StreamClient;
@@ -12,9 +13,12 @@ describe('rate limit', () => {
   it('should inspect rate limit', async () => {
     const response = await client.getRateLimits({
       server_side: true,
+      endpoints: 'QueryChannels,GetOrCreateChannel',
     });
 
     expect(response.server_side).toBeDefined();
+    expect(response.server_side!['QueryChannels']).toBeDefined();
+    expect(response.server_side!['GetOrCreateChannel']).toBeDefined();
   });
 
   it('should get rate limit from response header', async () => {

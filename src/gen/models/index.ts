@@ -11,6 +11,8 @@ export interface APIError {
 
   details: number[];
 
+  unrecoverable?: boolean;
+
   exception_fields?: Record<string, string>;
 }
 
@@ -65,13 +67,13 @@ export interface APNS {
 }
 
 export interface AWSRekognitionConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   rules?: AWSRekognitionRule[];
 }
 
 export interface AWSRekognitionRule {
-  action: 'flag' | 'shadow_message' | 'remove_message' | 'remove';
+  action: 'flag' | 'shadow' | 'remove';
 
   label: string;
 }
@@ -123,9 +125,9 @@ export interface ActionLogResponse {
 
   review_queue_item?: ReviewQueueItem;
 
-  target_user?: UserObject;
+  target_user?: UserResponse;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface AggregatedStats {
@@ -166,8 +168,6 @@ export interface AppResponseFields {
   organization: string;
 
   permission_version: string;
-
-  polls_enabled: boolean;
 
   reminders_interval: number;
 
@@ -345,13 +345,13 @@ export interface AutomodDetails {
 }
 
 export interface AutomodPlatformCircumventionConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   rules?: AutomodRule[];
 }
 
 export interface AutomodRule {
-  action: 'flag' | 'shadow_message' | 'remove_message' | 'remove';
+  action: 'flag' | 'shadow' | 'remove';
 
   label: string;
 
@@ -359,13 +359,13 @@ export interface AutomodRule {
 }
 
 export interface AutomodSemanticFiltersConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   rules?: AutomodSemanticFiltersRule[];
 }
 
 export interface AutomodSemanticFiltersRule {
-  action: 'flag' | 'shadow_message' | 'remove_message' | 'remove';
+  action: 'flag' | 'shadow' | 'remove';
 
   name: string;
 
@@ -373,7 +373,7 @@ export interface AutomodSemanticFiltersRule {
 }
 
 export interface AutomodToxicityConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   rules?: AutomodRule[];
 }
@@ -459,15 +459,15 @@ export interface BanResponse {
 
   shadow?: boolean;
 
-  banned_by?: UserObject;
+  banned_by?: UserResponse;
 
   channel?: ChannelResponse;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface BlockListConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   rules?: BlockListRule[];
 }
@@ -491,7 +491,7 @@ export interface BlockListResponse {
 }
 
 export interface BlockListRule {
-  action: 'flag' | 'shadow_message' | 'remove_message' | 'remove';
+  action: 'flag' | 'shadow' | 'remove';
 
   name: string;
 }
@@ -535,9 +535,25 @@ export interface BlockedUserResponse {
 }
 
 export interface BodyguardConfig {
-  enabled: boolean;
+  enabled?: boolean;
 
   profile?: string;
+
+  rules?: BodyguardRule[];
+
+  severity_rules?: BodyguardSeverityRule[];
+}
+
+export interface BodyguardRule {
+  action: 'flag' | 'shadow' | 'remove';
+
+  label: string;
+}
+
+export interface BodyguardSeverityRule {
+  action: 'flag' | 'shadow' | 'remove';
+
+  severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export interface BroadcastSettings {
@@ -667,6 +683,8 @@ export interface CallResponse {
 }
 
 export interface CallSessionResponse {
+  anonymous_participant_count: number;
+
   id: string;
 
   participants: CallParticipantResponse[];
@@ -935,6 +953,10 @@ export interface ChannelConfig {
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
 
+  partition_size?: number;
+
+  partition_ttl?: number;
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -990,6 +1012,10 @@ export interface ChannelConfigWithInfo {
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+
+  partition_size?: number;
+
+  partition_ttl?: number;
 
   allowed_flag_reasons?: string[];
 
@@ -1117,7 +1143,7 @@ export interface ChannelMemberResponse {
 
   user_id?: string;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface ChannelMute {
@@ -1292,6 +1318,10 @@ export interface ChannelTypeConfig {
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+
+  partition_size?: number;
+
+  partition_ttl?: number;
 
   allowed_flag_reasons?: string[];
 
@@ -1561,6 +1591,10 @@ export interface CreateChannelTypeRequest {
 
   mutes?: boolean;
 
+  partition_size?: number;
+
+  partition_ttl?: string;
+
   polls?: boolean;
 
   push_notifications?: boolean;
@@ -1642,6 +1676,10 @@ export interface CreateChannelTypeResponse {
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+
+  partition_size?: number;
+
+  partition_ttl?: number;
 
   allowed_flag_reasons?: string[];
 
@@ -1851,7 +1889,7 @@ export interface DeactivateUserRequest {
 export interface DeactivateUserResponse {
   duration: string;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface DeactivateUsersRequest {
@@ -1928,6 +1966,10 @@ export interface DeleteMessageResponse {
   duration: string;
 
   message: MessageResponse;
+}
+
+export interface DeleteModerationTemplateResponse {
+  duration: string;
 }
 
 export interface DeleteReactionRequest {
@@ -2027,9 +2069,11 @@ export interface EgressHLSResponse {
 export interface EgressRTMPResponse {
   name: string;
 
-  stream_key: string;
+  started_at: Date;
 
-  url: string;
+  stream_key?: string;
+
+  stream_url?: string;
 }
 
 export interface EgressResponse {
@@ -2167,7 +2211,7 @@ export interface ExportUserResponse {
 
   reactions?: Reaction[];
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface ExportUsersRequest {
@@ -2571,6 +2615,10 @@ export interface GetChannelTypeResponse {
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
 
+  partition_size?: number;
+
+  partition_ttl?: number;
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -2797,6 +2845,8 @@ export interface GoLiveRequest {
 
   start_recording?: boolean;
 
+  start_rtmp_broadcasts?: boolean;
+
   start_transcription?: boolean;
 
   transcription_storage_name?: string;
@@ -2809,7 +2859,7 @@ export interface GoLiveResponse {
 }
 
 export interface GoogleVisionConfig {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface HLSSettings {
@@ -3317,9 +3367,9 @@ export interface MessageFlagResponse {
 
   moderation_result?: MessageModerationResult;
 
-  reviewed_by?: UserObject;
+  reviewed_by?: UserResponse;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface MessageHistoryEntryResponse {
@@ -3377,7 +3427,7 @@ export interface MessageReadEvent {
 
   team?: string;
 
-  thread?: Thread;
+  thread?: ThreadResponse;
 
   user?: UserObject;
 }
@@ -4023,7 +4073,7 @@ export interface PollResponseData {
 
   max_votes_allowed?: number;
 
-  created_by?: UserObject;
+  created_by?: UserResponse;
 }
 
 export interface PollVote {
@@ -4069,7 +4119,7 @@ export interface PollVoteResponseData {
 
   user_id?: string;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface PollVotesResponse {
@@ -4378,6 +4428,22 @@ export interface QueryChannelsResponse {
   channels: ChannelStateResponseFields[];
 }
 
+export interface QueryFeedModerationTemplate {
+  created_at: Date;
+
+  name: string;
+
+  updated_at: Date;
+
+  config?: FeedsModerationTemplateConfig;
+}
+
+export interface QueryFeedModerationTemplatesResponse {
+  duration: string;
+
+  templates: QueryFeedModerationTemplate[];
+}
+
 export interface QueryMembersRequest {
   type: string;
 
@@ -4654,20 +4720,26 @@ export interface RTMPIngress {
   address: string;
 }
 
+export interface RTMPLocation {
+  name: string;
+
+  stream_key: string;
+
+  stream_url: string;
+}
+
 export interface RTMPSettings {
   enabled: boolean;
 
-  quality: string;
-
-  max_duration_minutes?: number;
+  quality_name?: string;
 
   layout?: LayoutSettings;
+
+  location?: RTMPLocation;
 }
 
 export interface RTMPSettingsRequest {
   enabled?: boolean;
-
-  max_duration_minutes?: number;
 
   quality?:
     | '360p'
@@ -4686,8 +4758,6 @@ export interface RTMPSettingsRequest {
 
 export interface RTMPSettingsResponse {
   enabled: boolean;
-
-  max_duration_minutes: number;
 
   quality: string;
 
@@ -4775,7 +4845,7 @@ export interface ReactivateUserRequest {
 export interface ReactivateUserResponse {
   duration: string;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface ReactivateUsersRequest {
@@ -5216,6 +5286,32 @@ export interface StartHLSBroadcastingResponse {
   playlist_url: string;
 }
 
+export interface StartRTMPBroadcastsRequest {
+  name: string;
+
+  stream_url: string;
+
+  quality?:
+    | '360p'
+    | '480p'
+    | '720p'
+    | '1080p'
+    | '1440p'
+    | 'portrait-360x640'
+    | 'portrait-480x854'
+    | 'portrait-720x1280'
+    | 'portrait-1080x1920'
+    | 'portrait-1440x2560';
+
+  stream_key?: string;
+
+  layout?: LayoutSettingsRequest;
+}
+
+export interface StartRTMPBroadcastsResponse {
+  duration: string;
+}
+
 export interface StartRecordingRequest {
   recording_external_storage?: string;
 }
@@ -5232,6 +5328,12 @@ export interface StartTranscriptionResponse {
   duration: string;
 }
 
+export interface StopAllRTMPBroadcastsRequest {}
+
+export interface StopAllRTMPBroadcastsResponse {
+  duration: string;
+}
+
 export interface StopHLSBroadcastingRequest {}
 
 export interface StopHLSBroadcastingResponse {
@@ -5244,6 +5346,12 @@ export interface StopLiveResponse {
   duration: string;
 
   call: CallResponse;
+}
+
+export interface StopRTMPBroadcastsRequest {}
+
+export interface StopRTMPBroadcastsResponse {
+  duration: string;
 }
 
 export interface StopRecordingRequest {}
@@ -5320,36 +5428,6 @@ export interface TargetResolution {
   width: number;
 }
 
-export interface Thread {
-  channel_cid: string;
-
-  created_at: Date;
-
-  parent_message_id: string;
-
-  title: string;
-
-  updated_at: Date;
-
-  custom: Record<string, any>;
-
-  deleted_at?: Date;
-
-  last_message_at?: Date;
-
-  participant_count?: number;
-
-  reply_count?: number;
-
-  thread_participants?: ThreadParticipant[];
-
-  channel?: Channel;
-
-  created_by?: UserObject;
-
-  parent_message?: Message;
-}
-
 export interface ThreadParticipant {
   app_pk: number;
 
@@ -5387,6 +5465,8 @@ export interface ThreadResponse {
 
   custom: Record<string, any>;
 
+  active_participant_count?: number;
+
   deleted_at?: Date;
 
   last_message_at?: Date;
@@ -5418,6 +5498,8 @@ export interface ThreadState {
   latest_replies: Message[];
 
   custom: Record<string, any>;
+
+  active_participant_count?: number;
 
   deleted_at?: Date;
 
@@ -5455,6 +5537,8 @@ export interface ThreadStateResponse {
 
   custom: Record<string, any>;
 
+  active_participant_count?: number;
+
   deleted_at?: Date;
 
   last_message_at?: Date;
@@ -5469,7 +5553,7 @@ export interface ThreadStateResponse {
 
   channel?: ChannelResponse;
 
-  created_by?: UserObject;
+  created_by?: UserResponse;
 
   parent_message?: Message;
 }
@@ -5762,6 +5846,8 @@ export interface UpdateAppRequest {
 
   migrate_permissions_to_v2?: boolean;
 
+  moderation_enabled?: boolean;
+
   moderation_webhook_url?: string;
 
   multi_tenant_enabled?: boolean;
@@ -5966,6 +6052,10 @@ export interface UpdateChannelTypeRequest {
 
   mutes?: boolean;
 
+  partition_size?: number;
+
+  partition_ttl?: string;
+
   polls?: boolean;
 
   push_notifications?: boolean;
@@ -6055,6 +6145,10 @@ export interface UpdateChannelTypeResponse {
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+
+  partition_size?: number;
+
+  partition_ttl?: number;
 
   allowed_flag_reasons?: string[];
 
@@ -6336,9 +6430,9 @@ export interface UserMuteResponse {
 
   expires?: Date;
 
-  target?: UserObject;
+  target?: UserResponse;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface UserObject {
@@ -6440,7 +6534,9 @@ export interface UserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  push_notifications?: PushNotificationSettings;
+  privacy_settings?: PrivacySettingsResponse;
+
+  push_notifications?: PushNotificationSettingsResponse;
 }
 
 export interface UserSessionStats {
@@ -6636,6 +6732,8 @@ export interface WSEvent {
 
   team?: string;
 
+  thread_id?: string;
+
   user_id?: string;
 
   watcher_count?: number;
@@ -6660,7 +6758,7 @@ export interface WSEvent {
 
   reaction?: Reaction;
 
-  thread?: Thread;
+  thread?: ThreadResponse;
 
   user?: UserObject;
 }

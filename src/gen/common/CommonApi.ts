@@ -97,6 +97,7 @@ export class CommonApi extends BaseApi {
       feeds_v2_region: request?.feeds_v2_region,
       image_moderation_enabled: request?.image_moderation_enabled,
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
+      moderation_enabled: request?.moderation_enabled,
       moderation_webhook_url: request?.moderation_webhook_url,
       multi_tenant_enabled: request?.multi_tenant_enabled,
       permission_version: request?.permission_version,

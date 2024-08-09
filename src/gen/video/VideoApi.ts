@@ -37,12 +37,17 @@ import {
   SendCallEventRequest,
   SendCallEventResponse,
   StartHLSBroadcastingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
+  StopAllRTMPBroadcastsResponse,
   StopHLSBroadcastingResponse,
   StopLiveResponse,
+  StopRTMPBroadcastsRequest,
+  StopRTMPBroadcastsResponse,
   StopRecordingResponse,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -307,6 +312,7 @@ export class VideoApi extends BaseApi {
       recording_storage_name: request?.recording_storage_name,
       start_hls: request?.start_hls,
       start_recording: request?.start_recording,
+      start_rtmp_broadcasts: request?.start_rtmp_broadcasts,
       start_transcription: request?.start_transcription,
       transcription_storage_name: request?.transcription_storage_name,
     };
@@ -447,6 +453,88 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.ListRecordingsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  startRTMPBroadcast = async (
+    request: StartRTMPBroadcastsRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      name: request?.name,
+      stream_url: request?.stream_url,
+      quality: request?.quality,
+      stream_key: request?.stream_key,
+      layout: request?.layout,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StartRTMPBroadcastsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.StartRTMPBroadcastsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  stopAllRTMPBroadcasts = async (request: {
+    type: string;
+    id: string;
+  }): Promise<StreamResponse<StopAllRTMPBroadcastsResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StopAllRTMPBroadcastsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/stop',
+      pathParams,
+      undefined,
+    );
+
+    decoders.StopAllRTMPBroadcastsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  stopRTMPBroadcast = async (
+    request: StopRTMPBroadcastsRequest & {
+      type: string;
+      id: string;
+      name: string;
+    },
+  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+      name: request?.name,
+    };
+    const body = {};
+
+    const response = await this.sendRequest<
+      StreamResponse<StopRTMPBroadcastsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/{name}/stop',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.StopRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

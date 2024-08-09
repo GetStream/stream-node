@@ -25,12 +25,17 @@ import {
   SendCallEventRequest,
   SendCallEventResponse,
   StartHLSBroadcastingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
+  StopAllRTMPBroadcastsResponse,
   StopHLSBroadcastingResponse,
   StopLiveResponse,
+  StopRTMPBroadcastsRequest,
+  StopRTMPBroadcastsResponse,
   StopRecordingResponse,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -157,6 +162,35 @@ export class CallApi {
 
   listRecordings = (): Promise<StreamResponse<ListRecordingsResponse>> => {
     return this.videoApi.listRecordings({ id: this.id, type: this.type });
+  };
+
+  startRTMPBroadcast = (
+    request: StartRTMPBroadcastsRequest,
+  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
+    return this.videoApi.startRTMPBroadcast({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  };
+
+  stopAllRTMPBroadcasts = (): Promise<
+    StreamResponse<StopAllRTMPBroadcastsResponse>
+  > => {
+    return this.videoApi.stopAllRTMPBroadcasts({
+      id: this.id,
+      type: this.type,
+    });
+  };
+
+  stopRTMPBroadcast = (
+    request: StopRTMPBroadcastsRequest & { name: string },
+  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> => {
+    return this.videoApi.stopRTMPBroadcast({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   };
 
   startHLSBroadcasting = (): Promise<

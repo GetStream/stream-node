@@ -95,6 +95,8 @@ export class BaseApi {
       const param = params[k];
       if (Array.isArray(param)) {
         newParams.push(`${k}=${encodeURIComponent(param.join(','))}`);
+      } else if (param instanceof Date) {
+        newParams.push(param.toISOString());
       } else if (typeof param === 'object') {
         newParams.push(`${k}=${encodeURIComponent(JSON.stringify(param))}`);
       } else {
