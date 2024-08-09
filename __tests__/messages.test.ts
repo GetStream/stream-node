@@ -3,7 +3,6 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamChannel } from '../src/StreamChannel';
 import { StreamClient } from '../src/StreamClient';
-import { TranslateMessageRequestLanguageEnum } from '../src/gen/chat';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('messages API', () => {
@@ -25,12 +24,7 @@ describe('messages API', () => {
   beforeAll(async () => {
     client = createTestClient();
 
-    await client.upsertUsers({
-      users: {
-        [user.id]: { ...user },
-        [user2.id]: { ...user2 },
-      },
-    });
+    await client.upsertUsers([user, user2]);
 
     channel = client.chat.channel('messaging', channelId);
     await channel.getOrCreate({
@@ -53,22 +47,52 @@ describe('messages API', () => {
 
     expect(response.message?.text).toBe('Hello from Stream Node SDK');
 
-    messageId = response.message?.id;
+    messageId = response.message.id;
 
-    const getResponse = await channel.getManyMessages({ ids: [messageId] });
+    const getResponse = await channel.getManyMessages({
+      ids: [messageId, messageId],
+    });
 
     expect(getResponse.messages.length).toBe(1);
   });
 
-  it('update message', async () => {
-    const urlAttachment = await channel.getOpenGraphData({
-      url: 'https://getstream.io/',
+  it('thread replies', async () => {
+    const now = new Date();
+    const response = await channel.sendMessage({
+      message: {
+        text: 'Hello from Stream Node SDK',
+        attachments: [],
+        user_id: user.id,
+      },
     });
-    const response = await channel.updateMessage(messageId!, {
+
+    const threadResponse = await channel.sendMessage({
+      message: {
+        parent_id: response.message.id,
+        text: 'Hello from a thread',
+        attachments: [],
+        user_id: user.id,
+      },
+    });
+
+    const getResponse = await client.chat.getReplies({
+      parent_id: response.message.id,
+      created_at_after: now,
+    });
+
+    expect(
+      getResponse.messages.find((m) => m.id === threadResponse.message.id),
+    ).toBeDefined();
+  });
+
+  it('update message', async () => {
+    const urlAttachment = await client.getOG({ url: 'https://getstream.io/' });
+
+    const response = await client.chat.updateMessage({
+      id: messageId!,
       message: {
         text: 'https://getstream.io/',
-        // Property 'custom' is missing in type '{ image_url: string; }' but required in type 'Attachment'
-        attachments: [urlAttachment],
+        attachments: [{ title_link: urlAttachment.title_link }],
         user_id: user.id,
       },
     });
@@ -80,7 +104,8 @@ describe('messages API', () => {
   });
 
   it('update partial', async () => {
-    const response = await channel.updateMessagePartial(messageId!, {
+    const response = await client.chat.updateMessagePartial({
+      id: messageId!,
       set: {
         text: 'check this out: https://getstream.io/',
       },
@@ -97,11 +122,12 @@ describe('messages API', () => {
   });
 
   it('translate', async () => {
-    const response = await channel.translateMessage(messageId!, {
-      language: TranslateMessageRequestLanguageEnum.HU,
+    const response = await client.chat.translateMessage({
+      id: messageId!,
+      language: 'hu',
     });
 
-    // Property 'message' does not exist on type 'MessageResponse'.
+    // @ts-expect-error
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
@@ -119,7 +145,8 @@ describe('messages API', () => {
   });
 
   it('send reaction', async () => {
-    const response = await channel.sendMessageReaction(messageId!, {
+    const response = await client.chat.sendReaction({
+      id: messageId!,
       reaction: { type: 'like', user_id: user.id },
     });
 
@@ -129,15 +156,16 @@ describe('messages API', () => {
   });
 
   it('get reactions', async () => {
-    const response = await channel.getMessageReactions(messageId!);
+    const response = await client.chat.getReactions({ id: messageId! });
 
     expect(response.reactions.length).toBe(1);
   });
 
   it('delete reaction', async () => {
-    const response = await channel.deleteMessageReaction(messageId!, {
+    const response = await client.chat.deleteReaction({
+      id: messageId!,
       type: 'like',
-      userId: user.id,
+      user_id: user.id,
     });
 
     expect(response.message?.id).toBe(messageId);
@@ -145,21 +173,25 @@ describe('messages API', () => {
   });
 
   it('search', async () => {
-    const response = await client.chat.searchMessages({
-      filter_conditions: { members: { $in: [user2.id] } },
-      message_filter_conditions: { text: { $autocomplete: 'check' } },
+    const response = await client.chat.search({
+      payload: {
+        filter_conditions: { members: { $in: [user2.id] } },
+        message_filter_conditions: { text: { $autocomplete: 'check' } },
+      },
     });
 
     expect(response.results).toBeDefined();
   });
 
   it('flag', async () => {
-    const response = await client.flag({
-      target_message_id: messageId!,
+    const response = await client.moderation.flag({
+      entity_type: 'stream:chat:v1:message',
+      entity_id: messageId!,
       user_id: user.id,
+      reason: 'hate',
     });
 
-    expect(response.flag?.target_message_id).toBe(messageId!);
+    expect(response.item_id).toBeDefined();
   });
 
   it('truncate', async () => {
@@ -171,7 +203,7 @@ describe('messages API', () => {
   });
 
   it('delete message', async () => {
-    const response = await channel.deleteMessage({
+    const response = await client.chat.deleteMessage({
       id: messageId!,
       hard: true,
     });
@@ -179,13 +211,13 @@ describe('messages API', () => {
     expect(response.message?.id).toBe(messageId);
 
     await expect(() =>
-      channel.getMessage({ id: messageId! }),
+      client.chat.getMessage({ id: messageId! }),
     ).rejects.toThrowError(
       `Stream error code 4: GetMessage failed with error: "Message with id ${messageId} doesn't exist"`,
     );
   });
 
   afterAll(async () => {
-    await channel.delete({ hardDelete: true });
+    await channel.delete({ hard_delete: true });
   });
 });

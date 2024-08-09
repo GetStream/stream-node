@@ -41,15 +41,6 @@ $ yarn generate:open-api
 $ yarn generate:open-api:dev
 ```
 
-If you want to update only chat or video you need to define the `PRODUCT` env variable like this:
-
-```shell
-$ PRODUCT=video yarn generate:open-api
-$ PRODUCT=chat yarn generate:open-api:dev
-```
-
-The current chat open API contains some issues, to fix some of them apply the following commit manually after updating the chat open API: [87f8672f9c302138d2c19f07b9b5236e3ba98714](https://github.com/GetStream/stream-node/pull/42/commits/87f8672f9c302138d2c19f07b9b5236e3ba98714)
-
 ## Release (for Stream developers)
 
 Releasing this package involves two GitHub Action steps:

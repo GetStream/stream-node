@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { StreamClient } from '../';
+import { StreamClient } from '../src/StreamClient';
 import { createTestClient } from './create-test-client';
 
 describe('webhooks', () => {

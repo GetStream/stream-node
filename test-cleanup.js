@@ -1,8 +1,5 @@
 require("dotenv/config");
-const {
-  StreamClient,
-  DeleteUsersRequestUserEnum,
-} = require("./dist/index.cjs.js");
+const { StreamClient } = require("./dist/index.cjs.js");
 
 const apiKey = process.env.STREAM_API_KEY;
 const secret = process.env.STREAM_SECRET;
@@ -14,13 +11,13 @@ const createTestClient = () => {
 const client = createTestClient();
 
 const cleanupBlockLists = async () => {
-  const blockLists = (await client.chat.listBlockLists()).blocklists;
+  const blockLists = (await client.listBlockLists()).blocklists;
   const customBlockLists = blockLists.filter((b) =>
     b.name.startsWith("streamnodetest-F1"),
   );
 
   await Promise.all(
-    customBlockLists.map((b) => client.chat.deleteBlockList({ name: b.name })),
+    customBlockLists.map((b) => client.deleteBlockList({ name: b.name })),
   );
 };
 
@@ -49,13 +46,13 @@ const cleanupCallTypes = async () => {
 };
 
 const cleanupExternalStorage = async () => {
-  const storage = (await client.video.listExternalStorages()).external_storages;
+  const storage = (await client.listExternalStorage()).external_storages;
   const customStorage = Object.keys(storage).filter((k) =>
     k.startsWith("streamnodetest"),
   );
 
   await Promise.all(
-    customStorage.map((s) => client.video.deleteExternalStorage({ name: s })),
+    customStorage.map((s) => client.deleteExternalStorage({ name: s })),
   );
 };
 
@@ -75,7 +72,9 @@ const cleanUpChannelTypes = async () => {
 const cleanUpChannels = async () => {
   const channels = (
     await client.chat.queryChannels({
-      filter_conditions: { name: { $autocomplete: "streamnodetest" } },
+      payload: {
+        filter_conditions: { name: { $autocomplete: "streamnodetest" } },
+      },
     })
   ).channels;
 
@@ -107,7 +106,7 @@ const cleanUpRoles = async () => {
   customRoles.forEach((r) => {
     grants[r.name] = [];
   });
-  await client.updateAppSettings({
+  await client.updateApp({
     grants,
   });
 
@@ -119,14 +118,16 @@ const cleanUpRoles = async () => {
 const cleanUpUsers = async () => {
   const users = (
     await client.queryUsers({
-      filter_conditions: { name: { $autocomplete: "streamnodetest" } },
+      payload: {
+        filter_conditions: { name: { $autocomplete: "streamnodetest" } },
+      },
     })
   ).users;
 
   if (users.length > 0) {
     await client.deleteUsers({
       user_ids: users.map((u) => u.id),
-      user: DeleteUsersRequestUserEnum.HARD,
+      user: "hard",
     });
   }
 };

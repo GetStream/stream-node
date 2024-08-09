@@ -2,13 +2,13 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { UserObjectRequest } from '../src/gen/chat';
 import { StreamCall } from '../src/StreamCall';
+import { UserRequest } from '../src/gen/models';
 
 describe('teams', () => {
   let client: StreamClient;
   const userId = 'streamnodetest' + uuidv4();
-  const newUser: UserObjectRequest = {
+  const newUser: UserRequest = {
     id: userId,
     role: 'user',
     custom: {
@@ -27,32 +27,24 @@ describe('teams', () => {
 
   beforeAll(async () => {
     client = createTestClient();
-    await client.upsertUsers({
-      users: {
-        [user.id]: { ...user },
-      },
-    });
-    await client.updateAppSettings({ multi_tenant_enabled: true });
+    await client.upsertUsers([user]);
+    await client.updateApp({ multi_tenant_enabled: true });
     call = client.video.call('default', callId);
   });
 
   it('create user with team', async () => {
-    const response = await client.upsertUsers({
-      users: {
-        [newUser.id]: {
-          ...newUser,
-        },
-      },
-    });
+    const response = await client.upsertUsers([newUser]);
 
     const createdUser = response.users[newUser.id];
 
     expect(createdUser.teams).toEqual(['red', 'blue']);
 
     const queryResponse = await client.queryUsers({
-      sort: [],
-      filter_conditions: {
-        id: { $eq: newUser.id },
+      payload: {
+        sort: [],
+        filter_conditions: {
+          id: { $eq: newUser.id },
+        },
       },
     });
 
@@ -63,18 +55,22 @@ describe('teams', () => {
 
   it('search users with teams', async () => {
     let response = await client.queryUsers({
-      filter_conditions: {
-        name: userId,
-        teams: { $in: ['blue', 'green'] },
+      payload: {
+        filter_conditions: {
+          name: userId,
+          teams: { $in: ['blue', 'green'] },
+        },
       },
     });
 
     expect(response.users[0].id).toBe(userId);
 
     response = await client.queryUsers({
-      filter_conditions: {
-        name: userId,
-        teams: null,
+      payload: {
+        filter_conditions: {
+          name: userId,
+          teams: null,
+        },
       },
     });
 

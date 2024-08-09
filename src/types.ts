@@ -1,5 +1,40 @@
 export type OmitTypeId<T> = Omit<T, 'type' | 'id' | 'connection_id'>;
 
+export interface ApiConfig {
+  apiKey: string;
+  token: string;
+  baseUrl: string;
+  timeout: number;
+}
+
+export interface RequestMetadata {
+  responseHeaders: Headers;
+  rateLimit: RateLimit;
+  responseCode: number;
+  clientRequestId: string;
+}
+
+export type StreamResponse<T> = T & {
+  metadata: RequestMetadata;
+};
+
+export class StreamError extends Error {
+  constructor(
+    message: string,
+    public metadata: Partial<RequestMetadata>,
+    public code?: number,
+    errorOptions?: ErrorOptions,
+  ) {
+    super(message, errorOptions);
+  }
+}
+
+export interface RateLimit {
+  rateLimit?: number;
+  rateLimitRemaining?: number;
+  rateLimitReset?: Date;
+}
+
 interface BaseTokenPayload {
   user_id: string;
   exp: number;
