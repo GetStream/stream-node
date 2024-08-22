@@ -13,8 +13,10 @@ import {
   VideoPinRequest,
   VideoQueryCallMembersRequest,
   VideoSendCallEventRequest,
+  VideoStartRTMPBroadcastsRequest,
   VideoStartRecordingRequest,
   VideoStartTranscriptionRequest,
+  VideoStopRTMPBroadcastsResponse,
   VideoUnblockUserRequest,
   VideoUnpinRequest,
   VideoUpdateCallMembersRequest,
@@ -125,6 +127,15 @@ export class StreamCall {
     return this.apiClient.startHLSBroadcasting({ ...this.baseRequest });
   };
 
+  startRTMPBroadcast = (
+    videoStartRTMPBroadcastsRequest: VideoStartRTMPBroadcastsRequest,
+  ) => {
+    return this.apiClient.startRTMPBroadcast({
+      ...this.baseRequest,
+      videoStartRTMPBroadcastsRequest,
+    });
+  };
+
   startRecording = (request?: VideoStartRecordingRequest) => {
     return this.apiClient.startRecording({
       ...this.baseRequest,
@@ -150,6 +161,18 @@ export class StreamCall {
 
   stopHLSBroadcasting = () => {
     return this.apiClient.stopHLSBroadcasting({ ...this.baseRequest });
+  };
+
+  stopRTMPBroadcast = (name: string) => {
+    return this.apiClient.stopRTMPBroadcast({
+      ...this.baseRequest,
+      name: name,
+      body: {},
+    });
+  };
+
+  stopAllRTMPBroadcasts = () => {
+    return this.apiClient.stopAllRTMPBroadcasts({ ...this.baseRequest });
   };
 
   stopLive = () => {

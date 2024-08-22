@@ -5,6 +5,7 @@ import { StreamClient } from '../src/StreamClient';
 import {
   VideoLayoutSettingsRequestNameEnum,
   VideoOwnCapability,
+  VideoRTMPSettingsRequestQualityEnum,
   VideoRecordSettingsRequestModeEnum,
   VideoRecordSettingsRequestQualityEnum,
 } from '../src/gen/video';
@@ -116,6 +117,21 @@ describe('call types CRUD API', () => {
           // FIXME OL: these props shouldn't be required to be set when recording is disabled
           audio_only: false,
           quality: VideoRecordSettingsRequestQualityEnum._1080P,
+        },
+      },
+    });
+
+    const res = await client.video.updateCallType('livestream', {
+      settings: {
+        broadcasting: {
+          enabled: true,
+          rtmp: {
+            enabled: true,
+            quality: VideoRTMPSettingsRequestQualityEnum._1080P,
+            layout: {
+              name: VideoLayoutSettingsRequestNameEnum.SPOTLIGHT,
+            },
+          },
         },
       },
     });

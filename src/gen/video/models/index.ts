@@ -302,7 +302,7 @@ export interface VideoBlockUserRequest {
  */
 export interface VideoBlockUserResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoBlockUserResponse
      */
@@ -326,6 +326,12 @@ export interface VideoBroadcastSettingsRequest {
      * @memberof VideoBroadcastSettingsRequest
      */
     hls?: VideoHLSSettingsRequest;
+    /**
+     * 
+     * @type {VideoRTMPSettingsRequest}
+     * @memberof VideoBroadcastSettingsRequest
+     */
+    rtmp?: VideoRTMPSettingsRequest;
 }
 /**
  * 
@@ -345,6 +351,12 @@ export interface VideoBroadcastSettingsResponse {
      * @memberof VideoBroadcastSettingsResponse
      */
     hls: VideoHLSSettingsResponse;
+    /**
+     * 
+     * @type {VideoRTMPSettingsResponse}
+     * @memberof VideoBroadcastSettingsResponse
+     */
+    rtmp: VideoRTMPSettingsResponse;
 }
 /**
  * 
@@ -518,6 +530,12 @@ export interface VideoCallRequest {
      * @memberof VideoCallRequest
      */
     team?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoCallRequest
+     */
+    video?: boolean;
 }
 /**
  * Represents a call
@@ -1045,7 +1063,7 @@ export interface VideoCallTypeResponse {
  */
 export interface VideoCheckExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoCheckExternalStorageResponse
      */
@@ -1107,7 +1125,7 @@ export interface VideoCollectUserFeedbackRequest {
  */
 export interface VideoCollectUserFeedbackResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoCollectUserFeedbackResponse
      */
@@ -1287,19 +1305,19 @@ export interface VideoCreateCallTypeResponse {
  */
 export interface VideoCreateDeviceRequest {
     /**
-     * 
+     * Device ID
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
     id: string;
     /**
-     * 
+     * Push provider
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
     push_provider: VideoCreateDeviceRequestPushProviderEnum;
     /**
-     * 
+     * Push provider name
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
@@ -1311,13 +1329,13 @@ export interface VideoCreateDeviceRequest {
      */
     user?: VideoUserRequest;
     /**
-     * 
+     * **Server-side only**. User ID which server acts upon
      * @type {string}
      * @memberof VideoCreateDeviceRequest
      */
     user_id?: string;
     /**
-     * 
+     * When true the token is for Apple VoIP push notifications
      * @type {boolean}
      * @memberof VideoCreateDeviceRequest
      */
@@ -1404,7 +1422,7 @@ export type VideoCreateExternalStorageRequestStorageTypeEnum = typeof VideoCreat
  */
 export interface VideoCreateExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoCreateExternalStorageResponse
      */
@@ -1436,7 +1454,7 @@ export interface VideoCreateGuestResponse {
      */
     access_token: string;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoCreateGuestResponse
      */
@@ -1474,7 +1492,7 @@ export interface VideoDeleteCallResponse {
      */
     call: VideoCallResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoDeleteCallResponse
      */
@@ -1493,7 +1511,7 @@ export interface VideoDeleteCallResponse {
  */
 export interface VideoDeleteExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoDeleteExternalStorageResponse
      */
@@ -1532,19 +1550,19 @@ export interface VideoDeleteTranscriptionResponse {
  */
 export interface VideoDevice {
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof VideoDevice
      */
     created_at: string;
     /**
-     * 
+     * Whether device is disabled or not
      * @type {boolean}
      * @memberof VideoDevice
      */
     disabled?: boolean;
     /**
-     * 
+     * Reason explaining why device had been disabled
      * @type {string}
      * @memberof VideoDevice
      */
@@ -1556,43 +1574,30 @@ export interface VideoDevice {
      */
     id: string;
     /**
-     * 
+     * Push provider
      * @type {string}
      * @memberof VideoDevice
      */
-    push_provider: VideoDevicePushProviderEnum;
+    push_provider: string;
     /**
-     * Name of the push provider configuration
+     * Push provider name
      * @type {string}
      * @memberof VideoDevice
      */
     push_provider_name?: string;
     /**
-     * 
+     * User ID
      * @type {string}
      * @memberof VideoDevice
      */
     user_id: string;
     /**
-     * 
+     * When true the token is for Apple VoIP push notifications
      * @type {boolean}
      * @memberof VideoDevice
      */
     voip?: boolean;
 }
-
-
-/**
- * @export
- */
-export const VideoDevicePushProviderEnum = {
-    FIREBASE: 'firebase',
-    APN: 'apn',
-    HUAWEI: 'huawei',
-    XIAOMI: 'xiaomi'
-} as const;
-export type VideoDevicePushProviderEnum = typeof VideoDevicePushProviderEnum[keyof typeof VideoDevicePushProviderEnum];
-
 /**
  * 
  * @export
@@ -1690,13 +1695,19 @@ export interface VideoEgressRTMPResponse {
      * @type {string}
      * @memberof VideoEgressRTMPResponse
      */
-    stream_key: string;
+    started_at: string;
     /**
      * 
      * @type {string}
      * @memberof VideoEgressRTMPResponse
      */
-    url: string;
+    stream_key?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoEgressRTMPResponse
+     */
+    stream_url?: string;
 }
 /**
  * 
@@ -1953,7 +1964,7 @@ export interface VideoGetCallStatsResponse {
      */
     call_timeline?: VideoCallTimeline;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoGetCallStatsResponse
      */
@@ -2081,7 +2092,7 @@ export interface VideoGetCallTypeResponse {
  */
 export interface VideoGetEdgesResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoGetEdgesResponse
      */
@@ -2123,6 +2134,12 @@ export interface VideoGetOrCreateCallRequest {
      * @memberof VideoGetOrCreateCallRequest
      */
     ring?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoGetOrCreateCallRequest
+     */
+    video?: boolean;
 }
 /**
  * 
@@ -2190,6 +2207,12 @@ export interface VideoGoLiveRequest {
      * @type {boolean}
      * @memberof VideoGoLiveRequest
      */
+    start_rtmp_broadcasts?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoGoLiveRequest
+     */
     start_transcription?: boolean;
     /**
      * 
@@ -2211,7 +2234,7 @@ export interface VideoGoLiveResponse {
      */
     call: VideoCallResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoGoLiveResponse
      */
@@ -2452,7 +2475,7 @@ export interface VideoListDevicesResponse {
  */
 export interface VideoListExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoListExternalStorageResponse
      */
@@ -2725,7 +2748,7 @@ export interface VideoMuteUsersRequest {
  */
 export interface VideoMuteUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoMuteUsersResponse
      */
@@ -2879,13 +2902,13 @@ export type VideoOwnCapability = typeof VideoOwnCapability[keyof typeof VideoOwn
  */
 export interface VideoPinRequest {
     /**
-     * 
+     * the session ID of the user who pinned the message
      * @type {string}
      * @memberof VideoPinRequest
      */
     session_id: string;
     /**
-     * 
+     * the user ID of the user who pinned the message
      * @type {string}
      * @memberof VideoPinRequest
      */
@@ -2898,7 +2921,7 @@ export interface VideoPinRequest {
  */
 export interface VideoPinResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoPinResponse
      */
@@ -2922,6 +2945,25 @@ export interface VideoPrivacySettings {
      * @memberof VideoPrivacySettings
      */
     typing_indicators?: VideoTypingIndicators;
+}
+/**
+ * 
+ * @export
+ * @interface VideoPrivacySettingsResponse
+ */
+export interface VideoPrivacySettingsResponse {
+    /**
+     * 
+     * @type {VideoReadReceiptsResponse}
+     * @memberof VideoPrivacySettingsResponse
+     */
+    read_receipts?: VideoReadReceiptsResponse;
+    /**
+     * 
+     * @type {VideoTypingIndicatorsResponse}
+     * @memberof VideoPrivacySettingsResponse
+     */
+    typing_indicators?: VideoTypingIndicatorsResponse;
 }
 /**
  * 
@@ -2970,25 +3012,6 @@ export interface VideoPublisherAggregateStats {
 /**
  * 
  * @export
- * @interface VideoPushNotificationSettings
- */
-export interface VideoPushNotificationSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoPushNotificationSettings
-     */
-    disabled?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoPushNotificationSettings
-     */
-    disabled_until?: string;
-}
-/**
- * 
- * @export
  * @interface VideoPushNotificationSettingsInput
  */
 export interface VideoPushNotificationSettingsInput {
@@ -3004,6 +3027,25 @@ export interface VideoPushNotificationSettingsInput {
      * @memberof VideoPushNotificationSettingsInput
      */
     disabled_until?: VideoNullTime;
+}
+/**
+ * 
+ * @export
+ * @interface VideoPushNotificationSettingsResponse
+ */
+export interface VideoPushNotificationSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoPushNotificationSettingsResponse
+     */
+    disabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoPushNotificationSettingsResponse
+     */
+    disabled_until?: string;
 }
 /**
  * 
@@ -3043,10 +3085,10 @@ export interface VideoQueryCallMembersRequest {
     prev?: string;
     /**
      * 
-     * @type {Array<VideoSortParam>}
+     * @type {Array<VideoSortParamRequest>}
      * @memberof VideoQueryCallMembersRequest
      */
-    sort?: Array<VideoSortParam>;
+    sort?: Array<VideoSortParamRequest>;
     /**
      * 
      * @type {string}
@@ -3061,7 +3103,7 @@ export interface VideoQueryCallMembersRequest {
  */
 export interface VideoQueryCallMembersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoQueryCallMembersResponse
      */
@@ -3117,10 +3159,10 @@ export interface VideoQueryCallStatsRequest {
     prev?: string;
     /**
      * 
-     * @type {Array<VideoSortParam>}
+     * @type {Array<VideoSortParamRequest>}
      * @memberof VideoQueryCallStatsRequest
      */
-    sort?: Array<VideoSortParam>;
+    sort?: Array<VideoSortParamRequest>;
 }
 /**
  * 
@@ -3129,7 +3171,7 @@ export interface VideoQueryCallStatsRequest {
  */
 export interface VideoQueryCallStatsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoQueryCallStatsResponse
      */
@@ -3185,10 +3227,10 @@ export interface VideoQueryCallsRequest {
     prev?: string;
     /**
      * 
-     * @type {Array<VideoSortParam>}
+     * @type {Array<VideoSortParamRequest>}
      * @memberof VideoQueryCallsRequest
      */
-    sort?: Array<VideoSortParam>;
+    sort?: Array<VideoSortParamRequest>;
 }
 /**
  * 
@@ -3203,7 +3245,7 @@ export interface VideoQueryCallsResponse {
      */
     calls: Array<VideoCallStateResponseFields>;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoQueryCallsResponse
      */
@@ -3237,6 +3279,75 @@ export interface VideoRTMPIngress {
 /**
  * 
  * @export
+ * @interface VideoRTMPSettingsRequest
+ */
+export interface VideoRTMPSettingsRequest {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoRTMPSettingsRequest
+     */
+    enabled?: boolean;
+    /**
+     * 
+     * @type {VideoLayoutSettingsRequest}
+     * @memberof VideoRTMPSettingsRequest
+     */
+    layout?: VideoLayoutSettingsRequest;
+    /**
+     * Resolution to set for the RTMP stream
+     * @type {string}
+     * @memberof VideoRTMPSettingsRequest
+     */
+    quality?: VideoRTMPSettingsRequestQualityEnum;
+}
+
+
+/**
+ * @export
+ */
+export const VideoRTMPSettingsRequestQualityEnum = {
+    _360P: '360p',
+    _480P: '480p',
+    _720P: '720p',
+    _1080P: '1080p',
+    _1440P: '1440p',
+    PORTRAIT_360X640: 'portrait-360x640',
+    PORTRAIT_480X854: 'portrait-480x854',
+    PORTRAIT_720X1280: 'portrait-720x1280',
+    PORTRAIT_1080X1920: 'portrait-1080x1920',
+    PORTRAIT_1440X2560: 'portrait-1440x2560'
+} as const;
+export type VideoRTMPSettingsRequestQualityEnum = typeof VideoRTMPSettingsRequestQualityEnum[keyof typeof VideoRTMPSettingsRequestQualityEnum];
+
+/**
+ * 
+ * @export
+ * @interface VideoRTMPSettingsResponse
+ */
+export interface VideoRTMPSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoRTMPSettingsResponse
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {VideoLayoutSettingsResponse}
+     * @memberof VideoRTMPSettingsResponse
+     */
+    layout: VideoLayoutSettingsResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoRTMPSettingsResponse
+     */
+    quality: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoReadReceipts
  */
 export interface VideoReadReceipts {
@@ -3246,6 +3357,19 @@ export interface VideoReadReceipts {
      * @memberof VideoReadReceipts
      */
     enabled?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VideoReadReceiptsResponse
+ */
+export interface VideoReadReceiptsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoReadReceiptsResponse
+     */
+    enabled: boolean;
 }
 /**
  * 
@@ -3345,7 +3469,7 @@ export interface VideoRecordSettingsResponse {
  */
 export interface VideoResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoResponse
      */
@@ -3548,19 +3672,19 @@ export interface VideoSendCallEventResponse {
 /**
  * 
  * @export
- * @interface VideoSortParam
+ * @interface VideoSortParamRequest
  */
-export interface VideoSortParam {
+export interface VideoSortParamRequest {
     /**
-     * Direction of sorting, -1 for descending, 1 for ascending
+     * Direction of sorting, 1 for Ascending, -1 for Descending, default is 1
      * @type {number}
-     * @memberof VideoSortParam
+     * @memberof VideoSortParamRequest
      */
     direction?: number;
     /**
      * Name of field to sort by
      * @type {string}
-     * @memberof VideoSortParam
+     * @memberof VideoSortParamRequest
      */
     field?: string;
 }
@@ -3571,7 +3695,7 @@ export interface VideoSortParam {
  */
 export interface VideoStartHLSBroadcastingResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoStartHLSBroadcastingResponse
      */
@@ -3582,6 +3706,75 @@ export interface VideoStartHLSBroadcastingResponse {
      * @memberof VideoStartHLSBroadcastingResponse
      */
     playlist_url: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoStartRTMPBroadcastsRequest
+ */
+export interface VideoStartRTMPBroadcastsRequest {
+    /**
+     * 
+     * @type {VideoLayoutSettingsRequest}
+     * @memberof VideoStartRTMPBroadcastsRequest
+     */
+    layout?: VideoLayoutSettingsRequest;
+    /**
+     * Name identifier for RTMP broadcast, must be unique in call
+     * @type {string}
+     * @memberof VideoStartRTMPBroadcastsRequest
+     */
+    name: string;
+    /**
+     * If provided, will override the call's RTMP settings quality
+     * @type {string}
+     * @memberof VideoStartRTMPBroadcastsRequest
+     */
+    quality?: VideoStartRTMPBroadcastsRequestQualityEnum;
+    /**
+     * If provided, will be appended at the end of stream_url
+     * @type {string}
+     * @memberof VideoStartRTMPBroadcastsRequest
+     */
+    stream_key?: string;
+    /**
+     * URL for the RTMP server to send the call to
+     * @type {string}
+     * @memberof VideoStartRTMPBroadcastsRequest
+     */
+    stream_url: string;
+}
+
+
+/**
+ * @export
+ */
+export const VideoStartRTMPBroadcastsRequestQualityEnum = {
+    _360P: '360p',
+    _480P: '480p',
+    _720P: '720p',
+    _1080P: '1080p',
+    _1440P: '1440p',
+    PORTRAIT_360X640: 'portrait-360x640',
+    PORTRAIT_480X854: 'portrait-480x854',
+    PORTRAIT_720X1280: 'portrait-720x1280',
+    PORTRAIT_1080X1920: 'portrait-1080x1920',
+    PORTRAIT_1440X2560: 'portrait-1440x2560'
+} as const;
+export type VideoStartRTMPBroadcastsRequestQualityEnum = typeof VideoStartRTMPBroadcastsRequestQualityEnum[keyof typeof VideoStartRTMPBroadcastsRequestQualityEnum];
+
+/**
+ * 
+ * @export
+ * @interface VideoStartRTMPBroadcastsResponse
+ */
+export interface VideoStartRTMPBroadcastsResponse {
+    /**
+     * Duration of the request in milliseconds
+     * @type {string}
+     * @memberof VideoStartRTMPBroadcastsResponse
+     */
+    duration: string;
 }
 /**
  * 
@@ -3638,11 +3831,24 @@ export interface VideoStartTranscriptionResponse {
 /**
  * 
  * @export
+ * @interface VideoStopAllRTMPBroadcastsResponse
+ */
+export interface VideoStopAllRTMPBroadcastsResponse {
+    /**
+     * Duration of the request in milliseconds
+     * @type {string}
+     * @memberof VideoStopAllRTMPBroadcastsResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface VideoStopHLSBroadcastingResponse
  */
 export interface VideoStopHLSBroadcastingResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoStopHLSBroadcastingResponse
      */
@@ -3661,9 +3867,22 @@ export interface VideoStopLiveResponse {
      */
     call: VideoCallResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoStopLiveResponse
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
+ * @interface VideoStopRTMPBroadcastsResponse
+ */
+export interface VideoStopRTMPBroadcastsResponse {
+    /**
+     * Duration of the request in milliseconds
+     * @type {string}
+     * @memberof VideoStopRTMPBroadcastsResponse
      */
     duration: string;
 }
@@ -3674,7 +3893,7 @@ export interface VideoStopLiveResponse {
  */
 export interface VideoStopRecordingResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoStopRecordingResponse
      */
@@ -3687,7 +3906,7 @@ export interface VideoStopRecordingResponse {
  */
 export interface VideoStopTranscriptionResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoStopTranscriptionResponse
      */
@@ -3916,6 +4135,19 @@ export interface VideoTypingIndicators {
 /**
  * 
  * @export
+ * @interface VideoTypingIndicatorsResponse
+ */
+export interface VideoTypingIndicatorsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VideoTypingIndicatorsResponse
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
  * @interface VideoUnblockUserRequest
  */
 export interface VideoUnblockUserRequest {
@@ -3933,7 +4165,7 @@ export interface VideoUnblockUserRequest {
  */
 export interface VideoUnblockUserResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoUnblockUserResponse
      */
@@ -3946,13 +4178,13 @@ export interface VideoUnblockUserResponse {
  */
 export interface VideoUnpinRequest {
     /**
-     * 
+     * the session ID of the user who pinned the message
      * @type {string}
      * @memberof VideoUnpinRequest
      */
     session_id: string;
     /**
-     * 
+     * the user ID of the user who pinned the message
      * @type {string}
      * @memberof VideoUnpinRequest
      */
@@ -3965,7 +4197,7 @@ export interface VideoUnpinRequest {
  */
 export interface VideoUnpinResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoUnpinResponse
      */
@@ -3997,7 +4229,7 @@ export interface VideoUpdateCallMembersRequest {
  */
 export interface VideoUpdateCallMembersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoUpdateCallMembersResponse
      */
@@ -4219,7 +4451,7 @@ export interface VideoUpdateExternalStorageResponse {
      */
     bucket: string;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoUpdateExternalStorageResponse
      */
@@ -4287,7 +4519,7 @@ export interface VideoUpdateUserPermissionsRequest {
  */
 export interface VideoUpdateUserPermissionsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof VideoUpdateUserPermissionsResponse
      */
@@ -4398,7 +4630,13 @@ export interface VideoUserRequest {
  */
 export interface VideoUserResponse {
     /**
-     * 
+     * Date when ban expires
+     * @type {string}
+     * @memberof VideoUserResponse
+     */
+    ban_expires?: string;
+    /**
+     * Whether a user is banned or not
      * @type {boolean}
      * @memberof VideoUserResponse
      */
@@ -4416,13 +4654,13 @@ export interface VideoUserResponse {
      */
     created_at: string;
     /**
-     * 
+     * Custom data for this object
      * @type {{ [key: string]: any; }}
      * @memberof VideoUserResponse
      */
     custom: { [key: string]: any; };
     /**
-     * 
+     * Date of deactivation
      * @type {string}
      * @memberof VideoUserResponse
      */
@@ -4434,13 +4672,13 @@ export interface VideoUserResponse {
      */
     deleted_at?: string;
     /**
-     * 
+     * List of devices user is using
      * @type {Array<VideoDevice>}
      * @memberof VideoUserResponse
      */
     devices: Array<VideoDevice>;
     /**
-     * 
+     * Unique user identifier
      * @type {string}
      * @memberof VideoUserResponse
      */
@@ -4458,55 +4696,61 @@ export interface VideoUserResponse {
      */
     invisible: boolean;
     /**
-     * 
+     * Preferred language of a user
      * @type {string}
      * @memberof VideoUserResponse
      */
     language: string;
     /**
-     * 
+     * Date of last activity
      * @type {string}
      * @memberof VideoUserResponse
      */
     last_active?: string;
     /**
-     * 
+     * Optional name of user
      * @type {string}
      * @memberof VideoUserResponse
      */
     name?: string;
     /**
-     * 
+     * Whether a user online or not
      * @type {boolean}
      * @memberof VideoUserResponse
      */
     online: boolean;
     /**
      * 
-     * @type {VideoPushNotificationSettings}
+     * @type {VideoPrivacySettingsResponse}
      * @memberof VideoUserResponse
      */
-    push_notifications?: VideoPushNotificationSettings;
+    privacy_settings?: VideoPrivacySettingsResponse;
     /**
      * 
+     * @type {VideoPushNotificationSettingsResponse}
+     * @memberof VideoUserResponse
+     */
+    push_notifications?: VideoPushNotificationSettingsResponse;
+    /**
+     * Revocation date for tokens
      * @type {string}
      * @memberof VideoUserResponse
      */
     revoke_tokens_issued_before?: string;
     /**
-     * 
+     * Determines the set of user permissions
      * @type {string}
      * @memberof VideoUserResponse
      */
     role: string;
     /**
-     * 
+     * Whether a user is shadow banned
      * @type {boolean}
      * @memberof VideoUserResponse
      */
     shadow_banned: boolean;
     /**
-     * 
+     * List of teams user is a part of
      * @type {Array<string>}
      * @memberof VideoUserResponse
      */

@@ -400,6 +400,18 @@ export interface AppResponseFields {
      * @type {boolean}
      * @memberof AppResponseFields
      */
+    moderation_enabled: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppResponseFields
+     */
+    moderation_webhook_url: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppResponseFields
+     */
     multi_tenant_enabled: boolean;
     /**
      * 
@@ -425,12 +437,6 @@ export interface AppResponseFields {
      * @memberof AppResponseFields
      */
     policies: { [key: string]: Array<Policy>; };
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppResponseFields
-     */
-    polls_enabled: boolean;
     /**
      * 
      * @type {PushNotificationFields}
@@ -705,7 +711,7 @@ export interface Attachment {
      */
     title_link?: string;
     /**
-     * Attachment type (e.g. image, video, url, poll)
+     * Attachment type (e.g. image, video, url)
      * @type {string}
      * @memberof Attachment
      */
@@ -933,10 +939,10 @@ export interface BanRequest {
 export interface BanResponse {
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof BanResponse
      */
-    banned_by?: UserObject;
+    banned_by?: UserResponse;
     /**
      * 
      * @type {ChannelResponse}
@@ -969,47 +975,10 @@ export interface BanResponse {
     shadow?: boolean;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof BanResponse
      */
-    user?: UserObject;
-}
-/**
- * Block list contains restricted words
- * @export
- * @interface BlockList
- */
-export interface BlockList {
-    /**
-     * Date/time of creation
-     * @type {string}
-     * @memberof BlockList
-     */
-    created_at?: string;
-    /**
-     * Block list name
-     * @type {string}
-     * @memberof BlockList
-     */
-    name: string;
-    /**
-     * Block list type.
-     * @type {string}
-     * @memberof BlockList
-     */
-    type: string;
-    /**
-     * Date/time of the last update
-     * @type {string}
-     * @memberof BlockList
-     */
-    updated_at?: string;
-    /**
-     * List of words to block
-     * @type {Array<string>}
-     * @memberof BlockList
-     */
-    words: Array<string>;
+    user?: UserResponse;
 }
 /**
  * 
@@ -1043,6 +1012,43 @@ export const BlockListOptionsBehaviorEnum = {
 export type BlockListOptionsBehaviorEnum = typeof BlockListOptionsBehaviorEnum[keyof typeof BlockListOptionsBehaviorEnum];
 
 /**
+ * Block list contains restricted words
+ * @export
+ * @interface BlockListResponse
+ */
+export interface BlockListResponse {
+    /**
+     * Date/time of creation
+     * @type {string}
+     * @memberof BlockListResponse
+     */
+    created_at?: string;
+    /**
+     * Block list name
+     * @type {string}
+     * @memberof BlockListResponse
+     */
+    name: string;
+    /**
+     * Block list type.
+     * @type {string}
+     * @memberof BlockListResponse
+     */
+    type: string;
+    /**
+     * Date/time of the last update
+     * @type {string}
+     * @memberof BlockListResponse
+     */
+    updated_at?: string;
+    /**
+     * List of words to block
+     * @type {Array<string>}
+     * @memberof BlockListResponse
+     */
+    words: Array<string>;
+}
+/**
  * 
  * @export
  * @interface BlockUsersRequest
@@ -1074,25 +1080,25 @@ export interface BlockUsersRequest {
  */
 export interface BlockUsersResponse {
     /**
-     * 
+     * User id who blocked another user
      * @type {string}
      * @memberof BlockUsersResponse
      */
     blocked_by_user_id: string;
     /**
-     * 
+     * User id who got blocked
      * @type {string}
      * @memberof BlockUsersResponse
      */
     blocked_user_id: string;
     /**
-     * 
+     * Timestamp when the user was blocked
      * @type {string}
      * @memberof BlockUsersResponse
      */
     created_at: string;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof BlockUsersResponse
      */
@@ -1152,7 +1158,13 @@ export interface BroadcastSettings {
      * @type {HLSSettings}
      * @memberof BroadcastSettings
      */
-    hls: HLSSettings;
+    hls?: HLSSettings;
+    /**
+     * 
+     * @type {RTMPSettings}
+     * @memberof BroadcastSettings
+     */
+    rtmp?: RTMPSettings;
 }
 /**
  * 
@@ -1575,6 +1587,18 @@ export interface ChannelConfig {
     name: string;
     /**
      * 
+     * @type {number}
+     * @memberof ChannelConfig
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChannelConfig
+     */
+    partition_ttl?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ChannelConfig
      */
@@ -1782,6 +1806,18 @@ export interface ChannelConfigWithInfo {
     name: string;
     /**
      * 
+     * @type {number}
+     * @memberof ChannelConfigWithInfo
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChannelConfigWithInfo
+     */
+    partition_ttl?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ChannelConfigWithInfo
      */
@@ -1977,7 +2013,6 @@ export interface ChannelGetOrCreateRequest {
  * @interface ChannelInput
  */
 export interface ChannelInput {
-    [key: string]: any;
     /**
      * Enable or disable auto translation
      * @type {boolean}
@@ -2037,7 +2072,7 @@ export interface ChannelInput {
      * @type {Array<ChannelMember>}
      * @memberof ChannelInput
      */
-    members?: Array<Partial<ChannelMember>>;
+    members?: Array<ChannelMember>;
     /**
      * Team the channel belongs to (if multi-tenant mode is enabled)
      * @type {string}
@@ -2151,6 +2186,122 @@ export interface ChannelMember {
 /**
  * 
  * @export
+ * @interface ChannelMemberResponse
+ */
+export interface ChannelMemberResponse {
+    /**
+     * Expiration date of the ban
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    ban_expires?: string;
+    /**
+     * Whether member is banned this channel or not
+     * @type {boolean}
+     * @memberof ChannelMemberResponse
+     */
+    banned: boolean;
+    /**
+     * Role of the member in the channel
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    channel_role: string;
+    /**
+     * Date/time of creation
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    deleted_at?: string;
+    /**
+     * Date when invite was accepted
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    invite_accepted_at?: string;
+    /**
+     * Date when invite was rejected
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    invite_rejected_at?: string;
+    /**
+     * Whether member was invited or not
+     * @type {boolean}
+     * @memberof ChannelMemberResponse
+     */
+    invited?: boolean;
+    /**
+     * Whether member is channel moderator or not
+     * @type {boolean}
+     * @memberof ChannelMemberResponse
+     */
+    is_moderator?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ChannelMemberResponse
+     */
+    notifications_muted: boolean;
+    /**
+     * Permission level of the member in the channel (DEPRECATED: use channel_role instead)
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    role?: ChannelMemberResponseRoleEnum;
+    /**
+     * Whether member is shadow banned in this channel or not
+     * @type {boolean}
+     * @memberof ChannelMemberResponse
+     */
+    shadow_banned: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    status?: string;
+    /**
+     * Date/time of the last update
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    updated_at: string;
+    /**
+     * 
+     * @type {UserResponse}
+     * @memberof ChannelMemberResponse
+     */
+    user?: UserResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChannelMemberResponse
+     */
+    user_id?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ChannelMemberResponseRoleEnum = {
+    MEMBER: 'member',
+    MODERATOR: 'moderator',
+    ADMIN: 'admin',
+    OWNER: 'owner'
+} as const;
+export type ChannelMemberResponseRoleEnum = typeof ChannelMemberResponseRoleEnum[keyof typeof ChannelMemberResponseRoleEnum];
+
+/**
+ * 
+ * @export
  * @interface ChannelMute
  */
 export interface ChannelMute {
@@ -2191,7 +2342,6 @@ export interface ChannelMute {
  * @interface ChannelResponse
  */
 export interface ChannelResponse {
-    [key: string]: any;
     /**
      * Whether auto translation is enabled or not
      * @type {boolean}
@@ -2236,10 +2386,10 @@ export interface ChannelResponse {
     created_at: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof ChannelResponse
      */
-    created_by?: UserObject;
+    created_by?: UserResponse;
     /**
      * 
      * @type {{ [key: string]: any; }}
@@ -2299,7 +2449,7 @@ export interface ChannelResponse {
      * @type {Array<ChannelMember>}
      * @memberof ChannelResponse
      */
-    members?: Array<Partial<ChannelMember>>;
+    members?: Array<ChannelMember>;
     /**
      * Date of mute expiration
      * @type {string}
@@ -2332,10 +2482,10 @@ export interface ChannelResponse {
     truncated_at?: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof ChannelResponse
      */
-    truncated_by?: UserObject;
+    truncated_by?: UserResponse;
     /**
      * Type of the channel
      * @type {string}
@@ -2617,6 +2767,18 @@ export interface ChannelTypeConfig {
     name: string;
     /**
      * 
+     * @type {number}
+     * @memberof ChannelTypeConfig
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChannelTypeConfig
+     */
+    partition_ttl?: number;
+    /**
+     * 
      * @type {Array<PolicyRequest>}
      * @memberof ChannelTypeConfig
      */
@@ -2733,7 +2895,7 @@ export type ChannelTypeConfigBlocklistBehaviorEnum = typeof ChannelTypeConfigBlo
  */
 export interface CheckExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CheckExternalStorageResponse
      */
@@ -3200,7 +3362,7 @@ export interface CreateCallResponse {
      */
     call?: Call;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateCallResponse
      */
@@ -3302,6 +3464,18 @@ export interface CreateChannelTypeRequest {
      * @memberof CreateChannelTypeRequest
      */
     name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateChannelTypeRequest
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateChannelTypeRequest
+     */
+    partition_ttl?: string | null;
     /**
      * List of permissions for the channel type
      * @type {Array<PolicyRequest>}
@@ -3504,6 +3678,18 @@ export interface CreateChannelTypeResponse {
     name: string;
     /**
      * 
+     * @type {number}
+     * @memberof CreateChannelTypeResponse
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateChannelTypeResponse
+     */
+    partition_ttl?: number;
+    /**
+     * 
      * @type {Array<PolicyRequest>}
      * @memberof CreateChannelTypeResponse
      */
@@ -3657,7 +3843,7 @@ export interface CreateCommandResponse {
      */
     command?: Command | null;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateCommandResponse
      */
@@ -3670,19 +3856,19 @@ export interface CreateCommandResponse {
  */
 export interface CreateDeviceRequest {
     /**
-     * 
+     * Device ID
      * @type {string}
      * @memberof CreateDeviceRequest
      */
     id: string;
     /**
-     * 
+     * Push provider
      * @type {string}
      * @memberof CreateDeviceRequest
      */
     push_provider: CreateDeviceRequestPushProviderEnum;
     /**
-     * 
+     * Push provider name
      * @type {string}
      * @memberof CreateDeviceRequest
      */
@@ -3694,13 +3880,13 @@ export interface CreateDeviceRequest {
      */
     user?: UserRequest;
     /**
-     * 
+     * **Server-side only**. User ID which server acts upon
      * @type {string}
      * @memberof CreateDeviceRequest
      */
     user_id?: string;
     /**
-     * 
+     * When true the token is for Apple VoIP push notifications
      * @type {boolean}
      * @memberof CreateDeviceRequest
      */
@@ -3787,7 +3973,7 @@ export type CreateExternalStorageRequestStorageTypeEnum = typeof CreateExternalS
  */
 export interface CreateExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateExternalStorageResponse
      */
@@ -3819,7 +4005,7 @@ export interface CreateGuestResponse {
      */
     access_token: string;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateGuestResponse
      */
@@ -3868,7 +4054,7 @@ export type CreateImportRequestModeEnum = typeof CreateImportRequestModeEnum[key
  */
 export interface CreateImportResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateImportResponse
      */
@@ -3900,7 +4086,7 @@ export interface CreateImportURLRequest {
  */
 export interface CreateImportURLResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateImportURLResponse
      */
@@ -3937,7 +4123,7 @@ export interface CreatePollOptionRequest {
      */
     position?: number;
     /**
-     * 
+     * Option text
      * @type {string}
      * @memberof CreatePollOptionRequest
      */
@@ -4071,7 +4257,7 @@ export interface CreateRoleRequest {
  */
 export interface CreateRoleResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof CreateRoleResponse
      */
@@ -4134,17 +4320,17 @@ export interface DeactivateUserRequest {
  */
 export interface DeactivateUserResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeactivateUserResponse
      */
     duration: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof DeactivateUserResponse
      */
-    user?: UserObject;
+    user?: UserResponse;
 }
 /**
  * 
@@ -4184,7 +4370,7 @@ export interface DeactivateUsersRequest {
  */
 export interface DeactivateUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeactivateUsersResponse
      */
@@ -4209,7 +4395,7 @@ export interface DeleteChannelResponse {
      */
     channel?: ChannelResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteChannelResponse
      */
@@ -4241,17 +4427,17 @@ export interface DeleteChannelsRequest {
  */
 export interface DeleteChannelsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteChannelsResponse
      */
     duration: string;
     /**
-     * 
-     * @type {{ [key: string]: DeleteChannelsResult; }}
+     * Map of channel IDs and their deletion results
+     * @type {{ [key: string]: DeleteChannelsResultResponse; }}
      * @memberof DeleteChannelsResponse
      */
-    result?: { [key: string]: DeleteChannelsResult; };
+    result?: { [key: string]: DeleteChannelsResultResponse; };
     /**
      * 
      * @type {string}
@@ -4262,19 +4448,19 @@ export interface DeleteChannelsResponse {
 /**
  * 
  * @export
- * @interface DeleteChannelsResult
+ * @interface DeleteChannelsResultResponse
  */
-export interface DeleteChannelsResult {
+export interface DeleteChannelsResultResponse {
     /**
      * 
      * @type {string}
-     * @memberof DeleteChannelsResult
+     * @memberof DeleteChannelsResultResponse
      */
     error?: string;
     /**
      * 
      * @type {string}
-     * @memberof DeleteChannelsResult
+     * @memberof DeleteChannelsResultResponse
      */
     status: string;
 }
@@ -4285,7 +4471,7 @@ export interface DeleteChannelsResult {
  */
 export interface DeleteCommandResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteCommandResponse
      */
@@ -4304,7 +4490,7 @@ export interface DeleteCommandResponse {
  */
 export interface DeleteExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteExternalStorageResponse
      */
@@ -4317,7 +4503,7 @@ export interface DeleteExternalStorageResponse {
  */
 export interface DeleteMessageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteMessageResponse
      */
@@ -4444,13 +4630,13 @@ export type DeleteUsersRequestUserEnum = typeof DeleteUsersRequestUserEnum[keyof
  */
 export interface DeleteUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof DeleteUsersResponse
      */
     duration: string;
     /**
-     * 
+     * ID of the task to delete users
      * @type {string}
      * @memberof DeleteUsersResponse
      */
@@ -4463,19 +4649,19 @@ export interface DeleteUsersResponse {
  */
 export interface Device {
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof Device
      */
     created_at: string;
     /**
-     * 
+     * Whether device is disabled or not
      * @type {boolean}
      * @memberof Device
      */
     disabled?: boolean;
     /**
-     * 
+     * Reason explaining why device had been disabled
      * @type {string}
      * @memberof Device
      */
@@ -4487,43 +4673,30 @@ export interface Device {
      */
     id: string;
     /**
-     * 
+     * Push provider
      * @type {string}
      * @memberof Device
      */
-    push_provider: DevicePushProviderEnum;
+    push_provider: string;
     /**
-     * Name of the push provider configuration
+     * Push provider name
      * @type {string}
      * @memberof Device
      */
     push_provider_name?: string;
     /**
-     * 
+     * User ID
      * @type {string}
      * @memberof Device
      */
     user_id: string;
     /**
-     * 
+     * When true the token is for Apple VoIP push notifications
      * @type {boolean}
      * @memberof Device
      */
     voip?: boolean;
 }
-
-
-/**
- * @export
- */
-export const DevicePushProviderEnum = {
-    FIREBASE: 'firebase',
-    APN: 'apn',
-    HUAWEI: 'huawei',
-    XIAOMI: 'xiaomi'
-} as const;
-export type DevicePushProviderEnum = typeof DevicePushProviderEnum[keyof typeof DevicePushProviderEnum];
-
 /**
  * 
  * @export
@@ -4637,7 +4810,7 @@ export interface EventRequest {
  */
 export interface EventResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof EventResponse
      */
@@ -4686,7 +4859,7 @@ export interface ExportChannelsRequest {
      */
     include_truncated_messages?: boolean;
     /**
-     * 
+     * Export version
      * @type {string}
      * @memberof ExportChannelsRequest
      */
@@ -4699,13 +4872,13 @@ export interface ExportChannelsRequest {
  */
 export interface ExportChannelsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ExportChannelsResponse
      */
     duration: string;
     /**
-     * 
+     * ID of the task to export channels
      * @type {string}
      * @memberof ExportChannelsResponse
      */
@@ -4743,7 +4916,7 @@ export interface ExportChannelsResult {
  */
 export interface ExportUserResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ExportUserResponse
      */
@@ -4762,10 +4935,10 @@ export interface ExportUserResponse {
     reactions?: Array<Reaction>;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof ExportUserResponse
      */
-    user?: UserObject;
+    user?: UserResponse;
 }
 /**
  * 
@@ -4787,7 +4960,7 @@ export interface ExportUsersRequest {
  */
 export interface ExportUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ExportUsersResponse
      */
@@ -4870,19 +5043,6 @@ export interface Field {
 /**
  * 
  * @export
- * @interface FileDeleteResponse
- */
-export interface FileDeleteResponse {
-    /**
-     * Duration of the request in human-readable format
-     * @type {string}
-     * @memberof FileDeleteResponse
-     */
-    duration: string;
-}
-/**
- * 
- * @export
  * @interface FileUploadConfig
  */
 export interface FileUploadConfig {
@@ -4943,7 +5103,7 @@ export interface FileUploadRequest {
  */
 export interface FileUploadResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof FileUploadResponse
      */
@@ -5269,7 +5429,7 @@ export interface FlagRequest {
  */
 export interface FlagResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof FlagResponse
      */
@@ -5280,6 +5440,12 @@ export interface FlagResponse {
      * @memberof FlagResponse
      */
     flag?: Flag;
+    /**
+     * 
+     * @type {string}
+     * @memberof FlagResponse
+     */
+    review_queue_item_id: string;
 }
 /**
  * 
@@ -5373,10 +5539,10 @@ export interface FullUserResponse {
     latest_hidden_channels?: Array<string>;
     /**
      * 
-     * @type {Array<UserMute>}
+     * @type {Array<UserMuteResponse>}
      * @memberof FullUserResponse
      */
-    mutes: Array<UserMute>;
+    mutes: Array<UserMuteResponse>;
     /**
      * 
      * @type {string}
@@ -5391,16 +5557,16 @@ export interface FullUserResponse {
     online: boolean;
     /**
      * 
-     * @type {PrivacySettings}
+     * @type {PrivacySettingsResponse}
      * @memberof FullUserResponse
      */
-    privacy_settings?: PrivacySettings;
+    privacy_settings?: PrivacySettingsResponse;
     /**
      * 
-     * @type {PushNotificationSettings}
+     * @type {PushNotificationSettingsResponse}
      * @memberof FullUserResponse
      */
-    push_notifications?: PushNotificationSettings;
+    push_notifications?: PushNotificationSettingsResponse;
     /**
      * 
      * @type {string}
@@ -5507,7 +5673,7 @@ export interface GetApplicationResponse {
      */
     app: AppResponseFields;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetApplicationResponse
      */
@@ -5521,12 +5687,12 @@ export interface GetApplicationResponse {
 export interface GetBlockListResponse {
     /**
      * 
-     * @type {BlockList}
+     * @type {BlockListResponse}
      * @memberof GetBlockListResponse
      */
-    blocklist?: BlockList | null;
+    blocklist?: BlockListResponse | null;
     /**
-     * Duration of the request in human-readable format
+     * 
      * @type {string}
      * @memberof GetBlockListResponse
      */
@@ -5545,7 +5711,7 @@ export interface GetBlockedUsersResponse {
      */
     blocks: Array<BlockedUserResponse>;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetBlockedUsersResponse
      */
@@ -5589,7 +5755,7 @@ export interface GetCallTokenResponse {
      */
     agora_uid?: number;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetCallTokenResponse
      */
@@ -5601,6 +5767,237 @@ export interface GetCallTokenResponse {
      */
     token: string;
 }
+/**
+ * 
+ * @export
+ * @interface GetChannelTypeResponse
+ */
+export interface GetChannelTypeResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetChannelTypeResponse
+     */
+    allowed_flag_reasons?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    automod: GetChannelTypeResponseAutomodEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    automod_behavior: GetChannelTypeResponseAutomodBehaviorEnum;
+    /**
+     * 
+     * @type {Thresholds}
+     * @memberof GetChannelTypeResponse
+     */
+    automod_thresholds?: Thresholds;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklist?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklist_behavior?: GetChannelTypeResponseBlocklistBehaviorEnum;
+    /**
+     * 
+     * @type {Array<BlockListOptions>}
+     * @memberof GetChannelTypeResponse
+     */
+    blocklists?: Array<BlockListOptions>;
+    /**
+     * 
+     * @type {Array<Command>}
+     * @memberof GetChannelTypeResponse
+     */
+    commands: Array<Command>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    connect_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    custom_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    duration: string;
+    /**
+     * 
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof GetChannelTypeResponse
+     */
+    grants: { [key: string]: Array<string>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    mark_messages_pending: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetChannelTypeResponse
+     */
+    max_message_length: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    mutes: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetChannelTypeResponse
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetChannelTypeResponse
+     */
+    partition_ttl?: number;
+    /**
+     * 
+     * @type {Array<PolicyRequest>}
+     * @memberof GetChannelTypeResponse
+     */
+    permissions: Array<PolicyRequest>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    polls: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    push_notifications: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    quotes: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    reactions: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    read_events: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    reminders: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    replies: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    search: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    typing_events: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetChannelTypeResponse
+     */
+    updated_at: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    uploads: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GetChannelTypeResponse
+     */
+    url_enrichment: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseAutomodEnum = {
+    DISABLED: 'disabled',
+    SIMPLE: 'simple',
+    AI: 'AI'
+} as const;
+export type GetChannelTypeResponseAutomodEnum = typeof GetChannelTypeResponseAutomodEnum[keyof typeof GetChannelTypeResponseAutomodEnum];
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseAutomodBehaviorEnum = {
+    FLAG: 'flag',
+    BLOCK: 'block',
+    SHADOW_BLOCK: 'shadow_block'
+} as const;
+export type GetChannelTypeResponseAutomodBehaviorEnum = typeof GetChannelTypeResponseAutomodBehaviorEnum[keyof typeof GetChannelTypeResponseAutomodBehaviorEnum];
+
+/**
+ * @export
+ */
+export const GetChannelTypeResponseBlocklistBehaviorEnum = {
+    FLAG: 'flag',
+    BLOCK: 'block',
+    SHADOW_BLOCK: 'shadow_block'
+} as const;
+export type GetChannelTypeResponseBlocklistBehaviorEnum = typeof GetChannelTypeResponseBlocklistBehaviorEnum[keyof typeof GetChannelTypeResponseBlocklistBehaviorEnum];
+
 /**
  * 
  * @export
@@ -5657,7 +6054,7 @@ export interface GetCommandResponse {
  */
 export interface GetCustomPermissionResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetCustomPermissionResponse
      */
@@ -5676,13 +6073,13 @@ export interface GetCustomPermissionResponse {
  */
 export interface GetExportChannelsStatusResponse {
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof GetExportChannelsStatusResponse
      */
     created_at: string;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetExportChannelsStatusResponse
      */
@@ -5700,11 +6097,11 @@ export interface GetExportChannelsStatusResponse {
      */
     result?: ExportChannelsResult;
     /**
-     * 
+     * Task status
      * @type {string}
      * @memberof GetExportChannelsStatusResponse
      */
-    status: string;
+    status: GetExportChannelsStatusResponseStatusEnum;
     /**
      * 
      * @type {string}
@@ -5712,12 +6109,27 @@ export interface GetExportChannelsStatusResponse {
      */
     task_id: string;
     /**
-     * 
+     * Date/time of the last update
      * @type {string}
      * @memberof GetExportChannelsStatusResponse
      */
     updated_at: string;
 }
+
+
+/**
+ * @export
+ */
+export const GetExportChannelsStatusResponseStatusEnum = {
+    WAITING: 'waiting',
+    PENDING: 'pending',
+    RUNNING: 'running',
+    COMPLETED: 'completed',
+    FAILED: 'failed',
+    CANCELED: 'canceled'
+} as const;
+export type GetExportChannelsStatusResponseStatusEnum = typeof GetExportChannelsStatusResponseStatusEnum[keyof typeof GetExportChannelsStatusResponseStatusEnum];
+
 /**
  * 
  * @export
@@ -5725,7 +6137,7 @@ export interface GetExportChannelsStatusResponse {
  */
 export interface GetImportResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetImportResponse
      */
@@ -5763,7 +6175,7 @@ export interface GetManyMessagesResponse {
  */
 export interface GetMessageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetMessageResponse
      */
@@ -5989,7 +6401,7 @@ export interface GetReactionsResponse {
  */
 export interface GetRepliesResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof GetRepliesResponse
      */
@@ -6151,7 +6563,7 @@ export interface HideChannelRequest {
  */
 export interface HideChannelResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof HideChannelResponse
      */
@@ -6332,25 +6744,25 @@ export interface ImageUploadRequest {
  */
 export interface ImageUploadResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ImageUploadResponse
      */
     duration: string;
     /**
-     * URL to the uploaded asset. Should be used to put to `asset_url` attachment field
+     * 
      * @type {string}
      * @memberof ImageUploadResponse
      */
     file?: string;
     /**
-     * URL of the file thumbnail for supported file formats. Should be put to `thumb_url` attachment field
+     * 
      * @type {string}
      * @memberof ImageUploadResponse
      */
     thumb_url?: string;
     /**
-     * 
+     * Array of image size configurations
      * @type {Array<ImageSize>}
      * @memberof ImageUploadResponse
      */
@@ -6626,12 +7038,12 @@ export interface LimitsSettings {
 export interface ListBlockListResponse {
     /**
      * 
-     * @type {Array<BlockList>}
+     * @type {Array<BlockListResponse>}
      * @memberof ListBlockListResponse
      */
-    blocklists: Array<BlockList>;
+    blocklists: Array<BlockListResponse>;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListBlockListResponse
      */
@@ -6669,7 +7081,7 @@ export interface ListCommandsResponse {
      */
     commands: Array<Command>;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListCommandsResponse
      */
@@ -6701,7 +7113,7 @@ export interface ListDevicesResponse {
  */
 export interface ListExternalStorageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListExternalStorageResponse
      */
@@ -6720,7 +7132,7 @@ export interface ListExternalStorageResponse {
  */
 export interface ListImportsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListImportsResponse
      */
@@ -6739,7 +7151,7 @@ export interface ListImportsResponse {
  */
 export interface ListPermissionsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListPermissionsResponse
      */
@@ -6758,7 +7170,7 @@ export interface ListPermissionsResponse {
  */
 export interface ListPushProvidersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListPushProvidersResponse
      */
@@ -6777,7 +7189,7 @@ export interface ListPushProvidersResponse {
  */
 export interface ListRolesResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ListRolesResponse
      */
@@ -6796,7 +7208,7 @@ export interface ListRolesResponse {
  */
 export interface MarkChannelsReadRequest {
     /**
-     * 
+     * Map of channel ID to last read message ID
      * @type {{ [key: string]: string; }}
      * @memberof MarkChannelsReadRequest
      */
@@ -6852,7 +7264,7 @@ export interface MarkReadRequest {
  */
 export interface MarkReadResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof MarkReadResponse
      */
@@ -6902,7 +7314,7 @@ export interface MarkUnreadRequest {
  */
 export interface MembersResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof MembersResponse
      */
@@ -7253,134 +7665,134 @@ export interface MessageChangeSet {
 /**
  * 
  * @export
- * @interface MessageFlag
+ * @interface MessageFlagResponse
  */
-export interface MessageFlag {
+export interface MessageFlagResponse {
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     approved_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     created_at: string;
     /**
      * 
      * @type {boolean}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     created_by_automod: boolean;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     custom?: { [key: string]: any; };
     /**
      * 
      * @type {FlagDetails}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     details?: FlagDetails;
     /**
      * 
      * @type {Message}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     message?: Message;
     /**
      * 
      * @type {FlagFeedback}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     moderation_feedback?: FlagFeedback;
     /**
      * 
      * @type {MessageModerationResult}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     moderation_result?: MessageModerationResult;
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     reason?: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     rejected_at?: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     reviewed_at?: string;
     /**
      * 
-     * @type {UserObject}
-     * @memberof MessageFlag
+     * @type {UserResponse}
+     * @memberof MessageFlagResponse
      */
-    reviewed_by?: UserObject;
+    reviewed_by?: UserResponse;
     /**
      * 
      * @type {string}
-     * @memberof MessageFlag
+     * @memberof MessageFlagResponse
      */
     updated_at: string;
     /**
      * 
-     * @type {UserObject}
-     * @memberof MessageFlag
+     * @type {UserResponse}
+     * @memberof MessageFlagResponse
      */
-    user?: UserObject;
+    user?: UserResponse;
 }
 /**
  * 
  * @export
- * @interface MessageHistoryEntry
+ * @interface MessageHistoryEntryResponse
  */
-export interface MessageHistoryEntry {
+export interface MessageHistoryEntryResponse {
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     Custom: { [key: string]: any; };
     /**
      * 
      * @type {Array<Attachment>}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     attachments: Array<Attachment>;
     /**
      * 
      * @type {string}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     message_id: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     message_updated_at: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     message_updated_by_id: string;
     /**
      * 
      * @type {string}
-     * @memberof MessageHistoryEntry
+     * @memberof MessageHistoryEntryResponse
      */
     text: string;
 }
@@ -7501,10 +7913,10 @@ export interface MessageReadEvent {
     team?: string;
     /**
      * 
-     * @type {Thread}
+     * @type {ThreadResponse}
      * @memberof MessageReadEvent
      */
-    thread?: Thread;
+    thread?: ThreadResponse;
     /**
      * 
      * @type {string}
@@ -8975,11 +9387,36 @@ export interface PollOptionInput {
 /**
  * 
  * @export
+ * @interface PollOptionRequest
+ */
+export interface PollOptionRequest {
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof PollOptionRequest
+     */
+    custom?: { [key: string]: any; };
+    /**
+     * 
+     * @type {string}
+     * @memberof PollOptionRequest
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PollOptionRequest
+     */
+    text?: string;
+}
+/**
+ * 
+ * @export
  * @interface PollOptionResponse
  */
 export interface PollOptionResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof PollOptionResponse
      */
@@ -9023,7 +9460,7 @@ export interface PollOptionResponseData {
  */
 export interface PollResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof PollResponse
      */
@@ -9073,10 +9510,10 @@ export interface PollResponseData {
     created_at: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof PollResponseData
      */
-    created_by?: UserObject;
+    created_by?: UserResponse;
     /**
      * 
      * @type {string}
@@ -9230,7 +9667,7 @@ export interface PollVote {
  */
 export interface PollVoteResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof PollVoteResponse
      */
@@ -9292,10 +9729,10 @@ export interface PollVoteResponseData {
     updated_at: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof PollVoteResponseData
      */
-    user?: UserObject;
+    user?: UserResponse;
     /**
      * 
      * @type {string}
@@ -9310,7 +9747,7 @@ export interface PollVoteResponseData {
  */
 export interface PollVotesResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof PollVotesResponse
      */
@@ -9328,7 +9765,7 @@ export interface PollVotesResponse {
      */
     prev?: string;
     /**
-     * 
+     * Poll votes
      * @type {Array<PollVoteResponseData>}
      * @memberof PollVotesResponse
      */
@@ -9352,6 +9789,25 @@ export interface PrivacySettings {
      * @memberof PrivacySettings
      */
     typing_indicators?: TypingIndicators;
+}
+/**
+ * 
+ * @export
+ * @interface PrivacySettingsResponse
+ */
+export interface PrivacySettingsResponse {
+    /**
+     * 
+     * @type {ReadReceiptsResponse}
+     * @memberof PrivacySettingsResponse
+     */
+    read_receipts?: ReadReceiptsResponse;
+    /**
+     * 
+     * @type {TypingIndicatorsResponse}
+     * @memberof PrivacySettingsResponse
+     */
+    typing_indicators?: TypingIndicatorsResponse;
 }
 /**
  * 
@@ -9469,6 +9925,25 @@ export interface PushNotificationSettingsInput {
      * @memberof PushNotificationSettingsInput
      */
     disabled_until?: NullTime;
+}
+/**
+ * 
+ * @export
+ * @interface PushNotificationSettingsResponse
+ */
+export interface PushNotificationSettingsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PushNotificationSettingsResponse
+     */
+    disabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof PushNotificationSettingsResponse
+     */
+    disabled_until?: string;
 }
 /**
  * 
@@ -9815,7 +10290,7 @@ export interface PushProviderResponse {
  */
 export interface QueryBannedUsersRequest {
     /**
-     * 
+     * Whether to exclude expired bans or not
      * @type {boolean}
      * @memberof QueryBannedUsersRequest
      */
@@ -9827,23 +10302,23 @@ export interface QueryBannedUsersRequest {
      */
     filter_conditions: { [key: string]: any; };
     /**
-     * 
+     * Number of records to return
      * @type {number}
      * @memberof QueryBannedUsersRequest
      */
     limit?: number;
     /**
-     * 
+     * Number of records to offset
      * @type {number}
      * @memberof QueryBannedUsersRequest
      */
     offset?: number;
     /**
-     * 
-     * @type {Array<SortParam>}
+     * Array of sort parameters
+     * @type {Array<SortParamRequest>}
      * @memberof QueryBannedUsersRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
     /**
      * 
      * @type {UserRequest}
@@ -9864,13 +10339,13 @@ export interface QueryBannedUsersRequest {
  */
 export interface QueryBannedUsersResponse {
     /**
-     * 
+     * List of found bans
      * @type {Array<BanResponse>}
      * @memberof QueryBannedUsersResponse
      */
     bans: Array<BanResponse>;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryBannedUsersResponse
      */
@@ -9914,10 +10389,10 @@ export interface QueryChannelsRequest {
     offset?: number;
     /**
      * List of sort parameters
-     * @type {Array<SortParam>}
+     * @type {Array<SortParamRequest>}
      * @memberof QueryChannelsRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
     /**
      * Whether to update channel state or not
      * @type {boolean}
@@ -9950,7 +10425,7 @@ export interface QueryChannelsResponse {
      */
     channels: Array<ChannelStateResponseFields>;
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryChannelsResponse
      */
@@ -9994,10 +10469,10 @@ export interface QueryMembersRequest {
     offset?: number;
     /**
      * Array of sort parameters
-     * @type {Array<SortParam>}
+     * @type {Array<SortParamRequest>}
      * @memberof QueryMembersRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
     /**
      * Channel type to interact with
      * @type {string}
@@ -10042,7 +10517,7 @@ export interface QueryMessageFlagsRequest {
      */
     offset?: number;
     /**
-     * 
+     * Whether to include deleted messages in the results
      * @type {boolean}
      * @memberof QueryMessageFlagsRequest
      */
@@ -10073,17 +10548,17 @@ export interface QueryMessageFlagsRequest {
  */
 export interface QueryMessageFlagsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryMessageFlagsResponse
      */
     duration: string;
     /**
-     * 
-     * @type {Array<MessageFlag>}
+     * The flags that match the query
+     * @type {Array<MessageFlagResponse>}
      * @memberof QueryMessageFlagsResponse
      */
-    flags: Array<MessageFlag>;
+    flags: Array<MessageFlagResponse>;
 }
 /**
  * 
@@ -10092,7 +10567,7 @@ export interface QueryMessageFlagsResponse {
  */
 export interface QueryMessageHistoryRequest {
     /**
-     * 
+     * Filter to apply to the query
      * @type {{ [key: string]: any; }}
      * @memberof QueryMessageHistoryRequest
      */
@@ -10116,11 +10591,11 @@ export interface QueryMessageHistoryRequest {
      */
     prev?: string;
     /**
-     * 
-     * @type {Array<SortParam>}
+     * Array of sort parameters
+     * @type {Array<SortParamRequest>}
      * @memberof QueryMessageHistoryRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
 }
 /**
  * 
@@ -10129,17 +10604,17 @@ export interface QueryMessageHistoryRequest {
  */
 export interface QueryMessageHistoryResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryMessageHistoryResponse
      */
     duration: string;
     /**
-     * 
-     * @type {Array<MessageHistoryEntry>}
+     * Message history entries
+     * @type {Array<MessageHistoryEntryResponse>}
      * @memberof QueryMessageHistoryResponse
      */
-    message_history: Array<MessageHistoryEntry>;
+    message_history: Array<MessageHistoryEntryResponse>;
     /**
      * 
      * @type {string}
@@ -10160,7 +10635,7 @@ export interface QueryMessageHistoryResponse {
  */
 export interface QueryPollVotesRequest {
     /**
-     * 
+     * Filter to apply to the query
      * @type {{ [key: string]: any; }}
      * @memberof QueryPollVotesRequest
      */
@@ -10184,11 +10659,11 @@ export interface QueryPollVotesRequest {
      */
     prev?: string;
     /**
-     * 
-     * @type {Array<SortParam>}
+     * Array of sort parameters
+     * @type {Array<SortParamRequest>}
      * @memberof QueryPollVotesRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
 }
 /**
  * 
@@ -10197,7 +10672,7 @@ export interface QueryPollVotesRequest {
  */
 export interface QueryPollsRequest {
     /**
-     * 
+     * Filter to apply to the query
      * @type {{ [key: string]: any; }}
      * @memberof QueryPollsRequest
      */
@@ -10221,11 +10696,11 @@ export interface QueryPollsRequest {
      */
     prev?: string;
     /**
-     * 
-     * @type {Array<SortParam>}
+     * Array of sort parameters
+     * @type {Array<SortParamRequest>}
      * @memberof QueryPollsRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
 }
 /**
  * 
@@ -10234,7 +10709,7 @@ export interface QueryPollsRequest {
  */
 export interface QueryPollsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryPollsResponse
      */
@@ -10246,7 +10721,7 @@ export interface QueryPollsResponse {
      */
     next?: string;
     /**
-     * 
+     * Polls data returned by the query
      * @type {Array<PollResponseData>}
      * @memberof QueryPollsResponse
      */
@@ -10290,10 +10765,10 @@ export interface QueryReactionsRequest {
     prev?: string;
     /**
      * 
-     * @type {Array<SortParam>}
+     * @type {Array<SortParamRequest>}
      * @memberof QueryReactionsRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
     /**
      * 
      * @type {UserRequest}
@@ -10314,7 +10789,7 @@ export interface QueryReactionsRequest {
  */
 export interface QueryReactionsResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryReactionsResponse
      */
@@ -10400,7 +10875,7 @@ export interface QueryThreadsRequest {
  */
 export interface QueryThreadsResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryThreadsResponse
      */
@@ -10462,10 +10937,10 @@ export interface QueryUsersPayload {
     presence?: boolean;
     /**
      * 
-     * @type {Array<SortParam>}
+     * @type {Array<SortParamRequest>}
      * @memberof QueryUsersPayload
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
     /**
      * 
      * @type {UserRequest}
@@ -10486,17 +10961,73 @@ export interface QueryUsersPayload {
  */
 export interface QueryUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof QueryUsersResponse
      */
     duration: string;
     /**
-     * 
+     * Array of users as result of filters applied.
      * @type {Array<FullUserResponse>}
      * @memberof QueryUsersResponse
      */
     users: Array<FullUserResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface RTMPLocation
+ */
+export interface RTMPLocation {
+    /**
+     * 
+     * @type {string}
+     * @memberof RTMPLocation
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RTMPLocation
+     */
+    stream_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RTMPLocation
+     */
+    stream_url: string;
+}
+/**
+ * 
+ * @export
+ * @interface RTMPSettings
+ */
+export interface RTMPSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RTMPSettings
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {LayoutSettings}
+     * @memberof RTMPSettings
+     */
+    layout?: LayoutSettings;
+    /**
+     * 
+     * @type {RTMPLocation}
+     * @memberof RTMPSettings
+     */
+    location?: RTMPLocation;
+    /**
+     * 
+     * @type {string}
+     * @memberof RTMPSettings
+     */
+    quality_name?: string;
 }
 /**
  * Represents user reaction to a message
@@ -10591,7 +11122,7 @@ export interface ReactionGroupResponse {
  */
 export interface ReactionRemovalResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ReactionRemovalResponse
      */
@@ -10665,37 +11196,37 @@ export interface ReactionRequest {
  */
 export interface ReactionResponse {
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof ReactionResponse
      */
     created_at: string;
     /**
-     * 
+     * Custom data for this object
      * @type {{ [key: string]: any; }}
      * @memberof ReactionResponse
      */
     custom: { [key: string]: any; };
     /**
-     * 
+     * Message ID
      * @type {string}
      * @memberof ReactionResponse
      */
     message_id: string;
     /**
-     * 
+     * Score of the reaction
      * @type {number}
      * @memberof ReactionResponse
      */
     score: number;
     /**
-     * 
+     * Type of reaction
      * @type {string}
      * @memberof ReactionResponse
      */
     type: string;
     /**
-     * 
+     * Date/time of the last update
      * @type {string}
      * @memberof ReactionResponse
      */
@@ -10707,7 +11238,7 @@ export interface ReactionResponse {
      */
     user: UserResponse;
     /**
-     * 
+     * User ID
      * @type {string}
      * @memberof ReactionResponse
      */
@@ -10745,17 +11276,17 @@ export interface ReactivateUserRequest {
  */
 export interface ReactivateUserResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ReactivateUserResponse
      */
     duration: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof ReactivateUserResponse
      */
-    user?: UserObject;
+    user?: UserResponse;
 }
 /**
  * 
@@ -10795,7 +11326,7 @@ export interface ReactivateUsersRequest {
  */
 export interface ReactivateUsersResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ReactivateUsersResponse
      */
@@ -10848,6 +11379,19 @@ export interface ReadReceipts {
      * 
      * @type {boolean}
      * @memberof ReadReceipts
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ReadReceiptsResponse
+ */
+export interface ReadReceiptsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ReadReceiptsResponse
      */
     enabled: boolean;
 }
@@ -10920,7 +11464,7 @@ export interface RecordSettings {
  */
 export interface Response {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof Response
      */
@@ -11095,10 +11639,10 @@ export interface SearchRequest {
     query?: string;
     /**
      * Sort parameters. Cannot be used with non-zero offset
-     * @type {Array<SortParam>}
+     * @type {Array<SortParamRequest>}
      * @memberof SearchRequest
      */
-    sort?: Array<SortParam>;
+    sort?: Array<SortParamRequest>;
 }
 /**
  * 
@@ -11107,7 +11651,7 @@ export interface SearchRequest {
  */
 export interface SearchResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof SearchResponse
      */
@@ -11491,7 +12035,7 @@ export interface SendMessageRequest {
  */
 export interface SendMessageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof SendMessageResponse
      */
@@ -11503,7 +12047,7 @@ export interface SendMessageResponse {
      */
     message: MessageResponse;
     /**
-     * 
+     * Pending message metadata
      * @type {{ [key: string]: string; }}
      * @memberof SendMessageResponse
      */
@@ -11541,7 +12085,7 @@ export interface SendReactionRequest {
  */
 export interface SendReactionResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof SendReactionResponse
      */
@@ -11598,7 +12142,7 @@ export interface ShowChannelRequest {
  */
 export interface ShowChannelResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof ShowChannelResponse
      */
@@ -11626,6 +12170,25 @@ export interface SortParam {
 /**
  * 
  * @export
+ * @interface SortParamRequest
+ */
+export interface SortParamRequest {
+    /**
+     * Direction of sorting, 1 for Ascending, -1 for Descending, default is 1
+     * @type {number}
+     * @memberof SortParamRequest
+     */
+    direction?: number;
+    /**
+     * Name of field to sort by
+     * @type {string}
+     * @memberof SortParamRequest
+     */
+    field?: string;
+}
+/**
+ * 
+ * @export
  * @interface TargetResolution
  */
 export interface TargetResolution {
@@ -11647,97 +12210,6 @@ export interface TargetResolution {
      * @memberof TargetResolution
      */
     width: number;
-}
-/**
- * Represents a conversation thread linked to a specific message in a channel.
- * @export
- * @interface Thread
- */
-export interface Thread {
-    /**
-     * 
-     * @type {Channel}
-     * @memberof Thread
-     */
-    channel?: Channel;
-    /**
-     * Channel CID is unique string identifier of the channel
-     * @type {string}
-     * @memberof Thread
-     */
-    channel_cid: string;
-    /**
-     * Date/time of creation
-     * @type {string}
-     * @memberof Thread
-     */
-    created_at: string;
-    /**
-     * 
-     * @type {UserObject}
-     * @memberof Thread
-     */
-    created_by?: UserObject;
-    /**
-     * Custom is the custom data of the thread
-     * @type {{ [key: string]: any; }}
-     * @memberof Thread
-     */
-    custom: { [key: string]: any; };
-    /**
-     * Date/time of deletion
-     * @type {string}
-     * @memberof Thread
-     */
-    deleted_at?: string;
-    /**
-     * Last Message At is the time of the last message in the thread
-     * @type {string}
-     * @memberof Thread
-     */
-    last_message_at?: string;
-    /**
-     * 
-     * @type {Message}
-     * @memberof Thread
-     */
-    parent_message?: Message;
-    /**
-     * Parent Message ID is unique string identifier of the parent message
-     * @type {string}
-     * @memberof Thread
-     */
-    parent_message_id: string;
-    /**
-     * The number of participants in the thread
-     * @type {number}
-     * @memberof Thread
-     */
-    participant_count?: number;
-    /**
-     * The number of replies in the thread
-     * @type {number}
-     * @memberof Thread
-     */
-    reply_count?: number;
-    /**
-     * 
-     * @type {Array<ThreadParticipant>}
-     * @memberof Thread
-     */
-    thread_participants?: Array<ThreadParticipant>;
-    /**
-     * Title is the title of the thread
-     * @type {string}
-     * @memberof Thread
-     */
-    title: string;
-    /**
-     * Date/time of the last update
-     * @type {string}
-     * @memberof Thread
-     */
-    updated_at: string;
 }
 /**
  * Represents a user that is participating in a thread.
@@ -11813,19 +12285,25 @@ export interface ThreadParticipant {
  */
 export interface ThreadResponse {
     /**
+     * Active Participant Count
+     * @type {number}
+     * @memberof ThreadResponse
+     */
+    active_participant_count?: number;
+    /**
      * 
      * @type {ChannelResponse}
      * @memberof ThreadResponse
      */
     channel?: ChannelResponse;
     /**
-     * 
+     * Channel CID
      * @type {string}
      * @memberof ThreadResponse
      */
     channel_cid: string;
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof ThreadResponse
      */
@@ -11837,25 +12315,25 @@ export interface ThreadResponse {
      */
     created_by?: UserObject;
     /**
-     * 
+     * Created By User ID
      * @type {string}
      * @memberof ThreadResponse
      */
     created_by_user_id: string;
     /**
-     * 
+     * Custom data for this object
      * @type {{ [key: string]: any; }}
      * @memberof ThreadResponse
      */
     custom: { [key: string]: any; };
     /**
-     * 
+     * Deleted At
      * @type {string}
      * @memberof ThreadResponse
      */
     deleted_at?: string;
     /**
-     * 
+     * Last Message At
      * @type {string}
      * @memberof ThreadResponse
      */
@@ -11867,37 +12345,37 @@ export interface ThreadResponse {
      */
     parent_message?: Message;
     /**
-     * 
+     * Parent Message ID
      * @type {string}
      * @memberof ThreadResponse
      */
     parent_message_id: string;
     /**
-     * 
+     * Participant Count
      * @type {number}
      * @memberof ThreadResponse
      */
     participant_count?: number;
     /**
-     * 
+     * Reply Count
      * @type {number}
      * @memberof ThreadResponse
      */
     reply_count?: number;
     /**
-     * 
+     * Thread Participants
      * @type {Array<ThreadParticipant>}
      * @memberof ThreadResponse
      */
     thread_participants?: Array<ThreadParticipant>;
     /**
-     * 
+     * Title
      * @type {string}
      * @memberof ThreadResponse
      */
     title: string;
     /**
-     * 
+     * Date/time of the last update
      * @type {string}
      * @memberof ThreadResponse
      */
@@ -11909,6 +12387,12 @@ export interface ThreadResponse {
  * @interface ThreadState
  */
 export interface ThreadState {
+    /**
+     * 
+     * @type {number}
+     * @memberof ThreadState
+     */
+    active_participant_count?: number;
     /**
      * 
      * @type {Channel}
@@ -12013,49 +12497,55 @@ export interface ThreadState {
  */
 export interface ThreadStateResponse {
     /**
+     * Active Participant Count
+     * @type {number}
+     * @memberof ThreadStateResponse
+     */
+    active_participant_count?: number;
+    /**
      * 
      * @type {ChannelResponse}
      * @memberof ThreadStateResponse
      */
     channel?: ChannelResponse;
     /**
-     * 
+     * Channel CID
      * @type {string}
      * @memberof ThreadStateResponse
      */
     channel_cid: string;
     /**
-     * 
+     * Date/time of creation
      * @type {string}
      * @memberof ThreadStateResponse
      */
     created_at: string;
     /**
      * 
-     * @type {UserObject}
+     * @type {UserResponse}
      * @memberof ThreadStateResponse
      */
-    created_by?: UserObject;
+    created_by?: UserResponse;
     /**
-     * 
+     * Created By User ID
      * @type {string}
      * @memberof ThreadStateResponse
      */
     created_by_user_id: string;
     /**
-     * 
+     * Custom data for this object
      * @type {{ [key: string]: any; }}
      * @memberof ThreadStateResponse
      */
     custom: { [key: string]: any; };
     /**
-     * 
+     * Deleted At
      * @type {string}
      * @memberof ThreadStateResponse
      */
     deleted_at?: string;
     /**
-     * 
+     * Last Message At
      * @type {string}
      * @memberof ThreadStateResponse
      */
@@ -12073,13 +12563,13 @@ export interface ThreadStateResponse {
      */
     parent_message?: Message;
     /**
-     * 
+     * Parent Message ID
      * @type {string}
      * @memberof ThreadStateResponse
      */
     parent_message_id: string;
     /**
-     * 
+     * Participant Count
      * @type {number}
      * @memberof ThreadStateResponse
      */
@@ -12091,25 +12581,25 @@ export interface ThreadStateResponse {
      */
     read?: Array<Read>;
     /**
-     * 
+     * Reply Count
      * @type {number}
      * @memberof ThreadStateResponse
      */
     reply_count?: number;
     /**
-     * 
+     * Thread Participants
      * @type {Array<ThreadParticipant>}
      * @memberof ThreadStateResponse
      */
     thread_participants?: Array<ThreadParticipant>;
     /**
-     * 
+     * Title
      * @type {string}
      * @memberof ThreadStateResponse
      */
     title: string;
     /**
-     * 
+     * Date/time of the last update
      * @type {string}
      * @memberof ThreadStateResponse
      */
@@ -12323,7 +12813,7 @@ export interface TruncateChannelResponse {
      */
     channel?: ChannelResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof TruncateChannelResponse
      */
@@ -12345,6 +12835,19 @@ export interface TypingIndicators {
      * 
      * @type {boolean}
      * @memberof TypingIndicators
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface TypingIndicatorsResponse
+ */
+export interface TypingIndicatorsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TypingIndicatorsResponse
      */
     enabled: boolean;
 }
@@ -12380,7 +12883,7 @@ export interface UnblockUsersRequest {
  */
 export interface UnblockUsersResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UnblockUsersResponse
      */
@@ -12424,7 +12927,7 @@ export interface UnmuteChannelRequest {
  */
 export interface UnmuteResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UnmuteResponse
      */
@@ -12493,7 +12996,7 @@ export interface UnreadCountsBatchResponse {
      */
     counts_by_user: { [key: string]: UnreadCountsResponse; };
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UnreadCountsBatchResponse
      */
@@ -12631,6 +13134,12 @@ export interface UpdateAppRequest {
     agora_options?: Config;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof UpdateAppRequest
+     */
+    allowed_flag_reasons?: Array<string>;
+    /**
+     * 
      * @type {APNConfig}
      * @memberof UpdateAppRequest
      */
@@ -12703,6 +13212,18 @@ export interface UpdateAppRequest {
     enforce_unique_usernames?: UpdateAppRequestEnforceUniqueUsernamesEnum;
     /**
      * 
+     * @type {boolean}
+     * @memberof UpdateAppRequest
+     */
+    feeds_moderation_enabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppRequest
+     */
+    feeds_v2_region?: string;
+    /**
+     * 
      * @type {FileUploadConfig}
      * @memberof UpdateAppRequest
      */
@@ -12761,6 +13282,18 @@ export interface UpdateAppRequest {
      * @memberof UpdateAppRequest
      */
     migrate_permissions_to_v2?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateAppRequest
+     */
+    moderation_enabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppRequest
+     */
+    moderation_webhook_url?: string;
     /**
      * 
      * @type {boolean}
@@ -12951,17 +13484,17 @@ export interface UpdateChannelPartialResponse {
      */
     channel?: ChannelResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateChannelPartialResponse
      */
     duration: string;
     /**
-     * 
-     * @type {Array<ChannelMember>}
+     * List of updated members
+     * @type {Array<ChannelMemberResponse>}
      * @memberof UpdateChannelPartialResponse
      */
-    members: Array<ChannelMember>;
+    members: Array<ChannelMemberResponse>;
 }
 /**
  * 
@@ -12980,7 +13513,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    add_members?: Array<Partial<ChannelMember>>;
+    add_members?: Array<ChannelMember>;
     /**
      * List of user IDs to make channel moderators
      * @type {Array<string>}
@@ -12992,7 +13525,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    assign_roles?: Array<Partial<ChannelMember>>;
+    assign_roles?: Array<ChannelMember>;
     /**
      * Sets cool down period for the channel in seconds
      * @type {number}
@@ -13022,7 +13555,7 @@ export interface UpdateChannelRequest {
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelRequest
      */
-    invites?: Array<Partial<ChannelMember>>;
+    invites?: Array<ChannelMember>;
     /**
      * 
      * @type {MessageRequest}
@@ -13073,13 +13606,13 @@ export interface UpdateChannelResponse {
      */
     channel?: ChannelResponse;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateChannelResponse
      */
     duration: string;
     /**
-     * 
+     * List of channel members
      * @type {Array<ChannelMember>}
      * @memberof UpdateChannelResponse
      */
@@ -13181,6 +13714,18 @@ export interface UpdateChannelTypeRequest {
      * @memberof UpdateChannelTypeRequest
      */
     mutes?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateChannelTypeRequest
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateChannelTypeRequest
+     */
+    partition_ttl?: string | null;
     /**
      * 
      * @type {Array<PolicyRequest>}
@@ -13394,6 +13939,18 @@ export interface UpdateChannelTypeResponse {
      * @memberof UpdateChannelTypeResponse
      */
     name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateChannelTypeResponse
+     */
+    partition_size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateChannelTypeResponse
+     */
+    partition_ttl?: number;
     /**
      * 
      * @type {Array<PolicyRequest>}
@@ -13617,7 +14174,7 @@ export interface UpdateExternalStorageResponse {
      */
     bucket: string;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateExternalStorageResponse
      */
@@ -13666,7 +14223,7 @@ export interface UpdateMessagePartialRequest {
      */
     set?: { [key: string]: any; };
     /**
-     * 
+     * Skip enriching the URL in the message
      * @type {boolean}
      * @memberof UpdateMessagePartialRequest
      */
@@ -13697,7 +14254,7 @@ export interface UpdateMessagePartialRequest {
  */
 export interface UpdateMessagePartialResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateMessagePartialResponse
      */
@@ -13709,7 +14266,7 @@ export interface UpdateMessagePartialResponse {
      */
     message?: Message;
     /**
-     * 
+     * Pending message metadata
      * @type {{ [key: string]: string; }}
      * @memberof UpdateMessagePartialResponse
      */
@@ -13728,7 +14285,7 @@ export interface UpdateMessageRequest {
      */
     message: MessageRequest;
     /**
-     * 
+     * Skip enrich URL
      * @type {boolean}
      * @memberof UpdateMessageRequest
      */
@@ -13741,7 +14298,7 @@ export interface UpdateMessageRequest {
  */
 export interface UpdateMessageResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateMessageResponse
      */
@@ -13772,13 +14329,13 @@ export interface UpdatePollOptionRequest {
      */
     Custom?: { [key: string]: any; };
     /**
-     * 
+     * Option ID
      * @type {string}
      * @memberof UpdatePollOptionRequest
      */
     id: string;
     /**
-     * 
+     * Option text
      * @type {string}
      * @memberof UpdatePollOptionRequest
      */
@@ -13840,59 +14397,59 @@ export interface UpdatePollRequest {
      */
     Custom?: { [key: string]: any; };
     /**
-     * 
+     * Allow answers
      * @type {boolean}
      * @memberof UpdatePollRequest
      */
     allow_answers?: boolean;
     /**
-     * 
+     * Allow user suggested options
      * @type {boolean}
      * @memberof UpdatePollRequest
      */
     allow_user_suggested_options?: boolean;
     /**
-     * 
+     * Poll description
      * @type {string}
      * @memberof UpdatePollRequest
      */
     description?: string;
     /**
-     * 
+     * Enforce unique vote
      * @type {boolean}
      * @memberof UpdatePollRequest
      */
     enforce_unique_vote?: boolean;
     /**
-     * 
+     * Poll ID
      * @type {string}
      * @memberof UpdatePollRequest
      */
     id: string;
     /**
-     * 
+     * Is closed
      * @type {boolean}
      * @memberof UpdatePollRequest
      */
     is_closed?: boolean;
     /**
-     * 
+     * Max votes allowed
      * @type {number}
      * @memberof UpdatePollRequest
      */
     max_votes_allowed?: number;
     /**
-     * 
+     * Poll name
      * @type {string}
      * @memberof UpdatePollRequest
      */
     name: string;
     /**
-     * 
-     * @type {Array<PollOption>}
+     * Poll options
+     * @type {Array<PollOptionRequest>}
      * @memberof UpdatePollRequest
      */
-    options?: Array<PollOption>;
+    options?: Array<PollOptionRequest>;
     /**
      * 
      * @type {UserRequest}
@@ -13906,7 +14463,7 @@ export interface UpdatePollRequest {
      */
     user_id?: string;
     /**
-     * 
+     * Voting visibility
      * @type {string}
      * @memberof UpdatePollRequest
      */
@@ -13930,13 +14487,13 @@ export type UpdatePollRequestVotingVisibilityEnum = typeof UpdatePollRequestVoti
  */
 export interface UpdateThreadPartialRequest {
     /**
-     * 
+     * Sets new field values
      * @type {{ [key: string]: any; }}
      * @memberof UpdateThreadPartialRequest
      */
     set?: { [key: string]: any; };
     /**
-     * 
+     * Array of field names to unset
      * @type {Array<string>}
      * @memberof UpdateThreadPartialRequest
      */
@@ -13961,7 +14518,7 @@ export interface UpdateThreadPartialRequest {
  */
 export interface UpdateThreadPartialResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateThreadPartialResponse
      */
@@ -14031,7 +14588,7 @@ export interface UpdateUsersRequest {
  */
 export interface UpdateUsersResponse {
     /**
-     * 
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpdateUsersResponse
      */
@@ -14069,7 +14626,7 @@ export interface UpsertPushProviderRequest {
  */
 export interface UpsertPushProviderResponse {
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof UpsertPushProviderResponse
      */
@@ -14138,6 +14695,43 @@ export interface UserMute {
     user?: UserObject;
 }
 /**
+ * 
+ * @export
+ * @interface UserMuteResponse
+ */
+export interface UserMuteResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserMuteResponse
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserMuteResponse
+     */
+    expires?: string;
+    /**
+     * 
+     * @type {UserResponse}
+     * @memberof UserMuteResponse
+     */
+    target?: UserResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserMuteResponse
+     */
+    updated_at: string;
+    /**
+     * 
+     * @type {UserResponse}
+     * @memberof UserMuteResponse
+     */
+    user?: UserResponse;
+}
+/**
  * Represents chat user
  * @export
  * @interface UserObject
@@ -14154,7 +14748,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    banned?: boolean;
+    banned: boolean;
     /**
      * Date/time of creation
      * @type {string}
@@ -14166,7 +14760,7 @@ export interface UserObject {
      * @type {{ [key: string]: any; }}
      * @memberof UserObject
      */
-    custom?: { [key: string]: any; };
+    custom: { [key: string]: any; };
     /**
      * Date of deactivation
      * @type {string}
@@ -14208,7 +14802,7 @@ export interface UserObject {
      * @type {boolean}
      * @memberof UserObject
      */
-    readonly online?: boolean;
+    readonly online: boolean;
     /**
      * 
      * @type {PrivacySettings}
@@ -14232,7 +14826,7 @@ export interface UserObject {
      * @type {string}
      * @memberof UserObject
      */
-    role?: string;
+    role: string;
     /**
      * List of teams user is a part of
      * @type {Array<string>}
@@ -14320,7 +14914,13 @@ export interface UserRequest {
  */
 export interface UserResponse {
     /**
-     * 
+     * Date when ban expires
+     * @type {string}
+     * @memberof UserResponse
+     */
+    ban_expires?: string;
+    /**
+     * Whether a user is banned or not
      * @type {boolean}
      * @memberof UserResponse
      */
@@ -14338,13 +14938,13 @@ export interface UserResponse {
      */
     created_at: string;
     /**
-     * 
+     * Custom data for this object
      * @type {{ [key: string]: any; }}
      * @memberof UserResponse
      */
     custom: { [key: string]: any; };
     /**
-     * 
+     * Date of deactivation
      * @type {string}
      * @memberof UserResponse
      */
@@ -14356,13 +14956,13 @@ export interface UserResponse {
      */
     deleted_at?: string;
     /**
-     * 
+     * List of devices user is using
      * @type {Array<Device>}
      * @memberof UserResponse
      */
     devices: Array<Device>;
     /**
-     * 
+     * Unique user identifier
      * @type {string}
      * @memberof UserResponse
      */
@@ -14380,55 +14980,61 @@ export interface UserResponse {
      */
     invisible: boolean;
     /**
-     * 
+     * Preferred language of a user
      * @type {string}
      * @memberof UserResponse
      */
     language: string;
     /**
-     * 
+     * Date of last activity
      * @type {string}
      * @memberof UserResponse
      */
     last_active?: string;
     /**
-     * 
+     * Optional name of user
      * @type {string}
      * @memberof UserResponse
      */
     name?: string;
     /**
-     * 
+     * Whether a user online or not
      * @type {boolean}
      * @memberof UserResponse
      */
     online: boolean;
     /**
      * 
-     * @type {PushNotificationSettings}
+     * @type {PrivacySettingsResponse}
      * @memberof UserResponse
      */
-    push_notifications?: PushNotificationSettings;
+    privacy_settings?: PrivacySettingsResponse;
     /**
      * 
+     * @type {PushNotificationSettingsResponse}
+     * @memberof UserResponse
+     */
+    push_notifications?: PushNotificationSettingsResponse;
+    /**
+     * Revocation date for tokens
      * @type {string}
      * @memberof UserResponse
      */
     revoke_tokens_issued_before?: string;
     /**
-     * 
+     * Determines the set of user permissions
      * @type {string}
      * @memberof UserResponse
      */
     role: string;
     /**
-     * 
+     * Whether a user is shadow banned
      * @type {boolean}
      * @memberof UserResponse
      */
     shadow_banned: boolean;
     /**
-     * 
+     * List of teams user is a part of
      * @type {Array<string>}
      * @memberof UserResponse
      */
@@ -14642,10 +15248,16 @@ export interface WSEvent {
     team?: string;
     /**
      * 
-     * @type {Thread}
+     * @type {ThreadResponse}
      * @memberof WSEvent
      */
-    thread?: Thread;
+    thread?: ThreadResponse;
+    /**
+     * 
+     * @type {string}
+     * @memberof WSEvent
+     */
+    thread_id?: string;
     /**
      * 
      * @type {string}
@@ -14690,7 +15302,7 @@ export interface WrappedUnreadCountsResponse {
      */
     channels: Array<UnreadCountsChannel>;
     /**
-     * Duration of the request in human-readable format
+     * Duration of the request in milliseconds
      * @type {string}
      * @memberof WrappedUnreadCountsResponse
      */
