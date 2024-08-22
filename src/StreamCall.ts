@@ -16,7 +16,6 @@ import {
   VideoStartRTMPBroadcastsRequest,
   VideoStartRecordingRequest,
   VideoStartTranscriptionRequest,
-  VideoStopRTMPBroadcastsResponse,
   VideoUnblockUserRequest,
   VideoUnpinRequest,
   VideoUpdateCallMembersRequest,
