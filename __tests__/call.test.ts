@@ -201,7 +201,7 @@ describe('call API', () => {
   it('start recording', async () => {
     // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
     await expect(() => call.startRecording()).rejects.toThrowError(
-      'Stream error code 4: StartRecording failed with error: "cannot record inactive call"',
+      'Stream error code 4: StartRecording failed with error: "there is no active session"',
     );
   });
 
@@ -255,7 +255,7 @@ describe('call API', () => {
   it('start transcribing', async () => {
     // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
     await expect(() => call.startTranscription()).rejects.toThrowError(
-      'Stream error code 4: StartTranscription failed with error: "cannot transcribe inactive call"',
+      'Stream error code 4: StartTranscription failed with error: "there is no active session"',
     );
   });
 
