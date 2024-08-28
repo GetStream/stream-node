@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/GetStream/stream-node/compare/v0.3.0...v0.3.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* support modern esm and types resolution ([#48](https://github.com/GetStream/stream-node/issues/48)) ([78e3c9f](https://github.com/GetStream/stream-node/commit/78e3c9f01e907d680e9db4dc802d8fbc0ac4bde6))
+
 ## [0.3.0](https://github.com/GetStream/stream-node/compare/v0.2.6...v0.3.0) (2024-06-28)
 
 
