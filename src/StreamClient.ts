@@ -73,10 +73,57 @@ export class StreamClient extends CommonApi {
 
   /**
    *
+   * @param payload
+   * - user_id - the id of the user the token is for
+   * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
+   * - exp - when the token expires, unix timestamp in seconds
+   * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   */
+  generateUserToken = (
+    payload: {
+      user_id: string;
+      validity_in_seconds?: number;
+      exp?: number;
+      iat?: number;
+    } & { [key: string]: unknown },
+  ) => {
+    const defaultIat = Math.floor((Date.now() - 1000) / 1000);
+    payload.iat = payload.iat ?? defaultIat;
+    const validityInSeconds = payload.validity_in_seconds ?? 60 * 60;
+    payload.exp = payload.exp ?? payload.iat + validityInSeconds;
+
+    return JWTUserToken(this.secret, payload as UserTokenPayload);
+  };
+
+  /**
+   *
+   * @param payload
+   * - user_id - the id of the user the token is for
+   * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
+   * - exp - when the token expires, unix timestamp in seconds
+   * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   */
+  generateCallToken = (
+    payload: {
+      user_id: string;
+      role?: string;
+      call_cids: string[];
+      validity_in_seconds?: number;
+      exp?: number;
+      iat?: number;
+    } & { [key: string]: unknown },
+  ) => {
+    return this.generateUserToken(payload);
+  };
+
+  /**
+   *
    * @param userID
    * @param exp
    * @param iat deprecated, the default date will be set internally
    * @returns
+   *
+   * @deprecated use generateUserToken instead
    */
   createToken = (
     userID: string,
@@ -99,6 +146,8 @@ export class StreamClient extends CommonApi {
    * @param exp
    * @param iat this is deprecated, the current date will be set internally
    * @returns
+   *
+   * @deprecated use generateCallToken instead
    */
   createCallToken = (
     userIdOrObject: string | { user_id: string; role?: string },
