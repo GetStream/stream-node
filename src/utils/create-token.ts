@@ -2,7 +2,12 @@ import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 export function JWTUserToken(
   apiSecret: Secret,
-  payload: { user_id: string; exp: number; iat: number; call_cids?: string[] },
+  payload: {
+    user_id: string;
+    exp: number;
+    iat: number;
+    call_cids?: string[];
+  } & { [key: string]: any },
 ) {
   // make sure we return a clear error when jwt is shimmed (ie. browser build)
   if (jwt == null || jwt.sign == null) {

@@ -2,8 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { CreateRoleRequest } from '../src/gen/chat';
-import { VideoOwnCapability } from '../src/gen/video';
+import { CreateRoleRequest, OwnCapability } from '../src/gen/models';
 
 describe('permissions and app settings API', () => {
   let client: StreamClient;
@@ -41,24 +40,23 @@ describe('permissions and app settings API', () => {
   });
 
   it('update role', async () => {
-    const response = await client.updateAppSettings({
+    const response = await client.updateApp({
       grants: {
-        [role.name]: [VideoOwnCapability.CREATE_CALL],
+        [role.name]: [OwnCapability.CREATE_CALL],
       },
     });
 
     expect(response).toBeDefined();
 
-    // temporary disable due to rate limit issues
-    // const appSettings = await client.getAppSettings();
+    const appSettings = await client.getApp();
 
-    // expect(
-    //   appSettings.app.grants[role.name].includes(VideoOwnCapability.CREATE_CALL)
-    // ).toBe(true);
+    expect(
+      appSettings.app.grants[role.name].includes(OwnCapability.CREATE_CALL),
+    ).toBe(true);
   });
 
   it('delete role', async () => {
-    await client.updateAppSettings({
+    await client.updateApp({
       grants: {
         [role.name]: [],
       },

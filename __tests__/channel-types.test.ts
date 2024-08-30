@@ -1,7 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
-import { CreateChannelTypeRequestAutomodEnum } from '../src/gen/chat/models';
 import { StreamClient } from '../src/StreamClient';
 
 describe('channel types CRUD API', () => {
@@ -15,9 +14,9 @@ describe('channel types CRUD API', () => {
   it('create', async () => {
     const response = await client.chat.createChannelType({
       name: channelType,
-      automod: CreateChannelTypeRequestAutomodEnum.DISABLED,
+      automod: 'disabled',
       automod_behavior: 'block',
-      max_message_length: 1200,
+      max_message_length: 30000,
     });
 
     expect(response.name).toBe(channelType);
@@ -30,20 +29,18 @@ describe('channel types CRUD API', () => {
   });
 
   it('update', async () => {
-    const response = await client.chat.updateChannelType(channelType, {
-      automod: CreateChannelTypeRequestAutomodEnum.SIMPLE,
+    const response = await client.chat.updateChannelType({
+      name: channelType,
+      automod: 'simple',
       automod_behavior: 'block',
-      max_message_length: 1200,
+      max_message_length: 20000,
     });
 
-    expect(response.automod).toBe(CreateChannelTypeRequestAutomodEnum.SIMPLE);
+    expect(response.automod).toBe('simple');
 
     const getResponse = await client.chat.getChannelType({ name: channelType });
 
-    // Property 'automod' does not exist on type 'Response'.
-    expect(getResponse.automod).toBe(
-      CreateChannelTypeRequestAutomodEnum.SIMPLE,
-    );
+    expect(getResponse.automod).toBe('simple');
   });
 
   it('delete', async () => {

@@ -22,25 +22,19 @@ describe('channel API', () => {
   beforeAll(async () => {
     client = createTestClient();
 
-    await client.upsertUsers({
-      users: {
-        [user.id]: { ...user },
-        [user2.id]: { ...user2 },
-      },
-    });
+    await client.upsertUsers([user, user2]);
 
     channel = client.chat.channel('messaging', channelId);
   });
 
   it('create', async () => {
     const response = await channel.getOrCreate({
-      // Type error: Object literal may only specify known properties, and 'name' does not exist in type 'ChannelInput'.
-      data: { created_by_id: user.id, name: channelId },
+      data: { created_by_id: user.id, custom: { name: channelId } },
     });
 
     expect(response.channel?.cid).toBe(`${channel.type}:${channel.id}`);
     // Type error: Property 'name' does not exist on type 'ChannelResponse'
-    expect(response.channel?.name).toBe(channelId);
+    expect(response.channel?.custom?.name).toBe(channelId);
   });
 
   it('create - without id', async () => {
@@ -48,8 +42,6 @@ describe('channel API', () => {
     const response = await channelWithoutId.getOrCreate({
       data: {
         created_by_id: user.id,
-        // Type error: Type '{ user_id: string; }' is missing the following properties from type 'ChannelMember':
-        // banned, channel_role, created_at, notifications_muted, and 2 more.
         members: [{ user_id: user.id }, { user_id: user2.id }],
       },
     });
@@ -71,7 +63,7 @@ describe('channel API', () => {
   });
 
   it('update partial', async () => {
-    const response = await channel.updatePartial({
+    const response = await channel.updateChannelPartial({
       set: { cooldown: 100 },
       unset: [],
     });
@@ -92,13 +84,15 @@ describe('channel API', () => {
 
     const channelFromResponse = filteredResponse.channels[0];
 
-    expect(channelFromResponse.channel?.name).toBe(channelId);
+    expect(channelFromResponse.channel?.custom?.name).toBe(channelId);
   });
 
   it('query members', async () => {
     const response = await channel.queryMembers({
-      filter_conditions: {
-        name: { $autocomplete: '2' },
+      payload: {
+        filter_conditions: {
+          name: { $autocomplete: '2' },
+        },
       },
     });
 
@@ -126,11 +120,17 @@ describe('channel API', () => {
   });
 
   it('mute and unmute', async () => {
-    const muteResponse = await channel.mute({ user_id: user2.id });
+    const muteResponse = await client.chat.muteChannel({
+      user_id: user2.id,
+      channel_cids: [channel.cid],
+    });
 
     expect(muteResponse.channel_mute?.channel?.id).toBe(channel.id);
 
-    await channel.unmute({ user_id: user2.id });
+    await client.chat.unmuteChannel({
+      user_id: user2.id,
+      channel_cids: [channel.cid],
+    });
 
     const queryResponse = await client.chat.queryChannels({
       filter_conditions: { muted: true },
@@ -147,7 +147,7 @@ describe('channel API', () => {
     const response = await client.chat.exportChannels({
       channels: [{ cid: channel.cid }],
     });
-    const statusResponse = await client.chat.getExportStatus({
+    const statusResponse = await client.chat.getExportChannelsStatus({
       id: response.task_id,
     });
 
@@ -155,9 +155,11 @@ describe('channel API', () => {
   });
 
   it('custom event', async () => {
-    const response = await channel.sendCustomEvent({
-      type: 'my-event',
-      user_id: user.id,
+    const response = await channel.sendEvent({
+      event: {
+        type: 'my-event',
+        user_id: user.id,
+      },
     });
 
     expect(response.event?.type).toBe('my-event');

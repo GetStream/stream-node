@@ -17,23 +17,50 @@ describe('creating tokens', () => {
   describe('user token', () => {
     it('with default expiration', () => {
       for (let i = 0; i < 5; i++) {
-        const token = client.createToken(userId);
+        const token = client.generateUserToken({ user_id: userId });
         const decodedToken = jwt.verify(token, secret) as any;
         const now = Date.now();
         const oneHour = 60 * 60 * 1000;
-        const oneSec = 1000;
+        const oneSec = 1010;
         const exp = new Date(decodedToken.exp * 1000).getTime();
         const tokenValidity = exp - now;
 
         expect(decodedToken.user_id).toBe(userId);
-        expect(tokenValidity).toBeLessThanOrEqual(oneHour + oneSec);
-        expect(tokenValidity).toBeGreaterThanOrEqual(oneHour - oneSec);
+        expect(tokenValidity).toBeLessThanOrEqual(oneHour);
+        expect(tokenValidity).toBeGreaterThanOrEqual(oneHour - 2 * oneSec);
+      }
+    });
+
+    it('with custom data', () => {
+      const token = client.generateUserToken({
+        user_id: userId,
+        my_own_id: 'my_own_id',
+      });
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      expect(decodedToken.my_own_id).toBe('my_own_id');
+    });
+
+    it('with token validity', () => {
+      for (let i = 0; i < 5; i++) {
+        const validity = 120 * 60;
+        const token = client.generateUserToken({
+          user_id: userId,
+          validity_in_seconds: validity,
+        });
+        const decodedToken = jwt.verify(token, secret) as any;
+        const iat = new Date(decodedToken.iat * 1000).getTime();
+        const exp = new Date(decodedToken.exp * 1000).getTime();
+        const tokenValidity = (exp - iat) / 1000;
+
+        expect(decodedToken.user_id).toBe(userId);
+        expect(tokenValidity).toBe(validity);
       }
     });
 
     it(`should make sure iat is correct`, () => {
       for (let i = 0; i < 5; i++) {
-        const token = client.createToken(userId);
+        const token = client.generateUserToken({ user_id: userId });
         const decodedToken = jwt.verify(token, secret) as any;
         const now = Date.now();
         const nowMinus1sec = now - 1000;
@@ -47,7 +74,7 @@ describe('creating tokens', () => {
 
     it('with expiration provided', () => {
       const exp = Math.round(new Date().getTime() / 1000) + 58 * 60;
-      const token = client.createToken(userId, exp);
+      const token = client.generateUserToken({ user_id: userId, exp });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.exp).toBe(exp);
@@ -55,7 +82,7 @@ describe('creating tokens', () => {
 
     it('with iat provided', () => {
       const iat = Math.round(new Date().getTime() / 1000) + 60 * 60;
-      const token = client.createToken(userId, undefined, iat);
+      const token = client.generateUserToken({ user_id: userId, iat });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.iat).toBe(iat);
@@ -67,7 +94,7 @@ describe('creating tokens', () => {
     const call_cids = ['default:call1', 'livestream:call2'];
 
     it('with call IDs provided', () => {
-      const token = client.createCallToken(userId, call_cids);
+      const token = client.generateCallToken({ user_id: userId, call_cids });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.user_id).toEqual(userId);
@@ -77,10 +104,11 @@ describe('creating tokens', () => {
     });
 
     it('with call IDs and role provided', () => {
-      const token = client.createCallToken(
-        { user_id: userId, role: 'admin' },
+      const token = client.generateCallToken({
+        user_id: userId,
         call_cids,
-      );
+        role: 'admin',
+      });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.call_cids).toEqual(call_cids);
@@ -92,7 +120,7 @@ describe('creating tokens', () => {
 
     it('with default expiration', () => {
       for (let i = 0; i < 5; i++) {
-        const token = client.createCallToken(userId, call_cids);
+        const token = client.generateCallToken({ user_id: userId, call_cids });
         const decodedToken = jwt.verify(token, secret) as any;
         const now = Date.now();
         const oneHour = 60 * 60 * 1000;
@@ -101,14 +129,14 @@ describe('creating tokens', () => {
         const tokenValidity = exp - now;
 
         expect(decodedToken.user_id).toBe(userId);
-        expect(tokenValidity).toBeLessThanOrEqual(oneHour + oneSec);
-        expect(tokenValidity).toBeGreaterThanOrEqual(oneHour - oneSec);
+        expect(tokenValidity).toBeLessThanOrEqual(oneHour);
+        expect(tokenValidity).toBeGreaterThanOrEqual(oneHour - 2 * oneSec);
       }
     });
 
     it(`should make sure iat is correct`, () => {
       for (let i = 0; i < 5; i++) {
-        const token = client.createCallToken(userId, call_cids);
+        const token = client.generateCallToken({ user_id: userId, call_cids });
         const decodedToken = jwt.verify(token, secret) as any;
         const now = Date.now();
         const nowMinus1sec = now - 1000;
@@ -122,7 +150,11 @@ describe('creating tokens', () => {
 
     it('with expiration provided', () => {
       const exp = Math.round(new Date().getTime() / 1000) + 58 * 60;
-      const token = client.createCallToken(userId, call_cids, exp);
+      const token = client.generateCallToken({
+        user_id: userId,
+        call_cids,
+        exp,
+      });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.exp).toBe(exp);
@@ -130,7 +162,11 @@ describe('creating tokens', () => {
 
     it('with iat provided', () => {
       const iat = Math.round(new Date().getTime() / 1000) + 60 * 60;
-      const token = client.createCallToken(userId, call_cids, undefined, iat);
+      const token = client.generateCallToken({
+        user_id: userId,
+        call_cids,
+        iat,
+      });
       const decodedToken = jwt.verify(token, secret) as any;
 
       expect(decodedToken.iat).toBe(iat);

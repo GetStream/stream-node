@@ -4,6 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: ["standard-with-typescript", "prettier"],
+  plugins: ["unused-imports"],
   overrides: [
     {
       env: {
@@ -33,5 +34,19 @@ module.exports = {
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-confusing-void-expression": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "error",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
+    "@typescript-eslint/no-empty-interface": "off",
+    eqeqeq: ["error", "smart"],
   },
 };

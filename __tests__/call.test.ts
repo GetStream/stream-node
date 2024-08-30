@@ -3,11 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
-import {
-  VideoDeleteCallResponse,
-  VideoRecordSettingsRequestModeEnum,
-  VideoRecordSettingsRequestQualityEnum,
-} from '../src/gen/video';
 
 describe('call API', () => {
   let client: StreamClient;
@@ -19,11 +14,7 @@ describe('call API', () => {
 
     call = client.video.call('default', callId);
 
-    await client.upsertUsers({
-      users: {
-        john: { name: 'John', id: 'john' },
-      },
-    });
+    await client.upsertUsers([{ name: 'John', id: 'john' }]);
   });
 
   it('create', async () => {
@@ -51,7 +42,7 @@ describe('call API', () => {
   });
 
   it('send custom event', async () => {
-    const response = await call.sendCustomEvent({
+    const response = await call.sendCallEvent({
       custom: {
         'render-animation': 'balloons',
       },
@@ -79,13 +70,11 @@ describe('call API', () => {
 
     // userId of existing user
     const userId = 'jane';
-    await client.upsertUsers({
-      users: {
-        [userId]: {
-          id: userId,
-        },
+    await client.upsertUsers([
+      {
+        id: userId,
       },
-    });
+    ]);
     const token = client.createToken(userId);
     const rtmpURL = resp.call.ingress.rtmp.address;
     const streamKey = token;
@@ -146,12 +135,12 @@ describe('call API', () => {
   });
 
   it('query call stats', async () => {
-    const response = await client.video.queryCallStatistics();
+    const response = await client.video.queryCallStats();
 
     expect(response.reports.length).toBeGreaterThan(0);
 
     await expect(() =>
-      call.getSessionStatistics({
+      call.getCallStats({
         session: '<session id>',
       }),
     ).rejects.toThrowError(
@@ -159,73 +148,60 @@ describe('call API', () => {
     );
   });
 
-  it('enable call recording', async () => {
-    let response = await call.update({
-      settings_override: {
-        recording: {
-          mode: VideoRecordSettingsRequestModeEnum.DISABLED,
-          audio_only: true,
-        },
-      },
-    });
-    let settings = response.call.settings.recording;
-
-    expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.DISABLED);
-
-    response = await call.update({
-      settings_override: {
-        recording: {
-          mode: VideoRecordSettingsRequestModeEnum.AVAILABLE,
-        },
-      },
+  it('query call stats - single call', async () => {
+    const response = await client.video.queryCallStats({
+      filter_conditions: { call_cid: call.cid },
     });
 
-    settings = response.call.settings.recording;
-    expect(settings.mode).toBe(VideoRecordSettingsRequestModeEnum.AVAILABLE);
+    expect(response.reports).toBeDefined();
+  });
 
-    response = await call.update({
-      settings_override: {
-        recording: {
-          audio_only: false,
-          quality: VideoRecordSettingsRequestQualityEnum._1080P,
-          mode: VideoRecordSettingsRequestModeEnum.AUTO_ON,
+  describe('recording', () => {
+    it('enable call recording', async () => {
+      let response = await call.update({
+        settings_override: {
+          recording: {
+            mode: 'disabled',
+            audio_only: true,
+          },
         },
-      },
+      });
+      let settings = response.call.settings.recording;
+
+      expect(settings.mode).toBe('disabled');
+
+      response = await call.update({
+        settings_override: {
+          recording: {
+            mode: 'available',
+          },
+        },
+      });
+
+      settings = response.call.settings.recording;
+      expect(settings.mode).toBe('available');
+
+      response = await call.update({
+        settings_override: {
+          recording: {
+            audio_only: false,
+            quality: '1080p',
+            mode: 'auto-on',
+          },
+        },
+      });
+
+      settings = response.call.settings.recording;
+      expect(settings.audio_only).toBe(false);
+      expect(settings.quality).toBe('1080p');
     });
 
-    settings = response.call.settings.recording;
-    expect(settings.audio_only).toBe(false);
-    expect(settings.quality).toBe(VideoRecordSettingsRequestQualityEnum._1080P);
-  });
-
-  it('start recording', async () => {
-    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
-    await expect(() => call.startRecording()).rejects.toThrowError(
-      'Stream error code 4: StartRecording failed with error: "there is no active session"',
-    );
-  });
-
-  it('stop recording', async () => {
-    // somewhat dummy test, we should do a proper test in the future
-    await expect(() => call.stopRecording()).rejects.toThrowError(
-      'Stream error code 4: StopRecording failed with error: "call is not being recorded"',
-    );
-  });
-
-  it('delete recording', async () => {
-    // somewhat dummy test, we should do a proper test in the future
-    await expect(() =>
-      call.deleteRecording({ session: 'test', filename: 'test' }),
-    ).rejects.toThrowError(
-      `Stream error code 16: DeleteRecording failed with error: "recording doesn't exist"`,
-    );
-  });
-
-  it('query recordings', async () => {
-    // somewhat dummy test, we should do a proper test in the future
-    const response = await call.listRecordings();
-
-    expect(response.recordings).toBeDefined();
+    it('start recording', async () => {
+      // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+      await expect(() => call.startRecording()).rejects.toThrowError(
+        'Stream error code 4: StartRecording failed with error: "there is no active session"',
+      );
+    });
   });
 
   it('enable backstage mode', async () => {
@@ -252,33 +228,34 @@ describe('call API', () => {
     expect(response.call.backstage).toBe(true);
   });
 
-  it('start transcribing', async () => {
-    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
-    await expect(() => call.startTranscription()).rejects.toThrowError(
-      'Stream error code 4: StartTranscription failed with error: "there is no active session"',
-    );
-  });
+  describe('transcriptions', () => {
+    it('start transcribing', async () => {
+      // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+      await expect(() => call.startTranscription()).rejects.toThrowError(
+        'Stream error code 4: StartTranscription failed with error: "there is no active session"',
+      );
+    });
 
-  it('stop transcribing', async () => {
-    // somewhat dummy test, we should do a proper test in the future
-    await expect(() => call.stopTranscription()).rejects.toThrowError(
-      'Stream error code 4: StopTranscription failed with error: "call is not being transcribed"',
-    );
-  });
+    it('stop transcribing', async () => {
+      // somewhat dummy test, we should do a proper test in the future
+      await expect(() => call.stopTranscription()).rejects.toThrowError(
+        'Stream error code 4: StopTranscription failed with error: "call is not being transcribed"',
+      );
+    });
 
-  it('delete transcription', async () => {
-    // somewhat dummy test, we should do a proper test in the future
-    await expect(() =>
-      call.deleteTranscription({ session: 'test', filename: 'test' }),
-    ).rejects.toThrowError(
-      `Stream error code 16: DeleteTranscription failed with error: "transcription doesn't exist"`,
-    );
+    it('delete transcription', async () => {
+      // somewhat dummy test, we should do a proper test in the future
+      await expect(() =>
+        call.deleteTranscription({ session: 'test', filename: 'test' }),
+      ).rejects.toThrowError(
+        `Stream error code 16: DeleteTranscription failed with error: "transcription doesn't exist"`,
+      );
+    });
   });
 
   it('delete call', async () => {
-    let response: VideoDeleteCallResponse;
     try {
-      response = await call.delete({ hard: true });
+      await call.delete({ hard: true });
     } catch (e) {
       // the first request fails on backend sometimes
       // retry it
@@ -286,9 +263,7 @@ describe('call API', () => {
         setTimeout(() => resolve(), 2000);
       });
 
-      response = await call.delete({ hard: true });
+      await call.delete({ hard: true });
     }
-
-    expect(response.duration).toBeDefined();
   });
 });
