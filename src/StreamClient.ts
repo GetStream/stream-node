@@ -85,7 +85,7 @@ export class StreamClient extends CommonApi {
       validity_in_seconds?: number;
       exp?: number;
       iat?: number;
-    } & { [key: string]: unknown },
+    } & Record<string, unknown>,
   ) => {
     const defaultIat = Math.floor((Date.now() - 1000) / 1000);
     payload.iat = payload.iat ?? defaultIat;
@@ -111,7 +111,7 @@ export class StreamClient extends CommonApi {
       validity_in_seconds?: number;
       exp?: number;
       iat?: number;
-    } & { [key: string]: unknown },
+    } & Record<string, unknown>,
   ) => {
     return this.generateUserToken(payload);
   };
