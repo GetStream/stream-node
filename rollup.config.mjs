@@ -1,7 +1,9 @@
 import typescript from "@rollup/plugin-typescript";
 import replace from "@rollup/plugin-replace";
 
-import pkg from "./package.json" with { type: "json" };
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pkg = require("./package.json");
 
 const nodeConfig = {
   input: "index.ts",
