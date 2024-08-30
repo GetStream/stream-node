@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/GetStream/stream-node/compare/v0.3.1...v0.4.0) (2024-08-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39))
+
+### Features
+
+* use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39)) ([1bba83d](https://github.com/GetStream/stream-node/commit/1bba83dd3f5536c4989c4d566c1969bce3b29423))
+
 ## [0.3.1](https://github.com/GetStream/stream-node/compare/v0.3.0...v0.3.1) (2024-08-28)
 
 
