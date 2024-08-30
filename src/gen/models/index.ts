@@ -953,10 +953,6 @@ export interface ChannelConfig {
 
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
 
-  partition_size?: number;
-
-  partition_ttl?: number;
-
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -1075,7 +1071,7 @@ export interface ChannelInput {
 
   config_overrides?: ChannelConfig;
 
-  created_by?: UserObject;
+  created_by?: UserRequest;
 
   custom?: Record<string, any>;
 }
