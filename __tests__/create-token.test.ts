@@ -31,6 +31,16 @@ describe('creating tokens', () => {
       }
     });
 
+    it('with custom data', () => {
+      const token = client.generateUserToken({
+        user_id: userId,
+        my_own_id: 'my_own_id',
+      });
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      expect(decodedToken.my_own_id).toBe('my_own_id');
+    });
+
     it('with token validity', () => {
       for (let i = 0; i < 5; i++) {
         const validity = 120 * 60;
