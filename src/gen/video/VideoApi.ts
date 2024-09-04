@@ -457,7 +457,7 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  startRTMPBroadcast = async (
+  startRTMPBroadcasts = async (
     request: StartRTMPBroadcastsRequest & { type: string; id: string },
   ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
     const pathParams = {
@@ -465,11 +465,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
     const body = {
-      name: request?.name,
-      stream_url: request?.stream_url,
-      quality: request?.quality,
-      stream_key: request?.stream_key,
-      layout: request?.layout,
+      broadcasts: request?.broadcasts,
     };
 
     const response = await this.sendRequest<
