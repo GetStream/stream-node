@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/GetStream/stream-node/compare/v0.4.0...v0.4.1) (2024-09-09)
+
+
+### Features
+
+* RTMP broadcasts list endpoint ([#53](https://github.com/GetStream/stream-node/issues/53)) ([8851dab](https://github.com/GetStream/stream-node/commit/8851dab3f5afd6f6739518b4d38c1baeeb5c79a9))
+
 ## [0.4.0](https://github.com/GetStream/stream-node/compare/v0.3.1...v0.4.0) (2024-08-30)
 
 
