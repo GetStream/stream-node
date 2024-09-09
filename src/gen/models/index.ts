@@ -4712,6 +4712,28 @@ export interface QueueStatsResponse {
   time_to_action_buckets: Record<string, number>;
 }
 
+export interface RTMPBroadcastRequest {
+  name: string;
+
+  stream_url: string;
+
+  quality?:
+    | '360p'
+    | '480p'
+    | '720p'
+    | '1080p'
+    | '1440p'
+    | 'portrait-360x640'
+    | 'portrait-480x854'
+    | 'portrait-720x1280'
+    | 'portrait-1080x1920'
+    | 'portrait-1440x2560';
+
+  stream_key?: string;
+
+  layout?: LayoutSettingsRequest;
+}
+
 export interface RTMPIngress {
   address: string;
 }
@@ -5283,25 +5305,7 @@ export interface StartHLSBroadcastingResponse {
 }
 
 export interface StartRTMPBroadcastsRequest {
-  name: string;
-
-  stream_url: string;
-
-  quality?:
-    | '360p'
-    | '480p'
-    | '720p'
-    | '1080p'
-    | '1440p'
-    | 'portrait-360x640'
-    | 'portrait-480x854'
-    | 'portrait-720x1280'
-    | 'portrait-1080x1920'
-    | 'portrait-1440x2560';
-
-  stream_key?: string;
-
-  layout?: LayoutSettingsRequest;
+  broadcasts: RTMPBroadcastRequest[];
 }
 
 export interface StartRTMPBroadcastsResponse {

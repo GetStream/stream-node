@@ -164,10 +164,10 @@ export class CallApi {
     return this.videoApi.listRecordings({ id: this.id, type: this.type });
   };
 
-  startRTMPBroadcast = (
+  startRTMPBroadcasts = (
     request: StartRTMPBroadcastsRequest,
   ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
-    return this.videoApi.startRTMPBroadcast({
+    return this.videoApi.startRTMPBroadcasts({
       id: this.id,
       type: this.type,
       ...request,
