@@ -104,6 +104,7 @@ export class ModerationApi extends BaseApi {
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
       go_og_le_vision_config: request?.go_og_le_vision_config,
+      velocity_filter_config: request?.velocity_filter_config,
     };
 
     const response = await this.sendRequest<
@@ -362,6 +363,7 @@ export class ModerationApi extends BaseApi {
       user_id: request?.user_id,
       ban: request?.ban,
       custom: request?.custom,
+      delete_activity: request?.delete_activity,
       delete_message: request?.delete_message,
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,

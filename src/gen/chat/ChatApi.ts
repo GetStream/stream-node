@@ -48,12 +48,12 @@ import {
   PollResponse,
   PollVoteResponse,
   PollVotesResponse,
-  QueryBannedUsersRequest,
+  QueryBannedUsersPayload,
   QueryBannedUsersResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
-  QueryMembersRequest,
-  QueryMessageFlagsRequest,
+  QueryMembersPayload,
+  QueryMessageFlagsPayload,
   QueryMessageFlagsResponse,
   QueryMessageHistoryRequest,
   QueryMessageHistoryResponse,
@@ -66,7 +66,7 @@ import {
   QueryThreadsResponse,
   ReactionRemovalResponse,
   Response,
-  SearchRequest,
+  SearchPayload,
   SearchResponse,
   SendEventRequest,
   SendMessageRequest,
@@ -92,6 +92,8 @@ import {
   UpdateChannelTypeResponse,
   UpdateCommandRequest,
   UpdateCommandResponse,
+  UpdateMemberPartialRequest,
+  UpdateMemberPartialResponse,
   UpdateMessagePartialRequest,
   UpdateMessagePartialResponse,
   UpdateMessageRequest,
@@ -436,6 +438,38 @@ export class ChatApi extends BaseApi {
     );
 
     decoders.ImageUploadResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  updateMemberPartial = async (
+    request: UpdateMemberPartialRequest & {
+      user_id: string;
+      type: string;
+      id: string;
+    },
+  ): Promise<StreamResponse<UpdateMemberPartialResponse>> => {
+    const pathParams = {
+      user_id: request?.user_id,
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      unset: request?.unset,
+      set: request?.set,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<UpdateMemberPartialResponse>
+    >(
+      'PATCH',
+      '/api/v2/chat/channels/{type}/{id}/member/{user_id}',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.UpdateMemberPartialResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -900,7 +934,7 @@ export class ChatApi extends BaseApi {
   };
 
   queryMembers = async (request?: {
-    payload?: QueryMembersRequest;
+    payload?: QueryMembersPayload;
   }): Promise<StreamResponse<MembersResponse>> => {
     const queryParams = {
       payload: request?.payload,
@@ -1329,7 +1363,7 @@ export class ChatApi extends BaseApi {
   };
 
   queryMessageFlags = async (request?: {
-    payload?: QueryMessageFlagsRequest;
+    payload?: QueryMessageFlagsPayload;
   }): Promise<StreamResponse<QueryMessageFlagsResponse>> => {
     const queryParams = {
       payload: request?.payload,
@@ -1690,7 +1724,7 @@ export class ChatApi extends BaseApi {
   };
 
   queryBannedUsers = async (request?: {
-    payload?: QueryBannedUsersRequest;
+    payload?: QueryBannedUsersPayload;
   }): Promise<StreamResponse<QueryBannedUsersResponse>> => {
     const queryParams = {
       payload: request?.payload,
@@ -1706,7 +1740,7 @@ export class ChatApi extends BaseApi {
   };
 
   search = async (request?: {
-    payload?: SearchRequest;
+    payload?: SearchPayload;
   }): Promise<StreamResponse<SearchResponse>> => {
     const queryParams = {
       payload: request?.payload,
