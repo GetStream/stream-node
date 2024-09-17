@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/GetStream/stream-node/compare/v0.4.1...v0.4.2) (2024-09-17)
+
+
+### Bug Fixes
+
+* parse non-JSON response objects correctly ([#56](https://github.com/GetStream/stream-node/issues/56)) ([232f240](https://github.com/GetStream/stream-node/commit/232f2403899cd95621a47ef021b198f560b5d036))
+
 ## [0.4.1](https://github.com/GetStream/stream-node/compare/v0.4.0...v0.4.1) (2024-09-09)
 
 
