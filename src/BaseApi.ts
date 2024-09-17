@@ -52,11 +52,20 @@ export class BaseApi {
       };
 
       if (response.status < 200 || response.status >= 300) {
-        const error = (await response.json()) as APIError;
+        let error: APIError;
+        try {
+          error = (await response.json()) as APIError;
+        } catch (_) {
+          throw new StreamError(
+            `Stream error: ${response.status} - ${response.statusText}`,
+            metadata,
+            response.status,
+          );
+        }
         throw new StreamError(
-          `Stream error code ${error.code}: ${error.message}`,
+          `Stream error code ${error!.code}: ${error!.message}`,
           metadata,
-          error.code,
+          error!.code,
           undefined,
         );
       }
