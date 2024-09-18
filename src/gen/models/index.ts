@@ -1089,6 +1089,8 @@ export interface ChannelMember {
 
   updated_at: Date;
 
+  custom: Record<string, any>;
+
   ban_expires?: Date;
 
   deleted_at?: Date;
@@ -1120,6 +1122,8 @@ export interface ChannelMemberResponse {
   shadow_banned: boolean;
 
   updated_at: Date;
+
+  custom: Record<string, any>;
 
   ban_expires?: Date;
 
@@ -1225,7 +1229,7 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
-  pending_messages?: PendingMessage[];
+  pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
 
@@ -1251,7 +1255,7 @@ export interface ChannelStateResponseFields {
 
   watcher_count?: number;
 
-  pending_messages?: PendingMessage[];
+  pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
 
@@ -1500,6 +1504,8 @@ export interface ConfigResponse {
   bodyguard_config?: BodyguardConfig;
 
   go_og_le_vision_config?: GoogleVisionConfig;
+
+  velocity_filter_config?: VelocityFilterConfig;
 }
 
 export interface Coordinates {
@@ -1904,7 +1910,9 @@ export interface DeactivateUsersResponse {
   task_id: string;
 }
 
-export interface DeleteActivityRequest {}
+export interface DeleteActivityRequest {
+  hard_delete?: boolean;
+}
 
 export interface DeleteCallRequest {
   hard?: boolean;
@@ -2398,6 +2406,8 @@ export interface FullUserResponse {
   total_unread_count: number;
 
   unread_channels: number;
+
+  unread_count: number;
 
   unread_threads: number;
 
@@ -3369,6 +3379,8 @@ export interface MessageFlagResponse {
 }
 
 export interface MessageHistoryEntryResponse {
+  is_deleted: boolean;
+
   message_id: string;
 
   message_updated_at: Date;
@@ -3641,8 +3653,6 @@ export interface ModerationActionConfig {
 }
 
 export interface ModerationPayload {
-  created_at?: Date;
-
   images?: string[];
 
   texts?: string[];
@@ -3870,14 +3880,14 @@ export interface PaginationParams {
   offset?: number;
 }
 
-export interface PendingMessage {
-  channel?: Channel;
+export interface PendingMessageResponse {
+  channel?: ChannelResponse;
 
-  message?: Message;
+  message?: MessageResponse;
 
   metadata?: Record<string, string>;
 
-  user?: UserObject;
+  user?: UserResponse;
 }
 
 export interface Permission {
@@ -4306,7 +4316,7 @@ export interface PushProviderResponse {
   xiaomi_package_name?: string;
 }
 
-export interface QueryBannedUsersRequest {
+export interface QueryBannedUsersPayload {
   filter_conditions: Record<string, any>;
 
   exclude_expired_bans?: boolean;
@@ -4440,7 +4450,7 @@ export interface QueryFeedModerationTemplatesResponse {
   templates: QueryFeedModerationTemplate[];
 }
 
-export interface QueryMembersRequest {
+export interface QueryMembersPayload {
   type: string;
 
   filter_conditions: Record<string, any>;
@@ -4460,7 +4470,7 @@ export interface QueryMembersRequest {
   user?: UserRequest;
 }
 
-export interface QueryMessageFlagsRequest {
+export interface QueryMessageFlagsPayload {
   limit?: number;
 
   offset?: number;
@@ -5092,7 +5102,7 @@ export interface ScreensharingSettingsResponse {
   target_resolution?: TargetResolution;
 }
 
-export interface SearchRequest {
+export interface SearchPayload {
   filter_conditions: Record<string, any>;
 
   limit?: number;
@@ -5368,7 +5378,7 @@ export interface StopTranscriptionResponse {
 
 export interface SubmitActionRequest {
   action_type:
-    | 'mark_safe'
+    | 'mark_reviewed'
     | 'delete_message'
     | 'delete_activity'
     | 'delete_reaction'
@@ -5386,6 +5396,8 @@ export interface SubmitActionRequest {
   ban?: BanActionRequest;
 
   custom?: CustomActionRequest;
+
+  delete_activity?: DeleteActivityRequest;
 
   delete_message?: DeleteMessageRequest;
 
@@ -5533,7 +5545,7 @@ export interface ThreadStateResponse {
 
   updated_at: Date;
 
-  latest_replies: Message[];
+  latest_replies: MessageResponse[];
 
   custom: Record<string, any>;
 
@@ -5692,7 +5704,7 @@ export interface TruncateChannelResponse {
 
   channel?: ChannelResponse;
 
-  message?: Message;
+  message?: MessageResponse;
 }
 
 export interface TypingIndicators {
@@ -6197,6 +6209,18 @@ export interface UpdateExternalStorageResponse {
   type: 's3' | 'gcs' | 'abs';
 }
 
+export interface UpdateMemberPartialRequest {
+  unset?: string[];
+
+  set?: Record<string, any>;
+}
+
+export interface UpdateMemberPartialResponse {
+  duration: string;
+
+  channel_member?: ChannelMemberResponse;
+}
+
 export interface UpdateMessagePartialRequest {
   skip_enrich_url?: boolean;
 
@@ -6351,6 +6375,8 @@ export interface UpsertConfigRequest {
   bodyguard_config?: BodyguardConfig;
 
   go_og_le_vision_config?: GoogleVisionConfig;
+
+  velocity_filter_config?: VelocityFilterConfig;
 }
 
 export interface UpsertConfigResponse {
@@ -6546,6 +6572,8 @@ export interface UserSessionStats {
 
   max_freezes_duration_seconds: number;
 
+  min_event_ts: number;
+
   packet_loss_fraction: number;
 
   publisher_packet_loss_fraction: number;
@@ -6651,6 +6679,22 @@ export interface UserStats {
   info: UserInfoResponse;
 
   rating?: number;
+}
+
+export interface VelocityFilterConfig {
+  enabled?: boolean;
+
+  rule?: VelocityFilterConfigRule[];
+}
+
+export interface VelocityFilterConfigRule {
+  action: 'flag' | 'shadow' | 'remove' | 'ban';
+
+  ip_ban?: boolean;
+
+  shadow_ban?: boolean;
+
+  timeout?: Date;
 }
 
 export interface VideoQuality {

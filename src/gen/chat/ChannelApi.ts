@@ -27,6 +27,8 @@ import {
   UpdateChannelPartialResponse,
   UpdateChannelRequest,
   UpdateChannelResponse,
+  UpdateMemberPartialRequest,
+  UpdateMemberPartialResponse,
 } from '../models';
 
 export class ChannelApi {
@@ -161,6 +163,21 @@ export class ChannelApi {
       );
     }
     return this.chatApi.uploadImage({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  };
+
+  updateMemberPartial = (
+    request: UpdateMemberPartialRequest & { user_id: string },
+  ): Promise<StreamResponse<UpdateMemberPartialResponse>> => {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+    return this.chatApi.updateMemberPartial({
       id: this.id,
       type: this.type,
       ...request,

@@ -375,7 +375,7 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
 
-    pending_messages: { type: 'PendingMessage', isSingle: false },
+    pending_messages: { type: 'PendingMessageResponse', isSingle: false },
 
     read: { type: 'ReadStateResponse', isSingle: false },
 
@@ -400,7 +400,7 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
 
-    pending_messages: { type: 'PendingMessage', isSingle: false },
+    pending_messages: { type: 'PendingMessageResponse', isSingle: false },
 
     read: { type: 'ReadStateResponse', isSingle: false },
 
@@ -445,6 +445,8 @@ decoders.ConfigResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+
+    velocity_filter_config: { type: 'VelocityFilterConfig', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -569,8 +571,6 @@ decoders.Flag2 = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
-
-    moderation_payload: { type: 'ModerationPayload', isSingle: true },
 
     user: { type: 'UserObject', isSingle: true },
   };
@@ -1057,13 +1057,6 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ModerationPayload = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.ModerationUsageStats = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     updated_at: { type: 'DatetimeType', isSingle: true },
@@ -1121,13 +1114,13 @@ decoders.OwnUser = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.PendingMessage = (input?: Record<string, any>) => {
+decoders.PendingMessageResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    channel: { type: 'Channel', isSingle: true },
+    channel: { type: 'ChannelResponse', isSingle: true },
 
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
 
-    user: { type: 'UserObject', isSingle: true },
+    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1450,8 +1443,6 @@ decoders.ReviewQueueItem = (input?: Record<string, any>) => {
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
 
     message: { type: 'Message', isSingle: true },
-
-    moderation_payload: { type: 'ModerationPayload', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1606,7 +1597,7 @@ decoders.ThreadStateResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    latest_replies: { type: 'Message', isSingle: false },
+    latest_replies: { type: 'MessageResponse', isSingle: false },
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
@@ -1629,7 +1620,7 @@ decoders.TruncateChannelResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     channel: { type: 'ChannelResponse', isSingle: true },
 
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1721,6 +1712,13 @@ decoders.UpdateChannelTypeResponse = (input?: Record<string, any>) => {
 decoders.UpdateCommandResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     command: { type: 'Command', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UpdateMemberPartialResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    channel_member: { type: 'ChannelMemberResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1856,6 +1854,20 @@ decoders.UserResponse = (input?: Record<string, any>) => {
       type: 'PushNotificationSettingsResponse',
       isSingle: true,
     },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.VelocityFilterConfig = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    rule: { type: 'VelocityFilterConfigRule', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.VelocityFilterConfigRule = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    timeout: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

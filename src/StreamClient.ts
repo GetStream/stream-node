@@ -4,7 +4,7 @@ import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
-import { QueryBannedUsersRequest, UserRequest } from './gen/models';
+import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
 
 export interface StreamClientOptions {
@@ -67,7 +67,7 @@ export class StreamClient extends CommonApi {
     return this.updateUsers({ users: payload });
   };
 
-  queryBannedUsers = (request?: { payload?: QueryBannedUsersRequest }) => {
+  queryBannedUsers = (request?: { payload?: QueryBannedUsersPayload }) => {
     return this.chat.queryBannedUsers(request);
   };
 

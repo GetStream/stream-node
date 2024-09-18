@@ -1,5 +1,5 @@
 import { ChannelApi } from './gen/chat/ChannelApi';
-import { ChannelGetOrCreateRequest, QueryMembersRequest } from './gen/models';
+import { ChannelGetOrCreateRequest, QueryMembersPayload } from './gen/models';
 import { OmitTypeId } from './types';
 
 export class StreamChannel extends ChannelApi {
@@ -27,7 +27,7 @@ export class StreamChannel extends ChannelApi {
     }
   };
 
-  queryMembers(request?: { payload?: OmitTypeId<QueryMembersRequest> }) {
+  queryMembers(request?: { payload?: OmitTypeId<QueryMembersPayload> }) {
     return this.chatApi.queryMembers({
       payload: {
         id: this.id,
