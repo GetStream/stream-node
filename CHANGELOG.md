@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/GetStream/stream-node/compare/v0.4.2...v0.4.3) (2024-09-18)
+
+
+### Features
+
+* update to api version 131.1.1 ([#58](https://github.com/GetStream/stream-node/issues/58)) ([6e84e26](https://github.com/GetStream/stream-node/commit/6e84e26ab9ac6c5d0134b80add189976a1914168))
+
 ## [0.4.2](https://github.com/GetStream/stream-node/compare/v0.4.1...v0.4.2) (2024-09-17)
 
 
