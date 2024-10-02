@@ -14,7 +14,7 @@ const nodeConfig = {
       sourcemap: true,
     },
     {
-      file: "dist/index.es.js",
+      file: "dist/index.es.mjs",
       format: "es",
       sourcemap: true,
     },
