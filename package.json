@@ -4,13 +4,13 @@
   "description": "",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": "./dist/index.es.mjs",
       "require": "./dist/index.cjs.js",
       "types": "./dist/index.d.ts"
     }
   },
   "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.es.mjs",
   "types": "dist/index.d.ts",
   "author": "https://getstream.io",
   "license": "See license in LICENSE",
