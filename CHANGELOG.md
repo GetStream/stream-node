@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4](https://github.com/GetStream/stream-node/compare/v0.4.3...v0.4.4) (2024-10-02)
+
+
+### Bug Fixes
+
+* node js esm module import ([#61](https://github.com/GetStream/stream-node/issues/61)) ([3a0d9a6](https://github.com/GetStream/stream-node/commit/3a0d9a61679e249f765912a92613db65963d40da))
+
 ## [0.4.3](https://github.com/GetStream/stream-node/compare/v0.4.2...v0.4.3) (2024-09-18)
 
 
