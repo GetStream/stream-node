@@ -253,6 +253,35 @@ describe('call API', () => {
     });
   });
 
+  it('closed caption settings', async () => {
+    const response = await call.update({
+      settings_override: {
+        transcription: {
+          mode: 'available',
+          closed_caption_mode: 'disabled',
+        },
+      },
+    });
+
+    expect(response.call.settings.transcription.mode).toBe('available');
+    expect(response.call.settings.transcription.closed_caption_mode).toBe(
+      'disabled',
+    );
+    expect(response.call.captioning).toBe(false);
+  });
+
+  it('should start-stop closed captions', async () => {
+    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+    await expect(() => call.startClosedCaptions()).rejects.toThrowError(
+      'Stream error code 4: StartClosedCaptions failed with error: "there is no active session"',
+    );
+
+    // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
+    await expect(() => call.stopClosedCaptions()).rejects.toThrowError(
+      'Stream error code 4: StopClosedCaptions failed with error: "call is not being transcribed"',
+    );
+  });
+
   it('delete call', async () => {
     try {
       await call.delete({ hard: true });
