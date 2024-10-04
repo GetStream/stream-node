@@ -36,6 +36,7 @@ import {
   Response,
   SendCallEventRequest,
   SendCallEventResponse,
+  StartClosedCaptionsResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
@@ -44,6 +45,7 @@ import {
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
+  StopClosedCaptionsResponse,
   StopHLSBroadcastingResponse,
   StopLiveResponse,
   StopRTMPBroadcastsRequest,
@@ -558,6 +560,29 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
+  startClosedCaptions = async (request: {
+    type: string;
+    id: string;
+  }): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StartClosedCaptionsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/start_closed_captions',
+      pathParams,
+      undefined,
+    );
+
+    decoders.StartClosedCaptionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   startRecording = async (
     request: StartRecordingRequest & { type: string; id: string },
   ): Promise<StreamResponse<StartRecordingResponse>> => {
@@ -654,6 +679,29 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.StopHLSBroadcastingResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  stopClosedCaptions = async (request: {
+    type: string;
+    id: string;
+  }): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StopClosedCaptionsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/stop_closed_captions',
+      pathParams,
+      undefined,
+    );
+
+    decoders.StopClosedCaptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

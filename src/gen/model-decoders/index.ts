@@ -371,7 +371,7 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
     pinned_messages: { type: 'MessageResponse', isSingle: false },
 
-    threads: { type: 'ThreadState', isSingle: false },
+    threads: { type: 'ThreadStateResponse', isSingle: false },
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
 
@@ -396,7 +396,7 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
 
     pinned_messages: { type: 'MessageResponse', isSingle: false },
 
-    threads: { type: 'ThreadState', isSingle: false },
+    threads: { type: 'ThreadStateResponse', isSingle: false },
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
 
@@ -1013,7 +1013,7 @@ decoders.MessageResponse = (input?: Record<string, any>) => {
 
     poll: { type: 'Poll', isSingle: true },
 
-    quoted_message: { type: 'Message', isSingle: true },
+    quoted_message: { type: 'MessageResponse', isSingle: true },
 
     reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
   };
@@ -1050,9 +1050,20 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
 
     poll: { type: 'Poll', isSingle: true },
 
-    quoted_message: { type: 'Message', isSingle: true },
+    quoted_message: { type: 'MessageResponse', isSingle: true },
 
     reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ModerationConfig = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    velocity_filter_config: { type: 'VelocityFilterConfig', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1306,6 +1317,13 @@ decoders.QueryMessageHistoryResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.QueryModerationConfigsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    configs: { type: 'ModerationConfig', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.QueryModerationLogsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     l_og_s: { type: 'ActionLogResponse', isSingle: false },
@@ -1469,13 +1487,13 @@ decoders.SearchResultMessage = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    latest_reactions: { type: 'Reaction', isSingle: false },
+    latest_reactions: { type: 'ReactionResponse', isSingle: false },
 
-    mentioned_users: { type: 'UserObject', isSingle: false },
+    mentioned_users: { type: 'UserResponse', isSingle: false },
 
-    own_reactions: { type: 'Reaction', isSingle: false },
+    own_reactions: { type: 'ReactionResponse', isSingle: false },
 
-    reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
+    user: { type: 'UserResponse', isSingle: true },
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
@@ -1485,17 +1503,17 @@ decoders.SearchResultMessage = (input?: Record<string, any>) => {
 
     pinned_at: { type: 'DatetimeType', isSingle: true },
 
-    thread_participants: { type: 'UserObject', isSingle: false },
+    thread_participants: { type: 'UserResponse', isSingle: false },
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
-    pinned_by: { type: 'UserObject', isSingle: true },
+    pinned_by: { type: 'UserResponse', isSingle: true },
 
     poll: { type: 'Poll', isSingle: true },
 
-    quoted_message: { type: 'Message', isSingle: true },
+    quoted_message: { type: 'MessageResponse', isSingle: true },
 
-    user: { type: 'UserObject', isSingle: true },
+    reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -1566,31 +1584,6 @@ decoders.ThreadResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ThreadState = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    latest_replies: { type: 'Message', isSingle: false },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    last_message_at: { type: 'DatetimeType', isSingle: true },
-
-    read: { type: 'Read', isSingle: false },
-
-    thread_participants: { type: 'ThreadParticipant', isSingle: false },
-
-    channel: { type: 'Channel', isSingle: true },
-
-    created_by: { type: 'UserObject', isSingle: true },
-
-    parent_message: { type: 'Message', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.ThreadStateResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1611,7 +1604,7 @@ decoders.ThreadStateResponse = (input?: Record<string, any>) => {
 
     created_by: { type: 'UserResponse', isSingle: true },
 
-    parent_message: { type: 'Message', isSingle: true },
+    parent_message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1695,7 +1688,7 @@ decoders.UpdateChannelResponse = (input?: Record<string, any>) => {
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1725,14 +1718,14 @@ decoders.UpdateMemberPartialResponse = (input?: Record<string, any>) => {
 
 decoders.UpdateMessagePartialResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
 
 decoders.UpdateMessageResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1860,7 +1853,7 @@ decoders.UserResponse = (input?: Record<string, any>) => {
 
 decoders.VelocityFilterConfig = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    rule: { type: 'VelocityFilterConfigRule', isSingle: false },
+    rules: { type: 'VelocityFilterConfigRule', isSingle: false },
   };
   return decode(typeMappings, input);
 };
