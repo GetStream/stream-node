@@ -7,6 +7,7 @@ import {
   CheckResponse,
   CustomCheckRequest,
   CustomCheckResponse,
+  DeleteModerationConfigResponse,
   DeleteModerationTemplateResponse,
   FlagRequest,
   FlagResponse,
@@ -17,6 +18,8 @@ import {
   MuteRequest,
   MuteResponse,
   QueryFeedModerationTemplatesResponse,
+  QueryModerationConfigsRequest,
+  QueryModerationConfigsResponse,
   QueryModerationLogsRequest,
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
@@ -71,6 +74,7 @@ export class ModerationApi extends BaseApi {
       entity_creator_id: request?.entity_creator_id,
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
+      test_mode: request?.test_mode,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
@@ -116,6 +120,22 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
+  deleteConfig = async (request: {
+    key: string;
+  }): Promise<StreamResponse<DeleteModerationConfigResponse>> => {
+    const pathParams = {
+      key: request?.key,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<DeleteModerationConfigResponse>
+    >('DELETE', '/api/v2/moderation/config/{key}', pathParams, undefined);
+
+    decoders.DeleteModerationConfigResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   getConfig = async (request: {
     key: string;
   }): Promise<StreamResponse<GetConfigResponse>> => {
@@ -131,6 +151,28 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.GetConfigResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryModerationConfigs = async (
+    request?: QueryModerationConfigsRequest,
+  ): Promise<StreamResponse<QueryModerationConfigsResponse>> => {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryModerationConfigsResponse>
+    >('POST', '/api/v2/moderation/configs', undefined, undefined, body);
+
+    decoders.QueryModerationConfigsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -367,6 +409,7 @@ export class ModerationApi extends BaseApi {
       delete_message: request?.delete_message,
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,
+      mark_reviewed: request?.mark_reviewed,
       unban: request?.unban,
       user: request?.user,
     };
