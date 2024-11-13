@@ -473,8 +473,6 @@ decoders.ConfigResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
-
-    velocity_filter_config: { type: 'VelocityFilterConfig', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -569,6 +567,13 @@ decoders.Device = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.DeviceResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.EgressRTMPResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     started_at: { type: 'DatetimeType', isSingle: true },
@@ -604,6 +609,8 @@ decoders.EntityCreatorResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+
+    devices: { type: 'DeviceResponse', isSingle: false },
 
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
@@ -684,6 +691,8 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
     updated_at: { type: 'DatetimeType', isSingle: true },
 
     channel_mutes: { type: 'ChannelMute', isSingle: false },
+
+    devices: { type: 'DeviceResponse', isSingle: false },
 
     mutes: { type: 'UserMuteResponse', isSingle: false },
 
@@ -925,6 +934,13 @@ decoders.ListCommandsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ListDevicesResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    devices: { type: 'DeviceResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ListImportsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     import_tasks: { type: 'ImportTask', isSingle: false },
@@ -1148,17 +1164,6 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ModerationConfig = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    velocity_filter_config: { type: 'VelocityFilterConfig', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.ModerationUsageStats = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     reference_date: { type: 'DatetimeType', isSingle: true },
@@ -1227,6 +1232,8 @@ decoders.OwnUserResponse = (input?: Record<string, any>) => {
     updated_at: { type: 'DatetimeType', isSingle: true },
 
     channel_mutes: { type: 'ChannelMute', isSingle: false },
+
+    devices: { type: 'DeviceResponse', isSingle: false },
 
     mutes: { type: 'UserMuteResponse', isSingle: false },
 
@@ -1449,14 +1456,14 @@ decoders.QueryMessageHistoryResponse = (input?: Record<string, any>) => {
 
 decoders.QueryModerationConfigsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    configs: { type: 'ModerationConfig', isSingle: false },
+    configs: { type: 'ConfigResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
 
 decoders.QueryModerationLogsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    l_og_s: { type: 'ActionLogResponse', isSingle: false },
+    logs: { type: 'ActionLogResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2031,6 +2038,8 @@ decoders.UserResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
+    devices: { type: 'DeviceResponse', isSingle: false },
+
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
     deactivated_at: { type: 'DatetimeType', isSingle: true },
@@ -2045,20 +2054,6 @@ decoders.UserResponse = (input?: Record<string, any>) => {
       type: 'PushNotificationSettingsResponse',
       isSingle: true,
     },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.VelocityFilterConfig = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    rules: { type: 'VelocityFilterConfigRule', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.VelocityFilterConfigRule = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    timeout: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

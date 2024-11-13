@@ -70,6 +70,8 @@ export interface AWSRekognitionConfig {
   enabled: boolean;
 
   rules: AWSRekognitionRule[];
+
+  async?: boolean;
 }
 
 export interface AWSRekognitionRule {
@@ -122,6 +124,8 @@ export interface ActionLogResponse {
   id: string;
 
   reason: string;
+
+  target_user_id: string;
 
   type: string;
 
@@ -265,6 +269,10 @@ export interface Attachment {
 
   image_url?: string;
 
+  latitude?: number;
+
+  longitude?: number;
+
   og_scrape_url?: string;
 
   original_height?: number;
@@ -272,6 +280,8 @@ export interface Attachment {
   original_width?: number;
 
   pretext?: string;
+
+  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -354,6 +364,8 @@ export interface AutomodPlatformCircumventionConfig {
   enabled: boolean;
 
   rules: AutomodRule[];
+
+  async?: boolean;
 }
 
 export interface AutomodRule {
@@ -368,6 +380,8 @@ export interface AutomodSemanticFiltersConfig {
   enabled: boolean;
 
   rules: AutomodSemanticFiltersRule[];
+
+  async?: boolean;
 }
 
 export interface AutomodSemanticFiltersRule {
@@ -382,6 +396,8 @@ export interface AutomodToxicityConfig {
   enabled: boolean;
 
   rules: AutomodRule[];
+
+  async?: boolean;
 }
 
 export interface AzureRequest {
@@ -478,6 +494,8 @@ export interface BlockListConfig {
   enabled: boolean;
 
   rules: BlockListRule[];
+
+  async?: boolean;
 }
 
 export interface BlockListOptions {
@@ -550,6 +568,8 @@ export interface BodyguardConfig {
   rules: BodyguardRule[];
 
   severity_rules: BodyguardSeverityRule[];
+
+  async?: boolean;
 }
 
 export interface BodyguardRule {
@@ -933,7 +953,7 @@ export interface CampaignResponse {
 }
 
 export interface CampaignStatsResponse {
-  pr_og_ress: number;
+  progress: number;
 
   stats_channels_created: number;
 
@@ -1031,6 +1051,8 @@ export interface ChannelConfig {
 
   search: boolean;
 
+  skip_last_msg_update_for_system_msgs: boolean;
+
   typing_events: boolean;
 
   updated_at: Date;
@@ -1090,6 +1112,8 @@ export interface ChannelConfigWithInfo {
   replies: boolean;
 
   search: boolean;
+
+  skip_last_msg_update_for_system_msgs: boolean;
 
   typing_events: boolean;
 
@@ -1442,6 +1466,8 @@ export interface ChannelTypeConfig {
 
   search: boolean;
 
+  skip_last_msg_update_for_system_msgs: boolean;
+
   typing_events: boolean;
 
   updated_at: Date;
@@ -1664,13 +1690,13 @@ export interface ConfigResponse {
 
   automod_toxicity_config?: AutomodToxicityConfig;
 
-  aws_rek_og_nition_config?: AWSRekognitionConfig;
+  aws_rekognition_config?: AWSRekognitionConfig;
 
   block_list_config?: BlockListConfig;
 
   bodyguard_config?: BodyguardConfig;
 
-  go_og_le_vision_config?: GoogleVisionConfig;
+  google_vision_config?: GoogleVisionConfig;
 
   velocity_filter_config?: VelocityFilterConfig;
 }
@@ -1682,7 +1708,7 @@ export interface Coordinates {
 }
 
 export interface Count {
-  app_roximate: boolean;
+  approximate: boolean;
 
   value: number;
 }
@@ -1776,6 +1802,8 @@ export interface CreateChannelTypeRequest {
 
   search?: boolean;
 
+  skip_last_msg_update_for_system_msgs?: boolean;
+
   typing_events?: boolean;
 
   uploads?: boolean;
@@ -1827,6 +1855,8 @@ export interface CreateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  skip_last_msg_update_for_system_msgs: boolean;
 
   typing_events: boolean;
 
@@ -2221,6 +2251,24 @@ export interface DeviceErrorInfo {
   provider_name: string;
 }
 
+export interface DeviceResponse {
+  created_at: Date;
+
+  id: string;
+
+  push_provider: string;
+
+  user_id: string;
+
+  disabled?: boolean;
+
+  disabled_reason?: string;
+
+  push_provider_name?: string;
+
+  voip?: boolean;
+}
+
 export interface EdgeResponse {
   continent_code: string;
 
@@ -2260,7 +2308,7 @@ export interface EgressRTMPResponse {
 export interface EgressResponse {
   broadcasting: boolean;
 
-  rtmp_s: EgressRTMPResponse[];
+  rtmps: EgressRTMPResponse[];
 
   hls?: EgressHLSResponse;
 }
@@ -2392,7 +2440,7 @@ export interface EntityCreatorResponse {
 
   blocked_user_ids: string[];
 
-  devices: ResponseForDevice[];
+  devices: DeviceResponse[];
 
   teams: string[];
 
@@ -2716,7 +2764,7 @@ export interface FullUserResponse {
 
   channel_mutes: ChannelMute[];
 
-  devices: ResponseForDevice[];
+  devices: DeviceResponse[];
 
   mutes: UserMuteResponse[];
 
@@ -2908,6 +2956,8 @@ export interface GetChannelTypeResponse {
 
   search: boolean;
 
+  skip_last_msg_update_for_system_msgs: boolean;
+
   typing_events: boolean;
 
   updated_at: Date;
@@ -3036,6 +3086,10 @@ export interface GetOGResponse {
 
   image_url?: string;
 
+  latitude?: number;
+
+  longitude?: number;
+
   og_scrape_url?: string;
 
   original_height?: number;
@@ -3043,6 +3097,8 @@ export interface GetOGResponse {
   original_width?: number;
 
   pretext?: string;
+
+  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -3114,7 +3170,7 @@ export interface GetReviewQueueItemResponse {
 
   history: ReviewQueueItemResponse[];
 
-  item: ReviewQueueItemResponse;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface GetSegmentResponse {
@@ -3416,7 +3472,7 @@ export interface ListCommandsResponse {
 export interface ListDevicesResponse {
   duration: string;
 
-  devices: ResponseForDevice[];
+  devices: DeviceResponse[];
 }
 
 export interface ListExternalStorageResponse {
@@ -3959,32 +4015,6 @@ export interface ModerationActionConfig {
   custom: Record<string, any>;
 }
 
-export interface ModerationConfig {
-  async: boolean;
-
-  created_at: Date;
-
-  key: string;
-
-  updated_at: Date;
-
-  automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
-
-  automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
-
-  automod_toxicity_config?: AutomodToxicityConfig;
-
-  aws_rek_og_nition_config?: AWSRekognitionConfig;
-
-  block_list_config?: BlockListConfig;
-
-  bodyguard_config?: BodyguardConfig;
-
-  go_og_le_vision_config?: GoogleVisionConfig;
-
-  velocity_filter_config?: VelocityFilterConfig;
-}
-
 export interface ModerationPayload {
   images?: string[];
 
@@ -4244,7 +4274,7 @@ export interface OwnUserResponse {
 
   channel_mutes: ChannelMute[];
 
-  devices: ResponseForDevice[];
+  devices: DeviceResponse[];
 
   mutes: UserMuteResponse[];
 
@@ -4956,7 +4986,7 @@ export interface QueryModerationConfigsRequest {
 export interface QueryModerationConfigsResponse {
   duration: string;
 
-  configs: ModerationConfig[];
+  configs: ConfigResponse[];
 
   next?: string;
 
@@ -4982,7 +5012,7 @@ export interface QueryModerationLogsRequest {
 export interface QueryModerationLogsResponse {
   duration: string;
 
-  l_og_s: ActionLogResponse[];
+  logs: ActionLogResponse[];
 
   next?: string;
 
@@ -5052,9 +5082,11 @@ export interface QueryReactionsResponse {
 export interface QueryReviewQueueRequest {
   limit?: number;
 
-  lock_moderator_duration?: number;
+  lock_count?: number;
 
-  lock_moderator_id?: string;
+  lock_duration?: number;
+
+  lock_items?: boolean;
 
   next?: string;
 
@@ -5406,9 +5438,9 @@ export interface ReadStateResponse {
 export interface RecordSettings {
   mode: string;
 
-  quality: string;
-
   audio_only?: boolean;
+
+  quality?: string;
 
   layout?: LayoutSettings;
 }
@@ -5445,24 +5477,6 @@ export interface RecordSettingsResponse {
 
 export interface Response {
   duration: string;
-}
-
-export interface ResponseForDevice {
-  created_at: Date;
-
-  id: string;
-
-  push_provider: string;
-
-  user_id: string;
-
-  disabled?: boolean;
-
-  disabled_reason?: string;
-
-  push_provider_name?: string;
-
-  voip?: boolean;
 }
 
 export interface RestoreActionRequest {}
@@ -5538,6 +5552,8 @@ export interface ReviewQueueItemResponse {
 
   reviewed_by: string;
 
+  severity: number;
+
   status: string;
 
   updated_at: Date;
@@ -5547,6 +5563,8 @@ export interface ReviewQueueItemResponse {
   bans: Ban[];
 
   flags: Flag2Response[];
+
+  languages: string[];
 
   completed_at?: Date;
 
@@ -6671,6 +6689,8 @@ export interface UpdateChannelTypeRequest {
 
   search?: boolean;
 
+  skip_last_msg_update_for_system_msgs?: boolean;
+
   typing_events?: boolean;
 
   uploads?: boolean;
@@ -6726,6 +6746,8 @@ export interface UpdateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  skip_last_msg_update_for_system_msgs: boolean;
 
   typing_events: boolean;
 
@@ -6955,13 +6977,13 @@ export interface UpsertConfigRequest {
 
   automod_toxicity_config?: AutomodToxicityConfig;
 
-  aws_rek_og_nition_config?: AWSRekognitionConfig;
+  aws_rekognition_config?: AWSRekognitionConfig;
 
   block_list_config?: BlockListConfig;
 
   bodyguard_config?: BodyguardConfig;
 
-  go_og_le_vision_config?: GoogleVisionConfig;
+  google_vision_config?: GoogleVisionConfig;
 
   velocity_filter_config?: VelocityFilterConfig;
 }
@@ -7053,6 +7075,8 @@ export interface UserCustomEventRequest {
 }
 
 export interface UserInfoResponse {
+  id: string;
+
   image: string;
 
   name: string;
@@ -7129,7 +7153,7 @@ export interface UserResponse {
 
   blocked_user_ids: string[];
 
-  devices: ResponseForDevice[];
+  devices: DeviceResponse[];
 
   teams: string[];
 
@@ -7181,7 +7205,7 @@ export interface UserSessionStats {
 
   total_pixels_out: number;
 
-  bro_ws_er?: string;
+  browser?: string;
 
   browser_version?: string;
 
@@ -7273,33 +7297,49 @@ export interface VelocityFilterConfig {
 
   enabled: boolean;
 
+  first_message_only: boolean;
+
   rules: VelocityFilterConfigRule[];
+
+  async?: boolean;
 }
 
 export interface VelocityFilterConfigRule {
   action: 'flag' | 'shadow' | 'remove' | 'ban';
 
+  ban_duration: number;
+
   cascading_action: 'flag' | 'shadow' | 'remove' | 'ban';
 
   cascading_threshold: number;
+
+  check_message_context: boolean;
+
+  fast_spam_threshold: number;
+
+  fast_spam_ttl: number;
 
   ip_ban: boolean;
 
   shadow_ban: boolean;
 
-  timeout?: Date;
+  slow_spam_threshold: number;
+
+  slow_spam_ttl: number;
+
+  slow_spam_ban_duration?: number;
+}
+
+export interface VideoDimension {
+  height: number;
+
+  width: number;
 }
 
 export interface VideoQuality {
   usage_type?: string;
 
-  resolution?: VideoResolution;
-}
-
-export interface VideoResolution {
-  height: number;
-
-  width: number;
+  resolution?: VideoDimension;
 }
 
 export interface VideoSettings {

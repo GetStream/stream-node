@@ -802,6 +802,8 @@ export class ChatApi extends BaseApi {
       read_events: request?.read_events,
       replies: request?.replies,
       search: request?.search,
+      skip_last_msg_update_for_system_msgs:
+        request?.skip_last_msg_update_for_system_msgs,
       typing_events: request?.typing_events,
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
@@ -881,6 +883,8 @@ export class ChatApi extends BaseApi {
       reminders: request?.reminders,
       replies: request?.replies,
       search: request?.search,
+      skip_last_msg_update_for_system_msgs:
+        request?.skip_last_msg_update_for_system_msgs,
       typing_events: request?.typing_events,
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
@@ -2004,13 +2008,11 @@ export class ChatApi extends BaseApi {
 
   getThread = async (request: {
     message_id: string;
-    connection_id?: string;
     reply_limit?: number;
     participant_limit?: number;
     member_limit?: number;
   }): Promise<StreamResponse<GetThreadResponse>> => {
     const queryParams = {
-      connection_id: request?.connection_id,
       reply_limit: request?.reply_limit,
       participant_limit: request?.participant_limit,
       member_limit: request?.member_limit,

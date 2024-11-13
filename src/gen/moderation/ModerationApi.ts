@@ -104,10 +104,10 @@ export class ModerationApi extends BaseApi {
         request?.automod_platform_circumvention_config,
       automod_semantic_filters_config: request?.automod_semantic_filters_config,
       automod_toxicity_config: request?.automod_toxicity_config,
-      aws_rek_og_nition_config: request?.aws_rek_og_nition_config,
+      aws_rekognition_config: request?.aws_rekognition_config,
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
-      go_og_le_vision_config: request?.go_og_le_vision_config,
+      google_vision_config: request?.google_vision_config,
       velocity_filter_config: request?.velocity_filter_config,
     };
 
@@ -360,8 +360,9 @@ export class ModerationApi extends BaseApi {
   ): Promise<StreamResponse<QueryReviewQueueResponse>> => {
     const body = {
       limit: request?.limit,
-      lock_moderator_duration: request?.lock_moderator_duration,
-      lock_moderator_id: request?.lock_moderator_id,
+      lock_count: request?.lock_count,
+      lock_duration: request?.lock_duration,
+      lock_items: request?.lock_items,
       next: request?.next,
       prev: request?.prev,
       stats_only: request?.stats_only,
