@@ -44,4 +44,48 @@ describe('external storage CRUD API', () => {
 
     expect(response).toBeDefined();
   });
+
+  it('docs snippets', async () => {
+    const s3name = `streamnodetest-${uuidv4()}`;
+    await client.createExternalStorage({
+      name: s3name,
+      storage_type: 's3',
+      bucket: 'my-bucket',
+      path: 'directory_name/',
+      aws_s3: {
+        s3_api_key: 'us-east-1',
+        s3_region: 'my-access-key',
+        s3_secret: 'my-secret',
+      },
+    });
+
+    await client.deleteExternalStorage({ name: s3name });
+
+    const gcsName = `streamnodetest-${uuidv4()}`;
+    await client.createExternalStorage({
+      bucket: 'my-bucket',
+      name: gcsName,
+      storage_type: 'gcs',
+      path: 'directory_name/',
+      gcs_credentials: 'content of the service account file',
+    });
+
+    await client.deleteExternalStorage({ name: gcsName });
+
+    const azureName = `streamnodetest-${uuidv4()}`;
+    await client.createExternalStorage({
+      name: azureName,
+      storage_type: 'abs',
+      bucket: 'my-bucket',
+      path: 'directory_name/',
+      azure_blob: {
+        abs_account_name: '...',
+        abs_client_id: '...',
+        abs_client_secret: '...',
+        abs_tenant_id: '...',
+      },
+    });
+
+    await client.deleteExternalStorage({ name: azureName });
+  });
 });

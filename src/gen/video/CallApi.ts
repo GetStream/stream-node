@@ -24,6 +24,7 @@ import {
   PinResponse,
   SendCallEventRequest,
   SendCallEventResponse,
+  StartClosedCaptionsResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
@@ -32,7 +33,9 @@ import {
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
+  StopClosedCaptionsResponse,
   StopHLSBroadcastingResponse,
+  StopLiveRequest,
   StopLiveResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
@@ -199,6 +202,12 @@ export class CallApi {
     return this.videoApi.startHLSBroadcasting({ id: this.id, type: this.type });
   };
 
+  startClosedCaptions = (): Promise<
+    StreamResponse<StartClosedCaptionsResponse>
+  > => {
+    return this.videoApi.startClosedCaptions({ id: this.id, type: this.type });
+  };
+
   startRecording = (
     request?: StartRecordingRequest,
   ): Promise<StreamResponse<StartRecordingResponse>> => {
@@ -235,8 +244,16 @@ export class CallApi {
     return this.videoApi.stopHLSBroadcasting({ id: this.id, type: this.type });
   };
 
-  stopLive = (): Promise<StreamResponse<StopLiveResponse>> => {
-    return this.videoApi.stopLive({ id: this.id, type: this.type });
+  stopClosedCaptions = (): Promise<
+    StreamResponse<StopClosedCaptionsResponse>
+  > => {
+    return this.videoApi.stopClosedCaptions({ id: this.id, type: this.type });
+  };
+
+  stopLive = (
+    request?: StopLiveRequest,
+  ): Promise<StreamResponse<StopLiveResponse>> => {
+    return this.videoApi.stopLive({ id: this.id, type: this.type, ...request });
   };
 
   stopRecording = (): Promise<StreamResponse<StopRecordingResponse>> => {
