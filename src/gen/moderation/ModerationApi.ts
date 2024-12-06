@@ -7,6 +7,7 @@ import {
   CheckResponse,
   CustomCheckRequest,
   CustomCheckResponse,
+  DeleteModerationConfigResponse,
   DeleteModerationTemplateResponse,
   FlagRequest,
   FlagResponse,
@@ -17,6 +18,8 @@ import {
   MuteRequest,
   MuteResponse,
   QueryFeedModerationTemplatesResponse,
+  QueryModerationConfigsRequest,
+  QueryModerationConfigsResponse,
   QueryModerationLogsRequest,
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
@@ -71,6 +74,7 @@ export class ModerationApi extends BaseApi {
       entity_creator_id: request?.entity_creator_id,
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
+      test_mode: request?.test_mode,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
@@ -96,14 +100,16 @@ export class ModerationApi extends BaseApi {
     const body = {
       key: request?.key,
       async: request?.async,
+      ai_image_config: request?.ai_image_config,
+      ai_text_config: request?.ai_text_config,
       automod_platform_circumvention_config:
         request?.automod_platform_circumvention_config,
       automod_semantic_filters_config: request?.automod_semantic_filters_config,
       automod_toxicity_config: request?.automod_toxicity_config,
-      aws_rek_og_nition_config: request?.aws_rek_og_nition_config,
+      aws_rekognition_config: request?.aws_rekognition_config,
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
-      go_og_le_vision_config: request?.go_og_le_vision_config,
+      google_vision_config: request?.google_vision_config,
       velocity_filter_config: request?.velocity_filter_config,
     };
 
@@ -112,6 +118,22 @@ export class ModerationApi extends BaseApi {
     >('POST', '/api/v2/moderation/config', undefined, undefined, body);
 
     decoders.UpsertConfigResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  deleteConfig = async (request: {
+    key: string;
+  }): Promise<StreamResponse<DeleteModerationConfigResponse>> => {
+    const pathParams = {
+      key: request?.key,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<DeleteModerationConfigResponse>
+    >('DELETE', '/api/v2/moderation/config/{key}', pathParams, undefined);
+
+    decoders.DeleteModerationConfigResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -131,6 +153,28 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.GetConfigResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryModerationConfigs = async (
+    request?: QueryModerationConfigsRequest,
+  ): Promise<StreamResponse<QueryModerationConfigsResponse>> => {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryModerationConfigsResponse>
+    >('POST', '/api/v2/moderation/configs', undefined, undefined, body);
+
+    decoders.QueryModerationConfigsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -222,8 +266,8 @@ export class ModerationApi extends BaseApi {
     const body = {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
-      reason: request?.reason,
       entity_creator_id: request?.entity_creator_id,
+      reason: request?.reason,
       user_id: request?.user_id,
       custom: request?.custom,
       moderation_payload: request?.moderation_payload,
@@ -318,8 +362,9 @@ export class ModerationApi extends BaseApi {
   ): Promise<StreamResponse<QueryReviewQueueResponse>> => {
     const body = {
       limit: request?.limit,
-      lock_moderator_duration: request?.lock_moderator_duration,
-      lock_moderator_id: request?.lock_moderator_id,
+      lock_count: request?.lock_count,
+      lock_duration: request?.lock_duration,
+      lock_items: request?.lock_items,
       next: request?.next,
       prev: request?.prev,
       stats_only: request?.stats_only,
@@ -367,6 +412,7 @@ export class ModerationApi extends BaseApi {
       delete_message: request?.delete_message,
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,
+      mark_reviewed: request?.mark_reviewed,
       unban: request?.unban,
       user: request?.user,
     };
