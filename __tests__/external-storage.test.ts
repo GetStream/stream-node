@@ -39,9 +39,16 @@ describe('external storage CRUD API', () => {
     expect(response.bucket).toBe('new bucket');
   });
 
+  it('delete', async () => {
+    const response = await client.deleteExternalStorage({ name: storageName });
+
+    expect(response).toBeDefined();
+  });
+
   it('docs snippets', async () => {
+    const s3name = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
-      name: 'streamnodetest-my-s3',
+      name: s3name,
       storage_type: 's3',
       bucket: 'my-bucket',
       path: 'directory_name/',
@@ -52,16 +59,22 @@ describe('external storage CRUD API', () => {
       },
     });
 
+    await client.deleteExternalStorage({ name: s3name });
+
+    const gcsName = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
       bucket: 'my-bucket',
-      name: 'streamnodetest-my-gcs',
+      name: gcsName,
       storage_type: 'gcs',
       path: 'directory_name/',
       gcs_credentials: 'content of the service account file',
     });
 
+    await client.deleteExternalStorage({ name: gcsName });
+
+    const azureName = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
-      name: 'streamnodetest-my-abs',
+      name: azureName,
       storage_type: 'abs',
       bucket: 'my-bucket',
       path: 'directory_name/',
@@ -73,14 +86,6 @@ describe('external storage CRUD API', () => {
       },
     });
 
-    await client.deleteExternalStorage({ name: 'streamnodetest-my-s3' });
-    await client.deleteExternalStorage({ name: 'streamnodetest-my-gcs' });
-    await client.deleteExternalStorage({ name: 'streamnodetest-my-abs' });
-  });
-
-  it('delete', async () => {
-    const response = await client.deleteExternalStorage({ name: storageName });
-
-    expect(response).toBeDefined();
+    await client.deleteExternalStorage({ name: azureName });
   });
 });
