@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.5](https://github.com/GetStream/stream-node/compare/v0.4.4...v0.4.5) (2024-12-06)
+
+
+### Features
+
+* update open api to latest version ([#65](https://github.com/GetStream/stream-node/issues/65)) ([8393378](https://github.com/GetStream/stream-node/commit/8393378dbd47985a88dcf1247a05d975696a39ed))
+
 ## [0.4.4](https://github.com/GetStream/stream-node/compare/v0.4.3...v0.4.4) (2024-10-02)
 
 
