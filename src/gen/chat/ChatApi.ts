@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   CampaignResponse,
   CastPollVoteRequest,
@@ -118,9 +117,11 @@ import {
   UpdateThreadPartialResponse,
   WrappedUnreadCountsResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class ChatApi extends BaseApi {
+export class ChatApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
   queryCampaigns = async (
     request?: QueryCampaignsRequest,
   ): Promise<StreamResponse<QueryCampaignsResponse>> => {
@@ -132,7 +133,7 @@ export class ChatApi extends BaseApi {
       filter: request?.filter,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCampaignsResponse>
     >('POST', '/api/v2/chat/campaigns/query', undefined, undefined, body);
 
@@ -148,7 +149,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCampaignResponse>
     >('GET', '/api/v2/chat/campaigns/{id}', pathParams, undefined);
 
@@ -168,7 +169,7 @@ export class ChatApi extends BaseApi {
       stop_at: request?.stop_at,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartCampaignResponse>
     >('POST', '/api/v2/chat/campaigns/{id}/start', pathParams, undefined, body);
 
@@ -185,13 +186,9 @@ export class ChatApi extends BaseApi {
     };
     const body = {};
 
-    const response = await this.sendRequest<StreamResponse<CampaignResponse>>(
-      'POST',
-      '/api/v2/chat/campaigns/{id}/stop',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CampaignResponse>
+    >('POST', '/api/v2/chat/campaigns/{id}/stop', pathParams, undefined, body);
 
     decoders.CampaignResponse?.(response.body);
 
@@ -213,7 +210,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryChannelsResponse>
     >('POST', '/api/v2/chat/channels', undefined, undefined, body);
 
@@ -230,7 +227,7 @@ export class ChatApi extends BaseApi {
       hard_delete: request?.hard_delete,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteChannelsResponse>
     >('POST', '/api/v2/chat/channels/delete', undefined, undefined, body);
 
@@ -248,13 +245,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<MarkReadResponse>>(
-      'POST',
-      '/api/v2/chat/channels/read',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MarkReadResponse>
+    >('POST', '/api/v2/chat/channels/read', undefined, undefined, body);
 
     decoders.MarkReadResponse?.(response.body);
 
@@ -277,7 +270,7 @@ export class ChatApi extends BaseApi {
       watchers: request?.watchers,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ChannelStateResponse>
     >(
       'POST',
@@ -305,7 +298,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteChannelResponse>
     >('DELETE', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
 
@@ -328,7 +321,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateChannelPartialResponse>
     >(
       'PATCH',
@@ -368,7 +361,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateChannelResponse>
     >('POST', '/api/v2/chat/channels/{type}/{id}', pathParams, undefined, body);
 
@@ -388,7 +381,9 @@ export class ChatApi extends BaseApi {
       event: request?.event,
     };
 
-    const response = await this.sendRequest<StreamResponse<EventResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<EventResponse>
+    >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/event',
       pathParams,
@@ -414,7 +409,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/channels/{type}/{id}/file',
       pathParams,
@@ -438,7 +433,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<FileUploadResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<FileUploadResponse>
+    >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/file',
       pathParams,
@@ -464,7 +461,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<HideChannelResponse>
     >(
       'POST',
@@ -492,7 +489,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/channels/{type}/{id}/image',
       pathParams,
@@ -517,7 +514,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ImageUploadResponse>
     >(
       'POST',
@@ -549,7 +546,7 @@ export class ChatApi extends BaseApi {
       set: request?.set,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMemberPartialResponse>
     >(
       'PATCH',
@@ -581,7 +578,7 @@ export class ChatApi extends BaseApi {
       pending_message_metadata: request?.pending_message_metadata,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<SendMessageResponse>
     >(
       'POST',
@@ -609,7 +606,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetManyMessagesResponse>
     >(
       'GET',
@@ -640,7 +637,7 @@ export class ChatApi extends BaseApi {
       watchers: request?.watchers,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ChannelStateResponse>
     >(
       'POST',
@@ -669,7 +666,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<MarkReadResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MarkReadResponse>
+    >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/read',
       pathParams,
@@ -694,7 +693,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ShowChannelResponse>
     >(
       'POST',
@@ -725,7 +724,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<TruncateChannelResponse>
     >(
       'POST',
@@ -754,7 +753,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/unread',
       pathParams,
@@ -770,7 +769,7 @@ export class ChatApi extends BaseApi {
   listChannelTypes = async (): Promise<
     StreamResponse<ListChannelTypesResponse>
   > => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListChannelTypesResponse>
     >('GET', '/api/v2/chat/channeltypes', undefined, undefined);
 
@@ -813,7 +812,7 @@ export class ChatApi extends BaseApi {
       grants: request?.grants,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateChannelTypeResponse>
     >('POST', '/api/v2/chat/channeltypes', undefined, undefined, body);
 
@@ -829,7 +828,7 @@ export class ChatApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/channeltypes/{name}',
       pathParams,
@@ -848,7 +847,7 @@ export class ChatApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetChannelTypeResponse>
     >('GET', '/api/v2/chat/channeltypes/{name}', pathParams, undefined);
 
@@ -896,7 +895,7 @@ export class ChatApi extends BaseApi {
       grants: request?.grants,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateChannelTypeResponse>
     >('PUT', '/api/v2/chat/channeltypes/{name}', pathParams, undefined, body);
 
@@ -906,7 +905,7 @@ export class ChatApi extends BaseApi {
   };
 
   listCommands = async (): Promise<StreamResponse<ListCommandsResponse>> => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListCommandsResponse>
     >('GET', '/api/v2/chat/commands', undefined, undefined);
 
@@ -925,7 +924,7 @@ export class ChatApi extends BaseApi {
       set: request?.set,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateCommandResponse>
     >('POST', '/api/v2/chat/commands', undefined, undefined, body);
 
@@ -941,7 +940,7 @@ export class ChatApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteCommandResponse>
     >('DELETE', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
@@ -957,12 +956,9 @@ export class ChatApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetCommandResponse>>(
-      'GET',
-      '/api/v2/chat/commands/{name}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCommandResponse>
+    >('GET', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
     decoders.GetCommandResponse?.(response.body);
 
@@ -981,7 +977,7 @@ export class ChatApi extends BaseApi {
       set: request?.set,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCommandResponse>
     >('PUT', '/api/v2/chat/commands/{name}', pathParams, undefined, body);
 
@@ -1002,7 +998,7 @@ export class ChatApi extends BaseApi {
       version: request?.version,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ExportChannelsResponse>
     >('POST', '/api/v2/chat/export_channels', undefined, undefined, body);
 
@@ -1018,7 +1014,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetExportChannelsStatusResponse>
     >('GET', '/api/v2/chat/export_channels/{id}', pathParams, undefined);
 
@@ -1034,12 +1030,9 @@ export class ChatApi extends BaseApi {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<StreamResponse<MembersResponse>>(
-      'GET',
-      '/api/v2/chat/members',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MembersResponse>
+    >('GET', '/api/v2/chat/members', undefined, queryParams);
 
     decoders.MembersResponse?.(response.body);
 
@@ -1057,7 +1050,7 @@ export class ChatApi extends BaseApi {
       sort: request?.sort,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryMessageHistoryResponse>
     >('POST', '/api/v2/chat/messages/history', undefined, undefined, body);
 
@@ -1079,7 +1072,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteMessageResponse>
     >('DELETE', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
@@ -1099,12 +1092,9 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetMessageResponse>>(
-      'GET',
-      '/api/v2/chat/messages/{id}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetMessageResponse>
+    >('GET', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
     decoders.GetMessageResponse?.(response.body);
 
@@ -1122,7 +1112,7 @@ export class ChatApi extends BaseApi {
       skip_enrich_url: request?.skip_enrich_url,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMessageResponse>
     >('POST', '/api/v2/chat/messages/{id}', pathParams, undefined, body);
 
@@ -1145,7 +1135,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMessagePartialResponse>
     >('PUT', '/api/v2/chat/messages/{id}', pathParams, undefined, body);
 
@@ -1166,13 +1156,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<MessageResponse>>(
-      'POST',
-      '/api/v2/chat/messages/{id}/action',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MessageResponse>
+    >('POST', '/api/v2/chat/messages/{id}/action', pathParams, undefined, body);
 
     decoders.MessageResponse?.(response.body);
 
@@ -1187,13 +1173,9 @@ export class ChatApi extends BaseApi {
     };
     const body = {};
 
-    const response = await this.sendRequest<StreamResponse<MessageResponse>>(
-      'POST',
-      '/api/v2/chat/messages/{id}/commit',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MessageResponse>
+    >('POST', '/api/v2/chat/messages/{id}/commit', pathParams, undefined, body);
 
     decoders.MessageResponse?.(response.body);
 
@@ -1212,7 +1194,7 @@ export class ChatApi extends BaseApi {
       skip_push: request?.skip_push,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<SendReactionResponse>
     >(
       'POST',
@@ -1240,7 +1222,7 @@ export class ChatApi extends BaseApi {
       type: request?.type,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ReactionRemovalResponse>
     >(
       'DELETE',
@@ -1267,7 +1249,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetReactionsResponse>
     >('GET', '/api/v2/chat/messages/{id}/reactions', pathParams, queryParams);
 
@@ -1292,7 +1274,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryReactionsResponse>
     >(
       'POST',
@@ -1317,7 +1299,9 @@ export class ChatApi extends BaseApi {
       language: request?.language,
     };
 
-    const response = await this.sendRequest<StreamResponse<MessageResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MessageResponse>
+    >(
       'POST',
       '/api/v2/chat/messages/{id}/translate',
       pathParams,
@@ -1341,7 +1325,7 @@ export class ChatApi extends BaseApi {
       skip_enrich_url: request?.skip_enrich_url,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMessageResponse>
     >(
       'POST',
@@ -1369,7 +1353,9 @@ export class ChatApi extends BaseApi {
       vote: request?.vote,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollVoteResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollVoteResponse>
+    >(
       'POST',
       '/api/v2/chat/messages/{message_id}/polls/{poll_id}/vote',
       pathParams,
@@ -1397,7 +1383,9 @@ export class ChatApi extends BaseApi {
       vote_id: request?.vote_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollVoteResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollVoteResponse>
+    >(
       'DELETE',
       '/api/v2/chat/messages/{message_id}/polls/{poll_id}/vote/{vote_id}',
       pathParams,
@@ -1444,7 +1432,9 @@ export class ChatApi extends BaseApi {
       parent_id: request?.parent_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetRepliesResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetRepliesResponse>
+    >(
       'GET',
       '/api/v2/chat/messages/{parent_id}/replies',
       pathParams,
@@ -1463,7 +1453,7 @@ export class ChatApi extends BaseApi {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryMessageFlagsResponse>
     >('GET', '/api/v2/chat/moderation/flags/message', undefined, queryParams);
 
@@ -1482,7 +1472,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<MuteChannelResponse>
     >(
       'POST',
@@ -1507,7 +1497,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<UnmuteResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnmuteResponse>
+    >(
       'POST',
       '/api/v2/chat/moderation/unmute/channel',
       undefined,
@@ -1539,13 +1531,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollResponse>>(
-      'POST',
-      '/api/v2/chat/polls',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('POST', '/api/v2/chat/polls', undefined, undefined, body);
 
     decoders.PollResponse?.(response.body);
 
@@ -1571,13 +1559,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollResponse>>(
-      'PUT',
-      '/api/v2/chat/polls',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('PUT', '/api/v2/chat/polls', undefined, undefined, body);
 
     decoders.PollResponse?.(response.body);
 
@@ -1598,13 +1582,9 @@ export class ChatApi extends BaseApi {
       filter: request?.filter,
     };
 
-    const response = await this.sendRequest<StreamResponse<QueryPollsResponse>>(
-      'POST',
-      '/api/v2/chat/polls/query',
-      undefined,
-      queryParams,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryPollsResponse>
+    >('POST', '/api/v2/chat/polls/query', undefined, queryParams, body);
 
     decoders.QueryPollsResponse?.(response.body);
 
@@ -1622,7 +1602,7 @@ export class ChatApi extends BaseApi {
       poll_id: request?.poll_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/polls/{poll_id}',
       pathParams,
@@ -1645,12 +1625,9 @@ export class ChatApi extends BaseApi {
       poll_id: request?.poll_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollResponse>>(
-      'GET',
-      '/api/v2/chat/polls/{poll_id}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('GET', '/api/v2/chat/polls/{poll_id}', pathParams, queryParams);
 
     decoders.PollResponse?.(response.body);
 
@@ -1670,13 +1647,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollResponse>>(
-      'PATCH',
-      '/api/v2/chat/polls/{poll_id}',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('PATCH', '/api/v2/chat/polls/{poll_id}', pathParams, undefined, body);
 
     decoders.PollResponse?.(response.body);
 
@@ -1697,7 +1670,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollOptionResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >(
       'POST',
       '/api/v2/chat/polls/{poll_id}/options',
       pathParams,
@@ -1724,7 +1699,9 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollOptionResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >(
       'PUT',
       '/api/v2/chat/polls/{poll_id}/options',
       pathParams,
@@ -1750,7 +1727,7 @@ export class ChatApi extends BaseApi {
       option_id: request?.option_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/polls/{poll_id}/options/{option_id}',
       pathParams,
@@ -1775,7 +1752,9 @@ export class ChatApi extends BaseApi {
       option_id: request?.option_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollOptionResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >(
       'GET',
       '/api/v2/chat/polls/{poll_id}/options/{option_id}',
       pathParams,
@@ -1804,7 +1783,9 @@ export class ChatApi extends BaseApi {
       filter: request?.filter,
     };
 
-    const response = await this.sendRequest<StreamResponse<PollVotesResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollVotesResponse>
+    >(
       'POST',
       '/api/v2/chat/polls/{poll_id}/votes',
       pathParams,
@@ -1824,7 +1805,7 @@ export class ChatApi extends BaseApi {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryBannedUsersResponse>
     >('GET', '/api/v2/chat/query_banned_users', undefined, queryParams);
 
@@ -1840,12 +1821,9 @@ export class ChatApi extends BaseApi {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<StreamResponse<SearchResponse>>(
-      'GET',
-      '/api/v2/chat/search',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SearchResponse>
+    >('GET', '/api/v2/chat/search', undefined, queryParams);
 
     decoders.SearchResponse?.(response.body);
 
@@ -1863,7 +1841,7 @@ export class ChatApi extends BaseApi {
       sort: request?.sort,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QuerySegmentsResponse>
     >('POST', '/api/v2/chat/segments/query', undefined, undefined, body);
 
@@ -1879,7 +1857,7 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/chat/segments/{id}',
       pathParams,
@@ -1898,12 +1876,9 @@ export class ChatApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetSegmentResponse>>(
-      'GET',
-      '/api/v2/chat/segments/{id}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetSegmentResponse>
+    >('GET', '/api/v2/chat/segments/{id}', pathParams, undefined);
 
     decoders.GetSegmentResponse?.(response.body);
 
@@ -1920,7 +1895,7 @@ export class ChatApi extends BaseApi {
       target_ids: request?.target_ids,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/chat/segments/{id}/deletetargets',
       pathParams,
@@ -1942,7 +1917,7 @@ export class ChatApi extends BaseApi {
       target_id: request?.target_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'GET',
       '/api/v2/chat/segments/{id}/target/{target_id}',
       pathParams,
@@ -1968,7 +1943,7 @@ export class ChatApi extends BaseApi {
       filter: request?.filter,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QuerySegmentTargetsResponse>
     >(
       'POST',
@@ -1997,7 +1972,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryThreadsResponse>
     >('POST', '/api/v2/chat/threads', undefined, undefined, body);
 
@@ -2021,12 +1996,9 @@ export class ChatApi extends BaseApi {
       message_id: request?.message_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetThreadResponse>>(
-      'GET',
-      '/api/v2/chat/threads/{message_id}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetThreadResponse>
+    >('GET', '/api/v2/chat/threads/{message_id}', pathParams, queryParams);
 
     decoders.GetThreadResponse?.(response.body);
 
@@ -2046,7 +2018,7 @@ export class ChatApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateThreadPartialResponse>
     >(
       'PATCH',
@@ -2064,7 +2036,7 @@ export class ChatApi extends BaseApi {
   unreadCounts = async (): Promise<
     StreamResponse<WrappedUnreadCountsResponse>
   > => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<WrappedUnreadCountsResponse>
     >('GET', '/api/v2/chat/unread', undefined, undefined);
 
@@ -2080,7 +2052,7 @@ export class ChatApi extends BaseApi {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UnreadCountsBatchResponse>
     >('POST', '/api/v2/chat/unread_batch', undefined, undefined, body);
 
@@ -2099,7 +2071,7 @@ export class ChatApi extends BaseApi {
       event: request?.event,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/chat/users/{user_id}/event',
       pathParams,

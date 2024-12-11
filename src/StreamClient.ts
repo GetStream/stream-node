@@ -6,6 +6,8 @@ import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
+import { StreamFeedsClient } from './StreamFeedsClient';
+import { ApiClient } from './ApiClient';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -16,6 +18,7 @@ export class StreamClient extends CommonApi {
   public readonly video: StreamVideoClient;
   public readonly chat: StreamChatClient;
   public readonly moderation: StreamModerationClient;
+  public readonly feeds: StreamFeedsClient;
   public readonly options: StreamClientOptions = {};
 
   private static readonly DEFAULT_TIMEOUT = 3000;
@@ -33,28 +36,13 @@ export class StreamClient extends CommonApi {
   ) {
     const token = JWTServerToken(secret);
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
-    const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
-    const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
-    super({ apiKey, token, timeout, baseUrl: chatBaseUrl });
-
-    this.video = new StreamVideoClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: videoBaseUrl,
-    });
-    this.chat = new StreamChatClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-    });
-    this.moderation = new StreamModerationClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-    });
+    const baseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
+    const apiClient = new ApiClient({ apiKey, token, timeout, baseUrl });
+    super(apiClient);
+    this.video = new StreamVideoClient(apiClient);
+    this.chat = new StreamChatClient(apiClient);
+    this.moderation = new StreamModerationClient(apiClient);
+    this.feeds = new StreamFeedsClient(apiClient);
   }
 
   upsertUsers = (users: UserRequest[]) => {

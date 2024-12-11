@@ -4,3 +4,5 @@ export * from './src/StreamCall';
 export * from './src/StreamChatClient';
 export * from './src/StreamChannel';
 export * from './src/StreamVideoClient';
+export * from './src/StreamFeed';
+export * from './src/StreamFeedsClient';

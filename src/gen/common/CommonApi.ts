@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   BlockUsersRequest,
   BlockUsersResponse,
@@ -67,11 +66,13 @@ import {
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class CommonApi extends BaseApi {
+export class CommonApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
   getApp = async (): Promise<StreamResponse<GetApplicationResponse>> => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetApplicationResponse>
     >('GET', '/api/v2/app', undefined, undefined);
 
@@ -131,7 +132,7 @@ export class CommonApi extends BaseApi {
       xiaomi_config: request?.xiaomi_config,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'PATCH',
       '/api/v2/app',
       undefined,
@@ -145,7 +146,7 @@ export class CommonApi extends BaseApi {
   };
 
   listBlockLists = async (): Promise<StreamResponse<ListBlockListResponse>> => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListBlockListResponse>
     >('GET', '/api/v2/blocklists', undefined, undefined);
 
@@ -163,7 +164,7 @@ export class CommonApi extends BaseApi {
       type: request?.type,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/blocklists',
       undefined,
@@ -183,7 +184,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/blocklists/{name}',
       pathParams,
@@ -202,7 +203,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetBlockListResponse>
     >('GET', '/api/v2/blocklists/{name}', pathParams, undefined);
 
@@ -221,7 +222,7 @@ export class CommonApi extends BaseApi {
       words: request?.words,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'PUT',
       '/api/v2/blocklists/{name}',
       pathParams,
@@ -249,13 +250,9 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckPushResponse>>(
-      'POST',
-      '/api/v2/check_push',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckPushResponse>
+    >('POST', '/api/v2/check_push', undefined, undefined, body);
 
     decoders.CheckPushResponse?.(response.body);
 
@@ -271,13 +268,9 @@ export class CommonApi extends BaseApi {
       sns_topic_arn: request?.sns_topic_arn,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckSNSResponse>>(
-      'POST',
-      '/api/v2/check_sns',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckSNSResponse>
+    >('POST', '/api/v2/check_sns', undefined, undefined, body);
 
     decoders.CheckSNSResponse?.(response.body);
 
@@ -293,13 +286,9 @@ export class CommonApi extends BaseApi {
       sqs_url: request?.sqs_url,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckSQSResponse>>(
-      'POST',
-      '/api/v2/check_sqs',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckSQSResponse>
+    >('POST', '/api/v2/check_sqs', undefined, undefined, body);
 
     decoders.CheckSQSResponse?.(response.body);
 
@@ -315,7 +304,7 @@ export class CommonApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/devices',
       undefined,
@@ -334,7 +323,7 @@ export class CommonApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListDevicesResponse>
     >('GET', '/api/v2/devices', undefined, queryParams);
 
@@ -355,7 +344,7 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/devices',
       undefined,
@@ -375,7 +364,7 @@ export class CommonApi extends BaseApi {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ExportUsersResponse>
     >('POST', '/api/v2/export/users', undefined, undefined, body);
 
@@ -387,7 +376,7 @@ export class CommonApi extends BaseApi {
   listExternalStorage = async (): Promise<
     StreamResponse<ListExternalStorageResponse>
   > => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListExternalStorageResponse>
     >('GET', '/api/v2/external_storage', undefined, undefined);
 
@@ -409,7 +398,7 @@ export class CommonApi extends BaseApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateExternalStorageResponse>
     >('POST', '/api/v2/external_storage', undefined, undefined, body);
 
@@ -425,7 +414,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteExternalStorageResponse>
     >('DELETE', '/api/v2/external_storage/{name}', pathParams, undefined);
 
@@ -449,7 +438,7 @@ export class CommonApi extends BaseApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateExternalStorageResponse>
     >('PUT', '/api/v2/external_storage/{name}', pathParams, undefined, body);
 
@@ -465,7 +454,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CheckExternalStorageResponse>
     >('GET', '/api/v2/external_storage/{name}/check', pathParams, undefined);
 
@@ -481,7 +470,7 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateGuestResponse>
     >('POST', '/api/v2/guest', undefined, undefined, body);
 
@@ -497,7 +486,7 @@ export class CommonApi extends BaseApi {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportURLResponse>
     >('POST', '/api/v2/import_urls', undefined, undefined, body);
 
@@ -507,7 +496,7 @@ export class CommonApi extends BaseApi {
   };
 
   listImports = async (): Promise<StreamResponse<ListImportsResponse>> => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListImportsResponse>
     >('GET', '/api/v2/imports', undefined, undefined);
 
@@ -524,7 +513,7 @@ export class CommonApi extends BaseApi {
       path: request?.path,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportResponse>
     >('POST', '/api/v2/imports', undefined, undefined, body);
 
@@ -540,12 +529,9 @@ export class CommonApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetImportResponse>>(
-      'GET',
-      '/api/v2/imports/{id}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetImportResponse>
+    >('GET', '/api/v2/imports/{id}', pathParams, undefined);
 
     decoders.GetImportResponse?.(response.body);
 
@@ -559,12 +545,9 @@ export class CommonApi extends BaseApi {
       url: request?.url,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetOGResponse>>(
-      'GET',
-      '/api/v2/og',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOGResponse>
+    >('GET', '/api/v2/og', undefined, queryParams);
 
     decoders.GetOGResponse?.(response.body);
 
@@ -574,7 +557,7 @@ export class CommonApi extends BaseApi {
   listPermissions = async (): Promise<
     StreamResponse<ListPermissionsResponse>
   > => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListPermissionsResponse>
     >('GET', '/api/v2/permissions', undefined, undefined);
 
@@ -590,7 +573,7 @@ export class CommonApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCustomPermissionResponse>
     >('GET', '/api/v2/permissions/{id}', pathParams, undefined);
 
@@ -602,7 +585,7 @@ export class CommonApi extends BaseApi {
   listPushProviders = async (): Promise<
     StreamResponse<ListPushProvidersResponse>
   > => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListPushProvidersResponse>
     >('GET', '/api/v2/push_providers', undefined, undefined);
 
@@ -618,7 +601,7 @@ export class CommonApi extends BaseApi {
       push_provider: request?.push_provider,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertPushProviderResponse>
     >('POST', '/api/v2/push_providers', undefined, undefined, body);
 
@@ -636,7 +619,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/push_providers/{type}/{name}',
       pathParams,
@@ -663,7 +646,7 @@ export class CommonApi extends BaseApi {
       endpoints: request?.endpoints,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetRateLimitsResponse>
     >('GET', '/api/v2/rate_limits', undefined, queryParams);
 
@@ -673,12 +656,9 @@ export class CommonApi extends BaseApi {
   };
 
   listRoles = async (): Promise<StreamResponse<ListRolesResponse>> => {
-    const response = await this.sendRequest<StreamResponse<ListRolesResponse>>(
-      'GET',
-      '/api/v2/roles',
-      undefined,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListRolesResponse>
+    >('GET', '/api/v2/roles', undefined, undefined);
 
     decoders.ListRolesResponse?.(response.body);
 
@@ -692,13 +672,9 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<CreateRoleResponse>>(
-      'POST',
-      '/api/v2/roles',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateRoleResponse>
+    >('POST', '/api/v2/roles', undefined, undefined, body);
 
     decoders.CreateRoleResponse?.(response.body);
 
@@ -712,7 +688,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/roles/{name}',
       pathParams,
@@ -731,12 +707,9 @@ export class CommonApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetTaskResponse>>(
-      'GET',
-      '/api/v2/tasks/{id}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetTaskResponse>
+    >('GET', '/api/v2/tasks/{id}', pathParams, undefined);
 
     decoders.GetTaskResponse?.(response.body);
 
@@ -750,12 +723,9 @@ export class CommonApi extends BaseApi {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<StreamResponse<QueryUsersResponse>>(
-      'GET',
-      '/api/v2/users',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryUsersResponse>
+    >('GET', '/api/v2/users', undefined, queryParams);
 
     decoders.QueryUsersResponse?.(response.body);
 
@@ -769,7 +739,7 @@ export class CommonApi extends BaseApi {
       users: request?.users,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
     >('PATCH', '/api/v2/users', undefined, undefined, body);
 
@@ -785,7 +755,7 @@ export class CommonApi extends BaseApi {
       users: request?.users,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
     >('POST', '/api/v2/users', undefined, undefined, body);
 
@@ -801,7 +771,7 @@ export class CommonApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetBlockedUsersResponse>
     >('GET', '/api/v2/users/block', undefined, queryParams);
 
@@ -819,13 +789,9 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<BlockUsersResponse>>(
-      'POST',
-      '/api/v2/users/block',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BlockUsersResponse>
+    >('POST', '/api/v2/users/block', undefined, undefined, body);
 
     decoders.BlockUsersResponse?.(response.body);
 
@@ -842,7 +808,7 @@ export class CommonApi extends BaseApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeactivateUsersResponse>
     >('POST', '/api/v2/users/deactivate', undefined, undefined, body);
 
@@ -864,7 +830,7 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteUsersResponse>
     >('POST', '/api/v2/users/delete', undefined, undefined, body);
 
@@ -883,7 +849,7 @@ export class CommonApi extends BaseApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ReactivateUsersResponse>
     >('POST', '/api/v2/users/reactivate', undefined, undefined, body);
 
@@ -899,7 +865,7 @@ export class CommonApi extends BaseApi {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/users/restore',
       undefined,
@@ -921,7 +887,7 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UnblockUsersResponse>
     >('POST', '/api/v2/users/unblock', undefined, undefined, body);
 
@@ -941,7 +907,7 @@ export class CommonApi extends BaseApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeactivateUserResponse>
     >(
       'POST',
@@ -963,12 +929,9 @@ export class CommonApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<ExportUserResponse>>(
-      'GET',
-      '/api/v2/users/{user_id}/export',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ExportUserResponse>
+    >('GET', '/api/v2/users/{user_id}/export', pathParams, undefined);
 
     decoders.ExportUserResponse?.(response.body);
 
@@ -987,7 +950,7 @@ export class CommonApi extends BaseApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ReactivateUserResponse>
     >(
       'POST',

@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   BlockUserRequest,
   BlockUserResponse,
@@ -66,9 +65,11 @@ import {
   UpdateUserPermissionsRequest,
   UpdateUserPermissionsResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class VideoApi extends BaseApi {
+export class VideoApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
   queryCallMembers = async (
     request: QueryCallMembersRequest,
   ): Promise<StreamResponse<QueryCallMembersResponse>> => {
@@ -82,7 +83,7 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallMembersResponse>
     >('POST', '/api/v2/video/call/members', undefined, undefined, body);
 
@@ -102,7 +103,7 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallStatsResponse>
     >('POST', '/api/v2/video/call/stats', undefined, undefined, body);
 
@@ -130,12 +131,9 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetCallResponse>>(
-      'GET',
-      '/api/v2/video/call/{type}/{id}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCallResponse>
+    >('GET', '/api/v2/video/call/{type}/{id}', pathParams, queryParams);
 
     decoders.GetCallResponse?.(response.body);
 
@@ -155,13 +153,9 @@ export class VideoApi extends BaseApi {
       settings_override: request?.settings_override,
     };
 
-    const response = await this.sendRequest<StreamResponse<UpdateCallResponse>>(
-      'PATCH',
-      '/api/v2/video/call/{type}/{id}',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateCallResponse>
+    >('PATCH', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
     decoders.UpdateCallResponse?.(response.body);
 
@@ -183,7 +177,7 @@ export class VideoApi extends BaseApi {
       data: request?.data,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetOrCreateCallResponse>
     >('POST', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
@@ -203,7 +197,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<BlockUserResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BlockUserResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/block',
       pathParams,
@@ -227,7 +223,9 @@ export class VideoApi extends BaseApi {
       hard: request?.hard,
     };
 
-    const response = await this.sendRequest<StreamResponse<DeleteCallResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteCallResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/delete',
       pathParams,
@@ -253,7 +251,7 @@ export class VideoApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<SendCallEventResponse>
     >(
       'POST',
@@ -289,7 +287,7 @@ export class VideoApi extends BaseApi {
       custom: request?.custom,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CollectUserFeedbackResponse>
     >(
       'POST',
@@ -320,7 +318,9 @@ export class VideoApi extends BaseApi {
       transcription_storage_name: request?.transcription_storage_name,
     };
 
-    const response = await this.sendRequest<StreamResponse<GoLiveResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GoLiveResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/go_live',
       pathParams,
@@ -342,7 +342,9 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<EndCallResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<EndCallResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/mark_ended',
       pathParams,
@@ -366,7 +368,7 @@ export class VideoApi extends BaseApi {
       update_members: request?.update_members,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallMembersResponse>
     >(
       'POST',
@@ -399,7 +401,9 @@ export class VideoApi extends BaseApi {
       muted_by: request?.muted_by,
     };
 
-    const response = await this.sendRequest<StreamResponse<MuteUsersResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MuteUsersResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/mute_users',
       pathParams,
@@ -424,7 +428,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<PinResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PinResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/pin',
       pathParams,
@@ -446,7 +452,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListRecordingsResponse>
     >(
       'GET',
@@ -471,7 +477,7 @@ export class VideoApi extends BaseApi {
       broadcasts: request?.broadcasts,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartRTMPBroadcastsResponse>
     >(
       'POST',
@@ -495,7 +501,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopAllRTMPBroadcastsResponse>
     >(
       'POST',
@@ -523,7 +529,7 @@ export class VideoApi extends BaseApi {
     };
     const body = {};
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopRTMPBroadcastsResponse>
     >(
       'POST',
@@ -547,7 +553,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartHLSBroadcastingResponse>
     >(
       'POST',
@@ -570,7 +576,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartClosedCaptionsResponse>
     >(
       'POST',
@@ -595,7 +601,7 @@ export class VideoApi extends BaseApi {
       recording_external_storage: request?.recording_external_storage,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartRecordingResponse>
     >(
       'POST',
@@ -621,7 +627,7 @@ export class VideoApi extends BaseApi {
       transcription_external_storage: request?.transcription_external_storage,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartTranscriptionResponse>
     >(
       'POST',
@@ -647,7 +653,7 @@ export class VideoApi extends BaseApi {
       session: request?.session,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCallStatsResponse>
     >(
       'GET',
@@ -670,7 +676,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopHLSBroadcastingResponse>
     >(
       'POST',
@@ -693,7 +699,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopClosedCaptionsResponse>
     >(
       'POST',
@@ -721,7 +727,9 @@ export class VideoApi extends BaseApi {
       continue_transcription: request?.continue_transcription,
     };
 
-    const response = await this.sendRequest<StreamResponse<StopLiveResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<StopLiveResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/stop_live',
       pathParams,
@@ -743,7 +751,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopRecordingResponse>
     >(
       'POST',
@@ -766,7 +774,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopTranscriptionResponse>
     >(
       'POST',
@@ -789,7 +797,7 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListTranscriptionsResponse>
     >(
       'GET',
@@ -814,7 +822,7 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UnblockUserResponse>
     >(
       'POST',
@@ -841,7 +849,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<UnpinResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnpinResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/unpin',
       pathParams,
@@ -867,7 +877,7 @@ export class VideoApi extends BaseApi {
       revoke_permissions: request?.revoke_permissions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUserPermissionsResponse>
     >(
       'POST',
@@ -895,7 +905,7 @@ export class VideoApi extends BaseApi {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteRecordingResponse>
     >(
       'DELETE',
@@ -922,7 +932,7 @@ export class VideoApi extends BaseApi {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteTranscriptionResponse>
     >(
       'DELETE',
@@ -947,13 +957,9 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<StreamResponse<QueryCallsResponse>>(
-      'POST',
-      '/api/v2/video/calls',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallsResponse>
+    >('POST', '/api/v2/video/calls', undefined, undefined, body);
 
     decoders.QueryCallsResponse?.(response.body);
 
@@ -961,7 +967,7 @@ export class VideoApi extends BaseApi {
   };
 
   listCallTypes = async (): Promise<StreamResponse<ListCallTypeResponse>> => {
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListCallTypeResponse>
     >('GET', '/api/v2/video/calltypes', undefined, undefined);
 
@@ -981,7 +987,7 @@ export class VideoApi extends BaseApi {
       settings: request?.settings,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateCallTypeResponse>
     >('POST', '/api/v2/video/calltypes', undefined, undefined, body);
 
@@ -997,7 +1003,7 @@ export class VideoApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/video/calltypes/{name}',
       pathParams,
@@ -1016,7 +1022,7 @@ export class VideoApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCallTypeResponse>
     >('GET', '/api/v2/video/calltypes/{name}', pathParams, undefined);
 
@@ -1038,7 +1044,7 @@ export class VideoApi extends BaseApi {
       settings: request?.settings,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallTypeResponse>
     >('PUT', '/api/v2/video/calltypes/{name}', pathParams, undefined, body);
 
@@ -1048,12 +1054,9 @@ export class VideoApi extends BaseApi {
   };
 
   getEdges = async (): Promise<StreamResponse<GetEdgesResponse>> => {
-    const response = await this.sendRequest<StreamResponse<GetEdgesResponse>>(
-      'GET',
-      '/api/v2/video/edges',
-      undefined,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetEdgesResponse>
+    >('GET', '/api/v2/video/edges', undefined, undefined);
 
     decoders.GetEdgesResponse?.(response.body);
 
