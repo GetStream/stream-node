@@ -26,6 +26,8 @@ import {
   MuteUsersResponse,
   PinRequest,
   PinResponse,
+  QueryAggregateCallStatsRequest,
+  QueryAggregateCallStatsResponse,
   QueryCallMembersRequest,
   QueryCallMembersResponse,
   QueryCallStatsRequest,
@@ -1059,6 +1061,24 @@ export class VideoApi {
     >('GET', '/api/v2/video/edges', undefined, undefined);
 
     decoders.GetEdgesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryAggregateCallStats = async (
+    request?: QueryAggregateCallStatsRequest,
+  ): Promise<StreamResponse<QueryAggregateCallStatsResponse>> => {
+    const body = {
+      from: request?.from,
+      to: request?.to,
+      report_types: request?.report_types,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryAggregateCallStatsResponse>
+    >('POST', '/api/v2/video/stats', undefined, undefined, body);
+
+    decoders.QueryAggregateCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

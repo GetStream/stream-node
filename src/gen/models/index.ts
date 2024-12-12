@@ -680,6 +680,12 @@ export interface BodyguardSeverityRule {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
+export interface Bound {
+  inclusive: boolean;
+
+  value: number;
+}
+
 export interface BroadcastSettings {
   enabled: boolean;
 
@@ -702,6 +708,14 @@ export interface BroadcastSettingsResponse {
   hls: HLSSettingsResponse;
 
   rtmp: RTMPSettingsResponse;
+}
+
+export interface CallDurationReport {
+  histogram: ReportByHistogramBucket[];
+}
+
+export interface CallDurationReportResponse {
+  daily: DailyAggregateCallDurationReportResponse[];
 }
 
 export interface CallEvent {
@@ -728,6 +742,14 @@ export interface CallEvent {
 
 export interface CallIngressResponse {
   rtmp: RTMPIngress;
+}
+
+export interface CallParticipantCountReport {
+  histogram: ReportByHistogramBucket[];
+}
+
+export interface CallParticipantCountReportResponse {
+  daily: DailyAggregateCallParticipantCountReportResponse[];
 }
 
 export interface CallParticipantResponse {
@@ -982,6 +1004,14 @@ export interface CallTypeResponse {
   settings: CallSettingsResponse;
 
   external_storage?: string;
+}
+
+export interface CallsPerDayReport {
+  count: number;
+}
+
+export interface CallsPerDayReportResponse {
+  daily: DailyAggregateCallsPerDayReportResponse[];
 }
 
 export interface CampaignChannelTemplate {
@@ -2167,6 +2197,42 @@ export interface CustomCheckResponse {
   reviewed_at?: Date;
 }
 
+export interface DailyAggregateCallDurationReportResponse {
+  date: string;
+
+  report: CallDurationReport;
+}
+
+export interface DailyAggregateCallParticipantCountReportResponse {
+  date: string;
+
+  report: CallParticipantCountReport;
+}
+
+export interface DailyAggregateCallsPerDayReportResponse {
+  date: string;
+
+  report: CallsPerDayReport;
+}
+
+export interface DailyAggregateQualityScoreReportResponse {
+  date: string;
+
+  report: QualityScoreReport;
+}
+
+export interface DailyAggregateSDKUsageReportResponse {
+  date: string;
+
+  report: SDKUsageReport;
+}
+
+export interface DailyAggregateUserFeedbackReportResponse {
+  date: string;
+
+  report: UserFeedbackReport;
+}
+
 export interface Data {
   id: string;
 }
@@ -2680,12 +2746,7 @@ export interface Feed {
 
   updated_at: Date;
 
-  visibility_level:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'private'
-    | 'restricted';
+  visibility_level: 'public' | 'visible' | 'followers' | 'private';
 
   invites: FeedMember[];
 
@@ -2693,9 +2754,23 @@ export interface Feed {
 
   created_by: UserResponse;
 
+  follow_requests: FollowRequests;
+
   deleted_at?: Date;
 
   custom?: Record<string, any>;
+}
+
+export interface FeedFollowRequest {
+  created_at: Date;
+
+  source_fid: string;
+
+  status: string;
+
+  target_fid: string;
+
+  updated_at: Date;
 }
 
 export interface FeedGroupInput {
@@ -3046,10 +3121,18 @@ export interface FollowRequest {
   user?: UserRequest;
 }
 
+export interface FollowRequests {
+  invites: FeedFollowRequest[];
+
+  pending: FeedFollowRequest[];
+}
+
 export interface FollowResponse {
   created: boolean;
 
   duration: string;
+
+  follow_request_status?: string;
 }
 
 export interface FullUserResponse {
@@ -3204,6 +3287,8 @@ export interface GetCallStatsResponse {
   participant_report: UserStats[];
 
   sfus: SFULocationResponse[];
+
+  average_connection_time?: number;
 
   aggregated?: AggregatedStats;
 
@@ -3487,12 +3572,7 @@ export interface GetOrCreateCallResponse {
 export interface GetOrCreateFeedRequest {
   user_id?: string;
 
-  visibility_level?:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'private'
-    | 'restricted';
+  visibility_level?: 'public' | 'visible' | 'followers' | 'private';
 
   invites?: FeedMember[];
 
@@ -4523,6 +4603,16 @@ export interface MuteUsersResponse {
   duration: string;
 }
 
+export interface NetworkMetricsReportResponse {
+  average_connection_time?: number;
+
+  average_jitter?: number;
+
+  average_latency?: number;
+
+  average_time_to_reconnect?: number;
+}
+
 export interface NoiseCancellationSettings {
   mode: 'available' | 'disabled' | 'auto-on';
 }
@@ -4713,6 +4803,12 @@ export interface PendingMessageResponse {
   metadata?: Record<string, string>;
 
   user?: UserResponse;
+}
+
+export interface PerSDKUsageReport {
+  total: number;
+
+  by_version: Record<string, number>;
 }
 
 export interface Permission {
@@ -5143,6 +5239,14 @@ export interface PushProviderResponse {
   xiaomi_package_name?: string;
 }
 
+export interface QualityScoreReport {
+  histogram: ReportByHistogramBucket[];
+}
+
+export interface QualityScoreReportResponse {
+  daily: DailyAggregateQualityScoreReportResponse[];
+}
+
 export interface QueryActivitiesRequest {
   limit?: number;
 
@@ -5167,6 +5271,32 @@ export interface QueryActivitiesResponse {
   next?: string;
 
   prev?: string;
+}
+
+export interface QueryAggregateCallStatsRequest {
+  from?: string;
+
+  to?: string;
+
+  report_types?: string[];
+}
+
+export interface QueryAggregateCallStatsResponse {
+  duration: string;
+
+  call_duration_report?: CallDurationReportResponse;
+
+  call_participant_count_report?: CallParticipantCountReportResponse;
+
+  calls_per_day_report?: CallsPerDayReportResponse;
+
+  network_metrics_report?: NetworkMetricsReportResponse;
+
+  quality_score_report?: QualityScoreReportResponse;
+
+  sdk_usage_report?: SDKUsageReportResponse;
+
+  user_feedback_report?: UserFeedbackReportResponse;
 }
 
 export interface QueryBannedUsersPayload {
@@ -5943,6 +6073,20 @@ export interface RemoveActivityFromFeedResponse {
   duration: string;
 }
 
+export interface ReportByHistogramBucket {
+  category: string;
+
+  count: number;
+
+  mean: number;
+
+  sum: number;
+
+  lower_bound?: Bound;
+
+  upper_bound?: Bound;
+}
+
 export interface Response {
   duration: string;
 }
@@ -5954,6 +6098,8 @@ export interface RestoreUsersRequest {
 }
 
 export interface ReviewQueueItem {
+  bounce_count: number;
+
   content_changed: boolean;
 
   created_at: Date;
@@ -6097,6 +6243,14 @@ export interface S3Request {
   s3_api_key?: string;
 
   s3_secret?: string;
+}
+
+export interface SDKUsageReport {
+  per_sdk_usage: Record<string, PerSDKUsageReport>;
+}
+
+export interface SDKUsageReportResponse {
+  daily: DailyAggregateSDKUsageReportResponse[];
 }
 
 export interface SFULocationResponse {
@@ -7340,13 +7494,21 @@ export interface UpdateFeedRequest {
 
   user_id?: string;
 
+  accepted_follow_requests?: string[];
+
   add_members?: FeedMember[];
 
   assign_roles?: FeedMember[];
 
+  invited_follow_requests?: string[];
+
   invites?: FeedMember[];
 
+  rejected_follow_requests?: string[];
+
   remove_members?: string[];
+
+  revoked_follow_requests?: string[];
 
   custom?: Record<string, any>;
 
@@ -7629,6 +7791,16 @@ export interface UserCustomEventRequest {
   custom?: Record<string, any>;
 }
 
+export interface UserFeedbackReport {
+  unreported_count: number;
+
+  count_by_rating: Record<string, number>;
+}
+
+export interface UserFeedbackReportResponse {
+  daily: DailyAggregateUserFeedbackReportResponse[];
+}
+
 export interface UserInfoResponse {
   id: string;
 
@@ -7759,6 +7931,8 @@ export interface UserSessionStats {
   total_pixels_in: number;
 
   total_pixels_out: number;
+
+  average_connection_time?: number;
 
   browser?: string;
 
