@@ -24,6 +24,7 @@ import {
   PinResponse,
   SendCallEventRequest,
   SendCallEventResponse,
+  StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
@@ -33,6 +34,7 @@ import {
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
+  StopClosedCaptionsRequest,
   StopClosedCaptionsResponse,
   StopHLSBroadcastingResponse,
   StopLiveRequest,
@@ -40,6 +42,7 @@ import {
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
   StopRecordingResponse,
+  StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
   UnblockUserResponse,
@@ -202,10 +205,14 @@ export class CallApi {
     return this.videoApi.startHLSBroadcasting({ id: this.id, type: this.type });
   };
 
-  startClosedCaptions = (): Promise<
-    StreamResponse<StartClosedCaptionsResponse>
-  > => {
-    return this.videoApi.startClosedCaptions({ id: this.id, type: this.type });
+  startClosedCaptions = (
+    request?: StartClosedCaptionsRequest,
+  ): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
+    return this.videoApi.startClosedCaptions({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   };
 
   startRecording = (
@@ -244,10 +251,14 @@ export class CallApi {
     return this.videoApi.stopHLSBroadcasting({ id: this.id, type: this.type });
   };
 
-  stopClosedCaptions = (): Promise<
-    StreamResponse<StopClosedCaptionsResponse>
-  > => {
-    return this.videoApi.stopClosedCaptions({ id: this.id, type: this.type });
+  stopClosedCaptions = (
+    request?: StopClosedCaptionsRequest,
+  ): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
+    return this.videoApi.stopClosedCaptions({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   };
 
   stopLive = (
@@ -260,10 +271,14 @@ export class CallApi {
     return this.videoApi.stopRecording({ id: this.id, type: this.type });
   };
 
-  stopTranscription = (): Promise<
-    StreamResponse<StopTranscriptionResponse>
-  > => {
-    return this.videoApi.stopTranscription({ id: this.id, type: this.type });
+  stopTranscription = (
+    request?: StopTranscriptionRequest,
+  ): Promise<StreamResponse<StopTranscriptionResponse>> => {
+    return this.videoApi.stopTranscription({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   };
 
   listTranscriptions = (): Promise<

@@ -100,8 +100,11 @@ export class ModerationApi extends BaseApi {
     const body = {
       key: request?.key,
       async: request?.async,
+      team: request?.team,
+      user_id: request?.user_id,
       ai_image_config: request?.ai_image_config,
       ai_text_config: request?.ai_text_config,
+      ai_video_config: request?.ai_video_config,
       automod_platform_circumvention_config:
         request?.automod_platform_circumvention_config,
       automod_semantic_filters_config: request?.automod_semantic_filters_config,
@@ -110,6 +113,7 @@ export class ModerationApi extends BaseApi {
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
       google_vision_config: request?.google_vision_config,
+      user: request?.user,
       velocity_filter_config: request?.velocity_filter_config,
     };
 
@@ -124,14 +128,18 @@ export class ModerationApi extends BaseApi {
 
   deleteConfig = async (request: {
     key: string;
+    team?: string;
   }): Promise<StreamResponse<DeleteModerationConfigResponse>> => {
+    const queryParams = {
+      team: request?.team,
+    };
     const pathParams = {
       key: request?.key,
     };
 
     const response = await this.sendRequest<
       StreamResponse<DeleteModerationConfigResponse>
-    >('DELETE', '/api/v2/moderation/config/{key}', pathParams, undefined);
+    >('DELETE', '/api/v2/moderation/config/{key}', pathParams, queryParams);
 
     decoders.DeleteModerationConfigResponse?.(response.body);
 
@@ -140,7 +148,11 @@ export class ModerationApi extends BaseApi {
 
   getConfig = async (request: {
     key: string;
+    team?: string;
   }): Promise<StreamResponse<GetConfigResponse>> => {
+    const queryParams = {
+      team: request?.team,
+    };
     const pathParams = {
       key: request?.key,
     };
@@ -149,7 +161,7 @@ export class ModerationApi extends BaseApi {
       'GET',
       '/api/v2/moderation/config/{key}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.GetConfigResponse?.(response.body);
@@ -183,12 +195,10 @@ export class ModerationApi extends BaseApi {
     request: CustomCheckRequest,
   ): Promise<StreamResponse<CustomCheckResponse>> => {
     const body = {
-      entity_creator_id: request?.entity_creator_id,
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
-      name: request?.name,
-      reason: request?.reason,
-      recommended_action: request?.recommended_action,
+      flags: request?.flags,
+      entity_creator_id: request?.entity_creator_id,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
       user: request?.user,
