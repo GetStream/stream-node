@@ -533,9 +533,7 @@ decoders.CreateRoleResponse = (input?: Record<string, any>) => {
 
 decoders.CustomCheckResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    scored_at: { type: 'DatetimeType', isSingle: true },
-
-    reviewed_at: { type: 'DatetimeType', isSingle: true },
+    item: { type: 'ReviewQueueItemResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };

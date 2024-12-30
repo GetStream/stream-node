@@ -27,6 +27,8 @@ import {
   MuteUsersResponse,
   PinRequest,
   PinResponse,
+  QueryAggregateCallStatsRequest,
+  QueryAggregateCallStatsResponse,
   QueryCallMembersRequest,
   QueryCallMembersResponse,
   QueryCallStatsRequest,
@@ -36,6 +38,7 @@ import {
   Response,
   SendCallEventRequest,
   SendCallEventResponse,
+  StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
@@ -45,6 +48,7 @@ import {
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
+  StopClosedCaptionsRequest,
   StopClosedCaptionsResponse,
   StopHLSBroadcastingResponse,
   StopLiveRequest,
@@ -52,6 +56,7 @@ import {
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
   StopRecordingResponse,
+  StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
   UnblockUserResponse,
@@ -313,6 +318,7 @@ export class VideoApi extends BaseApi {
     };
     const body = {
       recording_storage_name: request?.recording_storage_name,
+      start_closed_caption: request?.start_closed_caption,
       start_hls: request?.start_hls,
       start_recording: request?.start_recording,
       start_rtmp_broadcasts: request?.start_rtmp_broadcasts,
@@ -561,13 +567,17 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  startClosedCaptions = async (request: {
-    type: string;
-    id: string;
-  }): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
+  startClosedCaptions = async (
+    request: StartClosedCaptionsRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
     const pathParams = {
       type: request?.type,
       id: request?.id,
+    };
+    const body = {
+      enable_transcription: request?.enable_transcription,
+      external_storage: request?.external_storage,
+      language: request?.language,
     };
 
     const response = await this.sendRequest<
@@ -577,6 +587,7 @@ export class VideoApi extends BaseApi {
       '/api/v2/video/call/{type}/{id}/start_closed_captions',
       pathParams,
       undefined,
+      body,
     );
 
     decoders.StartClosedCaptionsResponse?.(response.body);
@@ -618,6 +629,8 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
     const body = {
+      enable_closed_captions: request?.enable_closed_captions,
+      language: request?.language,
       transcription_external_storage: request?.transcription_external_storage,
     };
 
@@ -684,13 +697,15 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  stopClosedCaptions = async (request: {
-    type: string;
-    id: string;
-  }): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
+  stopClosedCaptions = async (
+    request: StopClosedCaptionsRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
     const pathParams = {
       type: request?.type,
       id: request?.id,
+    };
+    const body = {
+      stop_transcription: request?.stop_transcription,
     };
 
     const response = await this.sendRequest<
@@ -700,6 +715,7 @@ export class VideoApi extends BaseApi {
       '/api/v2/video/call/{type}/{id}/stop_closed_captions',
       pathParams,
       undefined,
+      body,
     );
 
     decoders.StopClosedCaptionsResponse?.(response.body);
@@ -715,9 +731,10 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
     const body = {
+      continue_closed_caption: request?.continue_closed_caption,
       continue_hls: request?.continue_hls,
       continue_recording: request?.continue_recording,
-      continue_rtmp_broadcast: request?.continue_rtmp_broadcast,
+      continue_rtmp_broadcasts: request?.continue_rtmp_broadcasts,
       continue_transcription: request?.continue_transcription,
     };
 
@@ -757,13 +774,15 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  stopTranscription = async (request: {
-    type: string;
-    id: string;
-  }): Promise<StreamResponse<StopTranscriptionResponse>> => {
+  stopTranscription = async (
+    request: StopTranscriptionRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StopTranscriptionResponse>> => {
     const pathParams = {
       type: request?.type,
       id: request?.id,
+    };
+    const body = {
+      stop_closed_captions: request?.stop_closed_captions,
     };
 
     const response = await this.sendRequest<
@@ -773,6 +792,7 @@ export class VideoApi extends BaseApi {
       '/api/v2/video/call/{type}/{id}/stop_transcription',
       pathParams,
       undefined,
+      body,
     );
 
     decoders.StopTranscriptionResponse?.(response.body);
@@ -1056,6 +1076,24 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.GetEdgesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryAggregateCallStats = async (
+    request?: QueryAggregateCallStatsRequest,
+  ): Promise<StreamResponse<QueryAggregateCallStatsResponse>> => {
+    const body = {
+      from: request?.from,
+      to: request?.to,
+      report_types: request?.report_types,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryAggregateCallStatsResponse>
+    >('POST', '/api/v2/video/stats', undefined, undefined, body);
+
+    decoders.QueryAggregateCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
