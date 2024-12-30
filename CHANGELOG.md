@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.6](https://github.com/GetStream/stream-node/compare/v0.4.5...v0.4.6) (2024-12-30)
+
+
+### Features
+
+* add closed caption endpoints ([#67](https://github.com/GetStream/stream-node/issues/67)) ([c1820f2](https://github.com/GetStream/stream-node/commit/c1820f20be4ab5969bb17a04fbf5ae417b40e846))
+
 ## [0.4.5](https://github.com/GetStream/stream-node/compare/v0.4.4...v0.4.5) (2024-12-06)
 
 
