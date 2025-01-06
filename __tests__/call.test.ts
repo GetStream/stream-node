@@ -230,6 +230,7 @@ describe('call API', () => {
 
   describe('transcriptions', () => {
     it('start transcribing', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
       await expect(() => call.startTranscription()).rejects.toThrowError(
         'Stream error code 4: StartTranscription failed with error: "there is no active session"',
