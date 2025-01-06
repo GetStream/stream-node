@@ -228,7 +228,7 @@ describe('call API', () => {
     expect(response.call.backstage).toBe(true);
   });
 
-  describe.skip('transcriptions', () => {
+  describe('transcriptions', () => {
     it('start transcribing', async () => {
       // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
       await expect(() => call.startTranscription()).rejects.toThrowError(
