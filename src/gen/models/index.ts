@@ -1193,6 +1193,8 @@ export interface CallSettings {
 
   screensharing?: ScreensharingSettings;
 
+  session?: SessionSettings;
+
   thumbnails?: ThumbnailsSettings;
 
   transcription?: TranscriptionSettings;
@@ -1217,6 +1219,8 @@ export interface CallSettingsRequest {
 
   screensharing?: ScreensharingSettingsRequest;
 
+  session?: SessionSettingsRequest;
+
   thumbnails?: ThumbnailsSettingsRequest;
 
   transcription?: TranscriptionSettingsRequest;
@@ -1240,6 +1244,8 @@ export interface CallSettingsResponse {
   ring: RingSettingsResponse;
 
   screensharing: ScreensharingSettingsResponse;
+
+  session: SessionSettingsResponse;
 
   thumbnails: ThumbnailsSettingsResponse;
 
@@ -7097,6 +7103,18 @@ export interface SendReactionResponse {
 
 export interface SendUserCustomEventRequest {
   event: UserCustomEventRequest;
+}
+
+export interface SessionSettings {
+  inactivity_timeout_seconds: number;
+}
+
+export interface SessionSettingsRequest {
+  inactivity_timeout_seconds: number;
+}
+
+export interface SessionSettingsResponse {
+  inactivity_timeout_seconds: number;
 }
 
 export interface ShowChannelRequest {
