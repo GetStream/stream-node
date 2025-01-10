@@ -153,6 +153,15 @@ decoders.CallRecording = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CallReportResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    ended_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CallResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },

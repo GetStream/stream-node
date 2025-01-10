@@ -988,6 +988,14 @@ export interface CallRejectedEvent {
   reason?: string;
 }
 
+export interface CallReportResponse {
+  score: number;
+
+  ended_at?: Date;
+
+  started_at?: Date;
+}
+
 export interface CallRequest {
   created_by_id?: string;
 
@@ -3615,6 +3623,14 @@ export interface GetBlockedUsersResponse {
   blocks: BlockedUserResponse[];
 }
 
+export interface GetCallReportResponse {
+  duration: string;
+
+  session_id: string;
+
+  report: ReportResponse;
+}
+
 export interface GetCallResponse {
   duration: string;
 
@@ -5367,6 +5383,12 @@ export interface PaginationParams {
   offset?: number;
 }
 
+export interface ParticipantReportResponse {
+  sum: number;
+
+  unique: number;
+}
+
 export interface PendingMessageResponse {
   channel?: ChannelResponse;
 
@@ -6661,6 +6683,14 @@ export interface ReportByHistogramBucket {
   lower_bound?: Bound;
 
   upper_bound?: Bound;
+}
+
+export interface ReportResponse {
+  call: CallReportResponse;
+
+  participants: ParticipantReportResponse;
+
+  user_ratings: UserRatingReportResponse;
 }
 
 export interface Response {
@@ -8610,6 +8640,12 @@ export interface UserMutedEvent {
   target_users?: string[];
 
   user?: User;
+}
+
+export interface UserRatingReportResponse {
+  average: number;
+
+  count: number;
 }
 
 export interface UserReactivatedEvent {
