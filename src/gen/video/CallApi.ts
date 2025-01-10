@@ -10,6 +10,7 @@ import {
   DeleteRecordingResponse,
   DeleteTranscriptionResponse,
   EndCallResponse,
+  GetCallReportResponse,
   GetCallResponse,
   GetCallStatsResponse,
   GetOrCreateCallRequest,
@@ -168,6 +169,16 @@ export class CallApi {
 
   listRecordings = (): Promise<StreamResponse<ListRecordingsResponse>> => {
     return this.videoApi.listRecordings({ id: this.id, type: this.type });
+  };
+
+  getCallReport = (request?: {
+    session_id?: string;
+  }): Promise<StreamResponse<GetCallReportResponse>> => {
+    return this.videoApi.getCallReport({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   };
 
   startRTMPBroadcasts = (

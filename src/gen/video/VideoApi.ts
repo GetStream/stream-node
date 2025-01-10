@@ -12,6 +12,7 @@ import {
   DeleteRecordingResponse,
   DeleteTranscriptionResponse,
   EndCallResponse,
+  GetCallReportResponse,
   GetCallResponse,
   GetCallStatsResponse,
   GetCallTypeResponse,
@@ -462,6 +463,28 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.ListRecordingsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  getCallReport = async (request: {
+    type: string;
+    id: string;
+    session_id?: string;
+  }): Promise<StreamResponse<GetCallReportResponse>> => {
+    const queryParams = {
+      session_id: request?.session_id,
+    };
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<GetCallReportResponse>
+    >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
+
+    decoders.GetCallReportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
