@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.8](https://github.com/GetStream/stream-node/compare/v0.4.7...v0.4.8) (2025-01-10)
+
+
+### Features
+
+* Stable video-stats API: Get call report ([#71](https://github.com/GetStream/stream-node/issues/71)) ([16d5e4f](https://github.com/GetStream/stream-node/commit/16d5e4f62081312a8f60a374a52cfa25241ef4f6))
+
 ## [0.4.7](https://github.com/GetStream/stream-node/compare/v0.4.6...v0.4.7) (2025-01-07)
 
 
