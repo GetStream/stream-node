@@ -17,6 +17,7 @@ import {
   DeleteChannelsResponse,
   DeleteCommandResponse,
   DeleteMessageResponse,
+  DeleteReactionResponse,
   DeleteSegmentTargetsRequest,
   EventResponse,
   ExportChannelsRequest,
@@ -74,7 +75,6 @@ import {
   QuerySegmentsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
-  ReactionRemovalResponse,
   Response,
   SearchPayload,
   SearchResponse,
@@ -1231,7 +1231,7 @@ export class ChatApi extends BaseApi {
     id: string;
     type: string;
     user_id?: string;
-  }): Promise<StreamResponse<ReactionRemovalResponse>> => {
+  }): Promise<StreamResponse<DeleteReactionResponse>> => {
     const queryParams = {
       user_id: request?.user_id,
     };
@@ -1241,7 +1241,7 @@ export class ChatApi extends BaseApi {
     };
 
     const response = await this.sendRequest<
-      StreamResponse<ReactionRemovalResponse>
+      StreamResponse<DeleteReactionResponse>
     >(
       'DELETE',
       '/api/v2/chat/messages/{id}/reaction/{type}',
@@ -1249,7 +1249,7 @@ export class ChatApi extends BaseApi {
       queryParams,
     );
 
-    decoders.ReactionRemovalResponse?.(response.body);
+    decoders.DeleteReactionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

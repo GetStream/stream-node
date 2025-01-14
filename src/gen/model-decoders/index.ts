@@ -575,6 +575,15 @@ decoders.DeleteMessageResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.DeleteReactionResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    message: { type: 'MessageResponse', isSingle: true },
+
+    reaction: { type: 'ReactionResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.Device = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1555,15 +1564,6 @@ decoders.ReactionGroupResponse = (input?: Record<string, any>) => {
     first_reaction_at: { type: 'DatetimeType', isSingle: true },
 
     last_reaction_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.ReactionRemovalResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    message: { type: 'Message', isSingle: true },
-
-    reaction: { type: 'Reaction', isSingle: true },
   };
   return decode(typeMappings, input);
 };

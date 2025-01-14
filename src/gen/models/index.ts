@@ -1447,6 +1447,8 @@ export interface CampaignResponse {
 
   sender_id: string;
 
+  sender_mode: string;
+
   skip_push: boolean;
 
   skip_webhook: boolean;
@@ -2905,6 +2907,14 @@ export interface DeleteModerationTemplateResponse {
 
 export interface DeleteReactionRequest {
   hard_delete?: boolean;
+}
+
+export interface DeleteReactionResponse {
+  duration: string;
+
+  message: MessageResponse;
+
+  reaction: ReactionResponse;
 }
 
 export interface DeleteRecordingResponse {
@@ -6519,14 +6529,6 @@ export interface ReactionNewEvent {
   reaction?: Reaction;
 
   user?: User;
-}
-
-export interface ReactionRemovalResponse {
-  duration: string;
-
-  message?: Message;
-
-  reaction?: Reaction;
 }
 
 export interface ReactionRequest {
