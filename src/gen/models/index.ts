@@ -666,6 +666,12 @@ export interface BroadcastSettingsResponse {
   rtmp: RTMPSettingsResponse;
 }
 
+export interface BrowserDataResponse {
+  name?: string;
+
+  version?: string;
+}
+
 export interface CallAcceptedEvent {
   call_cid: string;
 
@@ -2287,6 +2293,14 @@ export interface CheckSQSResponse {
   data?: Record<string, any>;
 }
 
+export interface ClientOSDataResponse {
+  architecture?: string;
+
+  name?: string;
+
+  version?: string;
+}
+
 export interface ClosedCaptionEvent {
   call_cid: string;
 
@@ -2977,6 +2991,12 @@ export interface Device {
   push_provider_name?: string;
 
   voip?: boolean;
+}
+
+export interface DeviceDataResponse {
+  name?: string;
+
+  version?: string;
 }
 
 export interface DeviceErrorInfo {
@@ -5459,6 +5479,14 @@ export interface PinResponse {
   duration: string;
 }
 
+export interface PlatformDataResponse {
+  browser: BrowserDataResponse;
+
+  device: DeviceDataResponse;
+
+  os: ClientOSDataResponse;
+}
+
 export interface Policy {
   action: number;
 
@@ -6351,6 +6379,28 @@ export interface QueryUsageStatsResponse {
   duration: string;
 
   items: ModerationUsageStats[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryUserFeedbackRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter_conditions?: Record<string, any>;
+}
+
+export interface QueryUserFeedbackResponse {
+  duration: string;
+
+  user_feedback: UserFeedbackResponse[];
 
   next?: string;
 
@@ -8582,6 +8632,26 @@ export interface UserFeedbackReport {
 
 export interface UserFeedbackReportResponse {
   daily: DailyAggregateUserFeedbackReportResponse[];
+}
+
+export interface UserFeedbackResponse {
+  cid: string;
+
+  rating: number;
+
+  reason: string;
+
+  sdk: string;
+
+  sdk_version: string;
+
+  session_id: string;
+
+  user_id: string;
+
+  platform: PlatformDataResponse;
+
+  custom?: Record<string, any>;
 }
 
 export interface UserFlaggedEvent {
