@@ -36,6 +36,8 @@ import {
   QueryCallStatsResponse,
   QueryCallsRequest,
   QueryCallsResponse,
+  QueryUserFeedbackRequest,
+  QueryUserFeedbackResponse,
   Response,
   SendCallEventRequest,
   SendCallEventResponse,
@@ -75,6 +77,29 @@ import {
 import { decoders } from '../model-decoders';
 
 export class VideoApi extends BaseApi {
+  queryUserFeedback = async (
+    request?: QueryUserFeedbackRequest & { full?: boolean },
+  ): Promise<StreamResponse<QueryUserFeedbackResponse>> => {
+    const queryParams = {
+      full: request?.full,
+    };
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryUserFeedbackResponse>
+    >('POST', '/api/v2/video/call/feedback', undefined, queryParams, body);
+
+    decoders.QueryUserFeedbackResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   queryCallMembers = async (
     request: QueryCallMembersRequest,
   ): Promise<StreamResponse<QueryCallMembersResponse>> => {
