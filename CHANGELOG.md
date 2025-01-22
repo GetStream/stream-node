@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.10](https://github.com/GetStream/stream-node/compare/v0.4.9...v0.4.10) (2025-01-22)
+
+
+### Features
+
+* [VID-300] Query user feedback API endpoint ([#75](https://github.com/GetStream/stream-node/issues/75)) ([71815d6](https://github.com/GetStream/stream-node/commit/71815d6acb7099d8bce91ece4db860003d20d836))
+
 ## [0.4.9](https://github.com/GetStream/stream-node/compare/v0.4.8...v0.4.9) (2025-01-14)
 
 
