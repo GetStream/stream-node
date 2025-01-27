@@ -381,6 +381,13 @@ decoders.ChannelMute = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ChannelPushPreferences = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    disabled_until: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ChannelResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -429,6 +436,8 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
     channel: { type: 'ChannelResponse', isSingle: true },
 
     membership: { type: 'ChannelMember', isSingle: true },
+
+    push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -454,6 +463,8 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
     channel: { type: 'ChannelResponse', isSingle: true },
 
     membership: { type: 'ChannelMember', isSingle: true },
+
+    push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -622,8 +633,6 @@ decoders.EntityCreator = (input?: Record<string, any>) => {
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
-
-    push_notifications: { type: 'PushNotificationSettings', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -634,8 +643,6 @@ decoders.EntityCreatorResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    devices: { type: 'DeviceResponse', isSingle: false },
-
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
     deactivated_at: { type: 'DatetimeType', isSingle: true },
@@ -645,6 +652,8 @@ decoders.EntityCreatorResponse = (input?: Record<string, any>) => {
     last_active: { type: 'DatetimeType', isSingle: true },
 
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
+
+    devices: { type: 'DeviceResponse', isSingle: false },
 
     push_notifications: {
       type: 'PushNotificationSettingsResponse',
@@ -727,11 +736,6 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
     last_active: { type: 'DatetimeType', isSingle: true },
 
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
-
-    push_notifications: {
-      type: 'PushNotificationSettingsResponse',
-      isSingle: true,
-    },
   };
   return decode(typeMappings, input);
 };
@@ -1109,9 +1113,11 @@ decoders.MessageReadEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
+    channel_last_message_at: { type: 'DatetimeType', isSingle: true },
+
     thread: { type: 'ThreadResponse', isSingle: true },
 
-    user: { type: 'UserResponse', isSingle: true },
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1217,13 +1223,6 @@ decoders.MuteResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.NullTime = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    value: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.OwnUser = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1244,7 +1243,7 @@ decoders.OwnUser = (input?: Record<string, any>) => {
 
     last_engaged_at: { type: 'DatetimeType', isSingle: true },
 
-    push_notifications: { type: 'PushNotificationSettings', isSingle: true },
+    push_preferences: { type: 'PushPreferences', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1269,10 +1268,7 @@ decoders.OwnUserResponse = (input?: Record<string, any>) => {
 
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
-    push_notifications: {
-      type: 'PushNotificationSettingsResponse',
-      isSingle: true,
-    },
+    push_preferences: { type: 'PushPreferences', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1368,14 +1364,14 @@ decoders.PushNotificationFields = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.PushNotificationSettings = (input?: Record<string, any>) => {
+decoders.PushNotificationSettingsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     disabled_until: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
 
-decoders.PushNotificationSettingsResponse = (input?: Record<string, any>) => {
+decoders.PushPreferences = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     disabled_until: { type: 'DatetimeType', isSingle: true },
   };
@@ -1606,10 +1602,6 @@ decoders.ReviewQueueItem = (input?: Record<string, any>) => {
     bans: { type: 'Ban', isSingle: false },
 
     flags: { type: 'Flag2', isSingle: false },
-
-    completed_at: { type: 'NullTime', isSingle: true },
-
-    reviewed_at: { type: 'NullTime', isSingle: true },
 
     assigned_to: { type: 'User', isSingle: true },
 
@@ -1980,6 +1972,13 @@ decoders.UpsertModerationTemplateResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UpsertPushPreferencesResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_preferences: { type: 'PushPreferences', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.UpsertPushProviderResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     push_provider: { type: 'PushProviderResponse', isSingle: true },
@@ -2004,8 +2003,6 @@ decoders.User = (input?: Record<string, any>) => {
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
-
-    push_notifications: { type: 'PushNotificationSettings', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2053,8 +2050,6 @@ decoders.UserResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    devices: { type: 'DeviceResponse', isSingle: false },
-
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
     deactivated_at: { type: 'DatetimeType', isSingle: true },
@@ -2065,6 +2060,8 @@ decoders.UserResponse = (input?: Record<string, any>) => {
 
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
+    devices: { type: 'DeviceResponse', isSingle: false },
+
     push_notifications: {
       type: 'PushNotificationSettingsResponse',
       isSingle: true,
@@ -2073,9 +2070,28 @@ decoders.UserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UserResponseCommonFields = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    deactivated_at: { type: 'DatetimeType', isSingle: true },
+
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    last_active: { type: 'DatetimeType', isSingle: true },
+
+    revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.WSEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
+
+    channel_last_message_at: { type: 'DatetimeType', isSingle: true },
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
