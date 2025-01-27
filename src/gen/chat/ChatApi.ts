@@ -116,6 +116,8 @@ import {
   UpdatePollRequest,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
+  UpsertPushPreferencesRequest,
+  UpsertPushPreferencesResponse,
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders';
@@ -1813,6 +1815,22 @@ export class ChatApi extends BaseApi {
     );
 
     decoders.PollVotesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  updatePushNotificationPreferences = async (
+    request: UpsertPushPreferencesRequest,
+  ): Promise<StreamResponse<UpsertPushPreferencesResponse>> => {
+    const body = {
+      preferences: request?.preferences,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<UpsertPushPreferencesResponse>
+    >('POST', '/api/v2/chat/push_preferences', undefined, undefined, body);
+
+    decoders.UpsertPushPreferencesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

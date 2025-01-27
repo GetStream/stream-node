@@ -167,8 +167,6 @@ export interface ActionLogResponse {
 }
 
 export interface AggregatedStats {
-  countrywise_aggregate_stats?: Record<string, CountrywiseAggregateStats>;
-
   publisher_aggregate_stats?: PublisherAggregateStats;
 
   turn?: TURNAggregatedStats;
@@ -951,6 +949,8 @@ export interface CallRecordingFailedEvent {
 
   created_at: Date;
 
+  egress_id: string;
+
   type: string;
 }
 
@@ -958,6 +958,8 @@ export interface CallRecordingReadyEvent {
   call_cid: string;
 
   created_at: Date;
+
+  egress_id: string;
 
   call_recording: CallRecording;
 
@@ -969,6 +971,8 @@ export interface CallRecordingStartedEvent {
 
   created_at: Date;
 
+  egress_id: string;
+
   type: string;
 }
 
@@ -976,6 +980,8 @@ export interface CallRecordingStoppedEvent {
   call_cid: string;
 
   created_at: Date;
+
+  egress_id: string;
 
   type: string;
 }
@@ -1313,6 +1319,8 @@ export interface CallTranscriptionFailedEvent {
 
   created_at: Date;
 
+  egress_id: string;
+
   type: string;
 }
 
@@ -1320,6 +1328,8 @@ export interface CallTranscriptionReadyEvent {
   call_cid: string;
 
   created_at: Date;
+
+  egress_id: string;
 
   call_transcription: CallTranscription;
 
@@ -1331,6 +1341,8 @@ export interface CallTranscriptionStartedEvent {
 
   created_at: Date;
 
+  egress_id: string;
+
   type: string;
 }
 
@@ -1338,6 +1350,8 @@ export interface CallTranscriptionStoppedEvent {
   call_cid: string;
 
   created_at: Date;
+
+  egress_id: string;
 
   type: string;
 }
@@ -1423,6 +1437,8 @@ export interface CampaignChannelTemplate {
 export interface CampaignCompletedEvent {
   created_at: Date;
 
+  custom: Record<string, any>;
+
   type: string;
 
   received_at?: Date;
@@ -1486,6 +1502,8 @@ export interface CampaignResponse {
 
 export interface CampaignStartedEvent {
   created_at: Date;
+
+  custom: Record<string, any>;
 
   type: string;
 
@@ -1939,6 +1957,12 @@ export const ChannelOwnCapability = {
 export type ChannelOwnCapability =
   (typeof ChannelOwnCapability)[keyof typeof ChannelOwnCapability];
 
+export interface ChannelPushPreferences {
+  chat_level?: string;
+
+  disabled_until?: Date;
+}
+
 export interface ChannelResponse {
   cid: string;
 
@@ -2019,6 +2043,8 @@ export interface ChannelStateResponse {
   channel?: ChannelResponse;
 
   membership?: ChannelMember;
+
+  push_preferences?: ChannelPushPreferences;
 }
 
 export interface ChannelStateResponseFields {
@@ -2045,6 +2071,8 @@ export interface ChannelStateResponseFields {
   channel?: ChannelResponse;
 
   membership?: ChannelMember;
+
+  push_preferences?: ChannelPushPreferences;
 }
 
 export interface ChannelTruncatedEvent {
@@ -2407,18 +2435,6 @@ export interface Count {
   approximate: boolean;
 
   value: number;
-}
-
-export interface CountrywiseAggregateStats {
-  participant_count?: Count;
-
-  publisher_jitter?: TimeStats;
-
-  publisher_latency?: TimeStats;
-
-  subscriber_jitter?: TimeStats;
-
-  subscriber_latency?: TimeStats;
 }
 
 export interface CreateBlockListRequest {
@@ -3049,6 +3065,8 @@ export interface EdgeResponse {
 
 export interface EgressHLSResponse {
   playlist_url: string;
+
+  status: string;
 }
 
 export interface EgressRTMPResponse {
@@ -3167,8 +3185,6 @@ export interface EntityCreator {
   teams?: string[];
 
   privacy_settings?: PrivacySettings;
-
-  push_notifications?: PushNotificationSettings;
 }
 
 export interface EntityCreatorResponse {
@@ -3196,8 +3212,6 @@ export interface EntityCreatorResponse {
 
   blocked_user_ids: string[];
 
-  devices: DeviceResponse[];
-
   teams: string[];
 
   custom: Record<string, any>;
@@ -3215,6 +3229,8 @@ export interface EntityCreatorResponse {
   name?: string;
 
   revoke_tokens_issued_before?: Date;
+
+  devices?: DeviceResponse[];
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -3522,6 +3538,8 @@ export interface FlagResponse {
 export interface FlagUpdatedEvent {
   created_at: Date;
 
+  custom: Record<string, any>;
+
   type: string;
 
   received_at?: Date;
@@ -3587,8 +3605,6 @@ export interface FullUserResponse {
   latest_hidden_channels?: string[];
 
   privacy_settings?: PrivacySettingsResponse;
-
-  push_notifications?: PushNotificationSettingsResponse;
 }
 
 export interface GeofenceResponse {
@@ -4726,13 +4742,15 @@ export interface MessageReadEvent {
 
   type: string;
 
+  channel_last_message_at?: Date;
+
   last_read_message_id?: string;
 
   team?: string;
 
   thread?: ThreadResponse;
 
-  user?: UserResponse;
+  user?: UserResponseCommonFields;
 }
 
 export interface MessageRequest {
@@ -5020,6 +5038,8 @@ export interface ModerationCustomActionEvent {
 export interface ModerationEvent {
   created_at: Date;
 
+  custom: Record<string, any>;
+
   type: string;
 
   received_at?: Date;
@@ -5249,17 +5269,7 @@ export interface NotificationSettings {
   session_started: EventNotificationSettings;
 }
 
-export interface NullBool {
-  has_value?: boolean;
-
-  value?: boolean;
-}
-
-export interface NullTime {
-  has_value?: boolean;
-
-  value?: Date;
-}
+export interface NullTime {}
 
 export interface OnlyUserID {
   id: string;
@@ -5348,7 +5358,7 @@ export interface OwnUser {
 
   privacy_settings?: PrivacySettings;
 
-  push_notifications?: PushNotificationSettings;
+  push_preferences?: PushPreferences;
 }
 
 export interface OwnUserResponse {
@@ -5404,7 +5414,7 @@ export interface OwnUserResponse {
 
   privacy_settings?: PrivacySettingsResponse;
 
-  push_notifications?: PushNotificationSettingsResponse;
+  push_preferences?: PushPreferences;
 }
 
 export interface PaginationParams {
@@ -5753,20 +5763,28 @@ export interface PushNotificationFields {
   providers?: PushProvider[];
 }
 
-export interface PushNotificationSettings {
+export interface PushNotificationSettingsResponse {
   disabled?: boolean;
 
   disabled_until?: Date;
 }
 
-export interface PushNotificationSettingsInput {
-  disabled?: NullBool;
+export interface PushPreferenceInput {
+  channel_cid?: string;
 
-  disabled_until?: NullTime;
+  chat_level?: 'all' | 'mentions' | 'none' | 'default';
+
+  disabled_until?: Date;
+
+  remove_disable?: boolean;
+
+  user_id?: string;
 }
 
-export interface PushNotificationSettingsResponse {
-  disabled?: boolean;
+export interface PushPreferences {
+  call_level?: string;
+
+  chat_level?: string;
 
   disabled_until?: Date;
 }
@@ -6280,7 +6298,7 @@ export interface QueryReviewQueueResponse {
 
   action_config: Record<string, ModerationActionConfig[]>;
 
-  stats: Record<string, number>;
+  stats: Record<string, any>;
 
   next?: string;
 
@@ -6795,8 +6813,6 @@ export interface ReviewQueueItem {
   languages: string[];
 
   teams: string[];
-
-  completed_at: NullTime;
 
   reviewed_at: NullTime;
 
@@ -8476,6 +8492,21 @@ export interface UpsertModerationTemplateResponse {
   config?: FeedsModerationTemplateConfig;
 }
 
+export interface UpsertPushPreferencesRequest {
+  preferences: PushPreferenceInput[];
+}
+
+export interface UpsertPushPreferencesResponse {
+  duration: string;
+
+  user_channel_preferences: Record<
+    string,
+    Record<string, ChannelPushPreferences>
+  >;
+
+  user_preferences: Record<string, PushPreferences>;
+}
+
 export interface UpsertPushProviderRequest {
   push_provider?: PushProvider;
 }
@@ -8520,8 +8551,6 @@ export interface User {
   teams?: string[];
 
   privacy_settings?: PrivacySettings;
-
-  push_notifications?: PushNotificationSettings;
 }
 
 export interface UserBannedEvent {
@@ -8584,44 +8613,6 @@ export interface UserDeletedEvent {
   type: string;
 
   user?: User;
-}
-
-export interface UserEventPayload {
-  banned: boolean;
-
-  created_at: Date;
-
-  id: string;
-
-  language: string;
-
-  online: boolean;
-
-  role: string;
-
-  updated_at: Date;
-
-  blocked_user_ids: string[];
-
-  teams: string[];
-
-  custom: Record<string, any>;
-
-  deactivated_at?: Date;
-
-  deleted_at?: Date;
-
-  image?: string;
-
-  invisible?: boolean;
-
-  last_active?: Date;
-
-  name?: string;
-
-  revoke_tokens_issued_before?: Date;
-
-  privacy_settings?: PrivacySettingsResponse;
 }
 
 export interface UserFeedbackReport {
@@ -8746,8 +8737,6 @@ export interface UserRequest {
   custom?: Record<string, any>;
 
   privacy_settings?: PrivacySettingsResponse;
-
-  push_notifications?: PushNotificationSettingsInput;
 }
 
 export interface UserResponse {
@@ -8771,8 +8760,6 @@ export interface UserResponse {
 
   blocked_user_ids: string[];
 
-  devices: DeviceResponse[];
-
   teams: string[];
 
   custom: Record<string, any>;
@@ -8791,9 +8778,83 @@ export interface UserResponse {
 
   revoke_tokens_issued_before?: Date;
 
+  devices?: DeviceResponse[];
+
   privacy_settings?: PrivacySettingsResponse;
 
   push_notifications?: PushNotificationSettingsResponse;
+}
+
+export interface UserResponseCommonFields {
+  banned: boolean;
+
+  created_at: Date;
+
+  id: string;
+
+  language: string;
+
+  online: boolean;
+
+  role: string;
+
+  updated_at: Date;
+
+  blocked_user_ids: string[];
+
+  teams: string[];
+
+  custom: Record<string, any>;
+
+  deactivated_at?: Date;
+
+  deleted_at?: Date;
+
+  image?: string;
+
+  last_active?: Date;
+
+  name?: string;
+
+  revoke_tokens_issued_before?: Date;
+}
+
+export interface UserResponsePrivacyFields {
+  banned: boolean;
+
+  created_at: Date;
+
+  id: string;
+
+  language: string;
+
+  online: boolean;
+
+  role: string;
+
+  updated_at: Date;
+
+  blocked_user_ids: string[];
+
+  teams: string[];
+
+  custom: Record<string, any>;
+
+  deactivated_at?: Date;
+
+  deleted_at?: Date;
+
+  image?: string;
+
+  invisible?: boolean;
+
+  last_active?: Date;
+
+  name?: string;
+
+  revoke_tokens_issued_before?: Date;
+
+  privacy_settings?: PrivacySettingsResponse;
 }
 
 export interface UserSessionStats {
@@ -8955,7 +9016,9 @@ export interface UserUnreadReminderEvent {
 export interface UserUpdatedEvent {
   created_at: Date;
 
-  user: UserEventPayload;
+  custom: Record<string, any>;
+
+  user: UserResponsePrivacyFields;
 
   type: string;
 
@@ -9066,6 +9129,8 @@ export interface WSEvent {
   automoderation?: boolean;
 
   channel_id?: string;
+
+  channel_last_message_at?: Date;
 
   channel_type?: string;
 
