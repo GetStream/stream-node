@@ -199,6 +199,8 @@ export interface AppResponseFields {
 
   moderation_enabled: boolean;
 
+  moderation_multitenant_blocklist_enabled: boolean;
+
   moderation_webhook_url: string;
 
   multi_tenant_enabled: boolean;
@@ -543,6 +545,10 @@ export interface BlockListResponse {
 
   created_at?: Date;
 
+  id?: string;
+
+  team?: string;
+
   updated_at?: Date;
 }
 
@@ -556,6 +562,8 @@ export interface BlockListRule {
     | 'bounce_remove';
 
   name: string;
+
+  team: string;
 }
 
 export interface BlockUserRequest {
@@ -796,6 +804,8 @@ export interface CallHLSBroadcastingStartedEvent {
   created_at: Date;
 
   hls_playlist_url: string;
+
+  call: CallResponse;
 
   type: string;
 }
@@ -2262,6 +2272,8 @@ export interface CheckRequest {
 
   entity_type: string;
 
+  config_team?: string;
+
   test_mode?: boolean;
 
   user_id?: string;
@@ -2442,7 +2454,15 @@ export interface CreateBlockListRequest {
 
   words: string[];
 
+  team?: string;
+
   type?: 'regex' | 'domain' | 'email' | 'word';
+}
+
+export interface CreateBlockListResponse {
+  duration: string;
+
+  blocklist?: BlockListResponse;
 }
 
 export interface CreateCallTypeRequest {
@@ -6746,8 +6766,6 @@ export interface ReportByHistogramBucket {
 
   count: number;
 
-  mean: number;
-
   sum: number;
 
   lower_bound?: Bound;
@@ -6774,6 +6792,8 @@ export interface RestoreUsersRequest {
 }
 
 export interface ReviewQueueItem {
+  ai_text_severity: string;
+
   bounce_count: number;
 
   content_changed: boolean;
@@ -6830,6 +6850,8 @@ export interface ReviewQueueItem {
 }
 
 export interface ReviewQueueItemResponse {
+  ai_text_severity: string;
+
   created_at: Date;
 
   entity_id: string;
@@ -7985,7 +8007,15 @@ export interface UpdateAppRequest {
 }
 
 export interface UpdateBlockListRequest {
+  team?: string;
+
   words?: string[];
+}
+
+export interface UpdateBlockListResponse {
+  duration: string;
+
+  blocklist?: BlockListResponse;
 }
 
 export interface UpdateCallMembersRequest {

@@ -505,6 +505,13 @@ decoders.ConfigResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CreateBlockListResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    blocklist: { type: 'BlockListResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CreateCallTypeResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1856,6 +1863,13 @@ decoders.UnreadCountsResponse = (input?: Record<string, any>) => {
 decoders.UnreadCountsThread = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     last_read: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UpdateBlockListResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    blocklist: { type: 'BlockListResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
