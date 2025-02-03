@@ -11,6 +11,7 @@ import {
   CheckSQSRequest,
   CheckSQSResponse,
   CreateBlockListRequest,
+  CreateBlockListResponse,
   CreateDeviceRequest,
   CreateExternalStorageRequest,
   CreateExternalStorageResponse,
@@ -59,6 +60,7 @@ import {
   UnblockUsersResponse,
   UpdateAppRequest,
   UpdateBlockListRequest,
+  UpdateBlockListResponse,
   UpdateExternalStorageRequest,
   UpdateExternalStorageResponse,
   UpdateUsersPartialRequest,
@@ -141,10 +143,16 @@ export class CommonApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  listBlockLists = async (): Promise<StreamResponse<ListBlockListResponse>> => {
+  listBlockLists = async (request?: {
+    team?: string;
+  }): Promise<StreamResponse<ListBlockListResponse>> => {
+    const queryParams = {
+      team: request?.team,
+    };
+
     const response = await this.sendRequest<
       StreamResponse<ListBlockListResponse>
-    >('GET', '/api/v2/blocklists', undefined, undefined);
+    >('GET', '/api/v2/blocklists', undefined, queryParams);
 
     decoders.ListBlockListResponse?.(response.body);
 
@@ -153,29 +161,30 @@ export class CommonApi extends BaseApi {
 
   createBlockList = async (
     request: CreateBlockListRequest,
-  ): Promise<StreamResponse<Response>> => {
+  ): Promise<StreamResponse<CreateBlockListResponse>> => {
     const body = {
       name: request?.name,
       words: request?.words,
+      team: request?.team,
       type: request?.type,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
-      'POST',
-      '/api/v2/blocklists',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.sendRequest<
+      StreamResponse<CreateBlockListResponse>
+    >('POST', '/api/v2/blocklists', undefined, undefined, body);
 
-    decoders.Response?.(response.body);
+    decoders.CreateBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
 
   deleteBlockList = async (request: {
     name: string;
+    team?: string;
   }): Promise<StreamResponse<Response>> => {
+    const queryParams = {
+      team: request?.team,
+    };
     const pathParams = {
       name: request?.name,
     };
@@ -184,7 +193,7 @@ export class CommonApi extends BaseApi {
       'DELETE',
       '/api/v2/blocklists/{name}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.Response?.(response.body);
@@ -194,14 +203,18 @@ export class CommonApi extends BaseApi {
 
   getBlockList = async (request: {
     name: string;
+    team?: string;
   }): Promise<StreamResponse<GetBlockListResponse>> => {
+    const queryParams = {
+      team: request?.team,
+    };
     const pathParams = {
       name: request?.name,
     };
 
     const response = await this.sendRequest<
       StreamResponse<GetBlockListResponse>
-    >('GET', '/api/v2/blocklists/{name}', pathParams, undefined);
+    >('GET', '/api/v2/blocklists/{name}', pathParams, queryParams);
 
     decoders.GetBlockListResponse?.(response.body);
 
@@ -210,23 +223,20 @@ export class CommonApi extends BaseApi {
 
   updateBlockList = async (
     request: UpdateBlockListRequest & { name: string },
-  ): Promise<StreamResponse<Response>> => {
+  ): Promise<StreamResponse<UpdateBlockListResponse>> => {
     const pathParams = {
       name: request?.name,
     };
     const body = {
+      team: request?.team,
       words: request?.words,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
-      'PUT',
-      '/api/v2/blocklists/{name}',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.sendRequest<
+      StreamResponse<UpdateBlockListResponse>
+    >('PUT', '/api/v2/blocklists/{name}', pathParams, undefined, body);
 
-    decoders.Response?.(response.body);
+    decoders.UpdateBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

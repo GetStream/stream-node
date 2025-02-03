@@ -74,6 +74,7 @@ export class ModerationApi extends BaseApi {
       entity_creator_id: request?.entity_creator_id,
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
+      config_team: request?.config_team,
       test_mode: request?.test_mode,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
