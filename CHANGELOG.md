@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.12](https://github.com/GetStream/stream-node/compare/v0.4.11...v0.4.12) (2025-02-03)
+
+
+### Features
+
+* update to api spec v151.0.1 ([#80](https://github.com/GetStream/stream-node/issues/80)) ([73efff2](https://github.com/GetStream/stream-node/commit/73efff2debf78dc95dde4e91b8de3ed0b264dadd))
+
 ## [0.4.11](https://github.com/GetStream/stream-node/compare/v0.4.10...v0.4.11) (2025-01-27)
 
 
