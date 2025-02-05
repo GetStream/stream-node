@@ -8,7 +8,7 @@ import type {
 } from '@stream-io/openai-realtime-api';
 
 export class StreamVideoClient extends VideoApi {
-  private streamClient: StreamClient;
+  private readonly streamClient: StreamClient;
 
   constructor({
     streamClient,
