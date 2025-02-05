@@ -4,7 +4,7 @@ import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 
 export class BaseApi {
-  constructor(private readonly apiConfig: ApiConfig) {}
+  constructor(protected readonly apiConfig: ApiConfig) {}
 
   protected sendRequest = async <T>(
     method: string,
