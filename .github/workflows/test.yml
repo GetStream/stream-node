@@ -3,6 +3,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   STREAM_API_KEY: ${{ vars.TEST_API_KEY }}
   STREAM_SECRET: ${{ secrets.TEST_SECRET }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
 on:
   push:
