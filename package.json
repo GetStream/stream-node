@@ -78,6 +78,11 @@
   "peerDependencies": {
     "@stream-io/openai-realtime-api": "prerelease"
   },
+  "peerDependenciesMeta": {
+    "@stream-io/openai-realtime-api": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=18.0.0"
   },
