@@ -37,7 +37,7 @@ describe.skip('AI agent integration', () => {
 
   it('should throw on invalid OpenAI credentials', async () => {
     const streamClient = createTestClient();
-    const call = streamClient.video.call('default', `call${uuidv4}`);
+    const call = streamClient.video.call('default', `call${uuidv4()}`);
 
     await expect(
       streamClient.video.connectOpenAi({
@@ -51,7 +51,7 @@ describe.skip('AI agent integration', () => {
 
   it('should throw on invalid Stream credentials', async () => {
     const streamClient = new StreamClient('', 'secret');
-    const call = streamClient.video.call('default', `call${uuidv4}`);
+    const call = streamClient.video.call('default', `call${uuidv4()}`);
 
     await expect(
       streamClient.video.connectOpenAi({
