@@ -27,6 +27,8 @@ import {
   SendCallEventResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
+  StartFrameRecordingRequest,
+  StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
@@ -37,6 +39,7 @@ import {
   StopAllRTMPBroadcastsResponse,
   StopClosedCaptionsRequest,
   StopClosedCaptionsResponse,
+  StopFrameRecordingResponse,
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
@@ -124,7 +127,7 @@ export class CallApi {
   };
 
   collectUserFeedback = (
-    request: CollectUserFeedbackRequest & { session: string },
+    request: CollectUserFeedbackRequest,
   ): Promise<StreamResponse<CollectUserFeedbackResponse>> => {
     return this.videoApi.collectUserFeedback({
       id: this.id,
@@ -226,6 +229,16 @@ export class CallApi {
     });
   };
 
+  startFrameRecording = (
+    request?: StartFrameRecordingRequest,
+  ): Promise<StreamResponse<StartFrameRecordingResponse>> => {
+    return this.videoApi.startFrameRecording({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  };
+
   startRecording = (
     request?: StartRecordingRequest,
   ): Promise<StreamResponse<StartRecordingResponse>> => {
@@ -270,6 +283,12 @@ export class CallApi {
       type: this.type,
       ...request,
     });
+  };
+
+  stopFrameRecording = (): Promise<
+    StreamResponse<StopFrameRecordingResponse>
+  > => {
+    return this.videoApi.stopFrameRecording({ id: this.id, type: this.type });
   };
 
   stopLive = (

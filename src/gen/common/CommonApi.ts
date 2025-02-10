@@ -97,6 +97,7 @@ export class CommonApi extends BaseApi {
       enforce_unique_usernames: request?.enforce_unique_usernames,
       feeds_moderation_enabled: request?.feeds_moderation_enabled,
       feeds_v2_region: request?.feeds_v2_region,
+      guest_user_creation_disabled: request?.guest_user_creation_disabled,
       image_moderation_enabled: request?.image_moderation_enabled,
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
       moderation_enabled: request?.moderation_enabled,

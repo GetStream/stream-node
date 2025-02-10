@@ -12,6 +12,8 @@ import {
   FlagRequest,
   FlagResponse,
   GetConfigResponse,
+  GetModerationAnalyticsRequest,
+  GetModerationAnalyticsResponse,
   GetReviewQueueItemResponse,
   GetUserModerationReportResponse,
   ModeratorStatsResponse,
@@ -41,6 +43,23 @@ import {
 import { decoders } from '../model-decoders';
 
 export class ModerationApi extends BaseApi {
+  getModerationAnalytics = async (
+    request?: GetModerationAnalyticsRequest,
+  ): Promise<StreamResponse<GetModerationAnalyticsResponse>> => {
+    const body = {
+      end_date: request?.end_date,
+      start_date: request?.start_date,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<GetModerationAnalyticsResponse>
+    >('POST', '/api/v2/moderation/analytics', undefined, undefined, body);
+
+    decoders.GetModerationAnalyticsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   ban = async (request: BanRequest): Promise<StreamResponse<BanResponse>> => {
     const body = {
       target_user_id: request?.target_user_id,
