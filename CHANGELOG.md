@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.13](https://github.com/GetStream/stream-node/compare/v0.4.12...v0.4.13) (2025-02-10)
+
+
+### Features
+
+* update to API version 155.0.0 ([#83](https://github.com/GetStream/stream-node/issues/83)) ([04a176a](https://github.com/GetStream/stream-node/commit/04a176a68e8239f89a03aff4cfe209af66902c7c))
+
 ## [0.4.12](https://github.com/GetStream/stream-node/compare/v0.4.11...v0.4.12) (2025-02-03)
 
 
