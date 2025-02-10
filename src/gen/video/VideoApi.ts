@@ -43,6 +43,8 @@ import {
   SendCallEventResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
+  StartFrameRecordingRequest,
+  StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
@@ -53,6 +55,7 @@ import {
   StopAllRTMPBroadcastsResponse,
   StopClosedCaptionsRequest,
   StopClosedCaptionsResponse,
+  StopFrameRecordingResponse,
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
@@ -300,23 +303,18 @@ export class VideoApi extends BaseApi {
   };
 
   collectUserFeedback = async (
-    request: CollectUserFeedbackRequest & {
-      type: string;
-      id: string;
-      session: string;
-    },
+    request: CollectUserFeedbackRequest & { type: string; id: string },
   ): Promise<StreamResponse<CollectUserFeedbackResponse>> => {
     const pathParams = {
       type: request?.type,
       id: request?.id,
-      session: request?.session,
     };
     const body = {
       rating: request?.rating,
       sdk: request?.sdk,
       sdk_version: request?.sdk_version,
-      user_session_id: request?.user_session_id,
       reason: request?.reason,
+      user_session_id: request?.user_session_id,
       custom: request?.custom,
     };
 
@@ -324,7 +322,7 @@ export class VideoApi extends BaseApi {
       StreamResponse<CollectUserFeedbackResponse>
     >(
       'POST',
-      '/api/v2/video/call/{type}/{id}/feedback/{session}',
+      '/api/v2/video/call/{type}/{id}/feedback',
       pathParams,
       undefined,
       body,
@@ -643,6 +641,32 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
+  startFrameRecording = async (
+    request: StartFrameRecordingRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StartFrameRecordingResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      recording_external_storage: request?.recording_external_storage,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StartFrameRecordingResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/start_frame_recording',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.StartFrameRecordingResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   startRecording = async (
     request: StartRecordingRequest & { type: string; id: string },
   ): Promise<StreamResponse<StartRecordingResponse>> => {
@@ -767,6 +791,29 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.StopClosedCaptionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  stopFrameRecording = async (request: {
+    type: string;
+    id: string;
+  }): Promise<StreamResponse<StopFrameRecordingResponse>> => {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<StopFrameRecordingResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/stop_frame_recording',
+      pathParams,
+      undefined,
+    );
+
+    decoders.StopFrameRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

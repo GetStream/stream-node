@@ -37,7 +37,11 @@ const cleanupCalls = async () => {
 const cleanupCallTypes = async () => {
   const callTypes = (await client.video.listCallTypes()).call_types;
   const customCallTypes = Object.keys(callTypes).filter(
-    (t) => t.startsWith("streamnodetest") || t.startsWith("calltype"),
+    (t) =>
+      t.startsWith("streamnodetest") ||
+      t.startsWith("calltype") ||
+      t.startsWith("long_inactivity_timeout") ||
+      t.startsWith("frame_recording"),
   );
 
   await Promise.all(

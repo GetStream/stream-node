@@ -195,6 +195,8 @@ export interface AppResponseFields {
 
   enforce_unique_usernames: string;
 
+  guest_user_creation_disabled: boolean;
+
   image_moderation_enabled: boolean;
 
   moderation_enabled: boolean;
@@ -790,6 +792,62 @@ export interface CallEvent {
   issue_tags?: string[];
 }
 
+export interface CallFrameRecordingFailedEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  egress_id: string;
+
+  call: CallResponse;
+
+  type: string;
+}
+
+export interface CallFrameRecordingFrameReadyEvent {
+  call_cid: string;
+
+  captured_at: Date;
+
+  created_at: Date;
+
+  egress_id: string;
+
+  session_id: string;
+
+  track_type: string;
+
+  url: string;
+
+  users: Record<string, UserResponse>;
+
+  type: string;
+}
+
+export interface CallFrameRecordingStartedEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  egress_id: string;
+
+  call: CallResponse;
+
+  type: string;
+}
+
+export interface CallFrameRecordingStoppedEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  egress_id: string;
+
+  call: CallResponse;
+
+  type: string;
+}
+
 export interface CallHLSBroadcastingFailedEvent {
   call_cid: string;
 
@@ -1213,6 +1271,8 @@ export interface CallSettings {
 
   broadcasting?: BroadcastSettings;
 
+  frame_recording?: FrameRecordSettings;
+
   geofencing?: GeofenceSettings;
 
   limits?: LimitsSettings;
@@ -1239,6 +1299,8 @@ export interface CallSettingsRequest {
 
   broadcasting?: BroadcastSettingsRequest;
 
+  frame_recording?: FrameRecordingSettingsRequest;
+
   geofencing?: GeofenceSettingsRequest;
 
   limits?: LimitsSettingsRequest;
@@ -1264,6 +1326,8 @@ export interface CallSettingsResponse {
   backstage: BackstageSettingsResponse;
 
   broadcasting: BroadcastSettingsResponse;
+
+  frame_recording: FrameRecordingSettingsResponse;
 
   geofencing: GeofenceSettingsResponse;
 
@@ -1950,6 +2014,7 @@ export const ChannelOwnCapability = {
   SEND_POLL: 'send-poll',
   SEND_REACTION: 'send-reaction',
   SEND_REPLY: 'send-reply',
+  SEND_RESTRICTED_VISIBILITY_MESSAGE: 'send-restricted-visibility-message',
   SEND_TYPING_EVENTS: 'send-typing-events',
   SET_CHANNEL_COOLDOWN: 'set-channel-cooldown',
   SKIP_SLOW_MODE: 'skip-slow-mode',
@@ -2358,9 +2423,9 @@ export interface CollectUserFeedbackRequest {
 
   sdk_version: string;
 
-  user_session_id: string;
-
   reason?: string;
+
+  user_session_id?: string;
 
   custom?: Record<string, any>;
 }
@@ -3104,6 +3169,8 @@ export interface EgressResponse {
 
   rtmps: EgressRTMPResponse[];
 
+  frame_recording?: FrameRecordingResponse;
+
   hls?: EgressHLSResponse;
 }
 
@@ -3571,6 +3638,34 @@ export interface FlagUpdatedEvent {
   user?: UserResponse;
 }
 
+export interface FrameRecordSettings {
+  capture_interval_in_seconds: number;
+
+  mode: 'available' | 'disabled' | 'auto-on';
+
+  quality?: string;
+}
+
+export interface FrameRecordingResponse {
+  status: string;
+}
+
+export interface FrameRecordingSettingsRequest {
+  capture_interval_in_seconds: number;
+
+  mode: 'available' | 'disabled' | 'auto-on';
+
+  quality?: '360p' | '480p' | '720p' | '1080p' | '1440p';
+}
+
+export interface FrameRecordingSettingsResponse {
+  capture_interval_in_seconds: number;
+
+  mode: 'available' | 'disabled' | 'auto-on';
+
+  quality?: string;
+}
+
 export interface FullUserResponse {
   banned: boolean;
 
@@ -3907,6 +4002,18 @@ export interface GetMessageResponse {
   message: MessageWithChannelResponse;
 
   pending_message_metadata?: Record<string, string>;
+}
+
+export interface GetModerationAnalyticsRequest {
+  end_date?: string;
+
+  start_date?: string;
+}
+
+export interface GetModerationAnalyticsResponse {
+  duration: string;
+
+  analytics?: ModerationAnalytics;
 }
 
 export interface GetOGResponse {
@@ -4544,6 +4651,8 @@ export interface Message {
 
   own_reactions: Reaction[];
 
+  restricted_visibility: string[];
+
   custom: Record<string, any>;
 
   reaction_counts: Record<string, number>;
@@ -4806,6 +4915,8 @@ export interface MessageRequest {
 
   mentioned_users?: string[];
 
+  restricted_visibility?: string[];
+
   custom?: Record<string, any>;
 
   user?: UserRequest;
@@ -4843,6 +4954,8 @@ export interface MessageResponse {
   mentioned_users: UserResponse[];
 
   own_reactions: ReactionResponse[];
+
+  restricted_visibility: string[];
 
   custom: Record<string, any>;
 
@@ -4982,6 +5095,8 @@ export interface MessageWithChannelResponse {
 
   own_reactions: ReactionResponse[];
 
+  restricted_visibility: string[];
+
   channel: ChannelResponse;
 
   custom: Record<string, any>;
@@ -5041,6 +5156,36 @@ export interface ModerationActionConfig {
   order: number;
 
   custom: Record<string, any>;
+}
+
+export interface ModerationAnalytics {
+  total_items_moderated: number;
+
+  ai_image_harms: Array<Record<string, any>>;
+
+  ai_text_harms: Array<Record<string, any>>;
+
+  ai_video_harms: Array<Record<string, any>>;
+
+  blocklist_by_list: Array<Record<string, any>>;
+
+  blocklist_matches: Array<Record<string, any>>;
+
+  model_accuracy: Array<Record<string, any>>;
+
+  moderator_actions: Array<Record<string, any>>;
+
+  moderator_productivity: Array<Record<string, any>>;
+
+  semantic_filter_top_matches: Array<Record<string, any>>;
+
+  sla_metrics: Array<Record<string, any>>;
+
+  usage_metrics: Array<Record<string, any>>;
+
+  action_distribution_over_time: Record<string, Record<string, any>>;
+
+  detection_by_engine_over_time: Record<string, Record<string, any>>;
 }
 
 export interface ModerationCustomActionEvent {
@@ -5314,10 +5459,12 @@ export const OwnCapability = {
   SEND_VIDEO: 'send-video',
   START_BROADCAST_CALL: 'start-broadcast-call',
   START_CLOSED_CAPTIONS_CALL: 'start-closed-captions-call',
+  START_FRAME_RECORD_CALL: 'start-frame-record-call',
   START_RECORD_CALL: 'start-record-call',
   START_TRANSCRIPTION_CALL: 'start-transcription-call',
   STOP_BROADCAST_CALL: 'stop-broadcast-call',
   STOP_CLOSED_CAPTIONS_CALL: 'stop-closed-captions-call',
+  STOP_FRAME_RECORD_CALL: 'stop-frame-record-call',
   STOP_RECORD_CALL: 'stop-record-call',
   STOP_TRANSCRIPTION_CALL: 'stop-transcription-call',
   UPDATE_CALL: 'update-call',
@@ -6884,6 +7031,8 @@ export interface ReviewQueueItemResponse {
 
   reviewed_at?: Date;
 
+  teams?: string[];
+
   assigned_to?: UserResponse;
 
   entity_creator?: EntityCreatorResponse;
@@ -7047,6 +7196,8 @@ export interface SearchResultMessage {
   mentioned_users: UserResponse[];
 
   own_reactions: ReactionResponse[];
+
+  restricted_visibility: string[];
 
   custom: Record<string, any>;
 
@@ -7277,6 +7428,14 @@ export interface StartClosedCaptionsResponse {
   duration: string;
 }
 
+export interface StartFrameRecordingRequest {
+  recording_external_storage?: string;
+}
+
+export interface StartFrameRecordingResponse {
+  duration: string;
+}
+
 export interface StartHLSBroadcastingRequest {}
 
 export interface StartHLSBroadcastingResponse {
@@ -7326,6 +7485,12 @@ export interface StopClosedCaptionsRequest {
 }
 
 export interface StopClosedCaptionsResponse {
+  duration: string;
+}
+
+export interface StopFrameRecordingRequest {}
+
+export interface StopFrameRecordingResponse {
   duration: string;
 }
 
@@ -7942,6 +8107,8 @@ export interface UpdateAppRequest {
   feeds_moderation_enabled?: boolean;
 
   feeds_v2_region?: string;
+
+  guest_user_creation_disabled?: boolean;
 
   image_moderation_enabled?: boolean;
 

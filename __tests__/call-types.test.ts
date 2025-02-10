@@ -24,6 +24,11 @@ describe('call types CRUD API', () => {
         geofencing: {
           names: ['european_union'],
         },
+        frame_recording: {
+          mode: 'auto-on',
+          capture_interval_in_seconds: 5,
+          quality: '720p',
+        },
       },
       notification_settings: {
         enabled: true,
@@ -68,6 +73,9 @@ describe('call types CRUD API', () => {
     expect(
       createResponse.notification_settings.call_notification?.apns?.title,
     ).toBe('{{ user.display_name }} invites you to a call');
+    expect(
+      createResponse.settings.frame_recording.capture_interval_in_seconds,
+    ).toBe(5);
   });
 
   it('read', async () => {
