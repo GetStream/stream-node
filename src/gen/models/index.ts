@@ -264,6 +264,60 @@ export interface AppResponseFields {
   datadog_info?: DataDogInfo;
 }
 
+export interface AsyncExportChannelsEvent {
+  created_at: Date;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  url: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
+export interface AsyncExportErrorEvent {
+  created_at: Date;
+
+  error: string;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
+export interface AsyncExportUsersEvent {
+  created_at: Date;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  url: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
 export interface AsyncModerationCallbackConfig {
   mode?: 'CALLBACK_MODE_NONE' | 'CALLBACK_MODE_REST' | 'CALLBACK_MODE_TWIRP';
 
@@ -1006,6 +1060,8 @@ export interface CallRecording {
   end_time: Date;
 
   filename: string;
+
+  session_id: string;
 
   start_time: Date;
 
@@ -3283,6 +3339,8 @@ export interface EntityCreatorResponse {
 
   deleted_content_count: number;
 
+  flagged_count: number;
+
   id: string;
 
   invisible: boolean;
@@ -3374,14 +3432,6 @@ export interface ExportChannelsResponse {
   duration: string;
 
   task_id: string;
-}
-
-export interface ExportChannelsResult {
-  url: string;
-
-  path?: string;
-
-  s3_bucket_name?: string;
 }
 
 export interface ExportUserResponse {
@@ -3962,28 +4012,6 @@ export interface GetEdgesResponse {
   edges: EdgeResponse[];
 }
 
-export interface GetExportChannelsStatusResponse {
-  created_at: Date;
-
-  duration: string;
-
-  status:
-    | 'waiting'
-    | 'pending'
-    | 'running'
-    | 'completed'
-    | 'failed'
-    | 'canceled';
-
-  task_id: string;
-
-  updated_at: Date;
-
-  error?: ErrorResult;
-
-  result?: ExportChannelsResult;
-}
-
 export interface GetImportResponse {
   duration: string;
 
@@ -4172,8 +4200,6 @@ export interface GoLiveRequest {
   start_hls?: boolean;
 
   start_recording?: boolean;
-
-  start_rtmp_broadcasts?: boolean;
 
   start_transcription?: boolean;
 
@@ -5180,8 +5206,6 @@ export interface ModerationAnalytics {
   semantic_filter_top_matches: Array<Record<string, any>>;
 
   sla_metrics: Array<Record<string, any>>;
-
-  usage_metrics: Array<Record<string, any>>;
 
   action_distribution_over_time: Record<string, Record<string, any>>;
 
@@ -7388,6 +7412,8 @@ export interface SessionSettingsResponse {
   inactivity_timeout_seconds: number;
 }
 
+export interface ShadowBlockActionRequest {}
+
 export interface ShowChannelRequest {
   user_id?: string;
 
@@ -7549,7 +7575,8 @@ export interface SubmitActionRequest {
     | 'unban'
     | 'restore'
     | 'delete_user'
-    | 'unblock';
+    | 'unblock'
+    | 'shadow_block';
 
   item_id: string;
 
@@ -9224,6 +9251,8 @@ export interface UserUpdatedEvent {
 
 export interface VelocityFilterConfig {
   cascading_actions: boolean;
+
+  cids_per_user: number;
 
   enabled: boolean;
 
