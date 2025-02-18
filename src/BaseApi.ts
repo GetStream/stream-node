@@ -27,7 +27,7 @@ export class BaseApi {
       Authorization: this.apiConfig.token,
       'stream-auth-type': 'jwt',
       'Content-Type': 'application/json',
-      'X-Stream-Client': 'stream-node-' + process.env.PKG_VERSION,
+      'X-Stream-Client': 'stream-node-v' + process.env.PKG_VERSION,
       'Accept-Encoding': 'gzip',
       'x-client-request-id': clientRequestId,
     };
