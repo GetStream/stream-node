@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.14](https://github.com/GetStream/stream-node/compare/v0.4.13...v0.4.14) (2025-02-18)
+
+
+### Features
+
+* add a method to connect OpenAI agent to call ([#82](https://github.com/GetStream/stream-node/issues/82)) ([b9fc11f](https://github.com/GetStream/stream-node/commit/b9fc11f7a485d41917314dd4dd9a309475fb4b58))
+
 ## [0.4.13](https://github.com/GetStream/stream-node/compare/v0.4.12...v0.4.13) (2025-02-10)
 
 
