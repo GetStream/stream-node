@@ -38,6 +38,7 @@ export class StreamClient extends CommonApi {
     super({ apiKey, token, timeout, baseUrl: chatBaseUrl });
 
     this.video = new StreamVideoClient({
+      streamClient: this,
       apiKey,
       token,
       timeout,

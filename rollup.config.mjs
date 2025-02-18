@@ -11,6 +11,7 @@ const nodeConfig = {
     {
       file: "dist/index.cjs.js",
       format: "cjs",
+      dynamicImportInCjs: false,
       sourcemap: true,
     },
     {
