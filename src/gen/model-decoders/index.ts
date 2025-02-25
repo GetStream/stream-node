@@ -820,15 +820,6 @@ decoders.GetConfigResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.GetExportChannelsStatusResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.GetImportResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     import_task: { type: 'ImportTask', isSingle: true },

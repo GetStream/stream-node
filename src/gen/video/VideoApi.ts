@@ -345,7 +345,6 @@ export class VideoApi extends BaseApi {
       start_closed_caption: request?.start_closed_caption,
       start_hls: request?.start_hls,
       start_recording: request?.start_recording,
-      start_rtmp_broadcasts: request?.start_rtmp_broadcasts,
       start_transcription: request?.start_transcription,
       transcription_storage_name: request?.transcription_storage_name,
     };

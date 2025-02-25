@@ -174,6 +174,8 @@ describe('call API', () => {
         settings_override: {
           recording: {
             mode: 'available',
+            // TODO: backend had a regression recently
+            quality: '1080p',
           },
         },
       });

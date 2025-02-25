@@ -27,7 +27,6 @@ import {
   GetCampaignResponse,
   GetChannelTypeResponse,
   GetCommandResponse,
-  GetExportChannelsStatusResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
   GetReactionsResponse,
@@ -1009,22 +1008,6 @@ export class ChatApi extends BaseApi {
     >('POST', '/api/v2/chat/export_channels', undefined, undefined, body);
 
     decoders.ExportChannelsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getExportChannelsStatus = async (request: {
-    id: string;
-  }): Promise<StreamResponse<GetExportChannelsStatusResponse>> => {
-    const pathParams = {
-      id: request?.id,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<GetExportChannelsStatusResponse>
-    >('GET', '/api/v2/chat/export_channels/{id}', pathParams, undefined);
-
-    decoders.GetExportChannelsStatusResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

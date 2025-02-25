@@ -147,7 +147,7 @@ describe('channel API', () => {
     const response = await client.chat.exportChannels({
       channels: [{ cid: channel.cid }],
     });
-    const statusResponse = await client.chat.getExportChannelsStatus({
+    const statusResponse = await client.getTask({
       id: response.task_id,
     });
 
