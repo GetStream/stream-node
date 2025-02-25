@@ -2,174 +2,153 @@
 
 ## [0.4.15](https://github.com/GetStream/stream-node/compare/v0.4.14...v0.4.15) (2025-02-25)
 
-
 ### Features
 
-* update to API spec 157.6.2 ([#87](https://github.com/GetStream/stream-node/issues/87)) ([92cdde4](https://github.com/GetStream/stream-node/commit/92cdde47ca016f70816eb363d8d6123f254b5411))
+- update to API spec 157.6.2 ([#87](https://github.com/GetStream/stream-node/issues/87)) ([92cdde4](https://github.com/GetStream/stream-node/commit/92cdde47ca016f70816eb363d8d6123f254b5411))
+
+`start_rtmp_broadcasts` option is removed from `goLive` call (it didn't do anything, so it's safe to remove)
 
 `client.chat.getExportChannelsStatus` is removed, you can use the `client.getTask` instead, or the new `export.channels.success` and `export.channels.error` Webhook events
 
 ## [0.4.14](https://github.com/GetStream/stream-node/compare/v0.4.13...v0.4.14) (2025-02-18)
 
-
 ### Features
 
-* add a method to connect OpenAI agent to call ([#82](https://github.com/GetStream/stream-node/issues/82)) ([b9fc11f](https://github.com/GetStream/stream-node/commit/b9fc11f7a485d41917314dd4dd9a309475fb4b58))
+- add a method to connect OpenAI agent to call ([#82](https://github.com/GetStream/stream-node/issues/82)) ([b9fc11f](https://github.com/GetStream/stream-node/commit/b9fc11f7a485d41917314dd4dd9a309475fb4b58))
 
 ## [0.4.13](https://github.com/GetStream/stream-node/compare/v0.4.12...v0.4.13) (2025-02-10)
 
-
 ### Features
 
-* update to API version 155.0.0 ([#83](https://github.com/GetStream/stream-node/issues/83)) ([04a176a](https://github.com/GetStream/stream-node/commit/04a176a68e8239f89a03aff4cfe209af66902c7c))
+- update to API version 155.0.0 ([#83](https://github.com/GetStream/stream-node/issues/83)) ([04a176a](https://github.com/GetStream/stream-node/commit/04a176a68e8239f89a03aff4cfe209af66902c7c))
 
 ## [0.4.12](https://github.com/GetStream/stream-node/compare/v0.4.11...v0.4.12) (2025-02-03)
 
-
 ### Features
 
-* update to api spec v151.0.1 ([#80](https://github.com/GetStream/stream-node/issues/80)) ([73efff2](https://github.com/GetStream/stream-node/commit/73efff2debf78dc95dde4e91b8de3ed0b264dadd))
+- update to api spec v151.0.1 ([#80](https://github.com/GetStream/stream-node/issues/80)) ([73efff2](https://github.com/GetStream/stream-node/commit/73efff2debf78dc95dde4e91b8de3ed0b264dadd))
 
 ## [0.4.11](https://github.com/GetStream/stream-node/compare/v0.4.10...v0.4.11) (2025-01-27)
 
-
 ### Features
 
-* update to api spec v147.3.0 ([#78](https://github.com/GetStream/stream-node/issues/78)) ([147bddb](https://github.com/GetStream/stream-node/commit/147bddb7aaee2981cf808c79b702c7682115eecb))
+- update to api spec v147.3.0 ([#78](https://github.com/GetStream/stream-node/issues/78)) ([147bddb](https://github.com/GetStream/stream-node/commit/147bddb7aaee2981cf808c79b702c7682115eecb))
 
 ## [0.4.10](https://github.com/GetStream/stream-node/compare/v0.4.9...v0.4.10) (2025-01-22)
 
-
 ### Features
 
-* [VID-300] Query user feedback API endpoint ([#75](https://github.com/GetStream/stream-node/issues/75)) ([71815d6](https://github.com/GetStream/stream-node/commit/71815d6acb7099d8bce91ece4db860003d20d836))
+- [VID-300] Query user feedback API endpoint ([#75](https://github.com/GetStream/stream-node/issues/75)) ([71815d6](https://github.com/GetStream/stream-node/commit/71815d6acb7099d8bce91ece4db860003d20d836))
 
 ## [0.4.9](https://github.com/GetStream/stream-node/compare/v0.4.8...v0.4.9) (2025-01-14)
 
-
 ### Features
 
-* update to API version 142.7.0 ([#73](https://github.com/GetStream/stream-node/issues/73)) ([d38b43d](https://github.com/GetStream/stream-node/commit/d38b43dac51fe61087d542a62c43fc6bd6864f92))
+- update to API version 142.7.0 ([#73](https://github.com/GetStream/stream-node/issues/73)) ([d38b43d](https://github.com/GetStream/stream-node/commit/d38b43dac51fe61087d542a62c43fc6bd6864f92))
 
 ## [0.4.8](https://github.com/GetStream/stream-node/compare/v0.4.7...v0.4.8) (2025-01-10)
 
-
 ### Features
 
-* Stable video-stats API: Get call report ([#71](https://github.com/GetStream/stream-node/issues/71)) ([16d5e4f](https://github.com/GetStream/stream-node/commit/16d5e4f62081312a8f60a374a52cfa25241ef4f6))
+- Stable video-stats API: Get call report ([#71](https://github.com/GetStream/stream-node/issues/71)) ([16d5e4f](https://github.com/GetStream/stream-node/commit/16d5e4f62081312a8f60a374a52cfa25241ef4f6))
 
 ## [0.4.7](https://github.com/GetStream/stream-node/compare/v0.4.6...v0.4.7) (2025-01-07)
 
-
 ### Features
 
-* update to API version 142.4.0 ([#69](https://github.com/GetStream/stream-node/issues/69)) ([c1a0d02](https://github.com/GetStream/stream-node/commit/c1a0d02b13581379875a7f8c5428ba9edad09d88))
+- update to API version 142.4.0 ([#69](https://github.com/GetStream/stream-node/issues/69)) ([c1a0d02](https://github.com/GetStream/stream-node/commit/c1a0d02b13581379875a7f8c5428ba9edad09d88))
 
 ## [0.4.6](https://github.com/GetStream/stream-node/compare/v0.4.5...v0.4.6) (2024-12-30)
 
-
 ### Features
 
-* add closed caption endpoints ([#67](https://github.com/GetStream/stream-node/issues/67)) ([c1820f2](https://github.com/GetStream/stream-node/commit/c1820f20be4ab5969bb17a04fbf5ae417b40e846))
+- add closed caption endpoints ([#67](https://github.com/GetStream/stream-node/issues/67)) ([c1820f2](https://github.com/GetStream/stream-node/commit/c1820f20be4ab5969bb17a04fbf5ae417b40e846))
 
 ## [0.4.5](https://github.com/GetStream/stream-node/compare/v0.4.4...v0.4.5) (2024-12-06)
 
-
 ### Features
 
-* update open api to latest version ([#65](https://github.com/GetStream/stream-node/issues/65)) ([8393378](https://github.com/GetStream/stream-node/commit/8393378dbd47985a88dcf1247a05d975696a39ed))
+- update open api to latest version ([#65](https://github.com/GetStream/stream-node/issues/65)) ([8393378](https://github.com/GetStream/stream-node/commit/8393378dbd47985a88dcf1247a05d975696a39ed))
 
 ## [0.4.4](https://github.com/GetStream/stream-node/compare/v0.4.3...v0.4.4) (2024-10-02)
 
-
 ### Bug Fixes
 
-* node js esm module import ([#61](https://github.com/GetStream/stream-node/issues/61)) ([3a0d9a6](https://github.com/GetStream/stream-node/commit/3a0d9a61679e249f765912a92613db65963d40da))
+- node js esm module import ([#61](https://github.com/GetStream/stream-node/issues/61)) ([3a0d9a6](https://github.com/GetStream/stream-node/commit/3a0d9a61679e249f765912a92613db65963d40da))
 
 ## [0.4.3](https://github.com/GetStream/stream-node/compare/v0.4.2...v0.4.3) (2024-09-18)
 
-
 ### Features
 
-* update to api version 131.1.1 ([#58](https://github.com/GetStream/stream-node/issues/58)) ([6e84e26](https://github.com/GetStream/stream-node/commit/6e84e26ab9ac6c5d0134b80add189976a1914168))
+- update to api version 131.1.1 ([#58](https://github.com/GetStream/stream-node/issues/58)) ([6e84e26](https://github.com/GetStream/stream-node/commit/6e84e26ab9ac6c5d0134b80add189976a1914168))
 
 ## [0.4.2](https://github.com/GetStream/stream-node/compare/v0.4.1...v0.4.2) (2024-09-17)
 
-
 ### Bug Fixes
 
-* parse non-JSON response objects correctly ([#56](https://github.com/GetStream/stream-node/issues/56)) ([232f240](https://github.com/GetStream/stream-node/commit/232f2403899cd95621a47ef021b198f560b5d036))
+- parse non-JSON response objects correctly ([#56](https://github.com/GetStream/stream-node/issues/56)) ([232f240](https://github.com/GetStream/stream-node/commit/232f2403899cd95621a47ef021b198f560b5d036))
 
 ## [0.4.1](https://github.com/GetStream/stream-node/compare/v0.4.0...v0.4.1) (2024-09-09)
 
-
 ### Features
 
-* RTMP broadcasts list endpoint ([#53](https://github.com/GetStream/stream-node/issues/53)) ([8851dab](https://github.com/GetStream/stream-node/commit/8851dab3f5afd6f6739518b4d38c1baeeb5c79a9))
+- RTMP broadcasts list endpoint ([#53](https://github.com/GetStream/stream-node/issues/53)) ([8851dab](https://github.com/GetStream/stream-node/commit/8851dab3f5afd6f6739518b4d38c1baeeb5c79a9))
 
 ## [0.4.0](https://github.com/GetStream/stream-node/compare/v0.3.1...v0.4.0) (2024-08-30)
 
-
 ### ⚠ BREAKING CHANGES
 
-* use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39))
+- use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39))
 
 ### Features
 
-* use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39)) ([1bba83d](https://github.com/GetStream/stream-node/commit/1bba83dd3f5536c4989c4d566c1969bce3b29423))
+- use unified API spec, and go generator ([#39](https://github.com/GetStream/stream-node/issues/39)) ([1bba83d](https://github.com/GetStream/stream-node/commit/1bba83dd3f5536c4989c4d566c1969bce3b29423))
 
 ## [0.3.1](https://github.com/GetStream/stream-node/compare/v0.3.0...v0.3.1) (2024-08-28)
 
-
 ### Bug Fixes
 
-* support modern esm and types resolution ([#48](https://github.com/GetStream/stream-node/issues/48)) ([78e3c9f](https://github.com/GetStream/stream-node/commit/78e3c9f01e907d680e9db4dc802d8fbc0ac4bde6))
+- support modern esm and types resolution ([#48](https://github.com/GetStream/stream-node/issues/48)) ([78e3c9f](https://github.com/GetStream/stream-node/commit/78e3c9f01e907d680e9db4dc802d8fbc0ac4bde6))
 
 ## [0.3.0](https://github.com/GetStream/stream-node/compare/v0.2.6...v0.3.0) (2024-06-28)
 
-
 ### ⚠ BREAKING CHANGES
 
-* update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42))
+- update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42))
 
 ### Features
 
-* update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42)) ([73df541](https://github.com/GetStream/stream-node/commit/73df541301e383cf2fc38538f2d588a07537688a))
+- update to latest open api ([#42](https://github.com/GetStream/stream-node/issues/42)) ([73df541](https://github.com/GetStream/stream-node/commit/73df541301e383cf2fc38538f2d588a07537688a))
 
 ## [0.2.6](https://github.com/GetStream/stream-node/compare/v0.2.5...v0.2.6) (2024-06-20)
 
-
 ### Features
 
-* implement delete call endpoint ([#45](https://github.com/GetStream/stream-node/issues/45)) ([96884a3](https://github.com/GetStream/stream-node/commit/96884a3ec4da1901dd9f135d6c7ab0111851d5d1))
+- implement delete call endpoint ([#45](https://github.com/GetStream/stream-node/issues/45)) ([96884a3](https://github.com/GetStream/stream-node/commit/96884a3ec4da1901dd9f135d6c7ab0111851d5d1))
 
 ## [0.2.5](https://github.com/GetStream/stream-node/compare/v0.2.4...v0.2.5) (2024-06-04)
 
-
 ### Features
 
-* session timers ([#43](https://github.com/GetStream/stream-node/issues/43)) ([68d8c0d](https://github.com/GetStream/stream-node/commit/68d8c0d1348fc12ccca07446ac69606b01f859d9))
+- session timers ([#43](https://github.com/GetStream/stream-node/issues/43)) ([68d8c0d](https://github.com/GetStream/stream-node/commit/68d8c0d1348fc12ccca07446ac69606b01f859d9))
 
 ## [0.2.4](https://github.com/GetStream/stream-node/compare/v0.2.3...v0.2.4) (2024-05-30)
 
-
 ### Bug Fixes
 
-* iat can be in the future ([#40](https://github.com/GetStream/stream-node/issues/40)) ([483d4c4](https://github.com/GetStream/stream-node/commit/483d4c4b01e313520a872fb91d906b2d8144b581))
+- iat can be in the future ([#40](https://github.com/GetStream/stream-node/issues/40)) ([483d4c4](https://github.com/GetStream/stream-node/commit/483d4c4b01e313520a872fb91d906b2d8144b581))
 
 ## [0.2.3](https://github.com/GetStream/stream-node/compare/v0.2.2...v0.2.3) (2024-05-23)
 
-
 ### Features
 
-* add call stats query endpoints ([#37](https://github.com/GetStream/stream-node/issues/37)) ([f2c3ec9](https://github.com/GetStream/stream-node/commit/f2c3ec981bc42c4741cf23cffe571eef68b345af))
+- add call stats query endpoints ([#37](https://github.com/GetStream/stream-node/issues/37)) ([f2c3ec9](https://github.com/GetStream/stream-node/commit/f2c3ec981bc42c4741cf23cffe571eef68b345af))
 
 ## [0.2.2](https://github.com/GetStream/stream-node/compare/v0.2.1...v0.2.2) (2024-05-21)
 
-
 ### Features
 
-* add option to provide role for call token ([#35](https://github.com/GetStream/stream-node/issues/35)) ([befe685](https://github.com/GetStream/stream-node/commit/befe68549f9e5fc4c43d63377098de57b39ca1c4))
+- add option to provide role for call token ([#35](https://github.com/GetStream/stream-node/issues/35)) ([befe685](https://github.com/GetStream/stream-node/commit/befe68549f9e5fc4c43d63377098de57b39ca1c4))
 
 ## [0.2.1](https://github.com/GetStream/stream-node/compare/v0.2.0...v0.2.1) (2024-05-15)
 
