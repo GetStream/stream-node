@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.16](https://github.com/GetStream/stream-node/compare/v0.4.15...v0.4.16) (2025-02-25)
+
+
+### Bug Fixes
+
+* update changelog ([#89](https://github.com/GetStream/stream-node/issues/89)) ([1b46c91](https://github.com/GetStream/stream-node/commit/1b46c919ccc5a98414ca441b833020743217e95d))
+
 ## [0.4.15](https://github.com/GetStream/stream-node/compare/v0.4.14...v0.4.15) (2025-02-25)
 
 ### Features
