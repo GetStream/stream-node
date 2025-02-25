@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.15](https://github.com/GetStream/stream-node/compare/v0.4.14...v0.4.15) (2025-02-25)
+
+
+### Features
+
+* update to API spec 157.6.2 ([#87](https://github.com/GetStream/stream-node/issues/87)) ([92cdde4](https://github.com/GetStream/stream-node/commit/92cdde47ca016f70816eb363d8d6123f254b5411))
+
+`client.chat.getExportChannelsStatus` is removed, you can use the `client.getTask` instead, or the new `export.channels.success` and `export.channels.error` Webhook events
+
 ## [0.4.14](https://github.com/GetStream/stream-node/compare/v0.4.13...v0.4.14) (2025-02-18)
 
 
