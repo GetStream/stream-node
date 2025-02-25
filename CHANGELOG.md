@@ -227,3 +227,5 @@
 ### Features
 
 - Update open api ([4c461e7](https://github.com/GetStream/stream-node/commit/4c461e7e0d46a5c3c214d31934ac4ebc8b2a4ede))
+
+`client.chat.getExportChannelsStatus` is removed, you can use the `client.getTask` instead, or the new `export.channels.success` and `export.channels.error` Webhook events
