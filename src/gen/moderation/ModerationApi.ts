@@ -5,8 +5,6 @@ import {
   BanResponse,
   CheckRequest,
   CheckResponse,
-  CustomCheckRequest,
-  CustomCheckResponse,
   DeleteModerationConfigResponse,
   DeleteModerationTemplateResponse,
   FlagRequest,
@@ -16,7 +14,6 @@ import {
   GetModerationAnalyticsResponse,
   GetReviewQueueItemResponse,
   GetUserModerationReportResponse,
-  ModeratorStatsResponse,
   MuteRequest,
   MuteResponse,
   QueryFeedModerationTemplatesResponse,
@@ -26,9 +23,6 @@ import {
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
   QueryReviewQueueResponse,
-  QueryUsageStatsRequest,
-  QueryUsageStatsResponse,
-  QueueStatsResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   UnbanRequest,
@@ -94,7 +88,6 @@ export class ModerationApi extends BaseApi {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
       config_team: request?.config_team,
-      test_mode: request?.test_mode,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
@@ -211,28 +204,6 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  customCheck = async (
-    request: CustomCheckRequest,
-  ): Promise<StreamResponse<CustomCheckResponse>> => {
-    const body = {
-      entity_id: request?.entity_id,
-      entity_type: request?.entity_type,
-      flags: request?.flags,
-      entity_creator_id: request?.entity_creator_id,
-      user_id: request?.user_id,
-      moderation_payload: request?.moderation_payload,
-      user: request?.user,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<CustomCheckResponse>
-    >('POST', '/api/v2/moderation/custom_check', undefined, undefined, body);
-
-    decoders.CustomCheckResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   v2DeleteTemplate = async (): Promise<
     StreamResponse<DeleteModerationTemplateResponse>
   > => {
@@ -339,18 +310,6 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  getModeratorStats = async (): Promise<
-    StreamResponse<ModeratorStatsResponse>
-  > => {
-    const response = await this.sendRequest<
-      StreamResponse<ModeratorStatsResponse>
-    >('GET', '/api/v2/moderation/moderator_stats', undefined, undefined);
-
-    decoders.ModeratorStatsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   mute = async (
     request: MuteRequest,
   ): Promise<StreamResponse<MuteResponse>> => {
@@ -370,19 +329,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.MuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getQueueStats = async (): Promise<StreamResponse<QueueStatsResponse>> => {
-    const response = await this.sendRequest<StreamResponse<QueueStatsResponse>>(
-      'GET',
-      '/api/v2/moderation/queue_stats',
-      undefined,
-      undefined,
-    );
-
-    decoders.QueueStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -504,28 +450,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.UnmuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  queryUsageStats = async (
-    request?: QueryUsageStatsRequest,
-  ): Promise<StreamResponse<QueryUsageStatsResponse>> => {
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      user_id: request?.user_id,
-      sort: request?.sort,
-      filter: request?.filter,
-      user: request?.user,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<QueryUsageStatsResponse>
-    >('POST', '/api/v2/moderation/usage_stats', undefined, undefined, body);
-
-    decoders.QueryUsageStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

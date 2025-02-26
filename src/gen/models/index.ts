@@ -2395,8 +2395,6 @@ export interface CheckRequest {
 
   config_team?: string;
 
-  test_mode?: boolean;
-
   user_id?: string;
 
   moderation_payload?: ModerationPayload;
@@ -2880,42 +2878,6 @@ export interface CustomActionRequest {
   id?: string;
 
   options?: Record<string, any>;
-}
-
-export interface CustomCheckFlag {
-  type: string;
-
-  reason?: string;
-
-  labels?: string[];
-
-  custom?: Record<string, any>;
-}
-
-export interface CustomCheckRequest {
-  entity_id: string;
-
-  entity_type: string;
-
-  flags: CustomCheckFlag[];
-
-  entity_creator_id?: string;
-
-  user_id?: string;
-
-  moderation_payload?: ModerationPayload;
-
-  user?: UserRequest;
-}
-
-export interface CustomCheckResponse {
-  duration: string;
-
-  id: string;
-
-  status: string;
-
-  item?: ReviewQueueItemResponse;
 }
 
 export interface CustomVideoEvent {
@@ -5232,22 +5194,6 @@ export interface ModerationCustomActionEvent {
   user?: User;
 }
 
-export interface ModerationEvent {
-  created_at: Date;
-
-  custom: Record<string, any>;
-
-  type: string;
-
-  received_at?: Date;
-
-  flags?: Flag2Response[];
-
-  action?: ActionLogResponse;
-
-  review_queue_item?: ReviewQueueItemResponse;
-}
-
 export interface ModerationFlaggedEvent {
   created_at: Date;
 
@@ -5292,22 +5238,6 @@ export interface ModerationResponse {
   toxic: number;
 }
 
-export interface ModerationUsageStats {
-  app_pk: number;
-
-  id: number;
-
-  organization_id: number;
-
-  reference_date: Date;
-
-  updated_at: Date;
-
-  usage_amount: number;
-
-  usage_type: string;
-}
-
 export interface ModerationV2Response {
   action: string;
 
@@ -5322,20 +5252,6 @@ export interface ModerationV2Response {
   image_harms?: string[];
 
   text_harms?: string[];
-}
-
-export interface ModeratorStats {
-  id: string;
-
-  items_reviewed: number;
-
-  action_counts: Record<string, number>;
-}
-
-export interface ModeratorStatsResponse {
-  duration: string;
-
-  moderator_stats: ModeratorStats[];
 }
 
 export interface MuteChannelRequest {
@@ -6576,32 +6492,6 @@ export interface QueryThreadsResponse {
   prev?: string;
 }
 
-export interface QueryUsageStatsRequest {
-  limit?: number;
-
-  next?: string;
-
-  prev?: string;
-
-  user_id?: string;
-
-  sort?: SortParamRequest[];
-
-  filter?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface QueryUsageStatsResponse {
-  duration: string;
-
-  items: ModerationUsageStats[];
-
-  next?: string;
-
-  prev?: string;
-}
-
 export interface QueryUserFeedbackRequest {
   limit?: number;
 
@@ -6646,14 +6536,6 @@ export interface QueryUsersResponse {
   duration: string;
 
   users: FullUserResponse[];
-}
-
-export interface QueueStatsResponse {
-  avg_time_to_action: number;
-
-  duration: string;
-
-  time_to_action_buckets: Record<string, number>;
 }
 
 export interface RTMPBroadcastRequest {
@@ -7028,6 +6910,22 @@ export interface ReviewQueueItem {
   moderation_payload?: ModerationPayload;
 }
 
+export interface ReviewQueueItemNewEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: Flag2Response[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
+}
+
 export interface ReviewQueueItemResponse {
   ai_text_severity: string;
 
@@ -7076,6 +6974,22 @@ export interface ReviewQueueItemResponse {
   message?: MessageResponse;
 
   moderation_payload?: ModerationPayload;
+}
+
+export interface ReviewQueueItemUpdatedEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: Flag2Response[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
 }
 
 export interface RingSettings {
