@@ -558,13 +558,6 @@ decoders.CreateRoleResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.CustomCheckResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    item: { type: 'ReviewQueueItemResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.DeactivateUserResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     user: { type: 'UserResponse', isSingle: true },
@@ -1192,15 +1185,6 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ModerationUsageStats = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    reference_date: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.MuteChannelResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     channel_mutes: { type: 'ChannelMute', isSingle: false },
@@ -1524,13 +1508,6 @@ decoders.QuerySegmentsResponse = (input?: Record<string, any>) => {
 decoders.QueryThreadsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     threads: { type: 'ThreadStateResponse', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.QueryUsageStatsResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    items: { type: 'ModerationUsageStats', isSingle: false },
   };
   return decode(typeMappings, input);
 };
