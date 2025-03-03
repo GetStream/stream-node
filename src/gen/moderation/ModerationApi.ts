@@ -5,6 +5,8 @@ import {
   BanResponse,
   CheckRequest,
   CheckResponse,
+  CustomCheckRequest,
+  CustomCheckResponse,
   DeleteModerationConfigResponse,
   DeleteModerationTemplateResponse,
   FlagRequest,
@@ -126,6 +128,7 @@ export class ModerationApi extends BaseApi {
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
       google_vision_config: request?.google_vision_config,
+      ocr_config: request?.ocr_config,
       user: request?.user,
       velocity_filter_config: request?.velocity_filter_config,
     };
@@ -200,6 +203,28 @@ export class ModerationApi extends BaseApi {
     >('POST', '/api/v2/moderation/configs', undefined, undefined, body);
 
     decoders.QueryModerationConfigsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  customCheck = async (
+    request: CustomCheckRequest,
+  ): Promise<StreamResponse<CustomCheckResponse>> => {
+    const body = {
+      entity_id: request?.entity_id,
+      entity_type: request?.entity_type,
+      flags: request?.flags,
+      entity_creator_id: request?.entity_creator_id,
+      user_id: request?.user_id,
+      moderation_payload: request?.moderation_payload,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<CustomCheckResponse>
+    >('POST', '/api/v2/moderation/custom_check', undefined, undefined, body);
+
+    decoders.CustomCheckResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

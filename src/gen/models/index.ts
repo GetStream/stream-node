@@ -2880,6 +2880,42 @@ export interface CustomActionRequest {
   options?: Record<string, any>;
 }
 
+export interface CustomCheckFlag {
+  type: string;
+
+  reason?: string;
+
+  labels?: string[];
+
+  custom?: Record<string, any>;
+}
+
+export interface CustomCheckRequest {
+  entity_id: string;
+
+  entity_type: string;
+
+  flags: CustomCheckFlag[];
+
+  entity_creator_id?: string;
+
+  user_id?: string;
+
+  moderation_payload?: ModerationPayload;
+
+  user?: UserRequest;
+}
+
+export interface CustomCheckResponse {
+  duration: string;
+
+  id: string;
+
+  status: string;
+
+  item?: ReviewQueueItemResponse;
+}
+
 export interface CustomVideoEvent {
   call_cid: string;
 
@@ -3429,8 +3465,6 @@ export interface ExternalStorageResponse {
 export interface FPSStats {
   average_fps: number;
 
-  harmonic_fps: number;
-
   tracked: number;
 }
 
@@ -3505,36 +3539,6 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
-
-  updated_at: Date;
-
-  approved_at?: Date;
-
-  reason?: string;
-
-  rejected_at?: Date;
-
-  reviewed_at?: Date;
-
-  reviewed_by?: string;
-
-  target_message_id?: string;
-
-  custom?: Record<string, any>;
-
-  details?: FlagDetails;
-
-  target_message?: Message;
-
-  target_user?: User;
-
-  user?: User;
-}
-
-export interface Flag2 {
-  created_at: Date;
-
   entity_id: string;
 
   entity_type: string;
@@ -3560,36 +3564,6 @@ export interface Flag2 {
   moderation_payload?: ModerationPayload;
 
   user?: User;
-}
-
-export interface Flag2Response {
-  created_at: Date;
-
-  entity_id: string;
-
-  entity_type: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  reason?: string;
-
-  review_queue_item_id?: string;
-
-  type?: string;
-
-  labels?: string[];
-
-  custom?: Record<string, any>;
-
-  moderation_payload?: ModerationPayload;
-
-  user?: UserResponse;
 }
 
 export interface FlagDetails {
@@ -3724,6 +3698,8 @@ export interface FullUserResponse {
   teams: string[];
 
   custom: Record<string, any>;
+
+  ban_expires?: Date;
 
   deactivated_at?: Date;
 
@@ -5384,6 +5360,10 @@ export interface NotificationSettings {
 
 export interface NullTime {}
 
+export interface OCRConfig {
+  rules?: BodyguardRule[];
+}
+
 export interface OnlyUserID {
   id: string;
 }
@@ -6889,7 +6869,7 @@ export interface ReviewQueueItem {
 
   bans: Ban[];
 
-  flags: Flag2[];
+  flags: Flag[];
 
   languages: string[];
 
@@ -6919,7 +6899,7 @@ export interface ReviewQueueItemNewEvent {
 
   received_at?: Date;
 
-  flags?: Flag2Response[];
+  flags?: FlagResponse[];
 
   action?: ActionLogResponse;
 
@@ -6951,7 +6931,7 @@ export interface ReviewQueueItemResponse {
 
   bans: Ban[];
 
-  flags: Flag2Response[];
+  flags: FlagResponse[];
 
   languages: string[];
 
@@ -6985,7 +6965,7 @@ export interface ReviewQueueItemUpdatedEvent {
 
   received_at?: Date;
 
-  flags?: Flag2Response[];
+  flags?: FlagResponse[];
 
   action?: ActionLogResponse;
 
@@ -7875,7 +7855,8 @@ export interface TranslateMessageRequest {
     | 'uk'
     | 'ur'
     | 'vi'
-    | 'lt';
+    | 'lt'
+    | 'ht';
 }
 
 export interface TruncateChannelRequest {
@@ -8608,6 +8589,8 @@ export interface UpsertConfigRequest {
   bodyguard_config?: AITextConfig;
 
   google_vision_config?: GoogleVisionConfig;
+
+  ocr_config?: OCRConfig;
 
   user?: UserRequest;
 

@@ -558,6 +558,13 @@ decoders.CreateRoleResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CustomCheckResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    item: { type: 'ReviewQueueItemResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.DeactivateUserResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     user: { type: 'UserResponse', isSingle: true },
@@ -681,24 +688,13 @@ decoders.ExportUserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.Flag2 = (input?: Record<string, any>) => {
+decoders.Flag = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'User', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.Flag2Response = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -728,6 +724,8 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
     devices: { type: 'DeviceResponse', isSingle: false },
 
     mutes: { type: 'UserMuteResponse', isSingle: false },
+
+    ban_expires: { type: 'DatetimeType', isSingle: true },
 
     deactivated_at: { type: 'DatetimeType', isSingle: true },
 
@@ -1576,7 +1574,7 @@ decoders.ReviewQueueItem = (input?: Record<string, any>) => {
 
     bans: { type: 'Ban', isSingle: false },
 
-    flags: { type: 'Flag2', isSingle: false },
+    flags: { type: 'Flag', isSingle: false },
 
     assigned_to: { type: 'User', isSingle: true },
 
@@ -1598,8 +1596,6 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     actions: { type: 'ActionLogResponse', isSingle: false },
 
     bans: { type: 'Ban', isSingle: false },
-
-    flags: { type: 'Flag2Response', isSingle: false },
 
     completed_at: { type: 'DatetimeType', isSingle: true },
 
