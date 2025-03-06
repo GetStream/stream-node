@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.17](https://github.com/GetStream/stream-node/compare/v0.4.16...v0.4.17) (2025-03-06)
+
+
+### Bug Fixes
+
+* use an exact version of @stream-io/openai-realtime-api ([#92](https://github.com/GetStream/stream-node/issues/92)) ([d6f0419](https://github.com/GetStream/stream-node/commit/d6f0419f924bfdadbb44d2b12b44a664bb4b39a6))
+
 ## [0.4.16](https://github.com/GetStream/stream-node/compare/v0.4.15...v0.4.16) (2025-02-25)
 
 
