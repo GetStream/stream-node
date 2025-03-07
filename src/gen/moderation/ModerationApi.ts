@@ -16,7 +16,6 @@ import {
   GetModerationAnalyticsResponse,
   GetReviewQueueItemResponse,
   GetUserModerationReportResponse,
-  ModeratorStatsResponse,
   MuteRequest,
   MuteResponse,
   QueryFeedModerationTemplatesResponse,
@@ -26,9 +25,6 @@ import {
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
   QueryReviewQueueResponse,
-  QueryUsageStatsRequest,
-  QueryUsageStatsResponse,
-  QueueStatsResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   UnbanRequest,
@@ -94,7 +90,6 @@ export class ModerationApi extends BaseApi {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
       config_team: request?.config_team,
-      test_mode: request?.test_mode,
       user_id: request?.user_id,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
@@ -133,6 +128,7 @@ export class ModerationApi extends BaseApi {
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
       google_vision_config: request?.google_vision_config,
+      ocr_config: request?.ocr_config,
       user: request?.user,
       velocity_filter_config: request?.velocity_filter_config,
     };
@@ -339,18 +335,6 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  getModeratorStats = async (): Promise<
-    StreamResponse<ModeratorStatsResponse>
-  > => {
-    const response = await this.sendRequest<
-      StreamResponse<ModeratorStatsResponse>
-    >('GET', '/api/v2/moderation/moderator_stats', undefined, undefined);
-
-    decoders.ModeratorStatsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   mute = async (
     request: MuteRequest,
   ): Promise<StreamResponse<MuteResponse>> => {
@@ -370,19 +354,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.MuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getQueueStats = async (): Promise<StreamResponse<QueueStatsResponse>> => {
-    const response = await this.sendRequest<StreamResponse<QueueStatsResponse>>(
-      'GET',
-      '/api/v2/moderation/queue_stats',
-      undefined,
-      undefined,
-    );
-
-    decoders.QueueStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -504,28 +475,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.UnmuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  queryUsageStats = async (
-    request?: QueryUsageStatsRequest,
-  ): Promise<StreamResponse<QueryUsageStatsResponse>> => {
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      user_id: request?.user_id,
-      sort: request?.sort,
-      filter: request?.filter,
-      user: request?.user,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<QueryUsageStatsResponse>
-    >('POST', '/api/v2/moderation/usage_stats', undefined, undefined, body);
-
-    decoders.QueryUsageStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
