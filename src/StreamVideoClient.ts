@@ -4,6 +4,7 @@ import type { StreamClient } from './StreamClient';
 import type { ApiConfig } from './types';
 import type {
   createRealtimeClient,
+  RealtimeAPIModel,
   RealtimeClient,
 } from '@stream-io/openai-realtime-api';
 
@@ -26,7 +27,7 @@ export class StreamVideoClient extends VideoApi {
     call: StreamCall;
     agentUserId: string;
     openAiApiKey: string;
-    model?: Parameters<typeof createRealtimeClient>[0]['model'];
+    model?: RealtimeAPIModel;
     validityInSeconds?: number;
   }): Promise<RealtimeClient> => {
     let doCreateRealtimeClient: typeof createRealtimeClient;
