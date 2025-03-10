@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.18](https://github.com/GetStream/stream-node/compare/v0.4.17...v0.4.18) (2025-03-10)
+
+
+### Bug Fixes
+
+* support realtime AI model overrides ([#94](https://github.com/GetStream/stream-node/issues/94)) ([1071f75](https://github.com/GetStream/stream-node/commit/1071f75aaf7ffb029f8c3c4c06465e81abf341d6))
+
 ## [0.4.17](https://github.com/GetStream/stream-node/compare/v0.4.16...v0.4.17) (2025-03-06)
 
 
