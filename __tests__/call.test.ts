@@ -144,7 +144,7 @@ describe('call API', () => {
         session: '<session id>',
       }),
     ).rejects.toThrowError(
-      `Stream error code 16: GetCallStats failed with error: "call report not found for cid:default:${callId} session_id:<session id>"`,
+      `Stream error code 16: GetCallStats failed with error: "call session not found"`,
     );
   });
 
