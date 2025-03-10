@@ -3,8 +3,8 @@ import { StreamCall } from './StreamCall';
 import type { StreamClient } from './StreamClient';
 import type { ApiConfig } from './types';
 import type {
-  RealtimeClient,
   createRealtimeClient,
+  RealtimeClient,
 } from '@stream-io/openai-realtime-api';
 
 export class StreamVideoClient extends VideoApi {
@@ -26,7 +26,8 @@ export class StreamVideoClient extends VideoApi {
     call: StreamCall;
     agentUserId: string;
     openAiApiKey: string;
-    validityInSeconds: number;
+    model?: Parameters<typeof createRealtimeClient>[0]['model'];
+    validityInSeconds?: number;
   }): Promise<RealtimeClient> => {
     let doCreateRealtimeClient: typeof createRealtimeClient;
 
@@ -55,6 +56,7 @@ export class StreamVideoClient extends VideoApi {
       streamApiKey: this.apiConfig.apiKey,
       streamUserToken: token,
       openAiApiKey: options.openAiApiKey,
+      model: options.model,
     });
 
     await realtimeClient.connect();
