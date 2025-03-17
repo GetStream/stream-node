@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.19](https://github.com/GetStream/stream-node/compare/v0.4.18...v0.4.19) (2025-03-17)
+
+
+### Features
+
+* update to API spec v163.0.0 ([#96](https://github.com/GetStream/stream-node/issues/96)) ([dcdfea8](https://github.com/GetStream/stream-node/commit/dcdfea8cfbf83b0ef3426426909c844424f682ab))
+
 ## [0.4.18](https://github.com/GetStream/stream-node/compare/v0.4.17...v0.4.18) (2025-03-10)
 
 
