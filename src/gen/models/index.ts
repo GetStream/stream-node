@@ -2399,8 +2399,6 @@ export interface CheckRequest {
 
   config_team?: string;
 
-  test_mode?: boolean;
-
   user_id?: string;
 
   moderation_payload?: ModerationPayload;
@@ -3545,36 +3543,6 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
-
-  updated_at: Date;
-
-  approved_at?: Date;
-
-  reason?: string;
-
-  rejected_at?: Date;
-
-  reviewed_at?: Date;
-
-  reviewed_by?: string;
-
-  target_message_id?: string;
-
-  custom?: Record<string, any>;
-
-  details?: FlagDetails;
-
-  target_message?: Message;
-
-  target_user?: User;
-
-  user?: User;
-}
-
-export interface Flag2 {
-  created_at: Date;
-
   entity_id: string;
 
   entity_type: string;
@@ -3600,36 +3568,6 @@ export interface Flag2 {
   moderation_payload?: ModerationPayload;
 
   user?: User;
-}
-
-export interface Flag2Response {
-  created_at: Date;
-
-  entity_id: string;
-
-  entity_type: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  reason?: string;
-
-  review_queue_item_id?: string;
-
-  type?: string;
-
-  labels?: string[];
-
-  custom?: Record<string, any>;
-
-  moderation_payload?: ModerationPayload;
-
-  user?: UserResponse;
 }
 
 export interface FlagDetails {
@@ -5238,22 +5176,6 @@ export interface ModerationCustomActionEvent {
   user?: User;
 }
 
-export interface ModerationEvent {
-  created_at: Date;
-
-  custom: Record<string, any>;
-
-  type: string;
-
-  received_at?: Date;
-
-  flags?: Flag2Response[];
-
-  action?: ActionLogResponse;
-
-  review_queue_item?: ReviewQueueItemResponse;
-}
-
 export interface ModerationFlaggedEvent {
   created_at: Date;
 
@@ -5298,22 +5220,6 @@ export interface ModerationResponse {
   toxic: number;
 }
 
-export interface ModerationUsageStats {
-  app_pk: number;
-
-  id: number;
-
-  organization_id: number;
-
-  reference_date: Date;
-
-  updated_at: Date;
-
-  usage_amount: number;
-
-  usage_type: string;
-}
-
 export interface ModerationV2Response {
   action: string;
 
@@ -5328,20 +5234,6 @@ export interface ModerationV2Response {
   image_harms?: string[];
 
   text_harms?: string[];
-}
-
-export interface ModeratorStats {
-  id: string;
-
-  items_reviewed: number;
-
-  action_counts: Record<string, number>;
-}
-
-export interface ModeratorStatsResponse {
-  duration: string;
-
-  moderator_stats: ModeratorStats[];
 }
 
 export interface MuteChannelRequest {
@@ -5473,6 +5365,10 @@ export interface NotificationSettings {
 }
 
 export interface NullTime {}
+
+export interface OCRConfig {
+  rules?: BodyguardRule[];
+}
 
 export interface OnlyUserID {
   id: string;
@@ -6582,32 +6478,6 @@ export interface QueryThreadsResponse {
   prev?: string;
 }
 
-export interface QueryUsageStatsRequest {
-  limit?: number;
-
-  next?: string;
-
-  prev?: string;
-
-  user_id?: string;
-
-  sort?: SortParamRequest[];
-
-  filter?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface QueryUsageStatsResponse {
-  duration: string;
-
-  items: ModerationUsageStats[];
-
-  next?: string;
-
-  prev?: string;
-}
-
 export interface QueryUserFeedbackRequest {
   limit?: number;
 
@@ -6652,14 +6522,6 @@ export interface QueryUsersResponse {
   duration: string;
 
   users: FullUserResponse[];
-}
-
-export interface QueueStatsResponse {
-  avg_time_to_action: number;
-
-  duration: string;
-
-  time_to_action_buckets: Record<string, number>;
 }
 
 export interface RTMPBroadcastRequest {
@@ -7013,7 +6875,7 @@ export interface ReviewQueueItem {
 
   bans: Ban[];
 
-  flags: Flag2[];
+  flags: Flag[];
 
   languages: string[];
 
@@ -7036,6 +6898,22 @@ export interface ReviewQueueItem {
   moderation_payload?: ModerationPayload;
 
   reaction?: Reaction;
+}
+
+export interface ReviewQueueItemNewEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: FlagResponse[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
 }
 
 export interface ReviewQueueItemResponse {
@@ -7063,7 +6941,7 @@ export interface ReviewQueueItemResponse {
 
   bans: Ban[];
 
-  flags: Flag2Response[];
+  flags: FlagResponse[];
 
   languages: string[];
 
@@ -7090,6 +6968,22 @@ export interface ReviewQueueItemResponse {
   moderation_payload?: ModerationPayload;
 
   reaction?: Reaction;
+}
+
+export interface ReviewQueueItemUpdatedEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: FlagResponse[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
 }
 
 export interface RingSettings {
@@ -8711,6 +8605,8 @@ export interface UpsertConfigRequest {
   bodyguard_config?: AITextConfig;
 
   google_vision_config?: GoogleVisionConfig;
+
+  ocr_config?: OCRConfig;
 
   user?: UserRequest;
 
