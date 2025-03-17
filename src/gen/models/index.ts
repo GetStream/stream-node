@@ -672,6 +672,10 @@ export interface BlockedUserResponse {
   user: UserResponse;
 }
 
+export interface BodyguardImageAnalysisConfig {
+  rules?: BodyguardRule[];
+}
+
 export interface BodyguardRule {
   action:
     | 'flag'
@@ -3467,8 +3471,6 @@ export interface ExternalStorageResponse {
 export interface FPSStats {
   average_fps: number;
 
-  harmonic_fps: number;
-
   tracked: number;
 }
 
@@ -3763,6 +3765,8 @@ export interface FullUserResponse {
 
   custom: Record<string, any>;
 
+  ban_expires?: Date;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -3866,6 +3870,8 @@ export interface GetCallStatsResponse {
   call_status: string;
 
   duration: string;
+
+  is_truncated_report: boolean;
 
   max_freezes_duration_seconds: number;
 
@@ -7015,6 +7021,8 @@ export interface ReviewQueueItem {
 
   reviewed_at: NullTime;
 
+  activity?: EnrichedActivity;
+
   assigned_to?: User;
 
   entity_creator?: EntityCreator;
@@ -7026,6 +7034,8 @@ export interface ReviewQueueItem {
   message?: Message;
 
   moderation_payload?: ModerationPayload;
+
+  reaction?: Reaction;
 }
 
 export interface ReviewQueueItemResponse {
@@ -7065,6 +7075,8 @@ export interface ReviewQueueItemResponse {
 
   teams?: string[];
 
+  activity?: EnrichedActivity;
+
   assigned_to?: UserResponse;
 
   entity_creator?: EntityCreatorResponse;
@@ -7076,6 +7088,8 @@ export interface ReviewQueueItemResponse {
   message?: MessageResponse;
 
   moderation_payload?: ModerationPayload;
+
+  reaction?: Reaction;
 }
 
 export interface RingSettings {
@@ -7961,7 +7975,8 @@ export interface TranslateMessageRequest {
     | 'uk'
     | 'ur'
     | 'vi'
-    | 'lt';
+    | 'lt'
+    | 'ht';
 }
 
 export interface TruncateChannelRequest {
@@ -8677,6 +8692,8 @@ export interface UpsertConfigRequest {
 
   ai_image_config?: AIImageConfig;
 
+  ai_image_lite_config?: BodyguardImageAnalysisConfig;
+
   ai_text_config?: AITextConfig;
 
   ai_video_config?: AIVideoConfig;
@@ -9204,6 +9221,8 @@ export interface UserStats {
 
   info: UserInfoResponse;
 
+  feedback?: string;
+
   rating?: number;
 }
 
@@ -9260,6 +9279,8 @@ export interface UserUpdatedEvent {
 }
 
 export interface VelocityFilterConfig {
+  advanced_filters: boolean;
+
   cascading_actions: boolean;
 
   cids_per_user: number;

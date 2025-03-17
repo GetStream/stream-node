@@ -123,6 +123,7 @@ export class ModerationApi extends BaseApi {
       team: request?.team,
       user_id: request?.user_id,
       ai_image_config: request?.ai_image_config,
+      ai_image_lite_config: request?.ai_image_lite_config,
       ai_text_config: request?.ai_text_config,
       ai_video_config: request?.ai_video_config,
       automod_platform_circumvention_config:
