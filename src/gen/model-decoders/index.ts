@@ -736,6 +736,8 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
 
     mutes: { type: 'UserMuteResponse', isSingle: false },
 
+    ban_expires: { type: 'DatetimeType', isSingle: true },
+
     deactivated_at: { type: 'DatetimeType', isSingle: true },
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
@@ -1608,6 +1610,8 @@ decoders.ReviewQueueItem = (input?: Record<string, any>) => {
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
 
     message: { type: 'Message', isSingle: true },
+
+    reaction: { type: 'Reaction', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1635,6 +1639,8 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
 
     message: { type: 'MessageResponse', isSingle: true },
+
+    reaction: { type: 'Reaction', isSingle: true },
   };
   return decode(typeMappings, input);
 };
