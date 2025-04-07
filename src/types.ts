@@ -1,10 +1,14 @@
+import { Agent } from 'undici';
+
 export type OmitTypeId<T> = Omit<T, 'type' | 'id' | 'connection_id'>;
 
 export interface ApiConfig {
   apiKey: string;
   token: string;
   baseUrl: string;
+  /** The timeout for requests in milliseconds. The default is 3000. */
   timeout: number;
+  agent: Agent;
 }
 
 export interface RequestMetadata {

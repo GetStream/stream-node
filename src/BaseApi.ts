@@ -2,9 +2,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
+import { Agent } from 'undici';
 
 export class BaseApi {
-  constructor(protected readonly apiConfig: ApiConfig) {}
+  private readonly dispatcher: Agent;
+
+  constructor(protected readonly apiConfig: ApiConfig) {
+    this.dispatcher = this.apiConfig.agent;
+  }
 
   protected sendRequest = async <T>(
     method: string,
@@ -21,6 +26,7 @@ export class BaseApi {
         url = url.replace(`{${paramName}}`, pathParams[paramName]);
       });
     }
+
     url += `?${encodedParams}`;
     const clientRequestId = uuidv4();
     const headers = {
@@ -40,6 +46,8 @@ export class BaseApi {
         method,
         body: JSON.stringify(body),
         headers,
+        /** @ts-expect-error we get types from DOM here, but we should use node types */
+        dispatcher: this.dispatcher,
       });
 
       const responseHeaders = response.headers;

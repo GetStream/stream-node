@@ -300,6 +300,24 @@ export interface AsyncExportErrorEvent {
   received_at?: Date;
 }
 
+export interface AsyncExportModerationLogsEvent {
+  created_at: Date;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  url: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
 export interface AsyncExportUsersEvent {
   created_at: Date;
 
@@ -670,10 +688,6 @@ export interface BlockedUserResponse {
   blocked_user: UserResponse;
 
   user: UserResponse;
-}
-
-export interface BodyguardImageAnalysisConfig {
-  rules?: BodyguardRule[];
 }
 
 export interface BodyguardRule {
@@ -1536,6 +1550,28 @@ export interface CallUpdatedEvent {
   type: string;
 }
 
+export interface CallUserFeedbackSubmittedEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  rating: number;
+
+  session_id: string;
+
+  user: UserResponse;
+
+  type: string;
+
+  reason?: string;
+
+  sdk?: string;
+
+  sdk_version?: string;
+
+  custom?: Record<string, any>;
+}
+
 export interface CallUserMutedEvent {
   call_cid: string;
 
@@ -1656,6 +1692,10 @@ export interface CampaignStatsResponse {
   stats_messages_sent: number;
 
   stats_started_at: Date;
+
+  stats_users_read: number;
+
+  stats_users_sent: number;
 }
 
 export interface CastPollVoteRequest {
@@ -1690,6 +1730,8 @@ export interface Channel {
   cooldown?: number;
 
   deleted_at?: Date;
+
+  last_campaigns?: string;
 
   last_message_at?: Date;
 
@@ -2177,6 +2219,8 @@ export interface ChannelStateResponse {
 
   channel?: ChannelResponse;
 
+  draft?: DraftResponse;
+
   membership?: ChannelMember;
 
   push_preferences?: ChannelPushPreferences;
@@ -2204,6 +2248,8 @@ export interface ChannelStateResponseFields {
   watchers?: UserResponse[];
 
   channel?: ChannelResponse;
+
+  draft?: DraftResponse;
 
   membership?: ChannelMember;
 
@@ -3186,6 +3232,50 @@ export interface DeviceResponse {
   voip?: boolean;
 }
 
+export interface DraftPayloadResponse {
+  id: string;
+
+  text: string;
+
+  custom: Record<string, any>;
+
+  html?: string;
+
+  mml?: string;
+
+  parent_id?: string;
+
+  poll_id?: string;
+
+  quoted_message_id?: string;
+
+  show_in_channel?: boolean;
+
+  silent?: boolean;
+
+  type?: string;
+
+  attachments?: Attachment[];
+
+  mentioned_users?: UserResponse[];
+}
+
+export interface DraftResponse {
+  channel_cid: string;
+
+  created_at: Date;
+
+  message: DraftPayloadResponse;
+
+  parent_id?: string;
+
+  channel?: ChannelResponse;
+
+  parent_message?: MessageResponse;
+
+  quoted_message?: MessageResponse;
+}
+
 export interface EdgeResponse {
   continent_code: string;
 
@@ -3309,6 +3399,8 @@ export interface EntityCreator {
 
   custom: Record<string, any>;
 
+  teams_role: Record<string, string>;
+
   ban_expires?: Date;
 
   created_at?: Date;
@@ -3384,6 +3476,8 @@ export interface EntityCreatorResponse {
   privacy_settings?: PrivacySettingsResponse;
 
   push_notifications?: PushNotificationSettingsResponse;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface ErrorResult {
@@ -3545,36 +3639,6 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
-
-  updated_at: Date;
-
-  approved_at?: Date;
-
-  reason?: string;
-
-  rejected_at?: Date;
-
-  reviewed_at?: Date;
-
-  reviewed_by?: string;
-
-  target_message_id?: string;
-
-  custom?: Record<string, any>;
-
-  details?: FlagDetails;
-
-  target_message?: Message;
-
-  target_user?: User;
-
-  user?: User;
-}
-
-export interface Flag2 {
-  created_at: Date;
-
   entity_id: string;
 
   entity_type: string;
@@ -3600,36 +3664,6 @@ export interface Flag2 {
   moderation_payload?: ModerationPayload;
 
   user?: User;
-}
-
-export interface Flag2Response {
-  created_at: Date;
-
-  entity_id: string;
-
-  entity_type: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  reason?: string;
-
-  review_queue_item_id?: string;
-
-  type?: string;
-
-  labels?: string[];
-
-  custom?: Record<string, any>;
-
-  moderation_payload?: ModerationPayload;
-
-  user?: UserResponse;
 }
 
 export interface FlagDetails {
@@ -3782,6 +3816,8 @@ export interface FullUserResponse {
   latest_hidden_channels?: string[];
 
   privacy_settings?: PrivacySettingsResponse;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface GeofenceResponse {
@@ -3922,6 +3958,8 @@ export interface GetCampaignResponse {
   duration: string;
 
   campaign?: CampaignResponse;
+
+  users?: PagerResponse;
 }
 
 export interface GetChannelTypeResponse {
@@ -4020,6 +4058,12 @@ export interface GetCustomPermissionResponse {
   permission: Permission;
 }
 
+export interface GetDraftResponse {
+  duration: string;
+
+  draft: DraftResponse;
+}
+
 export interface GetEdgesResponse {
   duration: string;
 
@@ -4044,18 +4088,6 @@ export interface GetMessageResponse {
   message: MessageWithChannelResponse;
 
   pending_message_metadata?: Record<string, string>;
-}
-
-export interface GetModerationAnalyticsRequest {
-  end_date?: string;
-
-  start_date?: string;
-}
-
-export interface GetModerationAnalyticsResponse {
-  duration: string;
-
-  analytics?: ModerationAnalytics;
 }
 
 export interface GetOGResponse {
@@ -4194,16 +4226,6 @@ export interface GetThreadResponse {
   duration: string;
 
   thread: ThreadStateResponse;
-}
-
-export interface GetUserModerationReportResponse {
-  duration: string;
-
-  user_blocks: UserBlock[];
-
-  user_mutes: UserMute[];
-
-  user: UserResponse;
 }
 
 export interface GoLiveRequest {
@@ -4898,6 +4920,10 @@ export interface MessageNewEvent {
   user?: User;
 }
 
+export interface MessageOptions {
+  include_thread_participants?: boolean;
+}
+
 export interface MessagePaginationParams {}
 
 export interface MessageReadEvent {
@@ -5026,6 +5052,8 @@ export interface MessageResponse {
   show_in_channel?: boolean;
 
   thread_participants?: UserResponse[];
+
+  draft?: DraftResponse;
 
   i18n?: Record<string, string>;
 
@@ -5169,6 +5197,8 @@ export interface MessageWithChannelResponse {
 
   thread_participants?: UserResponse[];
 
+  draft?: DraftResponse;
+
   i18n?: Record<string, string>;
 
   image_labels?: Record<string, string[]>;
@@ -5198,34 +5228,6 @@ export interface ModerationActionConfig {
   custom: Record<string, any>;
 }
 
-export interface ModerationAnalytics {
-  total_items_moderated: number;
-
-  ai_image_harms: Array<Record<string, any>>;
-
-  ai_text_harms: Array<Record<string, any>>;
-
-  ai_video_harms: Array<Record<string, any>>;
-
-  blocklist_by_list: Array<Record<string, any>>;
-
-  blocklist_matches: Array<Record<string, any>>;
-
-  model_accuracy: Array<Record<string, any>>;
-
-  moderator_actions: Array<Record<string, any>>;
-
-  moderator_productivity: Array<Record<string, any>>;
-
-  semantic_filter_top_matches: Array<Record<string, any>>;
-
-  sla_metrics: Array<Record<string, any>>;
-
-  action_distribution_over_time: Record<string, Record<string, any>>;
-
-  detection_by_engine_over_time: Record<string, Record<string, any>>;
-}
-
 export interface ModerationCustomActionEvent {
   created_at: Date;
 
@@ -5236,22 +5238,6 @@ export interface ModerationCustomActionEvent {
   message?: Message;
 
   user?: User;
-}
-
-export interface ModerationEvent {
-  created_at: Date;
-
-  custom: Record<string, any>;
-
-  type: string;
-
-  received_at?: Date;
-
-  flags?: Flag2Response[];
-
-  action?: ActionLogResponse;
-
-  review_queue_item?: ReviewQueueItemResponse;
 }
 
 export interface ModerationFlaggedEvent {
@@ -5298,22 +5284,6 @@ export interface ModerationResponse {
   toxic: number;
 }
 
-export interface ModerationUsageStats {
-  app_pk: number;
-
-  id: number;
-
-  organization_id: number;
-
-  reference_date: Date;
-
-  updated_at: Date;
-
-  usage_amount: number;
-
-  usage_type: string;
-}
-
 export interface ModerationV2Response {
   action: string;
 
@@ -5328,20 +5298,6 @@ export interface ModerationV2Response {
   image_harms?: string[];
 
   text_harms?: string[];
-}
-
-export interface ModeratorStats {
-  id: string;
-
-  items_reviewed: number;
-
-  action_counts: Record<string, number>;
-}
-
-export interface ModeratorStatsResponse {
-  duration: string;
-
-  moderator_stats: ModeratorStats[];
 }
 
 export interface MuteChannelRequest {
@@ -5564,6 +5520,8 @@ export interface OwnUser {
   privacy_settings?: PrivacySettings;
 
   push_preferences?: PushPreferences;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface OwnUserResponse {
@@ -5620,6 +5578,14 @@ export interface OwnUserResponse {
   privacy_settings?: PrivacySettingsResponse;
 
   push_preferences?: PushPreferences;
+
+  teams_role?: Record<string, string>;
+}
+
+export interface PagerResponse {
+  next?: string;
+
+  prev?: string;
 }
 
 export interface PaginationParams {
@@ -6239,6 +6205,8 @@ export interface QueryCampaignsRequest {
 
   prev?: string;
 
+  user_limit?: number;
+
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
@@ -6278,6 +6246,32 @@ export interface QueryChannelsResponse {
   duration: string;
 
   channels: ChannelStateResponseFields[];
+}
+
+export interface QueryDraftsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface QueryDraftsResponse {
+  duration: string;
+
+  drafts: DraftResponse[];
+
+  next?: string;
+
+  prev?: string;
 }
 
 export interface QueryFeedModerationTemplate {
@@ -6582,32 +6576,6 @@ export interface QueryThreadsResponse {
   prev?: string;
 }
 
-export interface QueryUsageStatsRequest {
-  limit?: number;
-
-  next?: string;
-
-  prev?: string;
-
-  user_id?: string;
-
-  sort?: SortParamRequest[];
-
-  filter?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface QueryUsageStatsResponse {
-  duration: string;
-
-  items: ModerationUsageStats[];
-
-  next?: string;
-
-  prev?: string;
-}
-
 export interface QueryUserFeedbackRequest {
   limit?: number;
 
@@ -6652,14 +6620,6 @@ export interface QueryUsersResponse {
   duration: string;
 
   users: FullUserResponse[];
-}
-
-export interface QueueStatsResponse {
-  avg_time_to_action: number;
-
-  duration: string;
-
-  time_to_action_buckets: Record<string, number>;
 }
 
 export interface RTMPBroadcastRequest {
@@ -6989,6 +6949,8 @@ export interface ReviewQueueItem {
 
   entity_type: string;
 
+  flags_count: number;
+
   has_image: boolean;
 
   has_text: boolean;
@@ -7013,7 +6975,7 @@ export interface ReviewQueueItem {
 
   bans: Ban[];
 
-  flags: Flag2[];
+  flags: Flag[];
 
   languages: string[];
 
@@ -7038,6 +7000,22 @@ export interface ReviewQueueItem {
   reaction?: Reaction;
 }
 
+export interface ReviewQueueItemNewEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: FlagResponse[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
+}
+
 export interface ReviewQueueItemResponse {
   ai_text_severity: string;
 
@@ -7046,6 +7024,8 @@ export interface ReviewQueueItemResponse {
   entity_id: string;
 
   entity_type: string;
+
+  flags_count: number;
 
   id: string;
 
@@ -7063,7 +7043,7 @@ export interface ReviewQueueItemResponse {
 
   bans: Ban[];
 
-  flags: Flag2Response[];
+  flags: FlagResponse[];
 
   languages: string[];
 
@@ -7090,6 +7070,22 @@ export interface ReviewQueueItemResponse {
   moderation_payload?: ModerationPayload;
 
   reaction?: Reaction;
+}
+
+export interface ReviewQueueItemUpdatedEvent {
+  created_at: Date;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  flags?: FlagResponse[];
+
+  action?: ActionLogResponse;
+
+  review_queue_item?: ReviewQueueItemResponse;
 }
 
 export interface RingSettings {
@@ -7192,6 +7188,8 @@ export interface SearchPayload {
   sort?: SortParamRequest[];
 
   message_filter_conditions?: Record<string, any>;
+
+  message_options?: MessageOptions;
 }
 
 export interface SearchResponse {
@@ -7276,6 +7274,8 @@ export interface SearchResultMessage {
   thread_participants?: UserResponse[];
 
   channel?: ChannelResponse;
+
+  draft?: DraftResponse;
 
   i18n?: Record<string, string>;
 
@@ -7462,6 +7462,8 @@ export interface StartCampaignResponse {
   duration: string;
 
   campaign?: CampaignResponse;
+
+  users?: PagerResponse;
 }
 
 export interface StartClosedCaptionsRequest {
@@ -7743,6 +7745,8 @@ export interface ThreadStateResponse {
   channel?: ChannelResponse;
 
   created_by?: UserResponse;
+
+  draft?: DraftResponse;
 
   parent_message?: MessageResponse;
 }
@@ -8692,8 +8696,6 @@ export interface UpsertConfigRequest {
 
   ai_image_config?: AIImageConfig;
 
-  ai_image_lite_config?: BodyguardImageAnalysisConfig;
-
   ai_text_config?: AITextConfig;
 
   ai_video_config?: AIVideoConfig;
@@ -8777,6 +8779,8 @@ export interface User {
 
   custom: Record<string, any>;
 
+  teams_role: Record<string, string>;
+
   ban_expires?: Date;
 
   created_at?: Date;
@@ -8824,14 +8828,6 @@ export interface UserBannedEvent {
   team?: string;
 
   user?: User;
-}
-
-export interface UserBlock {
-  blocked_by_user_id: string;
-
-  blocked_user_id: string;
-
-  created_at: Date;
 }
 
 export interface UserCustomEventRequest {
@@ -8986,6 +8982,8 @@ export interface UserRequest {
   custom?: Record<string, any>;
 
   privacy_settings?: PrivacySettingsResponse;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserResponse {
@@ -9032,6 +9030,8 @@ export interface UserResponse {
   privacy_settings?: PrivacySettingsResponse;
 
   push_notifications?: PushNotificationSettingsResponse;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserResponseCommonFields {
@@ -9066,6 +9066,8 @@ export interface UserResponseCommonFields {
   name?: string;
 
   revoke_tokens_issued_before?: Date;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserResponsePrivacyFields {
@@ -9104,6 +9106,8 @@ export interface UserResponsePrivacyFields {
   revoke_tokens_issued_before?: Date;
 
   privacy_settings?: PrivacySettingsResponse;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserSessionStats {
@@ -9311,11 +9315,15 @@ export interface VelocityFilterConfigRule {
 
   ip_ban: boolean;
 
+  probation_period: number;
+
   shadow_ban: boolean;
 
   slow_spam_threshold: number;
 
   slow_spam_ttl: number;
+
+  url_only: boolean;
 
   slow_spam_ban_duration?: number;
 }
