@@ -73,6 +73,7 @@
     "@types/jsonwebtoken": "^9.0.3",
     "@types/node": "^20.11.24",
     "jsonwebtoken": "^9.0.2",
+    "undici": "^5.29.0",
     "uuid": "^9.0.1"
   },
   "peerDependencies": {
