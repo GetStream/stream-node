@@ -7,6 +7,7 @@ import {
   EventResponse,
   FileUploadRequest,
   FileUploadResponse,
+  GetDraftResponse,
   GetManyMessagesResponse,
   HideChannelRequest,
   HideChannelResponse,
@@ -81,6 +82,34 @@ export class ChannelApi {
       type: this.type,
       ...request,
     });
+  };
+
+  deleteDraft = (request?: {
+    parent_id?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<Response>> => {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+    return this.chatApi.deleteDraft({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  };
+
+  getDraft = (request?: {
+    parent_id?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<GetDraftResponse>> => {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+    return this.chatApi.getDraft({ id: this.id, type: this.type, ...request });
   };
 
   sendEvent = (

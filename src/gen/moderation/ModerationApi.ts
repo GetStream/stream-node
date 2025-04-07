@@ -12,11 +12,7 @@ import {
   FlagRequest,
   FlagResponse,
   GetConfigResponse,
-  GetModerationAnalyticsRequest,
-  GetModerationAnalyticsResponse,
   GetReviewQueueItemResponse,
-  GetUserModerationReportResponse,
-  ModeratorStatsResponse,
   MuteRequest,
   MuteResponse,
   QueryFeedModerationTemplatesResponse,
@@ -26,9 +22,6 @@ import {
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
   QueryReviewQueueResponse,
-  QueryUsageStatsRequest,
-  QueryUsageStatsResponse,
-  QueueStatsResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   UnbanRequest,
@@ -43,23 +36,6 @@ import {
 import { decoders } from '../model-decoders';
 
 export class ModerationApi extends BaseApi {
-  getModerationAnalytics = async (
-    request?: GetModerationAnalyticsRequest,
-  ): Promise<StreamResponse<GetModerationAnalyticsResponse>> => {
-    const body = {
-      end_date: request?.end_date,
-      start_date: request?.start_date,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<GetModerationAnalyticsResponse>
-    >('POST', '/api/v2/moderation/analytics', undefined, undefined, body);
-
-    decoders.GetModerationAnalyticsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   ban = async (request: BanRequest): Promise<StreamResponse<BanResponse>> => {
     const body = {
       target_user_id: request?.target_user_id,
@@ -123,7 +99,6 @@ export class ModerationApi extends BaseApi {
       team: request?.team,
       user_id: request?.user_id,
       ai_image_config: request?.ai_image_config,
-      ai_image_lite_config: request?.ai_image_lite_config,
       ai_text_config: request?.ai_text_config,
       ai_video_config: request?.ai_video_config,
       automod_platform_circumvention_config:
@@ -340,18 +315,6 @@ export class ModerationApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
-  getModeratorStats = async (): Promise<
-    StreamResponse<ModeratorStatsResponse>
-  > => {
-    const response = await this.sendRequest<
-      StreamResponse<ModeratorStatsResponse>
-    >('GET', '/api/v2/moderation/moderator_stats', undefined, undefined);
-
-    decoders.ModeratorStatsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   mute = async (
     request: MuteRequest,
   ): Promise<StreamResponse<MuteResponse>> => {
@@ -371,19 +334,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.MuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getQueueStats = async (): Promise<StreamResponse<QueueStatsResponse>> => {
-    const response = await this.sendRequest<StreamResponse<QueueStatsResponse>>(
-      'GET',
-      '/api/v2/moderation/queue_stats',
-      undefined,
-      undefined,
-    );
-
-    decoders.QueueStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -505,50 +455,6 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.UnmuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  queryUsageStats = async (
-    request?: QueryUsageStatsRequest,
-  ): Promise<StreamResponse<QueryUsageStatsResponse>> => {
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      user_id: request?.user_id,
-      sort: request?.sort,
-      filter: request?.filter,
-      user: request?.user,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<QueryUsageStatsResponse>
-    >('POST', '/api/v2/moderation/usage_stats', undefined, undefined, body);
-
-    decoders.QueryUsageStatsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getUserReport = async (request: {
-    user_id: string;
-    create_user_if_not_exists?: boolean;
-    include_user_mutes?: boolean;
-    include_user_blocks?: boolean;
-  }): Promise<StreamResponse<GetUserModerationReportResponse>> => {
-    const queryParams = {
-      user_id: request?.user_id,
-      create_user_if_not_exists: request?.create_user_if_not_exists,
-      include_user_mutes: request?.include_user_mutes,
-      include_user_blocks: request?.include_user_blocks,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<GetUserModerationReportResponse>
-    >('GET', '/api/v2/moderation/user_report', undefined, queryParams);
-
-    decoders.GetUserModerationReportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
