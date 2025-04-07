@@ -6,15 +6,13 @@ import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
-import { Agent } from 'undici';
 
 export interface StreamClientOptions {
   timeout?: number;
   basePath?: string;
-  /** The max number of clients to create. `null` if no limit. Default is 100. Has no effect if `agent` is provided. */
-  maxConnections?: number | null;
+  // We use unknown here because RequestInit['dispatcher'] is different between Node versions
   /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
-  agent?: Agent;
+  agent?: unknown;
 }
 
 export class StreamClient extends CommonApi {
@@ -24,7 +22,6 @@ export class StreamClient extends CommonApi {
   public readonly options: StreamClientOptions = {};
 
   private static readonly DEFAULT_TIMEOUT = 3000;
-  private static readonly MAX_CONNECTIONS = 100;
 
   /**
    *
@@ -39,17 +36,15 @@ export class StreamClient extends CommonApi {
   ) {
     const token = JWTServerToken(secret);
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
-    const agent =
-      config?.agent ??
-      new Agent({
-        connections:
-          config?.maxConnections === undefined
-            ? StreamClient.MAX_CONNECTIONS
-            : config.maxConnections,
-      });
     const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
     const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
-    super({ apiKey, token, timeout, baseUrl: chatBaseUrl, agent });
+    super({
+      apiKey,
+      token,
+      timeout,
+      baseUrl: chatBaseUrl,
+      agent: config?.agent as RequestInit['dispatcher'],
+    });
 
     this.video = new StreamVideoClient({
       streamClient: this,
@@ -57,21 +52,21 @@ export class StreamClient extends CommonApi {
       token,
       timeout,
       baseUrl: videoBaseUrl,
-      agent,
+      agent: config?.agent as RequestInit['dispatcher'],
     });
     this.chat = new StreamChatClient({
       apiKey,
       token,
       timeout,
       baseUrl: chatBaseUrl,
-      agent,
+      agent: config?.agent as RequestInit['dispatcher'],
     });
     this.moderation = new StreamModerationClient({
       apiKey,
       token,
       timeout,
       baseUrl: chatBaseUrl,
-      agent,
+      agent: config?.agent as RequestInit['dispatcher'],
     });
   }
 
