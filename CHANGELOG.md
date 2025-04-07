@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.20](https://github.com/GetStream/stream-node/compare/v0.4.19...v0.4.20) (2025-04-07)
+
+
+### Features
+
+* set max connections to 100, allow integrators to configure Fetch API ([#98](https://github.com/GetStream/stream-node/issues/98)) ([b044b59](https://github.com/GetStream/stream-node/commit/b044b599867a69b33b3aa9d989d1c1e3277dc92f))
+
 ## [0.4.19](https://github.com/GetStream/stream-node/compare/v0.4.18...v0.4.19) (2025-03-17)
 
 
