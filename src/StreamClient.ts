@@ -14,7 +14,7 @@ export interface StreamClientOptions {
   /** The max number of clients to create. `null` if no limit. Default is 100. Has no effect if `agent` is provided. */
   maxConnections?: number | null;
   /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
-  agent?: Agent;
+  agent?: RequestInit['dispatcher'];
 }
 
 export class StreamClient extends CommonApi {
