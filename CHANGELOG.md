@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.21](https://github.com/GetStream/stream-node/compare/v0.4.20...v0.4.21) (2025-04-08)
+
+
+### Bug Fixes
+
+* remove undici dependency ([#101](https://github.com/GetStream/stream-node/issues/101)) ([c943be1](https://github.com/GetStream/stream-node/commit/c943be1b2871b2b010dd4b29d690c46ecacda23b))
+
 ## [0.4.20](https://github.com/GetStream/stream-node/compare/v0.4.19...v0.4.20) (2025-04-07)
 
 
