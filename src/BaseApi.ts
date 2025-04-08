@@ -2,10 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
-import { Agent } from 'undici';
 
 export class BaseApi {
-  private readonly dispatcher: Agent;
+  private readonly dispatcher?: RequestInit['dispatcher'];
 
   constructor(protected readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
@@ -46,7 +45,6 @@ export class BaseApi {
         method,
         body: JSON.stringify(body),
         headers,
-        /** @ts-expect-error we get types from DOM here, but we should use node types */
         dispatcher: this.dispatcher,
       });
 
