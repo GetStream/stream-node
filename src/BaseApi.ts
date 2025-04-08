@@ -2,12 +2,95 @@ import { v4 as uuidv4 } from 'uuid';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
+import diagnosticsChannel from 'diagnostics_channel';
+
+// Define types for the diagnostics channel messages
+interface ConnectParams {
+  host: string;
+  hostname: string;
+  protocol: string;
+  port: number;
+  servername?: string;
+  version?: string;
+}
+
+interface BeforeConnectMessage {
+  connectParams: ConnectParams;
+  connector: Function;
+}
+
+interface ConnectedMessage {
+  socket: any; // Using any as socket type can be complex
+  connectParams: ConnectParams;
+  connector: Function;
+}
+
+interface ConnectErrorMessage {
+  error: Error & { code?: string };
+  socket?: any;
+  connectParams: ConnectParams;
+  connector: Function;
+}
 
 export class BaseApi {
   private readonly dispatcher?: RequestInit['dispatcher'];
 
   constructor(protected readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
+
+    // Setup diagnostics channel listeners
+    this.setupDiagnosticsChannels();
+  }
+
+  private setupDiagnosticsChannels() {
+    // Monitor connection before it starts (DNS resolution happens during this phase)
+    diagnosticsChannel
+      .channel('undici:client:beforeConnect')
+      .subscribe((message: unknown) => {
+        const { connectParams } = message as BeforeConnectMessage;
+        console.log(
+          `Attempting connection to ${connectParams.hostname}:${connectParams.port}`,
+        );
+      });
+
+    // Monitor successful connections (TCP connection successful)
+    diagnosticsChannel
+      .channel('undici:client:connected')
+      .subscribe((message: unknown) => {
+        const { socket, connectParams } = message as ConnectedMessage;
+        console.log(
+          `Successfully connected to ${connectParams.hostname}:${connectParams.port}`,
+        );
+        // For TLS connections, the socket will have TLS-specific properties when handshake is successful
+        if (
+          connectParams.protocol === 'https:' &&
+          'encrypted' in socket &&
+          socket.encrypted
+        ) {
+          console.log('TLS handshake successful');
+        }
+      });
+
+    // Monitor connection errors (failed DNS, TCP connection or TLS handshake)
+    diagnosticsChannel
+      .channel('undici:client:connectError')
+      .subscribe((message: unknown) => {
+        const { error, connectParams } = message as ConnectErrorMessage;
+        console.log(
+          `Connection failed to ${connectParams.hostname}:${connectParams.port}: ${error.message}`,
+        );
+        if (error.code === 'ENOTFOUND') {
+          console.log('DNS resolution failed');
+        } else if (error.code === 'ECONNREFUSED') {
+          console.log('TCP connection failed');
+        } else if (
+          error.code === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
+          error.message.includes('certificate') ||
+          error.message.includes('TLS')
+        ) {
+          console.log('TLS handshake failed');
+        }
+      });
   }
 
   protected sendRequest = async <T>(
