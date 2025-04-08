@@ -24,7 +24,7 @@
     "test": "vitest",
     "test:bun": "bun run vitest",
     "start": "rollup -w -c",
-    "build": "rm -rf dist && rollup -c",
+    "build": "rm -rf dist && rollup -c && ./fix-optional-dep-types.sh",
     "generate:open-api": "./generate-openapi.sh",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
