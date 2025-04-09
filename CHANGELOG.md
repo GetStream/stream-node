@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.22](https://github.com/GetStream/stream-node/compare/v0.4.21...v0.4.22) (2025-04-09)
+
+
+### Bug Fixes
+
+* handle missing optional dependency in declarations ([#103](https://github.com/GetStream/stream-node/issues/103)) ([eb271c5](https://github.com/GetStream/stream-node/commit/eb271c5f3bfb6002d341323af25beabd15516ef2))
+
 ## [0.4.21](https://github.com/GetStream/stream-node/compare/v0.4.20...v0.4.21) (2025-04-08)
 
 
