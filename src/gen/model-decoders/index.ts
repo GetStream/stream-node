@@ -181,6 +181,8 @@ decoders.CallResponse = (input?: Record<string, any>) => {
 
 decoders.CallSessionResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
     participants: { type: 'CallParticipantResponse', isSingle: false },
 
     accepted_by: { type: 'DatetimeType', isSingle: false },
