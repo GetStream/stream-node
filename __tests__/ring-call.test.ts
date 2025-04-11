@@ -2,10 +2,11 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('ring call API', () => {
   let client: StreamClient;
-  const callId = `call${crypto.randomUUID()}`;
+  const callId = `call${uuidv4()}`;
   let call: StreamCall;
 
   beforeAll(async () => {
