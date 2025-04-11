@@ -1,6 +1,8 @@
 export interface AIImageConfig {
   enabled: boolean;
 
+  ocr_rules: OCRRule[];
+
   rules: AWSRekognitionRule[];
 
   async?: boolean;
@@ -1303,6 +1305,8 @@ export interface CallSessionParticipantLeftEvent {
 export interface CallSessionResponse {
   anonymous_participant_count: number;
 
+  created_at: Date;
+
   id: string;
 
   participants: CallParticipantResponse[];
@@ -1640,6 +1644,8 @@ export interface CampaignResponse {
   sender_id: string;
 
   sender_mode: string;
+
+  show_channels: boolean;
 
   skip_push: boolean;
 
@@ -5430,6 +5436,18 @@ export interface NotificationSettings {
 
 export interface NullTime {}
 
+export interface OCRRule {
+  action:
+    | 'flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove';
+
+  label: string;
+}
+
 export interface OnlyUserID {
   id: string;
 }
@@ -6941,6 +6959,8 @@ export interface ReviewQueueItem {
 
   bounce_count: number;
 
+  config_key: string;
+
   content_changed: boolean;
 
   created_at: Date;
@@ -7048,6 +7068,8 @@ export interface ReviewQueueItemResponse {
   languages: string[];
 
   completed_at?: Date;
+
+  config_key?: string;
 
   entity_creator_id?: string;
 
