@@ -484,6 +484,13 @@ decoders.ChannelTypeConfig = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ChatActivityStatsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    messages: { type: 'MessageStatsResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CheckResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     item: { type: 'ReviewQueueItem', isSingle: true },
@@ -505,6 +512,13 @@ decoders.ConfigResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.CountByMinuteResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    start_ts: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -781,6 +795,13 @@ decoders.GetBlockListResponse = (input?: Record<string, any>) => {
 decoders.GetBlockedUsersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     blocks: { type: 'BlockedUserResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.GetCallReportResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    chat_activity: { type: 'ChatActivityStatsResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1163,6 +1184,13 @@ decoders.MessageResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.MessageStatsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    count_over_time: { type: 'CountByMinuteResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1268,6 +1296,20 @@ decoders.OwnUserResponse = (input?: Record<string, any>) => {
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
     push_preferences: { type: 'PushPreferences', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ParticipantCountByMinuteResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    start_ts: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ParticipantCountOverTimeResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    by_minute: { type: 'ParticipantCountByMinuteResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };

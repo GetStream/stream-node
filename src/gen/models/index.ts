@@ -1151,6 +1151,8 @@ export interface CallReportResponse {
 }
 
 export interface CallRequest {
+  channel_cid?: string;
+
   created_by_id?: string;
 
   starts_at?: Date;
@@ -1200,6 +1202,8 @@ export interface CallResponse {
   ingress: CallIngressResponse;
 
   settings: CallSettingsResponse;
+
+  channel_cid?: string;
 
   ended_at?: Date;
 
@@ -1430,6 +1434,16 @@ export interface CallStateResponseFields {
   call: CallResponse;
 }
 
+export interface CallStatsReportReadyEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  session_id: string;
+
+  type: string;
+}
+
 export interface CallStatsReportSummaryResponse {
   call_cid: string;
 
@@ -1508,6 +1522,8 @@ export interface CallType {
   app_pk: number;
 
   created_at: Date;
+
+  enable_live_insights: boolean;
 
   external_storage: string;
 
@@ -2392,6 +2408,10 @@ export interface ChannelVisibleEvent {
   user?: User;
 }
 
+export interface ChatActivityStatsResponse {
+  messages?: MessageStatsResponse;
+}
+
 export interface CheckExternalStorageResponse {
   duration: string;
 
@@ -2618,6 +2638,12 @@ export interface Count {
   approximate: boolean;
 
   value: number;
+}
+
+export interface CountByMinuteResponse {
+  count: number;
+
+  start_ts: Date;
 }
 
 export interface CreateBlockListRequest {
@@ -3888,6 +3914,8 @@ export interface GetCallReportResponse {
   session_id: string;
 
   report: ReportResponse;
+
+  chat_activity?: ChatActivityStatsResponse;
 }
 
 export interface GetCallResponse {
@@ -4250,6 +4278,12 @@ export interface GoLiveResponse {
 
 export interface GoogleVisionConfig {
   enabled?: boolean;
+}
+
+export interface GroupedStatsResponse {
+  name: string;
+
+  unique: number;
 }
 
 export interface HLSSettings {
@@ -5070,6 +5104,10 @@ export interface MessageResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 }
 
+export interface MessageStatsResponse {
+  count_over_time?: CountByMinuteResponse[];
+}
+
 export interface MessageUnblockedEvent {
   cid: string;
 
@@ -5594,10 +5632,42 @@ export interface PaginationParams {
   offset?: number;
 }
 
+export interface ParticipantCountByMinuteResponse {
+  first: number;
+
+  last: number;
+
+  max: number;
+
+  min: number;
+
+  start_ts: Date;
+}
+
+export interface ParticipantCountOverTimeResponse {
+  by_minute?: ParticipantCountByMinuteResponse[];
+}
+
 export interface ParticipantReportResponse {
   sum: number;
 
   unique: number;
+
+  max_concurrent?: number;
+
+  by_browser?: GroupedStatsResponse[];
+
+  by_country?: GroupedStatsResponse[];
+
+  by_device?: GroupedStatsResponse[];
+
+  by_operating_system?: GroupedStatsResponse[];
+
+  count_over_time?: ParticipantCountOverTimeResponse;
+
+  publishers?: PublisherStatsResponse;
+
+  subscribers?: SubscriberStatsResponse;
 }
 
 export interface PendingMessageResponse {
@@ -5910,6 +5980,14 @@ export interface PublisherAggregateStats {
   by_track_type?: Record<string, Count>;
 
   total?: Count;
+}
+
+export interface PublisherStatsResponse {
+  total: number;
+
+  unique: number;
+
+  by_track?: TrackStatsResponse[];
 }
 
 export interface PushConfig {
@@ -7631,6 +7709,14 @@ export interface SubmitActionResponse {
   item?: ReviewQueueItem;
 }
 
+export interface SubscriberStatsResponse {
+  total: number;
+
+  total_subscribed_duration_seconds: number;
+
+  unique: number;
+}
+
 export interface Subsession {
   ended_at: number;
 
@@ -7797,6 +7883,12 @@ export interface TimeStats {
   average_seconds: number;
 
   max_seconds: number;
+}
+
+export interface TrackStatsResponse {
+  duration_seconds: number;
+
+  track_type: string;
 }
 
 export interface TranscriptionSettings {
