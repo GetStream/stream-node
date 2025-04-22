@@ -67,7 +67,7 @@ describe('external storage CRUD API', () => {
       name: gcsName,
       storage_type: 'gcs',
       path: 'directory_name/',
-      gcs_credentials: 'content of the service account file',
+      gcs_credentials: '{"type": "service_account"}',
     });
 
     await client.deleteExternalStorage({ name: gcsName });
