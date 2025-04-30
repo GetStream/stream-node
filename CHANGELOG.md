@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.23](https://github.com/GetStream/stream-node/compare/v0.4.22...v0.4.23) (2025-04-30)
+
+
+### Features
+
+* update to v171.1.7 ([#107](https://github.com/GetStream/stream-node/issues/107)) ([dd442f0](https://github.com/GetStream/stream-node/commit/dd442f0e6b9acc465781cb748e5c5a03dd51624c))
+
 ## [0.4.22](https://github.com/GetStream/stream-node/compare/v0.4.21...v0.4.22) (2025-04-09)
 
 
