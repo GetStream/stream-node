@@ -12,7 +12,6 @@ import {
   EndCallResponse,
   GetCallReportResponse,
   GetCallResponse,
-  GetCallStatsResponse,
   GetOrCreateCallRequest,
   GetOrCreateCallResponse,
   GoLiveRequest,
@@ -23,6 +22,8 @@ import {
   MuteUsersResponse,
   PinRequest,
   PinResponse,
+  QueryCallParticipantsRequest,
+  QueryCallParticipantsResponse,
   SendCallEventRequest,
   SendCallEventResponse,
   StartClosedCaptionsRequest,
@@ -166,6 +167,16 @@ export class CallApi {
     });
   };
 
+  queryCallParticipants = (
+    request?: QueryCallParticipantsRequest & { limit?: number },
+  ): Promise<StreamResponse<QueryCallParticipantsResponse>> => {
+    return this.videoApi.queryCallParticipants({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  };
+
   videoPin = (request: PinRequest): Promise<StreamResponse<PinResponse>> => {
     return this.videoApi.videoPin({ id: this.id, type: this.type, ...request });
   };
@@ -253,16 +264,6 @@ export class CallApi {
     request?: StartTranscriptionRequest,
   ): Promise<StreamResponse<StartTranscriptionResponse>> => {
     return this.videoApi.startTranscription({
-      id: this.id,
-      type: this.type,
-      ...request,
-    });
-  };
-
-  getCallStats = (request: {
-    session: string;
-  }): Promise<StreamResponse<GetCallStatsResponse>> => {
-    return this.videoApi.getCallStats({
       id: this.id,
       type: this.type,
       ...request,

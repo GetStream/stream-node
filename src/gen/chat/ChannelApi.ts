@@ -199,7 +199,7 @@ export class ChannelApi {
   };
 
   updateMemberPartial = (
-    request: UpdateMemberPartialRequest & { user_id: string },
+    request?: UpdateMemberPartialRequest & { user_id?: string },
   ): Promise<StreamResponse<UpdateMemberPartialResponse>> => {
     if (!this.id) {
       throw new Error(
