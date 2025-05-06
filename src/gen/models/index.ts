@@ -7120,10 +7120,54 @@ export interface Role {
   scopes: string[];
 }
 
+export interface RuleBuilderAction {
+  duration?: number;
+
+  ip_ban?: boolean;
+
+  reason?: string;
+
+  shadow_ban?: boolean;
+
+  type?: string;
+}
+
+export interface RuleBuilderCondition {
+  provider?: string;
+
+  threshold?: number;
+
+  time_window?: string;
+
+  labels?: string[];
+}
+
+export interface RuleBuilderConfig {
+  async?: boolean;
+
+  enabled?: boolean;
+
+  rules?: RuleBuilderRule[];
+}
+
+export interface RuleBuilderRule {
+  enabled?: boolean;
+
+  id?: string;
+
+  name?: string;
+
+  conditions?: RuleBuilderCondition[];
+
+  action?: RuleBuilderAction;
+}
+
 export interface S3Request {
   s3_region: string;
 
   s3_api_key?: string;
+
+  s3_custom_endpoint_url?: string;
 
   s3_secret?: string;
 }
@@ -8777,6 +8821,8 @@ export interface UpsertConfigRequest {
   bodyguard_config?: AITextConfig;
 
   google_vision_config?: GoogleVisionConfig;
+
+  rule_builder_config?: RuleBuilderConfig;
 
   user?: UserRequest;
 
