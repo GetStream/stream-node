@@ -109,6 +109,7 @@ export class ModerationApi extends BaseApi {
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
       google_vision_config: request?.google_vision_config,
+      rule_builder_config: request?.rule_builder_config,
       user: request?.user,
       velocity_filter_config: request?.velocity_filter_config,
     };
