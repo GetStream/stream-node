@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.24](https://github.com/GetStream/stream-node/compare/v0.4.23...v0.4.24) (2025-05-06)
+
+
+### Features
+
+* empty commit to trigger release ([c0890a8](https://github.com/GetStream/stream-node/commit/c0890a8d8b7adc96d4d81717220159321e924480))
+
 ## [0.4.23](https://github.com/GetStream/stream-node/compare/v0.4.22...v0.4.23) (2025-04-30)
 
 
