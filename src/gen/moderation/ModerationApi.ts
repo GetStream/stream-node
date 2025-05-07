@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   BanRequest,
   BanResponse,
@@ -33,10 +32,12 @@ import {
   UpsertModerationTemplateRequest,
   UpsertModerationTemplateResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class ModerationApi extends BaseApi {
-  ban = async (request: BanRequest): Promise<StreamResponse<BanResponse>> => {
+export class ModerationApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
+  async ban(request: BanRequest): Promise<StreamResponse<BanResponse>> {
     const body = {
       target_user_id: request?.target_user_id,
       banned_by_id: request?.banned_by_id,
@@ -48,22 +49,16 @@ export class ModerationApi extends BaseApi {
       banned_by: request?.banned_by,
     };
 
-    const response = await this.sendRequest<StreamResponse<BanResponse>>(
-      'POST',
-      '/api/v2/moderation/ban',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BanResponse>
+    >('POST', '/api/v2/moderation/ban', undefined, undefined, body);
 
     decoders.BanResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  check = async (
-    request: CheckRequest,
-  ): Promise<StreamResponse<CheckResponse>> => {
+  async check(request: CheckRequest): Promise<StreamResponse<CheckResponse>> {
     const body = {
       config_key: request?.config_key,
       entity_creator_id: request?.entity_creator_id,
@@ -77,22 +72,18 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckResponse>>(
-      'POST',
-      '/api/v2/moderation/check',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckResponse>
+    >('POST', '/api/v2/moderation/check', undefined, undefined, body);
 
     decoders.CheckResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  upsertConfig = async (
+  async upsertConfig(
     request: UpsertConfigRequest,
-  ): Promise<StreamResponse<UpsertConfigResponse>> => {
+  ): Promise<StreamResponse<UpsertConfigResponse>> {
     const body = {
       key: request?.key,
       async: request?.async,
@@ -114,19 +105,19 @@ export class ModerationApi extends BaseApi {
       velocity_filter_config: request?.velocity_filter_config,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertConfigResponse>
     >('POST', '/api/v2/moderation/config', undefined, undefined, body);
 
     decoders.UpsertConfigResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteConfig = async (request: {
+  async deleteConfig(request: {
     key: string;
     team?: string;
-  }): Promise<StreamResponse<DeleteModerationConfigResponse>> => {
+  }): Promise<StreamResponse<DeleteModerationConfigResponse>> {
     const queryParams = {
       team: request?.team,
     };
@@ -134,19 +125,19 @@ export class ModerationApi extends BaseApi {
       key: request?.key,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteModerationConfigResponse>
     >('DELETE', '/api/v2/moderation/config/{key}', pathParams, queryParams);
 
     decoders.DeleteModerationConfigResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getConfig = async (request: {
+  async getConfig(request: {
     key: string;
     team?: string;
-  }): Promise<StreamResponse<GetConfigResponse>> => {
+  }): Promise<StreamResponse<GetConfigResponse>> {
     const queryParams = {
       team: request?.team,
     };
@@ -154,21 +145,18 @@ export class ModerationApi extends BaseApi {
       key: request?.key,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetConfigResponse>>(
-      'GET',
-      '/api/v2/moderation/config/{key}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetConfigResponse>
+    >('GET', '/api/v2/moderation/config/{key}', pathParams, queryParams);
 
     decoders.GetConfigResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryModerationConfigs = async (
+  async queryModerationConfigs(
     request?: QueryModerationConfigsRequest,
-  ): Promise<StreamResponse<QueryModerationConfigsResponse>> => {
+  ): Promise<StreamResponse<QueryModerationConfigsResponse>> {
     const body = {
       limit: request?.limit,
       next: request?.next,
@@ -179,18 +167,18 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryModerationConfigsResponse>
     >('POST', '/api/v2/moderation/configs', undefined, undefined, body);
 
     decoders.QueryModerationConfigsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  customCheck = async (
+  async customCheck(
     request: CustomCheckRequest,
-  ): Promise<StreamResponse<CustomCheckResponse>> => {
+  ): Promise<StreamResponse<CustomCheckResponse>> {
     const body = {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
@@ -201,19 +189,19 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CustomCheckResponse>
     >('POST', '/api/v2/moderation/custom_check', undefined, undefined, body);
 
     decoders.CustomCheckResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  v2DeleteTemplate = async (): Promise<
+  async v2DeleteTemplate(): Promise<
     StreamResponse<DeleteModerationTemplateResponse>
-  > => {
-    const response = await this.sendRequest<
+  > {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteModerationTemplateResponse>
     >(
       'DELETE',
@@ -225,12 +213,12 @@ export class ModerationApi extends BaseApi {
     decoders.DeleteModerationTemplateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  v2QueryTemplates = async (): Promise<
+  async v2QueryTemplates(): Promise<
     StreamResponse<QueryFeedModerationTemplatesResponse>
-  > => {
-    const response = await this.sendRequest<
+  > {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryFeedModerationTemplatesResponse>
     >(
       'GET',
@@ -242,17 +230,17 @@ export class ModerationApi extends BaseApi {
     decoders.QueryFeedModerationTemplatesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  v2UpsertTemplate = async (
+  async v2UpsertTemplate(
     request: UpsertModerationTemplateRequest,
-  ): Promise<StreamResponse<UpsertModerationTemplateResponse>> => {
+  ): Promise<StreamResponse<UpsertModerationTemplateResponse>> {
     const body = {
       name: request?.name,
       config: request?.config,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertModerationTemplateResponse>
     >(
       'POST',
@@ -265,11 +253,9 @@ export class ModerationApi extends BaseApi {
     decoders.UpsertModerationTemplateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  flag = async (
-    request: FlagRequest,
-  ): Promise<StreamResponse<FlagResponse>> => {
+  async flag(request: FlagRequest): Promise<StreamResponse<FlagResponse>> {
     const body = {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
@@ -281,22 +267,18 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<FlagResponse>>(
-      'POST',
-      '/api/v2/moderation/flag',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<FlagResponse>
+    >('POST', '/api/v2/moderation/flag', undefined, undefined, body);
 
     decoders.FlagResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryModerationLogs = async (
+  async queryModerationLogs(
     request?: QueryModerationLogsRequest,
-  ): Promise<StreamResponse<QueryModerationLogsResponse>> => {
+  ): Promise<StreamResponse<QueryModerationLogsResponse>> {
     const body = {
       limit: request?.limit,
       next: request?.next,
@@ -307,18 +289,16 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryModerationLogsResponse>
     >('POST', '/api/v2/moderation/logs', undefined, undefined, body);
 
     decoders.QueryModerationLogsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  mute = async (
-    request: MuteRequest,
-  ): Promise<StreamResponse<MuteResponse>> => {
+  async mute(request: MuteRequest): Promise<StreamResponse<MuteResponse>> {
     const body = {
       target_ids: request?.target_ids,
       timeout: request?.timeout,
@@ -326,22 +306,18 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<MuteResponse>>(
-      'POST',
-      '/api/v2/moderation/mute',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MuteResponse>
+    >('POST', '/api/v2/moderation/mute', undefined, undefined, body);
 
     decoders.MuteResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryReviewQueue = async (
+  async queryReviewQueue(
     request?: QueryReviewQueueRequest,
-  ): Promise<StreamResponse<QueryReviewQueueResponse>> => {
+  ): Promise<StreamResponse<QueryReviewQueueResponse>> {
     const body = {
       limit: request?.limit,
       lock_count: request?.lock_count,
@@ -356,34 +332,34 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryReviewQueueResponse>
     >('POST', '/api/v2/moderation/review_queue', undefined, undefined, body);
 
     decoders.QueryReviewQueueResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getReviewQueueItem = async (request: {
+  async getReviewQueueItem(request: {
     id: string;
-  }): Promise<StreamResponse<GetReviewQueueItemResponse>> => {
+  }): Promise<StreamResponse<GetReviewQueueItemResponse>> {
     const pathParams = {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetReviewQueueItemResponse>
     >('GET', '/api/v2/moderation/review_queue/{id}', pathParams, undefined);
 
     decoders.GetReviewQueueItemResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  submitAction = async (
+  async submitAction(
     request: SubmitActionRequest,
-  ): Promise<StreamResponse<SubmitActionResponse>> => {
+  ): Promise<StreamResponse<SubmitActionResponse>> {
     const body = {
       action_type: request?.action_type,
       item_id: request?.item_id,
@@ -399,22 +375,22 @@ export class ModerationApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<SubmitActionResponse>
     >('POST', '/api/v2/moderation/submit_action', undefined, undefined, body);
 
     decoders.SubmitActionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  unban = async (
+  async unban(
     request: UnbanRequest & {
       target_user_id: string;
       channel_cid?: string;
       created_by?: string;
     },
-  ): Promise<StreamResponse<UnbanResponse>> => {
+  ): Promise<StreamResponse<UnbanResponse>> {
     const queryParams = {
       target_user_id: request?.target_user_id,
       channel_cid: request?.channel_cid,
@@ -425,38 +401,30 @@ export class ModerationApi extends BaseApi {
       unbanned_by: request?.unbanned_by,
     };
 
-    const response = await this.sendRequest<StreamResponse<UnbanResponse>>(
-      'POST',
-      '/api/v2/moderation/unban',
-      undefined,
-      queryParams,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnbanResponse>
+    >('POST', '/api/v2/moderation/unban', undefined, queryParams, body);
 
     decoders.UnbanResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  unmute = async (
+  async unmute(
     request: UnmuteRequest,
-  ): Promise<StreamResponse<UnmuteResponse>> => {
+  ): Promise<StreamResponse<UnmuteResponse>> {
     const body = {
       target_ids: request?.target_ids,
       user_id: request?.user_id,
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<UnmuteResponse>>(
-      'POST',
-      '/api/v2/moderation/unmute',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnmuteResponse>
+    >('POST', '/api/v2/moderation/unmute', undefined, undefined, body);
 
     decoders.UnmuteResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 }

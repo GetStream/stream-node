@@ -6,6 +6,7 @@ import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
+import { ApiClient } from './ApiClient';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -38,36 +39,30 @@ export class StreamClient extends CommonApi {
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
     const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
-    super({
+    const chatApiClient = new ApiClient({
       apiKey,
       token,
-      timeout,
       baseUrl: chatBaseUrl,
+      timeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
+    const videoApiClient = new ApiClient({
+      apiKey,
+      token,
+      baseUrl: videoBaseUrl,
+      timeout,
+      agent: config?.agent as RequestInit['dispatcher'],
+    });
+
+    super(chatApiClient);
+
     this.video = new StreamVideoClient({
       streamClient: this,
-      apiKey,
-      token,
-      timeout,
-      baseUrl: videoBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
+      apiClient: videoApiClient,
     });
-    this.chat = new StreamChatClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
-    });
-    this.moderation = new StreamModerationClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
-    });
+    this.chat = new StreamChatClient(this.apiClient);
+    this.moderation = new StreamModerationClient(chatApiClient);
   }
 
   upsertUsers = (users: UserRequest[]) => {

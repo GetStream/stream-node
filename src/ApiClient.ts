@@ -3,14 +3,18 @@ import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 
-export class BaseApi {
+export class ApiClient {
   private readonly dispatcher?: RequestInit['dispatcher'];
 
-  constructor(protected readonly apiConfig: ApiConfig) {
+  constructor(public readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
   }
 
-  protected sendRequest = async <T>(
+  /**
+   *
+   * @internal
+   */
+  sendRequest = async <T>(
     method: string,
     url: string,
     pathParams?: Record<string, string>,
