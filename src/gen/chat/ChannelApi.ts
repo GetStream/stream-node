@@ -15,7 +15,6 @@ import {
   MarkReadRequest,
   MarkReadResponse,
   MarkUnreadRequest,
-  Response,
   SendEventRequest,
   SendMessageRequest,
   SendMessageResponse,

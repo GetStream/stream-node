@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
-import { APIError } from './gen/models';
+import { APIError } from './gen-feeds/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 
 export class ApiClient {

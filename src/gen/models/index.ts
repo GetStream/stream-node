@@ -1,3 +1,14 @@
+import {
+  DeviceResponse,
+  PagerResponse,
+  PrivacySettingsResponse,
+  PushNotificationSettingsResponse,
+  SortParamRequest,
+  UserRequest,
+  UserResponse,
+  UserResponseCommonFields,
+} from '../../gen-feeds/models';
+
 export interface AIImageConfig {
   enabled: boolean;
 
@@ -26,24 +37,6 @@ export interface AIVideoConfig {
   rules: AWSRekognitionRule[];
 
   async?: boolean;
-}
-
-export interface APIError {
-  code: number;
-
-  duration: string;
-
-  message: string;
-
-  more_info: string;
-
-  status_code: number;
-
-  details: number[];
-
-  unrecoverable?: boolean;
-
-  exception_fields?: Record<string, string>;
 }
 
 export interface APNConfig {
@@ -3218,24 +3211,6 @@ export interface DeviceErrorInfo {
   provider_name: string;
 }
 
-export interface DeviceResponse {
-  created_at: Date;
-
-  id: string;
-
-  push_provider: string;
-
-  user_id: string;
-
-  disabled?: boolean;
-
-  disabled_reason?: string;
-
-  push_provider_name?: string;
-
-  voip?: boolean;
-}
-
 export interface DraftPayloadResponse {
   id: string;
 
@@ -5544,12 +5519,6 @@ export interface OwnUserResponse {
   teams_role?: Record<string, string>;
 }
 
-export interface PagerResponse {
-  next?: string;
-
-  prev?: string;
-}
-
 export interface PaginationParams {
   limit?: number;
 
@@ -5886,12 +5855,6 @@ export interface PrivacySettings {
   typing_indicators?: TypingIndicators;
 }
 
-export interface PrivacySettingsResponse {
-  read_receipts?: ReadReceiptsResponse;
-
-  typing_indicators?: TypingIndicatorsResponse;
-}
-
 export interface PublisherStatsResponse {
   total: number;
 
@@ -5920,12 +5883,6 @@ export interface PushNotificationFields {
   xiaomi: XiaomiConfigFields;
 
   providers?: PushProvider[];
-}
-
-export interface PushNotificationSettingsResponse {
-  disabled?: boolean;
-
-  disabled_until?: Date;
 }
 
 export interface PushPreferenceInput {
@@ -6862,10 +6819,6 @@ export interface ReadReceipts {
   enabled: boolean;
 }
 
-export interface ReadReceiptsResponse {
-  enabled?: boolean;
-}
-
 export interface ReadStateResponse {
   last_read: Date;
 
@@ -6934,10 +6887,6 @@ export interface ReportResponse {
   participants: ParticipantReportResponse;
 
   user_ratings: UserRatingReportResponse;
-}
-
-export interface Response {
-  duration: string;
 }
 
 export interface RestoreActionRequest {}
@@ -7492,12 +7441,6 @@ export interface ShowChannelRequest {
 
 export interface ShowChannelResponse {
   duration: string;
-}
-
-export interface SortParamRequest {
-  direction?: number;
-
-  field?: string;
 }
 
 export interface StartCampaignRequest {
@@ -8135,10 +8078,6 @@ export interface TruncateChannelResponse {
 
 export interface TypingIndicators {
   enabled: boolean;
-}
-
-export interface TypingIndicatorsResponse {
-  enabled?: boolean;
 }
 
 export interface UnbanActionRequest {}
@@ -9082,112 +9021,6 @@ export interface UserReactivatedEvent {
   user?: User;
 }
 
-export interface UserRequest {
-  id: string;
-
-  image?: string;
-
-  invisible?: boolean;
-
-  language?: string;
-
-  name?: string;
-
-  role?: string;
-
-  teams?: string[];
-
-  custom?: Record<string, any>;
-
-  privacy_settings?: PrivacySettingsResponse;
-
-  teams_role?: Record<string, string>;
-}
-
-export interface UserResponse {
-  banned: boolean;
-
-  created_at: Date;
-
-  id: string;
-
-  invisible: boolean;
-
-  language: string;
-
-  online: boolean;
-
-  role: string;
-
-  shadow_banned: boolean;
-
-  updated_at: Date;
-
-  blocked_user_ids: string[];
-
-  teams: string[];
-
-  custom: Record<string, any>;
-
-  ban_expires?: Date;
-
-  deactivated_at?: Date;
-
-  deleted_at?: Date;
-
-  image?: string;
-
-  last_active?: Date;
-
-  name?: string;
-
-  revoke_tokens_issued_before?: Date;
-
-  devices?: DeviceResponse[];
-
-  privacy_settings?: PrivacySettingsResponse;
-
-  push_notifications?: PushNotificationSettingsResponse;
-
-  teams_role?: Record<string, string>;
-}
-
-export interface UserResponseCommonFields {
-  banned: boolean;
-
-  created_at: Date;
-
-  id: string;
-
-  language: string;
-
-  online: boolean;
-
-  role: string;
-
-  updated_at: Date;
-
-  blocked_user_ids: string[];
-
-  teams: string[];
-
-  custom: Record<string, any>;
-
-  deactivated_at?: Date;
-
-  deleted_at?: Date;
-
-  image?: string;
-
-  last_active?: Date;
-
-  name?: string;
-
-  revoke_tokens_issued_before?: Date;
-
-  teams_role?: Record<string, string>;
-}
-
 export interface UserResponsePrivacyFields {
   banned: boolean;
 
@@ -9425,122 +9258,6 @@ export interface WSEvent {
 
   user?: UserResponse;
 }
-
-export type WebhookEvent =
-  | ({ type: '*' } & AnyEvent)
-  | ({ type: 'activity.marked' } & ActivityMarkedEvent)
-  | ({ type: 'call.accepted' } & CallAcceptedEvent)
-  | ({ type: 'call.blocked_user' } & BlockedUserEvent)
-  | ({ type: 'call.closed_caption' } & ClosedCaptionEvent)
-  | ({ type: 'call.closed_captions_failed' } & CallClosedCaptionsFailedEvent)
-  | ({ type: 'call.closed_captions_started' } & CallClosedCaptionsStartedEvent)
-  | ({ type: 'call.closed_captions_stopped' } & CallClosedCaptionsStoppedEvent)
-  | ({ type: 'call.created' } & CallCreatedEvent)
-  | ({ type: 'call.deleted' } & CallDeletedEvent)
-  | ({ type: 'call.ended' } & CallEndedEvent)
-  | ({ type: 'call.frame_recording_failed' } & CallFrameRecordingFailedEvent)
-  | ({ type: 'call.frame_recording_ready' } & CallFrameRecordingFrameReadyEvent)
-  | ({ type: 'call.frame_recording_started' } & CallFrameRecordingStartedEvent)
-  | ({ type: 'call.frame_recording_stopped' } & CallFrameRecordingStoppedEvent)
-  | ({ type: 'call.hls_broadcasting_failed' } & CallHLSBroadcastingFailedEvent)
-  | ({
-      type: 'call.hls_broadcasting_started';
-    } & CallHLSBroadcastingStartedEvent)
-  | ({
-      type: 'call.hls_broadcasting_stopped';
-    } & CallHLSBroadcastingStoppedEvent)
-  | ({ type: 'call.live_started' } & CallLiveStartedEvent)
-  | ({ type: 'call.member_added' } & CallMemberAddedEvent)
-  | ({ type: 'call.member_removed' } & CallMemberRemovedEvent)
-  | ({ type: 'call.member_updated' } & CallMemberUpdatedEvent)
-  | ({
-      type: 'call.member_updated_permission';
-    } & CallMemberUpdatedPermissionEvent)
-  | ({ type: 'call.missed' } & CallMissedEvent)
-  | ({ type: 'call.notification' } & CallNotificationEvent)
-  | ({ type: 'call.permission_request' } & PermissionRequestEvent)
-  | ({ type: 'call.permissions_updated' } & UpdatedCallPermissionsEvent)
-  | ({ type: 'call.reaction_new' } & CallReactionEvent)
-  | ({ type: 'call.recording_failed' } & CallRecordingFailedEvent)
-  | ({ type: 'call.recording_ready' } & CallRecordingReadyEvent)
-  | ({ type: 'call.recording_started' } & CallRecordingStartedEvent)
-  | ({ type: 'call.recording_stopped' } & CallRecordingStoppedEvent)
-  | ({ type: 'call.rejected' } & CallRejectedEvent)
-  | ({ type: 'call.ring' } & CallRingEvent)
-  | ({ type: 'call.rtmp_broadcast_failed' } & CallRtmpBroadcastFailedEvent)
-  | ({ type: 'call.rtmp_broadcast_started' } & CallRtmpBroadcastStartedEvent)
-  | ({ type: 'call.rtmp_broadcast_stopped' } & CallRtmpBroadcastStoppedEvent)
-  | ({ type: 'call.session_ended' } & CallSessionEndedEvent)
-  | ({
-      type: 'call.session_participant_joined';
-    } & CallSessionParticipantJoinedEvent)
-  | ({
-      type: 'call.session_participant_left';
-    } & CallSessionParticipantLeftEvent)
-  | ({ type: 'call.session_started' } & CallSessionStartedEvent)
-  | ({ type: 'call.stats_report_ready' } & CallStatsReportReadyEvent)
-  | ({ type: 'call.transcription_failed' } & CallTranscriptionFailedEvent)
-  | ({ type: 'call.transcription_ready' } & CallTranscriptionReadyEvent)
-  | ({ type: 'call.transcription_started' } & CallTranscriptionStartedEvent)
-  | ({ type: 'call.transcription_stopped' } & CallTranscriptionStoppedEvent)
-  | ({ type: 'call.unblocked_user' } & UnblockedUserEvent)
-  | ({ type: 'call.updated' } & CallUpdatedEvent)
-  | ({ type: 'call.user_feedback_submitted' } & CallUserFeedbackSubmittedEvent)
-  | ({ type: 'call.user_muted' } & CallUserMutedEvent)
-  | ({ type: 'campaign.completed' } & CampaignCompletedEvent)
-  | ({ type: 'campaign.started' } & CampaignStartedEvent)
-  | ({ type: 'channel.created' } & ChannelCreatedEvent)
-  | ({ type: 'channel.deleted' } & ChannelDeletedEvent)
-  | ({ type: 'channel.frozen' } & ChannelFrozenEvent)
-  | ({ type: 'channel.hidden' } & ChannelHiddenEvent)
-  | ({ type: 'channel.muted' } & ChannelMutedEvent)
-  | ({ type: 'channel.truncated' } & ChannelTruncatedEvent)
-  | ({ type: 'channel.unfrozen' } & ChannelUnFrozenEvent)
-  | ({ type: 'channel.unmuted' } & ChannelUnmutedEvent)
-  | ({ type: 'channel.updated' } & ChannelUpdatedEvent)
-  | ({ type: 'channel.visible' } & ChannelVisibleEvent)
-  | ({ type: 'custom' } & CustomVideoEvent)
-  | ({ type: 'export.channels.error' } & AsyncExportErrorEvent)
-  | ({ type: 'export.channels.success' } & AsyncExportChannelsEvent)
-  | ({ type: 'export.moderation_logs.error' } & AsyncExportErrorEvent)
-  | ({
-      type: 'export.moderation_logs.success';
-    } & AsyncExportModerationLogsEvent)
-  | ({ type: 'export.users.error' } & AsyncExportErrorEvent)
-  | ({ type: 'export.users.success' } & AsyncExportUsersEvent)
-  | ({ type: 'flag.updated' } & FlagUpdatedEvent)
-  | ({ type: 'member.added' } & MemberAddedEvent)
-  | ({ type: 'member.removed' } & MemberRemovedEvent)
-  | ({ type: 'member.updated' } & MemberUpdatedEvent)
-  | ({ type: 'message.deleted' } & MessageDeletedEvent)
-  | ({ type: 'message.flagged' } & MessageFlaggedEvent)
-  | ({ type: 'message.new' } & MessageNewEvent)
-  | ({ type: 'message.read' } & MessageReadEvent)
-  | ({ type: 'message.unblocked' } & MessageUnblockedEvent)
-  | ({ type: 'message.undeleted' } & MessageUndeletedEvent)
-  | ({ type: 'message.updated' } & MessageUpdatedEvent)
-  | ({ type: 'moderation.custom_action' } & ModerationCustomActionEvent)
-  | ({ type: 'moderation.flagged' } & ModerationFlaggedEvent)
-  | ({ type: 'moderation.mark_reviewed' } & ModerationMarkReviewedEvent)
-  | ({ type: 'moderation_check.completed' } & ModerationCheckCompletedEvent)
-  | ({ type: 'notification.mark_unread' } & NotificationMarkUnreadEvent)
-  | ({ type: 'notification.thread_message_new' } & MessageNewEvent)
-  | ({ type: 'reaction.deleted' } & ReactionDeletedEvent)
-  | ({ type: 'reaction.new' } & ReactionNewEvent)
-  | ({ type: 'reaction.updated' } & ReactionUpdatedEvent)
-  | ({ type: 'review_queue_item.new' } & ReviewQueueItemNewEvent)
-  | ({ type: 'review_queue_item.updated' } & ReviewQueueItemUpdatedEvent)
-  | ({ type: 'thread.updated' } & ThreadUpdatedEvent)
-  | ({ type: 'user.banned' } & UserBannedEvent)
-  | ({ type: 'user.deactivated' } & UserDeactivatedEvent)
-  | ({ type: 'user.deleted' } & UserDeletedEvent)
-  | ({ type: 'user.flagged' } & UserFlaggedEvent)
-  | ({ type: 'user.muted' } & UserMutedEvent)
-  | ({ type: 'user.reactivated' } & UserReactivatedEvent)
-  | ({ type: 'user.unbanned' } & UserUnbannedEvent)
-  | ({ type: 'user.unmuted' } & UserUnmutedEvent)
-  | ({ type: 'user.unread_message_reminder' } & UserUnreadReminderEvent)
-  | ({ type: 'user.updated' } & UserUpdatedEvent);
 
 export interface WrappedUnreadCountsResponse {
   duration: string;

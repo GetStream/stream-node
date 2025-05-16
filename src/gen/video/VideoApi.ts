@@ -38,7 +38,6 @@ import {
   QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
-  Response,
   SendCallEventRequest,
   SendCallEventResponse,
   StartClosedCaptionsRequest,

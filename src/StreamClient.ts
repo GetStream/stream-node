@@ -4,9 +4,11 @@ import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
-import { QueryBannedUsersPayload, UserRequest } from './gen/models';
+import { QueryBannedUsersPayload } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
 import { ApiClient } from './ApiClient';
+import { UserRequest } from './gen-feeds/models';
+import { StreamFeedsClient } from './StreamFeedsClient';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -20,6 +22,7 @@ export class StreamClient extends CommonApi {
   public readonly video: StreamVideoClient;
   public readonly chat: StreamChatClient;
   public readonly moderation: StreamModerationClient;
+  public readonly feeds: StreamFeedsClient;
   public readonly options: StreamClientOptions = {};
 
   private static readonly DEFAULT_TIMEOUT = 3000;
@@ -39,6 +42,7 @@ export class StreamClient extends CommonApi {
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
     const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
+    const feedsBaseUrl = config?.basePath ?? 'https://feeds.stream-io-api.com';
     const chatApiClient = new ApiClient({
       apiKey,
       token,
@@ -55,6 +59,14 @@ export class StreamClient extends CommonApi {
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
+    const feedsApiClient = new ApiClient({
+      apiKey,
+      token,
+      baseUrl: feedsBaseUrl,
+      timeout,
+      agent: config?.agent as RequestInit['dispatcher'],
+    });
+
     super(chatApiClient);
 
     this.video = new StreamVideoClient({
@@ -63,6 +75,7 @@ export class StreamClient extends CommonApi {
     });
     this.chat = new StreamChatClient(this.apiClient);
     this.moderation = new StreamModerationClient(chatApiClient);
+    this.feeds = new StreamFeedsClient(feedsApiClient);
   }
 
   upsertUsers = (users: UserRequest[]) => {

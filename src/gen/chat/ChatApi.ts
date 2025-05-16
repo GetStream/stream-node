@@ -76,7 +76,6 @@ import {
   QuerySegmentsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
-  Response,
   SearchPayload,
   SearchResponse,
   SendEventRequest,
@@ -87,7 +86,6 @@ import {
   SendUserCustomEventRequest,
   ShowChannelRequest,
   ShowChannelResponse,
-  SortParamRequest,
   StartCampaignRequest,
   StartCampaignResponse,
   StopCampaignRequest,
@@ -122,6 +120,7 @@ import {
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
+import { SortParamRequest } from '../../gen-feeds/models';
 
 export class ChatApi {
   constructor(public readonly apiClient: ApiClient) {}
