@@ -8,12 +8,14 @@ import {
   AddActivityResponse,
   AddBookmarkRequest,
   AddBookmarkResponse,
+  AddCommentReactionRequest,
+  AddCommentReactionResponse,
   AddCommentRequest,
   AddCommentResponse,
+  AddCommentsBatchRequest,
+  AddCommentsBatchResponse,
   AddReactionRequest,
   AddReactionResponse,
-  CreateActivitiesBatchRequest,
-  CreateActivitiesBatchResponse,
   CreateFeedViewRequest,
   CreateFeedViewResponse,
   CreateManyFeedsRequest,
@@ -21,6 +23,7 @@ import {
   DeleteActivityReactionResponse,
   DeleteActivityResponse,
   DeleteBookmarkResponse,
+  DeleteCommentResponse,
   DeleteFeedGroupResponse,
   DeleteFeedResponse,
   DeleteFeedUserDataResponse,
@@ -30,8 +33,11 @@ import {
   FollowManyResponse,
   FollowRequest,
   FollowResponse,
-  FollowSuggestionsResponse,
   GetActivityResponse,
+  GetCommentRepliesResponse,
+  GetCommentResponse,
+  GetCommentsResponse,
+  GetFollowSuggestionsResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
   MarkActivityRequest,
@@ -52,7 +58,7 @@ import {
   RejectFollowResponse,
   RemoveActivitiesRequest,
   RemoveActivitiesResponse,
-  RemoveCommentResponse,
+  RemoveCommentReactionResponse,
   Response,
   UnfollowManyRequest,
   UnfollowManyResponse,
@@ -60,6 +66,8 @@ import {
   UnpinActivityResponse,
   UpdateActivityPartialRequest,
   UpdateActivityPartialResponse,
+  UpdateActivityRequest,
+  UpdateActivityResponse,
   UpdateBookmarkRequest,
   UpdateBookmarkResponse,
   UpdateCommentRequest,
@@ -71,6 +79,8 @@ import {
   UpdateFeedViewResponse,
   UpdateFollowRequest,
   UpdateFollowResponse,
+  UpsertActivitiesRequest,
+  UpsertActivitiesResponse,
   UpsertFeedGroupRequest,
   UpsertFeedGroupResponse,
 } from '../models';
@@ -91,6 +101,7 @@ export class FeedsApi {
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
+      visibility_tag: request?.visibility_tag,
       attachments: request?.attachments,
       filter_tags: request?.filter_tags,
       interest_tags: request?.interest_tags,
@@ -110,17 +121,17 @@ export class FeedsApi {
   }
 
   async upsertActivities(
-    request: CreateActivitiesBatchRequest,
-  ): Promise<StreamResponse<CreateActivitiesBatchResponse>> {
+    request: UpsertActivitiesRequest,
+  ): Promise<StreamResponse<UpsertActivitiesResponse>> {
     const body = {
       activities: request?.activities,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateActivitiesBatchResponse>
+      StreamResponse<UpsertActivitiesResponse>
     >('POST', '/feeds/v3/activities/batch', undefined, undefined, body);
 
-    decoders.CreateActivitiesBatchResponse?.(response.body);
+    decoders.UpsertActivitiesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -230,6 +241,34 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async updateActivity(
+    request: UpdateActivityRequest & { activity_id: string },
+  ): Promise<StreamResponse<UpdateActivityResponse>> {
+    const pathParams = {
+      activity_id: request?.activity_id,
+    };
+    const body = {
+      expires_at: request?.expires_at,
+      text: request?.text,
+      user_id: request?.user_id,
+      visibility: request?.visibility,
+      attachments: request?.attachments,
+      filter_tags: request?.filter_tags,
+      interest_tags: request?.interest_tags,
+      custom: request?.custom,
+      location: request?.location,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateActivityResponse>
+    >('PUT', '/feeds/v3/activities/{activity_id}', pathParams, undefined, body);
+
+    decoders.UpdateActivityResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async deleteBookmark(request: {
     activity_id: string;
   }): Promise<StreamResponse<DeleteBookmarkResponse>> {
@@ -305,33 +344,6 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async addComment(
-    request: AddCommentRequest & { activity_id: string },
-  ): Promise<StreamResponse<AddCommentResponse>> {
-    const pathParams = {
-      activity_id: request?.activity_id,
-    };
-    const body = {
-      comment: request?.comment,
-      parent_id: request?.parent_id,
-      custom: request?.custom,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddCommentResponse>
-    >(
-      'POST',
-      '/feeds/v3/activities/{activity_id}/comments',
-      pathParams,
-      undefined,
-      body,
-    );
-
-    decoders.AddCommentResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async deleteActivityReaction(request: {
     activity_id: string;
   }): Promise<StreamResponse<DeleteActivityReactionResponse>> {
@@ -381,6 +393,72 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getComments(request: {
+    object_id: string;
+    object_type: string;
+    depth?: number;
+    sort?: string;
+    limit?: number;
+    prev?: string;
+    next?: string;
+  }): Promise<StreamResponse<GetCommentsResponse>> {
+    const queryParams = {
+      object_id: request?.object_id,
+      object_type: request?.object_type,
+      depth: request?.depth,
+      sort: request?.sort,
+      limit: request?.limit,
+      prev: request?.prev,
+      next: request?.next,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCommentsResponse>
+    >('GET', '/feeds/v3/comments', undefined, queryParams);
+
+    decoders.GetCommentsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addComment(
+    request: AddCommentRequest,
+  ): Promise<StreamResponse<AddCommentResponse>> {
+    const body = {
+      comment: request?.comment,
+      object_id: request?.object_id,
+      object_type: request?.object_type,
+      parent_id: request?.parent_id,
+      attachment: request?.attachment,
+      mentioned_user_ids: request?.mentioned_user_ids,
+      custom: request?.custom,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<AddCommentResponse>
+    >('POST', '/feeds/v3/comments', undefined, undefined, body);
+
+    decoders.AddCommentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addCommentsBatch(
+    request: AddCommentsBatchRequest,
+  ): Promise<StreamResponse<AddCommentsBatchResponse>> {
+    const body = {
+      comments: request?.comments,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<AddCommentsBatchResponse>
+    >('POST', '/feeds/v3/comments/batch', undefined, undefined, body);
+
+    decoders.AddCommentsBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async queryComments(
     request?: QueryCommentsRequest,
   ): Promise<StreamResponse<QueryCommentsResponse>> {
@@ -403,18 +481,34 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async removeComment(request: {
+  async deleteComment(request: {
     comment_id: string;
-  }): Promise<StreamResponse<RemoveCommentResponse>> {
+  }): Promise<StreamResponse<DeleteCommentResponse>> {
     const pathParams = {
       comment_id: request?.comment_id,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<RemoveCommentResponse>
+      StreamResponse<DeleteCommentResponse>
     >('DELETE', '/feeds/v3/comments/{comment_id}', pathParams, undefined);
 
-    decoders.RemoveCommentResponse?.(response.body);
+    decoders.DeleteCommentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getComment(request: {
+    comment_id: string;
+  }): Promise<StreamResponse<GetCommentResponse>> {
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCommentResponse>
+    >('GET', '/feeds/v3/comments/{comment_id}', pathParams, undefined);
+
+    decoders.GetCommentResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -435,6 +529,90 @@ export class FeedsApi {
     >('PATCH', '/feeds/v3/comments/{comment_id}', pathParams, undefined, body);
 
     decoders.UpdateCommentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async removeCommentReaction(request: {
+    comment_id: string;
+  }): Promise<StreamResponse<RemoveCommentReactionResponse>> {
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RemoveCommentReactionResponse>
+    >(
+      'DELETE',
+      '/feeds/v3/comments/{comment_id}/reactions',
+      pathParams,
+      undefined,
+    );
+
+    decoders.RemoveCommentReactionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addCommentReaction(
+    request: AddCommentReactionRequest & { comment_id: string },
+  ): Promise<StreamResponse<AddCommentReactionResponse>> {
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+    const body = {
+      type: request?.type,
+      user_id: request?.user_id,
+      custom: request?.custom,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<AddCommentReactionResponse>
+    >(
+      'POST',
+      '/feeds/v3/comments/{comment_id}/reactions',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.AddCommentReactionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getCommentReplies(request: {
+    comment_id: string;
+    depth?: number;
+    sort?: string;
+    replies_limit?: number;
+    limit?: number;
+    prev?: string;
+    next?: string;
+  }): Promise<StreamResponse<GetCommentRepliesResponse>> {
+    const queryParams = {
+      depth: request?.depth,
+      sort: request?.sort,
+      replies_limit: request?.replies_limit,
+      limit: request?.limit,
+      prev: request?.prev,
+      next: request?.next,
+    };
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCommentRepliesResponse>
+    >(
+      'GET',
+      '/feeds/v3/comments/{comment_id}/replies',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.GetCommentRepliesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -513,32 +691,6 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async updateFeed(
-    request: UpdateFeedRequest & { feed_group_id: string; feed_id: string },
-  ): Promise<StreamResponse<UpdateFeedResponse>> {
-    const pathParams = {
-      feed_group_id: request?.feed_group_id,
-      feed_id: request?.feed_id,
-    };
-    const body = {
-      custom: request?.custom,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedResponse>
-    >(
-      'PATCH',
-      '/feeds/v3/feed_groups/{feed_group_id}/feeds/{feed_id}',
-      pathParams,
-      undefined,
-      body,
-    );
-
-    decoders.UpdateFeedResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async getOrCreateFeed(
     request: GetOrCreateFeedRequest & {
       feed_group_id: string;
@@ -578,6 +730,32 @@ export class FeedsApi {
     );
 
     decoders.GetOrCreateFeedResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateFeed(
+    request: UpdateFeedRequest & { feed_group_id: string; feed_id: string },
+  ): Promise<StreamResponse<UpdateFeedResponse>> {
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+      feed_id: request?.feed_id,
+    };
+    const body = {
+      custom: request?.custom,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateFeedResponse>
+    >(
+      'PUT',
+      '/feeds/v3/feed_groups/{feed_group_id}/feeds/{feed_id}',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.UpdateFeedResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -790,6 +968,31 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getFollowSuggestions(request: {
+    feed_group_id: string;
+    limit?: number;
+  }): Promise<StreamResponse<GetFollowSuggestionsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+    };
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFollowSuggestionsResponse>
+    >(
+      'GET',
+      '/feeds/v3/feed_groups/{feed_group_id}/follow_suggestions',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.GetFollowSuggestionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async createFeedView(
     request: CreateFeedViewRequest & { feed_group_id: string },
   ): Promise<StreamResponse<CreateFeedViewResponse>> {
@@ -891,18 +1094,6 @@ export class FeedsApi {
     >('GET', '/feeds/v3/feeds/query', undefined, undefined);
 
     decoders.QueryFeedsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getFollowSuggestions(): Promise<
-    StreamResponse<FollowSuggestionsResponse>
-  > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<FollowSuggestionsResponse>
-    >('GET', '/feeds/v3/follow_suggestions', undefined, undefined);
-
-    decoders.FollowSuggestionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

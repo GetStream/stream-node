@@ -47,15 +47,41 @@ export interface Activity {
 
   id: string;
 
-  text: string;
+  popularity: number;
+
+  score: number;
+
+  share_count: number;
 
   type: string;
 
   updated_at: Date;
 
-  visibility: string;
+  visibility: 'public' | 'private' | 'tag';
+
+  attachments: Attachment[];
+
+  comments: Comment[];
 
   feeds: string[];
+
+  filter_tags: string[];
+
+  interest_tags: string[];
+
+  latest_reactions: ActivityReaction[];
+
+  mentioned_users: UserResponse[];
+
+  own_bookmarks: Bookmark[];
+
+  own_reactions: ActivityReaction[];
+
+  custom: Record<string, any>;
+
+  reaction_groups: Record<string, ReactionGroup>;
+
+  search_data: Record<string, any>;
 
   user: UserResponse;
 
@@ -65,39 +91,15 @@ export interface Activity {
 
   expires_at?: Date;
 
-  popularity?: number;
+  text?: string;
 
-  score?: number;
-
-  share_count?: number;
-
-  attachments?: ActivityAttachment[];
-
-  comments?: Comment[];
-
-  filter_tags?: string[];
-
-  interest_tags?: string[];
-
-  latest_reactions?: ActivityReaction[];
-
-  mentioned_users?: UserResponse[];
-
-  own_bookmarks?: Bookmark[];
-
-  own_reactions?: ActivityReaction[];
+  visibility_tag?: string;
 
   current_feed?: Feed;
-
-  custom?: Record<string, any>;
 
   location?: ActivityLocation;
 
   parent?: BaseActivity;
-
-  reaction_groups?: Record<string, ReactionGroup>;
-
-  search_data?: Record<string, any>;
 }
 
 export interface ActivityAddedEvent {
@@ -118,24 +120,12 @@ export interface ActivityAddedEvent {
 
 export interface ActivityAnalyserConfig {}
 
-export interface ActivityAttachment {
-  type: string;
-
-  url: string;
-
-  asset_url?: string;
-
-  image_url?: string;
-
-  live_call_cid?: string;
-
-  custom?: Record<string, any>;
-}
-
 export interface ActivityDeletedEvent {
   created_at: Date;
 
   fid: string;
+
+  activity: Activity;
 
   custom: Record<string, any>;
 
@@ -241,9 +231,11 @@ export interface ActivityRequest {
 
   user_id?: string;
 
-  visibility?: 'public' | 'visible' | 'followers' | 'private' | 'restricted';
+  visibility?: 'public' | 'private' | 'tag';
 
-  attachments?: ActivityAttachment[];
+  visibility_tag?: string;
+
+  attachments?: Attachment[];
 
   filter_tags?: string[];
 
@@ -301,9 +293,11 @@ export interface AddActivityRequest {
 
   user_id?: string;
 
-  visibility?: 'public' | 'visible' | 'followers' | 'private' | 'restricted';
+  visibility?: 'public' | 'private' | 'tag';
 
-  attachments?: ActivityAttachment[];
+  visibility_tag?: string;
+
+  attachments?: Attachment[];
 
   filter_tags?: string[];
 
@@ -338,10 +332,36 @@ export interface AddBookmarkResponse {
   bookmark: Bookmark;
 }
 
+export interface AddCommentReactionRequest {
+  type: string;
+
+  user_id?: string;
+
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface AddCommentReactionResponse {
+  comment_id: string;
+
+  duration: string;
+
+  reaction: ActivityReaction;
+}
+
 export interface AddCommentRequest {
   comment: string;
 
+  object_id: string;
+
+  object_type: string;
+
   parent_id?: string;
+
+  attachment?: Attachment[];
+
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 }
@@ -350,6 +370,16 @@ export interface AddCommentResponse {
   duration: string;
 
   comment: Comment;
+}
+
+export interface AddCommentsBatchRequest {
+  comments: AddCommentRequest[];
+}
+
+export interface AddCommentsBatchResponse {
+  duration: string;
+
+  comments: Comment[];
 }
 
 export interface AddFolderRequest {
@@ -394,6 +424,20 @@ export interface AggregationConfig {
   format?: string;
 }
 
+export interface Attachment {
+  type: string;
+
+  url: string;
+
+  asset_url?: string;
+
+  image_url?: string;
+
+  live_call_cid?: string;
+
+  custom?: Record<string, any>;
+}
+
 export interface BaseActivity {
   bookmark_count: number;
 
@@ -403,15 +447,41 @@ export interface BaseActivity {
 
   id: string;
 
-  text: string;
+  popularity: number;
+
+  score: number;
+
+  share_count: number;
 
   type: string;
 
   updated_at: Date;
 
-  visibility: string;
+  visibility: 'public' | 'private' | 'tag';
+
+  attachments: Attachment[];
+
+  comments: Comment[];
 
   feeds: string[];
+
+  filter_tags: string[];
+
+  interest_tags: string[];
+
+  latest_reactions: ActivityReaction[];
+
+  mentioned_users: UserResponse[];
+
+  own_bookmarks: Bookmark[];
+
+  own_reactions: ActivityReaction[];
+
+  custom: Record<string, any>;
+
+  reaction_groups: Record<string, ReactionGroup>;
+
+  search_data: Record<string, any>;
 
   user: UserResponse;
 
@@ -421,39 +491,15 @@ export interface BaseActivity {
 
   expires_at?: Date;
 
-  popularity?: number;
+  text?: string;
 
-  score?: number;
-
-  share_count?: number;
-
-  attachments?: ActivityAttachment[];
-
-  comments?: Comment[];
-
-  filter_tags?: string[];
-
-  interest_tags?: string[];
-
-  latest_reactions?: ActivityReaction[];
-
-  mentioned_users?: UserResponse[];
-
-  own_bookmarks?: Bookmark[];
-
-  own_reactions?: ActivityReaction[];
+  visibility_tag?: string;
 
   current_feed?: Feed;
-
-  custom?: Record<string, any>;
 
   location?: ActivityLocation;
 
   moderation?: Moderation;
-
-  reaction_groups?: Record<string, ReactionGroup>;
-
-  search_data?: Record<string, any>;
 }
 
 export interface Bookmark {
@@ -531,11 +577,13 @@ export interface BookmarkUpdatedEvent {
 }
 
 export interface Comment {
-  activity_id: string;
-
   created_at: Date;
 
   id: string;
+
+  object_id: string;
+
+  object_type: string;
 
   reaction_count: number;
 
@@ -551,7 +599,11 @@ export interface Comment {
 
   text?: string;
 
+  attachments?: Attachment[];
+
   latest_reactions?: ActivityReaction[];
+
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -574,7 +626,7 @@ export interface CommentAddedEvent {
   user?: UserResponseCommonFields;
 }
 
-export interface CommentRemovedEvent {
+export interface CommentDeletedEvent {
   created_at: Date;
 
   fid: string;
@@ -588,6 +640,40 @@ export interface CommentRemovedEvent {
   received_at?: Date;
 
   user?: UserResponseCommonFields;
+}
+
+export interface CommentReactionAddedEvent {
+  comment_id: string;
+
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  reaction: ActivityReaction;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
+export interface CommentReactionRemovedEvent {
+  comment_id: string;
+
+  created_at: Date;
+
+  fid: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
 }
 
 export interface CommentUpdatedEvent {
@@ -604,16 +690,6 @@ export interface CommentUpdatedEvent {
   received_at?: Date;
 
   user?: UserResponseCommonFields;
-}
-
-export interface CreateActivitiesBatchRequest {
-  activities: ActivityRequest[];
-}
-
-export interface CreateActivitiesBatchResponse {
-  duration: string;
-
-  activities: Activity[];
 }
 
 export interface CreateFeedViewRequest {
@@ -688,6 +764,10 @@ export interface DeleteBookmarkResponse {
   duration: string;
 
   bookmark: Bookmark;
+}
+
+export interface DeleteCommentResponse {
+  duration: string;
 }
 
 export interface DeleteFeedGroupResponse {
@@ -1030,16 +1110,6 @@ export interface FollowResponse {
   follow: Follow;
 }
 
-export interface FollowSuggestionsResponse {
-  duration: string;
-
-  suggestions: Feed[];
-
-  next?: string;
-
-  prev?: string;
-}
-
 export interface FollowUpdatedEvent {
   created_at: Date;
 
@@ -1060,6 +1130,38 @@ export interface GetActivityResponse {
   duration: string;
 
   activity: Activity;
+}
+
+export interface GetCommentRepliesResponse {
+  duration: string;
+
+  comments: ThreadedComment[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface GetCommentResponse {
+  duration: string;
+
+  comment: Comment;
+}
+
+export interface GetCommentsResponse {
+  duration: string;
+
+  comments: ThreadedComment[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface GetFollowSuggestionsResponse {
+  duration: string;
+
+  suggestions: Feed[];
 }
 
 export interface GetOrCreateFeedRequest {
@@ -1115,6 +1217,8 @@ export interface GetOrCreateFeedResponse {
 
   prev?: string;
 
+  own_follows?: Follow[];
+
   followers_pagination?: PagerResponse;
 
   following_pagination?: PagerResponse;
@@ -1123,9 +1227,7 @@ export interface GetOrCreateFeedResponse {
 
   notification_status?: NotificationStatus;
 
-  own_feed_follow?: Follow;
-
-  own_feed_membership?: FeedMember;
+  own_membership?: FeedMember;
 }
 
 export interface MarkActivityRequest {
@@ -1374,10 +1476,18 @@ export interface RemoveActivitiesResponse {
   removed_activity_ids: string[];
 }
 
-export interface RemoveCommentResponse {
+export interface RemoveCommentReactionResponse {
   duration: string;
+}
 
-  comment: Comment;
+export interface RepliesMeta {
+  depth_truncated: boolean;
+
+  has_more: boolean;
+
+  remaining: number;
+
+  next_cursor?: string;
 }
 
 export interface Response {
@@ -1394,6 +1504,44 @@ export interface StoriesConfig {
   expiration_behaviour?: string;
 
   skip_watched?: boolean;
+}
+
+export interface ThreadedComment {
+  created_at: Date;
+
+  id: string;
+
+  object_id: string;
+
+  object_type: string;
+
+  reaction_count: number;
+
+  reply_count: number;
+
+  updated_at: Date;
+
+  user: UserResponse;
+
+  deleted_at?: Date;
+
+  parent_id?: string;
+
+  text?: string;
+
+  attachments?: Attachment[];
+
+  latest_reactions?: ActivityReaction[];
+
+  mentioned_user_ids?: string[];
+
+  replies?: ThreadedComment[];
+
+  custom?: Record<string, any>;
+
+  meta?: RepliesMeta;
+
+  reaction_groups?: Record<string, ReactionGroup>;
 }
 
 export interface TypingIndicatorsResponse {
@@ -1443,6 +1591,34 @@ export interface UpdateActivityPartialRequest {
 }
 
 export interface UpdateActivityPartialResponse {
+  duration: string;
+
+  activity: Activity;
+}
+
+export interface UpdateActivityRequest {
+  expires_at?: Date;
+
+  text?: string;
+
+  user_id?: string;
+
+  visibility?: string;
+
+  attachments?: Attachment[];
+
+  filter_tags?: string[];
+
+  interest_tags?: string[];
+
+  custom?: Record<string, any>;
+
+  location?: ActivityLocation;
+
+  user?: UserRequest;
+}
+
+export interface UpdateActivityResponse {
   duration: string;
 
   activity: Activity;
@@ -1520,6 +1696,16 @@ export interface UpdateFollowResponse {
   duration: string;
 
   follow: Follow;
+}
+
+export interface UpsertActivitiesRequest {
+  activities: ActivityRequest[];
+}
+
+export interface UpsertActivitiesResponse {
+  duration: string;
+
+  activities: Activity[];
 }
 
 export interface UpsertFeedGroupRequest {
@@ -1661,7 +1847,9 @@ export type WebhookEvent =
   | ({ type: 'bookmark.deleted' } & BookmarkDeletedEvent)
   | ({ type: 'bookmark.updated' } & BookmarkUpdatedEvent)
   | ({ type: 'comment.added' } & CommentAddedEvent)
-  | ({ type: 'comment.removed' } & CommentRemovedEvent)
+  | ({ type: 'comment.deleted' } & CommentDeletedEvent)
+  | ({ type: 'comment.reaction.added' } & CommentReactionAddedEvent)
+  | ({ type: 'comment.reaction.removed' } & CommentReactionRemovedEvent)
   | ({ type: 'comment.updated' } & CommentUpdatedEvent)
   | ({ type: 'feed.created' } & FeedCreatedEvent)
   | ({ type: 'feed.deleted' } & FeedDeletedEvent)
