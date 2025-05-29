@@ -168,12 +168,6 @@ export interface ActionLogResponse {
   user?: UserResponse;
 }
 
-export interface AggregatedStats {
-  publisher_aggregate_stats?: PublisherAggregateStats;
-
-  turn?: TURNAggregatedStats;
-}
-
 export interface AnyEvent {
   created_at: Date;
 
@@ -844,28 +838,6 @@ export interface CallEndedEvent {
   user?: UserResponse;
 }
 
-export interface CallEvent {
-  description: string;
-
-  end_timestamp: number;
-
-  internal: boolean;
-
-  kind: string;
-
-  severity: number;
-
-  timestamp: number;
-
-  type: string;
-
-  category?: string;
-
-  component?: string;
-
-  issue_tags?: string[];
-}
-
 export interface CallFrameRecordingFailedEvent {
   call_cid: string;
 
@@ -1153,6 +1125,8 @@ export interface CallReportResponse {
 }
 
 export interface CallRequest {
+  channel_cid?: string;
+
   created_by_id?: string;
 
   starts_at?: Date;
@@ -1202,6 +1176,8 @@ export interface CallResponse {
   ingress: CallIngressResponse;
 
   settings: CallSettingsResponse;
+
+  channel_cid?: string;
 
   ended_at?: Date;
 
@@ -1434,6 +1410,16 @@ export interface CallStateResponseFields {
   call: CallResponse;
 }
 
+export interface CallStatsReportReadyEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  session_id: string;
+
+  type: string;
+}
+
 export interface CallStatsReportSummaryResponse {
   call_cid: string;
 
@@ -1450,10 +1436,6 @@ export interface CallStatsReportSummaryResponse {
   min_user_rating?: number;
 
   quality_score?: number;
-}
-
-export interface CallTimeline {
-  events: CallEvent[];
 }
 
 export interface CallTranscription {
@@ -1512,6 +1494,8 @@ export interface CallType {
   app_pk: number;
 
   created_at: Date;
+
+  enable_live_insights: boolean;
 
   external_storage: string;
 
@@ -2398,6 +2382,10 @@ export interface ChannelVisibleEvent {
   user?: User;
 }
 
+export interface ChatActivityStatsResponse {
+  messages?: MessageStatsResponse;
+}
+
 export interface CheckExternalStorageResponse {
   duration: string;
 
@@ -2614,16 +2602,10 @@ export interface ConfigResponse {
   velocity_filter_config?: VelocityFilterConfig;
 }
 
-export interface Coordinates {
-  latitude: number;
+export interface CountByMinuteResponse {
+  count: number;
 
-  longitude: number;
-}
-
-export interface Count {
-  approximate: boolean;
-
-  value: number;
+  start_ts: Date;
 }
 
 export interface CreateBlockListRequest {
@@ -2633,7 +2615,7 @@ export interface CreateBlockListRequest {
 
   team?: string;
 
-  type?: 'regex' | 'domain' | 'email' | 'word';
+  type?: 'regex' | 'domain' | 'domain_allowlist' | 'email' | 'word';
 }
 
 export interface CreateBlockListResponse {
@@ -3568,12 +3550,6 @@ export interface ExternalStorageResponse {
   type: 's3' | 'gcs' | 'abs';
 }
 
-export interface FPSStats {
-  average_fps: number;
-
-  tracked: number;
-}
-
 export interface FeedsModerationTemplateConfig {
   config_key: string;
 
@@ -3848,28 +3824,6 @@ export interface GeofenceSettingsResponse {
   names: string[];
 }
 
-export interface GeolocationResult {
-  accuracy_radius: number;
-
-  city: string;
-
-  continent: string;
-
-  continent_code: string;
-
-  country: string;
-
-  country_iso_code: string;
-
-  latitude: number;
-
-  longitude: number;
-
-  subdivision: string;
-
-  subdivision_iso_code: string;
-}
-
 export interface GetApplicationResponse {
   duration: string;
 
@@ -3894,6 +3848,8 @@ export interface GetCallReportResponse {
   session_id: string;
 
   report: ReportResponse;
+
+  chat_activity?: ChatActivityStatsResponse;
 }
 
 export interface GetCallResponse {
@@ -3904,42 +3860,6 @@ export interface GetCallResponse {
   own_capabilities: OwnCapability[];
 
   call: CallResponse;
-}
-
-export interface GetCallStatsResponse {
-  call_duration_seconds: number;
-
-  call_status: string;
-
-  duration: string;
-
-  is_truncated_report: boolean;
-
-  max_freezes_duration_seconds: number;
-
-  max_participants: number;
-
-  max_total_quality_limitation_duration_seconds: number;
-
-  publishing_participants: number;
-
-  quality_score: number;
-
-  sfu_count: number;
-
-  participant_report: UserStats[];
-
-  sfus: SFULocationResponse[];
-
-  average_connection_time?: number;
-
-  aggregated?: AggregatedStats;
-
-  call_timeline?: CallTimeline;
-
-  jitter?: TimeStats;
-
-  latency?: TimeStats;
 }
 
 export interface GetCallTypeResponse {
@@ -4201,8 +4121,6 @@ export interface GetRepliesResponse {
 export interface GetReviewQueueItemResponse {
   duration: string;
 
-  history: ReviewQueueItemResponse[];
-
   item?: ReviewQueueItemResponse;
 }
 
@@ -4256,6 +4174,12 @@ export interface GoLiveResponse {
 
 export interface GoogleVisionConfig {
   enabled?: boolean;
+}
+
+export interface GroupedStatsResponse {
+  name: string;
+
+  unique: number;
 }
 
 export interface HLSSettings {
@@ -4546,14 +4470,6 @@ export interface ListTranscriptionsResponse {
   transcriptions: CallTranscription[];
 }
 
-export interface Location {
-  continent_code: string;
-
-  country_iso_code: string;
-
-  subdivision_iso_code: string;
-}
-
 export interface MarkChannelsReadRequest {
   user_id?: string;
 
@@ -4592,16 +4508,6 @@ export interface MarkUnreadRequest {
   user_id?: string;
 
   user?: UserRequest;
-}
-
-export interface MediaPubSubHint {
-  audio_published: boolean;
-
-  audio_subscribed: boolean;
-
-  video_published: boolean;
-
-  video_subscribed: boolean;
 }
 
 export interface MemberAddedEvent {
@@ -5076,6 +4982,10 @@ export interface MessageResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 }
 
+export interface MessageStatsResponse {
+  count_over_time?: CountByMinuteResponse[];
+}
+
 export interface MessageUnblockedEvent {
   cid: string;
 
@@ -5232,6 +5142,24 @@ export interface ModerationActionConfig {
   order: number;
 
   custom: Record<string, any>;
+}
+
+export interface ModerationCheckCompletedEvent {
+  created_at: Date;
+
+  entity_id: string;
+
+  entity_type: string;
+
+  recommended_action: string;
+
+  review_queue_item_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
 }
 
 export interface ModerationCustomActionEvent {
@@ -5612,10 +5540,42 @@ export interface PaginationParams {
   offset?: number;
 }
 
+export interface ParticipantCountByMinuteResponse {
+  first: number;
+
+  last: number;
+
+  max: number;
+
+  min: number;
+
+  start_ts: Date;
+}
+
+export interface ParticipantCountOverTimeResponse {
+  by_minute?: ParticipantCountByMinuteResponse[];
+}
+
 export interface ParticipantReportResponse {
   sum: number;
 
   unique: number;
+
+  max_concurrent?: number;
+
+  by_browser?: GroupedStatsResponse[];
+
+  by_country?: GroupedStatsResponse[];
+
+  by_device?: GroupedStatsResponse[];
+
+  by_operating_system?: GroupedStatsResponse[];
+
+  count_over_time?: ParticipantCountOverTimeResponse;
+
+  publishers?: PublisherStatsResponse;
+
+  subscribers?: SubscriberStatsResponse;
 }
 
 export interface PendingMessageResponse {
@@ -5916,18 +5876,12 @@ export interface PrivacySettingsResponse {
   typing_indicators?: TypingIndicatorsResponse;
 }
 
-export interface PublishedTrackInfo {
-  codec_mime_type?: string;
+export interface PublisherStatsResponse {
+  total: number;
 
-  duration_seconds?: number;
+  unique: number;
 
-  track_type?: string;
-}
-
-export interface PublisherAggregateStats {
-  by_track_type?: Record<string, Count>;
-
-  total?: Count;
+  by_track?: TrackStatsResponse[];
 }
 
 export interface PushConfig {
@@ -6170,6 +6124,24 @@ export interface QueryCallMembersResponse {
   next?: string;
 
   prev?: string;
+}
+
+export interface QueryCallParticipantsRequest {
+  filter_conditions?: Record<string, any>;
+}
+
+export interface QueryCallParticipantsResponse {
+  duration: string;
+
+  total_participants: number;
+
+  members: MemberResponse[];
+
+  own_capabilities: OwnCapability[];
+
+  participants: CallParticipantResponse[];
+
+  call: CallResponse;
 }
 
 export interface QueryCallStatsRequest {
@@ -6580,6 +6552,10 @@ export interface QueryThreadsRequest {
   reply_limit?: number;
 
   user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
 
   user?: UserRequest;
 }
@@ -7146,10 +7122,54 @@ export interface Role {
   scopes: string[];
 }
 
+export interface RuleBuilderAction {
+  duration?: number;
+
+  ip_ban?: boolean;
+
+  reason?: string;
+
+  shadow_ban?: boolean;
+
+  type?: string;
+}
+
+export interface RuleBuilderCondition {
+  provider?: string;
+
+  threshold?: number;
+
+  time_window?: string;
+
+  labels?: string[];
+}
+
+export interface RuleBuilderConfig {
+  async?: boolean;
+
+  enabled?: boolean;
+
+  rules?: RuleBuilderRule[];
+}
+
+export interface RuleBuilderRule {
+  enabled?: boolean;
+
+  id?: string;
+
+  name?: string;
+
+  conditions?: RuleBuilderCondition[];
+
+  action?: RuleBuilderAction;
+}
+
 export interface S3Request {
   s3_region: string;
 
   s3_api_key?: string;
+
+  s3_custom_endpoint_url?: string;
 
   s3_secret?: string;
 }
@@ -7160,16 +7180,6 @@ export interface SDKUsageReport {
 
 export interface SDKUsageReportResponse {
   daily: DailyAggregateSDKUsageReportResponse[];
-}
-
-export interface SFULocationResponse {
-  datacenter: string;
-
-  id: string;
-
-  coordinates: Coordinates;
-
-  location: Location;
 }
 
 export interface ScreensharingSettings {
@@ -7493,7 +7503,44 @@ export interface StartClosedCaptionsRequest {
 
   external_storage?: string;
 
-  language?: string;
+  language?:
+    | 'auto'
+    | 'en'
+    | 'fr'
+    | 'es'
+    | 'de'
+    | 'it'
+    | 'nl'
+    | 'pt'
+    | 'pl'
+    | 'ca'
+    | 'cs'
+    | 'da'
+    | 'el'
+    | 'fi'
+    | 'id'
+    | 'ja'
+    | 'ru'
+    | 'sv'
+    | 'ta'
+    | 'th'
+    | 'tr'
+    | 'hu'
+    | 'ro'
+    | 'zh'
+    | 'ar'
+    | 'tl'
+    | 'he'
+    | 'hi'
+    | 'hr'
+    | 'ko'
+    | 'ms'
+    | 'no'
+    | 'uk'
+    | 'bg'
+    | 'et'
+    | 'sl'
+    | 'sk';
 }
 
 export interface StartClosedCaptionsResponse {
@@ -7535,7 +7582,44 @@ export interface StartRecordingResponse {
 export interface StartTranscriptionRequest {
   enable_closed_captions?: boolean;
 
-  language?: string;
+  language?:
+    | 'auto'
+    | 'en'
+    | 'fr'
+    | 'es'
+    | 'de'
+    | 'it'
+    | 'nl'
+    | 'pt'
+    | 'pl'
+    | 'ca'
+    | 'cs'
+    | 'da'
+    | 'el'
+    | 'fi'
+    | 'id'
+    | 'ja'
+    | 'ru'
+    | 'sv'
+    | 'ta'
+    | 'th'
+    | 'tr'
+    | 'hu'
+    | 'ro'
+    | 'zh'
+    | 'ar'
+    | 'tl'
+    | 'he'
+    | 'hi'
+    | 'hr'
+    | 'ko'
+    | 'ms'
+    | 'no'
+    | 'uk'
+    | 'bg'
+    | 'et'
+    | 'sl'
+    | 'sk';
 
   transcription_external_storage?: string;
 }
@@ -7653,20 +7737,12 @@ export interface SubmitActionResponse {
   item?: ReviewQueueItem;
 }
 
-export interface Subsession {
-  ended_at: number;
+export interface SubscriberStatsResponse {
+  total: number;
 
-  joined_at: number;
+  total_subscribed_duration_seconds: number;
 
-  sfu_id: string;
-
-  pub_sub_hint?: MediaPubSubHint;
-}
-
-export interface TURNAggregatedStats {
-  tcp?: Count;
-
-  total?: Count;
+  unique: number;
 }
 
 export interface TargetResolution {
@@ -7815,10 +7891,10 @@ export interface ThumbnailsSettingsResponse {
 
 export interface Time {}
 
-export interface TimeStats {
-  average_seconds: number;
+export interface TrackStatsResponse {
+  duration_seconds: number;
 
-  max_seconds: number;
+  track_type: string;
 }
 
 export interface TranscriptionSettings {
@@ -7857,7 +7933,11 @@ export interface TranscriptionSettings {
     | 'ko'
     | 'ms'
     | 'no'
-    | 'uk';
+    | 'uk'
+    | 'bg'
+    | 'et'
+    | 'sl'
+    | 'sk';
 
   mode: 'available' | 'disabled' | 'auto-on';
 }
@@ -7900,7 +7980,11 @@ export interface TranscriptionSettingsRequest {
     | 'ko'
     | 'ms'
     | 'no'
-    | 'uk';
+    | 'uk'
+    | 'bg'
+    | 'et'
+    | 'sl'
+    | 'sk';
 }
 
 export interface TranscriptionSettingsResponse {
@@ -7939,7 +8023,11 @@ export interface TranscriptionSettingsResponse {
     | 'ko'
     | 'ms'
     | 'no'
-    | 'uk';
+    | 'uk'
+    | 'bg'
+    | 'et'
+    | 'sl'
+    | 'sk';
 
   mode: 'available' | 'disabled' | 'auto-on';
 }
@@ -8736,6 +8824,8 @@ export interface UpsertConfigRequest {
 
   google_vision_config?: GoogleVisionConfig;
 
+  rule_builder_config?: RuleBuilderConfig;
+
   user?: UserRequest;
 
   velocity_filter_config?: VelocityFilterConfig;
@@ -8922,18 +9012,6 @@ export interface UserFlaggedEvent {
   target_users?: string[];
 
   user?: User;
-}
-
-export interface UserInfoResponse {
-  id: string;
-
-  image: string;
-
-  name: string;
-
-  roles: string[];
-
-  custom: Record<string, any>;
 }
 
 export interface UserMute {
@@ -9132,126 +9210,6 @@ export interface UserResponsePrivacyFields {
   teams_role?: Record<string, string>;
 }
 
-export interface UserSessionStats {
-  freeze_duration_seconds: number;
-
-  group: string;
-
-  max_freeze_fraction: number;
-
-  max_freezes_duration_seconds: number;
-
-  min_event_ts: number;
-
-  packet_loss_fraction: number;
-
-  publisher_packet_loss_fraction: number;
-
-  publishing_duration_seconds: number;
-
-  quality_score: number;
-
-  receiving_duration_seconds: number;
-
-  session_id: string;
-
-  total_pixels_in: number;
-
-  total_pixels_out: number;
-
-  average_connection_time?: number;
-
-  browser?: string;
-
-  browser_version?: string;
-
-  current_ip?: string;
-
-  current_sfu?: string;
-
-  device_model?: string;
-
-  device_version?: string;
-
-  distance_to_sfu_kilometers?: number;
-
-  max_fir_per_second?: number;
-
-  max_freezes_per_second?: number;
-
-  max_nack_per_second?: number;
-
-  max_pli_per_second?: number;
-
-  os?: string;
-
-  os_version?: string;
-
-  publisher_noise_cancellation_seconds?: number;
-
-  publisher_quality_limitation_fraction?: number;
-
-  publishing_audio_codec?: string;
-
-  publishing_video_codec?: string;
-
-  receiving_audio_codec?: string;
-
-  receiving_video_codec?: string;
-
-  sdk?: string;
-
-  sdk_version?: string;
-
-  subscriber_video_quality_throttled_duration_seconds?: number;
-
-  truncated?: boolean;
-
-  webrtc_version?: string;
-
-  published_tracks?: PublishedTrackInfo[];
-
-  subsessions?: Subsession[];
-
-  fps?: FPSStats;
-
-  geolocation?: GeolocationResult;
-
-  jitter?: TimeStats;
-
-  latency?: TimeStats;
-
-  max_publishing_video_quality?: VideoQuality;
-
-  max_receiving_video_quality?: VideoQuality;
-
-  pub_sub_hints?: MediaPubSubHint;
-
-  publisher_jitter?: TimeStats;
-
-  publisher_latency?: TimeStats;
-
-  publisher_video_quality_limitation_duration_seconds?: Record<string, number>;
-
-  subscriber_jitter?: TimeStats;
-
-  subscriber_latency?: TimeStats;
-
-  timeline?: CallTimeline;
-}
-
-export interface UserStats {
-  min_event_ts: number;
-
-  session_stats: UserSessionStats[];
-
-  info: UserInfoResponse;
-
-  feedback?: string;
-
-  rating?: number;
-}
-
 export interface UserUnbannedEvent {
   channel_id: string;
 
@@ -9348,18 +9306,6 @@ export interface VelocityFilterConfigRule {
   url_only: boolean;
 
   slow_spam_ban_duration?: number;
-}
-
-export interface VideoDimension {
-  height: number;
-
-  width: number;
-}
-
-export interface VideoQuality {
-  usage_type?: string;
-
-  resolution?: VideoDimension;
 }
 
 export interface VideoSettings {

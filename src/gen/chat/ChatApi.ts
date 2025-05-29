@@ -601,13 +601,15 @@ export class ChatApi extends BaseApi {
 
   updateMemberPartial = async (
     request: UpdateMemberPartialRequest & {
-      user_id: string;
       type: string;
       id: string;
+      user_id?: string;
     },
   ): Promise<StreamResponse<UpdateMemberPartialResponse>> => {
-    const pathParams = {
+    const queryParams = {
       user_id: request?.user_id,
+    };
+    const pathParams = {
       type: request?.type,
       id: request?.id,
     };
@@ -620,9 +622,9 @@ export class ChatApi extends BaseApi {
       StreamResponse<UpdateMemberPartialResponse>
     >(
       'PATCH',
-      '/api/v2/chat/channels/{type}/{id}/member/{user_id}',
+      '/api/v2/chat/channels/{type}/{id}/member',
       pathParams,
-      undefined,
+      queryParams,
       body,
     );
 
@@ -2083,6 +2085,8 @@ export class ChatApi extends BaseApi {
       prev: request?.prev,
       reply_limit: request?.reply_limit,
       user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
       user: request?.user,
     };
 

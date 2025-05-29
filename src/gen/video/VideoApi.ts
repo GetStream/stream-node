@@ -14,7 +14,6 @@ import {
   EndCallResponse,
   GetCallReportResponse,
   GetCallResponse,
-  GetCallStatsResponse,
   GetCallTypeResponse,
   GetEdgesResponse,
   GetOrCreateCallRequest,
@@ -32,6 +31,8 @@ import {
   QueryAggregateCallStatsResponse,
   QueryCallMembersRequest,
   QueryCallMembersResponse,
+  QueryCallParticipantsRequest,
+  QueryCallParticipantsResponse,
   QueryCallsRequest,
   QueryCallsResponse,
   QueryCallStatsRequest,
@@ -443,6 +444,39 @@ export class VideoApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
+  queryCallParticipants = async (
+    request: QueryCallParticipantsRequest & {
+      id: string;
+      type: string;
+      limit?: number;
+    },
+  ): Promise<StreamResponse<QueryCallParticipantsResponse>> => {
+    const queryParams = {
+      limit: request?.limit,
+    };
+    const pathParams = {
+      id: request?.id,
+      type: request?.type,
+    };
+    const body = {
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryCallParticipantsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/participants',
+      pathParams,
+      queryParams,
+      body,
+    );
+
+    decoders.QueryCallParticipantsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   videoPin = async (
     request: PinRequest & { type: string; id: string },
   ): Promise<StreamResponse<PinResponse>> => {
@@ -718,31 +752,6 @@ export class VideoApi extends BaseApi {
     );
 
     decoders.StartTranscriptionResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  getCallStats = async (request: {
-    type: string;
-    id: string;
-    session: string;
-  }): Promise<StreamResponse<GetCallStatsResponse>> => {
-    const pathParams = {
-      type: request?.type,
-      id: request?.id,
-      session: request?.session,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<GetCallStatsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call/{type}/{id}/stats/{session}',
-      pathParams,
-      undefined,
-    );
-
-    decoders.GetCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
