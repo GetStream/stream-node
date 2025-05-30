@@ -16,10 +16,14 @@ import {
   AddCommentsBatchResponse,
   AddReactionRequest,
   AddReactionResponse,
+  CreateFeedGroupRequest,
+  CreateFeedGroupResponse,
   CreateFeedViewRequest,
   CreateFeedViewResponse,
   CreateManyFeedsRequest,
   CreateManyFeedsResponse,
+  DeleteActivitiesRequest,
+  DeleteActivitiesResponse,
   DeleteActivityReactionResponse,
   DeleteActivityResponse,
   DeleteBookmarkResponse,
@@ -29,10 +33,8 @@ import {
   DeleteFeedUserDataResponse,
   DeleteFeedViewResponse,
   ExportFeedUserDataResponse,
-  FollowManyRequest,
-  FollowManyResponse,
-  FollowRequest,
-  FollowResponse,
+  FollowBatchRequest,
+  FollowBatchResponse,
   GetActivityResponse,
   GetCommentRepliesResponse,
   GetCommentResponse,
@@ -49,6 +51,7 @@ import {
   QueryCommentsResponse,
   QueryFeedMembersRequest,
   QueryFeedMembersResponse,
+  QueryFeedsRequest,
   QueryFeedsResponse,
   QueryFollowsRequest,
   QueryFollowsResponse,
@@ -56,12 +59,12 @@ import {
   RejectFeedMemberResponse,
   RejectFollowRequest,
   RejectFollowResponse,
-  RemoveActivitiesRequest,
-  RemoveActivitiesResponse,
   RemoveCommentReactionResponse,
   Response,
-  UnfollowManyRequest,
-  UnfollowManyResponse,
+  SingleFollowRequest,
+  SingleFollowResponse,
+  UnfollowBatchRequest,
+  UnfollowBatchResponse,
   UnfollowResponse,
   UnpinActivityResponse,
   UpdateActivityPartialRequest,
@@ -81,8 +84,6 @@ import {
   UpdateFollowResponse,
   UpsertActivitiesRequest,
   UpsertActivitiesResponse,
-  UpsertFeedGroupRequest,
-  UpsertFeedGroupResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -136,6 +137,25 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async removeActivities(
+    request: DeleteActivitiesRequest,
+  ): Promise<StreamResponse<DeleteActivitiesResponse>> {
+    const body = {
+      activity_ids: request?.activity_ids,
+      hard_delete: request?.hard_delete,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteActivitiesResponse>
+    >('POST', '/feeds/v3/activities/delete', undefined, undefined, body);
+
+    decoders.DeleteActivitiesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async queryActivities(
     request?: QueryActivitiesRequest,
   ): Promise<StreamResponse<QueryActivitiesResponse>> {
@@ -154,25 +174,6 @@ export class FeedsApi {
     >('POST', '/feeds/v3/activities/query', undefined, undefined, body);
 
     decoders.QueryActivitiesResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async removeActivities(
-    request: RemoveActivitiesRequest,
-  ): Promise<StreamResponse<RemoveActivitiesResponse>> {
-    const body = {
-      activity_ids: request?.activity_ids,
-      hard_delete: request?.hard_delete,
-      user_id: request?.user_id,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RemoveActivitiesResponse>
-    >('POST', '/feeds/v3/activities/remove', undefined, undefined, body);
-
-    decoders.RemoveActivitiesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -398,6 +399,7 @@ export class FeedsApi {
     object_type: string;
     depth?: number;
     sort?: string;
+    replies_limit?: number;
     limit?: number;
     prev?: string;
     next?: string;
@@ -407,6 +409,7 @@ export class FeedsApi {
       object_type: request?.object_type,
       depth: request?.depth,
       sort: request?.sort,
+      replies_limit: request?.replies_limit,
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,
@@ -429,7 +432,7 @@ export class FeedsApi {
       object_id: request?.object_id,
       object_type: request?.object_type,
       parent_id: request?.parent_id,
-      attachment: request?.attachment,
+      attachments: request?.attachments,
       mentioned_user_ids: request?.mentioned_user_ids,
       custom: request?.custom,
     };
@@ -460,16 +463,14 @@ export class FeedsApi {
   }
 
   async queryComments(
-    request?: QueryCommentsRequest,
+    request: QueryCommentsRequest,
   ): Promise<StreamResponse<QueryCommentsResponse>> {
     const body = {
+      filter: request?.filter,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
       sort: request?.sort,
-      user_id: request?.user_id,
-      activity_ids: request?.activity_ids,
-      parent_ids: request?.parent_ids,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -618,8 +619,8 @@ export class FeedsApi {
   }
 
   async createFeedGroup(
-    request: UpsertFeedGroupRequest,
-  ): Promise<StreamResponse<UpsertFeedGroupResponse>> {
+    request: CreateFeedGroupRequest,
+  ): Promise<StreamResponse<CreateFeedGroupResponse>> {
     const body = {
       feed_group_id: request?.feed_group_id,
       activity_analysers: request?.activity_analysers,
@@ -631,10 +632,10 @@ export class FeedsApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertFeedGroupResponse>
+      StreamResponse<CreateFeedGroupResponse>
     >('POST', '/feeds/v3/feed_groups', undefined, undefined, body);
 
-    decoders.UpsertFeedGroupResponse?.(response.body);
+    decoders.CreateFeedGroupResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -742,6 +743,7 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
     const body = {
+      created_by_id: request?.created_by_id,
       custom: request?.custom,
     };
 
@@ -1000,7 +1002,6 @@ export class FeedsApi {
       feed_group_id: request?.feed_group_id,
     };
     const body = {
-      view_id: request?.view_id,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
@@ -1072,7 +1073,7 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async createManyFeeds(
+  async createFeedsBatch(
     request: CreateManyFeedsRequest,
   ): Promise<StreamResponse<CreateManyFeedsResponse>> {
     const body = {
@@ -1088,10 +1089,19 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async feedsQueryFeeds(): Promise<StreamResponse<QueryFeedsResponse>> {
+  async feedsQueryFeeds(
+    request?: QueryFeedsRequest,
+  ): Promise<StreamResponse<QueryFeedsResponse>> {
+    const body = {
+      watch: request?.watch,
+      sort: request?.sort,
+      filter: request?.filter,
+      pagination: request?.pagination,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryFeedsResponse>
-    >('GET', '/feeds/v3/feeds/query', undefined, undefined);
+    >('POST', '/feeds/v3/feeds/query', undefined, undefined, body);
 
     decoders.QueryFeedsResponse?.(response.body);
 
@@ -1099,9 +1109,11 @@ export class FeedsApi {
   }
 
   async updateFollow(
-    request?: UpdateFollowRequest,
+    request: UpdateFollowRequest,
   ): Promise<StreamResponse<UpdateFollowResponse>> {
     const body = {
+      source: request?.source,
+      target: request?.target,
       push_preference: request?.push_preference,
       custom: request?.custom,
     };
@@ -1116,21 +1128,20 @@ export class FeedsApi {
   }
 
   async follow(
-    request: FollowRequest,
-  ): Promise<StreamResponse<FollowResponse>> {
+    request: SingleFollowRequest,
+  ): Promise<StreamResponse<SingleFollowResponse>> {
     const body = {
       source: request?.source,
       target: request?.target,
       push_preference: request?.push_preference,
-      request: request?.request,
       custom: request?.custom,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<FollowResponse>
+      StreamResponse<SingleFollowResponse>
     >('POST', '/feeds/v3/follows', undefined, undefined, body);
 
-    decoders.FollowResponse?.(response.body);
+    decoders.SingleFollowResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1152,18 +1163,18 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async followMany(
-    request: FollowManyRequest,
-  ): Promise<StreamResponse<FollowManyResponse>> {
+  async followBatch(
+    request: FollowBatchRequest,
+  ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<FollowManyResponse>
+      StreamResponse<FollowBatchResponse>
     >('POST', '/feeds/v3/follows/batch', undefined, undefined, body);
 
-    decoders.FollowManyResponse?.(response.body);
+    decoders.FollowBatchResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1225,9 +1236,9 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async unfollowMany(
-    request: UnfollowManyRequest,
-  ): Promise<StreamResponse<UnfollowManyResponse>> {
+  async unfollowBatch(
+    request: UnfollowBatchRequest,
+  ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
       user_id: request?.user_id,
@@ -1235,10 +1246,10 @@ export class FeedsApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<UnfollowManyResponse>
+      StreamResponse<UnfollowBatchResponse>
     >('POST', '/feeds/v3/unfollow/batch', undefined, undefined, body);
 
-    decoders.UnfollowManyResponse?.(response.body);
+    decoders.UnfollowBatchResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
