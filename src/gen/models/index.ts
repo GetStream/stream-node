@@ -1,9 +1,14 @@
 import {
+  Action,
   Attachment,
   DeviceResponse,
+  Field,
+  ImageData,
+  Images,
   PagerResponse,
   PrivacySettingsResponse,
   PushNotificationSettingsResponse,
+  ReactionGroupResponse,
   SortParamRequest,
   UserRequest,
   UserResponse,
@@ -102,18 +107,6 @@ export interface AWSRekognitionRule {
   label: string;
 
   min_confidence: number;
-}
-
-export interface Action {
-  name: string;
-
-  text: string;
-
-  type: string;
-
-  style?: string;
-
-  value?: string;
 }
 
 export interface ActionLog {
@@ -3496,14 +3489,6 @@ export interface FeedsModerationTemplateConfig {
   data_types: Record<string, string>;
 }
 
-export interface Field {
-  short: boolean;
-
-  title: string;
-
-  value: string;
-}
-
 export interface FileUploadConfig {
   size_limit: number;
 
@@ -4180,18 +4165,6 @@ export interface HuaweiConfigFields {
   secret?: string;
 }
 
-export interface ImageData {
-  frames: string;
-
-  height: string;
-
-  size: string;
-
-  url: string;
-
-  width: string;
-}
-
 export interface ImageSize {
   crop?: 'top' | 'bottom' | 'left' | 'right' | 'center';
 
@@ -4218,22 +4191,6 @@ export interface ImageUploadResponse {
   thumb_url?: string;
 
   upload_sizes?: ImageSize[];
-}
-
-export interface Images {
-  fixed_height: ImageData;
-
-  fixed_height_downsampled: ImageData;
-
-  fixed_height_still: ImageData;
-
-  fixed_width: ImageData;
-
-  fixed_width_downsampled: ImageData;
-
-  fixed_width_still: ImageData;
-
-  original: ImageData;
 }
 
 export interface ImportTask {
@@ -6646,16 +6603,6 @@ export interface ReactionDeletedEvent {
   reaction?: Reaction;
 
   user?: User;
-}
-
-export interface ReactionGroupResponse {
-  count: number;
-
-  first_reaction_at: Date;
-
-  last_reaction_at: Date;
-
-  sum_scores: number;
 }
 
 export interface ReactionNewEvent {
