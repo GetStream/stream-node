@@ -777,6 +777,8 @@ export interface CreateFeedGroupResponse {
 }
 
 export interface CreateFeedViewRequest {
+  view_id: string;
+
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
@@ -1328,6 +1330,8 @@ export interface GetOrCreateFeedResponse {
   next?: string;
 
   prev?: string;
+
+  capabilities?: string[];
 
   own_follows?: FollowResponse[];
 

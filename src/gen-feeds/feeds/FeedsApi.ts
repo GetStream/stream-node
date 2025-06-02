@@ -1002,6 +1002,7 @@ export class FeedsApi {
       feed_group_id: request?.feed_group_id,
     };
     const body = {
+      view_id: request?.view_id,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
@@ -1046,11 +1047,11 @@ export class FeedsApi {
   }
 
   async updateFeedView(
-    request: UpdateFeedViewRequest & { feed_group_id: string; view_id: string },
+    request: UpdateFeedViewRequest & { view_id: string; feed_group_id: string },
   ): Promise<StreamResponse<UpdateFeedViewResponse>> {
     const pathParams = {
-      feed_group_id: request?.feed_group_id,
       view_id: request?.view_id,
+      feed_group_id: request?.feed_group_id,
     };
     const body = {
       activity_selectors: request?.activity_selectors,
