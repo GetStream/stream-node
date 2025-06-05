@@ -1,7 +1,6 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   CampaignResponse,
-  CastPollVoteRequest,
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
   CommitMessageRequest,
@@ -9,8 +8,6 @@ import {
   CreateChannelTypeResponse,
   CreateCommandRequest,
   CreateCommandResponse,
-  CreatePollOptionRequest,
-  CreatePollRequest,
   DeleteChannelResponse,
   DeleteChannelsRequest,
   DeleteChannelsResponse,
@@ -48,10 +45,6 @@ import {
   MessageResponse,
   MuteChannelRequest,
   MuteChannelResponse,
-  PollOptionResponse,
-  PollResponse,
-  PollVoteResponse,
-  PollVotesResponse,
   QueryBannedUsersPayload,
   QueryBannedUsersResponse,
   QueryCampaignsRequest,
@@ -65,9 +58,6 @@ import {
   QueryMessageFlagsResponse,
   QueryMessageHistoryRequest,
   QueryMessageHistoryResponse,
-  QueryPollVotesRequest,
-  QueryPollsRequest,
-  QueryPollsResponse,
   QueryReactionsRequest,
   QueryReactionsResponse,
   QuerySegmentTargetsRequest,
@@ -110,9 +100,6 @@ import {
   UpdateMessagePartialResponse,
   UpdateMessageRequest,
   UpdateMessageResponse,
-  UpdatePollOptionRequest,
-  UpdatePollPartialRequest,
-  UpdatePollRequest,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
   UpsertPushPreferencesRequest,
@@ -120,7 +107,22 @@ import {
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
-import { SortParamRequest } from '../../gen-feeds/models';
+import {
+  CastPollVoteRequest,
+  CreatePollOptionRequest,
+  CreatePollRequest,
+  PollOptionResponse,
+  PollResponse,
+  PollVoteResponse,
+  PollVotesResponse,
+  QueryPollsRequest,
+  QueryPollsResponse,
+  QueryPollVotesRequest,
+  SortParamRequest,
+  UpdatePollOptionRequest,
+  UpdatePollPartialRequest,
+  UpdatePollRequest,
+} from '../../gen-feeds/models';
 
 export class ChatApi {
   constructor(public readonly apiClient: ApiClient) {}

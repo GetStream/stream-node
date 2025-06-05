@@ -5,7 +5,11 @@ import {
   Field,
   ImageData,
   Images,
+  ModerationV2Response,
   PagerResponse,
+  PollOptionRequest,
+  PollResponseData,
+  PollVoteResponseData,
   PrivacySettingsResponse,
   PushNotificationSettingsResponse,
   ReactionGroupResponse,
@@ -1639,14 +1643,6 @@ export interface CampaignStatsResponse {
   stats_users_sent: number;
 }
 
-export interface CastPollVoteRequest {
-  user_id?: string;
-
-  user?: UserRequest;
-
-  vote?: VoteData;
-}
-
 export interface Channel {
   auto_translation_language: string;
 
@@ -2813,46 +2809,6 @@ export interface CreateImportURLResponse {
   path: string;
 
   upload_url: string;
-}
-
-export interface CreatePollOptionRequest {
-  text: string;
-
-  position?: number;
-
-  user_id?: string;
-
-  custom?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface CreatePollRequest {
-  name: string;
-
-  allow_answers?: boolean;
-
-  allow_user_suggested_options?: boolean;
-
-  description?: string;
-
-  enforce_unique_vote?: boolean;
-
-  id?: string;
-
-  is_closed?: boolean;
-
-  max_votes_allowed?: number;
-
-  user_id?: string;
-
-  voting_visibility?: 'anonymous' | 'public';
-
-  options?: PollOptionInput[];
-
-  custom?: Record<string, any>;
-
-  user?: UserRequest;
 }
 
 export interface CreateRoleRequest {
@@ -5115,22 +5071,6 @@ export interface ModerationResponse {
   toxic: number;
 }
 
-export interface ModerationV2Response {
-  action: string;
-
-  original_text: string;
-
-  blocklist_matched?: string;
-
-  platform_circumvented?: boolean;
-
-  semantic_filter_matched?: string;
-
-  image_harms?: string[];
-
-  text_harms?: string[];
-}
-
 export interface MuteChannelRequest {
   expiration?: number;
 
@@ -5621,84 +5561,6 @@ export interface PollOption {
   custom: Record<string, any>;
 }
 
-export interface PollOptionInput {
-  text?: string;
-
-  custom?: Record<string, any>;
-}
-
-export interface PollOptionRequest {
-  id: string;
-
-  text?: string;
-
-  custom?: Record<string, any>;
-}
-
-export interface PollOptionResponse {
-  duration: string;
-
-  poll_option: PollOptionResponseData;
-}
-
-export interface PollOptionResponseData {
-  id: string;
-
-  text: string;
-
-  custom: Record<string, any>;
-}
-
-export interface PollResponse {
-  duration: string;
-
-  poll: PollResponseData;
-}
-
-export interface PollResponseData {
-  allow_answers: boolean;
-
-  allow_user_suggested_options: boolean;
-
-  answers_count: number;
-
-  created_at: Date;
-
-  created_by_id: string;
-
-  description: string;
-
-  enforce_unique_vote: boolean;
-
-  id: string;
-
-  name: string;
-
-  updated_at: Date;
-
-  vote_count: number;
-
-  voting_visibility: string;
-
-  latest_answers: PollVoteResponseData[];
-
-  options: PollOptionResponseData[];
-
-  own_votes: PollVoteResponseData[];
-
-  custom: Record<string, any>;
-
-  latest_votes_by_option: Record<string, PollVoteResponseData[]>;
-
-  vote_counts_by_option: Record<string, number>;
-
-  is_closed?: boolean;
-
-  max_votes_allowed?: number;
-
-  created_by?: UserResponse;
-}
-
 export interface PollVote {
   created_at: Date;
 
@@ -5717,42 +5579,6 @@ export interface PollVote {
   user_id?: string;
 
   user?: User;
-}
-
-export interface PollVoteResponse {
-  duration: string;
-
-  vote?: PollVoteResponseData;
-}
-
-export interface PollVoteResponseData {
-  created_at: Date;
-
-  id: string;
-
-  option_id: string;
-
-  poll_id: string;
-
-  updated_at: Date;
-
-  answer_text?: string;
-
-  is_answer?: boolean;
-
-  user_id?: string;
-
-  user?: UserResponse;
-}
-
-export interface PollVotesResponse {
-  duration: string;
-
-  votes: PollVoteResponseData[];
-
-  next?: string;
-
-  prev?: string;
 }
 
 export interface PrivacySettings {
@@ -6269,40 +6095,6 @@ export interface QueryModerationLogsResponse {
   duration: string;
 
   logs: ActionLogResponse[];
-
-  next?: string;
-
-  prev?: string;
-}
-
-export interface QueryPollVotesRequest {
-  limit?: number;
-
-  next?: string;
-
-  prev?: string;
-
-  sort?: SortParamRequest[];
-
-  filter?: Record<string, any>;
-}
-
-export interface QueryPollsRequest {
-  limit?: number;
-
-  next?: string;
-
-  prev?: string;
-
-  sort?: SortParamRequest[];
-
-  filter?: Record<string, any>;
-}
-
-export interface QueryPollsResponse {
-  duration: string;
-
-  polls: PollResponseData[];
 
   next?: string;
 
@@ -8534,56 +8326,6 @@ export interface UpdateMessageResponse {
   pending_message_metadata?: Record<string, string>;
 }
 
-export interface UpdatePollOptionRequest {
-  id: string;
-
-  text: string;
-
-  user_id?: string;
-
-  custom?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface UpdatePollPartialRequest {
-  user_id?: string;
-
-  unset?: string[];
-
-  set?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
-export interface UpdatePollRequest {
-  id: string;
-
-  name: string;
-
-  allow_answers?: boolean;
-
-  allow_user_suggested_options?: boolean;
-
-  description?: string;
-
-  enforce_unique_vote?: boolean;
-
-  is_closed?: boolean;
-
-  max_votes_allowed?: number;
-
-  user_id?: string;
-
-  voting_visibility?: 'anonymous' | 'public';
-
-  options?: PollOptionRequest[];
-
-  custom?: Record<string, any>;
-
-  user?: UserRequest;
-}
-
 export interface UpdateThreadPartialRequest {
   user_id?: string;
 
@@ -9089,14 +8831,6 @@ export interface VideoSettingsResponse {
   enabled: boolean;
 
   target_resolution: TargetResolution;
-}
-
-export interface VoteData {
-  answer_text?: string;
-
-  option_id?: string;
-
-  option?: PollOptionResponseData;
 }
 
 export interface WSEvent {

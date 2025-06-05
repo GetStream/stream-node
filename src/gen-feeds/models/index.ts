@@ -16,20 +16,24 @@ export interface APIError {
   exception_fields?: Record<string, string>;
 }
 
-export interface AcceptFeedMemberRequest {
-  user_id: string;
+export interface AcceptFeedMemberInviteRequest {
+  user_id?: string;
+
+  user?: UserRequest;
 }
 
-export interface AcceptFeedMemberResponse {
+export interface AcceptFeedMemberInviteResponse {
   duration: string;
 
-  feed_member: FeedMemberResponse;
+  member: FeedMemberResponse;
 }
 
 export interface AcceptFollowRequest {
   source_fid: string;
 
   target_fid: string;
+
+  follower_role?: string;
 }
 
 export interface AcceptFollowResponse {
@@ -107,9 +111,11 @@ export interface ActivityReactionAddedEvent {
 
   fid: string;
 
+  activity: ActivityResponse;
+
   custom: Record<string, any>;
 
-  reaction: ActivityReactionResponse;
+  reaction: FeedsReactionResponse;
 
   type: string;
 
@@ -123,29 +129,17 @@ export interface ActivityReactionDeletedEvent {
 
   fid: string;
 
+  activity: ActivityResponse;
+
   custom: Record<string, any>;
 
-  reaction: ActivityReactionResponse;
+  reaction: FeedsReactionResponse;
 
   type: string;
 
   received_at?: Date;
 
   user?: UserResponseCommonFields;
-}
-
-export interface ActivityReactionResponse {
-  activity_id: string;
-
-  created_at: Date;
-
-  type: string;
-
-  updated_at: Date;
-
-  user: UserResponse;
-
-  custom?: Record<string, any>;
 }
 
 export interface ActivityRemovedFromFeedEvent {
@@ -229,13 +223,13 @@ export interface ActivityResponse {
 
   interest_tags: string[];
 
-  latest_reactions: ActivityReactionResponse[];
+  latest_reactions: FeedsReactionResponse[];
 
   mentioned_users: UserResponse[];
 
   own_bookmarks: BookmarkResponse[];
 
-  own_reactions: ActivityReactionResponse[];
+  own_reactions: FeedsReactionResponse[];
 
   custom: Record<string, any>;
 
@@ -259,7 +253,11 @@ export interface ActivityResponse {
 
   location?: ActivityLocation;
 
+  moderation?: ModerationV2Response;
+
   parent?: BaseActivityResponse;
+
+  poll?: PollResponseData;
 }
 
 export interface ActivitySelectorConfig {
@@ -355,11 +353,11 @@ export interface AddCommentReactionRequest {
 }
 
 export interface AddCommentReactionResponse {
-  comment_id: string;
-
   duration: string;
 
-  reaction: ActivityReactionResponse;
+  comment: CommentResponse;
+
+  reaction: FeedsReactionResponse;
 }
 
 export interface AddCommentRequest {
@@ -413,7 +411,9 @@ export interface AddReactionRequest {
 export interface AddReactionResponse {
   duration: string;
 
-  reaction: ActivityReactionResponse;
+  activity: ActivityResponse;
+
+  reaction: FeedsReactionResponse;
 }
 
 export interface AggregatedActivityResponse {
@@ -519,13 +519,13 @@ export interface BaseActivityResponse {
 
   interest_tags: string[];
 
-  latest_reactions: ActivityReactionResponse[];
+  latest_reactions: FeedsReactionResponse[];
 
   mentioned_users: UserResponse[];
 
   own_bookmarks: BookmarkResponse[];
 
-  own_reactions: ActivityReactionResponse[];
+  own_reactions: FeedsReactionResponse[];
 
   custom: Record<string, any>;
 
@@ -549,7 +549,9 @@ export interface BaseActivityResponse {
 
   location?: ActivityLocation;
 
-  moderation?: Moderation;
+  moderation?: ModerationV2Response;
+
+  poll?: PollResponseData;
 }
 
 export interface BookmarkAddedEvent {
@@ -626,6 +628,14 @@ export interface BookmarkUpdatedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface CastPollVoteRequest {
+  user_id?: string;
+
+  user?: UserRequest;
+
+  vote?: VoteData;
+}
+
 export interface CommentAddedEvent {
   created_at: Date;
 
@@ -659,15 +669,15 @@ export interface CommentDeletedEvent {
 }
 
 export interface CommentReactionAddedEvent {
-  comment_id: string;
-
   created_at: Date;
 
   fid: string;
 
+  comment: CommentResponse;
+
   custom: Record<string, any>;
 
-  reaction: ActivityReactionResponse;
+  reaction: FeedsReactionResponse;
 
   type: string;
 
@@ -676,16 +686,16 @@ export interface CommentReactionAddedEvent {
   user?: UserResponseCommonFields;
 }
 
-export interface CommentReactionRemovedEvent {
-  comment_id: string;
-
+export interface CommentReactionDeletedEvent {
   created_at: Date;
 
   fid: string;
 
-  user_id: string;
+  comment: CommentResponse;
 
   custom: Record<string, any>;
+
+  reaction: FeedsReactionResponse;
 
   type: string;
 
@@ -717,6 +727,8 @@ export interface CommentResponse {
 
   upvote_count: number;
 
+  mentioned_users: UserResponse[];
+
   user: UserResponse;
 
   controversy_score?: number;
@@ -729,11 +741,11 @@ export interface CommentResponse {
 
   attachments?: Attachment[];
 
-  latest_reactions?: ActivityReactionResponse[];
-
-  mentioned_user_ids?: string[];
+  latest_reactions?: FeedsReactionResponse[];
 
   custom?: Record<string, any>;
+
+  moderation?: ModerationV2Response;
 
   reaction_groups?: Record<string, ReactionGroupResponse>;
 }
@@ -792,14 +804,54 @@ export interface CreateFeedViewResponse {
   feed_view: FeedViewResponse;
 }
 
-export interface CreateManyFeedsRequest {
+export interface CreateFeedsBatchRequest {
   feeds: FeedRequest[];
 }
 
-export interface CreateManyFeedsResponse {
+export interface CreateFeedsBatchResponse {
   duration: string;
 
   feeds: FeedResponse[];
+}
+
+export interface CreatePollOptionRequest {
+  text: string;
+
+  position?: number;
+
+  user_id?: string;
+
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface CreatePollRequest {
+  name: string;
+
+  allow_answers?: boolean;
+
+  allow_user_suggested_options?: boolean;
+
+  description?: string;
+
+  enforce_unique_vote?: boolean;
+
+  id?: string;
+
+  is_closed?: boolean;
+
+  max_votes_allowed?: number;
+
+  user_id?: string;
+
+  voting_visibility?: 'anonymous' | 'public';
+
+  options?: PollOptionInput[];
+
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface DecayFunctionConfig {
@@ -833,13 +885,11 @@ export interface DeleteActivitiesResponse {
 }
 
 export interface DeleteActivityReactionResponse {
-  activity_id: string;
-
   duration: string;
 
-  type: string;
+  activity: ActivityResponse;
 
-  user_id: string;
+  reaction: FeedsReactionResponse;
 }
 
 export interface DeleteActivityResponse {
@@ -850,6 +900,14 @@ export interface DeleteBookmarkResponse {
   duration: string;
 
   bookmark: BookmarkResponse;
+}
+
+export interface DeleteCommentReactionResponse {
+  duration: string;
+
+  comment: CommentResponse;
+
+  reaction: FeedsReactionResponse;
 }
 
 export interface DeleteCommentResponse {
@@ -909,7 +967,7 @@ export interface ExportFeedUserDataResponse {
 
   comments: CommentResponse[];
 
-  reactions: ActivityReactionResponse[];
+  reactions: FeedsReactionResponse[];
 }
 
 export interface FeedCreatedEvent {
@@ -1040,10 +1098,42 @@ export interface FeedInput {
   custom?: Record<string, any>;
 }
 
+export interface FeedMemberAddedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  member: FeedMemberResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
+export interface FeedMemberRemovedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  member_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface FeedMemberRequest {
   user_id: string;
 
-  request?: boolean;
+  invite?: boolean;
 
   role?: string;
 
@@ -1055,19 +1145,33 @@ export interface FeedMemberResponse {
 
   role: string;
 
-  status: string;
+  status: 'member' | 'pending' | 'rejected';
 
   updated_at: Date;
 
   user: UserResponse;
 
-  request?: boolean;
+  invite_accepted_at?: Date;
 
-  request_accepted_at?: Date;
-
-  request_rejected_at?: Date;
+  invite_rejected_at?: Date;
 
   custom?: Record<string, any>;
+}
+
+export interface FeedMemberUpdatedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  member: FeedMemberResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
 }
 
 export interface FeedRequest {
@@ -1142,6 +1246,22 @@ export interface FeedViewResponse {
   ranking?: RankingConfig;
 }
 
+export interface FeedsReactionResponse {
+  activity_id: string;
+
+  created_at: Date;
+
+  type: string;
+
+  updated_at: Date;
+
+  user: UserResponse;
+
+  comment_id?: string;
+
+  custom?: Record<string, any>;
+}
+
 export interface Field {
   short: boolean;
 
@@ -1199,7 +1319,7 @@ export interface FollowRequest {
 
   target: string;
 
-  push_preference?: string;
+  push_preference?: 'all' | 'none';
 
   custom?: Record<string, any>;
 }
@@ -1207,9 +1327,11 @@ export interface FollowRequest {
 export interface FollowResponse {
   created_at: Date;
 
-  push_preference: string;
+  follower_role: string;
 
-  status: string;
+  push_preference: 'all' | 'none';
+
+  status: 'accepted' | 'pending' | 'rejected';
 
   updated_at: Date;
 
@@ -1220,8 +1342,6 @@ export interface FollowResponse {
   request_accepted_at?: Date;
 
   request_rejected_at?: Date;
-
-  role?: string;
 
   custom?: Record<string, any>;
 }
@@ -1388,7 +1508,21 @@ export interface MarkActivityRequest {
   user?: UserRequest;
 }
 
-export interface Moderation {}
+export interface ModerationV2Response {
+  action: string;
+
+  original_text: string;
+
+  blocklist_matched?: string;
+
+  platform_circumvented?: boolean;
+
+  semantic_filter_matched?: string;
+
+  image_harms?: string[];
+
+  text_harms?: string[];
+}
 
 export interface NotificationConfig {
   track_read?: boolean;
@@ -1438,6 +1572,120 @@ export interface PinActivityResponse {
   user_id: string;
 }
 
+export interface PollOptionInput {
+  text?: string;
+
+  custom?: Record<string, any>;
+}
+
+export interface PollOptionRequest {
+  id: string;
+
+  text?: string;
+
+  custom?: Record<string, any>;
+}
+
+export interface PollOptionResponse {
+  duration: string;
+
+  poll_option: PollOptionResponseData;
+}
+
+export interface PollOptionResponseData {
+  id: string;
+
+  text: string;
+
+  custom: Record<string, any>;
+}
+
+export interface PollResponse {
+  duration: string;
+
+  poll: PollResponseData;
+}
+
+export interface PollResponseData {
+  allow_answers: boolean;
+
+  allow_user_suggested_options: boolean;
+
+  answers_count: number;
+
+  created_at: Date;
+
+  created_by_id: string;
+
+  description: string;
+
+  enforce_unique_vote: boolean;
+
+  id: string;
+
+  name: string;
+
+  updated_at: Date;
+
+  vote_count: number;
+
+  voting_visibility: string;
+
+  latest_answers: PollVoteResponseData[];
+
+  options: PollOptionResponseData[];
+
+  own_votes: PollVoteResponseData[];
+
+  custom: Record<string, any>;
+
+  latest_votes_by_option: Record<string, PollVoteResponseData[]>;
+
+  vote_counts_by_option: Record<string, number>;
+
+  is_closed?: boolean;
+
+  max_votes_allowed?: number;
+
+  created_by?: UserResponse;
+}
+
+export interface PollVoteResponse {
+  duration: string;
+
+  vote?: PollVoteResponseData;
+}
+
+export interface PollVoteResponseData {
+  created_at: Date;
+
+  id: string;
+
+  option_id: string;
+
+  poll_id: string;
+
+  updated_at: Date;
+
+  answer_text?: string;
+
+  is_answer?: boolean;
+
+  user_id?: string;
+
+  user?: UserResponse;
+}
+
+export interface PollVotesResponse {
+  duration: string;
+
+  votes: PollVoteResponseData[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface PrivacySettingsResponse {
   read_receipts?: ReadReceiptsResponse;
 
@@ -1470,6 +1718,50 @@ export interface QueryActivitiesResponse {
   duration: string;
 
   activities: ActivityResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryActivityReactionsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryActivityReactionsResponse {
+  duration: string;
+
+  reactions: FeedsReactionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryCommentReactionsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryCommentReactionsResponse {
+  duration: string;
+
+  reactions: FeedsReactionResponse[];
 
   next?: string;
 
@@ -1562,6 +1854,40 @@ export interface QueryFollowsResponse {
   prev?: string;
 }
 
+export interface QueryPollVotesRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryPollsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryPollsResponse {
+  duration: string;
+
+  polls: PollResponseData[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface RankingConfig {
   decay_factor?: number;
 
@@ -1588,14 +1914,16 @@ export interface ReadReceiptsResponse {
   enabled: boolean;
 }
 
-export interface RejectFeedMemberRequest {
-  user_id: string;
+export interface RejectFeedMemberInviteRequest {
+  user_id?: string;
+
+  user?: UserRequest;
 }
 
-export interface RejectFeedMemberResponse {
+export interface RejectFeedMemberInviteResponse {
   duration: string;
 
-  feed_member: FeedMemberResponse;
+  member: FeedMemberResponse;
 }
 
 export interface RejectFollowRequest {
@@ -1608,10 +1936,6 @@ export interface RejectFollowResponse {
   duration: string;
 
   follow: FollowResponse;
-}
-
-export interface RemoveCommentReactionResponse {
-  duration: string;
 }
 
 export interface RepliesMeta {
@@ -1633,7 +1957,7 @@ export interface SingleFollowRequest {
 
   target: string;
 
-  push_preference?: string;
+  push_preference?: 'all' | 'none';
 
   custom?: Record<string, any>;
 }
@@ -1681,6 +2005,8 @@ export interface ThreadedCommentResponse {
 
   upvote_count: number;
 
+  mentioned_users: UserResponse[];
+
   user: UserResponse;
 
   controversy_score?: number;
@@ -1693,15 +2019,15 @@ export interface ThreadedCommentResponse {
 
   attachments?: Attachment[];
 
-  latest_reactions?: ActivityReactionResponse[];
-
-  mentioned_user_ids?: string[];
+  latest_reactions?: FeedsReactionResponse[];
 
   replies?: ThreadedCommentResponse[];
 
   custom?: Record<string, any>;
 
   meta?: RepliesMeta;
+
+  moderation?: ModerationV2Response;
 
   reaction_groups?: Record<string, ReactionGroupResponse>;
 }
@@ -1807,7 +2133,7 @@ export interface UpdateCommentResponse {
 }
 
 export interface UpdateFeedMembersRequest {
-  operation: 'add' | 'remove' | 'set';
+  operation: 'upsert' | 'remove' | 'set';
 
   limit?: number;
 
@@ -1816,6 +2142,16 @@ export interface UpdateFeedMembersRequest {
   prev?: string;
 
   members?: FeedMemberRequest[];
+}
+
+export interface UpdateFeedMembersResponse {
+  duration: string;
+
+  added: FeedMemberResponse[];
+
+  removed_ids: string[];
+
+  updated: FeedMemberResponse[];
 }
 
 export interface UpdateFeedRequest {
@@ -1849,7 +2185,7 @@ export interface UpdateFollowRequest {
 
   target: string;
 
-  push_preference?: string;
+  push_preference?: 'all' | 'none';
 
   custom?: Record<string, any>;
 }
@@ -1858,6 +2194,56 @@ export interface UpdateFollowResponse {
   duration: string;
 
   follow: FollowResponse;
+}
+
+export interface UpdatePollOptionRequest {
+  id: string;
+
+  text: string;
+
+  user_id?: string;
+
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface UpdatePollPartialRequest {
+  user_id?: string;
+
+  unset?: string[];
+
+  set?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface UpdatePollRequest {
+  id: string;
+
+  name: string;
+
+  allow_answers?: boolean;
+
+  allow_user_suggested_options?: boolean;
+
+  description?: string;
+
+  enforce_unique_vote?: boolean;
+
+  is_closed?: boolean;
+
+  max_votes_allowed?: number;
+
+  user_id?: string;
+
+  voting_visibility?: 'anonymous' | 'public';
+
+  options?: PollOptionRequest[];
+
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface UpsertActivitiesRequest {
@@ -1976,6 +2362,14 @@ export interface UserResponseCommonFields {
   teams_role?: Record<string, string>;
 }
 
+export interface VoteData {
+  answer_text?: string;
+
+  option_id?: string;
+
+  option?: PollOptionResponseData;
+}
+
 export type WebhookEvent =
   | ({ type: 'activity.added' } & ActivityAddedEvent)
   | ({ type: 'activity.deleted' } & ActivityDeletedEvent)
@@ -1989,13 +2383,16 @@ export type WebhookEvent =
   | ({ type: 'comment.added' } & CommentAddedEvent)
   | ({ type: 'comment.deleted' } & CommentDeletedEvent)
   | ({ type: 'comment.reaction.added' } & CommentReactionAddedEvent)
-  | ({ type: 'comment.reaction.removed' } & CommentReactionRemovedEvent)
+  | ({ type: 'comment.reaction.deleted' } & CommentReactionDeletedEvent)
   | ({ type: 'comment.updated' } & CommentUpdatedEvent)
   | ({ type: 'feed.created' } & FeedCreatedEvent)
   | ({ type: 'feed.deleted' } & FeedDeletedEvent)
   | ({ type: 'feed.updated' } & FeedUpdatedEvent)
   | ({ type: 'feed_group.changed' } & FeedGroupChangedEvent)
   | ({ type: 'feed_group.deleted' } & FeedGroupDeletedEvent)
+  | ({ type: 'feed_member.added' } & FeedMemberAddedEvent)
+  | ({ type: 'feed_member.removed' } & FeedMemberRemovedEvent)
+  | ({ type: 'feed_member.updated' } & FeedMemberUpdatedEvent)
   | ({ type: 'follow.created' } & FollowCreatedEvent)
   | ({ type: 'follow.deleted' } & FollowDeletedEvent)
   | ({ type: 'follow.updated' } & FollowUpdatedEvent);
