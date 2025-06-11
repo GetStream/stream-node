@@ -19,7 +19,6 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
-    "prepare": "husky install",
     "prepublish": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
