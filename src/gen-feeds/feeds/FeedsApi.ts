@@ -57,6 +57,10 @@ import {
   QueryActivitiesResponse,
   QueryActivityReactionsRequest,
   QueryActivityReactionsResponse,
+  QueryBookmarkFoldersRequest,
+  QueryBookmarkFoldersResponse,
+  QueryBookmarksRequest,
+  QueryBookmarksResponse,
   QueryCommentReactionsRequest,
   QueryCommentReactionsResponse,
   QueryCommentsRequest,
@@ -179,8 +183,6 @@ export class FeedsApi {
     request?: QueryActivitiesRequest,
   ): Promise<StreamResponse<QueryActivitiesResponse>> {
     const body = {
-      comment_limit: request?.comment_limit,
-      comment_sort: request?.comment_sort,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -303,7 +305,11 @@ export class FeedsApi {
 
   async deleteBookmark(request: {
     activity_id: string;
+    folder_id?: string;
   }): Promise<StreamResponse<DeleteBookmarkResponse>> {
+    const queryParams = {
+      folder_id: request?.folder_id,
+    };
     const pathParams = {
       activity_id: request?.activity_id,
     };
@@ -314,7 +320,7 @@ export class FeedsApi {
       'DELETE',
       '/api/v3/feeds/activities/{activity_id}/bookmarks',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.DeleteBookmarkResponse?.(response.body);
@@ -329,9 +335,12 @@ export class FeedsApi {
       activity_id: request?.activity_id,
     };
     const body = {
-      feed_id: request?.feed_id,
-      feed_type: request?.feed_type,
+      folder_id: request?.folder_id,
+      new_folder_id: request?.new_folder_id,
+      user_id: request?.user_id,
       custom: request?.custom,
+      new_folder: request?.new_folder,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -357,8 +366,10 @@ export class FeedsApi {
     };
     const body = {
       folder_id: request?.folder_id,
+      user_id: request?.user_id,
       custom: request?.custom,
       new_folder: request?.new_folder,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -509,6 +520,52 @@ export class FeedsApi {
     );
 
     decoders.DeleteActivityReactionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryBookmarkFolders(
+    request?: QueryBookmarkFoldersRequest,
+  ): Promise<StreamResponse<QueryBookmarkFoldersResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryBookmarkFoldersResponse>
+    >(
+      'POST',
+      '/api/v3/feeds/bookmark_folders/query',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders.QueryBookmarkFoldersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryBookmarks(
+    request?: QueryBookmarksRequest,
+  ): Promise<StreamResponse<QueryBookmarksResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryBookmarksResponse>
+    >('POST', '/api/v3/feeds/bookmarks/query', undefined, undefined, body);
+
+    decoders.QueryBookmarksResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1254,10 +1311,12 @@ export class FeedsApi {
     request?: QueryFeedsRequest,
   ): Promise<StreamResponse<QueryFeedsResponse>> {
     const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
       watch: request?.watch,
       sort: request?.sort,
       filter: request?.filter,
-      pagination: request?.pagination,
     };
 
     const response = await this.apiClient.sendRequest<

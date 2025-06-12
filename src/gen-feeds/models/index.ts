@@ -95,15 +95,31 @@ export interface ActivityLocation {
 }
 
 export interface ActivityPinResponse {
-  activity_id: string;
-
   created_at: Date;
 
   feed: string;
 
   updated_at: Date;
 
+  activity: ActivityResponse;
+
   user: UserResponse;
+}
+
+export interface ActivityPinnedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  pinned_activity: PinActivityResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
 }
 
 export interface ActivityReactionAddedEvent {
@@ -274,6 +290,22 @@ export interface ActivitySelectorConfig {
   tags?: string[];
 }
 
+export interface ActivityUnpinnedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  pinned_activity: PinActivityResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface ActivityUpdatedEvent {
   created_at: Date;
 
@@ -335,9 +367,13 @@ export interface AddActivityResponse {
 export interface AddBookmarkRequest {
   folder_id?: string;
 
+  user_id?: string;
+
   custom?: Record<string, any>;
 
   new_folder?: AddFolderRequest;
+
+  user?: UserRequest;
 }
 
 export interface AddBookmarkResponse {
@@ -559,11 +595,9 @@ export interface BaseActivityResponse {
 }
 
 export interface BookmarkAddedEvent {
-  activity_id: string;
-
   created_at: Date;
 
-  fid: string;
+  bookmark: BookmarkResponse;
 
   custom: Record<string, any>;
 
@@ -576,8 +610,6 @@ export interface BookmarkAddedEvent {
 
 export interface BookmarkDeletedEvent {
   created_at: Date;
-
-  fid: string;
 
   bookmark: BookmarkResponse;
 
@@ -603,23 +635,21 @@ export interface BookmarkFolderResponse {
 }
 
 export interface BookmarkResponse {
-  activity_id: string;
-
   created_at: Date;
 
   updated_at: Date;
 
-  folder: BookmarkFolderResponse;
+  activity: ActivityResponse;
 
   user: UserResponse;
 
   custom?: Record<string, any>;
+
+  folder?: BookmarkFolderResponse;
 }
 
 export interface BookmarkUpdatedEvent {
   created_at: Date;
-
-  fid: string;
 
   bookmark: BookmarkResponse;
 
@@ -1602,8 +1632,6 @@ export interface PinActivityRequest {
 }
 
 export interface PinActivityResponse {
-  activity_id: string;
-
   created_at: Date;
 
   duration: string;
@@ -1611,6 +1639,8 @@ export interface PinActivityResponse {
   fid: string;
 
   user_id: string;
+
+  activity: ActivityResponse;
 }
 
 export interface PollOptionInput {
@@ -1740,10 +1770,6 @@ export interface PushNotificationSettingsResponse {
 }
 
 export interface QueryActivitiesRequest {
-  comment_limit?: number;
-
-  comment_sort?: 'first' | 'last' | 'popular';
-
   limit?: number;
 
   next?: string;
@@ -1781,6 +1807,50 @@ export interface QueryActivityReactionsResponse {
   duration: string;
 
   reactions: FeedsReactionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryBookmarkFoldersRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryBookmarkFoldersResponse {
+  duration: string;
+
+  bookmark_folders: BookmarkFolderResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryBookmarksRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryBookmarksResponse {
+  duration: string;
+
+  bookmarks: BookmarkResponse[];
 
   next?: string;
 
@@ -1848,17 +1918,23 @@ export interface QueryFeedMembersResponse {
 
   members: FeedMemberResponse[];
 
-  pagination: PagerResponse;
+  next?: string;
+
+  prev?: string;
 }
 
 export interface QueryFeedsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
   watch?: boolean;
 
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
-
-  pagination?: PagerRequest;
 }
 
 export interface QueryFeedsResponse {
@@ -1866,7 +1942,9 @@ export interface QueryFeedsResponse {
 
   feeds: FeedResponse[];
 
-  pager: PagerResponse;
+  next?: string;
+
+  prev?: string;
 }
 
 export interface QueryFollowsRequest {
@@ -2094,13 +2172,13 @@ export interface UnfollowResponse {
 }
 
 export interface UnpinActivityResponse {
-  activity_id: string;
-
   duration: string;
 
   fid: string;
 
   user_id: string;
+
+  activity: ActivityResponse;
 }
 
 export interface UpdateActivityPartialRequest {
@@ -2150,11 +2228,17 @@ export interface UpdateActivityResponse {
 }
 
 export interface UpdateBookmarkRequest {
-  feed_id: string;
+  folder_id?: string;
 
-  feed_type: string;
+  new_folder_id?: string;
+
+  user_id?: string;
 
   custom?: Record<string, any>;
+
+  new_folder?: AddFolderRequest;
+
+  user?: UserRequest;
 }
 
 export interface UpdateBookmarkResponse {
@@ -2416,9 +2500,11 @@ export interface VoteData {
 export type WebhookEvent =
   | ({ type: 'activity.added' } & ActivityAddedEvent)
   | ({ type: 'activity.deleted' } & ActivityDeletedEvent)
+  | ({ type: 'activity.pinned' } & ActivityPinnedEvent)
   | ({ type: 'activity.reaction.added' } & ActivityReactionAddedEvent)
   | ({ type: 'activity.reaction.deleted' } & ActivityReactionDeletedEvent)
   | ({ type: 'activity.removed_from_feed' } & ActivityRemovedFromFeedEvent)
+  | ({ type: 'activity.unpinned' } & ActivityUnpinnedEvent)
   | ({ type: 'activity.updated' } & ActivityUpdatedEvent)
   | ({ type: 'bookmark.added' } & BookmarkAddedEvent)
   | ({ type: 'bookmark.deleted' } & BookmarkDeletedEvent)
