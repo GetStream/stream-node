@@ -94,6 +94,28 @@ export interface ActivityLocation {
   lng: number;
 }
 
+export interface ActivityMarkEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  mark_all_read?: boolean;
+
+  mark_all_seen?: boolean;
+
+  received_at?: Date;
+
+  mark_read?: string[];
+
+  mark_watched?: string[];
+
+  user?: UserResponseCommonFields;
+}
+
 export interface ActivityPinResponse {
   created_at: Date;
 
@@ -1125,6 +1147,10 @@ export interface FeedGroupResponse {
 }
 
 export interface FeedInput {
+  description?: string;
+
+  name?: string;
+
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
   members?: FeedMemberRequest[];
@@ -1252,6 +1278,10 @@ export interface FeedRequest {
 
   created_by_id?: string;
 
+  description?: string;
+
+  name?: string;
+
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
   members?: FeedMemberRequest[];
@@ -1261,6 +1291,8 @@ export interface FeedRequest {
 
 export interface FeedResponse {
   created_at: Date;
+
+  description: string;
 
   fid: string;
 
@@ -1273,6 +1305,8 @@ export interface FeedResponse {
   id: string;
 
   member_count: number;
+
+  name: string;
 
   pin_count: number;
 
@@ -2498,30 +2532,33 @@ export interface VoteData {
 }
 
 export type WebhookEvent =
-  | ({ type: 'activity.added' } & ActivityAddedEvent)
-  | ({ type: 'activity.deleted' } & ActivityDeletedEvent)
-  | ({ type: 'activity.pinned' } & ActivityPinnedEvent)
-  | ({ type: 'activity.reaction.added' } & ActivityReactionAddedEvent)
-  | ({ type: 'activity.reaction.deleted' } & ActivityReactionDeletedEvent)
-  | ({ type: 'activity.removed_from_feed' } & ActivityRemovedFromFeedEvent)
-  | ({ type: 'activity.unpinned' } & ActivityUnpinnedEvent)
-  | ({ type: 'activity.updated' } & ActivityUpdatedEvent)
-  | ({ type: 'bookmark.added' } & BookmarkAddedEvent)
-  | ({ type: 'bookmark.deleted' } & BookmarkDeletedEvent)
-  | ({ type: 'bookmark.updated' } & BookmarkUpdatedEvent)
-  | ({ type: 'comment.added' } & CommentAddedEvent)
-  | ({ type: 'comment.deleted' } & CommentDeletedEvent)
-  | ({ type: 'comment.reaction.added' } & CommentReactionAddedEvent)
-  | ({ type: 'comment.reaction.deleted' } & CommentReactionDeletedEvent)
-  | ({ type: 'comment.updated' } & CommentUpdatedEvent)
-  | ({ type: 'feed.created' } & FeedCreatedEvent)
-  | ({ type: 'feed.deleted' } & FeedDeletedEvent)
-  | ({ type: 'feed.updated' } & FeedUpdatedEvent)
-  | ({ type: 'feed_group.changed' } & FeedGroupChangedEvent)
-  | ({ type: 'feed_group.deleted' } & FeedGroupDeletedEvent)
-  | ({ type: 'feed_member.added' } & FeedMemberAddedEvent)
-  | ({ type: 'feed_member.removed' } & FeedMemberRemovedEvent)
-  | ({ type: 'feed_member.updated' } & FeedMemberUpdatedEvent)
-  | ({ type: 'follow.created' } & FollowCreatedEvent)
-  | ({ type: 'follow.deleted' } & FollowDeletedEvent)
-  | ({ type: 'follow.updated' } & FollowUpdatedEvent);
+  | ({ type: 'feeds.activity.added' } & ActivityAddedEvent)
+  | ({ type: 'feeds.activity.deleted' } & ActivityDeletedEvent)
+  | ({ type: 'feeds.activity.marked' } & ActivityMarkEvent)
+  | ({ type: 'feeds.activity.pinned' } & ActivityPinnedEvent)
+  | ({ type: 'feeds.activity.reaction.added' } & ActivityReactionAddedEvent)
+  | ({ type: 'feeds.activity.reaction.deleted' } & ActivityReactionDeletedEvent)
+  | ({
+      type: 'feeds.activity.removed_from_feed';
+    } & ActivityRemovedFromFeedEvent)
+  | ({ type: 'feeds.activity.unpinned' } & ActivityUnpinnedEvent)
+  | ({ type: 'feeds.activity.updated' } & ActivityUpdatedEvent)
+  | ({ type: 'feeds.bookmark.added' } & BookmarkAddedEvent)
+  | ({ type: 'feeds.bookmark.deleted' } & BookmarkDeletedEvent)
+  | ({ type: 'feeds.bookmark.updated' } & BookmarkUpdatedEvent)
+  | ({ type: 'feeds.comment.added' } & CommentAddedEvent)
+  | ({ type: 'feeds.comment.deleted' } & CommentDeletedEvent)
+  | ({ type: 'feeds.comment.reaction.added' } & CommentReactionAddedEvent)
+  | ({ type: 'feeds.comment.reaction.deleted' } & CommentReactionDeletedEvent)
+  | ({ type: 'feeds.comment.updated' } & CommentUpdatedEvent)
+  | ({ type: 'feeds.feed.created' } & FeedCreatedEvent)
+  | ({ type: 'feeds.feed.deleted' } & FeedDeletedEvent)
+  | ({ type: 'feeds.feed.updated' } & FeedUpdatedEvent)
+  | ({ type: 'feeds.feed_group.changed' } & FeedGroupChangedEvent)
+  | ({ type: 'feeds.feed_group.deleted' } & FeedGroupDeletedEvent)
+  | ({ type: 'feeds.feed_member.added' } & FeedMemberAddedEvent)
+  | ({ type: 'feeds.feed_member.removed' } & FeedMemberRemovedEvent)
+  | ({ type: 'feeds.feed_member.updated' } & FeedMemberUpdatedEvent)
+  | ({ type: 'feeds.follow.created' } & FollowCreatedEvent)
+  | ({ type: 'feeds.follow.deleted' } & FollowDeletedEvent)
+  | ({ type: 'feeds.follow.updated' } & FollowUpdatedEvent);
