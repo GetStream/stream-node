@@ -1,4 +1,4 @@
-import { FeedsApi } from './gen-feeds/feeds/FeedsApi';
+import { FeedsApi } from './gen/feeds/FeedsApi';
 import { StreamFeed } from './StreamFeed';
 
 export class StreamFeedsClient extends FeedsApi {

@@ -4,10 +4,9 @@ import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
-import { QueryBannedUsersPayload } from './gen/models';
+import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
 import { ApiClient } from './ApiClient';
-import { UserRequest } from './gen-feeds/models';
 import { StreamFeedsClient } from './StreamFeedsClient';
 
 export interface StreamClientOptions {
