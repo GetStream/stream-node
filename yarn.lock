@@ -488,10 +488,10 @@
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@stream-io/openai-realtime-api@~0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@stream-io/openai-realtime-api/-/openai-realtime-api-0.3.1.tgz#3fe4daa4a3d9b3f8f01a586b582d981178bd8c1f"
-  integrity sha512-Rm01Mi/J7H8mik5t+4ymTLnt2ihr3r3cxzrU6fxdyJ93S6EkXnafYAmAK9has47Q+I9nIwKiadQ5WipG6YnvvQ==
+"@stream-io/openai-realtime-api@~0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@stream-io/openai-realtime-api/-/openai-realtime-api-0.3.3.tgz#cd08be42134ba0fad81bc48ec4c7f9c576833b1e"
+  integrity sha512-jHjvE8zIkUAK6oeR/ZmjKDkyGB/jmV0QSGEv8CmXbobX4uzWPjM72CK6kqzTdUqJdxjGun7UrCp2enrPhHizlg==
   dependencies:
     "@openai/realtime-api-beta" openai/openai-realtime-api-beta#a5cb94824f625423858ebacb9f769226ca98945f
     ws "^8.18.0"
