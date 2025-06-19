@@ -1,9 +1,37 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
+  AIImageConfig,
+  AITextConfig,
+  AIVideoConfig,
+  APIError,
+  APNConfig,
+  APNConfigFields,
+  APNS,
+  AWSRekognitionRule,
   AcceptFeedMemberInviteRequest,
   AcceptFeedMemberInviteResponse,
   AcceptFollowRequest,
   AcceptFollowResponse,
+  Action,
+  ActionLog,
+  ActionLogResponse,
+  ActionSequence,
+  ActivityAddedEvent,
+  ActivityAnalyserConfig,
+  ActivityDeletedEvent,
+  ActivityLocation,
+  ActivityMarkEvent,
+  ActivityMarkedEvent,
+  ActivityPinResponse,
+  ActivityPinnedEvent,
+  ActivityReactionAddedEvent,
+  ActivityReactionDeletedEvent,
+  ActivityRemovedFromFeedEvent,
+  ActivityRequest,
+  ActivityResponse,
+  ActivitySelectorConfig,
+  ActivityUnpinnedEvent,
+  ActivityUpdatedEvent,
   AddActivityRequest,
   AddActivityResponse,
   AddBookmarkRequest,
@@ -14,85 +42,793 @@ import {
   AddCommentResponse,
   AddCommentsBatchRequest,
   AddCommentsBatchResponse,
+  AddFolderRequest,
   AddReactionRequest,
   AddReactionResponse,
+  AggregatedActivityResponse,
+  AggregationConfig,
+  AnyEvent,
+  AppResponseFields,
+  AsyncBulkImageModerationEvent,
+  AsyncExportChannelsEvent,
+  AsyncExportErrorEvent,
+  AsyncExportModerationLogsEvent,
+  AsyncExportUsersEvent,
+  AsyncModerationCallbackConfig,
+  AsyncModerationConfiguration,
+  Attachment,
+  AudioSettings,
+  AudioSettingsRequest,
+  AudioSettingsResponse,
+  AutomodDetails,
+  AutomodPlatformCircumventionConfig,
+  AutomodRule,
+  AutomodSemanticFiltersConfig,
+  AutomodSemanticFiltersRule,
+  AutomodToxicityConfig,
+  AzureRequest,
+  BackstageSettings,
+  BackstageSettingsRequest,
+  BackstageSettingsResponse,
+  Ban,
+  BanActionRequest,
+  BanRequest,
+  BanResponse,
+  BlockListConfig,
+  BlockListOptions,
+  BlockListResponse,
+  BlockListRule,
+  BlockUserRequest,
+  BlockUserResponse,
+  BlockUsersRequest,
+  BlockUsersResponse,
+  BlockedUserEvent,
+  BlockedUserResponse,
+  BodyguardRule,
+  BodyguardSeverityRule,
+  BookmarkAddedEvent,
+  BookmarkDeletedEvent,
+  BookmarkFolderResponse,
+  BookmarkResponse,
+  BookmarkUpdatedEvent,
+  Bound,
+  BroadcastSettings,
+  BroadcastSettingsRequest,
+  BroadcastSettingsResponse,
+  BrowserDataResponse,
+  BulkImageModerationRequest,
+  BulkImageModerationResponse,
+  Call,
+  CallAcceptedEvent,
+  CallClosedCaption,
+  CallClosedCaptionsFailedEvent,
+  CallClosedCaptionsStartedEvent,
+  CallClosedCaptionsStoppedEvent,
+  CallCreatedEvent,
+  CallDeletedEvent,
+  CallDurationReport,
+  CallDurationReportResponse,
+  CallEgress,
+  CallEndedEvent,
+  CallFrameRecordingFailedEvent,
+  CallFrameRecordingFrameReadyEvent,
+  CallFrameRecordingStartedEvent,
+  CallFrameRecordingStoppedEvent,
+  CallHLSBroadcastingFailedEvent,
+  CallHLSBroadcastingStartedEvent,
+  CallHLSBroadcastingStoppedEvent,
+  CallIngressResponse,
+  CallLiveStartedEvent,
+  CallMember,
+  CallMemberAddedEvent,
+  CallMemberRemovedEvent,
+  CallMemberUpdatedEvent,
+  CallMemberUpdatedPermissionEvent,
+  CallMissedEvent,
+  CallModerationBlurEvent,
+  CallModerationWarningEvent,
+  CallNotificationEvent,
+  CallParticipant,
+  CallParticipantCountReport,
+  CallParticipantCountReportResponse,
+  CallParticipantResponse,
+  CallReactionEvent,
+  CallRecording,
+  CallRecordingFailedEvent,
+  CallRecordingReadyEvent,
+  CallRecordingStartedEvent,
+  CallRecordingStoppedEvent,
+  CallRejectedEvent,
+  CallReportResponse,
+  CallRequest,
+  CallResponse,
+  CallRingEvent,
+  CallRtmpBroadcastFailedEvent,
+  CallRtmpBroadcastStartedEvent,
+  CallRtmpBroadcastStoppedEvent,
+  CallSession,
+  CallSessionEndedEvent,
+  CallSessionParticipantJoinedEvent,
+  CallSessionParticipantLeftEvent,
+  CallSessionResponse,
+  CallSessionStartedEvent,
+  CallSettings,
+  CallSettingsRequest,
+  CallSettingsResponse,
+  CallStateResponseFields,
+  CallStatsReportReadyEvent,
+  CallStatsReportSummaryResponse,
+  CallTranscription,
+  CallTranscriptionFailedEvent,
+  CallTranscriptionReadyEvent,
+  CallTranscriptionStartedEvent,
+  CallTranscriptionStoppedEvent,
+  CallType,
+  CallTypeResponse,
+  CallUpdatedEvent,
+  CallUserFeedbackSubmittedEvent,
+  CallUserMutedEvent,
+  CallsPerDayReport,
+  CallsPerDayReportResponse,
+  CampaignChannelTemplate,
+  CampaignCompletedEvent,
+  CampaignMessageTemplate,
+  CampaignResponse,
+  CampaignStartedEvent,
+  CampaignStatsResponse,
   CastPollVoteRequest,
+  Channel,
+  ChannelConfig,
+  ChannelConfigWithInfo,
+  ChannelCreatedEvent,
+  ChannelDeletedEvent,
+  ChannelExport,
+  ChannelFrozenEvent,
+  ChannelGetOrCreateRequest,
+  ChannelHiddenEvent,
+  ChannelInput,
+  ChannelMember,
+  ChannelMemberResponse,
+  ChannelMessages,
+  ChannelMute,
+  ChannelMutedEvent,
+  ChannelOwnCapability,
+  ChannelPushPreferences,
+  ChannelResponse,
+  ChannelStateResponse,
+  ChannelStateResponseFields,
+  ChannelTruncatedEvent,
+  ChannelTypeConfig,
+  ChannelUnFrozenEvent,
+  ChannelUnmutedEvent,
+  ChannelUpdatedEvent,
+  ChannelVisibleEvent,
+  ChatActivityStatsResponse,
+  CheckExternalStorageResponse,
+  CheckPushRequest,
+  CheckPushResponse,
+  CheckRequest,
+  CheckResponse,
+  CheckSNSRequest,
+  CheckSNSResponse,
+  CheckSQSRequest,
+  CheckSQSResponse,
+  ClientOSDataResponse,
+  ClosedCaptionEvent,
+  CollectUserFeedbackRequest,
+  CollectUserFeedbackResponse,
+  Command,
+  CommentAddedEvent,
+  CommentDeletedEvent,
+  CommentReactionAddedEvent,
+  CommentReactionDeletedEvent,
+  CommentResponse,
+  CommentUpdatedEvent,
+  CommitMessageRequest,
+  CompositeAppSettings,
+  ConfigOverrides,
+  ConfigResponse,
+  CountByMinuteResponse,
+  CreateBlockListRequest,
+  CreateBlockListResponse,
+  CreateCallTypeRequest,
+  CreateCallTypeResponse,
+  CreateChannelTypeRequest,
+  CreateChannelTypeResponse,
+  CreateCommandRequest,
+  CreateCommandResponse,
+  CreateDeviceRequest,
+  CreateExternalStorageRequest,
+  CreateExternalStorageResponse,
   CreateFeedGroupRequest,
   CreateFeedGroupResponse,
   CreateFeedViewRequest,
   CreateFeedViewResponse,
   CreateFeedsBatchRequest,
   CreateFeedsBatchResponse,
+  CreateGuestRequest,
+  CreateGuestResponse,
+  CreateImportRequest,
+  CreateImportResponse,
+  CreateImportURLRequest,
+  CreateImportURLResponse,
   CreatePollOptionRequest,
   CreatePollRequest,
+  CreateReminderRequest,
+  CreateRoleRequest,
+  CreateRoleResponse,
+  CustomActionRequest,
+  CustomCheckFlag,
+  CustomCheckRequest,
+  CustomCheckResponse,
+  CustomVideoEvent,
+  DailyAggregateCallDurationReportResponse,
+  DailyAggregateCallParticipantCountReportResponse,
+  DailyAggregateCallsPerDayReportResponse,
+  DailyAggregateQualityScoreReportResponse,
+  DailyAggregateSDKUsageReportResponse,
+  DailyAggregateUserFeedbackReportResponse,
+  Data,
+  DataDogInfo,
+  DeactivateUserRequest,
+  DeactivateUserResponse,
+  DeactivateUsersRequest,
+  DeactivateUsersResponse,
+  DecayFunctionConfig,
   DeleteActivitiesRequest,
   DeleteActivitiesResponse,
   DeleteActivityReactionResponse,
+  DeleteActivityRequest,
   DeleteActivityResponse,
   DeleteBookmarkResponse,
+  DeleteCallRequest,
+  DeleteCallResponse,
+  DeleteChannelResponse,
+  DeleteChannelsRequest,
+  DeleteChannelsResponse,
+  DeleteChannelsResultResponse,
+  DeleteCommandResponse,
   DeleteCommentReactionResponse,
   DeleteCommentResponse,
+  DeleteExternalStorageResponse,
   DeleteFeedGroupResponse,
   DeleteFeedResponse,
   DeleteFeedUserDataResponse,
   DeleteFeedViewResponse,
+  DeleteMessageRequest,
+  DeleteMessageResponse,
+  DeleteModerationConfigResponse,
+  DeleteModerationTemplateResponse,
+  DeleteReactionRequest,
+  DeleteReactionResponse,
+  DeleteRecordingResponse,
+  DeleteReminderResponse,
+  DeleteSegmentTargetsRequest,
+  DeleteTranscriptionResponse,
+  DeleteUserRequest,
+  DeleteUsersRequest,
+  DeleteUsersResponse,
+  Device,
+  DeviceDataResponse,
+  DeviceErrorInfo,
+  DeviceResponse,
+  DraftPayloadResponse,
+  DraftResponse,
+  EdgeResponse,
+  EgressHLSResponse,
+  EgressRTMPResponse,
+  EgressResponse,
+  EgressTaskConfig,
+  EgressUser,
+  EndCallRequest,
+  EndCallResponse,
+  EnrichedActivity,
+  EnrichedReaction,
+  EntityCreator,
+  EntityCreatorResponse,
+  ErrorResult,
+  EventHook,
+  EventNotificationSettings,
+  EventRequest,
+  EventResponse,
+  ExportChannelsRequest,
+  ExportChannelsResponse,
+  ExportFeedUserDataRequest,
   ExportFeedUserDataResponse,
+  ExportUserResponse,
+  ExportUsersRequest,
+  ExportUsersResponse,
+  ExternalStorage,
+  ExternalStorageResponse,
+  FCM,
+  FeedCreatedEvent,
+  FeedDeletedEvent,
+  FeedGroup,
+  FeedGroupChangedEvent,
+  FeedGroupDeletedEvent,
+  FeedGroupResponse,
+  FeedInput,
+  FeedMemberAddedEvent,
+  FeedMemberRemovedEvent,
+  FeedMemberRequest,
+  FeedMemberResponse,
+  FeedMemberUpdatedEvent,
+  FeedOwnCapability,
+  FeedRequest,
+  FeedResponse,
+  FeedUpdatedEvent,
+  FeedViewResponse,
+  FeedsModerationTemplateConfig,
+  FeedsReactionResponse,
+  Field,
+  FileUploadConfig,
+  FileUploadRequest,
+  FileUploadResponse,
+  FirebaseConfig,
+  FirebaseConfigFields,
+  Flag,
+  FlagDetails,
+  FlagFeedback,
+  FlagMessageDetails,
+  FlagRequest,
+  FlagResponse,
+  FlagUpdatedEvent,
   FollowBatchRequest,
   FollowBatchResponse,
+  FollowCreatedEvent,
+  FollowDeletedEvent,
+  FollowPair,
+  FollowRequest,
+  FollowResponse,
+  FollowUpdatedEvent,
+  FrameRecordSettings,
+  FrameRecordingEgressConfig,
+  FrameRecordingResponse,
+  FrameRecordingSettingsRequest,
+  FrameRecordingSettingsResponse,
+  FullUserResponse,
+  GeofenceResponse,
+  GeofenceSettings,
+  GeofenceSettingsRequest,
+  GeofenceSettingsResponse,
   GetActivityResponse,
+  GetApplicationResponse,
+  GetBlockListResponse,
+  GetBlockedUsersResponse,
+  GetCallReportResponse,
+  GetCallResponse,
+  GetCallTypeResponse,
+  GetCampaignResponse,
+  GetChannelTypeResponse,
+  GetCommandResponse,
   GetCommentRepliesResponse,
   GetCommentResponse,
   GetCommentsResponse,
+  GetConfigResponse,
+  GetCustomPermissionResponse,
+  GetDraftResponse,
+  GetEdgesResponse,
   GetFollowSuggestionsResponse,
+  GetImportResponse,
+  GetManyMessagesResponse,
+  GetMessageResponse,
+  GetOGResponse,
+  GetOrCreateCallRequest,
+  GetOrCreateCallResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
+  GetPushTemplatesResponse,
+  GetRateLimitsResponse,
+  GetReactionsResponse,
+  GetRepliesResponse,
+  GetReviewQueueItemResponse,
+  GetSegmentResponse,
+  GetTaskResponse,
+  GetThreadResponse,
+  GoLiveRequest,
+  GoLiveResponse,
+  GoogleVisionConfig,
+  GroupedStatsResponse,
+  HLSEgressConfig,
+  HLSSettings,
+  HLSSettingsRequest,
+  HLSSettingsResponse,
+  HarmConfig,
+  HideChannelRequest,
+  HideChannelResponse,
+  HuaweiConfig,
+  HuaweiConfigFields,
+  ImageData,
+  ImageSize,
+  ImageUploadRequest,
+  ImageUploadResponse,
+  Images,
+  ImportTask,
+  ImportTaskHistory,
+  Label,
+  LabelThresholds,
+  LayoutSettings,
+  LayoutSettingsRequest,
+  LayoutSettingsResponse,
+  LimitInfo,
+  LimitsSettings,
+  LimitsSettingsRequest,
+  LimitsSettingsResponse,
+  ListBlockListResponse,
+  ListCallTypeResponse,
+  ListChannelTypesResponse,
+  ListCommandsResponse,
+  ListDevicesResponse,
+  ListExternalStorageResponse,
+  ListImportsResponse,
+  ListPermissionsResponse,
+  ListPushProvidersResponse,
+  ListRecordingsResponse,
+  ListRolesResponse,
+  ListTranscriptionsResponse,
   MarkActivityRequest,
+  MarkChannelsReadRequest,
+  MarkReadRequest,
+  MarkReadResponse,
+  MarkReviewedRequest,
+  MarkUnreadRequest,
+  MemberAddedEvent,
+  MemberLookup,
+  MemberRemovedEvent,
+  MemberRequest,
+  MemberResponse,
+  MemberUpdatedEvent,
+  MembersResponse,
+  Message,
+  MessageActionRequest,
+  MessageChangeSet,
+  MessageDeletedEvent,
+  MessageFlagResponse,
+  MessageFlaggedEvent,
+  MessageHistoryEntryResponse,
+  MessageModerationResult,
+  MessageNewEvent,
+  MessageOptions,
+  MessagePaginationParams,
+  MessageReadEvent,
+  MessageReminder,
+  MessageRequest,
+  MessageResponse,
+  MessageStatsResponse,
+  MessageUnblockedEvent,
+  MessageUndeletedEvent,
+  MessageUpdate,
+  MessageUpdatedEvent,
+  MessageWithChannelResponse,
+  ModerationActionConfig,
+  ModerationCheckCompletedEvent,
+  ModerationCustomActionEvent,
+  ModerationDashboardPreferences,
+  ModerationFlagResponse,
+  ModerationFlaggedEvent,
+  ModerationMarkReviewedEvent,
+  ModerationPayload,
+  ModerationResponse,
+  ModerationV2Response,
+  MuteChannelRequest,
+  MuteChannelResponse,
+  MuteRequest,
+  MuteResponse,
+  MuteUsersRequest,
+  MuteUsersResponse,
+  NetworkMetricsReportResponse,
+  NoiseCancellationSettings,
+  NotificationConfig,
+  NotificationMarkUnreadEvent,
+  NotificationSettings,
+  NotificationStatusResponse,
+  NullTime,
+  OCRRule,
+  OnlyUserID,
+  OwnCapability,
+  OwnUser,
+  OwnUserResponse,
+  PagerRequest,
+  PagerResponse,
+  PaginationParams,
+  ParticipantCountByMinuteResponse,
+  ParticipantCountOverTimeResponse,
+  ParticipantReportResponse,
+  PendingMessageResponse,
+  PerSDKUsageReport,
+  Permission,
+  PermissionRequestEvent,
   PinActivityRequest,
   PinActivityResponse,
+  PinRequest,
+  PinResponse,
+  PlatformDataResponse,
+  Policy,
+  PolicyRequest,
+  Poll,
+  PollOption,
+  PollOptionInput,
+  PollOptionRequest,
   PollOptionResponse,
+  PollOptionResponseData,
   PollResponse,
+  PollResponseData,
+  PollVote,
   PollVoteResponse,
+  PollVoteResponseData,
   PollVotesResponse,
+  PrivacySettings,
+  PrivacySettingsResponse,
+  PublisherStatsResponse,
+  PushConfig,
+  PushNotificationFields,
+  PushNotificationSettingsResponse,
+  PushPreferenceInput,
+  PushPreferences,
+  PushProvider,
+  PushProviderResponse,
+  PushTemplate,
+  Quality,
+  QualityScoreReport,
+  QualityScoreReportResponse,
   QueryActivitiesRequest,
   QueryActivitiesResponse,
   QueryActivityReactionsRequest,
   QueryActivityReactionsResponse,
+  QueryAggregateCallStatsRequest,
+  QueryAggregateCallStatsResponse,
+  QueryBannedUsersPayload,
+  QueryBannedUsersResponse,
   QueryBookmarkFoldersRequest,
   QueryBookmarkFoldersResponse,
   QueryBookmarksRequest,
   QueryBookmarksResponse,
+  QueryCallMembersRequest,
+  QueryCallMembersResponse,
+  QueryCallParticipantsRequest,
+  QueryCallParticipantsResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
+  QueryCampaignsRequest,
+  QueryCampaignsResponse,
+  QueryChannelsRequest,
+  QueryChannelsResponse,
   QueryCommentReactionsRequest,
   QueryCommentReactionsResponse,
   QueryCommentsRequest,
   QueryCommentsResponse,
+  QueryDraftsRequest,
+  QueryDraftsResponse,
   QueryFeedMembersRequest,
   QueryFeedMembersResponse,
+  QueryFeedModerationTemplate,
+  QueryFeedModerationTemplatesResponse,
   QueryFeedsRequest,
   QueryFeedsResponse,
   QueryFollowsRequest,
   QueryFollowsResponse,
+  QueryMembersPayload,
+  QueryMessageFlagsPayload,
+  QueryMessageFlagsResponse,
+  QueryMessageHistoryRequest,
+  QueryMessageHistoryResponse,
+  QueryModerationConfigsRequest,
+  QueryModerationConfigsResponse,
+  QueryModerationFlagsRequest,
+  QueryModerationFlagsResponse,
+  QueryModerationLogsRequest,
+  QueryModerationLogsResponse,
   QueryPollVotesRequest,
   QueryPollsRequest,
   QueryPollsResponse,
+  QueryReactionsRequest,
+  QueryReactionsResponse,
+  QueryRemindersRequest,
+  QueryRemindersResponse,
+  QueryReviewQueueRequest,
+  QueryReviewQueueResponse,
+  QuerySegmentTargetsRequest,
+  QuerySegmentTargetsResponse,
+  QuerySegmentsRequest,
+  QuerySegmentsResponse,
+  QueryThreadsRequest,
+  QueryThreadsResponse,
+  QueryUserFeedbackRequest,
+  QueryUserFeedbackResponse,
+  QueryUsersPayload,
+  QueryUsersResponse,
+  RTMPBroadcastRequest,
+  RTMPEgressConfig,
+  RTMPIngress,
+  RTMPLocation,
+  RTMPSettings,
+  RTMPSettingsRequest,
+  RTMPSettingsResponse,
+  RankingConfig,
+  Reaction,
+  ReactionDeletedEvent,
+  ReactionGroupResponse,
+  ReactionNewEvent,
+  ReactionRequest,
+  ReactionResponse,
+  ReactionUpdatedEvent,
+  ReactivateUserRequest,
+  ReactivateUserResponse,
+  ReactivateUsersRequest,
+  ReactivateUsersResponse,
+  ReadReceipts,
+  ReadReceiptsResponse,
+  ReadStateResponse,
+  RecordSettings,
+  RecordSettingsRequest,
+  RecordSettingsResponse,
+  RecordingEgressConfig,
   RejectFeedMemberInviteRequest,
   RejectFeedMemberInviteResponse,
   RejectFollowRequest,
   RejectFollowResponse,
+  ReminderResponseData,
+  RepliesMeta,
+  ReportByHistogramBucket,
+  ReportResponse,
   Response,
+  RestoreActionRequest,
+  RestoreUsersRequest,
+  ReviewQueueItem,
+  ReviewQueueItemNewEvent,
+  ReviewQueueItemResponse,
+  ReviewQueueItemUpdatedEvent,
+  RingSettings,
+  RingSettingsRequest,
+  RingSettingsResponse,
+  Role,
+  RuleBuilderAction,
+  RuleBuilderCondition,
+  RuleBuilderConfig,
+  RuleBuilderRule,
+  S3Request,
+  SDKUsageReport,
+  SDKUsageReportResponse,
+  SFUIDLastSeen,
+  STTEgressConfig,
+  ScreensharingSettings,
+  ScreensharingSettingsRequest,
+  ScreensharingSettingsResponse,
+  SearchPayload,
+  SearchResponse,
+  SearchResult,
+  SearchResultMessage,
+  SearchWarning,
+  Segment,
+  SegmentResponse,
+  SegmentTargetResponse,
+  SendCallEventRequest,
+  SendCallEventResponse,
+  SendEventRequest,
+  SendMessageRequest,
+  SendMessageResponse,
+  SendReactionRequest,
+  SendReactionResponse,
+  SendUserCustomEventRequest,
+  SessionSettings,
+  SessionSettingsRequest,
+  SessionSettingsResponse,
+  ShadowBlockActionRequest,
+  ShowChannelRequest,
+  ShowChannelResponse,
   SingleFollowRequest,
   SingleFollowResponse,
+  SortParam,
+  SortParamRequest,
+  StartCampaignRequest,
+  StartCampaignResponse,
+  StartClosedCaptionsRequest,
+  StartClosedCaptionsResponse,
+  StartFrameRecordingRequest,
+  StartFrameRecordingResponse,
+  StartHLSBroadcastingRequest,
+  StartHLSBroadcastingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
+  StartTranscriptionRequest,
+  StartTranscriptionResponse,
+  StopAllRTMPBroadcastsRequest,
+  StopAllRTMPBroadcastsResponse,
+  StopCampaignRequest,
+  StopClosedCaptionsRequest,
+  StopClosedCaptionsResponse,
+  StopFrameRecordingRequest,
+  StopFrameRecordingResponse,
+  StopHLSBroadcastingRequest,
+  StopHLSBroadcastingResponse,
+  StopLiveRequest,
+  StopLiveResponse,
+  StopRTMPBroadcastsRequest,
+  StopRTMPBroadcastsResponse,
+  StopRecordingRequest,
+  StopRecordingResponse,
+  StopTranscriptionRequest,
+  StopTranscriptionResponse,
+  StoriesConfig,
+  SubmitActionRequest,
+  SubmitActionResponse,
+  SubscriberStatsResponse,
+  TargetResolution,
+  ThreadParticipant,
+  ThreadResponse,
+  ThreadStateResponse,
+  ThreadUpdatedEvent,
+  ThreadedCommentResponse,
+  Thresholds,
+  ThumbnailResponse,
+  ThumbnailsSettings,
+  ThumbnailsSettingsRequest,
+  ThumbnailsSettingsResponse,
+  Time,
+  TrackStatsResponse,
+  TranscriptionSettings,
+  TranscriptionSettingsRequest,
+  TranscriptionSettingsResponse,
+  TranslateMessageRequest,
+  TruncateChannelRequest,
+  TruncateChannelResponse,
+  TypingIndicators,
+  TypingIndicatorsResponse,
+  UnbanActionRequest,
+  UnbanRequest,
+  UnbanResponse,
+  UnblockActionRequest,
+  UnblockUserRequest,
+  UnblockUserResponse,
+  UnblockUsersRequest,
+  UnblockUsersResponse,
+  UnblockedUserEvent,
   UnfollowBatchRequest,
   UnfollowBatchResponse,
   UnfollowResponse,
+  UnmuteChannelRequest,
+  UnmuteRequest,
+  UnmuteResponse,
   UnpinActivityResponse,
+  UnpinRequest,
+  UnpinResponse,
+  UnreadCountsBatchRequest,
+  UnreadCountsBatchResponse,
+  UnreadCountsChannel,
+  UnreadCountsChannelType,
+  UnreadCountsResponse,
+  UnreadCountsThread,
   UpdateActivityPartialRequest,
   UpdateActivityPartialResponse,
   UpdateActivityRequest,
   UpdateActivityResponse,
+  UpdateAppRequest,
+  UpdateBlockListRequest,
+  UpdateBlockListResponse,
   UpdateBookmarkRequest,
   UpdateBookmarkResponse,
+  UpdateCallMembersRequest,
+  UpdateCallMembersResponse,
+  UpdateCallRequest,
+  UpdateCallResponse,
+  UpdateCallTypeRequest,
+  UpdateCallTypeResponse,
+  UpdateChannelPartialRequest,
+  UpdateChannelPartialResponse,
+  UpdateChannelRequest,
+  UpdateChannelResponse,
+  UpdateChannelTypeRequest,
+  UpdateChannelTypeResponse,
+  UpdateCommandRequest,
+  UpdateCommandResponse,
   UpdateCommentRequest,
   UpdateCommentResponse,
+  UpdateExternalStorageRequest,
+  UpdateExternalStorageResponse,
   UpdateFeedMembersRequest,
   UpdateFeedMembersResponse,
   UpdateFeedRequest,
@@ -101,11 +837,77 @@ import {
   UpdateFeedViewResponse,
   UpdateFollowRequest,
   UpdateFollowResponse,
+  UpdateMemberPartialRequest,
+  UpdateMemberPartialResponse,
+  UpdateMessagePartialRequest,
+  UpdateMessagePartialResponse,
+  UpdateMessageRequest,
+  UpdateMessageResponse,
   UpdatePollOptionRequest,
   UpdatePollPartialRequest,
   UpdatePollRequest,
+  UpdateReminderRequest,
+  UpdateReminderResponse,
+  UpdateThreadPartialRequest,
+  UpdateThreadPartialResponse,
+  UpdateUserPartialRequest,
+  UpdateUserPermissionsRequest,
+  UpdateUserPermissionsResponse,
+  UpdateUsersPartialRequest,
+  UpdateUsersRequest,
+  UpdateUsersResponse,
+  UpdatedCallPermissionsEvent,
   UpsertActivitiesRequest,
   UpsertActivitiesResponse,
+  UpsertConfigRequest,
+  UpsertConfigResponse,
+  UpsertModerationTemplateRequest,
+  UpsertModerationTemplateResponse,
+  UpsertPushPreferencesRequest,
+  UpsertPushPreferencesResponse,
+  UpsertPushProviderRequest,
+  UpsertPushProviderResponse,
+  UpsertPushTemplateRequest,
+  UpsertPushTemplateResponse,
+  User,
+  UserBannedEvent,
+  UserCustomEventRequest,
+  UserDeactivatedEvent,
+  UserDeletedEvent,
+  UserFeedbackReport,
+  UserFeedbackReportResponse,
+  UserFeedbackResponse,
+  UserFlaggedEvent,
+  UserMute,
+  UserMuteResponse,
+  UserMutedEvent,
+  UserRatingReportResponse,
+  UserReactivatedEvent,
+  UserRequest,
+  UserResponse,
+  UserResponseCommonFields,
+  UserResponsePrivacyFields,
+  UserUnbannedEvent,
+  UserUnmutedEvent,
+  UserUnreadReminderEvent,
+  UserUpdatedEvent,
+  VelocityFilterConfig,
+  VelocityFilterConfigRule,
+  VideoCallRuleConfig,
+  VideoEndCallRequest,
+  VideoKickUserRequest,
+  VideoOrientation,
+  VideoReactionOverTimeResponse,
+  VideoReactionsResponse,
+  VideoSettings,
+  VideoSettingsRequest,
+  VideoSettingsResponse,
+  VoteData,
+  WSEvent,
+  WebhookEvent,
+  WrappedUnreadCountsResponse,
+  XiaomiConfig,
+  XiaomiConfigFields,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -137,9 +939,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<AddActivityResponse>
-    >('POST', '/api/v3/feeds/activities', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/activities', undefined, undefined, body);
 
-    decoders.AddActivityResponse?.(response.body);
+    decoders['AddActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -153,9 +955,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertActivitiesResponse>
-    >('POST', '/api/v3/feeds/activities/batch', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/activities/batch', undefined, undefined, body);
 
-    decoders.UpsertActivitiesResponse?.(response.body);
+    decoders['UpsertActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -172,9 +974,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteActivitiesResponse>
-    >('POST', '/api/v3/feeds/activities/delete', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/activities/delete', undefined, undefined, body);
 
-    decoders.DeleteActivitiesResponse?.(response.body);
+    decoders['DeleteActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -192,9 +994,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryActivitiesResponse>
-    >('POST', '/api/v3/feeds/activities/query', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/activities/query', undefined, undefined, body);
 
-    decoders.QueryActivitiesResponse?.(response.body);
+    decoders['QueryActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -214,12 +1016,12 @@ export class FeedsApi {
       StreamResponse<DeleteActivityResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/activities/{activity_id}',
+      '/api/v2/feeds/activities/{activity_id}',
       pathParams,
       queryParams,
     );
 
-    decoders.DeleteActivityResponse?.(response.body);
+    decoders['DeleteActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -233,9 +1035,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetActivityResponse>
-    >('GET', '/api/v3/feeds/activities/{activity_id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/activities/{activity_id}', pathParams, undefined);
 
-    decoders.GetActivityResponse?.(response.body);
+    decoders['GetActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -257,13 +1059,13 @@ export class FeedsApi {
       StreamResponse<UpdateActivityPartialResponse>
     >(
       'PATCH',
-      '/api/v3/feeds/activities/{activity_id}',
+      '/api/v2/feeds/activities/{activity_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateActivityPartialResponse?.(response.body);
+    decoders['UpdateActivityPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -292,13 +1094,13 @@ export class FeedsApi {
       StreamResponse<UpdateActivityResponse>
     >(
       'PUT',
-      '/api/v3/feeds/activities/{activity_id}',
+      '/api/v2/feeds/activities/{activity_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateActivityResponse?.(response.body);
+    decoders['UpdateActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -318,12 +1120,12 @@ export class FeedsApi {
       StreamResponse<DeleteBookmarkResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/activities/{activity_id}/bookmarks',
+      '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       queryParams,
     );
 
-    decoders.DeleteBookmarkResponse?.(response.body);
+    decoders['DeleteBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -347,13 +1149,13 @@ export class FeedsApi {
       StreamResponse<UpdateBookmarkResponse>
     >(
       'PATCH',
-      '/api/v3/feeds/activities/{activity_id}/bookmarks',
+      '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateBookmarkResponse?.(response.body);
+    decoders['UpdateBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -376,13 +1178,13 @@ export class FeedsApi {
       StreamResponse<AddBookmarkResponse>
     >(
       'POST',
-      '/api/v3/feeds/activities/{activity_id}/bookmarks',
+      '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.AddBookmarkResponse?.(response.body);
+    decoders['AddBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -404,13 +1206,13 @@ export class FeedsApi {
       StreamResponse<PollVoteResponse>
     >(
       'POST',
-      '/api/v3/feeds/activities/{activity_id}/polls/{poll_id}/vote',
+      '/api/v2/feeds/activities/{activity_id}/polls/{poll_id}/vote',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -434,12 +1236,12 @@ export class FeedsApi {
       StreamResponse<PollVoteResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/activities/{activity_id}/polls/{poll_id}/vote/{vote_id}',
+      '/api/v2/feeds/activities/{activity_id}/polls/{poll_id}/vote/{vote_id}',
       pathParams,
       queryParams,
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -461,13 +1263,13 @@ export class FeedsApi {
       StreamResponse<AddReactionResponse>
     >(
       'POST',
-      '/api/v3/feeds/activities/{activity_id}/reactions',
+      '/api/v2/feeds/activities/{activity_id}/reactions',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.AddReactionResponse?.(response.body);
+    decoders['AddReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -490,13 +1292,13 @@ export class FeedsApi {
       StreamResponse<QueryActivityReactionsResponse>
     >(
       'POST',
-      '/api/v3/feeds/activities/{activity_id}/reactions/query',
+      '/api/v2/feeds/activities/{activity_id}/reactions/query',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.QueryActivityReactionsResponse?.(response.body);
+    decoders['QueryActivityReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -514,12 +1316,12 @@ export class FeedsApi {
       StreamResponse<DeleteActivityReactionResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/activities/{activity_id}/reactions/{type}',
+      '/api/v2/feeds/activities/{activity_id}/reactions/{type}',
       pathParams,
       undefined,
     );
 
-    decoders.DeleteActivityReactionResponse?.(response.body);
+    decoders['DeleteActivityReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -539,13 +1341,13 @@ export class FeedsApi {
       StreamResponse<QueryBookmarkFoldersResponse>
     >(
       'POST',
-      '/api/v3/feeds/bookmark_folders/query',
+      '/api/v2/feeds/bookmark_folders/query',
       undefined,
       undefined,
       body,
     );
 
-    decoders.QueryBookmarkFoldersResponse?.(response.body);
+    decoders['QueryBookmarkFoldersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -563,9 +1365,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryBookmarksResponse>
-    >('POST', '/api/v3/feeds/bookmarks/query', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/bookmarks/query', undefined, undefined, body);
 
-    decoders.QueryBookmarksResponse?.(response.body);
+    decoders['QueryBookmarksResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -593,9 +1395,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetCommentsResponse>
-    >('GET', '/api/v3/feeds/comments', undefined, queryParams);
+    >('GET', '/api/v2/feeds/comments', undefined, queryParams);
 
-    decoders.GetCommentsResponse?.(response.body);
+    decoders['GetCommentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -615,9 +1417,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<AddCommentResponse>
-    >('POST', '/api/v3/feeds/comments', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/comments', undefined, undefined, body);
 
-    decoders.AddCommentResponse?.(response.body);
+    decoders['AddCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -631,9 +1433,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<AddCommentsBatchResponse>
-    >('POST', '/api/v3/feeds/comments/batch', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/comments/batch', undefined, undefined, body);
 
-    decoders.AddCommentsBatchResponse?.(response.body);
+    decoders['AddCommentsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -651,9 +1453,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCommentsResponse>
-    >('POST', '/api/v3/feeds/comments/query', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/comments/query', undefined, undefined, body);
 
-    decoders.QueryCommentsResponse?.(response.body);
+    decoders['QueryCommentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -667,9 +1469,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteCommentResponse>
-    >('DELETE', '/api/v3/feeds/comments/{comment_id}', pathParams, undefined);
+    >('DELETE', '/api/v2/feeds/comments/{comment_id}', pathParams, undefined);
 
-    decoders.DeleteCommentResponse?.(response.body);
+    decoders['DeleteCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -683,9 +1485,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetCommentResponse>
-    >('GET', '/api/v3/feeds/comments/{comment_id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/comments/{comment_id}', pathParams, undefined);
 
-    decoders.GetCommentResponse?.(response.body);
+    decoders['GetCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -705,13 +1507,13 @@ export class FeedsApi {
       StreamResponse<UpdateCommentResponse>
     >(
       'PATCH',
-      '/api/v3/feeds/comments/{comment_id}',
+      '/api/v2/feeds/comments/{comment_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateCommentResponse?.(response.body);
+    decoders['UpdateCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -733,13 +1535,13 @@ export class FeedsApi {
       StreamResponse<AddCommentReactionResponse>
     >(
       'POST',
-      '/api/v3/feeds/comments/{comment_id}/reactions',
+      '/api/v2/feeds/comments/{comment_id}/reactions',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.AddCommentReactionResponse?.(response.body);
+    decoders['AddCommentReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -762,13 +1564,13 @@ export class FeedsApi {
       StreamResponse<QueryCommentReactionsResponse>
     >(
       'POST',
-      '/api/v3/feeds/comments/{comment_id}/reactions/query',
+      '/api/v2/feeds/comments/{comment_id}/reactions/query',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.QueryCommentReactionsResponse?.(response.body);
+    decoders['QueryCommentReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -786,12 +1588,12 @@ export class FeedsApi {
       StreamResponse<DeleteCommentReactionResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/comments/{comment_id}/reactions/{type}',
+      '/api/v2/feeds/comments/{comment_id}/reactions/{type}',
       pathParams,
       undefined,
     );
 
-    decoders.DeleteCommentReactionResponse?.(response.body);
+    decoders['DeleteCommentReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -821,12 +1623,12 @@ export class FeedsApi {
       StreamResponse<GetCommentRepliesResponse>
     >(
       'GET',
-      '/api/v3/feeds/comments/{comment_id}/replies',
+      '/api/v2/feeds/comments/{comment_id}/replies',
       pathParams,
       queryParams,
     );
 
-    decoders.GetCommentRepliesResponse?.(response.body);
+    decoders['GetCommentRepliesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -846,9 +1648,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateFeedGroupResponse>
-    >('POST', '/api/v3/feeds/feed_groups', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/feed_groups', undefined, undefined, body);
 
-    decoders.CreateFeedGroupResponse?.(response.body);
+    decoders['CreateFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -868,12 +1670,12 @@ export class FeedsApi {
       StreamResponse<DeleteFeedGroupResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/feed_groups/{feed_group_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}',
       pathParams,
       queryParams,
     );
 
-    decoders.DeleteFeedGroupResponse?.(response.body);
+    decoders['DeleteFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -895,12 +1697,12 @@ export class FeedsApi {
       StreamResponse<DeleteFeedResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       queryParams,
     );
 
-    decoders.DeleteFeedResponse?.(response.body);
+    decoders['DeleteFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -924,6 +1726,7 @@ export class FeedsApi {
       user_id: request?.user_id,
       view: request?.view,
       watch: request?.watch,
+      activity_selector_options: request?.activity_selector_options,
       data: request?.data,
       external_ranking: request?.external_ranking,
       filter: request?.filter,
@@ -937,13 +1740,13 @@ export class FeedsApi {
       StreamResponse<GetOrCreateFeedResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.GetOrCreateFeedResponse?.(response.body);
+    decoders['GetOrCreateFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -964,13 +1767,13 @@ export class FeedsApi {
       StreamResponse<UpdateFeedResponse>
     >(
       'PUT',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateFeedResponse?.(response.body);
+    decoders['UpdateFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -993,13 +1796,13 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/mark/batch',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/mark/batch',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1019,12 +1822,12 @@ export class FeedsApi {
       StreamResponse<UnpinActivityResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
       pathParams,
       undefined,
     );
 
-    decoders.UnpinActivityResponse?.(response.body);
+    decoders['UnpinActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1050,13 +1853,13 @@ export class FeedsApi {
       StreamResponse<PinActivityResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.PinActivityResponse?.(response.body);
+    decoders['PinActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1083,13 +1886,13 @@ export class FeedsApi {
       StreamResponse<UpdateFeedMembersResponse>
     >(
       'PATCH',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateFeedMembersResponse?.(response.body);
+    decoders['UpdateFeedMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1113,13 +1916,13 @@ export class FeedsApi {
       StreamResponse<AcceptFeedMemberInviteResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/accept',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/accept',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.AcceptFeedMemberInviteResponse?.(response.body);
+    decoders['AcceptFeedMemberInviteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1146,13 +1949,13 @@ export class FeedsApi {
       StreamResponse<QueryFeedMembersResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/query',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/query',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.QueryFeedMembersResponse?.(response.body);
+    decoders['QueryFeedMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1176,13 +1979,13 @@ export class FeedsApi {
       StreamResponse<RejectFeedMemberInviteResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/reject',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/reject',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.RejectFeedMemberInviteResponse?.(response.body);
+    decoders['RejectFeedMemberInviteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1202,12 +2005,12 @@ export class FeedsApi {
       StreamResponse<GetFollowSuggestionsResponse>
     >(
       'GET',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/follow_suggestions',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/follow_suggestions',
       pathParams,
       queryParams,
     );
 
-    decoders.GetFollowSuggestionsResponse?.(response.body);
+    decoders['GetFollowSuggestionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1229,13 +2032,13 @@ export class FeedsApi {
       StreamResponse<CreateFeedViewResponse>
     >(
       'POST',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/views',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/views',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.CreateFeedViewResponse?.(response.body);
+    decoders['CreateFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1253,12 +2056,12 @@ export class FeedsApi {
       StreamResponse<DeleteFeedViewResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/views/{view_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/views/{view_id}',
       pathParams,
       undefined,
     );
 
-    decoders.DeleteFeedViewResponse?.(response.body);
+    decoders['DeleteFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1280,13 +2083,13 @@ export class FeedsApi {
       StreamResponse<UpdateFeedViewResponse>
     >(
       'PUT',
-      '/api/v3/feeds/feed_groups/{feed_group_id}/views/{view_id}',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/views/{view_id}',
       pathParams,
       undefined,
       body,
     );
 
-    decoders.UpdateFeedViewResponse?.(response.body);
+    decoders['UpdateFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1300,9 +2103,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateFeedsBatchResponse>
-    >('POST', '/api/v3/feeds/feeds/batch', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/feeds/batch', undefined, undefined, body);
 
-    decoders.CreateFeedsBatchResponse?.(response.body);
+    decoders['CreateFeedsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1321,9 +2124,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryFeedsResponse>
-    >('POST', '/api/v3/feeds/feeds/query', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/feeds/query', undefined, undefined, body);
 
-    decoders.QueryFeedsResponse?.(response.body);
+    decoders['QueryFeedsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1340,9 +2143,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateFollowResponse>
-    >('PATCH', '/api/v3/feeds/follows', undefined, undefined, body);
+    >('PATCH', '/api/v2/feeds/follows', undefined, undefined, body);
 
-    decoders.UpdateFollowResponse?.(response.body);
+    decoders['UpdateFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1359,9 +2162,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<SingleFollowResponse>
-    >('POST', '/api/v3/feeds/follows', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/follows', undefined, undefined, body);
 
-    decoders.SingleFollowResponse?.(response.body);
+    decoders['SingleFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1377,9 +2180,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<AcceptFollowResponse>
-    >('POST', '/api/v3/feeds/follows/accept', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/follows/accept', undefined, undefined, body);
 
-    decoders.AcceptFollowResponse?.(response.body);
+    decoders['AcceptFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1393,9 +2196,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<FollowBatchResponse>
-    >('POST', '/api/v3/feeds/follows/batch', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/follows/batch', undefined, undefined, body);
 
-    decoders.FollowBatchResponse?.(response.body);
+    decoders['FollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1415,9 +2218,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryFollowsResponse>
-    >('POST', '/api/v3/feeds/follows/query', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/follows/query', undefined, undefined, body);
 
-    decoders.QueryFollowsResponse?.(response.body);
+    decoders['QueryFollowsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1432,9 +2235,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<RejectFollowResponse>
-    >('POST', '/api/v3/feeds/follows/reject', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/follows/reject', undefined, undefined, body);
 
-    decoders.RejectFollowResponse?.(response.body);
+    decoders['RejectFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1452,298 +2255,12 @@ export class FeedsApi {
       StreamResponse<UnfollowResponse>
     >(
       'DELETE',
-      '/api/v3/feeds/follows/{source}/{target}',
+      '/api/v2/feeds/follows/{source}/{target}',
       pathParams,
       undefined,
     );
 
-    decoders.UnfollowResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async createPoll(
-    request: CreatePollRequest,
-  ): Promise<StreamResponse<PollResponse>> {
-    const body = {
-      name: request?.name,
-      allow_answers: request?.allow_answers,
-      allow_user_suggested_options: request?.allow_user_suggested_options,
-      description: request?.description,
-      enforce_unique_vote: request?.enforce_unique_vote,
-      id: request?.id,
-      is_closed: request?.is_closed,
-      max_votes_allowed: request?.max_votes_allowed,
-      user_id: request?.user_id,
-      voting_visibility: request?.voting_visibility,
-      options: request?.options,
-      custom: request?.custom,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('POST', '/api/v3/feeds/polls', undefined, undefined, body);
-
-    decoders.PollResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updatePoll(
-    request: UpdatePollRequest,
-  ): Promise<StreamResponse<PollResponse>> {
-    const body = {
-      id: request?.id,
-      name: request?.name,
-      allow_answers: request?.allow_answers,
-      allow_user_suggested_options: request?.allow_user_suggested_options,
-      description: request?.description,
-      enforce_unique_vote: request?.enforce_unique_vote,
-      is_closed: request?.is_closed,
-      max_votes_allowed: request?.max_votes_allowed,
-      user_id: request?.user_id,
-      voting_visibility: request?.voting_visibility,
-      options: request?.options,
-      custom: request?.custom,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('PUT', '/api/v3/feeds/polls', undefined, undefined, body);
-
-    decoders.PollResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async queryPolls(
-    request?: QueryPollsRequest & { user_id?: string },
-  ): Promise<StreamResponse<QueryPollsResponse>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      sort: request?.sort,
-      filter: request?.filter,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryPollsResponse>
-    >('POST', '/api/v3/feeds/polls/query', undefined, queryParams, body);
-
-    decoders.QueryPollsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async deletePoll(request: {
-    poll_id: string;
-    user_id?: string;
-  }): Promise<StreamResponse<Response>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
-      'DELETE',
-      '/api/v3/feeds/polls/{poll_id}',
-      pathParams,
-      queryParams,
-    );
-
-    decoders.Response?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getPoll(request: {
-    poll_id: string;
-    user_id?: string;
-  }): Promise<StreamResponse<PollResponse>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('GET', '/api/v3/feeds/polls/{poll_id}', pathParams, queryParams);
-
-    decoders.PollResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updatePollPartial(
-    request: UpdatePollPartialRequest & { poll_id: string },
-  ): Promise<StreamResponse<PollResponse>> {
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-    const body = {
-      user_id: request?.user_id,
-      unset: request?.unset,
-      set: request?.set,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('PATCH', '/api/v3/feeds/polls/{poll_id}', pathParams, undefined, body);
-
-    decoders.PollResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async createPollOption(
-    request: CreatePollOptionRequest & { poll_id: string },
-  ): Promise<StreamResponse<PollOptionResponse>> {
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-    const body = {
-      text: request?.text,
-      position: request?.position,
-      user_id: request?.user_id,
-      custom: request?.custom,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
-      'POST',
-      '/api/v3/feeds/polls/{poll_id}/options',
-      pathParams,
-      undefined,
-      body,
-    );
-
-    decoders.PollOptionResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updatePollOption(
-    request: UpdatePollOptionRequest & { poll_id: string },
-  ): Promise<StreamResponse<PollOptionResponse>> {
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-    const body = {
-      id: request?.id,
-      text: request?.text,
-      user_id: request?.user_id,
-      custom: request?.custom,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
-      'PUT',
-      '/api/v3/feeds/polls/{poll_id}/options',
-      pathParams,
-      undefined,
-      body,
-    );
-
-    decoders.PollOptionResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async deletePollOption(request: {
-    poll_id: string;
-    option_id: string;
-    user_id?: string;
-  }): Promise<StreamResponse<Response>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const pathParams = {
-      poll_id: request?.poll_id,
-      option_id: request?.option_id,
-    };
-
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
-      'DELETE',
-      '/api/v3/feeds/polls/{poll_id}/options/{option_id}',
-      pathParams,
-      queryParams,
-    );
-
-    decoders.Response?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getPollOption(request: {
-    poll_id: string;
-    option_id: string;
-    user_id?: string;
-  }): Promise<StreamResponse<PollOptionResponse>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const pathParams = {
-      poll_id: request?.poll_id,
-      option_id: request?.option_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
-      'GET',
-      '/api/v3/feeds/polls/{poll_id}/options/{option_id}',
-      pathParams,
-      queryParams,
-    );
-
-    decoders.PollOptionResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async queryPollVotes(
-    request: QueryPollVotesRequest & { poll_id: string; user_id?: string },
-  ): Promise<StreamResponse<PollVotesResponse>> {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const pathParams = {
-      poll_id: request?.poll_id,
-    };
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      sort: request?.sort,
-      filter: request?.filter,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollVotesResponse>
-    >(
-      'POST',
-      '/api/v3/feeds/polls/{poll_id}/votes',
-      pathParams,
-      queryParams,
-      body,
-    );
-
-    decoders.PollVotesResponse?.(response.body);
+    decoders['UnfollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1759,9 +2276,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UnfollowBatchResponse>
-    >('POST', '/api/v3/feeds/unfollow/batch', undefined, undefined, body);
+    >('POST', '/api/v2/feeds/unfollow/batch', undefined, undefined, body);
 
-    decoders.UnfollowBatchResponse?.(response.body);
+    decoders['UnfollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1775,9 +2292,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteFeedUserDataResponse>
-    >('DELETE', '/api/v3/feeds/users/{user_id}/delete', pathParams, undefined);
+    >('DELETE', '/api/v2/feeds/users/{user_id}/delete', pathParams, undefined);
 
-    decoders.DeleteFeedUserDataResponse?.(response.body);
+    decoders['DeleteFeedUserDataResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1791,9 +2308,9 @@ export class FeedsApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<ExportFeedUserDataResponse>
-    >('POST', '/api/v3/feeds/users/{user_id}/export', pathParams, undefined);
+    >('POST', '/api/v2/feeds/users/{user_id}/export', pathParams, undefined);
 
-    decoders.ExportFeedUserDataResponse?.(response.body);
+    decoders['ExportFeedUserDataResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

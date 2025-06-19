@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-OUTPUT_DIR="../stream-node/src/gen-feeds"
+OUTPUT_DIR="../stream-node/src/gen"
 CHAT_DIR="../chat"
 
 rm -rf $OUTPUT_DIR
