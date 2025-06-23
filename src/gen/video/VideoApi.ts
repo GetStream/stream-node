@@ -1,588 +1,33 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
-  AIImageConfig,
-  AITextConfig,
-  AIVideoConfig,
-  APIError,
-  APNConfig,
-  APNConfigFields,
-  APNS,
-  AWSRekognitionRule,
-  AcceptFeedMemberInviteRequest,
-  AcceptFeedMemberInviteResponse,
-  AcceptFollowRequest,
-  AcceptFollowResponse,
-  Action,
-  ActionLog,
-  ActionLogResponse,
-  ActionSequence,
-  ActivityAddedEvent,
-  ActivityAnalyserConfig,
-  ActivityDeletedEvent,
-  ActivityLocation,
-  ActivityMarkEvent,
-  ActivityMarkedEvent,
-  ActivityPinResponse,
-  ActivityPinnedEvent,
-  ActivityReactionAddedEvent,
-  ActivityReactionDeletedEvent,
-  ActivityRemovedFromFeedEvent,
-  ActivityRequest,
-  ActivityResponse,
-  ActivitySelectorConfig,
-  ActivityUnpinnedEvent,
-  ActivityUpdatedEvent,
-  AddActivityRequest,
-  AddActivityResponse,
-  AddBookmarkRequest,
-  AddBookmarkResponse,
-  AddCommentReactionRequest,
-  AddCommentReactionResponse,
-  AddCommentRequest,
-  AddCommentResponse,
-  AddCommentsBatchRequest,
-  AddCommentsBatchResponse,
-  AddFolderRequest,
-  AddReactionRequest,
-  AddReactionResponse,
-  AggregatedActivityResponse,
-  AggregationConfig,
-  AnyEvent,
-  AppResponseFields,
-  AsyncBulkImageModerationEvent,
-  AsyncExportChannelsEvent,
-  AsyncExportErrorEvent,
-  AsyncExportModerationLogsEvent,
-  AsyncExportUsersEvent,
-  AsyncModerationCallbackConfig,
-  AsyncModerationConfiguration,
-  Attachment,
-  AudioSettings,
-  AudioSettingsRequest,
-  AudioSettingsResponse,
-  AutomodDetails,
-  AutomodPlatformCircumventionConfig,
-  AutomodRule,
-  AutomodSemanticFiltersConfig,
-  AutomodSemanticFiltersRule,
-  AutomodToxicityConfig,
-  AzureRequest,
-  BackstageSettings,
-  BackstageSettingsRequest,
-  BackstageSettingsResponse,
-  Ban,
-  BanActionRequest,
-  BanRequest,
-  BanResponse,
-  BlockListConfig,
-  BlockListOptions,
-  BlockListResponse,
-  BlockListRule,
   BlockUserRequest,
   BlockUserResponse,
-  BlockUsersRequest,
-  BlockUsersResponse,
-  BlockedUserEvent,
-  BlockedUserResponse,
-  BodyguardRule,
-  BodyguardSeverityRule,
-  BookmarkAddedEvent,
-  BookmarkDeletedEvent,
-  BookmarkFolderResponse,
-  BookmarkResponse,
-  BookmarkUpdatedEvent,
-  Bound,
-  BroadcastSettings,
-  BroadcastSettingsRequest,
-  BroadcastSettingsResponse,
-  BrowserDataResponse,
-  BulkImageModerationRequest,
-  BulkImageModerationResponse,
-  Call,
-  CallAcceptedEvent,
-  CallClosedCaption,
-  CallClosedCaptionsFailedEvent,
-  CallClosedCaptionsStartedEvent,
-  CallClosedCaptionsStoppedEvent,
-  CallCreatedEvent,
-  CallDeletedEvent,
-  CallDurationReport,
-  CallDurationReportResponse,
-  CallEgress,
-  CallEndedEvent,
-  CallFrameRecordingFailedEvent,
-  CallFrameRecordingFrameReadyEvent,
-  CallFrameRecordingStartedEvent,
-  CallFrameRecordingStoppedEvent,
-  CallHLSBroadcastingFailedEvent,
-  CallHLSBroadcastingStartedEvent,
-  CallHLSBroadcastingStoppedEvent,
-  CallIngressResponse,
-  CallLiveStartedEvent,
-  CallMember,
-  CallMemberAddedEvent,
-  CallMemberRemovedEvent,
-  CallMemberUpdatedEvent,
-  CallMemberUpdatedPermissionEvent,
-  CallMissedEvent,
-  CallModerationBlurEvent,
-  CallModerationWarningEvent,
-  CallNotificationEvent,
-  CallParticipant,
-  CallParticipantCountReport,
-  CallParticipantCountReportResponse,
-  CallParticipantResponse,
-  CallReactionEvent,
-  CallRecording,
-  CallRecordingFailedEvent,
-  CallRecordingReadyEvent,
-  CallRecordingStartedEvent,
-  CallRecordingStoppedEvent,
-  CallRejectedEvent,
-  CallReportResponse,
-  CallRequest,
-  CallResponse,
-  CallRingEvent,
-  CallRtmpBroadcastFailedEvent,
-  CallRtmpBroadcastStartedEvent,
-  CallRtmpBroadcastStoppedEvent,
-  CallSession,
-  CallSessionEndedEvent,
-  CallSessionParticipantJoinedEvent,
-  CallSessionParticipantLeftEvent,
-  CallSessionResponse,
-  CallSessionStartedEvent,
-  CallSettings,
-  CallSettingsRequest,
-  CallSettingsResponse,
-  CallStateResponseFields,
-  CallStatsReportReadyEvent,
-  CallStatsReportSummaryResponse,
-  CallTranscription,
-  CallTranscriptionFailedEvent,
-  CallTranscriptionReadyEvent,
-  CallTranscriptionStartedEvent,
-  CallTranscriptionStoppedEvent,
-  CallType,
-  CallTypeResponse,
-  CallUpdatedEvent,
-  CallUserFeedbackSubmittedEvent,
-  CallUserMutedEvent,
-  CallsPerDayReport,
-  CallsPerDayReportResponse,
-  CampaignChannelTemplate,
-  CampaignCompletedEvent,
-  CampaignMessageTemplate,
-  CampaignResponse,
-  CampaignStartedEvent,
-  CampaignStatsResponse,
-  CastPollVoteRequest,
-  Channel,
-  ChannelConfig,
-  ChannelConfigWithInfo,
-  ChannelCreatedEvent,
-  ChannelDeletedEvent,
-  ChannelExport,
-  ChannelFrozenEvent,
-  ChannelGetOrCreateRequest,
-  ChannelHiddenEvent,
-  ChannelInput,
-  ChannelMember,
-  ChannelMemberResponse,
-  ChannelMessages,
-  ChannelMute,
-  ChannelMutedEvent,
-  ChannelOwnCapability,
-  ChannelPushPreferences,
-  ChannelResponse,
-  ChannelStateResponse,
-  ChannelStateResponseFields,
-  ChannelTruncatedEvent,
-  ChannelTypeConfig,
-  ChannelUnFrozenEvent,
-  ChannelUnmutedEvent,
-  ChannelUpdatedEvent,
-  ChannelVisibleEvent,
-  ChatActivityStatsResponse,
-  CheckExternalStorageResponse,
-  CheckPushRequest,
-  CheckPushResponse,
-  CheckRequest,
-  CheckResponse,
-  CheckSNSRequest,
-  CheckSNSResponse,
-  CheckSQSRequest,
-  CheckSQSResponse,
-  ClientOSDataResponse,
-  ClosedCaptionEvent,
   CollectUserFeedbackRequest,
   CollectUserFeedbackResponse,
-  Command,
-  CommentAddedEvent,
-  CommentDeletedEvent,
-  CommentReactionAddedEvent,
-  CommentReactionDeletedEvent,
-  CommentResponse,
-  CommentUpdatedEvent,
-  CommitMessageRequest,
-  CompositeAppSettings,
-  ConfigOverrides,
-  ConfigResponse,
-  CountByMinuteResponse,
-  CreateBlockListRequest,
-  CreateBlockListResponse,
   CreateCallTypeRequest,
   CreateCallTypeResponse,
-  CreateChannelTypeRequest,
-  CreateChannelTypeResponse,
-  CreateCommandRequest,
-  CreateCommandResponse,
-  CreateDeviceRequest,
-  CreateExternalStorageRequest,
-  CreateExternalStorageResponse,
-  CreateFeedGroupRequest,
-  CreateFeedGroupResponse,
-  CreateFeedViewRequest,
-  CreateFeedViewResponse,
-  CreateFeedsBatchRequest,
-  CreateFeedsBatchResponse,
-  CreateGuestRequest,
-  CreateGuestResponse,
-  CreateImportRequest,
-  CreateImportResponse,
-  CreateImportURLRequest,
-  CreateImportURLResponse,
-  CreatePollOptionRequest,
-  CreatePollRequest,
-  CreateReminderRequest,
-  CreateRoleRequest,
-  CreateRoleResponse,
-  CustomActionRequest,
-  CustomCheckFlag,
-  CustomCheckRequest,
-  CustomCheckResponse,
-  CustomVideoEvent,
-  DailyAggregateCallDurationReportResponse,
-  DailyAggregateCallParticipantCountReportResponse,
-  DailyAggregateCallsPerDayReportResponse,
-  DailyAggregateQualityScoreReportResponse,
-  DailyAggregateSDKUsageReportResponse,
-  DailyAggregateUserFeedbackReportResponse,
-  Data,
-  DataDogInfo,
-  DeactivateUserRequest,
-  DeactivateUserResponse,
-  DeactivateUsersRequest,
-  DeactivateUsersResponse,
-  DecayFunctionConfig,
-  DeleteActivitiesRequest,
-  DeleteActivitiesResponse,
-  DeleteActivityReactionResponse,
-  DeleteActivityRequest,
-  DeleteActivityResponse,
-  DeleteBookmarkResponse,
   DeleteCallRequest,
   DeleteCallResponse,
-  DeleteChannelResponse,
-  DeleteChannelsRequest,
-  DeleteChannelsResponse,
-  DeleteChannelsResultResponse,
-  DeleteCommandResponse,
-  DeleteCommentReactionResponse,
-  DeleteCommentResponse,
-  DeleteExternalStorageResponse,
-  DeleteFeedGroupResponse,
-  DeleteFeedResponse,
-  DeleteFeedUserDataResponse,
-  DeleteFeedViewResponse,
-  DeleteMessageRequest,
-  DeleteMessageResponse,
-  DeleteModerationConfigResponse,
-  DeleteModerationTemplateResponse,
-  DeleteReactionRequest,
-  DeleteReactionResponse,
   DeleteRecordingResponse,
-  DeleteReminderResponse,
-  DeleteSegmentTargetsRequest,
   DeleteTranscriptionResponse,
-  DeleteUserRequest,
-  DeleteUsersRequest,
-  DeleteUsersResponse,
-  Device,
-  DeviceDataResponse,
-  DeviceErrorInfo,
-  DeviceResponse,
-  DraftPayloadResponse,
-  DraftResponse,
-  EdgeResponse,
-  EgressHLSResponse,
-  EgressRTMPResponse,
-  EgressResponse,
-  EgressTaskConfig,
-  EgressUser,
-  EndCallRequest,
   EndCallResponse,
-  EnrichedActivity,
-  EnrichedReaction,
-  EntityCreator,
-  EntityCreatorResponse,
-  ErrorResult,
-  EventHook,
-  EventNotificationSettings,
-  EventRequest,
-  EventResponse,
-  ExportChannelsRequest,
-  ExportChannelsResponse,
-  ExportFeedUserDataRequest,
-  ExportFeedUserDataResponse,
-  ExportUserResponse,
-  ExportUsersRequest,
-  ExportUsersResponse,
-  ExternalStorage,
-  ExternalStorageResponse,
-  FCM,
-  FeedCreatedEvent,
-  FeedDeletedEvent,
-  FeedGroup,
-  FeedGroupChangedEvent,
-  FeedGroupDeletedEvent,
-  FeedGroupResponse,
-  FeedInput,
-  FeedMemberAddedEvent,
-  FeedMemberRemovedEvent,
-  FeedMemberRequest,
-  FeedMemberResponse,
-  FeedMemberUpdatedEvent,
-  FeedOwnCapability,
-  FeedRequest,
-  FeedResponse,
-  FeedUpdatedEvent,
-  FeedViewResponse,
-  FeedsModerationTemplateConfig,
-  FeedsReactionResponse,
-  Field,
-  FileUploadConfig,
-  FileUploadRequest,
-  FileUploadResponse,
-  FirebaseConfig,
-  FirebaseConfigFields,
-  Flag,
-  FlagDetails,
-  FlagFeedback,
-  FlagMessageDetails,
-  FlagRequest,
-  FlagResponse,
-  FlagUpdatedEvent,
-  FollowBatchRequest,
-  FollowBatchResponse,
-  FollowCreatedEvent,
-  FollowDeletedEvent,
-  FollowPair,
-  FollowRequest,
-  FollowResponse,
-  FollowUpdatedEvent,
-  FrameRecordSettings,
-  FrameRecordingEgressConfig,
-  FrameRecordingResponse,
-  FrameRecordingSettingsRequest,
-  FrameRecordingSettingsResponse,
-  FullUserResponse,
-  GeofenceResponse,
-  GeofenceSettings,
-  GeofenceSettingsRequest,
-  GeofenceSettingsResponse,
-  GetActivityResponse,
-  GetApplicationResponse,
-  GetBlockListResponse,
-  GetBlockedUsersResponse,
   GetCallReportResponse,
   GetCallResponse,
   GetCallTypeResponse,
-  GetCampaignResponse,
-  GetChannelTypeResponse,
-  GetCommandResponse,
-  GetCommentRepliesResponse,
-  GetCommentResponse,
-  GetCommentsResponse,
-  GetConfigResponse,
-  GetCustomPermissionResponse,
-  GetDraftResponse,
   GetEdgesResponse,
-  GetFollowSuggestionsResponse,
-  GetImportResponse,
-  GetManyMessagesResponse,
-  GetMessageResponse,
-  GetOGResponse,
   GetOrCreateCallRequest,
   GetOrCreateCallResponse,
-  GetOrCreateFeedRequest,
-  GetOrCreateFeedResponse,
-  GetPushTemplatesResponse,
-  GetRateLimitsResponse,
-  GetReactionsResponse,
-  GetRepliesResponse,
-  GetReviewQueueItemResponse,
-  GetSegmentResponse,
-  GetTaskResponse,
-  GetThreadResponse,
   GoLiveRequest,
   GoLiveResponse,
-  GoogleVisionConfig,
-  GroupedStatsResponse,
-  HLSEgressConfig,
-  HLSSettings,
-  HLSSettingsRequest,
-  HLSSettingsResponse,
-  HarmConfig,
-  HideChannelRequest,
-  HideChannelResponse,
-  HuaweiConfig,
-  HuaweiConfigFields,
-  ImageData,
-  ImageSize,
-  ImageUploadRequest,
-  ImageUploadResponse,
-  Images,
-  ImportTask,
-  ImportTaskHistory,
-  Label,
-  LabelThresholds,
-  LayoutSettings,
-  LayoutSettingsRequest,
-  LayoutSettingsResponse,
-  LimitInfo,
-  LimitsSettings,
-  LimitsSettingsRequest,
-  LimitsSettingsResponse,
-  ListBlockListResponse,
   ListCallTypeResponse,
-  ListChannelTypesResponse,
-  ListCommandsResponse,
-  ListDevicesResponse,
-  ListExternalStorageResponse,
-  ListImportsResponse,
-  ListPermissionsResponse,
-  ListPushProvidersResponse,
   ListRecordingsResponse,
-  ListRolesResponse,
   ListTranscriptionsResponse,
-  MarkActivityRequest,
-  MarkChannelsReadRequest,
-  MarkReadRequest,
-  MarkReadResponse,
-  MarkReviewedRequest,
-  MarkUnreadRequest,
-  MemberAddedEvent,
-  MemberLookup,
-  MemberRemovedEvent,
-  MemberRequest,
-  MemberResponse,
-  MemberUpdatedEvent,
-  MembersResponse,
-  Message,
-  MessageActionRequest,
-  MessageChangeSet,
-  MessageDeletedEvent,
-  MessageFlagResponse,
-  MessageFlaggedEvent,
-  MessageHistoryEntryResponse,
-  MessageModerationResult,
-  MessageNewEvent,
-  MessageOptions,
-  MessagePaginationParams,
-  MessageReadEvent,
-  MessageReminder,
-  MessageRequest,
-  MessageResponse,
-  MessageStatsResponse,
-  MessageUnblockedEvent,
-  MessageUndeletedEvent,
-  MessageUpdate,
-  MessageUpdatedEvent,
-  MessageWithChannelResponse,
-  ModerationActionConfig,
-  ModerationCheckCompletedEvent,
-  ModerationCustomActionEvent,
-  ModerationDashboardPreferences,
-  ModerationFlagResponse,
-  ModerationFlaggedEvent,
-  ModerationMarkReviewedEvent,
-  ModerationPayload,
-  ModerationResponse,
-  ModerationV2Response,
-  MuteChannelRequest,
-  MuteChannelResponse,
-  MuteRequest,
-  MuteResponse,
   MuteUsersRequest,
   MuteUsersResponse,
-  NetworkMetricsReportResponse,
-  NoiseCancellationSettings,
-  NotificationConfig,
-  NotificationMarkUnreadEvent,
-  NotificationSettings,
-  NotificationStatusResponse,
-  NullTime,
-  OCRRule,
-  OnlyUserID,
-  OwnCapability,
-  OwnUser,
-  OwnUserResponse,
-  PagerRequest,
-  PagerResponse,
-  PaginationParams,
-  ParticipantCountByMinuteResponse,
-  ParticipantCountOverTimeResponse,
-  ParticipantReportResponse,
-  PendingMessageResponse,
-  PerSDKUsageReport,
-  Permission,
-  PermissionRequestEvent,
-  PinActivityRequest,
-  PinActivityResponse,
   PinRequest,
   PinResponse,
-  PlatformDataResponse,
-  Policy,
-  PolicyRequest,
-  Poll,
-  PollOption,
-  PollOptionInput,
-  PollOptionRequest,
-  PollOptionResponse,
-  PollOptionResponseData,
-  PollResponse,
-  PollResponseData,
-  PollVote,
-  PollVoteResponse,
-  PollVoteResponseData,
-  PollVotesResponse,
-  PrivacySettings,
-  PrivacySettingsResponse,
-  PublisherStatsResponse,
-  PushConfig,
-  PushNotificationFields,
-  PushNotificationSettingsResponse,
-  PushPreferenceInput,
-  PushPreferences,
-  PushProvider,
-  PushProviderResponse,
-  PushTemplate,
-  Quality,
-  QualityScoreReport,
-  QualityScoreReportResponse,
-  QueryActivitiesRequest,
-  QueryActivitiesResponse,
-  QueryActivityReactionsRequest,
-  QueryActivityReactionsResponse,
   QueryAggregateCallStatsRequest,
   QueryAggregateCallStatsResponse,
-  QueryBannedUsersPayload,
-  QueryBannedUsersResponse,
-  QueryBookmarkFoldersRequest,
-  QueryBookmarkFoldersResponse,
-  QueryBookmarksRequest,
-  QueryBookmarksResponse,
   QueryCallMembersRequest,
   QueryCallMembersResponse,
   QueryCallParticipantsRequest,
@@ -591,144 +36,15 @@ import {
   QueryCallStatsResponse,
   QueryCallsRequest,
   QueryCallsResponse,
-  QueryCampaignsRequest,
-  QueryCampaignsResponse,
-  QueryChannelsRequest,
-  QueryChannelsResponse,
-  QueryCommentReactionsRequest,
-  QueryCommentReactionsResponse,
-  QueryCommentsRequest,
-  QueryCommentsResponse,
-  QueryDraftsRequest,
-  QueryDraftsResponse,
-  QueryFeedMembersRequest,
-  QueryFeedMembersResponse,
-  QueryFeedModerationTemplate,
-  QueryFeedModerationTemplatesResponse,
-  QueryFeedsRequest,
-  QueryFeedsResponse,
-  QueryFollowsRequest,
-  QueryFollowsResponse,
-  QueryMembersPayload,
-  QueryMessageFlagsPayload,
-  QueryMessageFlagsResponse,
-  QueryMessageHistoryRequest,
-  QueryMessageHistoryResponse,
-  QueryModerationConfigsRequest,
-  QueryModerationConfigsResponse,
-  QueryModerationFlagsRequest,
-  QueryModerationFlagsResponse,
-  QueryModerationLogsRequest,
-  QueryModerationLogsResponse,
-  QueryPollVotesRequest,
-  QueryPollsRequest,
-  QueryPollsResponse,
-  QueryReactionsRequest,
-  QueryReactionsResponse,
-  QueryRemindersRequest,
-  QueryRemindersResponse,
-  QueryReviewQueueRequest,
-  QueryReviewQueueResponse,
-  QuerySegmentTargetsRequest,
-  QuerySegmentTargetsResponse,
-  QuerySegmentsRequest,
-  QuerySegmentsResponse,
-  QueryThreadsRequest,
-  QueryThreadsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
-  QueryUsersPayload,
-  QueryUsersResponse,
-  RTMPBroadcastRequest,
-  RTMPEgressConfig,
-  RTMPIngress,
-  RTMPLocation,
-  RTMPSettings,
-  RTMPSettingsRequest,
-  RTMPSettingsResponse,
-  RankingConfig,
-  Reaction,
-  ReactionDeletedEvent,
-  ReactionGroupResponse,
-  ReactionNewEvent,
-  ReactionRequest,
-  ReactionResponse,
-  ReactionUpdatedEvent,
-  ReactivateUserRequest,
-  ReactivateUserResponse,
-  ReactivateUsersRequest,
-  ReactivateUsersResponse,
-  ReadReceipts,
-  ReadReceiptsResponse,
-  ReadStateResponse,
-  RecordSettings,
-  RecordSettingsRequest,
-  RecordSettingsResponse,
-  RecordingEgressConfig,
-  RejectFeedMemberInviteRequest,
-  RejectFeedMemberInviteResponse,
-  RejectFollowRequest,
-  RejectFollowResponse,
-  ReminderResponseData,
-  RepliesMeta,
-  ReportByHistogramBucket,
-  ReportResponse,
   Response,
-  RestoreActionRequest,
-  RestoreUsersRequest,
-  ReviewQueueItem,
-  ReviewQueueItemNewEvent,
-  ReviewQueueItemResponse,
-  ReviewQueueItemUpdatedEvent,
-  RingSettings,
-  RingSettingsRequest,
-  RingSettingsResponse,
-  Role,
-  RuleBuilderAction,
-  RuleBuilderCondition,
-  RuleBuilderConfig,
-  RuleBuilderRule,
-  S3Request,
-  SDKUsageReport,
-  SDKUsageReportResponse,
-  SFUIDLastSeen,
-  STTEgressConfig,
-  ScreensharingSettings,
-  ScreensharingSettingsRequest,
-  ScreensharingSettingsResponse,
-  SearchPayload,
-  SearchResponse,
-  SearchResult,
-  SearchResultMessage,
-  SearchWarning,
-  Segment,
-  SegmentResponse,
-  SegmentTargetResponse,
   SendCallEventRequest,
   SendCallEventResponse,
-  SendEventRequest,
-  SendMessageRequest,
-  SendMessageResponse,
-  SendReactionRequest,
-  SendReactionResponse,
-  SendUserCustomEventRequest,
-  SessionSettings,
-  SessionSettingsRequest,
-  SessionSettingsResponse,
-  ShadowBlockActionRequest,
-  ShowChannelRequest,
-  ShowChannelResponse,
-  SingleFollowRequest,
-  SingleFollowResponse,
-  SortParam,
-  SortParamRequest,
-  StartCampaignRequest,
-  StartCampaignResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
-  StartHLSBroadcastingRequest,
   StartHLSBroadcastingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
@@ -736,178 +52,30 @@ import {
   StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
-  StopAllRTMPBroadcastsRequest,
   StopAllRTMPBroadcastsResponse,
-  StopCampaignRequest,
   StopClosedCaptionsRequest,
   StopClosedCaptionsResponse,
-  StopFrameRecordingRequest,
   StopFrameRecordingResponse,
-  StopHLSBroadcastingRequest,
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
-  StopRecordingRequest,
   StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
-  StoriesConfig,
-  SubmitActionRequest,
-  SubmitActionResponse,
-  SubscriberStatsResponse,
-  TargetResolution,
-  ThreadParticipant,
-  ThreadResponse,
-  ThreadStateResponse,
-  ThreadUpdatedEvent,
-  ThreadedCommentResponse,
-  Thresholds,
-  ThumbnailResponse,
-  ThumbnailsSettings,
-  ThumbnailsSettingsRequest,
-  ThumbnailsSettingsResponse,
-  Time,
-  TrackStatsResponse,
-  TranscriptionSettings,
-  TranscriptionSettingsRequest,
-  TranscriptionSettingsResponse,
-  TranslateMessageRequest,
-  TruncateChannelRequest,
-  TruncateChannelResponse,
-  TypingIndicators,
-  TypingIndicatorsResponse,
-  UnbanActionRequest,
-  UnbanRequest,
-  UnbanResponse,
-  UnblockActionRequest,
   UnblockUserRequest,
   UnblockUserResponse,
-  UnblockUsersRequest,
-  UnblockUsersResponse,
-  UnblockedUserEvent,
-  UnfollowBatchRequest,
-  UnfollowBatchResponse,
-  UnfollowResponse,
-  UnmuteChannelRequest,
-  UnmuteRequest,
-  UnmuteResponse,
-  UnpinActivityResponse,
   UnpinRequest,
   UnpinResponse,
-  UnreadCountsBatchRequest,
-  UnreadCountsBatchResponse,
-  UnreadCountsChannel,
-  UnreadCountsChannelType,
-  UnreadCountsResponse,
-  UnreadCountsThread,
-  UpdateActivityPartialRequest,
-  UpdateActivityPartialResponse,
-  UpdateActivityRequest,
-  UpdateActivityResponse,
-  UpdateAppRequest,
-  UpdateBlockListRequest,
-  UpdateBlockListResponse,
-  UpdateBookmarkRequest,
-  UpdateBookmarkResponse,
   UpdateCallMembersRequest,
   UpdateCallMembersResponse,
   UpdateCallRequest,
   UpdateCallResponse,
   UpdateCallTypeRequest,
   UpdateCallTypeResponse,
-  UpdateChannelPartialRequest,
-  UpdateChannelPartialResponse,
-  UpdateChannelRequest,
-  UpdateChannelResponse,
-  UpdateChannelTypeRequest,
-  UpdateChannelTypeResponse,
-  UpdateCommandRequest,
-  UpdateCommandResponse,
-  UpdateCommentRequest,
-  UpdateCommentResponse,
-  UpdateExternalStorageRequest,
-  UpdateExternalStorageResponse,
-  UpdateFeedMembersRequest,
-  UpdateFeedMembersResponse,
-  UpdateFeedRequest,
-  UpdateFeedResponse,
-  UpdateFeedViewRequest,
-  UpdateFeedViewResponse,
-  UpdateFollowRequest,
-  UpdateFollowResponse,
-  UpdateMemberPartialRequest,
-  UpdateMemberPartialResponse,
-  UpdateMessagePartialRequest,
-  UpdateMessagePartialResponse,
-  UpdateMessageRequest,
-  UpdateMessageResponse,
-  UpdatePollOptionRequest,
-  UpdatePollPartialRequest,
-  UpdatePollRequest,
-  UpdateReminderRequest,
-  UpdateReminderResponse,
-  UpdateThreadPartialRequest,
-  UpdateThreadPartialResponse,
-  UpdateUserPartialRequest,
   UpdateUserPermissionsRequest,
   UpdateUserPermissionsResponse,
-  UpdateUsersPartialRequest,
-  UpdateUsersRequest,
-  UpdateUsersResponse,
-  UpdatedCallPermissionsEvent,
-  UpsertActivitiesRequest,
-  UpsertActivitiesResponse,
-  UpsertConfigRequest,
-  UpsertConfigResponse,
-  UpsertModerationTemplateRequest,
-  UpsertModerationTemplateResponse,
-  UpsertPushPreferencesRequest,
-  UpsertPushPreferencesResponse,
-  UpsertPushProviderRequest,
-  UpsertPushProviderResponse,
-  UpsertPushTemplateRequest,
-  UpsertPushTemplateResponse,
-  User,
-  UserBannedEvent,
-  UserCustomEventRequest,
-  UserDeactivatedEvent,
-  UserDeletedEvent,
-  UserFeedbackReport,
-  UserFeedbackReportResponse,
-  UserFeedbackResponse,
-  UserFlaggedEvent,
-  UserMute,
-  UserMuteResponse,
-  UserMutedEvent,
-  UserRatingReportResponse,
-  UserReactivatedEvent,
-  UserRequest,
-  UserResponse,
-  UserResponseCommonFields,
-  UserResponsePrivacyFields,
-  UserUnbannedEvent,
-  UserUnmutedEvent,
-  UserUnreadReminderEvent,
-  UserUpdatedEvent,
-  VelocityFilterConfig,
-  VelocityFilterConfigRule,
-  VideoCallRuleConfig,
-  VideoEndCallRequest,
-  VideoKickUserRequest,
-  VideoOrientation,
-  VideoReactionOverTimeResponse,
-  VideoReactionsResponse,
-  VideoSettings,
-  VideoSettingsRequest,
-  VideoSettingsResponse,
-  VoteData,
-  WSEvent,
-  WebhookEvent,
-  WrappedUnreadCountsResponse,
-  XiaomiConfig,
-  XiaomiConfigFields,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -932,7 +100,7 @@ export class VideoApi {
       StreamResponse<QueryUserFeedbackResponse>
     >('POST', '/api/v2/video/call/feedback', undefined, queryParams, body);
 
-    decoders['QueryUserFeedbackResponse']?.(response.body);
+    decoders.QueryUserFeedbackResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -954,7 +122,7 @@ export class VideoApi {
       StreamResponse<QueryCallMembersResponse>
     >('POST', '/api/v2/video/call/members', undefined, undefined, body);
 
-    decoders['QueryCallMembersResponse']?.(response.body);
+    decoders.QueryCallMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -974,7 +142,7 @@ export class VideoApi {
       StreamResponse<QueryCallStatsResponse>
     >('POST', '/api/v2/video/call/stats', undefined, undefined, body);
 
-    decoders['QueryCallStatsResponse']?.(response.body);
+    decoders.QueryCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1002,7 +170,7 @@ export class VideoApi {
       StreamResponse<GetCallResponse>
     >('GET', '/api/v2/video/call/{type}/{id}', pathParams, queryParams);
 
-    decoders['GetCallResponse']?.(response.body);
+    decoders.GetCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1024,7 +192,7 @@ export class VideoApi {
       StreamResponse<UpdateCallResponse>
     >('PATCH', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
-    decoders['UpdateCallResponse']?.(response.body);
+    decoders.UpdateCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1048,7 +216,7 @@ export class VideoApi {
       StreamResponse<GetOrCreateCallResponse>
     >('POST', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
-    decoders['GetOrCreateCallResponse']?.(response.body);
+    decoders.GetOrCreateCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1074,7 +242,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['BlockUserResponse']?.(response.body);
+    decoders.BlockUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1100,7 +268,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['DeleteCallResponse']?.(response.body);
+    decoders.DeleteCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1128,7 +296,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['SendCallEventResponse']?.(response.body);
+    decoders.SendCallEventResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1159,7 +327,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['CollectUserFeedbackResponse']?.(response.body);
+    decoders.CollectUserFeedbackResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1190,7 +358,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['GoLiveResponse']?.(response.body);
+    decoders.GoLiveResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1213,7 +381,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['EndCallResponse']?.(response.body);
+    decoders.EndCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1240,7 +408,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['UpdateCallMembersResponse']?.(response.body);
+    decoders.UpdateCallMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1273,7 +441,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['MuteUsersResponse']?.(response.body);
+    decoders.MuteUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1306,7 +474,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['QueryCallParticipantsResponse']?.(response.body);
+    decoders.QueryCallParticipantsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1333,7 +501,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['PinResponse']?.(response.body);
+    decoders.PinResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1356,7 +524,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['ListRecordingsResponse']?.(response.body);
+    decoders.ListRecordingsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1378,7 +546,7 @@ export class VideoApi {
       StreamResponse<GetCallReportResponse>
     >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
 
-    decoders['GetCallReportResponse']?.(response.body);
+    decoders.GetCallReportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1404,7 +572,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StartRTMPBroadcastsResponse']?.(response.body);
+    decoders.StartRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1427,7 +595,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['StopAllRTMPBroadcastsResponse']?.(response.body);
+    decoders.StopAllRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1456,7 +624,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StopRTMPBroadcastsResponse']?.(response.body);
+    decoders.StopRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1479,7 +647,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['StartHLSBroadcastingResponse']?.(response.body);
+    decoders.StartHLSBroadcastingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1507,7 +675,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StartClosedCaptionsResponse']?.(response.body);
+    decoders.StartClosedCaptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1533,7 +701,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StartFrameRecordingResponse']?.(response.body);
+    decoders.StartFrameRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1559,7 +727,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StartRecordingResponse']?.(response.body);
+    decoders.StartRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1587,7 +755,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StartTranscriptionResponse']?.(response.body);
+    decoders.StartTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1610,7 +778,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['StopHLSBroadcastingResponse']?.(response.body);
+    decoders.StopHLSBroadcastingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1636,7 +804,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StopClosedCaptionsResponse']?.(response.body);
+    decoders.StopClosedCaptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1659,7 +827,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['StopFrameRecordingResponse']?.(response.body);
+    decoders.StopFrameRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1689,7 +857,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StopLiveResponse']?.(response.body);
+    decoders.StopLiveResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1712,7 +880,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['StopRecordingResponse']?.(response.body);
+    decoders.StopRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1738,7 +906,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['StopTranscriptionResponse']?.(response.body);
+    decoders.StopTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1761,7 +929,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['ListTranscriptionsResponse']?.(response.body);
+    decoders.ListTranscriptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1787,7 +955,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['UnblockUserResponse']?.(response.body);
+    decoders.UnblockUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1814,7 +982,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['UnpinResponse']?.(response.body);
+    decoders.UnpinResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1842,7 +1010,7 @@ export class VideoApi {
       body,
     );
 
-    decoders['UpdateUserPermissionsResponse']?.(response.body);
+    decoders.UpdateUserPermissionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1869,7 +1037,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['DeleteRecordingResponse']?.(response.body);
+    decoders.DeleteRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1896,7 +1064,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['DeleteTranscriptionResponse']?.(response.body);
+    decoders.DeleteTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1916,7 +1084,7 @@ export class VideoApi {
       StreamResponse<QueryCallsResponse>
     >('POST', '/api/v2/video/calls', undefined, undefined, body);
 
-    decoders['QueryCallsResponse']?.(response.body);
+    decoders.QueryCallsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1926,7 +1094,7 @@ export class VideoApi {
       StreamResponse<ListCallTypeResponse>
     >('GET', '/api/v2/video/calltypes', undefined, undefined);
 
-    decoders['ListCallTypeResponse']?.(response.body);
+    decoders.ListCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1946,7 +1114,7 @@ export class VideoApi {
       StreamResponse<CreateCallTypeResponse>
     >('POST', '/api/v2/video/calltypes', undefined, undefined, body);
 
-    decoders['CreateCallTypeResponse']?.(response.body);
+    decoders.CreateCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1965,7 +1133,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1981,7 +1149,7 @@ export class VideoApi {
       StreamResponse<GetCallTypeResponse>
     >('GET', '/api/v2/video/calltypes/{name}', pathParams, undefined);
 
-    decoders['GetCallTypeResponse']?.(response.body);
+    decoders.GetCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2003,7 +1171,7 @@ export class VideoApi {
       StreamResponse<UpdateCallTypeResponse>
     >('PUT', '/api/v2/video/calltypes/{name}', pathParams, undefined, body);
 
-    decoders['UpdateCallTypeResponse']?.(response.body);
+    decoders.UpdateCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2013,7 +1181,7 @@ export class VideoApi {
       StreamResponse<GetEdgesResponse>
     >('GET', '/api/v2/video/edges', undefined, undefined);
 
-    decoders['GetEdgesResponse']?.(response.body);
+    decoders.GetEdgesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2031,7 +1199,7 @@ export class VideoApi {
       StreamResponse<QueryAggregateCallStatsResponse>
     >('POST', '/api/v2/video/stats', undefined, undefined, body);
 
-    decoders['QueryAggregateCallStatsResponse']?.(response.body);
+    decoders.QueryAggregateCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
