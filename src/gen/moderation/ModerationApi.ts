@@ -3,6 +3,8 @@ import { StreamResponse } from '../../types';
 import {
   BanRequest,
   BanResponse,
+  BulkImageModerationRequest,
+  BulkImageModerationResponse,
   CheckRequest,
   CheckResponse,
   CustomCheckRequest,
@@ -18,6 +20,8 @@ import {
   QueryFeedModerationTemplatesResponse,
   QueryModerationConfigsRequest,
   QueryModerationConfigsResponse,
+  QueryModerationFlagsRequest,
+  QueryModerationFlagsResponse,
   QueryModerationLogsRequest,
   QueryModerationLogsResponse,
   QueryReviewQueueRequest,
@@ -41,6 +45,7 @@ export class ModerationApi extends BaseApi {
       target_user_id: request?.target_user_id,
       banned_by_id: request?.banned_by_id,
       channel_cid: request?.channel_cid,
+      delete_messages: request?.delete_messages,
       ip_ban: request?.ip_ban,
       reason: request?.reason,
       shadow: request?.shadow,
@@ -57,6 +62,28 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.BanResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  bulkImageModeration = async (
+    request: BulkImageModerationRequest,
+  ): Promise<StreamResponse<BulkImageModerationResponse>> => {
+    const body = {
+      csv_file: request?.csv_file,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<BulkImageModerationResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/bulk_image_moderation',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders.BulkImageModerationResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -112,6 +139,7 @@ export class ModerationApi extends BaseApi {
       rule_builder_config: request?.rule_builder_config,
       user: request?.user,
       velocity_filter_config: request?.velocity_filter_config,
+      video_call_rule_config: request?.video_call_rule_config,
     };
 
     const response = await this.sendRequest<
@@ -290,6 +318,26 @@ export class ModerationApi extends BaseApi {
     );
 
     decoders.FlagResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryModerationFlags = async (
+    request?: QueryModerationFlagsRequest,
+  ): Promise<StreamResponse<QueryModerationFlagsResponse>> => {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryModerationFlagsResponse>
+    >('POST', '/api/v2/moderation/flags', undefined, undefined, body);
+
+    decoders.QueryModerationFlagsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

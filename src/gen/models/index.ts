@@ -73,8 +73,6 @@ export interface APNConfigFields {
 
   enabled: boolean;
 
-  notification_template: string;
-
   auth_key?: string;
 
   auth_type?: string;
@@ -85,6 +83,8 @@ export interface APNConfigFields {
 
   key_id?: string;
 
+  notification_template?: string;
+
   p12_cert?: string;
 
   team_id?: string;
@@ -94,6 +94,14 @@ export interface APNS {
   body: string;
 
   title: string;
+
+  content_available?: number;
+
+  mutable_content?: number;
+
+  sound?: string;
+
+  data?: Record<string, any>;
 }
 
 export interface AWSRekognitionRule {
@@ -168,6 +176,22 @@ export interface ActionLogResponse {
   user?: UserResponse;
 }
 
+export interface ActionSequence {
+  action: string;
+
+  blur: boolean;
+
+  cooldown_period: number;
+
+  threshold: number;
+
+  time_window: number;
+
+  warning: boolean;
+
+  warning_text: string;
+}
+
 export interface AnyEvent {
   created_at: Date;
 
@@ -227,7 +251,11 @@ export interface AppResponseFields {
 
   suspended_explanation: string;
 
+  use_hook_v2: boolean;
+
   webhook_url: string;
+
+  event_hooks: EventHook[];
 
   user_search_disallowed_roles: string[];
 
@@ -258,6 +286,26 @@ export interface AppResponseFields {
   image_moderation_labels?: string[];
 
   datadog_info?: DataDogInfo;
+
+  moderation_dashboard_preferences?: ModerationDashboardPreferences;
+}
+
+export interface AsyncBulkImageModerationEvent {
+  created_at: Date;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  url: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
 }
 
 export interface AsyncExportChannelsEvent {
@@ -549,6 +597,8 @@ export interface Ban {
 export interface BanActionRequest {
   channel_ban_only?: boolean;
 
+  delete_messages?: 'soft' | 'pruning' | 'hard';
+
   ip_ban?: boolean;
 
   reason?: string;
@@ -564,6 +614,8 @@ export interface BanRequest {
   banned_by_id?: string;
 
   channel_cid?: string;
+
+  delete_messages?: 'soft' | 'pruning' | 'hard';
 
   ip_ban?: boolean;
 
@@ -625,6 +677,7 @@ export interface BlockListResponse {
 export interface BlockListRule {
   action:
     | 'flag'
+    | 'mask_flag'
     | 'shadow'
     | 'remove'
     | 'bounce'
@@ -748,6 +801,80 @@ export interface BrowserDataResponse {
   version?: string;
 }
 
+export interface BulkImageModerationRequest {
+  csv_file: string;
+}
+
+export interface BulkImageModerationResponse {
+  duration: string;
+
+  task_id: string;
+}
+
+export interface Call {
+  app_pk: number;
+
+  backstage: boolean;
+
+  channel_cid: string;
+
+  cid: string;
+
+  created_at: Date;
+
+  created_by_user_id: string;
+
+  current_session_id: string;
+
+  id: string;
+
+  last_session_id: string;
+
+  team: string;
+
+  thumbnail_url: string;
+
+  type: string;
+
+  updated_at: Date;
+
+  blocked_user_i_ds: string[];
+
+  blocked_users: User[];
+
+  egresses: CallEgress[];
+
+  members: CallMember[];
+
+  custom: Record<string, any>;
+
+  deleted_at?: Date;
+
+  egress_updated_at?: Date;
+
+  ended_at?: Date;
+
+  join_ahead_time_seconds?: number;
+
+  last_heartbeat_at?: Date;
+
+  member_count?: number;
+
+  starts_at?: Date;
+
+  call_type?: CallType;
+
+  created_by?: User;
+
+  member_lookup?: MemberLookup;
+
+  session?: CallSession;
+
+  settings?: CallSettings;
+
+  settings_overrides?: CallSettings;
+}
+
 export interface CallAcceptedEvent {
   call_cid: string;
 
@@ -826,6 +953,30 @@ export interface CallDurationReportResponse {
   daily: DailyAggregateCallDurationReportResponse[];
 }
 
+export interface CallEgress {
+  app_pk: number;
+
+  call_id: string;
+
+  call_type: string;
+
+  egress_id: string;
+
+  egress_type: string;
+
+  instance_ip: string;
+
+  started_at: Date;
+
+  state: string;
+
+  updated_at: Date;
+
+  stopped_at?: Date;
+
+  config?: EgressTaskConfig;
+}
+
 export interface CallEndedEvent {
   call_cid: string;
 
@@ -834,6 +985,8 @@ export interface CallEndedEvent {
   call: CallResponse;
 
   type: string;
+
+  reason?: string;
 
   user?: UserResponse;
 }
@@ -936,6 +1089,22 @@ export interface CallLiveStartedEvent {
   type: string;
 }
 
+export interface CallMember {
+  created_at: Date;
+
+  role: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  deleted_at?: Date;
+
+  user?: User;
+}
+
 export interface CallMemberAddedEvent {
   call_cid: string;
 
@@ -1004,6 +1173,32 @@ export interface CallMissedEvent {
   type: string;
 }
 
+export interface CallModerationBlurEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+}
+
+export interface CallModerationWarningEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  message: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+}
+
 export interface CallNotificationEvent {
   call_cid: string;
 
@@ -1018,6 +1213,48 @@ export interface CallNotificationEvent {
   user: UserResponse;
 
   type: string;
+}
+
+export interface CallParticipant {
+  banned: boolean;
+
+  id: string;
+
+  joined_at: Date;
+
+  online: boolean;
+
+  role: string;
+
+  user_session_id: string;
+
+  custom: Record<string, any>;
+
+  teams_role: Record<string, string>;
+
+  ban_expires?: Date;
+
+  created_at?: Date;
+
+  deactivated_at?: Date;
+
+  deleted_at?: Date;
+
+  invisible?: boolean;
+
+  language?: string;
+
+  last_active?: Date;
+
+  last_engaged_at?: Date;
+
+  revoke_tokens_issued_before?: Date;
+
+  updated_at?: Date;
+
+  teams?: string[];
+
+  privacy_settings?: PrivacySettings;
 }
 
 export interface CallParticipantCountReport {
@@ -1240,6 +1477,50 @@ export interface CallRtmpBroadcastStoppedEvent {
   type: string;
 }
 
+export interface CallSession {
+  anonymous_participant_count: number;
+
+  app_pk: number;
+
+  call_id: string;
+
+  call_type: string;
+
+  created_at: Date;
+
+  session_id: string;
+
+  active_sf_us: SFUIDLastSeen[];
+
+  participants: CallParticipant[];
+
+  sfui_ds: string[];
+
+  accepted_by: Record<string, Date>;
+
+  missed_by: Record<string, Date>;
+
+  participants_count_by_role: Record<string, number>;
+
+  rejected_by: Record<string, Date>;
+
+  user_permission_overrides: Record<string, Record<string, boolean>>;
+
+  deleted_at?: Date;
+
+  ended_at?: Date;
+
+  live_ended_at?: Date;
+
+  live_started_at?: Date;
+
+  ring_at?: Date;
+
+  started_at?: Date;
+
+  timer_ends_at?: Date;
+}
+
 export interface CallSessionEndedEvent {
   call_cid: string;
 
@@ -1441,6 +1722,8 @@ export interface CallTranscription {
 
   filename: string;
 
+  session_id: string;
+
   start_time: Date;
 
   url: string;
@@ -1454,6 +1737,8 @@ export interface CallTranscriptionFailedEvent {
   egress_id: string;
 
   type: string;
+
+  error?: string;
 }
 
 export interface CallTranscriptionReadyEvent {
@@ -1492,8 +1777,6 @@ export interface CallType {
   app_pk: number;
 
   created_at: Date;
-
-  enable_live_insights: boolean;
 
   external_storage: string;
 
@@ -1785,6 +2068,8 @@ export interface ChannelConfig {
 
   url_enrichment: boolean;
 
+  user_message_reminders: boolean;
+
   commands: string[];
 
   blocklist?: string;
@@ -1793,7 +2078,7 @@ export interface ChannelConfig {
 
   partition_size?: number;
 
-  partition_ttl?: string;
+  partition_ttl?: number;
 
   allowed_flag_reasons?: string[];
 
@@ -1846,6 +2131,8 @@ export interface ChannelConfigWithInfo {
   uploads: boolean;
 
   url_enrichment: boolean;
+
+  user_message_reminders: boolean;
 
   commands: Command[];
 
@@ -2305,6 +2592,8 @@ export interface ChannelTypeConfig {
 
   url_enrichment: boolean;
 
+  user_message_reminders: boolean;
+
   commands: Command[];
 
   permissions: PolicyRequest[];
@@ -2393,6 +2682,13 @@ export interface CheckExternalStorageResponse {
 export interface CheckPushRequest {
   apn_template?: string;
 
+  event_type?:
+    | 'message.new'
+    | 'message.updated'
+    | 'reaction.new'
+    | 'reaction.updated'
+    | 'notification.reminder_due';
+
   firebase_data_template?: string;
 
   firebase_template?: string;
@@ -2412,6 +2708,8 @@ export interface CheckPushRequest {
 
 export interface CheckPushResponse {
   duration: string;
+
+  event_type?: string;
 
   rendered_apn_template?: string;
 
@@ -2548,6 +2846,12 @@ export interface Command {
 
 export interface CommitMessageRequest {}
 
+export interface CompositeAppSettings {
+  json_encoded_settings?: string;
+
+  url?: string;
+}
+
 export interface ConfigOverrides {
   commands: string[];
 
@@ -2570,6 +2874,8 @@ export interface ConfigOverrides {
   uploads?: boolean;
 
   url_enrichment?: boolean;
+
+  user_message_reminders?: boolean;
 }
 
 export interface ConfigResponse {
@@ -2598,6 +2904,8 @@ export interface ConfigResponse {
   block_list_config?: BlockListConfig;
 
   velocity_filter_config?: VelocityFilterConfig;
+
+  video_call_rule_config?: VideoCallRuleConfig;
 }
 
 export interface CountByMinuteResponse {
@@ -2699,6 +3007,8 @@ export interface CreateChannelTypeRequest {
 
   url_enrichment?: boolean;
 
+  user_message_reminders?: boolean;
+
   blocklists?: BlockListOptions[];
 
   commands?: string[];
@@ -2754,6 +3064,8 @@ export interface CreateChannelTypeResponse {
   uploads: boolean;
 
   url_enrichment: boolean;
+
+  user_message_reminders: boolean;
 
   commands: string[];
 
@@ -2898,6 +3210,14 @@ export interface CreatePollRequest {
   options?: PollOptionInput[];
 
   custom?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface CreateReminderRequest {
+  remind_at?: Date;
+
+  user_id?: string;
 
   user?: UserRequest;
 }
@@ -3128,6 +3448,10 @@ export interface DeleteRecordingResponse {
   duration: string;
 }
 
+export interface DeleteReminderResponse {
+  duration: string;
+}
+
 export interface DeleteSegmentTargetsRequest {
   target_ids: string[];
 }
@@ -3310,6 +3634,24 @@ export interface EgressResponse {
   hls?: EgressHLSResponse;
 }
 
+export interface EgressTaskConfig {
+  egress_user?: EgressUser;
+
+  frame_recording_egress_config?: FrameRecordingEgressConfig;
+
+  hls_egress_config?: HLSEgressConfig;
+
+  recording_egress_config?: RecordingEgressConfig;
+
+  rtmp_egress_config?: RTMPEgressConfig;
+
+  stt_egress_config?: STTEgressConfig;
+}
+
+export interface EgressUser {
+  token?: string;
+}
+
 export interface EndCallRequest {}
 
 export interface EndCallResponse {
@@ -3474,10 +3816,56 @@ export interface ErrorResult {
   version?: string;
 }
 
+export interface EventHook {
+  created_at?: Date;
+
+  enabled?: boolean;
+
+  hook_type?: string;
+
+  id?: string;
+
+  sns_auth_type?: string;
+
+  sns_key?: string;
+
+  sns_region?: string;
+
+  sns_role_arn?: string;
+
+  sns_secret?: string;
+
+  sns_topic_arn?: string;
+
+  sqs_auth_type?: string;
+
+  sqs_key?: string;
+
+  sqs_queue_url?: string;
+
+  sqs_region?: string;
+
+  sqs_role_arn?: string;
+
+  sqs_secret?: string;
+
+  timeout_ms?: number;
+
+  updated_at?: Date;
+
+  webhook_url?: string;
+
+  event_types?: string[];
+
+  callback?: AsyncModerationCallbackConfig;
+}
+
 export interface EventNotificationSettings {
   enabled: boolean;
 
   apns: APNS;
+
+  fcm: FCM;
 }
 
 export interface EventRequest {
@@ -3538,6 +3926,34 @@ export interface ExportUsersResponse {
   task_id: string;
 }
 
+export interface ExternalStorage {
+  abs_account_name?: string;
+
+  abs_client_id?: string;
+
+  abs_client_secret?: string;
+
+  abs_tenant_id?: string;
+
+  bucket?: string;
+
+  gcs_credentials?: string;
+
+  path?: string;
+
+  s3_api_key?: string;
+
+  s3_custom_endpoint?: string;
+
+  s3_region?: string;
+
+  s3_secret_key?: string;
+
+  storage_name?: string;
+
+  storage_type?: number;
+}
+
 export interface ExternalStorageResponse {
   bucket: string;
 
@@ -3546,6 +3962,10 @@ export interface ExternalStorageResponse {
   path: string;
 
   type: 's3' | 'gcs' | 'abs';
+}
+
+export interface FCM {
+  data?: Record<string, any>;
 }
 
 export interface FeedsModerationTemplateConfig {
@@ -3603,15 +4023,15 @@ export interface FirebaseConfig {
 }
 
 export interface FirebaseConfigFields {
-  apn_template: string;
-
-  data_template: string;
-
   enabled: boolean;
 
-  notification_template: string;
+  apn_template?: string;
 
   credentials_json?: string;
+
+  data_template?: string;
+
+  notification_template?: string;
 
   server_key?: string;
 }
@@ -3629,6 +4049,8 @@ export interface Flag {
 
   entity_creator_id?: string;
 
+  is_streamed_content?: boolean;
+
   moderation_payload_hash?: string;
 
   reason?: string;
@@ -3642,6 +4064,8 @@ export interface Flag {
   custom?: Record<string, any>;
 
   moderation_payload?: ModerationPayload;
+
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
 }
@@ -3718,6 +4142,16 @@ export interface FrameRecordSettings {
   mode: 'available' | 'disabled' | 'auto-on';
 
   quality?: string;
+}
+
+export interface FrameRecordingEgressConfig {
+  capture_interval_in_seconds?: number;
+
+  storage_name?: string;
+
+  external_storage?: ExternalStorage;
+
+  quality?: Quality;
 }
 
 export interface FrameRecordingResponse {
@@ -3847,6 +4281,8 @@ export interface GetCallReportResponse {
 
   report: ReportResponse;
 
+  video_reactions?: VideoReactionsResponse[];
+
   chat_activity?: ChatActivityStatsResponse;
 }
 
@@ -3932,6 +4368,8 @@ export interface GetChannelTypeResponse {
   uploads: boolean;
 
   url_enrichment: boolean;
+
+  user_message_reminders: boolean;
 
   commands: Command[];
 
@@ -4092,6 +4530,12 @@ export interface GetOrCreateCallResponse {
   call: CallResponse;
 }
 
+export interface GetPushTemplatesResponse {
+  duration: string;
+
+  templates: PushTemplate[];
+}
+
 export interface GetRateLimitsResponse {
   duration: string;
 
@@ -4180,6 +4624,16 @@ export interface GroupedStatsResponse {
   unique: number;
 }
 
+export interface HLSEgressConfig {
+  playlist_url?: string;
+
+  start_unix_nano?: number;
+
+  qualities?: Quality[];
+
+  composite_app_settings?: CompositeAppSettings;
+}
+
 export interface HLSSettings {
   auto_on: boolean;
 
@@ -4208,6 +4662,12 @@ export interface HLSSettingsResponse {
   quality_tracks: string[];
 
   layout: LayoutSettingsResponse;
+}
+
+export interface HarmConfig {
+  severity: number;
+
+  action_sequences: ActionSequence[];
 }
 
 export interface HideChannelRequest {
@@ -4526,6 +4986,10 @@ export interface MemberAddedEvent {
   user?: User;
 }
 
+export interface MemberLookup {
+  limit: number;
+}
+
 export interface MemberRemovedEvent {
   channel_id: string;
 
@@ -4668,6 +5132,8 @@ export interface Message {
   poll?: Poll;
 
   quoted_message?: Message;
+
+  reminder?: MessageReminder;
 
   user?: User;
 }
@@ -4858,6 +5324,28 @@ export interface MessageReadEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface MessageReminder {
+  channel_cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  task_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  remind_at?: Date;
+
+  channel?: Channel;
+
+  message?: Message;
+
+  user?: User;
+}
+
 export interface MessageRequest {
   html?: string;
 
@@ -4978,6 +5466,8 @@ export interface MessageResponse {
   quoted_message?: MessageResponse;
 
   reaction_groups?: Record<string, ReactionGroupResponse>;
+
+  reminder?: ReminderResponseData;
 }
 
 export interface MessageStatsResponse {
@@ -5126,6 +5616,8 @@ export interface MessageWithChannelResponse {
   quoted_message?: MessageResponse;
 
   reaction_groups?: Record<string, ReactionGroupResponse>;
+
+  reminder?: ReminderResponseData;
 }
 
 export interface ModerationActionConfig {
@@ -5170,6 +5662,42 @@ export interface ModerationCustomActionEvent {
   message?: Message;
 
   user?: User;
+}
+
+export interface ModerationDashboardPreferences {
+  media_queue_blur_enabled?: boolean;
+}
+
+export interface ModerationFlagResponse {
+  created_at: string;
+
+  entity_id: string;
+
+  entity_type: string;
+
+  id: string;
+
+  type: string;
+
+  updated_at: string;
+
+  entity_creator_id?: string;
+
+  reason?: string;
+
+  review_queue_item_id?: string;
+
+  labels?: string[];
+
+  result?: Array<Record<string, any>>;
+
+  custom?: Record<string, any>;
+
+  moderation_payload?: ModerationPayload;
+
+  review_queue_item?: ReviewQueueItem;
+
+  user?: UserResponse;
 }
 
 export interface ModerationFlaggedEvent {
@@ -5883,7 +6411,7 @@ export interface PublisherStatsResponse {
 }
 
 export interface PushConfig {
-  version: 'v1' | 'v2';
+  version: 'v1' | 'v2' | 'v3';
 
   offline_only?: boolean;
 }
@@ -5982,6 +6510,8 @@ export interface PushProvider {
   xiaomi_app_secret?: string;
 
   xiaomi_package_name?: string;
+
+  push_templates?: PushTemplate[];
 }
 
 export interface PushProviderResponse {
@@ -6040,6 +6570,36 @@ export interface PushProviderResponse {
   xiaomi_app_secret?: string;
 
   xiaomi_package_name?: string;
+}
+
+export interface PushTemplate {
+  created_at: Date;
+
+  enable_push: boolean;
+
+  event_type:
+    | 'message.new'
+    | 'message.updated'
+    | 'reaction.new'
+    | 'notification.reminder_due';
+
+  updated_at: Date;
+
+  template?: string;
+}
+
+export interface Quality {
+  bitdepth?: number;
+
+  framerate?: number;
+
+  height?: number;
+
+  name?: string;
+
+  video_bitrate?: number;
+
+  width?: number;
 }
 
 export interface QualityScoreReport {
@@ -6368,6 +6928,28 @@ export interface QueryModerationConfigsResponse {
   prev?: string;
 }
 
+export interface QueryModerationFlagsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParam[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryModerationFlagsResponse {
+  duration: string;
+
+  flags: ModerationFlagResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryModerationLogsRequest {
   limit?: number;
 
@@ -6448,6 +7030,32 @@ export interface QueryReactionsResponse {
   duration: string;
 
   reactions: ReactionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryRemindersRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface QueryRemindersResponse {
+  duration: string;
+
+  reminders: ReminderResponseData[];
 
   next?: string;
 
@@ -6634,6 +7242,14 @@ export interface RTMPBroadcastRequest {
   stream_key?: string;
 
   layout?: LayoutSettingsRequest;
+}
+
+export interface RTMPEgressConfig {
+  rtmp_location?: string;
+
+  composite_app_settings?: CompositeAppSettings;
+
+  quality?: Quality;
 }
 
 export interface RTMPIngress {
@@ -6898,6 +7514,40 @@ export interface RecordSettingsResponse {
   layout: LayoutSettingsResponse;
 }
 
+export interface RecordingEgressConfig {
+  audio_only?: boolean;
+
+  storage_name?: string;
+
+  composite_app_settings?: CompositeAppSettings;
+
+  external_storage?: ExternalStorage;
+
+  quality?: Quality;
+
+  video_orientation_hint?: VideoOrientation;
+}
+
+export interface ReminderResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  remind_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: Message;
+
+  user?: User;
+}
+
 export interface ReportByHistogramBucket {
   category: string;
 
@@ -6981,6 +7631,8 @@ export interface ReviewQueueItem {
 
   assigned_to?: User;
 
+  call?: Call;
+
   entity_creator?: EntityCreator;
 
   feeds_v2_activity?: EnrichedActivity;
@@ -7054,6 +7706,8 @@ export interface ReviewQueueItemResponse {
   activity?: EnrichedActivity;
 
   assigned_to?: UserResponse;
+
+  call?: CallResponse;
 
   entity_creator?: EntityCreatorResponse;
 
@@ -7178,6 +7832,32 @@ export interface SDKUsageReport {
 
 export interface SDKUsageReportResponse {
   daily: DailyAggregateSDKUsageReportResponse[];
+}
+
+export interface SFUIDLastSeen {
+  id: string;
+
+  last_seen: Date;
+
+  process_start_time: number;
+}
+
+export interface STTEgressConfig {
+  closed_captions_enabled?: boolean;
+
+  language?: string;
+
+  storage_name?: string;
+
+  translations_enabled?: boolean;
+
+  upload_transcriptions?: boolean;
+
+  whisper_server_base_url?: string;
+
+  translation_languages?: string[];
+
+  external_storage?: ExternalStorage;
 }
 
 export interface ScreensharingSettings {
@@ -7320,6 +8000,8 @@ export interface SearchResultMessage {
   quoted_message?: MessageResponse;
 
   reaction_groups?: Record<string, ReactionGroupResponse>;
+
+  reminder?: ReminderResponseData;
 }
 
 export interface SearchWarning {
@@ -7474,6 +8156,12 @@ export interface ShowChannelRequest {
 
 export interface ShowChannelResponse {
   duration: string;
+}
+
+export interface SortParam {
+  direction?: number;
+
+  field?: string;
 }
 
 export interface SortParamRequest {
@@ -7704,7 +8392,9 @@ export interface SubmitActionRequest {
     | 'restore'
     | 'delete_user'
     | 'unblock'
-    | 'shadow_block';
+    | 'shadow_block'
+    | 'kick_user'
+    | 'end_call';
 
   item_id: string;
 
@@ -8100,6 +8790,8 @@ export interface TruncateChannelRequest {
 
   user_id?: string;
 
+  member_ids?: string[];
+
   message?: MessageRequest;
 
   user?: UserRequest;
@@ -8306,6 +8998,8 @@ export interface UpdateAppRequest {
 
   allowed_flag_reasons?: string[];
 
+  event_hooks?: EventHook[];
+
   image_moderation_block_labels?: string[];
 
   image_moderation_labels?: string[];
@@ -8329,6 +9023,8 @@ export interface UpdateAppRequest {
   huawei_config?: HuaweiConfig;
 
   image_upload_config?: FileUploadConfig;
+
+  moderation_dashboard_preferences?: ModerationDashboardPreferences;
 
   push_config?: PushConfig;
 
@@ -8512,6 +9208,8 @@ export interface UpdateChannelTypeRequest {
 
   url_enrichment?: boolean;
 
+  user_message_reminders?: boolean;
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -8571,6 +9269,8 @@ export interface UpdateChannelTypeResponse {
   uploads: boolean;
 
   url_enrichment: boolean;
+
+  user_message_reminders: boolean;
 
   commands: string[];
 
@@ -8669,6 +9369,8 @@ export interface UpdateMessageRequest {
   message: MessageRequest;
 
   skip_enrich_url?: boolean;
+
+  skip_push?: boolean;
 }
 
 export interface UpdateMessageResponse {
@@ -8727,6 +9429,20 @@ export interface UpdatePollRequest {
   custom?: Record<string, any>;
 
   user?: UserRequest;
+}
+
+export interface UpdateReminderRequest {
+  remind_at?: Date;
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface UpdateReminderResponse {
+  duration: string;
+
+  reminder: ReminderResponseData;
 }
 
 export interface UpdateThreadPartialRequest {
@@ -8827,6 +9543,8 @@ export interface UpsertConfigRequest {
   user?: UserRequest;
 
   velocity_filter_config?: VelocityFilterConfig;
+
+  video_call_rule_config?: VideoCallRuleConfig;
 }
 
 export interface UpsertConfigResponse {
@@ -8876,6 +9594,28 @@ export interface UpsertPushProviderResponse {
   duration: string;
 
   push_provider: PushProviderResponse;
+}
+
+export interface UpsertPushTemplateRequest {
+  event_type:
+    | 'message.new'
+    | 'message.updated'
+    | 'reaction.new'
+    | 'notification.reminder_due';
+
+  push_provider_type: 'firebase' | 'apn';
+
+  enable_push?: boolean;
+
+  push_provider_name?: string;
+
+  template?: string;
+}
+
+export interface UpsertPushTemplateResponse {
+  duration: string;
+
+  template?: PushTemplate;
 }
 
 export interface User {
@@ -9304,6 +10044,28 @@ export interface VelocityFilterConfigRule {
   url_only: boolean;
 
   slow_spam_ban_duration?: number;
+}
+
+export interface VideoCallRuleConfig {
+  rules: Record<string, HarmConfig>;
+}
+
+export interface VideoEndCallRequest {}
+
+export interface VideoKickUserRequest {}
+
+export interface VideoOrientation {
+  orientation?: number;
+}
+
+export interface VideoReactionOverTimeResponse {
+  by_minute?: CountByMinuteResponse[];
+}
+
+export interface VideoReactionsResponse {
+  reaction: string;
+
+  count_over_time?: VideoReactionOverTimeResponse;
 }
 
 export interface VideoSettings {
