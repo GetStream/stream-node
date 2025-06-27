@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   BlockUserRequest,
   BlockUserResponse,
@@ -78,12 +77,14 @@ import {
   UpdateUserPermissionsRequest,
   UpdateUserPermissionsResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class VideoApi extends BaseApi {
-  queryUserFeedback = async (
+export class VideoApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
+  async queryUserFeedback(
     request?: QueryUserFeedbackRequest & { full?: boolean },
-  ): Promise<StreamResponse<QueryUserFeedbackResponse>> => {
+  ): Promise<StreamResponse<QueryUserFeedbackResponse>> {
     const queryParams = {
       full: request?.full,
     };
@@ -95,18 +96,18 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryUserFeedbackResponse>
     >('POST', '/api/v2/video/call/feedback', undefined, queryParams, body);
 
     decoders.QueryUserFeedbackResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryCallMembers = async (
+  async queryCallMembers(
     request: QueryCallMembersRequest,
-  ): Promise<StreamResponse<QueryCallMembersResponse>> => {
+  ): Promise<StreamResponse<QueryCallMembersResponse>> {
     const body = {
       id: request?.id,
       type: request?.type,
@@ -117,18 +118,18 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallMembersResponse>
     >('POST', '/api/v2/video/call/members', undefined, undefined, body);
 
     decoders.QueryCallMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryCallStats = async (
+  async queryCallStats(
     request?: QueryCallStatsRequest,
-  ): Promise<StreamResponse<QueryCallStatsResponse>> => {
+  ): Promise<StreamResponse<QueryCallStatsResponse>> {
     const body = {
       limit: request?.limit,
       next: request?.next,
@@ -137,23 +138,23 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallStatsResponse>
     >('POST', '/api/v2/video/call/stats', undefined, undefined, body);
 
     decoders.QueryCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getCall = async (request: {
+  async getCall(request: {
     type: string;
     id: string;
     members_limit?: number;
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
-  }): Promise<StreamResponse<GetCallResponse>> => {
+  }): Promise<StreamResponse<GetCallResponse>> {
     const queryParams = {
       members_limit: request?.members_limit,
       ring: request?.ring,
@@ -165,21 +166,18 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetCallResponse>>(
-      'GET',
-      '/api/v2/video/call/{type}/{id}',
-      pathParams,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCallResponse>
+    >('GET', '/api/v2/video/call/{type}/{id}', pathParams, queryParams);
 
     decoders.GetCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateCall = async (
+  async updateCall(
     request: UpdateCallRequest & { type: string; id: string },
-  ): Promise<StreamResponse<UpdateCallResponse>> => {
+  ): Promise<StreamResponse<UpdateCallResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -190,22 +188,18 @@ export class VideoApi extends BaseApi {
       settings_override: request?.settings_override,
     };
 
-    const response = await this.sendRequest<StreamResponse<UpdateCallResponse>>(
-      'PATCH',
-      '/api/v2/video/call/{type}/{id}',
-      pathParams,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateCallResponse>
+    >('PATCH', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
     decoders.UpdateCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getOrCreateCall = async (
+  async getOrCreateCall(
     request: GetOrCreateCallRequest & { type: string; id: string },
-  ): Promise<StreamResponse<GetOrCreateCallResponse>> => {
+  ): Promise<StreamResponse<GetOrCreateCallResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -218,18 +212,18 @@ export class VideoApi extends BaseApi {
       data: request?.data,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetOrCreateCallResponse>
     >('POST', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
 
     decoders.GetOrCreateCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  blockUser = async (
+  async blockUser(
     request: BlockUserRequest & { type: string; id: string },
-  ): Promise<StreamResponse<BlockUserResponse>> => {
+  ): Promise<StreamResponse<BlockUserResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -238,7 +232,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<BlockUserResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BlockUserResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/block',
       pathParams,
@@ -249,11 +245,11 @@ export class VideoApi extends BaseApi {
     decoders.BlockUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteCall = async (
+  async deleteCall(
     request: DeleteCallRequest & { type: string; id: string },
-  ): Promise<StreamResponse<DeleteCallResponse>> => {
+  ): Promise<StreamResponse<DeleteCallResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -262,7 +258,9 @@ export class VideoApi extends BaseApi {
       hard: request?.hard,
     };
 
-    const response = await this.sendRequest<StreamResponse<DeleteCallResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteCallResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/delete',
       pathParams,
@@ -273,11 +271,11 @@ export class VideoApi extends BaseApi {
     decoders.DeleteCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  sendCallEvent = async (
+  async sendCallEvent(
     request: SendCallEventRequest & { type: string; id: string },
-  ): Promise<StreamResponse<SendCallEventResponse>> => {
+  ): Promise<StreamResponse<SendCallEventResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -288,7 +286,7 @@ export class VideoApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<SendCallEventResponse>
     >(
       'POST',
@@ -301,11 +299,11 @@ export class VideoApi extends BaseApi {
     decoders.SendCallEventResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  collectUserFeedback = async (
+  async collectUserFeedback(
     request: CollectUserFeedbackRequest & { type: string; id: string },
-  ): Promise<StreamResponse<CollectUserFeedbackResponse>> => {
+  ): Promise<StreamResponse<CollectUserFeedbackResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -319,7 +317,7 @@ export class VideoApi extends BaseApi {
       custom: request?.custom,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CollectUserFeedbackResponse>
     >(
       'POST',
@@ -332,11 +330,11 @@ export class VideoApi extends BaseApi {
     decoders.CollectUserFeedbackResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  goLive = async (
+  async goLive(
     request: GoLiveRequest & { type: string; id: string },
-  ): Promise<StreamResponse<GoLiveResponse>> => {
+  ): Promise<StreamResponse<GoLiveResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -350,7 +348,9 @@ export class VideoApi extends BaseApi {
       transcription_storage_name: request?.transcription_storage_name,
     };
 
-    const response = await this.sendRequest<StreamResponse<GoLiveResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GoLiveResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/go_live',
       pathParams,
@@ -361,18 +361,20 @@ export class VideoApi extends BaseApi {
     decoders.GoLiveResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  endCall = async (request: {
+  async endCall(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<EndCallResponse>> => {
+  }): Promise<StreamResponse<EndCallResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<EndCallResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<EndCallResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/mark_ended',
       pathParams,
@@ -382,11 +384,11 @@ export class VideoApi extends BaseApi {
     decoders.EndCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateCallMembers = async (
+  async updateCallMembers(
     request: UpdateCallMembersRequest & { type: string; id: string },
-  ): Promise<StreamResponse<UpdateCallMembersResponse>> => {
+  ): Promise<StreamResponse<UpdateCallMembersResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -396,7 +398,7 @@ export class VideoApi extends BaseApi {
       update_members: request?.update_members,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallMembersResponse>
     >(
       'POST',
@@ -409,11 +411,11 @@ export class VideoApi extends BaseApi {
     decoders.UpdateCallMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  muteUsers = async (
+  async muteUsers(
     request: MuteUsersRequest & { type: string; id: string },
-  ): Promise<StreamResponse<MuteUsersResponse>> => {
+  ): Promise<StreamResponse<MuteUsersResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -429,7 +431,9 @@ export class VideoApi extends BaseApi {
       muted_by: request?.muted_by,
     };
 
-    const response = await this.sendRequest<StreamResponse<MuteUsersResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MuteUsersResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/mute_users',
       pathParams,
@@ -440,15 +444,15 @@ export class VideoApi extends BaseApi {
     decoders.MuteUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryCallParticipants = async (
+  async queryCallParticipants(
     request: QueryCallParticipantsRequest & {
       id: string;
       type: string;
       limit?: number;
     },
-  ): Promise<StreamResponse<QueryCallParticipantsResponse>> => {
+  ): Promise<StreamResponse<QueryCallParticipantsResponse>> {
     const queryParams = {
       limit: request?.limit,
     };
@@ -460,7 +464,7 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallParticipantsResponse>
     >(
       'POST',
@@ -473,11 +477,11 @@ export class VideoApi extends BaseApi {
     decoders.QueryCallParticipantsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  videoPin = async (
+  async videoPin(
     request: PinRequest & { type: string; id: string },
-  ): Promise<StreamResponse<PinResponse>> => {
+  ): Promise<StreamResponse<PinResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -487,7 +491,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<PinResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PinResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/pin',
       pathParams,
@@ -498,18 +504,18 @@ export class VideoApi extends BaseApi {
     decoders.PinResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listRecordings = async (request: {
+  async listRecordings(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<ListRecordingsResponse>> => {
+  }): Promise<StreamResponse<ListRecordingsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListRecordingsResponse>
     >(
       'GET',
@@ -521,13 +527,13 @@ export class VideoApi extends BaseApi {
     decoders.ListRecordingsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getCallReport = async (request: {
+  async getCallReport(request: {
     type: string;
     id: string;
     session_id?: string;
-  }): Promise<StreamResponse<GetCallReportResponse>> => {
+  }): Promise<StreamResponse<GetCallReportResponse>> {
     const queryParams = {
       session_id: request?.session_id,
     };
@@ -536,18 +542,18 @@ export class VideoApi extends BaseApi {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCallReportResponse>
     >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
 
     decoders.GetCallReportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startRTMPBroadcasts = async (
+  async startRTMPBroadcasts(
     request: StartRTMPBroadcastsRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
+  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -556,7 +562,7 @@ export class VideoApi extends BaseApi {
       broadcasts: request?.broadcasts,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartRTMPBroadcastsResponse>
     >(
       'POST',
@@ -569,18 +575,18 @@ export class VideoApi extends BaseApi {
     decoders.StartRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopAllRTMPBroadcasts = async (request: {
+  async stopAllRTMPBroadcasts(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<StopAllRTMPBroadcastsResponse>> => {
+  }): Promise<StreamResponse<StopAllRTMPBroadcastsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopAllRTMPBroadcastsResponse>
     >(
       'POST',
@@ -592,15 +598,15 @@ export class VideoApi extends BaseApi {
     decoders.StopAllRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopRTMPBroadcast = async (
+  async stopRTMPBroadcast(
     request: StopRTMPBroadcastsRequest & {
       type: string;
       id: string;
       name: string;
     },
-  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> => {
+  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -608,7 +614,7 @@ export class VideoApi extends BaseApi {
     };
     const body = {};
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopRTMPBroadcastsResponse>
     >(
       'POST',
@@ -621,18 +627,18 @@ export class VideoApi extends BaseApi {
     decoders.StopRTMPBroadcastsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startHLSBroadcasting = async (request: {
+  async startHLSBroadcasting(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<StartHLSBroadcastingResponse>> => {
+  }): Promise<StreamResponse<StartHLSBroadcastingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartHLSBroadcastingResponse>
     >(
       'POST',
@@ -644,11 +650,11 @@ export class VideoApi extends BaseApi {
     decoders.StartHLSBroadcastingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startClosedCaptions = async (
+  async startClosedCaptions(
     request: StartClosedCaptionsRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
+  ): Promise<StreamResponse<StartClosedCaptionsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -659,7 +665,7 @@ export class VideoApi extends BaseApi {
       language: request?.language,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartClosedCaptionsResponse>
     >(
       'POST',
@@ -672,11 +678,11 @@ export class VideoApi extends BaseApi {
     decoders.StartClosedCaptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startFrameRecording = async (
+  async startFrameRecording(
     request: StartFrameRecordingRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartFrameRecordingResponse>> => {
+  ): Promise<StreamResponse<StartFrameRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -685,7 +691,7 @@ export class VideoApi extends BaseApi {
       recording_external_storage: request?.recording_external_storage,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartFrameRecordingResponse>
     >(
       'POST',
@@ -698,11 +704,11 @@ export class VideoApi extends BaseApi {
     decoders.StartFrameRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startRecording = async (
+  async startRecording(
     request: StartRecordingRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartRecordingResponse>> => {
+  ): Promise<StreamResponse<StartRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -711,7 +717,7 @@ export class VideoApi extends BaseApi {
       recording_external_storage: request?.recording_external_storage,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartRecordingResponse>
     >(
       'POST',
@@ -724,11 +730,11 @@ export class VideoApi extends BaseApi {
     decoders.StartRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  startTranscription = async (
+  async startTranscription(
     request: StartTranscriptionRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartTranscriptionResponse>> => {
+  ): Promise<StreamResponse<StartTranscriptionResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -739,7 +745,7 @@ export class VideoApi extends BaseApi {
       transcription_external_storage: request?.transcription_external_storage,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StartTranscriptionResponse>
     >(
       'POST',
@@ -752,18 +758,18 @@ export class VideoApi extends BaseApi {
     decoders.StartTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopHLSBroadcasting = async (request: {
+  async stopHLSBroadcasting(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<StopHLSBroadcastingResponse>> => {
+  }): Promise<StreamResponse<StopHLSBroadcastingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopHLSBroadcastingResponse>
     >(
       'POST',
@@ -775,11 +781,11 @@ export class VideoApi extends BaseApi {
     decoders.StopHLSBroadcastingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopClosedCaptions = async (
+  async stopClosedCaptions(
     request: StopClosedCaptionsRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
+  ): Promise<StreamResponse<StopClosedCaptionsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -788,7 +794,7 @@ export class VideoApi extends BaseApi {
       stop_transcription: request?.stop_transcription,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopClosedCaptionsResponse>
     >(
       'POST',
@@ -801,18 +807,18 @@ export class VideoApi extends BaseApi {
     decoders.StopClosedCaptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopFrameRecording = async (request: {
+  async stopFrameRecording(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<StopFrameRecordingResponse>> => {
+  }): Promise<StreamResponse<StopFrameRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopFrameRecordingResponse>
     >(
       'POST',
@@ -824,11 +830,11 @@ export class VideoApi extends BaseApi {
     decoders.StopFrameRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopLive = async (
+  async stopLive(
     request: StopLiveRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StopLiveResponse>> => {
+  ): Promise<StreamResponse<StopLiveResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -841,7 +847,9 @@ export class VideoApi extends BaseApi {
       continue_transcription: request?.continue_transcription,
     };
 
-    const response = await this.sendRequest<StreamResponse<StopLiveResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<StopLiveResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/stop_live',
       pathParams,
@@ -852,18 +860,18 @@ export class VideoApi extends BaseApi {
     decoders.StopLiveResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopRecording = async (request: {
+  async stopRecording(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<StopRecordingResponse>> => {
+  }): Promise<StreamResponse<StopRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopRecordingResponse>
     >(
       'POST',
@@ -875,11 +883,11 @@ export class VideoApi extends BaseApi {
     decoders.StopRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  stopTranscription = async (
+  async stopTranscription(
     request: StopTranscriptionRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StopTranscriptionResponse>> => {
+  ): Promise<StreamResponse<StopTranscriptionResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -888,7 +896,7 @@ export class VideoApi extends BaseApi {
       stop_closed_captions: request?.stop_closed_captions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<StopTranscriptionResponse>
     >(
       'POST',
@@ -901,18 +909,18 @@ export class VideoApi extends BaseApi {
     decoders.StopTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listTranscriptions = async (request: {
+  async listTranscriptions(request: {
     type: string;
     id: string;
-  }): Promise<StreamResponse<ListTranscriptionsResponse>> => {
+  }): Promise<StreamResponse<ListTranscriptionsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListTranscriptionsResponse>
     >(
       'GET',
@@ -924,11 +932,11 @@ export class VideoApi extends BaseApi {
     decoders.ListTranscriptionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  unblockUser = async (
+  async unblockUser(
     request: UnblockUserRequest & { type: string; id: string },
-  ): Promise<StreamResponse<UnblockUserResponse>> => {
+  ): Promise<StreamResponse<UnblockUserResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -937,7 +945,7 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UnblockUserResponse>
     >(
       'POST',
@@ -950,11 +958,11 @@ export class VideoApi extends BaseApi {
     decoders.UnblockUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  videoUnpin = async (
+  async videoUnpin(
     request: UnpinRequest & { type: string; id: string },
-  ): Promise<StreamResponse<UnpinResponse>> => {
+  ): Promise<StreamResponse<UnpinResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -964,7 +972,9 @@ export class VideoApi extends BaseApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<UnpinResponse>>(
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnpinResponse>
+    >(
       'POST',
       '/api/v2/video/call/{type}/{id}/unpin',
       pathParams,
@@ -975,11 +985,11 @@ export class VideoApi extends BaseApi {
     decoders.UnpinResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateUserPermissions = async (
+  async updateUserPermissions(
     request: UpdateUserPermissionsRequest & { type: string; id: string },
-  ): Promise<StreamResponse<UpdateUserPermissionsResponse>> => {
+  ): Promise<StreamResponse<UpdateUserPermissionsResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -990,7 +1000,7 @@ export class VideoApi extends BaseApi {
       revoke_permissions: request?.revoke_permissions,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUserPermissionsResponse>
     >(
       'POST',
@@ -1003,14 +1013,14 @@ export class VideoApi extends BaseApi {
     decoders.UpdateUserPermissionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteRecording = async (request: {
+  async deleteRecording(request: {
     type: string;
     id: string;
     session: string;
     filename: string;
-  }): Promise<StreamResponse<DeleteRecordingResponse>> => {
+  }): Promise<StreamResponse<DeleteRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -1018,7 +1028,7 @@ export class VideoApi extends BaseApi {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteRecordingResponse>
     >(
       'DELETE',
@@ -1030,14 +1040,14 @@ export class VideoApi extends BaseApi {
     decoders.DeleteRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteTranscription = async (request: {
+  async deleteTranscription(request: {
     type: string;
     id: string;
     session: string;
     filename: string;
-  }): Promise<StreamResponse<DeleteTranscriptionResponse>> => {
+  }): Promise<StreamResponse<DeleteTranscriptionResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -1045,7 +1055,7 @@ export class VideoApi extends BaseApi {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteTranscriptionResponse>
     >(
       'DELETE',
@@ -1057,11 +1067,11 @@ export class VideoApi extends BaseApi {
     decoders.DeleteTranscriptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryCalls = async (
+  async queryCalls(
     request?: QueryCallsRequest,
-  ): Promise<StreamResponse<QueryCallsResponse>> => {
+  ): Promise<StreamResponse<QueryCallsResponse>> {
     const body = {
       limit: request?.limit,
       next: request?.next,
@@ -1070,32 +1080,28 @@ export class VideoApi extends BaseApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.sendRequest<StreamResponse<QueryCallsResponse>>(
-      'POST',
-      '/api/v2/video/calls',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallsResponse>
+    >('POST', '/api/v2/video/calls', undefined, undefined, body);
 
     decoders.QueryCallsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listCallTypes = async (): Promise<StreamResponse<ListCallTypeResponse>> => {
-    const response = await this.sendRequest<
+  async listCallTypes(): Promise<StreamResponse<ListCallTypeResponse>> {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListCallTypeResponse>
     >('GET', '/api/v2/video/calltypes', undefined, undefined);
 
     decoders.ListCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createCallType = async (
+  async createCallType(
     request: CreateCallTypeRequest,
-  ): Promise<StreamResponse<CreateCallTypeResponse>> => {
+  ): Promise<StreamResponse<CreateCallTypeResponse>> {
     const body = {
       name: request?.name,
       external_storage: request?.external_storage,
@@ -1104,23 +1110,23 @@ export class VideoApi extends BaseApi {
       settings: request?.settings,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateCallTypeResponse>
     >('POST', '/api/v2/video/calltypes', undefined, undefined, body);
 
     decoders.CreateCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteCallType = async (request: {
+  async deleteCallType(request: {
     name: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const pathParams = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/video/calltypes/{name}',
       pathParams,
@@ -1130,27 +1136,27 @@ export class VideoApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getCallType = async (request: {
+  async getCallType(request: {
     name: string;
-  }): Promise<StreamResponse<GetCallTypeResponse>> => {
+  }): Promise<StreamResponse<GetCallTypeResponse>> {
     const pathParams = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCallTypeResponse>
     >('GET', '/api/v2/video/calltypes/{name}', pathParams, undefined);
 
     decoders.GetCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateCallType = async (
+  async updateCallType(
     request: UpdateCallTypeRequest & { name: string },
-  ): Promise<StreamResponse<UpdateCallTypeResponse>> => {
+  ): Promise<StreamResponse<UpdateCallTypeResponse>> {
     const pathParams = {
       name: request?.name,
     };
@@ -1161,43 +1167,40 @@ export class VideoApi extends BaseApi {
       settings: request?.settings,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallTypeResponse>
     >('PUT', '/api/v2/video/calltypes/{name}', pathParams, undefined, body);
 
     decoders.UpdateCallTypeResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getEdges = async (): Promise<StreamResponse<GetEdgesResponse>> => {
-    const response = await this.sendRequest<StreamResponse<GetEdgesResponse>>(
-      'GET',
-      '/api/v2/video/edges',
-      undefined,
-      undefined,
-    );
+  async getEdges(): Promise<StreamResponse<GetEdgesResponse>> {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetEdgesResponse>
+    >('GET', '/api/v2/video/edges', undefined, undefined);
 
     decoders.GetEdgesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryAggregateCallStats = async (
+  async queryAggregateCallStats(
     request?: QueryAggregateCallStatsRequest,
-  ): Promise<StreamResponse<QueryAggregateCallStatsResponse>> => {
+  ): Promise<StreamResponse<QueryAggregateCallStatsResponse>> {
     const body = {
       from: request?.from,
       to: request?.to,
       report_types: request?.report_types,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<QueryAggregateCallStatsResponse>
     >('POST', '/api/v2/video/stats', undefined, undefined, body);
 
     decoders.QueryAggregateCallStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 }

@@ -1,5 +1,4 @@
-import { BaseApi } from '../../BaseApi';
-import { StreamResponse } from '../../types';
+import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   BlockUsersRequest,
   BlockUsersResponse,
@@ -21,6 +20,8 @@ import {
   CreateImportResponse,
   CreateImportURLRequest,
   CreateImportURLResponse,
+  CreatePollOptionRequest,
+  CreatePollRequest,
   CreateRoleRequest,
   CreateRoleResponse,
   DeactivateUserRequest,
@@ -52,6 +53,12 @@ import {
   ListPermissionsResponse,
   ListPushProvidersResponse,
   ListRolesResponse,
+  PollOptionResponse,
+  PollResponse,
+  PollVotesResponse,
+  QueryPollVotesRequest,
+  QueryPollsRequest,
+  QueryPollsResponse,
   QueryUsersPayload,
   QueryUsersResponse,
   ReactivateUserRequest,
@@ -67,28 +74,33 @@ import {
   UpdateBlockListResponse,
   UpdateExternalStorageRequest,
   UpdateExternalStorageResponse,
+  UpdatePollOptionRequest,
+  UpdatePollPartialRequest,
+  UpdatePollRequest,
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
 } from '../models';
-import { decoders } from '../model-decoders';
+import { decoders } from '../model-decoders/decoders';
 
-export class CommonApi extends BaseApi {
-  getApp = async (): Promise<StreamResponse<GetApplicationResponse>> => {
-    const response = await this.sendRequest<
+export class CommonApi {
+  constructor(public readonly apiClient: ApiClient) {}
+
+  async getApp(): Promise<StreamResponse<GetApplicationResponse>> {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetApplicationResponse>
     >('GET', '/api/v2/app', undefined, undefined);
 
     decoders.GetApplicationResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateApp = async (
+  async updateApp(
     request?: UpdateAppRequest,
-  ): Promise<StreamResponse<Response>> => {
+  ): Promise<StreamResponse<Response>> {
     const body = {
       async_url_enrich_enabled: request?.async_url_enrich_enabled,
       auto_translation_enabled: request?.auto_translation_enabled,
@@ -138,7 +150,7 @@ export class CommonApi extends BaseApi {
       xiaomi_config: request?.xiaomi_config,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'PATCH',
       '/api/v2/app',
       undefined,
@@ -149,27 +161,27 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listBlockLists = async (request?: {
+  async listBlockLists(request?: {
     team?: string;
-  }): Promise<StreamResponse<ListBlockListResponse>> => {
+  }): Promise<StreamResponse<ListBlockListResponse>> {
     const queryParams = {
       team: request?.team,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListBlockListResponse>
     >('GET', '/api/v2/blocklists', undefined, queryParams);
 
     decoders.ListBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createBlockList = async (
+  async createBlockList(
     request: CreateBlockListRequest,
-  ): Promise<StreamResponse<CreateBlockListResponse>> => {
+  ): Promise<StreamResponse<CreateBlockListResponse>> {
     const body = {
       name: request?.name,
       words: request?.words,
@@ -177,19 +189,19 @@ export class CommonApi extends BaseApi {
       type: request?.type,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateBlockListResponse>
     >('POST', '/api/v2/blocklists', undefined, undefined, body);
 
     decoders.CreateBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteBlockList = async (request: {
+  async deleteBlockList(request: {
     name: string;
     team?: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const queryParams = {
       team: request?.team,
     };
@@ -197,7 +209,7 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/blocklists/{name}',
       pathParams,
@@ -207,12 +219,12 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getBlockList = async (request: {
+  async getBlockList(request: {
     name: string;
     team?: string;
-  }): Promise<StreamResponse<GetBlockListResponse>> => {
+  }): Promise<StreamResponse<GetBlockListResponse>> {
     const queryParams = {
       team: request?.team,
     };
@@ -220,18 +232,18 @@ export class CommonApi extends BaseApi {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetBlockListResponse>
     >('GET', '/api/v2/blocklists/{name}', pathParams, queryParams);
 
     decoders.GetBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateBlockList = async (
+  async updateBlockList(
     request: UpdateBlockListRequest & { name: string },
-  ): Promise<StreamResponse<UpdateBlockListResponse>> => {
+  ): Promise<StreamResponse<UpdateBlockListResponse>> {
     const pathParams = {
       name: request?.name,
     };
@@ -240,18 +252,18 @@ export class CommonApi extends BaseApi {
       words: request?.words,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateBlockListResponse>
     >('PUT', '/api/v2/blocklists/{name}', pathParams, undefined, body);
 
     decoders.UpdateBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  checkPush = async (
+  async checkPush(
     request?: CheckPushRequest,
-  ): Promise<StreamResponse<CheckPushResponse>> => {
+  ): Promise<StreamResponse<CheckPushResponse>> {
     const body = {
       apn_template: request?.apn_template,
       event_type: request?.event_type,
@@ -265,73 +277,61 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckPushResponse>>(
-      'POST',
-      '/api/v2/check_push',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckPushResponse>
+    >('POST', '/api/v2/check_push', undefined, undefined, body);
 
     decoders.CheckPushResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  checkSNS = async (
+  async checkSNS(
     request?: CheckSNSRequest,
-  ): Promise<StreamResponse<CheckSNSResponse>> => {
+  ): Promise<StreamResponse<CheckSNSResponse>> {
     const body = {
       sns_key: request?.sns_key,
       sns_secret: request?.sns_secret,
       sns_topic_arn: request?.sns_topic_arn,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckSNSResponse>>(
-      'POST',
-      '/api/v2/check_sns',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckSNSResponse>
+    >('POST', '/api/v2/check_sns', undefined, undefined, body);
 
     decoders.CheckSNSResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  checkSQS = async (
+  async checkSQS(
     request?: CheckSQSRequest,
-  ): Promise<StreamResponse<CheckSQSResponse>> => {
+  ): Promise<StreamResponse<CheckSQSResponse>> {
     const body = {
       sqs_key: request?.sqs_key,
       sqs_secret: request?.sqs_secret,
       sqs_url: request?.sqs_url,
     };
 
-    const response = await this.sendRequest<StreamResponse<CheckSQSResponse>>(
-      'POST',
-      '/api/v2/check_sqs',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckSQSResponse>
+    >('POST', '/api/v2/check_sqs', undefined, undefined, body);
 
     decoders.CheckSQSResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteDevice = async (request: {
+  async deleteDevice(request: {
     id: string;
     user_id?: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const queryParams = {
       id: request?.id,
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/devices',
       undefined,
@@ -341,27 +341,27 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listDevices = async (request?: {
+  async listDevices(request?: {
     user_id?: string;
-  }): Promise<StreamResponse<ListDevicesResponse>> => {
+  }): Promise<StreamResponse<ListDevicesResponse>> {
     const queryParams = {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListDevicesResponse>
     >('GET', '/api/v2/devices', undefined, queryParams);
 
     decoders.ListDevicesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createDevice = async (
+  async createDevice(
     request: CreateDeviceRequest,
-  ): Promise<StreamResponse<Response>> => {
+  ): Promise<StreamResponse<Response>> {
     const body = {
       id: request?.id,
       push_provider: request?.push_provider,
@@ -371,7 +371,7 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/devices',
       undefined,
@@ -382,39 +382,39 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  exportUsers = async (
+  async exportUsers(
     request: ExportUsersRequest,
-  ): Promise<StreamResponse<ExportUsersResponse>> => {
+  ): Promise<StreamResponse<ExportUsersResponse>> {
     const body = {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ExportUsersResponse>
     >('POST', '/api/v2/export/users', undefined, undefined, body);
 
     decoders.ExportUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listExternalStorage = async (): Promise<
+  async listExternalStorage(): Promise<
     StreamResponse<ListExternalStorageResponse>
-  > => {
-    const response = await this.sendRequest<
+  > {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListExternalStorageResponse>
     >('GET', '/api/v2/external_storage', undefined, undefined);
 
     decoders.ListExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createExternalStorage = async (
+  async createExternalStorage(
     request: CreateExternalStorageRequest,
-  ): Promise<StreamResponse<CreateExternalStorageResponse>> => {
+  ): Promise<StreamResponse<CreateExternalStorageResponse>> {
     const body = {
       bucket: request?.bucket,
       name: request?.name,
@@ -425,34 +425,34 @@ export class CommonApi extends BaseApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateExternalStorageResponse>
     >('POST', '/api/v2/external_storage', undefined, undefined, body);
 
     decoders.CreateExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteExternalStorage = async (request: {
+  async deleteExternalStorage(request: {
     name: string;
-  }): Promise<StreamResponse<DeleteExternalStorageResponse>> => {
+  }): Promise<StreamResponse<DeleteExternalStorageResponse>> {
     const pathParams = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteExternalStorageResponse>
     >('DELETE', '/api/v2/external_storage/{name}', pathParams, undefined);
 
     decoders.DeleteExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateExternalStorage = async (
+  async updateExternalStorage(
     request: UpdateExternalStorageRequest & { name: string },
-  ): Promise<StreamResponse<UpdateExternalStorageResponse>> => {
+  ): Promise<StreamResponse<UpdateExternalStorageResponse>> {
     const pathParams = {
       name: request?.name,
     };
@@ -465,194 +465,453 @@ export class CommonApi extends BaseApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateExternalStorageResponse>
     >('PUT', '/api/v2/external_storage/{name}', pathParams, undefined, body);
 
     decoders.UpdateExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  checkExternalStorage = async (request: {
+  async checkExternalStorage(request: {
     name: string;
-  }): Promise<StreamResponse<CheckExternalStorageResponse>> => {
+  }): Promise<StreamResponse<CheckExternalStorageResponse>> {
     const pathParams = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CheckExternalStorageResponse>
     >('GET', '/api/v2/external_storage/{name}/check', pathParams, undefined);
 
     decoders.CheckExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createGuest = async (
+  async createGuest(
     request: CreateGuestRequest,
-  ): Promise<StreamResponse<CreateGuestResponse>> => {
+  ): Promise<StreamResponse<CreateGuestResponse>> {
     const body = {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateGuestResponse>
     >('POST', '/api/v2/guest', undefined, undefined, body);
 
     decoders.CreateGuestResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createImportURL = async (
+  async createImportURL(
     request?: CreateImportURLRequest,
-  ): Promise<StreamResponse<CreateImportURLResponse>> => {
+  ): Promise<StreamResponse<CreateImportURLResponse>> {
     const body = {
       filename: request?.filename,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportURLResponse>
     >('POST', '/api/v2/import_urls', undefined, undefined, body);
 
     decoders.CreateImportURLResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listImports = async (): Promise<StreamResponse<ListImportsResponse>> => {
-    const response = await this.sendRequest<
+  async listImports(): Promise<StreamResponse<ListImportsResponse>> {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListImportsResponse>
     >('GET', '/api/v2/imports', undefined, undefined);
 
     decoders.ListImportsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createImport = async (
+  async createImport(
     request: CreateImportRequest,
-  ): Promise<StreamResponse<CreateImportResponse>> => {
+  ): Promise<StreamResponse<CreateImportResponse>> {
     const body = {
       mode: request?.mode,
       path: request?.path,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportResponse>
     >('POST', '/api/v2/imports', undefined, undefined, body);
 
     decoders.CreateImportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getImport = async (request: {
+  async getImport(request: {
     id: string;
-  }): Promise<StreamResponse<GetImportResponse>> => {
+  }): Promise<StreamResponse<GetImportResponse>> {
     const pathParams = {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetImportResponse>>(
-      'GET',
-      '/api/v2/imports/{id}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetImportResponse>
+    >('GET', '/api/v2/imports/{id}', pathParams, undefined);
 
     decoders.GetImportResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getOG = async (request: {
+  async getOG(request: {
     url: string;
-  }): Promise<StreamResponse<GetOGResponse>> => {
+  }): Promise<StreamResponse<GetOGResponse>> {
     const queryParams = {
       url: request?.url,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetOGResponse>>(
-      'GET',
-      '/api/v2/og',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOGResponse>
+    >('GET', '/api/v2/og', undefined, queryParams);
 
     decoders.GetOGResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listPermissions = async (): Promise<
-    StreamResponse<ListPermissionsResponse>
-  > => {
-    const response = await this.sendRequest<
+  async listPermissions(): Promise<StreamResponse<ListPermissionsResponse>> {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListPermissionsResponse>
     >('GET', '/api/v2/permissions', undefined, undefined);
 
     decoders.ListPermissionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getPermission = async (request: {
+  async getPermission(request: {
     id: string;
-  }): Promise<StreamResponse<GetCustomPermissionResponse>> => {
+  }): Promise<StreamResponse<GetCustomPermissionResponse>> {
     const pathParams = {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetCustomPermissionResponse>
     >('GET', '/api/v2/permissions/{id}', pathParams, undefined);
 
     decoders.GetCustomPermissionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listPushProviders = async (): Promise<
+  async createPoll(
+    request: CreatePollRequest,
+  ): Promise<StreamResponse<PollResponse>> {
+    const body = {
+      name: request?.name,
+      allow_answers: request?.allow_answers,
+      allow_user_suggested_options: request?.allow_user_suggested_options,
+      description: request?.description,
+      enforce_unique_vote: request?.enforce_unique_vote,
+      id: request?.id,
+      is_closed: request?.is_closed,
+      max_votes_allowed: request?.max_votes_allowed,
+      user_id: request?.user_id,
+      voting_visibility: request?.voting_visibility,
+      options: request?.options,
+      custom: request?.custom,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('POST', '/api/v2/polls', undefined, undefined, body);
+
+    decoders.PollResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updatePoll(
+    request: UpdatePollRequest,
+  ): Promise<StreamResponse<PollResponse>> {
+    const body = {
+      id: request?.id,
+      name: request?.name,
+      allow_answers: request?.allow_answers,
+      allow_user_suggested_options: request?.allow_user_suggested_options,
+      description: request?.description,
+      enforce_unique_vote: request?.enforce_unique_vote,
+      is_closed: request?.is_closed,
+      max_votes_allowed: request?.max_votes_allowed,
+      user_id: request?.user_id,
+      voting_visibility: request?.voting_visibility,
+      options: request?.options,
+      custom: request?.custom,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('PUT', '/api/v2/polls', undefined, undefined, body);
+
+    decoders.PollResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryPolls(
+    request?: QueryPollsRequest & { user_id?: string },
+  ): Promise<StreamResponse<QueryPollsResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryPollsResponse>
+    >('POST', '/api/v2/polls/query', undefined, queryParams, body);
+
+    decoders.QueryPollsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deletePoll(request: {
+    poll_id: string;
+    user_id?: string;
+  }): Promise<StreamResponse<Response>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/polls/{poll_id}',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPoll(request: {
+    poll_id: string;
+    user_id?: string;
+  }): Promise<StreamResponse<PollResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('GET', '/api/v2/polls/{poll_id}', pathParams, queryParams);
+
+    decoders.PollResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updatePollPartial(
+    request: UpdatePollPartialRequest & { poll_id: string },
+  ): Promise<StreamResponse<PollResponse>> {
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      unset: request?.unset,
+      set: request?.set,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollResponse>
+    >('PATCH', '/api/v2/polls/{poll_id}', pathParams, undefined, body);
+
+    decoders.PollResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createPollOption(
+    request: CreatePollOptionRequest & { poll_id: string },
+  ): Promise<StreamResponse<PollOptionResponse>> {
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+    const body = {
+      text: request?.text,
+      user_id: request?.user_id,
+      custom: request?.custom,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >('POST', '/api/v2/polls/{poll_id}/options', pathParams, undefined, body);
+
+    decoders.PollOptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updatePollOption(
+    request: UpdatePollOptionRequest & { poll_id: string },
+  ): Promise<StreamResponse<PollOptionResponse>> {
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+    const body = {
+      id: request?.id,
+      text: request?.text,
+      user_id: request?.user_id,
+      custom: request?.custom,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >('PUT', '/api/v2/polls/{poll_id}/options', pathParams, undefined, body);
+
+    decoders.PollOptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deletePollOption(request: {
+    poll_id: string;
+    option_id: string;
+    user_id?: string;
+  }): Promise<StreamResponse<Response>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      poll_id: request?.poll_id,
+      option_id: request?.option_id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/polls/{poll_id}/options/{option_id}',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPollOption(request: {
+    poll_id: string;
+    option_id: string;
+    user_id?: string;
+  }): Promise<StreamResponse<PollOptionResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      poll_id: request?.poll_id,
+      option_id: request?.option_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollOptionResponse>
+    >(
+      'GET',
+      '/api/v2/polls/{poll_id}/options/{option_id}',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.PollOptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryPollVotes(
+    request: QueryPollVotesRequest & { poll_id: string; user_id?: string },
+  ): Promise<StreamResponse<PollVotesResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      poll_id: request?.poll_id,
+    };
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PollVotesResponse>
+    >('POST', '/api/v2/polls/{poll_id}/votes', pathParams, queryParams, body);
+
+    decoders.PollVotesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listPushProviders(): Promise<
     StreamResponse<ListPushProvidersResponse>
-  > => {
-    const response = await this.sendRequest<
+  > {
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ListPushProvidersResponse>
     >('GET', '/api/v2/push_providers', undefined, undefined);
 
     decoders.ListPushProvidersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  upsertPushProvider = async (
+  async upsertPushProvider(
     request?: UpsertPushProviderRequest,
-  ): Promise<StreamResponse<UpsertPushProviderResponse>> => {
+  ): Promise<StreamResponse<UpsertPushProviderResponse>> {
     const body = {
       push_provider: request?.push_provider,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertPushProviderResponse>
     >('POST', '/api/v2/push_providers', undefined, undefined, body);
 
     decoders.UpsertPushProviderResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deletePushProvider = async (request: {
+  async deletePushProvider(request: {
     type: string;
     name: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const pathParams = {
       type: request?.type,
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/push_providers/{type}/{name}',
       pathParams,
@@ -662,15 +921,15 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getRateLimits = async (request?: {
+  async getRateLimits(request?: {
     server_side?: boolean;
     android?: boolean;
     ios?: boolean;
     web?: boolean;
     endpoints?: string;
-  }): Promise<StreamResponse<GetRateLimitsResponse>> => {
+  }): Promise<StreamResponse<GetRateLimitsResponse>> {
     const queryParams = {
       server_side: request?.server_side,
       android: request?.android,
@@ -679,56 +938,49 @@ export class CommonApi extends BaseApi {
       endpoints: request?.endpoints,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetRateLimitsResponse>
     >('GET', '/api/v2/rate_limits', undefined, queryParams);
 
     decoders.GetRateLimitsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  listRoles = async (): Promise<StreamResponse<ListRolesResponse>> => {
-    const response = await this.sendRequest<StreamResponse<ListRolesResponse>>(
-      'GET',
-      '/api/v2/roles',
-      undefined,
-      undefined,
-    );
+  async listRoles(): Promise<StreamResponse<ListRolesResponse>> {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListRolesResponse>
+    >('GET', '/api/v2/roles', undefined, undefined);
 
     decoders.ListRolesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  createRole = async (
+  async createRole(
     request: CreateRoleRequest,
-  ): Promise<StreamResponse<CreateRoleResponse>> => {
+  ): Promise<StreamResponse<CreateRoleResponse>> {
     const body = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<CreateRoleResponse>>(
-      'POST',
-      '/api/v2/roles',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateRoleResponse>
+    >('POST', '/api/v2/roles', undefined, undefined, body);
 
     decoders.CreateRoleResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteRole = async (request: {
+  async deleteRole(request: {
     name: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const pathParams = {
       name: request?.name,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/roles/{name}',
       pathParams,
@@ -738,35 +990,32 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getTask = async (request: {
+  async getTask(request: {
     id: string;
-  }): Promise<StreamResponse<GetTaskResponse>> => {
+  }): Promise<StreamResponse<GetTaskResponse>> {
     const pathParams = {
       id: request?.id,
     };
 
-    const response = await this.sendRequest<StreamResponse<GetTaskResponse>>(
-      'GET',
-      '/api/v2/tasks/{id}',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetTaskResponse>
+    >('GET', '/api/v2/tasks/{id}', pathParams, undefined);
 
     decoders.GetTaskResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteFile = async (request?: {
+  async deleteFile(request?: {
     url?: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const queryParams = {
       url: request?.url,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/uploads/file',
       undefined,
@@ -776,37 +1025,33 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  uploadFile = async (
+  async uploadFile(
     request?: FileUploadRequest,
-  ): Promise<StreamResponse<FileUploadResponse>> => {
+  ): Promise<StreamResponse<FileUploadResponse>> {
     const body = {
       file: request?.file,
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<FileUploadResponse>>(
-      'POST',
-      '/api/v2/uploads/file',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<FileUploadResponse>
+    >('POST', '/api/v2/uploads/file', undefined, undefined, body);
 
     decoders.FileUploadResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteImage = async (request?: {
+  async deleteImage(request?: {
     url?: string;
-  }): Promise<StreamResponse<Response>> => {
+  }): Promise<StreamResponse<Response>> {
     const queryParams = {
       url: request?.url,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'DELETE',
       '/api/v2/uploads/image',
       undefined,
@@ -816,118 +1061,111 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  uploadImage = async (
+  async uploadImage(
     request?: ImageUploadRequest,
-  ): Promise<StreamResponse<ImageUploadResponse>> => {
+  ): Promise<StreamResponse<ImageUploadResponse>> {
     const body = {
       file: request?.file,
       upload_sizes: request?.upload_sizes,
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ImageUploadResponse>
     >('POST', '/api/v2/uploads/image', undefined, undefined, body);
 
     decoders.ImageUploadResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  queryUsers = async (request?: {
+  async queryUsers(request?: {
     payload?: QueryUsersPayload;
-  }): Promise<StreamResponse<QueryUsersResponse>> => {
+  }): Promise<StreamResponse<QueryUsersResponse>> {
     const queryParams = {
       payload: request?.payload,
     };
 
-    const response = await this.sendRequest<StreamResponse<QueryUsersResponse>>(
-      'GET',
-      '/api/v2/users',
-      undefined,
-      queryParams,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryUsersResponse>
+    >('GET', '/api/v2/users', undefined, queryParams);
 
     decoders.QueryUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateUsersPartial = async (
+  async updateUsersPartial(
     request: UpdateUsersPartialRequest,
-  ): Promise<StreamResponse<UpdateUsersResponse>> => {
+  ): Promise<StreamResponse<UpdateUsersResponse>> {
     const body = {
       users: request?.users,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
     >('PATCH', '/api/v2/users', undefined, undefined, body);
 
     decoders.UpdateUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  updateUsers = async (
+  async updateUsers(
     request: UpdateUsersRequest,
-  ): Promise<StreamResponse<UpdateUsersResponse>> => {
+  ): Promise<StreamResponse<UpdateUsersResponse>> {
     const body = {
       users: request?.users,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
     >('POST', '/api/v2/users', undefined, undefined, body);
 
     decoders.UpdateUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  getBlockedUsers = async (request?: {
+  async getBlockedUsers(request?: {
     user_id?: string;
-  }): Promise<StreamResponse<GetBlockedUsersResponse>> => {
+  }): Promise<StreamResponse<GetBlockedUsersResponse>> {
     const queryParams = {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<GetBlockedUsersResponse>
     >('GET', '/api/v2/users/block', undefined, queryParams);
 
     decoders.GetBlockedUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  blockUsers = async (
+  async blockUsers(
     request: BlockUsersRequest,
-  ): Promise<StreamResponse<BlockUsersResponse>> => {
+  ): Promise<StreamResponse<BlockUsersResponse>> {
     const body = {
       blocked_user_id: request?.blocked_user_id,
       user_id: request?.user_id,
       user: request?.user,
     };
 
-    const response = await this.sendRequest<StreamResponse<BlockUsersResponse>>(
-      'POST',
-      '/api/v2/users/block',
-      undefined,
-      undefined,
-      body,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BlockUsersResponse>
+    >('POST', '/api/v2/users/block', undefined, undefined, body);
 
     decoders.BlockUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deactivateUsers = async (
+  async deactivateUsers(
     request: DeactivateUsersRequest,
-  ): Promise<StreamResponse<DeactivateUsersResponse>> => {
+  ): Promise<StreamResponse<DeactivateUsersResponse>> {
     const body = {
       user_ids: request?.user_ids,
       created_by_id: request?.created_by_id,
@@ -935,18 +1173,18 @@ export class CommonApi extends BaseApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeactivateUsersResponse>
     >('POST', '/api/v2/users/deactivate', undefined, undefined, body);
 
     decoders.DeactivateUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deleteUsers = async (
+  async deleteUsers(
     request: DeleteUsersRequest,
-  ): Promise<StreamResponse<DeleteUsersResponse>> => {
+  ): Promise<StreamResponse<DeleteUsersResponse>> {
     const body = {
       user_ids: request?.user_ids,
       calls: request?.calls,
@@ -957,18 +1195,18 @@ export class CommonApi extends BaseApi {
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteUsersResponse>
     >('POST', '/api/v2/users/delete', undefined, undefined, body);
 
     decoders.DeleteUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  reactivateUsers = async (
+  async reactivateUsers(
     request: ReactivateUsersRequest,
-  ): Promise<StreamResponse<ReactivateUsersResponse>> => {
+  ): Promise<StreamResponse<ReactivateUsersResponse>> {
     const body = {
       user_ids: request?.user_ids,
       created_by_id: request?.created_by_id,
@@ -976,23 +1214,23 @@ export class CommonApi extends BaseApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ReactivateUsersResponse>
     >('POST', '/api/v2/users/reactivate', undefined, undefined, body);
 
     decoders.ReactivateUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  restoreUsers = async (
+  async restoreUsers(
     request: RestoreUsersRequest,
-  ): Promise<StreamResponse<Response>> => {
+  ): Promise<StreamResponse<Response>> {
     const body = {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
       'POST',
       '/api/v2/users/restore',
       undefined,
@@ -1003,29 +1241,29 @@ export class CommonApi extends BaseApi {
     decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  unblockUsers = async (
+  async unblockUsers(
     request: UnblockUsersRequest,
-  ): Promise<StreamResponse<UnblockUsersResponse>> => {
+  ): Promise<StreamResponse<UnblockUsersResponse>> {
     const body = {
       blocked_user_id: request?.blocked_user_id,
       user_id: request?.user_id,
       user: request?.user,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<UnblockUsersResponse>
     >('POST', '/api/v2/users/unblock', undefined, undefined, body);
 
     decoders.UnblockUsersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  deactivateUser = async (
+  async deactivateUser(
     request: DeactivateUserRequest & { user_id: string },
-  ): Promise<StreamResponse<DeactivateUserResponse>> => {
+  ): Promise<StreamResponse<DeactivateUserResponse>> {
     const pathParams = {
       user_id: request?.user_id,
     };
@@ -1034,7 +1272,7 @@ export class CommonApi extends BaseApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<DeactivateUserResponse>
     >(
       'POST',
@@ -1047,30 +1285,27 @@ export class CommonApi extends BaseApi {
     decoders.DeactivateUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  exportUser = async (request: {
+  async exportUser(request: {
     user_id: string;
-  }): Promise<StreamResponse<ExportUserResponse>> => {
+  }): Promise<StreamResponse<ExportUserResponse>> {
     const pathParams = {
       user_id: request?.user_id,
     };
 
-    const response = await this.sendRequest<StreamResponse<ExportUserResponse>>(
-      'GET',
-      '/api/v2/users/{user_id}/export',
-      pathParams,
-      undefined,
-    );
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ExportUserResponse>
+    >('GET', '/api/v2/users/{user_id}/export', pathParams, undefined);
 
     decoders.ExportUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 
-  reactivateUser = async (
+  async reactivateUser(
     request: ReactivateUserRequest & { user_id: string },
-  ): Promise<StreamResponse<ReactivateUserResponse>> => {
+  ): Promise<StreamResponse<ReactivateUserResponse>> {
     const pathParams = {
       user_id: request?.user_id,
     };
@@ -1080,7 +1315,7 @@ export class CommonApi extends BaseApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.sendRequest<
+    const response = await this.apiClient.sendRequest<
       StreamResponse<ReactivateUserResponse>
     >(
       'POST',
@@ -1093,5 +1328,5 @@ export class CommonApi extends BaseApi {
     decoders.ReactivateUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
-  };
+  }
 }
