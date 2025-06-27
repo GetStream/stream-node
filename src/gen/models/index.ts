@@ -234,8 +234,6 @@ export interface ActivityAddedEvent {
   user?: UserResponseCommonFields;
 }
 
-export interface ActivityAnalyserConfig {}
-
 export interface ActivityDeletedEvent {
   created_at: Date;
 
@@ -325,6 +323,8 @@ export interface ActivityPinnedEvent {
 
   user?: UserResponseCommonFields;
 }
+
+export interface ActivityProcessorConfig {}
 
 export interface ActivityReactionAddedEvent {
   created_at: Date;
@@ -3843,6 +3843,8 @@ export interface CreateFeedGroupResponse {
 export interface CreateFeedViewRequest {
   view_id: string;
 
+  activity_processors?: ActivityProcessorConfig[];
+
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
@@ -5089,6 +5091,8 @@ export interface FeedViewResponse {
   view_id: string;
 
   last_used_at?: Date;
+
+  activity_processors?: ActivityProcessorConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
 
@@ -11195,17 +11199,11 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
-  activity_analysers?: ActivityAnalyserConfig[];
-
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
+  default_view_id?: string;
 
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 }
 
 export interface UpdateFeedGroupResponse {
@@ -11249,6 +11247,8 @@ export interface UpdateFeedResponse {
 }
 
 export interface UpdateFeedViewRequest {
+  activity_processors?: ActivityProcessorConfig[];
+
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;

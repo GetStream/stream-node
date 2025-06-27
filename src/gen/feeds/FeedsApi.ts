@@ -908,12 +908,9 @@ export class FeedsApi {
       feed_group_id: request?.feed_group_id,
     };
     const body = {
-      activity_analysers: request?.activity_analysers,
-      activity_selectors: request?.activity_selectors,
-      aggregation: request?.aggregation,
+      default_view_id: request?.default_view_id,
       custom: request?.custom,
       notification: request?.notification,
-      ranking: request?.ranking,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1280,6 +1277,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedViewResponse>> {
     const body = {
       view_id: request?.view_id,
+      activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
@@ -1333,6 +1331,7 @@ export class FeedsApi {
       view_id: request?.view_id,
     };
     const body = {
+      activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
