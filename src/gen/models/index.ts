@@ -3827,19 +3827,11 @@ export interface CreateExternalStorageResponse {
 export interface CreateFeedGroupRequest {
   feed_group_id: string;
 
-  view_id?: string;
-
-  activity_analysers?: ActivityAnalyserConfig[];
-
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
+  default_view_id?: string;
 
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 }
 
 export interface CreateFeedGroupResponse {
@@ -4827,11 +4819,11 @@ export interface FeedDeletedEvent {
 }
 
 export interface FeedGroup {
-  aggregation_version: number;
-
   app_pk: number;
 
   created_at: Date;
+
+  default_view_id: string;
 
   default_visibility: string;
 
@@ -4839,21 +4831,13 @@ export interface FeedGroup {
 
   updated_at: Date;
 
-  activity_analysers: ActivityAnalyserConfig[];
-
-  activity_selectors: ActivitySelectorConfig[];
-
   custom: Record<string, any>;
 
   deleted_at?: Date;
 
   last_feed_get_at?: Date;
 
-  aggregation?: AggregationConfig;
-
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 
   stories?: StoriesConfig;
 }
@@ -4897,19 +4881,13 @@ export interface FeedGroupResponse {
 
   updated_at: Date;
 
+  default_view_id?: string;
+
   default_visibility?: string;
-
-  activity_analysers?: ActivityAnalyserConfig[];
-
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
 
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 
   stories?: StoriesConfig;
 }
@@ -5838,10 +5816,6 @@ export interface GetOrCreateCallResponse {
 }
 
 export interface GetOrCreateFeedRequest {
-  comment_limit?: number;
-
-  comment_sort?: 'first' | 'last' | 'popular';
-
   limit?: number;
 
   next?: string;
@@ -5866,12 +5840,16 @@ export interface GetOrCreateFeedRequest {
 
   following_pagination?: PagerRequest;
 
+  interest_weights?: Record<string, number>;
+
   member_pagination?: PagerRequest;
 
   user?: UserRequest;
 }
 
 export interface GetOrCreateFeedResponse {
+  created: boolean;
+
   duration: string;
 
   activities: ActivityResponse[];
@@ -6216,21 +6194,33 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface LimitsSettingsRequest {
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
+
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface ListBlockListResponse {

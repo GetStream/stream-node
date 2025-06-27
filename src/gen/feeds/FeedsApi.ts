@@ -841,13 +841,9 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedGroupResponse>> {
     const body = {
       feed_group_id: request?.feed_group_id,
-      view_id: request?.view_id,
-      activity_analysers: request?.activity_analysers,
-      activity_selectors: request?.activity_selectors,
-      aggregation: request?.aggregation,
+      default_view_id: request?.default_view_id,
       custom: request?.custom,
       notification: request?.notification,
-      ranking: request?.ranking,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -973,8 +969,6 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
     const body = {
-      comment_limit: request?.comment_limit,
-      comment_sort: request?.comment_sort,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -987,6 +981,7 @@ export class FeedsApi {
       filter: request?.filter,
       follower_pagination: request?.follower_pagination,
       following_pagination: request?.following_pagination,
+      interest_weights: request?.interest_weights,
       member_pagination: request?.member_pagination,
       user: request?.user,
     };
