@@ -613,11 +613,15 @@ export interface AddCommentRequest {
 
   parent_id?: string;
 
+  user_id?: string;
+
   attachments?: Attachment[];
 
   mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface AddCommentResponse {

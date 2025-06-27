@@ -603,9 +603,11 @@ export class FeedsApi {
       object_id: request?.object_id,
       object_type: request?.object_type,
       parent_id: request?.parent_id,
+      user_id: request?.user_id,
       attachments: request?.attachments,
       mentioned_user_ids: request?.mentioned_user_ids,
       custom: request?.custom,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
