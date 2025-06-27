@@ -1782,6 +1782,8 @@ export interface CallParticipant {
 
   role: string;
 
+  role: string;
+
   user_session_id: string;
 
   custom: Record<string, any>;
@@ -3827,8 +3829,6 @@ export interface CreateExternalStorageResponse {
 export interface CreateFeedGroupRequest {
   feed_group_id: string;
 
-  view_id?: string;
-
   activity_analysers?: ActivityAnalyserConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
@@ -5721,18 +5721,6 @@ export interface GetEdgesResponse {
   edges: EdgeResponse[];
 }
 
-export interface GetFeedGroupResponse {
-  duration: string;
-
-  feed_group: FeedGroupResponse;
-}
-
-export interface GetFeedViewResponse {
-  duration: string;
-
-  feed_view: FeedViewResponse;
-}
-
 export interface GetFollowSuggestionsResponse {
   duration: string;
 
@@ -5838,10 +5826,6 @@ export interface GetOrCreateCallResponse {
 }
 
 export interface GetOrCreateFeedRequest {
-  comment_limit?: number;
-
-  comment_sort?: 'first' | 'last' | 'popular';
-
   limit?: number;
 
   next?: string;
@@ -5866,12 +5850,16 @@ export interface GetOrCreateFeedRequest {
 
   following_pagination?: PagerRequest;
 
+  interest_weights?: Record<string, number>;
+
   member_pagination?: PagerRequest;
 
   user?: UserRequest;
 }
 
 export interface GetOrCreateFeedResponse {
+  created: boolean;
+
   duration: string;
 
   activities: ActivityResponse[];
@@ -6216,21 +6204,33 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface LimitsSettingsRequest {
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
+
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface ListBlockListResponse {
@@ -6267,18 +6267,6 @@ export interface ListExternalStorageResponse {
   duration: string;
 
   external_storages: Record<string, ExternalStorageResponse>;
-}
-
-export interface ListFeedGroupsResponse {
-  duration: string;
-
-  groups: Record<string, FeedGroupResponse>;
-}
-
-export interface ListFeedViewsResponse {
-  duration: string;
-
-  views: Record<string, FeedViewResponse>;
 }
 
 export interface ListImportsResponse {
@@ -8468,13 +8456,9 @@ export interface QueryFollowsRequest {
 
   prev?: string;
 
-  user_id?: string;
-
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
-
-  user?: UserRequest;
 }
 
 export interface QueryFollowsResponse {
@@ -10626,10 +10610,6 @@ export interface UnblockedUserEvent {
 
 export interface UnfollowBatchRequest {
   follows: FollowPair[];
-
-  user_id?: string;
-
-  user?: UserRequest;
 }
 
 export interface UnfollowBatchResponse {
@@ -10720,6 +10700,8 @@ export interface UnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface UnreadCountsThread {
@@ -11204,26 +11186,6 @@ export interface UpdateExternalStorageResponse {
   type: 's3' | 'gcs' | 'abs';
 }
 
-export interface UpdateFeedGroupRequest {
-  activity_analysers?: ActivityAnalyserConfig[];
-
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
-
-  custom?: Record<string, any>;
-
-  notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
-}
-
-export interface UpdateFeedGroupResponse {
-  duration: string;
-
-  feed_group: FeedGroupResponse;
-}
-
 export interface UpdateFeedMembersRequest {
   operation: 'upsert' | 'remove' | 'set';
 
@@ -11276,6 +11238,8 @@ export interface UpdateFollowRequest {
   source: string;
 
   target: string;
+
+  follower_role?: string;
 
   push_preference?: 'all' | 'none';
 
@@ -12295,6 +12259,8 @@ export interface WrappedUnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface XiaomiConfig {

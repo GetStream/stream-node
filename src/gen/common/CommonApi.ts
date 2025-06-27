@@ -1008,7 +1008,7 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFileGlobal(request?: {
+  async deleteFile(request?: {
     url?: string;
   }): Promise<StreamResponse<Response>> {
     const queryParams = {
@@ -1027,7 +1027,7 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadFileGlobal(
+  async uploadFile(
     request?: FileUploadRequest,
   ): Promise<StreamResponse<FileUploadResponse>> {
     const body = {
@@ -1044,7 +1044,7 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteImageGlobal(request?: {
+  async deleteImage(request?: {
     url?: string;
   }): Promise<StreamResponse<Response>> {
     const queryParams = {
@@ -1063,7 +1063,7 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadImageGlobal(
+  async uploadImage(
     request?: ImageUploadRequest,
   ): Promise<StreamResponse<ImageUploadResponse>> {
     const body = {

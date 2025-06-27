@@ -2290,20 +2290,6 @@ decoders.GetDraftResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.GetFeedGroupResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    feed_group: { type: 'FeedGroupResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.GetFeedViewResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    feed_view: { type: 'FeedViewResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.GetFollowSuggestionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     suggestions: { type: 'FeedResponse', isSingle: false },
@@ -2476,20 +2462,6 @@ decoders.ListCommandsResponse = (input?: Record<string, any>) => {
 decoders.ListDevicesResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     devices: { type: 'DeviceResponse', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.ListFeedGroupsResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    groups: { type: 'FeedGroupResponse', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.ListFeedViewsResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    views: { type: 'FeedViewResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -3986,13 +3958,6 @@ decoders.UpdateCommandResponse = (input?: Record<string, any>) => {
 decoders.UpdateCommentResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     comment: { type: 'CommentResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.UpdateFeedGroupResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    feed_group: { type: 'FeedGroupResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
