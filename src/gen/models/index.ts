@@ -5086,8 +5086,6 @@ export interface FeedUpdatedEvent {
 }
 
 export interface FeedViewResponse {
-  feed_group_id: string;
-
   view_id: string;
 
   last_used_at?: Date;
