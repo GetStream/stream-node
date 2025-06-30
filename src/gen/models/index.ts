@@ -195,7 +195,7 @@ export interface ActionLogResponse {
 
   custom: Record<string, any>;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   target_user?: UserResponse;
 
@@ -233,8 +233,6 @@ export interface ActivityAddedEvent {
 
   user?: UserResponseCommonFields;
 }
-
-export interface ActivityAnalyserConfig {}
 
 export interface ActivityDeletedEvent {
   created_at: Date;
@@ -325,6 +323,8 @@ export interface ActivityPinnedEvent {
 
   user?: UserResponseCommonFields;
 }
+
+export interface ActivityProcessorConfig {}
 
 export interface ActivityReactionAddedEvent {
   created_at: Date;
@@ -3315,7 +3315,7 @@ export interface CheckResponse {
 
   task_id?: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface CheckSNSRequest {
@@ -3831,17 +3831,18 @@ export interface CreateExternalStorageResponse {
 export interface CreateFeedGroupRequest {
   feed_group_id: string;
 
-  activity_analysers?: ActivityAnalyserConfig[];
+  default_view_id?: string;
 
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
 
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 }
 
 export interface CreateFeedGroupResponse {
@@ -3852,6 +3853,8 @@ export interface CreateFeedGroupResponse {
 
 export interface CreateFeedViewRequest {
   view_id: string;
+
+  activity_processors?: ActivityProcessorConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
 
@@ -4829,11 +4832,11 @@ export interface FeedDeletedEvent {
 }
 
 export interface FeedGroup {
-  aggregation_version: number;
-
   app_pk: number;
 
   created_at: Date;
+
+  default_view_id: string;
 
   default_visibility: string;
 
@@ -4841,21 +4844,13 @@ export interface FeedGroup {
 
   updated_at: Date;
 
-  activity_analysers: ActivityAnalyserConfig[];
-
-  activity_selectors: ActivitySelectorConfig[];
-
   custom: Record<string, any>;
 
   deleted_at?: Date;
 
   last_feed_get_at?: Date;
 
-  aggregation?: AggregationConfig;
-
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 
   stories?: StoriesConfig;
 }
@@ -4893,25 +4888,17 @@ export interface FeedGroupDeletedEvent {
 export interface FeedGroupResponse {
   created_at: Date;
 
-  group_id: string;
-
   id: string;
 
   updated_at: Date;
 
+  default_view_id?: string;
+
   default_visibility?: string;
-
-  activity_analysers?: ActivityAnalyserConfig[];
-
-  activity_selectors?: ActivitySelectorConfig[];
-
-  aggregation?: AggregationConfig;
 
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
-
-  ranking?: RankingConfig;
 
   stories?: StoriesConfig;
 }
@@ -5108,11 +5095,11 @@ export interface FeedUpdatedEvent {
 }
 
 export interface FeedViewResponse {
-  feed_group_id: string;
-
   view_id: string;
 
   last_used_at?: Date;
+
+  activity_processors?: ActivityProcessorConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
 
@@ -5208,33 +5195,29 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
 }
@@ -5721,6 +5704,18 @@ export interface GetEdgesResponse {
   duration: string;
 
   edges: EdgeResponse[];
+}
+
+export interface GetFeedGroupResponse {
+  duration: string;
+
+  feed_group: FeedGroupResponse;
+}
+
+export interface GetFeedViewResponse {
+  duration: string;
+
+  feed_view: FeedViewResponse;
 }
 
 export interface GetFollowSuggestionsResponse {
@@ -6269,6 +6264,18 @@ export interface ListExternalStorageResponse {
   duration: string;
 
   external_storages: Record<string, ExternalStorageResponse>;
+}
+
+export interface ListFeedGroupsResponse {
+  duration: string;
+
+  groups: Record<string, FeedGroupResponse>;
+}
+
+export interface ListFeedViewsResponse {
+  duration: string;
+
+  views: Record<string, FeedViewResponse>;
 }
 
 export interface ListImportsResponse {
@@ -7088,7 +7095,7 @@ export interface ModerationFlagResponse {
 
   moderation_payload?: ModerationPayload;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   user?: UserResponse;
 }
@@ -9304,6 +9311,8 @@ export interface ReviewQueueItem {
 
   teams: string[];
 
+  completed_at: NullTime;
+
   reviewed_at: NullTime;
 
   activity?: EnrichedActivity;
@@ -10123,7 +10132,7 @@ export interface SubmitActionRequest {
 export interface SubmitActionResponse {
   duration: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface SubscriberStatsResponse {
@@ -11188,6 +11197,20 @@ export interface UpdateExternalStorageResponse {
   type: 's3' | 'gcs' | 'abs';
 }
 
+export interface UpdateFeedGroupRequest {
+  default_view_id?: string;
+
+  custom?: Record<string, any>;
+
+  notification?: NotificationConfig;
+}
+
+export interface UpdateFeedGroupResponse {
+  duration: string;
+
+  feed_group: FeedGroupResponse;
+}
+
 export interface UpdateFeedMembersRequest {
   operation: 'upsert' | 'remove' | 'set';
 
@@ -11223,6 +11246,8 @@ export interface UpdateFeedResponse {
 }
 
 export interface UpdateFeedViewRequest {
+  activity_processors?: ActivityProcessorConfig[];
+
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
