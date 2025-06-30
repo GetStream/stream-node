@@ -842,6 +842,7 @@ export class FeedsApi {
     const body = {
       feed_group_id: request?.feed_group_id,
       default_view_id: request?.default_view_id,
+      default_visibility: request?.default_visibility,
       custom: request?.custom,
       notification: request?.notification,
     };

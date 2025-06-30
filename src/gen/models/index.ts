@@ -3829,6 +3829,13 @@ export interface CreateFeedGroupRequest {
 
   default_view_id?: string;
 
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
+
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
