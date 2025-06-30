@@ -69,6 +69,7 @@ export class FeedApi {
 
   unpinActivity(request: {
     activity_id: string;
+    user_id?: string;
   }): Promise<StreamResponse<UnpinActivityResponse>> {
     return this.feedsApi.unpinActivity({
       feed_id: this.id,
