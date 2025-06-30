@@ -4884,8 +4884,6 @@ export interface FeedGroupDeletedEvent {
 export interface FeedGroupResponse {
   created_at: Date;
 
-  group_id: string;
-
   id: string;
 
   updated_at: Date;
