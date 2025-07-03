@@ -1798,8 +1798,6 @@ export interface CallParticipant {
 
   role: string;
 
-  role: string;
-
   user_session_id: string;
 
   custom: Record<string, any>;
