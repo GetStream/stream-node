@@ -139,7 +139,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCampaignsResponse>
-    >('POST', '/api/v2/chat/campaigns/query', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/campaigns/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryCampaignsResponse?.(response.body);
 
@@ -183,7 +190,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<StartCampaignResponse>
-    >('POST', '/api/v2/chat/campaigns/{id}/start', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/campaigns/{id}/start',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.StartCampaignResponse?.(response.body);
 
@@ -200,7 +214,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CampaignResponse>
-    >('POST', '/api/v2/chat/campaigns/{id}/stop', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/campaigns/{id}/stop',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CampaignResponse?.(response.body);
 
@@ -224,7 +245,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryChannelsResponse>
-    >('POST', '/api/v2/chat/channels', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/channels',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryChannelsResponse?.(response.body);
 
@@ -241,7 +269,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteChannelsResponse>
-    >('POST', '/api/v2/chat/channels/delete', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/channels/delete',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.DeleteChannelsResponse?.(response.body);
 
@@ -259,7 +294,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<MarkReadResponse>
-    >('POST', '/api/v2/chat/channels/read', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/channels/read',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.MarkReadResponse?.(response.body);
 
@@ -290,6 +332,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.ChannelStateResponse?.(response.body);
@@ -341,6 +384,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateChannelPartialResponse?.(response.body);
@@ -375,7 +419,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateChannelResponse>
-    >('POST', '/api/v2/chat/channels/{type}/{id}', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateChannelResponse?.(response.body);
 
@@ -457,6 +508,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.EventResponse?.(response.body);
@@ -509,6 +561,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'multipart/form-data',
     );
 
     decoders.FileUploadResponse?.(response.body);
@@ -537,6 +590,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.HideChannelResponse?.(response.body);
@@ -590,6 +644,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'multipart/form-data',
     );
 
     decoders.ImageUploadResponse?.(response.body);
@@ -624,6 +679,7 @@ export class ChatApi {
       pathParams,
       queryParams,
       body,
+      'application/json',
     );
 
     decoders.UpdateMemberPartialResponse?.(response.body);
@@ -656,6 +712,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.SendMessageResponse?.(response.body);
@@ -715,6 +772,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.ChannelStateResponse?.(response.body);
@@ -744,6 +802,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.MarkReadResponse?.(response.body);
@@ -771,6 +830,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.ShowChannelResponse?.(response.body);
@@ -803,6 +863,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.TruncateChannelResponse?.(response.body);
@@ -830,6 +891,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);
@@ -870,6 +932,7 @@ export class ChatApi {
       read_events: request?.read_events,
       replies: request?.replies,
       search: request?.search,
+      shared_locations: request?.shared_locations,
       skip_last_msg_update_for_system_msgs:
         request?.skip_last_msg_update_for_system_msgs,
       typing_events: request?.typing_events,
@@ -884,7 +947,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateChannelTypeResponse>
-    >('POST', '/api/v2/chat/channeltypes', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/channeltypes',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateChannelTypeResponse?.(response.body);
 
@@ -952,6 +1022,7 @@ export class ChatApi {
       reminders: request?.reminders,
       replies: request?.replies,
       search: request?.search,
+      shared_locations: request?.shared_locations,
       skip_last_msg_update_for_system_msgs:
         request?.skip_last_msg_update_for_system_msgs,
       typing_events: request?.typing_events,
@@ -968,7 +1039,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateChannelTypeResponse>
-    >('PUT', '/api/v2/chat/channeltypes/{name}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/chat/channeltypes/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateChannelTypeResponse?.(response.body);
 
@@ -997,7 +1075,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateCommandResponse>
-    >('POST', '/api/v2/chat/commands', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/commands',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateCommandResponse?.(response.body);
 
@@ -1050,7 +1135,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCommandResponse>
-    >('PUT', '/api/v2/chat/commands/{name}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/chat/commands/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateCommandResponse?.(response.body);
 
@@ -1072,7 +1164,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryDraftsResponse>
-    >('POST', '/api/v2/chat/drafts/query', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/drafts/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryDraftsResponse?.(response.body);
 
@@ -1093,7 +1192,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<ExportChannelsResponse>
-    >('POST', '/api/v2/chat/export_channels', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/export_channels',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.ExportChannelsResponse?.(response.body);
 
@@ -1129,7 +1235,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryMessageHistoryResponse>
-    >('POST', '/api/v2/chat/messages/history', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/messages/history',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryMessageHistoryResponse?.(response.body);
 
@@ -1192,7 +1305,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMessageResponse>
-    >('POST', '/api/v2/chat/messages/{id}', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/messages/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateMessageResponse?.(response.body);
 
@@ -1215,7 +1335,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateMessagePartialResponse>
-    >('PUT', '/api/v2/chat/messages/{id}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/chat/messages/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateMessagePartialResponse?.(response.body);
 
@@ -1236,7 +1363,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<MessageResponse>
-    >('POST', '/api/v2/chat/messages/{id}/action', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/messages/{id}/action',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.MessageResponse?.(response.body);
 
@@ -1253,7 +1387,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<MessageResponse>
-    >('POST', '/api/v2/chat/messages/{id}/commit', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/messages/{id}/commit',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.MessageResponse?.(response.body);
 
@@ -1280,6 +1421,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.SendReactionResponse?.(response.body);
@@ -1360,6 +1502,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.QueryReactionsResponse?.(response.body);
@@ -1385,6 +1528,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.MessageResponse?.(response.body);
@@ -1412,6 +1556,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateMessageResponse?.(response.body);
@@ -1440,6 +1585,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.PollVoteResponse?.(response.body);
@@ -1521,6 +1667,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateReminderResponse?.(response.body);
@@ -1548,6 +1695,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.ReminderResponseData?.(response.body);
@@ -1638,6 +1786,7 @@ export class ChatApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.MuteChannelResponse?.(response.body);
@@ -1663,6 +1812,7 @@ export class ChatApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UnmuteResponse?.(response.body);
@@ -1679,7 +1829,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertPushPreferencesResponse>
-    >('POST', '/api/v2/chat/push_preferences', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/push_preferences',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpsertPushPreferencesResponse?.(response.body);
 
@@ -1717,7 +1874,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertPushTemplateResponse>
-    >('POST', '/api/v2/chat/push_templates', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/push_templates',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpsertPushTemplateResponse?.(response.body);
 
@@ -1755,7 +1919,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryRemindersResponse>
-    >('POST', '/api/v2/chat/reminders/query', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/reminders/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryRemindersResponse?.(response.body);
 
@@ -1791,7 +1962,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QuerySegmentsResponse>
-    >('POST', '/api/v2/chat/segments/query', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/segments/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QuerySegmentsResponse?.(response.body);
 
@@ -1849,6 +2027,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);
@@ -1899,6 +2078,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.QuerySegmentTargetsResponse?.(response.body);
@@ -1924,7 +2104,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryThreadsResponse>
-    >('POST', '/api/v2/chat/threads', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/threads',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryThreadsResponse?.(response.body);
 
@@ -1976,6 +2163,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateThreadPartialResponse?.(response.body);
@@ -2002,7 +2190,14 @@ export class ChatApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UnreadCountsBatchResponse>
-    >('POST', '/api/v2/chat/unread_batch', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/chat/unread_batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UnreadCountsBatchResponse?.(response.body);
 
@@ -2025,6 +2220,7 @@ export class ChatApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);

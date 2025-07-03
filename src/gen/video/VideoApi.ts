@@ -98,7 +98,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryUserFeedbackResponse>
-    >('POST', '/api/v2/video/call/feedback', undefined, queryParams, body);
+    >(
+      'POST',
+      '/api/v2/video/call/feedback',
+      undefined,
+      queryParams,
+      body,
+      'application/json',
+    );
 
     decoders.QueryUserFeedbackResponse?.(response.body);
 
@@ -120,7 +127,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallMembersResponse>
-    >('POST', '/api/v2/video/call/members', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/call/members',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryCallMembersResponse?.(response.body);
 
@@ -140,7 +154,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallStatsResponse>
-    >('POST', '/api/v2/video/call/stats', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/call/stats',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryCallStatsResponse?.(response.body);
 
@@ -190,7 +211,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallResponse>
-    >('PATCH', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
+    >(
+      'PATCH',
+      '/api/v2/video/call/{type}/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateCallResponse?.(response.body);
 
@@ -214,7 +242,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetOrCreateCallResponse>
-    >('POST', '/api/v2/video/call/{type}/{id}', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.GetOrCreateCallResponse?.(response.body);
 
@@ -240,6 +275,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.BlockUserResponse?.(response.body);
@@ -266,6 +302,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.DeleteCallResponse?.(response.body);
@@ -294,6 +331,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.SendCallEventResponse?.(response.body);
@@ -325,6 +363,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.CollectUserFeedbackResponse?.(response.body);
@@ -356,6 +395,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.GoLiveResponse?.(response.body);
@@ -406,6 +446,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateCallMembersResponse?.(response.body);
@@ -439,6 +480,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.MuteUsersResponse?.(response.body);
@@ -472,6 +514,7 @@ export class VideoApi {
       pathParams,
       queryParams,
       body,
+      'application/json',
     );
 
     decoders.QueryCallParticipantsResponse?.(response.body);
@@ -499,6 +542,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.PinResponse?.(response.body);
@@ -570,6 +614,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StartRTMPBroadcastsResponse?.(response.body);
@@ -622,6 +667,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StopRTMPBroadcastsResponse?.(response.body);
@@ -673,6 +719,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StartClosedCaptionsResponse?.(response.body);
@@ -699,6 +746,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StartFrameRecordingResponse?.(response.body);
@@ -725,6 +773,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StartRecordingResponse?.(response.body);
@@ -753,6 +802,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StartTranscriptionResponse?.(response.body);
@@ -802,6 +852,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StopClosedCaptionsResponse?.(response.body);
@@ -855,6 +906,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StopLiveResponse?.(response.body);
@@ -904,6 +956,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.StopTranscriptionResponse?.(response.body);
@@ -953,6 +1006,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UnblockUserResponse?.(response.body);
@@ -980,6 +1034,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UnpinResponse?.(response.body);
@@ -1008,6 +1063,7 @@ export class VideoApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpdateUserPermissionsResponse?.(response.body);
@@ -1082,7 +1138,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryCallsResponse>
-    >('POST', '/api/v2/video/calls', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/calls',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryCallsResponse?.(response.body);
 
@@ -1112,7 +1175,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateCallTypeResponse>
-    >('POST', '/api/v2/video/calltypes', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/calltypes',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateCallTypeResponse?.(response.body);
 
@@ -1169,7 +1239,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateCallTypeResponse>
-    >('PUT', '/api/v2/video/calltypes/{name}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/video/calltypes/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateCallTypeResponse?.(response.body);
 
@@ -1197,7 +1274,14 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryAggregateCallStatsResponse>
-    >('POST', '/api/v2/video/stats', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/video/stats',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryAggregateCallStatsResponse?.(response.body);
 

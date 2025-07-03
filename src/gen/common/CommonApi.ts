@@ -67,6 +67,8 @@ import {
   ReactivateUsersResponse,
   Response,
   RestoreUsersRequest,
+  SharedLocationResponse,
+  SharedLocationsResponse,
   UnblockUsersRequest,
   UnblockUsersResponse,
   UpdateAppRequest,
@@ -74,6 +76,7 @@ import {
   UpdateBlockListResponse,
   UpdateExternalStorageRequest,
   UpdateExternalStorageResponse,
+  UpdateLiveLocationRequest,
   UpdatePollOptionRequest,
   UpdatePollPartialRequest,
   UpdatePollRequest,
@@ -156,6 +159,7 @@ export class CommonApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);
@@ -191,7 +195,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateBlockListResponse>
-    >('POST', '/api/v2/blocklists', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/blocklists',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateBlockListResponse?.(response.body);
 
@@ -254,7 +265,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateBlockListResponse>
-    >('PUT', '/api/v2/blocklists/{name}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/blocklists/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateBlockListResponse?.(response.body);
 
@@ -279,7 +297,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CheckPushResponse>
-    >('POST', '/api/v2/check_push', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/check_push',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CheckPushResponse?.(response.body);
 
@@ -297,7 +322,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CheckSNSResponse>
-    >('POST', '/api/v2/check_sns', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/check_sns',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CheckSNSResponse?.(response.body);
 
@@ -315,7 +347,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CheckSQSResponse>
-    >('POST', '/api/v2/check_sqs', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/check_sqs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CheckSQSResponse?.(response.body);
 
@@ -377,6 +416,7 @@ export class CommonApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);
@@ -393,7 +433,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<ExportUsersResponse>
-    >('POST', '/api/v2/export/users', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/export/users',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.ExportUsersResponse?.(response.body);
 
@@ -427,7 +474,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateExternalStorageResponse>
-    >('POST', '/api/v2/external_storage', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/external_storage',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateExternalStorageResponse?.(response.body);
 
@@ -467,7 +521,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateExternalStorageResponse>
-    >('PUT', '/api/v2/external_storage/{name}', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/external_storage/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpdateExternalStorageResponse?.(response.body);
 
@@ -499,7 +560,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateGuestResponse>
-    >('POST', '/api/v2/guest', undefined, undefined, body);
+    >('POST', '/api/v2/guest', undefined, undefined, body, 'application/json');
 
     decoders.CreateGuestResponse?.(response.body);
 
@@ -515,7 +576,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportURLResponse>
-    >('POST', '/api/v2/import_urls', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/import_urls',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateImportURLResponse?.(response.body);
 
@@ -542,7 +610,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateImportResponse>
-    >('POST', '/api/v2/imports', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/imports',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CreateImportResponse?.(response.body);
 
@@ -628,7 +703,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollResponse>
-    >('POST', '/api/v2/polls', undefined, undefined, body);
+    >('POST', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
     decoders.PollResponse?.(response.body);
 
@@ -656,7 +731,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollResponse>
-    >('PUT', '/api/v2/polls', undefined, undefined, body);
+    >('PUT', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
     decoders.PollResponse?.(response.body);
 
@@ -679,7 +754,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryPollsResponse>
-    >('POST', '/api/v2/polls/query', undefined, queryParams, body);
+    >(
+      'POST',
+      '/api/v2/polls/query',
+      undefined,
+      queryParams,
+      body,
+      'application/json',
+    );
 
     decoders.QueryPollsResponse?.(response.body);
 
@@ -744,7 +826,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollResponse>
-    >('PATCH', '/api/v2/polls/{poll_id}', pathParams, undefined, body);
+    >(
+      'PATCH',
+      '/api/v2/polls/{poll_id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.PollResponse?.(response.body);
 
@@ -766,7 +855,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollOptionResponse>
-    >('POST', '/api/v2/polls/{poll_id}/options', pathParams, undefined, body);
+    >(
+      'POST',
+      '/api/v2/polls/{poll_id}/options',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.PollOptionResponse?.(response.body);
 
@@ -789,7 +885,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollOptionResponse>
-    >('PUT', '/api/v2/polls/{poll_id}/options', pathParams, undefined, body);
+    >(
+      'PUT',
+      '/api/v2/polls/{poll_id}/options',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.PollOptionResponse?.(response.body);
 
@@ -867,7 +970,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<PollVotesResponse>
-    >('POST', '/api/v2/polls/{poll_id}/votes', pathParams, queryParams, body);
+    >(
+      'POST',
+      '/api/v2/polls/{poll_id}/votes',
+      pathParams,
+      queryParams,
+      body,
+      'application/json',
+    );
 
     decoders.PollVotesResponse?.(response.body);
 
@@ -895,7 +1005,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertPushProviderResponse>
-    >('POST', '/api/v2/push_providers', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/push_providers',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpsertPushProviderResponse?.(response.body);
 
@@ -966,7 +1083,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CreateRoleResponse>
-    >('POST', '/api/v2/roles', undefined, undefined, body);
+    >('POST', '/api/v2/roles', undefined, undefined, body, 'application/json');
 
     decoders.CreateRoleResponse?.(response.body);
 
@@ -1037,7 +1154,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<FileUploadResponse>
-    >('POST', '/api/v2/uploads/file', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/uploads/file',
+      undefined,
+      undefined,
+      body,
+      'multipart/form-data',
+    );
 
     decoders.FileUploadResponse?.(response.body);
 
@@ -1074,7 +1198,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<ImageUploadResponse>
-    >('POST', '/api/v2/uploads/image', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/uploads/image',
+      undefined,
+      undefined,
+      body,
+      'multipart/form-data',
+    );
 
     decoders.ImageUploadResponse?.(response.body);
 
@@ -1106,7 +1237,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
-    >('PATCH', '/api/v2/users', undefined, undefined, body);
+    >('PATCH', '/api/v2/users', undefined, undefined, body, 'application/json');
 
     decoders.UpdateUsersResponse?.(response.body);
 
@@ -1122,7 +1253,7 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpdateUsersResponse>
-    >('POST', '/api/v2/users', undefined, undefined, body);
+    >('POST', '/api/v2/users', undefined, undefined, body, 'application/json');
 
     decoders.UpdateUsersResponse?.(response.body);
 
@@ -1156,7 +1287,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<BlockUsersResponse>
-    >('POST', '/api/v2/users/block', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/users/block',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.BlockUsersResponse?.(response.body);
 
@@ -1175,7 +1313,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeactivateUsersResponse>
-    >('POST', '/api/v2/users/deactivate', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/users/deactivate',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.DeactivateUsersResponse?.(response.body);
 
@@ -1197,9 +1342,62 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteUsersResponse>
-    >('POST', '/api/v2/users/delete', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/users/delete',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.DeleteUsersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getUserLiveLocations(request?: {
+    user_id?: string;
+  }): Promise<StreamResponse<SharedLocationsResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SharedLocationsResponse>
+    >('GET', '/api/v2/users/live_locations', undefined, queryParams);
+
+    decoders.SharedLocationsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateLiveLocation(
+    request: UpdateLiveLocationRequest & { user_id?: string },
+  ): Promise<StreamResponse<SharedLocationResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const body = {
+      created_by_device_id: request?.created_by_device_id,
+      message_id: request?.message_id,
+      end_at: request?.end_at,
+      latitude: request?.latitude,
+      longitude: request?.longitude,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SharedLocationResponse>
+    >(
+      'PUT',
+      '/api/v2/users/live_locations',
+      undefined,
+      queryParams,
+      body,
+      'application/json',
+    );
+
+    decoders.SharedLocationResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1216,7 +1414,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<ReactivateUsersResponse>
-    >('POST', '/api/v2/users/reactivate', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/users/reactivate',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.ReactivateUsersResponse?.(response.body);
 
@@ -1236,6 +1441,7 @@ export class CommonApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.Response?.(response.body);
@@ -1254,7 +1460,14 @@ export class CommonApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UnblockUsersResponse>
-    >('POST', '/api/v2/users/unblock', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/users/unblock',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UnblockUsersResponse?.(response.body);
 
@@ -1280,6 +1493,7 @@ export class CommonApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.DeactivateUserResponse?.(response.body);
@@ -1323,6 +1537,7 @@ export class CommonApi {
       pathParams,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.ReactivateUserResponse?.(response.body);

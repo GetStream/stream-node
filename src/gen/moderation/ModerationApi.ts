@@ -56,7 +56,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<BanResponse>
-    >('POST', '/api/v2/moderation/ban', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/ban',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.BanResponse?.(response.body);
 
@@ -78,6 +85,7 @@ export class ModerationApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.BulkImageModerationResponse?.(response.body);
@@ -101,7 +109,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CheckResponse>
-    >('POST', '/api/v2/moderation/check', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/check',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CheckResponse?.(response.body);
 
@@ -135,7 +150,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UpsertConfigResponse>
-    >('POST', '/api/v2/moderation/config', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/config',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UpsertConfigResponse?.(response.body);
 
@@ -197,7 +219,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryModerationConfigsResponse>
-    >('POST', '/api/v2/moderation/configs', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/configs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryModerationConfigsResponse?.(response.body);
 
@@ -219,7 +248,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<CustomCheckResponse>
-    >('POST', '/api/v2/moderation/custom_check', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/custom_check',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.CustomCheckResponse?.(response.body);
 
@@ -276,6 +312,7 @@ export class ModerationApi {
       undefined,
       undefined,
       body,
+      'application/json',
     );
 
     decoders.UpsertModerationTemplateResponse?.(response.body);
@@ -297,7 +334,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<FlagResponse>
-    >('POST', '/api/v2/moderation/flag', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/flag',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.FlagResponse?.(response.body);
 
@@ -317,7 +361,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryModerationFlagsResponse>
-    >('POST', '/api/v2/moderation/flags', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/flags',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryModerationFlagsResponse?.(response.body);
 
@@ -339,7 +390,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryModerationLogsResponse>
-    >('POST', '/api/v2/moderation/logs', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/logs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryModerationLogsResponse?.(response.body);
 
@@ -356,7 +414,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<MuteResponse>
-    >('POST', '/api/v2/moderation/mute', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/mute',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.MuteResponse?.(response.body);
 
@@ -382,7 +447,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<QueryReviewQueueResponse>
-    >('POST', '/api/v2/moderation/review_queue', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/review_queue',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.QueryReviewQueueResponse?.(response.body);
 
@@ -425,7 +497,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<SubmitActionResponse>
-    >('POST', '/api/v2/moderation/submit_action', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/submit_action',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.SubmitActionResponse?.(response.body);
 
@@ -451,7 +530,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UnbanResponse>
-    >('POST', '/api/v2/moderation/unban', undefined, queryParams, body);
+    >(
+      'POST',
+      '/api/v2/moderation/unban',
+      undefined,
+      queryParams,
+      body,
+      'application/json',
+    );
 
     decoders.UnbanResponse?.(response.body);
 
@@ -469,7 +555,14 @@ export class ModerationApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<UnmuteResponse>
-    >('POST', '/api/v2/moderation/unmute', undefined, undefined, body);
+    >(
+      'POST',
+      '/api/v2/moderation/unmute',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.UnmuteResponse?.(response.body);
 

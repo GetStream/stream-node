@@ -362,6 +362,24 @@ export interface ActivityReactionDeletedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface ActivityReactionUpdatedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  activity: ActivityResponse;
+
+  custom: Record<string, any>;
+
+  reaction: FeedsReactionResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface ActivityRemovedFromFeedEvent {
   created_at: Date;
 
@@ -905,10 +923,6 @@ export interface Attachment {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -916,8 +930,6 @@ export interface Attachment {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -1786,6 +1798,8 @@ export interface CallParticipant {
 
   role: string;
 
+  role: string;
+
   user_session_id: string;
 
   custom: Record<string, any>;
@@ -2570,6 +2584,8 @@ export interface Channel {
 
   team?: string;
 
+  active_live_locations?: SharedLocation[];
+
   invites?: ChannelMember[];
 
   members?: ChannelMember[];
@@ -2617,6 +2633,8 @@ export interface ChannelConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2681,6 +2699,8 @@ export interface ChannelConfigWithInfo {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2954,6 +2974,7 @@ export const ChannelOwnCapability = {
   SEND_RESTRICTED_VISIBILITY_MESSAGE: 'send-restricted-visibility-message',
   SEND_TYPING_EVENTS: 'send-typing-events',
   SET_CHANNEL_COOLDOWN: 'set-channel-cooldown',
+  SHARE_LOCATION: 'share-location',
   SKIP_SLOW_MODE: 'skip-slow-mode',
   SLOW_MODE: 'slow-mode',
   TYPING_EVENTS: 'typing-events',
@@ -3046,6 +3067,8 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
+  active_live_locations?: SharedLocationResponseData[];
+
   pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
@@ -3075,6 +3098,8 @@ export interface ChannelStateResponseFields {
   hide_messages_before?: Date;
 
   watcher_count?: number;
+
+  active_live_locations?: SharedLocationResponseData[];
 
   pending_messages?: PendingMessageResponse[];
 
@@ -3141,6 +3166,8 @@ export interface ChannelTypeConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -3470,6 +3497,24 @@ export interface CommentReactionDeletedEvent {
   received_at?: Date;
 }
 
+export interface CommentReactionUpdatedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  comment: CommentResponse;
+
+  custom: Record<string, any>;
+
+  reaction: FeedsReactionResponse;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface CommentResponse {
   confidence_score: number;
 
@@ -3558,6 +3603,8 @@ export interface ConfigOverrides {
   reactions?: boolean;
 
   replies?: boolean;
+
+  shared_locations?: boolean;
 
   typing_events?: boolean;
 
@@ -3689,6 +3736,8 @@ export interface CreateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -3744,6 +3793,8 @@ export interface CreateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -5195,29 +5246,33 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
+  entity_id: string;
+
+  entity_type: string;
 
   updated_at: Date;
 
-  approved_at?: Date;
+  result: Array<Record<string, any>>;
+
+  entity_creator_id?: string;
+
+  is_streamed_content?: boolean;
+
+  moderation_payload_hash?: string;
 
   reason?: string;
 
-  rejected_at?: Date;
+  review_queue_item_id?: string;
 
-  reviewed_at?: Date;
+  type?: string;
 
-  reviewed_by?: string;
-
-  target_message_id?: string;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
-  details?: FlagDetails;
+  moderation_payload?: ModerationPayload;
 
-  target_message?: Message;
-
-  target_user?: User;
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
 }
@@ -5607,6 +5662,8 @@ export interface GetChannelTypeResponse {
 
   search: boolean;
 
+  shared_locations: boolean;
+
   skip_last_msg_update_for_system_msgs: boolean;
 
   typing_events: boolean;
@@ -5767,10 +5824,6 @@ export interface GetOGResponse {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -5778,8 +5831,6 @@ export interface GetOGResponse {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -5843,7 +5894,7 @@ export interface GetOrCreateFeedRequest {
 
   filter?: Record<string, any>;
 
-  follower_pagination?: PagerRequest;
+  followers_pagination?: PagerRequest;
 
   following_pagination?: PagerRequest;
 
@@ -6535,6 +6586,8 @@ export interface Message {
 
   reminder?: MessageReminder;
 
+  shared_location?: SharedLocation;
+
   user?: User;
 }
 
@@ -6783,6 +6836,8 @@ export interface MessageRequest {
 
   custom?: Record<string, any>;
 
+  shared_location?: SharedLocation;
+
   user?: UserRequest;
 }
 
@@ -6868,6 +6923,8 @@ export interface MessageResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface MessageStatsResponse {
@@ -7018,6 +7075,8 @@ export interface MessageWithChannelResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface ModerationActionConfig {
@@ -9690,6 +9749,8 @@ export interface SearchResultMessage {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface SearchWarning {
@@ -9835,6 +9896,86 @@ export interface SessionSettingsResponse {
 }
 
 export interface ShadowBlockActionRequest {}
+
+export interface SharedLocation {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
+
+  channel?: Channel;
+
+  message?: Message;
+}
+
+export interface SharedLocationResponse {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  duration: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationsResponse {
+  duration: string;
+
+  active_live_locations: SharedLocationResponseData[];
+}
 
 export interface ShowChannelRequest {
   user_id?: string;
@@ -11052,6 +11193,8 @@ export interface UpdateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -11111,6 +11254,8 @@ export interface UpdateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -11277,6 +11422,18 @@ export interface UpdateFollowResponse {
   duration: string;
 
   follow: FollowResponse;
+}
+
+export interface UpdateLiveLocationRequest {
+  created_by_device_id: string;
+
+  message_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
 }
 
 export interface UpdateMemberPartialRequest {
@@ -12216,6 +12373,7 @@ export type WebhookEvent =
   | ({ type: 'feeds.activity.pinned' } & ActivityPinnedEvent)
   | ({ type: 'feeds.activity.reaction.added' } & ActivityReactionAddedEvent)
   | ({ type: 'feeds.activity.reaction.deleted' } & ActivityReactionDeletedEvent)
+  | ({ type: 'feeds.activity.reaction.updated' } & ActivityReactionUpdatedEvent)
   | ({
       type: 'feeds.activity.removed_from_feed';
     } & ActivityRemovedFromFeedEvent)
@@ -12228,6 +12386,7 @@ export type WebhookEvent =
   | ({ type: 'feeds.comment.deleted' } & CommentDeletedEvent)
   | ({ type: 'feeds.comment.reaction.added' } & CommentReactionAddedEvent)
   | ({ type: 'feeds.comment.reaction.deleted' } & CommentReactionDeletedEvent)
+  | ({ type: 'feeds.comment.reaction.updated' } & CommentReactionUpdatedEvent)
   | ({ type: 'feeds.comment.updated' } & CommentUpdatedEvent)
   | ({ type: 'feeds.feed.created' } & FeedCreatedEvent)
   | ({ type: 'feeds.feed.deleted' } & FeedDeletedEvent)

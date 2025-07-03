@@ -161,6 +161,21 @@ decoders.ActivityReactionDeletedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ActivityReactionUpdatedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    activity: { type: 'ActivityResponse', isSingle: true },
+
+    reaction: { type: 'FeedsReactionResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ActivityRemovedFromFeedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1095,6 +1110,8 @@ decoders.Channel = (input?: Record<string, any>) => {
 
     last_message_at: { type: 'DatetimeType', isSingle: true },
 
+    active_live_locations: { type: 'SharedLocation', isSingle: false },
+
     invites: { type: 'ChannelMember', isSingle: false },
 
     members: { type: 'ChannelMember', isSingle: false },
@@ -1276,6 +1293,11 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
 
+    active_live_locations: {
+      type: 'SharedLocationResponseData',
+      isSingle: false,
+    },
+
     pending_messages: { type: 'PendingMessageResponse', isSingle: false },
 
     read: { type: 'ReadStateResponse', isSingle: false },
@@ -1304,6 +1326,11 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
     threads: { type: 'ThreadStateResponse', isSingle: false },
 
     hide_messages_before: { type: 'DatetimeType', isSingle: true },
+
+    active_live_locations: {
+      type: 'SharedLocationResponseData',
+      isSingle: false,
+    },
 
     pending_messages: { type: 'PendingMessageResponse', isSingle: false },
 
@@ -1458,6 +1485,21 @@ decoders.CommentReactionDeletedEvent = (input?: Record<string, any>) => {
     reaction: { type: 'FeedsReactionResponse', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.CommentReactionUpdatedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    comment: { type: 'CommentResponse', isSingle: true },
+
+    reaction: { type: 'FeedsReactionResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2463,6 +2505,8 @@ decoders.Message = (input?: Record<string, any>) => {
 
     reminder: { type: 'MessageReminder', isSingle: true },
 
+    shared_location: { type: 'SharedLocation', isSingle: true },
+
     user: { type: 'User', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -2615,6 +2659,8 @@ decoders.MessageResponse = (input?: Record<string, any>) => {
     reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
 
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    shared_location: { type: 'SharedLocationResponseData', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2702,6 +2748,8 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
     reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
 
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    shared_location: { type: 'SharedLocationResponseData', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3476,6 +3524,8 @@ decoders.SearchResultMessage = (input?: Record<string, any>) => {
     reaction_groups: { type: 'ReactionGroupResponse', isSingle: false },
 
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    shared_location: { type: 'SharedLocationResponseData', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3521,6 +3571,61 @@ decoders.SendReactionResponse = (input?: Record<string, any>) => {
     message: { type: 'MessageResponse', isSingle: true },
 
     reaction: { type: 'ReactionResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SharedLocation = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    end_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'Channel', isSingle: true },
+
+    message: { type: 'Message', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SharedLocationResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    end_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    message: { type: 'MessageResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SharedLocationResponseData = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    end_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    message: { type: 'MessageResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SharedLocationsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    active_live_locations: {
+      type: 'SharedLocationResponseData',
+      isSingle: false,
+    },
   };
   return decode(typeMappings, input);
 };
