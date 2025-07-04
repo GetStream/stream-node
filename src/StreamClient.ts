@@ -8,6 +8,7 @@ import { QueryBannedUsersPayload, UserRequest } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
 import { ApiClient } from './ApiClient';
 import { StreamFeedsClient } from './StreamFeedsClient';
+import { File } from 'buffer';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -89,6 +90,30 @@ export class StreamClient extends CommonApi {
 
   queryBannedUsers = (request?: { payload?: QueryBannedUsersPayload }) => {
     return this.chat.queryBannedUsers(request);
+  };
+
+  // @ts-expect-error API spec says file should be a string
+  uploadFile = (request: Omit<FileUploadRequest, 'file'> & { file: File }) => {
+    return super.uploadFile({
+      // @ts-expect-error API spec says file should be a string
+      file: request.file,
+      // @ts-expect-error form data will only work if this is a string
+      user: JSON.stringify(request.user),
+    });
+  };
+
+  // @ts-expect-error API spec says file should be a string
+  uploadImage = (
+    request: Omit<ImageUploadRequest, 'file'> & { file: File },
+  ) => {
+    return super.uploadImage({
+      // @ts-expect-error API spec says file should be a string
+      file: request.file,
+      // @ts-expect-error form data will only work if this is a string
+      user: JSON.stringify(request.user),
+      // @ts-expect-error form data will only work if this is a string
+      upload_sizes: JSON.stringify(request.upload_sizes),
+    });
   };
 
   /**
