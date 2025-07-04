@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import {
+  FileUploadRequest,
   ImageUploadRequest,
   QueryBannedUsersPayload,
   UserRequest,
