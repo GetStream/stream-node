@@ -12,12 +12,14 @@ import {
   CreateCommandResponse,
   CreatePollOptionRequest,
   CreatePollRequest,
+  CreateReminderRequest,
   DeleteChannelResponse,
   DeleteChannelsRequest,
   DeleteChannelsResponse,
   DeleteCommandResponse,
   DeleteMessageResponse,
   DeleteReactionResponse,
+  DeleteReminderResponse,
   DeleteSegmentTargetsRequest,
   EventResponse,
   ExportChannelsRequest,
@@ -30,6 +32,7 @@ import {
   GetDraftResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
+  GetPushTemplatesResponse,
   GetReactionsResponse,
   GetRepliesResponse,
   GetSegmentResponse,
@@ -71,12 +74,15 @@ import {
   QueryPollsResponse,
   QueryReactionsRequest,
   QueryReactionsResponse,
+  QueryRemindersRequest,
+  QueryRemindersResponse,
   QuerySegmentTargetsRequest,
   QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
   QuerySegmentsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
+  ReminderResponseData,
   Response,
   SearchPayload,
   SearchResponse,
@@ -116,10 +122,14 @@ import {
   UpdatePollOptionRequest,
   UpdatePollPartialRequest,
   UpdatePollRequest,
+  UpdateReminderRequest,
+  UpdateReminderResponse,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
   UpsertPushPreferencesRequest,
   UpsertPushPreferencesResponse,
+  UpsertPushTemplateRequest,
+  UpsertPushTemplateResponse,
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders';
@@ -790,6 +800,7 @@ export class ChatApi extends BaseApi {
       skip_push: request?.skip_push,
       truncated_at: request?.truncated_at,
       user_id: request?.user_id,
+      member_ids: request?.member_ids,
       message: request?.message,
       user: request?.user,
     };
@@ -876,6 +887,7 @@ export class ChatApi extends BaseApi {
       typing_events: request?.typing_events,
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
+      user_message_reminders: request?.user_message_reminders,
       blocklists: request?.blocklists,
       commands: request?.commands,
       permissions: request?.permissions,
@@ -957,6 +969,7 @@ export class ChatApi extends BaseApi {
       typing_events: request?.typing_events,
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
+      user_message_reminders: request?.user_message_reminders,
       allowed_flag_reasons: request?.allowed_flag_reasons,
       blocklists: request?.blocklists,
       commands: request?.commands,
@@ -1195,6 +1208,7 @@ export class ChatApi extends BaseApi {
     const body = {
       message: request?.message,
       skip_enrich_url: request?.skip_enrich_url,
+      skip_push: request?.skip_push,
     };
 
     const response = await this.sendRequest<
@@ -1414,6 +1428,7 @@ export class ChatApi extends BaseApi {
     const body = {
       message: request?.message,
       skip_enrich_url: request?.skip_enrich_url,
+      skip_push: request?.skip_push,
     };
 
     const response = await this.sendRequest<
@@ -1480,6 +1495,85 @@ export class ChatApi extends BaseApi {
     );
 
     decoders.PollVoteResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  deleteReminder = async (request: {
+    message_id: string;
+    user_id?: string;
+  }): Promise<StreamResponse<DeleteReminderResponse>> => {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      message_id: request?.message_id,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<DeleteReminderResponse>
+    >(
+      'DELETE',
+      '/api/v2/chat/messages/{message_id}/reminders',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.DeleteReminderResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  updateReminder = async (
+    request: UpdateReminderRequest & { message_id: string },
+  ): Promise<StreamResponse<UpdateReminderResponse>> => {
+    const pathParams = {
+      message_id: request?.message_id,
+    };
+    const body = {
+      remind_at: request?.remind_at,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<UpdateReminderResponse>
+    >(
+      'PATCH',
+      '/api/v2/chat/messages/{message_id}/reminders',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.UpdateReminderResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  createReminder = async (
+    request: CreateReminderRequest & { message_id: string },
+  ): Promise<StreamResponse<ReminderResponseData>> => {
+    const pathParams = {
+      message_id: request?.message_id,
+    };
+    const body = {
+      remind_at: request?.remind_at,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<ReminderResponseData>
+    >(
+      'POST',
+      '/api/v2/chat/messages/{message_id}/reminders',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders.ReminderResponseData?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
@@ -1908,6 +2002,44 @@ export class ChatApi extends BaseApi {
     return { ...response.body, metadata: response.metadata };
   };
 
+  getPushTemplates = async (request: {
+    push_provider_type: string;
+    push_provider_name?: string;
+  }): Promise<StreamResponse<GetPushTemplatesResponse>> => {
+    const queryParams = {
+      push_provider_type: request?.push_provider_type,
+      push_provider_name: request?.push_provider_name,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<GetPushTemplatesResponse>
+    >('GET', '/api/v2/chat/push_templates', undefined, queryParams);
+
+    decoders.GetPushTemplatesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  upsertPushTemplate = async (
+    request: UpsertPushTemplateRequest,
+  ): Promise<StreamResponse<UpsertPushTemplateResponse>> => {
+    const body = {
+      event_type: request?.event_type,
+      push_provider_type: request?.push_provider_type,
+      enable_push: request?.enable_push,
+      push_provider_name: request?.push_provider_name,
+      template: request?.template,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<UpsertPushTemplateResponse>
+    >('POST', '/api/v2/chat/push_templates', undefined, undefined, body);
+
+    decoders.UpsertPushTemplateResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   queryBannedUsers = async (request?: {
     payload?: QueryBannedUsersPayload;
   }): Promise<StreamResponse<QueryBannedUsersResponse>> => {
@@ -1920,6 +2052,28 @@ export class ChatApi extends BaseApi {
     >('GET', '/api/v2/chat/query_banned_users', undefined, queryParams);
 
     decoders.QueryBannedUsersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  queryReminders = async (
+    request?: QueryRemindersRequest,
+  ): Promise<StreamResponse<QueryRemindersResponse>> => {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<QueryRemindersResponse>
+    >('POST', '/api/v2/chat/reminders/query', undefined, undefined, body);
+
+    decoders.QueryRemindersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };

@@ -33,6 +33,8 @@ import {
   ExportUserResponse,
   ExportUsersRequest,
   ExportUsersResponse,
+  FileUploadRequest,
+  FileUploadResponse,
   GetApplicationResponse,
   GetBlockListResponse,
   GetBlockedUsersResponse,
@@ -41,6 +43,8 @@ import {
   GetOGResponse,
   GetRateLimitsResponse,
   GetTaskResponse,
+  ImageUploadRequest,
+  ImageUploadResponse,
   ListBlockListResponse,
   ListDevicesResponse,
   ListExternalStorageResponse,
@@ -115,6 +119,7 @@ export class CommonApi extends BaseApi {
       sqs_url: request?.sqs_url,
       webhook_url: request?.webhook_url,
       allowed_flag_reasons: request?.allowed_flag_reasons,
+      event_hooks: request?.event_hooks,
       image_moderation_block_labels: request?.image_moderation_block_labels,
       image_moderation_labels: request?.image_moderation_labels,
       user_search_disallowed_roles: request?.user_search_disallowed_roles,
@@ -127,6 +132,8 @@ export class CommonApi extends BaseApi {
       grants: request?.grants,
       huawei_config: request?.huawei_config,
       image_upload_config: request?.image_upload_config,
+      moderation_dashboard_preferences:
+        request?.moderation_dashboard_preferences,
       push_config: request?.push_config,
       xiaomi_config: request?.xiaomi_config,
     };
@@ -247,6 +254,7 @@ export class CommonApi extends BaseApi {
   ): Promise<StreamResponse<CheckPushResponse>> => {
     const body = {
       apn_template: request?.apn_template,
+      event_type: request?.event_type,
       firebase_data_template: request?.firebase_data_template,
       firebase_template: request?.firebase_template,
       message_id: request?.message_id,
@@ -747,6 +755,83 @@ export class CommonApi extends BaseApi {
     );
 
     decoders.GetTaskResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  deleteFile = async (request?: {
+    url?: string;
+  }): Promise<StreamResponse<Response>> => {
+    const queryParams = {
+      url: request?.url,
+    };
+
+    const response = await this.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/uploads/file',
+      undefined,
+      queryParams,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  uploadFile = async (
+    request?: FileUploadRequest,
+  ): Promise<StreamResponse<FileUploadResponse>> => {
+    const body = {
+      file: request?.file,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<StreamResponse<FileUploadResponse>>(
+      'POST',
+      '/api/v2/uploads/file',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders.FileUploadResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  deleteImage = async (request?: {
+    url?: string;
+  }): Promise<StreamResponse<Response>> => {
+    const queryParams = {
+      url: request?.url,
+    };
+
+    const response = await this.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/uploads/image',
+      undefined,
+      queryParams,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
+  uploadImage = async (
+    request?: ImageUploadRequest,
+  ): Promise<StreamResponse<ImageUploadResponse>> => {
+    const body = {
+      file: request?.file,
+      upload_sizes: request?.upload_sizes,
+      user: request?.user,
+    };
+
+    const response = await this.sendRequest<
+      StreamResponse<ImageUploadResponse>
+    >('POST', '/api/v2/uploads/image', undefined, undefined, body);
+
+    decoders.ImageUploadResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   };
