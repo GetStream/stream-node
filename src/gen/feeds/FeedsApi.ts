@@ -169,7 +169,7 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async removeActivities(
+  async deleteActivities(
     request: DeleteActivitiesRequest,
   ): Promise<StreamResponse<DeleteActivitiesResponse>> {
     const body = {
@@ -445,7 +445,7 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async removePollVote(request: {
+  async deletePollVote(request: {
     activity_id: string;
     poll_id: string;
     vote_id: string;

@@ -1593,7 +1593,7 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async removePollVote(request: {
+  async deletePollVote(request: {
     message_id: string;
     poll_id: string;
     vote_id: string;
