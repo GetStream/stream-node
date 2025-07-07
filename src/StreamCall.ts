@@ -9,7 +9,7 @@ export class StreamCall extends CallApi {
 
   create = this.getOrCreate;
 
-  ring = (params: { member_ids?: string[] }) => {
+  ring = (params: { target_member_ids?: string[] }) => {
     return this.videoApi.getCall({
       ...params,
       id: this.id,
