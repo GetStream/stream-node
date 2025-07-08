@@ -3540,6 +3540,8 @@ export interface CommentResponse {
 
   mentioned_users: UserResponse[];
 
+  own_reactions: FeedsReactionResponse[];
+
   user: UserResponse;
 
   controversy_score?: number;
@@ -10428,6 +10430,8 @@ export interface ThreadedCommentResponse {
   upvote_count: number;
 
   mentioned_users: UserResponse[];
+
+  own_reactions: FeedsReactionResponse[];
 
   user: UserResponse;
 
