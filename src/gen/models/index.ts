@@ -4961,6 +4961,8 @@ export interface FeedInput {
 
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
+  filter_tags?: string[];
+
   members?: FeedMemberRequest[];
 
   custom?: Record<string, any>;
@@ -5092,6 +5094,8 @@ export interface FeedRequest {
 
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
+  filter_tags?: string[];
+
   members?: FeedMemberRequest[];
 
   custom?: Record<string, any>;
@@ -5125,6 +5129,8 @@ export interface FeedResponse {
   deleted_at?: Date;
 
   visibility?: string;
+
+  filter_tags?: string[];
 
   custom?: Record<string, any>;
 }
