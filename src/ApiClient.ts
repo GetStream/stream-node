@@ -58,8 +58,6 @@ export class ApiClient {
       });
     }
 
-    console.log('encodedBody', encodedBody);
-
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
         signal,
