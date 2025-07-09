@@ -29,7 +29,7 @@
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "prettier:fix": "prettier . --write",
-    "lint:gen": "eslint --fix src/gen/**/*ts"
+    "lint:gen": "eslint --fix src/gen/**/*ts && prettier src/gen/**/*.ts --write"
   },
   "lint-staged": {
     "**/*": [
