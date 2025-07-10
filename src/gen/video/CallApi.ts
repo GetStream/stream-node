@@ -73,7 +73,8 @@ export class CallApi {
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
-    member_ids?: string[];
+    ring_by_id?: string;
+    target_member_ids?: string[];
   }): Promise<StreamResponse<GetCallResponse>> => {
     return this.videoApi.getCall({ id: this.id, type: this.type, ...request });
   };

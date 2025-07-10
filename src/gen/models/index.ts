@@ -169,7 +169,7 @@ export interface ActionLogResponse {
 
   custom: Record<string, any>;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   target_user?: UserResponse;
 
@@ -413,10 +413,6 @@ export interface Attachment {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -424,8 +420,6 @@ export interface Attachment {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -1562,8 +1556,6 @@ export interface CallSessionParticipantLeftEvent {
 export interface CallSessionResponse {
   anonymous_participant_count: number;
 
-  created_at: Date;
-
   id: string;
 
   participants: CallParticipantResponse[];
@@ -2012,6 +2004,8 @@ export interface Channel {
 
   team?: string;
 
+  active_live_locations?: SharedLocation[];
+
   invites?: ChannelMember[];
 
   members?: ChannelMember[];
@@ -2059,6 +2053,8 @@ export interface ChannelConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2123,6 +2119,8 @@ export interface ChannelConfigWithInfo {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2396,6 +2394,7 @@ export const ChannelOwnCapability = {
   SEND_RESTRICTED_VISIBILITY_MESSAGE: 'send-restricted-visibility-message',
   SEND_TYPING_EVENTS: 'send-typing-events',
   SET_CHANNEL_COOLDOWN: 'set-channel-cooldown',
+  SHARE_LOCATION: 'share-location',
   SKIP_SLOW_MODE: 'skip-slow-mode',
   SLOW_MODE: 'slow-mode',
   TYPING_EVENTS: 'typing-events',
@@ -2488,6 +2487,8 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
+  active_live_locations?: SharedLocationResponseData[];
+
   pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
@@ -2517,6 +2518,8 @@ export interface ChannelStateResponseFields {
   hide_messages_before?: Date;
 
   watcher_count?: number;
+
+  active_live_locations?: SharedLocationResponseData[];
 
   pending_messages?: PendingMessageResponse[];
 
@@ -2583,6 +2586,8 @@ export interface ChannelTypeConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2757,7 +2762,7 @@ export interface CheckResponse {
 
   task_id?: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface CheckSNSRequest {
@@ -2870,6 +2875,8 @@ export interface ConfigOverrides {
   reactions?: boolean;
 
   replies?: boolean;
+
+  shared_locations?: boolean;
 
   typing_events?: boolean;
 
@@ -3001,6 +3008,8 @@ export interface CreateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -3056,6 +3065,8 @@ export interface CreateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -4361,6 +4372,8 @@ export interface GetChannelTypeResponse {
 
   search: boolean;
 
+  shared_locations: boolean;
+
   skip_last_msg_update_for_system_msgs: boolean;
 
   typing_events: boolean;
@@ -4477,10 +4490,6 @@ export interface GetOGResponse {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -4488,8 +4497,6 @@ export interface GetOGResponse {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -4841,21 +4848,33 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface LimitsSettingsRequest {
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
+
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface ListBlockListResponse {
@@ -5137,6 +5156,8 @@ export interface Message {
 
   reminder?: MessageReminder;
 
+  shared_location?: SharedLocation;
+
   user?: User;
 }
 
@@ -5385,6 +5406,8 @@ export interface MessageRequest {
 
   custom?: Record<string, any>;
 
+  shared_location?: SharedLocation;
+
   user?: UserRequest;
 }
 
@@ -5470,6 +5493,8 @@ export interface MessageResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface MessageStatsResponse {
@@ -5620,6 +5645,8 @@ export interface MessageWithChannelResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface ModerationActionConfig {
@@ -5697,7 +5724,7 @@ export interface ModerationFlagResponse {
 
   moderation_payload?: ModerationPayload;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   user?: UserResponse;
 }
@@ -5975,6 +6002,8 @@ export interface OwnUser {
 
   custom: Record<string, any>;
 
+  total_unread_count_by_team: Record<string, number>;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -6054,6 +6083,8 @@ export interface OwnUserResponse {
   push_preferences?: PushPreferences;
 
   teams_role?: Record<string, string>;
+
+  total_unread_count_by_team?: Record<string, number>;
 }
 
 export interface PagerResponse {
@@ -7627,6 +7658,8 @@ export interface ReviewQueueItem {
 
   teams: string[];
 
+  completed_at: NullTime;
+
   reviewed_at: NullTime;
 
   activity?: EnrichedActivity;
@@ -8004,6 +8037,8 @@ export interface SearchResultMessage {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface SearchWarning {
@@ -8149,6 +8184,86 @@ export interface SessionSettingsResponse {
 }
 
 export interface ShadowBlockActionRequest {}
+
+export interface SharedLocation {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
+
+  channel?: Channel;
+
+  message?: Message;
+}
+
+export interface SharedLocationResponse {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  duration: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationsResponse {
+  duration: string;
+
+  active_live_locations: SharedLocationResponseData[];
+}
 
 export interface ShowChannelRequest {
   user_id?: string;
@@ -8424,7 +8539,7 @@ export interface SubmitActionRequest {
 export interface SubmitActionResponse {
   duration: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface SubscriberStatsResponse {
@@ -8929,6 +9044,8 @@ export interface UnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface UnreadCountsThread {
@@ -9202,6 +9319,8 @@ export interface UpdateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -9261,6 +9380,8 @@ export interface UpdateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -9333,6 +9454,18 @@ export interface UpdateExternalStorageResponse {
   path: string;
 
   type: 's3' | 'gcs' | 'abs';
+}
+
+export interface UpdateLiveLocationRequest {
+  created_by_device_id: string;
+
+  message_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
 }
 
 export interface UpdateMemberPartialRequest {
@@ -10186,6 +10319,8 @@ export interface WrappedUnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface XiaomiConfig {

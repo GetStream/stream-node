@@ -153,6 +153,7 @@ export class VideoApi extends BaseApi {
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
+    ring_by_id?: string;
     target_member_ids?: string[];
   }): Promise<StreamResponse<GetCallResponse>> => {
     const queryParams = {
@@ -160,6 +161,7 @@ export class VideoApi extends BaseApi {
       ring: request?.ring,
       notify: request?.notify,
       video: request?.video,
+      ring_by_id: request?.ring_by_id,
       target_member_ids: request?.target_member_ids,
     };
     const pathParams = {
