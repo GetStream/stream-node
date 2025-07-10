@@ -31,10 +31,10 @@ import {
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRTMPBroadcastsRequest,
-  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -44,9 +44,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
+  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
-  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -73,6 +73,8 @@ export class CallApi {
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
+    ring_by_id?: string;
+    target_member_ids?: string[];
   }): Promise<StreamResponse<GetCallResponse>> => {
     return this.videoApi.getCall({ id: this.id, type: this.type, ...request });
   };

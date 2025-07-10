@@ -33,10 +33,10 @@ import {
   QueryCallMembersResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
-  QueryCallStatsRequest,
-  QueryCallStatsResponse,
   QueryCallsRequest,
   QueryCallsResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
   Response,
@@ -47,10 +47,10 @@ import {
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRTMPBroadcastsRequest,
-  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -60,9 +60,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
+  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
-  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -153,12 +153,16 @@ export class VideoApi extends BaseApi {
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
+    ring_by_id?: string;
+    target_member_ids?: string[];
   }): Promise<StreamResponse<GetCallResponse>> => {
     const queryParams = {
       members_limit: request?.members_limit,
       ring: request?.ring,
       notify: request?.notify,
       video: request?.video,
+      ring_by_id: request?.ring_by_id,
+      target_member_ids: request?.target_member_ids,
     };
     const pathParams = {
       type: request?.type,
