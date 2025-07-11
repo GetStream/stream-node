@@ -399,7 +399,7 @@ export interface ActivityRemovedFromFeedEvent {
 export interface ActivityRequest {
   type: string;
 
-  feed_ids: string[];
+  fids: string[];
 
   expires_at?: string;
 
@@ -443,6 +443,8 @@ export interface ActivityResponse {
 
   popularity: number;
 
+  reaction_count: number;
+
   score: number;
 
   share_count: number;
@@ -457,7 +459,7 @@ export interface ActivityResponse {
 
   comments: CommentResponse[];
 
-  feed_ids: string[];
+  feeds: string[];
 
   filter_tags: string[];
 
@@ -547,7 +549,7 @@ export interface ActivityUpdatedEvent {
 export interface AddActivityRequest {
   type: string;
 
-  feed_ids: string[];
+  fids: string[];
 
   expires_at?: string;
 
@@ -1823,6 +1825,8 @@ export interface CallParticipant {
   joined_at: Date;
 
   online: boolean;
+
+  role: string;
 
   role: string;
 
@@ -5138,7 +5142,7 @@ export interface FeedResponse {
 
   description: string;
 
-  feed_id: string;
+  fid: string;
 
   follower_count: number;
 
@@ -5284,33 +5288,29 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
 }
@@ -7690,7 +7690,7 @@ export interface PinActivityResponse {
 
   duration: string;
 
-  feed_id: string;
+  fid: string;
 
   user_id: string;
 
@@ -10843,7 +10843,7 @@ export interface UnmuteResponse {
 export interface UnpinActivityResponse {
   duration: string;
 
-  feed_id: string;
+  fid: string;
 
   user_id: string;
 
