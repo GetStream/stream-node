@@ -399,7 +399,7 @@ export interface ActivityRemovedFromFeedEvent {
 export interface ActivityRequest {
   type: string;
 
-  fids: string[];
+  feed_ids: string[];
 
   expires_at?: string;
 
@@ -457,7 +457,7 @@ export interface ActivityResponse {
 
   comments: CommentResponse[];
 
-  feeds: string[];
+  feed_ids: string[];
 
   filter_tags: string[];
 
@@ -547,7 +547,7 @@ export interface ActivityUpdatedEvent {
 export interface AddActivityRequest {
   type: string;
 
-  fids: string[];
+  feed_ids: string[];
 
   expires_at?: string;
 
@@ -5138,7 +5138,7 @@ export interface FeedResponse {
 
   description: string;
 
-  fid: string;
+  feed_id: string;
 
   follower_count: number;
 
@@ -7690,7 +7690,7 @@ export interface PinActivityResponse {
 
   duration: string;
 
-  fid: string;
+  feed_id: string;
 
   user_id: string;
 
@@ -10843,7 +10843,7 @@ export interface UnmuteResponse {
 export interface UnpinActivityResponse {
   duration: string;
 
-  fid: string;
+  feed_id: string;
 
   user_id: string;
 

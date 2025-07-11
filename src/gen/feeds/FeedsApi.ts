@@ -115,7 +115,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<AddActivityResponse>> {
     const body = {
       type: request?.type,
-      fids: request?.fids,
+      feed_ids: request?.feed_ids,
       expires_at: request?.expires_at,
       id: request?.id,
       parent_id: request?.parent_id,
