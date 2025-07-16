@@ -169,7 +169,7 @@ export interface ActionLogResponse {
 
   custom: Record<string, any>;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   target_user?: UserResponse;
 
@@ -190,6 +190,40 @@ export interface ActionSequence {
   warning: boolean;
 
   warning_text: string;
+}
+
+export interface ActiveCallsFPSStats {
+  p05: number;
+
+  p10: number;
+
+  p50: number;
+
+  p90: number;
+}
+
+export interface ActiveCallsLatencyStats {
+  p50: number;
+
+  p90: number;
+}
+
+export interface ActiveCallsMetrics {
+  join_call_api?: JoinCallAPIMetrics;
+
+  publishers?: PublishersMetrics;
+
+  subscribers?: SubscribersMetrics;
+}
+
+export interface ActiveCallsSummary {
+  active_calls: number;
+
+  active_publishers: number;
+
+  active_subscribers: number;
+
+  participants: number;
 }
 
 export interface AnyEvent {
@@ -413,10 +447,6 @@ export interface Attachment {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -424,8 +454,6 @@ export interface Attachment {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -608,6 +636,16 @@ export interface BanActionRequest {
   timeout?: number;
 }
 
+export interface BanOptions {
+  duration: number;
+
+  ip_ban: boolean;
+
+  reason: string;
+
+  shadow_ban: boolean;
+}
+
 export interface BanRequest {
   target_user_id: string;
 
@@ -642,6 +680,10 @@ export interface BanResponse {
   channel?: ChannelResponse;
 
   user?: UserResponse;
+}
+
+export interface BlockContentOptions {
+  reason: string;
 }
 
 export interface BlockListConfig {
@@ -2010,6 +2052,8 @@ export interface Channel {
 
   team?: string;
 
+  active_live_locations?: SharedLocation[];
+
   invites?: ChannelMember[];
 
   members?: ChannelMember[];
@@ -2057,6 +2101,8 @@ export interface ChannelConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2121,6 +2167,8 @@ export interface ChannelConfigWithInfo {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2394,6 +2442,7 @@ export const ChannelOwnCapability = {
   SEND_RESTRICTED_VISIBILITY_MESSAGE: 'send-restricted-visibility-message',
   SEND_TYPING_EVENTS: 'send-typing-events',
   SET_CHANNEL_COOLDOWN: 'set-channel-cooldown',
+  SHARE_LOCATION: 'share-location',
   SKIP_SLOW_MODE: 'skip-slow-mode',
   SLOW_MODE: 'slow-mode',
   TYPING_EVENTS: 'typing-events',
@@ -2486,6 +2535,8 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
+  active_live_locations?: SharedLocationResponseData[];
+
   pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
@@ -2515,6 +2566,8 @@ export interface ChannelStateResponseFields {
   hide_messages_before?: Date;
 
   watcher_count?: number;
+
+  active_live_locations?: SharedLocationResponseData[];
 
   pending_messages?: PendingMessageResponse[];
 
@@ -2581,6 +2634,8 @@ export interface ChannelTypeConfig {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -2755,7 +2810,7 @@ export interface CheckResponse {
 
   task_id?: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
 }
 
 export interface CheckSNSRequest {
@@ -2869,6 +2924,8 @@ export interface ConfigOverrides {
 
   replies?: boolean;
 
+  shared_locations?: boolean;
+
   typing_events?: boolean;
 
   uploads?: boolean;
@@ -2903,9 +2960,17 @@ export interface ConfigResponse {
 
   block_list_config?: BlockListConfig;
 
+  rule_builder_config?: RuleBuilderConfig;
+
   velocity_filter_config?: VelocityFilterConfig;
 
   video_call_rule_config?: VideoCallRuleConfig;
+}
+
+export interface ContentCountRuleParameters {
+  threshold: number;
+
+  time_window: string;
 }
 
 export interface CountByMinuteResponse {
@@ -2999,6 +3064,8 @@ export interface CreateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -3054,6 +3121,8 @@ export interface CreateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -4039,35 +4108,35 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
+}
+
+export interface FlagContentOptions {
+  reason: string;
 }
 
 export interface FlagDetails {
@@ -4134,6 +4203,10 @@ export interface FlagUpdatedEvent {
   message?: MessageResponse;
 
   user?: UserResponse;
+}
+
+export interface FlagUserOptions {
+  reason: string;
 }
 
 export interface FrameRecordSettings {
@@ -4256,6 +4329,18 @@ export interface GeofenceSettingsResponse {
   names: string[];
 }
 
+export interface GetActiveCallsStatusResponse {
+  duration: string;
+
+  end_time: Date;
+
+  start_time: Date;
+
+  metrics?: ActiveCallsMetrics;
+
+  summary?: ActiveCallsSummary;
+}
+
 export interface GetApplicationResponse {
   duration: string;
 
@@ -4358,6 +4443,8 @@ export interface GetChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -4475,10 +4562,6 @@ export interface GetOGResponse {
 
   image_url?: string;
 
-  latitude?: number;
-
-  longitude?: number;
-
   og_scrape_url?: string;
 
   original_height?: number;
@@ -4486,8 +4569,6 @@ export interface GetOGResponse {
   original_width?: number;
 
   pretext?: string;
-
-  stopped_sharing?: boolean;
 
   text?: string;
 
@@ -4698,6 +4779,10 @@ export interface HuaweiConfigFields {
   secret?: string;
 }
 
+export interface ImageContentParameters {
+  harm_labels?: string[];
+}
+
 export interface ImageData {
   frames: string;
 
@@ -4708,6 +4793,14 @@ export interface ImageData {
   url: string;
 
   width: string;
+}
+
+export interface ImageRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  harm_labels?: string[];
 }
 
 export interface ImageSize {
@@ -4780,6 +4873,14 @@ export interface ImportTaskHistory {
   prev_state: string;
 }
 
+export interface JoinCallAPIMetrics {
+  failures: number;
+
+  total: number;
+
+  latency?: ActiveCallsLatencyStats;
+}
+
 export interface Label {
   name: string;
 
@@ -4839,21 +4940,33 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface LimitsSettingsRequest {
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
+
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface ListBlockListResponse {
@@ -5135,6 +5248,8 @@ export interface Message {
 
   reminder?: MessageReminder;
 
+  shared_location?: SharedLocation;
+
   user?: User;
 }
 
@@ -5383,6 +5498,8 @@ export interface MessageRequest {
 
   custom?: Record<string, any>;
 
+  shared_location?: SharedLocation;
+
   user?: UserRequest;
 }
 
@@ -5468,6 +5585,8 @@ export interface MessageResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface MessageStatsResponse {
@@ -5618,6 +5737,8 @@ export interface MessageWithChannelResponse {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface ModerationActionConfig {
@@ -5665,6 +5786,8 @@ export interface ModerationCustomActionEvent {
 }
 
 export interface ModerationDashboardPreferences {
+  flag_user_on_flagged_content?: boolean;
+
   media_queue_blur_enabled?: boolean;
 }
 
@@ -5695,7 +5818,7 @@ export interface ModerationFlagResponse {
 
   moderation_payload?: ModerationPayload;
 
-  review_queue_item?: ReviewQueueItem;
+  review_queue_item?: ReviewQueueItemResponse;
 
   user?: UserResponse;
 }
@@ -5973,6 +6096,8 @@ export interface OwnUser {
 
   custom: Record<string, any>;
 
+  total_unread_count_by_team: Record<string, number>;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -6052,6 +6177,8 @@ export interface OwnUserResponse {
   push_preferences?: PushPreferences;
 
   teams_role?: Record<string, string>;
+
+  total_unread_count_by_team?: Record<string, number>;
 }
 
 export interface PagerResponse {
@@ -6102,6 +6229,26 @@ export interface ParticipantReportResponse {
   publishers?: PublisherStatsResponse;
 
   subscribers?: SubscriberStatsResponse;
+}
+
+export interface PendingMessageEvent {
+  created_at: Date;
+
+  method: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  channel?: Channel;
+
+  message?: Message;
+
+  metadata?: Record<string, string>;
+
+  user?: User;
 }
 
 export interface PendingMessageResponse {
@@ -6402,12 +6549,36 @@ export interface PrivacySettingsResponse {
   typing_indicators?: TypingIndicatorsResponse;
 }
 
+export interface PublisherAllMetrics {
+  audio?: PublisherAudioMetrics;
+
+  rtt_ms?: ActiveCallsLatencyStats;
+
+  video?: PublisherVideoMetrics;
+}
+
+export interface PublisherAudioMetrics {
+  jitter_ms?: ActiveCallsLatencyStats;
+}
+
 export interface PublisherStatsResponse {
   total: number;
 
   unique: number;
 
   by_track?: TrackStatsResponse[];
+}
+
+export interface PublisherVideoMetrics {
+  fps_30?: ActiveCallsFPSStats;
+
+  frame_encoding_time_ms?: ActiveCallsLatencyStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+}
+
+export interface PublishersMetrics {
+  all?: PublisherAllMetrics;
 }
 
 export interface PushConfig {
@@ -6439,6 +6610,8 @@ export interface PushNotificationSettingsResponse {
 }
 
 export interface PushPreferenceInput {
+  call_level?: 'all' | 'none' | 'default';
+
   channel_cid?: string;
 
   chat_level?: 'all' | 'mentions' | 'none' | 'default';
@@ -7625,6 +7798,8 @@ export interface ReviewQueueItem {
 
   teams: string[];
 
+  completed_at: NullTime;
+
   reviewed_at: NullTime;
 
   activity?: EnrichedActivity;
@@ -7775,45 +7950,71 @@ export interface Role {
 }
 
 export interface RuleBuilderAction {
-  duration?: number;
+  type: string;
 
-  ip_ban?: boolean;
+  ban_options?: BanOptions;
 
-  reason?: string;
+  flag_content_options?: FlagContentOptions;
 
-  shadow_ban?: boolean;
+  flag_user_options?: FlagUserOptions;
 
-  type?: string;
+  remove_content_options?: BlockContentOptions;
 }
 
 export interface RuleBuilderCondition {
-  provider?: string;
+  type: string;
 
-  threshold?: number;
+  confidence?: number;
 
-  time_window?: string;
+  content_count_rule_params?: ContentCountRuleParameters;
 
-  labels?: string[];
+  image_content_params?: ImageContentParameters;
+
+  image_rule_params?: ImageRuleParameters;
+
+  text_content_params?: TextContentParameters;
+
+  text_rule_params?: TextRuleParameters;
+
+  user_created_within_params?: UserCreatedWithinParameters;
+
+  user_rule_params?: UserRuleParameters;
+
+  video_content_params?: VideoContentParameters;
+
+  video_rule_params?: VideoRuleParameters;
+}
+
+export interface RuleBuilderConditionGroup {
+  logic: string;
+
+  conditions: RuleBuilderCondition[];
 }
 
 export interface RuleBuilderConfig {
+  rules: RuleBuilderRule[];
+
   async?: boolean;
-
-  enabled?: boolean;
-
-  rules?: RuleBuilderRule[];
 }
 
 export interface RuleBuilderRule {
-  enabled?: boolean;
+  enabled: boolean;
 
-  id?: string;
+  id: string;
 
-  name?: string;
+  name: string;
+
+  rule_type: string;
+
+  action: RuleBuilderAction;
+
+  cooldown_period?: string;
+
+  logic?: string;
 
   conditions?: RuleBuilderCondition[];
 
-  action?: RuleBuilderAction;
+  groups?: RuleBuilderConditionGroup[];
 }
 
 export interface S3Request {
@@ -8002,6 +8203,8 @@ export interface SearchResultMessage {
   reaction_groups?: Record<string, ReactionGroupResponse>;
 
   reminder?: ReminderResponseData;
+
+  shared_location?: SharedLocationResponseData;
 }
 
 export interface SearchWarning {
@@ -8147,6 +8350,86 @@ export interface SessionSettingsResponse {
 }
 
 export interface ShadowBlockActionRequest {}
+
+export interface SharedLocation {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
+
+  channel?: Channel;
+
+  message?: Message;
+}
+
+export interface SharedLocationResponse {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  duration: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  channel?: ChannelResponse;
+
+  message?: MessageResponse;
+}
+
+export interface SharedLocationsResponse {
+  duration: string;
+
+  active_live_locations: SharedLocationResponseData[];
+}
 
 export interface ShowChannelRequest {
   user_id?: string;
@@ -8422,7 +8705,23 @@ export interface SubmitActionRequest {
 export interface SubmitActionResponse {
   duration: string;
 
-  item?: ReviewQueueItem;
+  item?: ReviewQueueItemResponse;
+}
+
+export interface SubscriberAllMetrics {
+  audio?: SubscriberAudioMetrics;
+
+  rtt_ms?: ActiveCallsLatencyStats;
+
+  video?: SubscriberVideoMetrics;
+}
+
+export interface SubscriberAudioMetrics {
+  concealment_pct?: ActiveCallsLatencyStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+
+  packets_lost_pct?: ActiveCallsLatencyStats;
 }
 
 export interface SubscriberStatsResponse {
@@ -8433,12 +8732,48 @@ export interface SubscriberStatsResponse {
   unique: number;
 }
 
+export interface SubscriberVideoMetrics {
+  fps_30?: ActiveCallsFPSStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+
+  packets_lost_pct?: ActiveCallsLatencyStats;
+}
+
+export interface SubscribersMetrics {
+  all?: SubscriberAllMetrics;
+}
+
 export interface TargetResolution {
   bitrate: number;
 
   height: number;
 
   width: number;
+}
+
+export interface TextContentParameters {
+  contains_url?: boolean;
+
+  severity?: string;
+
+  blocklist_match?: string[];
+
+  harm_labels?: string[];
+}
+
+export interface TextRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  contains_url?: boolean;
+
+  severity?: string;
+
+  blocklist_match?: string[];
+
+  harm_labels?: string[];
 }
 
 export interface ThreadParticipant {
@@ -8927,6 +9262,8 @@ export interface UnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface UnreadCountsThread {
@@ -9200,6 +9537,8 @@ export interface UpdateChannelTypeRequest {
 
   search?: boolean;
 
+  shared_locations?: boolean;
+
   skip_last_msg_update_for_system_msgs?: boolean;
 
   typing_events?: boolean;
@@ -9259,6 +9598,8 @@ export interface UpdateChannelTypeResponse {
   replies: boolean;
 
   search: boolean;
+
+  shared_locations: boolean;
 
   skip_last_msg_update_for_system_msgs: boolean;
 
@@ -9331,6 +9672,18 @@ export interface UpdateExternalStorageResponse {
   path: string;
 
   type: 's3' | 'gcs' | 'abs';
+}
+
+export interface UpdateLiveLocationRequest {
+  created_by_device_id: string;
+
+  message_id: string;
+
+  end_at?: Date;
+
+  latitude?: number;
+
+  longitude?: number;
 }
 
 export interface UpdateMemberPartialRequest {
@@ -9680,6 +10033,10 @@ export interface UserBannedEvent {
   user?: User;
 }
 
+export interface UserCreatedWithinParameters {
+  max_age?: string;
+}
+
 export interface UserCustomEventRequest {
   type: string;
 
@@ -9948,6 +10305,10 @@ export interface UserResponsePrivacyFields {
   teams_role?: Record<string, string>;
 }
 
+export interface UserRuleParameters {
+  max_age?: string;
+}
+
 export interface UserUnbannedEvent {
   channel_id: string;
 
@@ -10050,6 +10411,10 @@ export interface VideoCallRuleConfig {
   rules: Record<string, HarmConfig>;
 }
 
+export interface VideoContentParameters {
+  harm_labels?: string[];
+}
+
 export interface VideoEndCallRequest {}
 
 export interface VideoKickUserRequest {}
@@ -10066,6 +10431,14 @@ export interface VideoReactionsResponse {
   reaction: string;
 
   count_over_time?: VideoReactionOverTimeResponse;
+}
+
+export interface VideoRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  harm_labels?: string[];
 }
 
 export interface VideoSettings {
@@ -10184,6 +10557,8 @@ export interface WrappedUnreadCountsResponse {
   channels: UnreadCountsChannel[];
 
   threads: UnreadCountsThread[];
+
+  total_unread_count_by_team: Record<string, number>;
 }
 
 export interface XiaomiConfig {

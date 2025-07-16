@@ -12,6 +12,7 @@ import {
   DeleteRecordingResponse,
   DeleteTranscriptionResponse,
   EndCallResponse,
+  GetActiveCallsStatusResponse,
   GetCallReportResponse,
   GetCallResponse,
   GetCallTypeResponse,
@@ -81,6 +82,18 @@ import {
 import { decoders } from '../model-decoders';
 
 export class VideoApi extends BaseApi {
+  getActiveCallsStatus = async (): Promise<
+    StreamResponse<GetActiveCallsStatusResponse>
+  > => {
+    const response = await this.sendRequest<
+      StreamResponse<GetActiveCallsStatusResponse>
+    >('GET', '/api/v2/video/active_calls_status', undefined, undefined);
+
+    decoders.GetActiveCallsStatusResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  };
+
   queryUserFeedback = async (
     request?: QueryUserFeedbackRequest & { full?: boolean },
   ): Promise<StreamResponse<QueryUserFeedbackResponse>> => {
