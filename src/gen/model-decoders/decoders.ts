@@ -2092,6 +2092,15 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetActiveCallsStatusResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    end_time: { type: 'DatetimeType', isSingle: true },
+
+    start_time: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetActivityResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activity: { type: 'ActivityResponse', isSingle: true },
@@ -2931,6 +2940,21 @@ decoders.ParticipantCountByMinuteResponse = (input?: Record<string, any>) => {
 decoders.ParticipantCountOverTimeResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     by_minute: { type: 'ParticipantCountByMinuteResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PendingMessageEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'Channel', isSingle: true },
+
+    message: { type: 'Message', isSingle: true },
+
+    user: { type: 'User', isSingle: true },
   };
   return decode(typeMappings, input);
 };

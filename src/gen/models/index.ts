@@ -218,6 +218,40 @@ export interface ActionSequence {
   warning_text: string;
 }
 
+export interface ActiveCallsFPSStats {
+  p05: number;
+
+  p10: number;
+
+  p50: number;
+
+  p90: number;
+}
+
+export interface ActiveCallsLatencyStats {
+  p50: number;
+
+  p90: number;
+}
+
+export interface ActiveCallsMetrics {
+  join_call_api?: JoinCallAPIMetrics;
+
+  publishers?: PublishersMetrics;
+
+  subscribers?: SubscribersMetrics;
+}
+
+export interface ActiveCallsSummary {
+  active_calls: number;
+
+  active_publishers: number;
+
+  active_subscribers: number;
+
+  participants: number;
+}
+
 export interface ActivityAddedEvent {
   created_at: Date;
 
@@ -500,6 +534,8 @@ export interface ActivityResponse {
   parent?: ActivityResponse;
 
   poll?: PollResponseData;
+
+  target?: Record<string, any>;
 }
 
 export interface ActivitySelectorConfig {
@@ -609,6 +645,8 @@ export interface AddBookmarkResponse {
 export interface AddCommentReactionRequest {
   type: string;
 
+  create_notification_activity?: boolean;
+
   user_id?: string;
 
   custom?: Record<string, any>;
@@ -630,6 +668,8 @@ export interface AddCommentRequest {
   object_id: string;
 
   object_type: string;
+
+  create_notification_activity?: boolean;
 
   parent_id?: string;
 
@@ -668,6 +708,8 @@ export interface AddFolderRequest {
 
 export interface AddReactionRequest {
   type: string;
+
+  create_notification_activity?: boolean;
 
   user_id?: string;
 
@@ -1114,6 +1156,16 @@ export interface BanActionRequest {
   timeout?: number;
 }
 
+export interface BanOptions {
+  duration: number;
+
+  ip_ban: boolean;
+
+  reason: string;
+
+  shadow_ban: boolean;
+}
+
 export interface BanRequest {
   target_user_id: string;
 
@@ -1148,6 +1200,10 @@ export interface BanResponse {
   channel?: ChannelResponse;
 
   user?: UserResponse;
+}
+
+export interface BlockContentOptions {
+  reason: string;
 }
 
 export interface BlockListConfig {
@@ -3670,9 +3726,17 @@ export interface ConfigResponse {
 
   block_list_config?: BlockListConfig;
 
+  rule_builder_config?: RuleBuilderConfig;
+
   velocity_filter_config?: VelocityFilterConfig;
 
   video_call_rule_config?: VideoCallRuleConfig;
+}
+
+export interface ContentCountRuleParameters {
+  threshold: number;
+
+  time_window: string;
 }
 
 export interface CountByMinuteResponse {
@@ -5286,31 +5350,39 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
+  entity_id: string;
+
+  entity_type: string;
 
   updated_at: Date;
 
-  approved_at?: Date;
+  result: Array<Record<string, any>>;
+
+  entity_creator_id?: string;
+
+  is_streamed_content?: boolean;
+
+  moderation_payload_hash?: string;
 
   reason?: string;
 
-  rejected_at?: Date;
+  review_queue_item_id?: string;
 
-  reviewed_at?: Date;
+  type?: string;
 
-  reviewed_by?: string;
-
-  target_message_id?: string;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
-  details?: FlagDetails;
+  moderation_payload?: ModerationPayload;
 
-  target_message?: Message;
-
-  target_user?: User;
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
+}
+
+export interface FlagContentOptions {
+  reason: string;
 }
 
 export interface FlagDetails {
@@ -5379,6 +5451,10 @@ export interface FlagUpdatedEvent {
   user?: UserResponse;
 }
 
+export interface FlagUserOptions {
+  reason: string;
+}
+
 export interface FollowBatchRequest {
   follows: FollowRequest[];
 }
@@ -5427,6 +5503,8 @@ export interface FollowRequest {
   source: string;
 
   target: string;
+
+  create_notification_activity?: boolean;
 
   push_preference?: 'all' | 'none';
 
@@ -5587,6 +5665,18 @@ export interface GeofenceSettingsRequest {
 
 export interface GeofenceSettingsResponse {
   names: string[];
+}
+
+export interface GetActiveCallsStatusResponse {
+  duration: string;
+
+  end_time: Date;
+
+  start_time: Date;
+
+  metrics?: ActiveCallsMetrics;
+
+  summary?: ActiveCallsSummary;
 }
 
 export interface GetActivityResponse {
@@ -6147,6 +6237,10 @@ export interface HuaweiConfigFields {
   secret?: string;
 }
 
+export interface ImageContentParameters {
+  harm_labels?: string[];
+}
+
 export interface ImageData {
   frames: string;
 
@@ -6157,6 +6251,14 @@ export interface ImageData {
   url: string;
 
   width: string;
+}
+
+export interface ImageRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  harm_labels?: string[];
 }
 
 export interface ImageSize {
@@ -6227,6 +6329,14 @@ export interface ImportTaskHistory {
   next_state: string;
 
   prev_state: string;
+}
+
+export interface JoinCallAPIMetrics {
+  failures: number;
+
+  total: number;
+
+  latency?: ActiveCallsLatencyStats;
 }
 
 export interface Label {
@@ -7160,6 +7270,8 @@ export interface ModerationCustomActionEvent {
 }
 
 export interface ModerationDashboardPreferences {
+  flag_user_on_flagged_content?: boolean;
+
   media_queue_blur_enabled?: boolean;
 }
 
@@ -7627,6 +7739,26 @@ export interface ParticipantReportResponse {
   subscribers?: SubscriberStatsResponse;
 }
 
+export interface PendingMessageEvent {
+  created_at: Date;
+
+  method: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  channel?: Channel;
+
+  message?: Message;
+
+  metadata?: Record<string, string>;
+
+  user?: User;
+}
+
 export interface PendingMessageResponse {
   channel?: ChannelResponse;
 
@@ -7943,12 +8075,36 @@ export interface PrivacySettingsResponse {
   typing_indicators?: TypingIndicatorsResponse;
 }
 
+export interface PublisherAllMetrics {
+  audio?: PublisherAudioMetrics;
+
+  rtt_ms?: ActiveCallsLatencyStats;
+
+  video?: PublisherVideoMetrics;
+}
+
+export interface PublisherAudioMetrics {
+  jitter_ms?: ActiveCallsLatencyStats;
+}
+
 export interface PublisherStatsResponse {
   total: number;
 
   unique: number;
 
   by_track?: TrackStatsResponse[];
+}
+
+export interface PublisherVideoMetrics {
+  fps_30?: ActiveCallsFPSStats;
+
+  frame_encoding_time_ms?: ActiveCallsLatencyStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+}
+
+export interface PublishersMetrics {
+  all?: PublisherAllMetrics;
 }
 
 export interface PushConfig {
@@ -7980,6 +8136,8 @@ export interface PushNotificationSettingsResponse {
 }
 
 export interface PushPreferenceInput {
+  call_level?: 'all' | 'none' | 'default';
+
   channel_cid?: string;
 
   chat_level?: 'all' | 'mentions' | 'none' | 'default';
@@ -9562,45 +9720,71 @@ export interface Role {
 }
 
 export interface RuleBuilderAction {
-  duration?: number;
+  type: string;
 
-  ip_ban?: boolean;
+  ban_options?: BanOptions;
 
-  reason?: string;
+  flag_content_options?: FlagContentOptions;
 
-  shadow_ban?: boolean;
+  flag_user_options?: FlagUserOptions;
 
-  type?: string;
+  remove_content_options?: BlockContentOptions;
 }
 
 export interface RuleBuilderCondition {
-  provider?: string;
+  type: string;
 
-  threshold?: number;
+  confidence?: number;
 
-  time_window?: string;
+  content_count_rule_params?: ContentCountRuleParameters;
 
-  labels?: string[];
+  image_content_params?: ImageContentParameters;
+
+  image_rule_params?: ImageRuleParameters;
+
+  text_content_params?: TextContentParameters;
+
+  text_rule_params?: TextRuleParameters;
+
+  user_created_within_params?: UserCreatedWithinParameters;
+
+  user_rule_params?: UserRuleParameters;
+
+  video_content_params?: VideoContentParameters;
+
+  video_rule_params?: VideoRuleParameters;
+}
+
+export interface RuleBuilderConditionGroup {
+  logic: string;
+
+  conditions: RuleBuilderCondition[];
 }
 
 export interface RuleBuilderConfig {
+  rules: RuleBuilderRule[];
+
   async?: boolean;
-
-  enabled?: boolean;
-
-  rules?: RuleBuilderRule[];
 }
 
 export interface RuleBuilderRule {
-  enabled?: boolean;
+  enabled: boolean;
 
-  id?: string;
+  id: string;
 
-  name?: string;
+  name: string;
+
+  rule_type: string;
+
+  action: RuleBuilderAction;
+
+  cooldown_period?: string;
+
+  logic?: string;
 
   conditions?: RuleBuilderCondition[];
 
-  action?: RuleBuilderAction;
+  groups?: RuleBuilderConditionGroup[];
 }
 
 export interface S3Request {
@@ -10032,6 +10216,8 @@ export interface SingleFollowRequest {
 
   target: string;
 
+  create_notification_activity?: boolean;
+
   push_preference?: 'all' | 'none';
 
   custom?: Record<string, any>;
@@ -10316,6 +10502,22 @@ export interface SubmitActionResponse {
   item?: ReviewQueueItemResponse;
 }
 
+export interface SubscriberAllMetrics {
+  audio?: SubscriberAudioMetrics;
+
+  rtt_ms?: ActiveCallsLatencyStats;
+
+  video?: SubscriberVideoMetrics;
+}
+
+export interface SubscriberAudioMetrics {
+  concealment_pct?: ActiveCallsLatencyStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+
+  packets_lost_pct?: ActiveCallsLatencyStats;
+}
+
 export interface SubscriberStatsResponse {
   total: number;
 
@@ -10324,12 +10526,48 @@ export interface SubscriberStatsResponse {
   unique: number;
 }
 
+export interface SubscriberVideoMetrics {
+  fps_30?: ActiveCallsFPSStats;
+
+  jitter_ms?: ActiveCallsLatencyStats;
+
+  packets_lost_pct?: ActiveCallsLatencyStats;
+}
+
+export interface SubscribersMetrics {
+  all?: SubscriberAllMetrics;
+}
+
 export interface TargetResolution {
   bitrate: number;
 
   height: number;
 
   width: number;
+}
+
+export interface TextContentParameters {
+  contains_url?: boolean;
+
+  severity?: string;
+
+  blocklist_match?: string[];
+
+  harm_labels?: string[];
+}
+
+export interface TextRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  contains_url?: boolean;
+
+  severity?: string;
+
+  blocklist_match?: string[];
+
+  harm_labels?: string[];
 }
 
 export interface ThreadParticipant {
@@ -11469,6 +11707,8 @@ export interface UpdateFollowRequest {
 
   target: string;
 
+  create_notification_activity?: boolean;
+
   follower_role?: string;
 
   push_preference?: 'all' | 'none';
@@ -11851,6 +12091,10 @@ export interface UserBannedEvent {
   user?: User;
 }
 
+export interface UserCreatedWithinParameters {
+  max_age?: string;
+}
+
 export interface UserCustomEventRequest {
   type: string;
 
@@ -12119,6 +12363,10 @@ export interface UserResponsePrivacyFields {
   teams_role?: Record<string, string>;
 }
 
+export interface UserRuleParameters {
+  max_age?: string;
+}
+
 export interface UserUnbannedEvent {
   channel_id: string;
 
@@ -12221,6 +12469,10 @@ export interface VideoCallRuleConfig {
   rules: Record<string, HarmConfig>;
 }
 
+export interface VideoContentParameters {
+  harm_labels?: string[];
+}
+
 export interface VideoEndCallRequest {}
 
 export interface VideoKickUserRequest {}
@@ -12237,6 +12489,14 @@ export interface VideoReactionsResponse {
   reaction: string;
 
   count_over_time?: VideoReactionOverTimeResponse;
+}
+
+export interface VideoRuleParameters {
+  threshold: number;
+
+  time_window: string;
+
+  harm_labels?: string[];
 }
 
 export interface VideoSettings {
@@ -12466,6 +12726,7 @@ export type WebhookEvent =
   | ({ type: 'message.deleted' } & MessageDeletedEvent)
   | ({ type: 'message.flagged' } & MessageFlaggedEvent)
   | ({ type: 'message.new' } & MessageNewEvent)
+  | ({ type: 'message.pending' } & PendingMessageEvent)
   | ({ type: 'message.read' } & MessageReadEvent)
   | ({ type: 'message.unblocked' } & MessageUnblockedEvent)
   | ({ type: 'message.undeleted' } & MessageUndeletedEvent)
