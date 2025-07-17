@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.26](https://github.com/GetStream/stream-node/compare/v0.4.25...v0.4.26) (2025-07-16)
+
+### Features
+
+- Update to API spec 186.1.0 ([#120](https://github.com/GetStream/stream-node/issues/120)) ([e1d1f88](https://github.com/GetStream/stream-node/commit/e1d1f88d823f71d6386a1791e285bdbee2cbfb54))
+
 ## [0.4.25](https://github.com/GetStream/stream-node/compare/v0.4.24...v0.4.25) (2025-06-24)
 
 ### Features
