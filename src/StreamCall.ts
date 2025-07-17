@@ -1,4 +1,4 @@
-import { QueryCallMembersRequest } from './gen/models';
+import { GetOrCreateCallRequest, QueryCallMembersRequest } from './gen/models';
 import { CallApi } from './gen/video/CallApi';
 import { OmitTypeId } from './types';
 
@@ -7,7 +7,7 @@ export class StreamCall extends CallApi {
     return `${this.type}:${this.id}`;
   }
 
-  create = this.getOrCreate;
+  create = (request?: GetOrCreateCallRequest) => this.getOrCreate(request);
 
   queryMembers = (request?: OmitTypeId<QueryCallMembersRequest>) => {
     return this.videoApi.queryCallMembers({

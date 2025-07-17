@@ -2,80 +2,69 @@
 
 ## [0.4.26](https://github.com/GetStream/stream-node/compare/v0.4.25...v0.4.26) (2025-07-16)
 
-
 ### Features
 
-* Update to API spec 186.1.0 ([#120](https://github.com/GetStream/stream-node/issues/120)) ([e1d1f88](https://github.com/GetStream/stream-node/commit/e1d1f88d823f71d6386a1791e285bdbee2cbfb54))
+- Update to API spec 186.1.0 ([#120](https://github.com/GetStream/stream-node/issues/120)) ([e1d1f88](https://github.com/GetStream/stream-node/commit/e1d1f88d823f71d6386a1791e285bdbee2cbfb54))
 
 ## [0.4.25](https://github.com/GetStream/stream-node/compare/v0.4.24...v0.4.25) (2025-06-24)
 
-
 ### Features
 
-* Update to API spec v179.7.0 ([#113](https://github.com/GetStream/stream-node/issues/113)) ([898ee9e](https://github.com/GetStream/stream-node/commit/898ee9e692b85075e60147835ff43de3f1179587))
+- Update to API spec v179.7.0 ([#113](https://github.com/GetStream/stream-node/issues/113)) ([898ee9e](https://github.com/GetStream/stream-node/commit/898ee9e692b85075e60147835ff43de3f1179587))
 
 ## [0.4.24](https://github.com/GetStream/stream-node/compare/v0.4.23...v0.4.24) (2025-05-06)
 
-
 ### Features
 
-* empty commit to trigger release ([c0890a8](https://github.com/GetStream/stream-node/commit/c0890a8d8b7adc96d4d81717220159321e924480))
+- empty commit to trigger release ([c0890a8](https://github.com/GetStream/stream-node/commit/c0890a8d8b7adc96d4d81717220159321e924480))
 
 ## [0.4.23](https://github.com/GetStream/stream-node/compare/v0.4.22...v0.4.23) (2025-04-30)
 
-
 ### Features
 
-* update to v171.1.7 ([#107](https://github.com/GetStream/stream-node/issues/107)) ([dd442f0](https://github.com/GetStream/stream-node/commit/dd442f0e6b9acc465781cb748e5c5a03dd51624c))
+- update to v171.1.7 ([#107](https://github.com/GetStream/stream-node/issues/107)) ([dd442f0](https://github.com/GetStream/stream-node/commit/dd442f0e6b9acc465781cb748e5c5a03dd51624c))
 
 ## [0.4.22](https://github.com/GetStream/stream-node/compare/v0.4.21...v0.4.22) (2025-04-09)
 
-
 ### Bug Fixes
 
-* handle missing optional dependency in declarations ([#103](https://github.com/GetStream/stream-node/issues/103)) ([eb271c5](https://github.com/GetStream/stream-node/commit/eb271c5f3bfb6002d341323af25beabd15516ef2))
+- handle missing optional dependency in declarations ([#103](https://github.com/GetStream/stream-node/issues/103)) ([eb271c5](https://github.com/GetStream/stream-node/commit/eb271c5f3bfb6002d341323af25beabd15516ef2))
 
 ## [0.4.21](https://github.com/GetStream/stream-node/compare/v0.4.20...v0.4.21) (2025-04-08)
 
-
 ### Bug Fixes
 
-* remove undici dependency ([#101](https://github.com/GetStream/stream-node/issues/101)) ([c943be1](https://github.com/GetStream/stream-node/commit/c943be1b2871b2b010dd4b29d690c46ecacda23b))
+- remove undici dependency ([#101](https://github.com/GetStream/stream-node/issues/101)) ([c943be1](https://github.com/GetStream/stream-node/commit/c943be1b2871b2b010dd4b29d690c46ecacda23b))
 
 ## [0.4.20](https://github.com/GetStream/stream-node/compare/v0.4.19...v0.4.20) (2025-04-07)
 
-
 ### Features
 
-* set max connections to 100, allow integrators to configure Fetch API ([#98](https://github.com/GetStream/stream-node/issues/98)) ([b044b59](https://github.com/GetStream/stream-node/commit/b044b599867a69b33b3aa9d989d1c1e3277dc92f))
+- set max connections to 100, allow integrators to configure Fetch API ([#98](https://github.com/GetStream/stream-node/issues/98)) ([b044b59](https://github.com/GetStream/stream-node/commit/b044b599867a69b33b3aa9d989d1c1e3277dc92f))
 
 ## [0.4.19](https://github.com/GetStream/stream-node/compare/v0.4.18...v0.4.19) (2025-03-17)
 
-
 ### Features
 
-* update to API spec v163.0.0 ([#96](https://github.com/GetStream/stream-node/issues/96)) ([dcdfea8](https://github.com/GetStream/stream-node/commit/dcdfea8cfbf83b0ef3426426909c844424f682ab))
+- update to API spec v163.0.0 ([#96](https://github.com/GetStream/stream-node/issues/96)) ([dcdfea8](https://github.com/GetStream/stream-node/commit/dcdfea8cfbf83b0ef3426426909c844424f682ab))
 
 ## [0.4.18](https://github.com/GetStream/stream-node/compare/v0.4.17...v0.4.18) (2025-03-10)
 
-
 ### Bug Fixes
 
-* support realtime AI model overrides ([#94](https://github.com/GetStream/stream-node/issues/94)) ([1071f75](https://github.com/GetStream/stream-node/commit/1071f75aaf7ffb029f8c3c4c06465e81abf341d6))
+- support realtime AI model overrides ([#94](https://github.com/GetStream/stream-node/issues/94)) ([1071f75](https://github.com/GetStream/stream-node/commit/1071f75aaf7ffb029f8c3c4c06465e81abf341d6))
 
 ## [0.4.17](https://github.com/GetStream/stream-node/compare/v0.4.16...v0.4.17) (2025-03-06)
 
-
 ### Bug Fixes
 
-* use an exact version of @stream-io/openai-realtime-api ([#92](https://github.com/GetStream/stream-node/issues/92)) ([d6f0419](https://github.com/GetStream/stream-node/commit/d6f0419f924bfdadbb44d2b12b44a664bb4b39a6))
+- use an exact version of @stream-io/openai-realtime-api ([#92](https://github.com/GetStream/stream-node/issues/92)) ([d6f0419](https://github.com/GetStream/stream-node/commit/d6f0419f924bfdadbb44d2b12b44a664bb4b39a6))
 
 ## [0.4.16](https://github.com/GetStream/stream-node/compare/v0.4.15...v0.4.16) (2025-02-25)
 
-
 ### Bug Fixes
 
-* update changelog ([#89](https://github.com/GetStream/stream-node/issues/89)) ([1b46c91](https://github.com/GetStream/stream-node/commit/1b46c919ccc5a98414ca441b833020743217e95d))
+- update changelog ([#89](https://github.com/GetStream/stream-node/issues/89)) ([1b46c91](https://github.com/GetStream/stream-node/commit/1b46c919ccc5a98414ca441b833020743217e95d))
 
 ## [0.4.15](https://github.com/GetStream/stream-node/compare/v0.4.14...v0.4.15) (2025-02-25)
 
