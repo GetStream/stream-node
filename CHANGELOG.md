@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.0](https://github.com/GetStream/stream-node/compare/v0.4.26...v0.5.0) (2025-07-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* add support for feeds v3 API ([#118](https://github.com/GetStream/stream-node/issues/118))
+
+### Features
+
+* add support for feeds v3 API ([#118](https://github.com/GetStream/stream-node/issues/118)) ([aa43a6b](https://github.com/GetStream/stream-node/commit/aa43a6b2666c81bff23ee0113c91f61568e5ccc2))
+
 ## [0.4.26](https://github.com/GetStream/stream-node/compare/v0.4.25...v0.4.26) (2025-07-16)
 
 ### Features
