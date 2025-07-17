@@ -531,11 +531,11 @@ export interface ActivityResponse {
 
   moderation?: ModerationV2Response;
 
+  object?: Record<string, any>;
+
   parent?: ActivityResponse;
 
   poll?: PollResponseData;
-
-  target?: Record<string, any>;
 }
 
 export interface ActivitySelectorConfig {
