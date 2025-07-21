@@ -2138,6 +2138,20 @@ decoders.UserResponseCommonFields = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.VideoReactionOverTimeResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    by_minute: { type: 'CountByMinuteResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.VideoReactionsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    count_over_time: { type: 'VideoReactionOverTimeResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.WSEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },

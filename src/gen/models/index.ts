@@ -4379,21 +4379,33 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface LimitsSettingsRequest {
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
+
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
+  max_participants_exclude_roles: string[];
+
   max_duration_seconds?: number;
 
   max_participants?: number;
+
+  max_participants_exclude_owner?: boolean;
 }
 
 export interface ListBlockListResponse {
