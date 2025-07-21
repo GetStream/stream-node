@@ -1493,8 +1493,6 @@ export interface CallType {
 
   created_at: Date;
 
-  enable_live_insights: boolean;
-
   external_storage: string;
 
   name: string;
@@ -3846,6 +3844,8 @@ export interface GetCallReportResponse {
   session_id: string;
 
   report: ReportResponse;
+
+  video_reactions?: VideoReactionsResponse[];
 
   chat_activity?: ChatActivityStatsResponse;
 }
@@ -9304,6 +9304,16 @@ export interface VelocityFilterConfigRule {
   url_only: boolean;
 
   slow_spam_ban_duration?: number;
+}
+
+export interface VideoReactionOverTimeResponse {
+  by_minute?: CountByMinuteResponse[];
+}
+
+export interface VideoReactionsResponse {
+  reaction: string;
+
+  count_over_time?: VideoReactionOverTimeResponse;
 }
 
 export interface VideoSettings {

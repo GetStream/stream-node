@@ -801,6 +801,8 @@ decoders.GetBlockedUsersResponse = (input?: Record<string, any>) => {
 
 decoders.GetCallReportResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
+    video_reactions: { type: 'VideoReactionsResponse', isSingle: false },
+
     chat_activity: { type: 'ChatActivityStatsResponse', isSingle: true },
   };
   return decode(typeMappings, input);
