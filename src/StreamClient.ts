@@ -47,7 +47,7 @@ export class StreamClient extends CommonApi {
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
     const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
-    const feedsBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
+    const feedsBaseUrl = config?.basePath ?? 'https://feeds.stream-io-api.com';
     const chatApiClient = new ApiClient({
       apiKey,
       token,

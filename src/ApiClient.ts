@@ -60,7 +60,8 @@ export class ApiClient {
 
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
-        signal,
+        signal:
+          requestContentType === 'multipart/form-data' ? undefined : signal,
         method,
         body: encodedBody,
         headers,
