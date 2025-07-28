@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/GetStream/stream-node/compare/v0.5.0...v0.5.1) (2025-07-25)
+
+
+### Features
+
+* No timeout for fileuploads ([#124](https://github.com/GetStream/stream-node/issues/124)) ([6bad4f0](https://github.com/GetStream/stream-node/commit/6bad4f084b459804899ffb6adbf740302a33d607))
+
 ## [0.5.0](https://github.com/GetStream/stream-node/compare/v0.4.26...v0.5.0) (2025-07-17)
 
 
