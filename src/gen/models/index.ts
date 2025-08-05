@@ -6106,8 +6106,6 @@ export interface GetOrCreateFeedResponse {
 }
 
 export interface GetOrCreateFeedViewRequest {
-  view_id: string;
-
   activity_processors?: ActivityProcessorConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
