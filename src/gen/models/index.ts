@@ -307,6 +307,8 @@ export interface ActivityMarkEvent {
 
   mark_read?: string[];
 
+  mark_seen?: string[];
+
   mark_watched?: string[];
 
   user?: UserResponseCommonFields;
@@ -531,7 +533,7 @@ export interface ActivityResponse {
 
   moderation?: ModerationV2Response;
 
-  object?: Record<string, any>;
+  notification_context?: Record<string, any>;
 
   parent?: ActivityResponse;
 
@@ -773,6 +775,8 @@ export interface AppResponseFields {
 
   image_moderation_enabled: boolean;
 
+  moderation_bulk_submit_action_enabled: boolean;
+
   moderation_enabled: boolean;
 
   moderation_multitenant_blocklist_enabled: boolean;
@@ -806,6 +810,8 @@ export interface AppResponseFields {
   suspended_explanation: string;
 
   use_hook_v2: boolean;
+
+  user_response_time_enabled: boolean;
 
   webhook_url: string;
 
@@ -1890,6 +1896,8 @@ export interface CallParticipant {
 
   teams_role: Record<string, string>;
 
+  avg_response_time?: number;
+
   ban_expires?: Date;
 
   created_at?: Date;
@@ -2191,6 +2199,20 @@ export interface CallSessionEndedEvent {
   type: string;
 }
 
+export interface CallSessionParticipantCountsUpdatedEvent {
+  anonymous_participant_count: number;
+
+  call_cid: string;
+
+  created_at: Date;
+
+  session_id: string;
+
+  participants_count_by_role: Record<string, number>;
+
+  type: string;
+}
+
 export interface CallSessionParticipantJoinedEvent {
   call_cid: string;
 
@@ -2266,6 +2288,8 @@ export interface CallSettings {
 
   geofencing?: GeofenceSettings;
 
+  ingress?: IngressSettings;
+
   limits?: LimitsSettings;
 
   recording?: RecordSettings;
@@ -2293,6 +2317,8 @@ export interface CallSettingsRequest {
   frame_recording?: FrameRecordingSettingsRequest;
 
   geofencing?: GeofenceSettingsRequest;
+
+  ingress?: IngressSettingsRequest;
 
   limits?: LimitsSettingsRequest;
 
@@ -2337,6 +2363,8 @@ export interface CallSettingsResponse {
   transcription: TranscriptionSettingsResponse;
 
   video: VideoSettingsResponse;
+
+  ingress?: IngressSettingsResponse;
 }
 
 export interface CallStateResponseFields {
@@ -4701,6 +4729,8 @@ export interface EntityCreator {
 
   teams_role: Record<string, string>;
 
+  avg_response_time?: number;
+
   ban_expires?: Date;
 
   created_at?: Date;
@@ -4756,6 +4786,8 @@ export interface EntityCreatorResponse {
   teams: string[];
 
   custom: Record<string, any>;
+
+  avg_response_time?: number;
 
   ban_expires?: Date;
 
@@ -5230,6 +5262,8 @@ export interface FeedResponse {
 
   filter_tags?: string[];
 
+  own_follows?: FollowResponse[];
+
   custom?: Record<string, any>;
 }
 
@@ -5350,29 +5384,33 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
+  entity_id: string;
+
+  entity_type: string;
 
   updated_at: Date;
 
-  approved_at?: Date;
+  result: Array<Record<string, any>>;
+
+  entity_creator_id?: string;
+
+  is_streamed_content?: boolean;
+
+  moderation_payload_hash?: string;
 
   reason?: string;
 
-  rejected_at?: Date;
+  review_queue_item_id?: string;
 
-  reviewed_at?: Date;
+  type?: string;
 
-  reviewed_by?: string;
-
-  target_message_id?: string;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
-  details?: FlagDetails;
+  moderation_payload?: ModerationPayload;
 
-  target_message?: Message;
-
-  target_user?: User;
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
 }
@@ -5619,6 +5657,8 @@ export interface FullUserResponse {
   teams: string[];
 
   custom: Record<string, any>;
+
+  avg_response_time?: number;
 
   ban_expires?: Date;
 
@@ -5995,6 +6035,29 @@ export interface GetOrCreateCallResponse {
   call: CallResponse;
 }
 
+export interface GetOrCreateFeedGroupRequest {
+  default_view_id?: string;
+
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
+
+  custom?: Record<string, any>;
+
+  notification?: NotificationConfig;
+}
+
+export interface GetOrCreateFeedGroupResponse {
+  duration: string;
+
+  was_created: boolean;
+
+  feed_group: FeedGroupResponse;
+}
+
 export interface GetOrCreateFeedRequest {
   limit?: number;
 
@@ -6327,6 +6390,102 @@ export interface ImportTaskHistory {
   prev_state: string;
 }
 
+export interface IngressAudioEncodingOptions {
+  bitrate: number;
+
+  channels: '1' | '2';
+
+  enable_dtx: boolean;
+}
+
+export interface IngressAudioEncodingOptionsRequest {
+  bitrate: number;
+
+  channels: '1' | '2';
+
+  enable_dtx?: boolean;
+}
+
+export interface IngressAudioEncodingResponse {
+  bitrate: number;
+
+  channels: number;
+
+  enable_dtx: boolean;
+}
+
+export interface IngressSettings {
+  enabled: boolean;
+
+  audio_encoding_options?: IngressAudioEncodingOptions;
+
+  video_encoding_options?: Record<string, IngressVideoEncodingOptions>;
+}
+
+export interface IngressSettingsRequest {
+  enabled?: boolean;
+
+  audio_encoding_options?: IngressAudioEncodingOptionsRequest;
+
+  video_encoding_options?: Record<string, IngressVideoEncodingOptionsRequest>;
+}
+
+export interface IngressSettingsResponse {
+  enabled: boolean;
+
+  audio_encoding_options?: IngressAudioEncodingResponse;
+
+  video_encoding_options?: Record<string, IngressVideoEncodingResponse>;
+}
+
+export interface IngressVideoEncodingOptions {
+  layers: IngressVideoLayer[];
+}
+
+export interface IngressVideoEncodingOptionsRequest {
+  layers: IngressVideoLayerRequest[];
+}
+
+export interface IngressVideoEncodingResponse {
+  layers: IngressVideoLayerResponse[];
+}
+
+export interface IngressVideoLayer {
+  bitrate: number;
+
+  codec: 'h264' | 'vp8';
+
+  frame_rate: number;
+
+  max_dimension: number;
+
+  min_dimension: number;
+}
+
+export interface IngressVideoLayerRequest {
+  bitrate: number;
+
+  codec: 'h264' | 'vp8';
+
+  frame_rate_limit: number;
+
+  max_dimension: number;
+
+  min_dimension: number;
+}
+
+export interface IngressVideoLayerResponse {
+  bitrate: number;
+
+  codec: string;
+
+  frame_rate_limit: number;
+
+  max_dimension: number;
+
+  min_dimension: number;
+}
+
 export interface JoinCallAPIMetrics {
   failures: number;
 
@@ -6515,6 +6674,8 @@ export interface MarkActivityRequest {
   user_id?: string;
 
   mark_read?: string[];
+
+  mark_seen?: string[];
 
   mark_watched?: string[];
 
@@ -7445,6 +7606,24 @@ export interface NotificationConfig {
   track_seen?: boolean;
 }
 
+export interface NotificationFeedUpdatedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  aggregated_activities?: AggregatedActivityResponse[];
+
+  notification_status?: NotificationStatusResponse;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface NotificationMarkUnreadEvent {
   channel_id: string;
 
@@ -7502,9 +7681,13 @@ export interface NotificationStatusResponse {
 
   unseen: number;
 
+  last_read_at?: Date;
+
   last_seen_at?: Date;
 
   read_activities?: string[];
+
+  seen_activities?: string[];
 }
 
 export interface NullTime {}
@@ -7594,6 +7777,8 @@ export interface OwnUser {
 
   total_unread_count_by_team: Record<string, number>;
 
+  avg_response_time?: number;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -7651,6 +7836,8 @@ export interface OwnUserResponse {
   teams: string[];
 
   custom: Record<string, any>;
+
+  avg_response_time?: number;
 
   deactivated_at?: Date;
 
@@ -9457,6 +9644,66 @@ export interface RejectFollowResponse {
   follow: FollowResponse;
 }
 
+export interface ReminderCreatedEvent {
+  cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  parent_id?: string;
+
+  received_at?: Date;
+
+  reminder?: ReminderResponseData;
+}
+
+export interface ReminderDeletedEvent {
+  cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  parent_id?: string;
+
+  received_at?: Date;
+
+  reminder?: ReminderResponseData;
+}
+
+export interface ReminderNotificationEvent {
+  cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  parent_id?: string;
+
+  received_at?: Date;
+
+  reminder?: ReminderResponseData;
+}
+
 export interface ReminderResponseData {
   channel_cid: string;
 
@@ -9475,6 +9722,26 @@ export interface ReminderResponseData {
   message?: Message;
 
   user?: User;
+}
+
+export interface ReminderUpdatedEvent {
+  cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  parent_id?: string;
+
+  received_at?: Date;
+
+  reminder?: ReminderResponseData;
 }
 
 export interface RepliesMeta {
@@ -9558,11 +9825,19 @@ export interface ReviewQueueItem {
 
   bans: Ban[];
 
+  flag_labels: string[];
+
+  flag_types: string[];
+
   flags: Flag[];
 
   languages: string[];
 
+  reporter_ids: string[];
+
   teams: string[];
+
+  archived_at: NullTime;
 
   completed_at: NullTime;
 
@@ -10466,6 +10741,7 @@ export interface SubmitActionRequest {
     | 'delete_user'
     | 'unblock'
     | 'shadow_block'
+    | 'unmask'
     | 'kick_user'
     | 'end_call';
 
@@ -11042,10 +11318,14 @@ export interface UnfollowBatchRequest {
 
 export interface UnfollowBatchResponse {
   duration: string;
+
+  follows: FollowResponse[];
 }
 
 export interface UnfollowResponse {
   duration: string;
+
+  follow: FollowResponse;
 }
 
 export interface UnmuteChannelRequest {
@@ -11129,7 +11409,7 @@ export interface UnreadCountsResponse {
 
   threads: UnreadCountsThread[];
 
-  total_unread_count_by_team: Record<string, number>;
+  total_unread_count_by_team?: Record<string, number>;
 }
 
 export interface UnreadCountsThread {
@@ -11242,6 +11522,8 @@ export interface UpdateAppRequest {
   sqs_secret?: string;
 
   sqs_url?: string;
+
+  user_response_time_enabled?: boolean;
 
   webhook_url?: string;
 
@@ -11719,8 +12001,6 @@ export interface UpdateFollowResponse {
 }
 
 export interface UpdateLiveLocationRequest {
-  created_by_device_id: string;
-
   message_id: string;
 
   end_at?: Date;
@@ -12038,6 +12318,8 @@ export interface User {
 
   teams_role: Record<string, string>;
 
+  avg_response_time?: number;
+
   ban_expires?: Date;
 
   created_at?: Date;
@@ -12260,6 +12542,8 @@ export interface UserResponse {
 
   custom: Record<string, any>;
 
+  avg_response_time?: number;
+
   ban_expires?: Date;
 
   deactivated_at?: Date;
@@ -12304,6 +12588,8 @@ export interface UserResponseCommonFields {
 
   custom: Record<string, any>;
 
+  avg_response_time?: number;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -12339,6 +12625,8 @@ export interface UserResponsePrivacyFields {
   teams: string[];
 
   custom: Record<string, any>;
+
+  avg_response_time?: number;
 
   deactivated_at?: Date;
 
@@ -12641,6 +12929,9 @@ export type WebhookEvent =
   | ({ type: 'call.rtmp_broadcast_stopped' } & CallRtmpBroadcastStoppedEvent)
   | ({ type: 'call.session_ended' } & CallSessionEndedEvent)
   | ({
+      type: 'call.session_participant_count_updated';
+    } & CallSessionParticipantCountsUpdatedEvent)
+  | ({
       type: 'call.session_participant_joined';
     } & CallSessionParticipantJoinedEvent)
   | ({
@@ -12715,6 +13006,7 @@ export type WebhookEvent =
   | ({ type: 'feeds.follow.created' } & FollowCreatedEvent)
   | ({ type: 'feeds.follow.deleted' } & FollowDeletedEvent)
   | ({ type: 'feeds.follow.updated' } & FollowUpdatedEvent)
+  | ({ type: 'feeds.notification_feed.updated' } & NotificationFeedUpdatedEvent)
   | ({ type: 'flag.updated' } & FlagUpdatedEvent)
   | ({ type: 'member.added' } & MemberAddedEvent)
   | ({ type: 'member.removed' } & MemberRemovedEvent)
@@ -12732,10 +13024,14 @@ export type WebhookEvent =
   | ({ type: 'moderation.mark_reviewed' } & ModerationMarkReviewedEvent)
   | ({ type: 'moderation_check.completed' } & ModerationCheckCompletedEvent)
   | ({ type: 'notification.mark_unread' } & NotificationMarkUnreadEvent)
+  | ({ type: 'notification.reminder_due' } & ReminderNotificationEvent)
   | ({ type: 'notification.thread_message_new' } & MessageNewEvent)
   | ({ type: 'reaction.deleted' } & ReactionDeletedEvent)
   | ({ type: 'reaction.new' } & ReactionNewEvent)
   | ({ type: 'reaction.updated' } & ReactionUpdatedEvent)
+  | ({ type: 'reminder.created' } & ReminderCreatedEvent)
+  | ({ type: 'reminder.deleted' } & ReminderDeletedEvent)
+  | ({ type: 'reminder.updated' } & ReminderUpdatedEvent)
   | ({ type: 'review_queue_item.new' } & ReviewQueueItemNewEvent)
   | ({ type: 'review_queue_item.updated' } & ReviewQueueItemUpdatedEvent)
   | ({ type: 'thread.updated' } & ThreadUpdatedEvent)
@@ -12763,7 +13059,7 @@ export interface WrappedUnreadCountsResponse {
 
   threads: UnreadCountsThread[];
 
-  total_unread_count_by_team: Record<string, number>;
+  total_unread_count_by_team?: Record<string, number>;
 }
 
 export interface XiaomiConfig {

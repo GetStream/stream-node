@@ -45,6 +45,8 @@ import {
   GetFeedGroupResponse,
   GetFeedViewResponse,
   GetFollowSuggestionsResponse,
+  GetOrCreateFeedGroupRequest,
+  GetOrCreateFeedGroupResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
   ListFeedGroupsResponse,
@@ -1044,6 +1046,35 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getOrCreateFeedGroup(
+    request: GetOrCreateFeedGroupRequest & { feed_group_id: string },
+  ): Promise<StreamResponse<GetOrCreateFeedGroupResponse>> {
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+    };
+    const body = {
+      default_view_id: request?.default_view_id,
+      default_visibility: request?.default_visibility,
+      custom: request?.custom,
+      notification: request?.notification,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOrCreateFeedGroupResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_groups/{feed_group_id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetOrCreateFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async updateFeedGroup(
     request: UpdateFeedGroupRequest & { feed_group_id: string },
   ): Promise<StreamResponse<UpdateFeedGroupResponse>> {
@@ -1183,6 +1214,7 @@ export class FeedsApi {
       mark_all_seen: request?.mark_all_seen,
       user_id: request?.user_id,
       mark_read: request?.mark_read,
+      mark_seen: request?.mark_seen,
       mark_watched: request?.mark_watched,
       user: request?.user,
     };
