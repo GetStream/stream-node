@@ -132,6 +132,7 @@ export class CommonApi {
       sqs_key: request?.sqs_key,
       sqs_secret: request?.sqs_secret,
       sqs_url: request?.sqs_url,
+      user_response_time_enabled: request?.user_response_time_enabled,
       webhook_url: request?.webhook_url,
       allowed_flag_reasons: request?.allowed_flag_reasons,
       event_hooks: request?.event_hooks,
@@ -1379,7 +1380,6 @@ export class CommonApi {
       user_id: request?.user_id,
     };
     const body = {
-      created_by_device_id: request?.created_by_device_id,
       message_id: request?.message_id,
       end_at: request?.end_at,
       latitude: request?.latitude,
