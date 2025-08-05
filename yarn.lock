@@ -365,7 +365,7 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@openai/realtime-api-beta@openai/openai-realtime-api-beta#a5cb94824f625423858ebacb9f769226ca98945f":
+"@openai/realtime-api-beta@github:openai/openai-realtime-api-beta#a5cb94824f625423858ebacb9f769226ca98945f":
   version "0.0.0"
   resolved "https://codeload.github.com/openai/openai-realtime-api-beta/tar.gz/a5cb94824f625423858ebacb9f769226ca98945f"
   dependencies:
@@ -488,10 +488,10 @@
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@stream-io/openai-realtime-api@~0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@stream-io/openai-realtime-api/-/openai-realtime-api-0.1.3.tgz#4a77eac5e58b4d7980958820690687a0edf3986d"
-  integrity sha512-kB3BMW2CYAHF+SrswUvaJmwVlOOK3MZYBW9oR4Q9HGpzS0gEGP/feGsqt5M37/0gJ6A5mOoBA26TcnHmaA39dA==
+"@stream-io/openai-realtime-api@~0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@stream-io/openai-realtime-api/-/openai-realtime-api-0.3.3.tgz#cd08be42134ba0fad81bc48ec4c7f9c576833b1e"
+  integrity sha512-jHjvE8zIkUAK6oeR/ZmjKDkyGB/jmV0QSGEv8CmXbobX4uzWPjM72CK6kqzTdUqJdxjGun7UrCp2enrPhHizlg==
   dependencies:
     "@openai/realtime-api-beta" openai/openai-realtime-api-beta#a5cb94824f625423858ebacb9f769226ca98945f
     ws "^8.18.0"
