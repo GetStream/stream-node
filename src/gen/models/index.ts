@@ -6035,6 +6035,29 @@ export interface GetOrCreateCallResponse {
   call: CallResponse;
 }
 
+export interface GetOrCreateFeedGroupRequest {
+  default_view_id?: string;
+
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
+
+  custom?: Record<string, any>;
+
+  notification?: NotificationConfig;
+}
+
+export interface GetOrCreateFeedGroupResponse {
+  duration: string;
+
+  was_created: boolean;
+
+  feed_group: FeedGroupResponse;
+}
+
 export interface GetOrCreateFeedRequest {
   limit?: number;
 

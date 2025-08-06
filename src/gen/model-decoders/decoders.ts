@@ -2273,6 +2273,13 @@ decoders.GetOrCreateCallResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetOrCreateFeedGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    feed_group: { type: 'FeedGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activities: { type: 'ActivityResponse', isSingle: false },

@@ -45,6 +45,8 @@ import {
   GetFeedGroupResponse,
   GetFeedViewResponse,
   GetFollowSuggestionsResponse,
+  GetOrCreateFeedGroupRequest,
+  GetOrCreateFeedGroupResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
   GetOrCreateFeedViewRequest,
@@ -1042,6 +1044,35 @@ export class FeedsApi {
     );
 
     decoders.GetFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getOrCreateFeedGroup(
+    request: GetOrCreateFeedGroupRequest & { feed_group_id: string },
+  ): Promise<StreamResponse<GetOrCreateFeedGroupResponse>> {
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+    };
+    const body = {
+      default_view_id: request?.default_view_id,
+      default_visibility: request?.default_visibility,
+      custom: request?.custom,
+      notification: request?.notification,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOrCreateFeedGroupResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_groups/{feed_group_id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetOrCreateFeedGroupResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
