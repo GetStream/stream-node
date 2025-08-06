@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.2](https://github.com/GetStream/stream-node/compare/v0.5.1...v0.5.2) (2025-08-06)
+
+
+### Features
+
+* add method and request/response for new endpoint ([#126](https://github.com/GetStream/stream-node/issues/126)) ([40a65d2](https://github.com/GetStream/stream-node/commit/40a65d2b349fb2d1b38d0ae01a7281ec7b626d1a))
+* new endpoint GetOrCreateFeedGroup ([#127](https://github.com/GetStream/stream-node/issues/127)) ([7c58c64](https://github.com/GetStream/stream-node/commit/7c58c648ce8d33eb3446e49ceb7f23ae3f32c824))
+
 ## [0.5.1](https://github.com/GetStream/stream-node/compare/v0.5.0...v0.5.1) (2025-07-25)
 
 
