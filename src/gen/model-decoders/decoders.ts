@@ -1888,6 +1888,8 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+
+    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2273,13 +2275,6 @@ decoders.GetOrCreateCallResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.GetOrCreateFeedGroupResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    feed_group: { type: 'FeedGroupResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activities: { type: 'ActivityResponse', isSingle: false },
@@ -2304,13 +2299,6 @@ decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
     notification_status: { type: 'NotificationStatusResponse', isSingle: true },
 
     own_membership: { type: 'FeedMemberResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.GetOrCreateFeedViewResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    feed_view: { type: 'FeedViewResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
