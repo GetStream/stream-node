@@ -182,7 +182,7 @@ export class FeedsApi {
     request: DeleteActivitiesRequest,
   ): Promise<StreamResponse<DeleteActivitiesResponse>> {
     const body = {
-      activity_ids: request?.activity_ids,
+      ids: request?.ids,
       hard_delete: request?.hard_delete,
       user_id: request?.user_id,
       user: request?.user,
