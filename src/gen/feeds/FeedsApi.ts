@@ -231,112 +231,6 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteActivity(request: {
-    activity_id: string;
-    hard_delete?: boolean;
-  }): Promise<StreamResponse<DeleteActivityResponse>> {
-    const queryParams = {
-      hard_delete: request?.hard_delete,
-    };
-    const pathParams = {
-      activity_id: request?.activity_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteActivityResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/activities/{activity_id}',
-      pathParams,
-      queryParams,
-    );
-
-    decoders.DeleteActivityResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getActivity(request: {
-    activity_id: string;
-  }): Promise<StreamResponse<GetActivityResponse>> {
-    const pathParams = {
-      activity_id: request?.activity_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetActivityResponse>
-    >('GET', '/api/v2/feeds/activities/{activity_id}', pathParams, undefined);
-
-    decoders.GetActivityResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updateActivityPartial(
-    request: UpdateActivityPartialRequest & { activity_id: string },
-  ): Promise<StreamResponse<UpdateActivityPartialResponse>> {
-    const pathParams = {
-      activity_id: request?.activity_id,
-    };
-    const body = {
-      user_id: request?.user_id,
-      unset: request?.unset,
-      set: request?.set,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateActivityPartialResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/activities/{activity_id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpdateActivityPartialResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updateActivity(
-    request: UpdateActivityRequest & { activity_id: string },
-  ): Promise<StreamResponse<UpdateActivityResponse>> {
-    const pathParams = {
-      activity_id: request?.activity_id,
-    };
-    const body = {
-      expires_at: request?.expires_at,
-      poll_id: request?.poll_id,
-      text: request?.text,
-      user_id: request?.user_id,
-      visibility: request?.visibility,
-      attachments: request?.attachments,
-      filter_tags: request?.filter_tags,
-      interest_tags: request?.interest_tags,
-      custom: request?.custom,
-      location: request?.location,
-      user: request?.user,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateActivityResponse>
-    >(
-      'PUT',
-      '/api/v2/feeds/activities/{activity_id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpdateActivityResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async deleteBookmark(request: {
     activity_id: string;
     folder_id?: string;
@@ -598,6 +492,107 @@ export class FeedsApi {
     );
 
     decoders.DeleteActivityReactionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteActivity(request: {
+    id: string;
+    hard_delete?: boolean;
+  }): Promise<StreamResponse<DeleteActivityResponse>> {
+    const queryParams = {
+      hard_delete: request?.hard_delete,
+    };
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteActivityResponse>
+    >('DELETE', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
+
+    decoders.DeleteActivityResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getActivity(request: {
+    id: string;
+  }): Promise<StreamResponse<GetActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetActivityResponse>
+    >('GET', '/api/v2/feeds/activities/{id}', pathParams, undefined);
+
+    decoders.GetActivityResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateActivityPartial(
+    request: UpdateActivityPartialRequest & { id: string },
+  ): Promise<StreamResponse<UpdateActivityPartialResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      unset: request?.unset,
+      set: request?.set,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateActivityPartialResponse>
+    >(
+      'PATCH',
+      '/api/v2/feeds/activities/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateActivityPartialResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateActivity(
+    request: UpdateActivityRequest & { id: string },
+  ): Promise<StreamResponse<UpdateActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      expires_at: request?.expires_at,
+      poll_id: request?.poll_id,
+      text: request?.text,
+      user_id: request?.user_id,
+      visibility: request?.visibility,
+      attachments: request?.attachments,
+      filter_tags: request?.filter_tags,
+      interest_tags: request?.interest_tags,
+      custom: request?.custom,
+      location: request?.location,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateActivityResponse>
+    >(
+      'PUT',
+      '/api/v2/feeds/activities/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateActivityResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
