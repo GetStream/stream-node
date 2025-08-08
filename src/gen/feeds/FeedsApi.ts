@@ -1718,8 +1718,8 @@ export class FeedsApi {
     request: AcceptFollowRequest,
   ): Promise<StreamResponse<AcceptFollowResponse>> {
     const body = {
-      source_fid: request?.source_fid,
-      target_fid: request?.target_fid,
+      source: request?.source,
+      target: request?.target,
       follower_role: request?.follower_role,
     };
 
@@ -1793,8 +1793,8 @@ export class FeedsApi {
     request: RejectFollowRequest,
   ): Promise<StreamResponse<RejectFollowResponse>> {
     const body = {
-      source_fid: request?.source_fid,
-      target_fid: request?.target_fid,
+      source: request?.source,
+      target: request?.target,
     };
 
     const response = await this.apiClient.sendRequest<
