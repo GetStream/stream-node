@@ -1009,7 +1009,7 @@ export class FeedsApi {
     request: CreateFeedGroupRequest,
   ): Promise<StreamResponse<CreateFeedGroupResponse>> {
     const body = {
-      feed_group_id: request?.feed_group_id,
+      id: request?.id,
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
@@ -1378,20 +1378,32 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFeedGroup(): Promise<StreamResponse<DeleteFeedGroupResponse>> {
+  async deleteFeedGroup(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteFeedGroupResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteFeedGroupResponse>
-    >('DELETE', '/api/v2/feeds/feed_groups/{id}', undefined, undefined);
+    >('DELETE', '/api/v2/feeds/feed_groups/{id}', pathParams, undefined);
 
     decoders.DeleteFeedGroupResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
-  async getFeedGroup(): Promise<StreamResponse<GetFeedGroupResponse>> {
+  async getFeedGroup(request: {
+    id: string;
+  }): Promise<StreamResponse<GetFeedGroupResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetFeedGroupResponse>
-    >('GET', '/api/v2/feeds/feed_groups/{id}', undefined, undefined);
+    >('GET', '/api/v2/feeds/feed_groups/{id}', pathParams, undefined);
 
     decoders.GetFeedGroupResponse?.(response.body);
 
@@ -1427,8 +1439,11 @@ export class FeedsApi {
   }
 
   async updateFeedGroup(
-    request?: UpdateFeedGroupRequest,
+    request: UpdateFeedGroupRequest & { id: string },
   ): Promise<StreamResponse<UpdateFeedGroupResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
     const body = {
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
@@ -1443,7 +1458,7 @@ export class FeedsApi {
     >(
       'PUT',
       '/api/v2/feeds/feed_groups/{id}',
-      undefined,
+      pathParams,
       undefined,
       body,
       'application/json',

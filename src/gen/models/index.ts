@@ -4062,7 +4062,7 @@ export interface CreateExternalStorageResponse {
 }
 
 export interface CreateFeedGroupRequest {
-  feed_group_id: string;
+  id: string;
 
   default_visibility?:
     | 'public'
