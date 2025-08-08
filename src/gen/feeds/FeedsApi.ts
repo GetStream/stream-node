@@ -233,7 +233,11 @@ export class FeedsApi {
 
   async deleteActivity(request: {
     activity_id: string;
+    hard_delete?: boolean;
   }): Promise<StreamResponse<DeleteActivityResponse>> {
+    const queryParams = {
+      hard_delete: request?.hard_delete,
+    };
     const pathParams = {
       activity_id: request?.activity_id,
     };
@@ -244,7 +248,7 @@ export class FeedsApi {
       'DELETE',
       '/api/v2/feeds/activities/{activity_id}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.DeleteActivityResponse?.(response.body);
