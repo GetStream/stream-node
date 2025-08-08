@@ -1038,7 +1038,11 @@ export class FeedsApi {
   async deleteFeed(request: {
     feed_group_id: string;
     feed_id: string;
+    hard_delete?: boolean;
   }): Promise<StreamResponse<DeleteFeedResponse>> {
+    const queryParams = {
+      hard_delete: request?.hard_delete,
+    };
     const pathParams = {
       feed_group_id: request?.feed_group_id,
       feed_id: request?.feed_id,
@@ -1050,7 +1054,7 @@ export class FeedsApi {
       'DELETE',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.DeleteFeedResponse?.(response.body);
@@ -1380,14 +1384,18 @@ export class FeedsApi {
 
   async deleteFeedGroup(request: {
     id: string;
+    hard_delete?: boolean;
   }): Promise<StreamResponse<DeleteFeedGroupResponse>> {
+    const queryParams = {
+      hard_delete: request?.hard_delete,
+    };
     const pathParams = {
       id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteFeedGroupResponse>
-    >('DELETE', '/api/v2/feeds/feed_groups/{id}', pathParams, undefined);
+    >('DELETE', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
 
     decoders.DeleteFeedGroupResponse?.(response.body);
 
