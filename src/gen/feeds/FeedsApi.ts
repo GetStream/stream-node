@@ -1509,15 +1509,15 @@ export class FeedsApi {
   }
 
   async deleteFeedView(request: {
-    view_id: string;
+    id: string;
   }): Promise<StreamResponse<DeleteFeedViewResponse>> {
     const pathParams = {
-      view_id: request?.view_id,
+      id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteFeedViewResponse>
-    >('DELETE', '/api/v2/feeds/feed_views/{view_id}', pathParams, undefined);
+    >('DELETE', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
 
     decoders.DeleteFeedViewResponse?.(response.body);
 
@@ -1525,15 +1525,15 @@ export class FeedsApi {
   }
 
   async getFeedView(request: {
-    view_id: string;
+    id: string;
   }): Promise<StreamResponse<GetFeedViewResponse>> {
     const pathParams = {
-      view_id: request?.view_id,
+      id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetFeedViewResponse>
-    >('GET', '/api/v2/feeds/feed_views/{view_id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
 
     decoders.GetFeedViewResponse?.(response.body);
 
@@ -1541,10 +1541,10 @@ export class FeedsApi {
   }
 
   async getOrCreateFeedView(
-    request: GetOrCreateFeedViewRequest & { view_id: string },
+    request: GetOrCreateFeedViewRequest & { id: string },
   ): Promise<StreamResponse<GetOrCreateFeedViewResponse>> {
     const pathParams = {
-      view_id: request?.view_id,
+      id: request?.id,
     };
     const body = {
       activity_processors: request?.activity_processors,
@@ -1557,7 +1557,7 @@ export class FeedsApi {
       StreamResponse<GetOrCreateFeedViewResponse>
     >(
       'POST',
-      '/api/v2/feeds/feed_views/{view_id}',
+      '/api/v2/feeds/feed_views/{id}',
       pathParams,
       undefined,
       body,
@@ -1570,10 +1570,10 @@ export class FeedsApi {
   }
 
   async updateFeedView(
-    request: UpdateFeedViewRequest & { view_id: string },
+    request: UpdateFeedViewRequest & { id: string },
   ): Promise<StreamResponse<UpdateFeedViewResponse>> {
     const pathParams = {
-      view_id: request?.view_id,
+      id: request?.id,
     };
     const body = {
       activity_processors: request?.activity_processors,
@@ -1586,7 +1586,7 @@ export class FeedsApi {
       StreamResponse<UpdateFeedViewResponse>
     >(
       'PUT',
-      '/api/v2/feeds/feed_views/{view_id}',
+      '/api/v2/feeds/feed_views/{id}',
       pathParams,
       undefined,
       body,
