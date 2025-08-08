@@ -819,15 +819,15 @@ export class FeedsApi {
   }
 
   async deleteComment(request: {
-    comment_id: string;
+    id: string;
   }): Promise<StreamResponse<DeleteCommentResponse>> {
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteCommentResponse>
-    >('DELETE', '/api/v2/feeds/comments/{comment_id}', pathParams, undefined);
+    >('DELETE', '/api/v2/feeds/comments/{id}', pathParams, undefined);
 
     decoders.DeleteCommentResponse?.(response.body);
 
@@ -835,15 +835,15 @@ export class FeedsApi {
   }
 
   async getComment(request: {
-    comment_id: string;
+    id: string;
   }): Promise<StreamResponse<GetCommentResponse>> {
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetCommentResponse>
-    >('GET', '/api/v2/feeds/comments/{comment_id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/comments/{id}', pathParams, undefined);
 
     decoders.GetCommentResponse?.(response.body);
 
@@ -851,10 +851,10 @@ export class FeedsApi {
   }
 
   async updateComment(
-    request: UpdateCommentRequest & { comment_id: string },
+    request: UpdateCommentRequest & { id: string },
   ): Promise<StreamResponse<UpdateCommentResponse>> {
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
     const body = {
       comment: request?.comment,
@@ -865,7 +865,7 @@ export class FeedsApi {
       StreamResponse<UpdateCommentResponse>
     >(
       'PATCH',
-      '/api/v2/feeds/comments/{comment_id}',
+      '/api/v2/feeds/comments/{id}',
       pathParams,
       undefined,
       body,
@@ -878,10 +878,10 @@ export class FeedsApi {
   }
 
   async addCommentReaction(
-    request: AddCommentReactionRequest & { comment_id: string },
+    request: AddCommentReactionRequest & { id: string },
   ): Promise<StreamResponse<AddCommentReactionResponse>> {
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
     const body = {
       type: request?.type,
@@ -895,7 +895,7 @@ export class FeedsApi {
       StreamResponse<AddCommentReactionResponse>
     >(
       'POST',
-      '/api/v2/feeds/comments/{comment_id}/reactions',
+      '/api/v2/feeds/comments/{id}/reactions',
       pathParams,
       undefined,
       body,
@@ -908,10 +908,10 @@ export class FeedsApi {
   }
 
   async queryCommentReactions(
-    request: QueryCommentReactionsRequest & { comment_id: string },
+    request: QueryCommentReactionsRequest & { id: string },
   ): Promise<StreamResponse<QueryCommentReactionsResponse>> {
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
     const body = {
       limit: request?.limit,
@@ -925,7 +925,7 @@ export class FeedsApi {
       StreamResponse<QueryCommentReactionsResponse>
     >(
       'POST',
-      '/api/v2/feeds/comments/{comment_id}/reactions/query',
+      '/api/v2/feeds/comments/{id}/reactions/query',
       pathParams,
       undefined,
       body,
@@ -938,7 +938,7 @@ export class FeedsApi {
   }
 
   async deleteCommentReaction(request: {
-    comment_id: string;
+    id: string;
     type: string;
     user_id?: string;
   }): Promise<StreamResponse<DeleteCommentReactionResponse>> {
@@ -946,7 +946,7 @@ export class FeedsApi {
       user_id: request?.user_id,
     };
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
       type: request?.type,
     };
 
@@ -954,7 +954,7 @@ export class FeedsApi {
       StreamResponse<DeleteCommentReactionResponse>
     >(
       'DELETE',
-      '/api/v2/feeds/comments/{comment_id}/reactions/{type}',
+      '/api/v2/feeds/comments/{id}/reactions/{type}',
       pathParams,
       queryParams,
     );
@@ -965,7 +965,7 @@ export class FeedsApi {
   }
 
   async getCommentReplies(request: {
-    comment_id: string;
+    id: string;
     depth?: number;
     sort?: string;
     replies_limit?: number;
@@ -982,17 +982,12 @@ export class FeedsApi {
       next: request?.next,
     };
     const pathParams = {
-      comment_id: request?.comment_id,
+      id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetCommentRepliesResponse>
-    >(
-      'GET',
-      '/api/v2/feeds/comments/{comment_id}/replies',
-      pathParams,
-      queryParams,
-    );
+    >('GET', '/api/v2/feeds/comments/{id}/replies', pathParams, queryParams);
 
     decoders.GetCommentRepliesResponse?.(response.body);
 
