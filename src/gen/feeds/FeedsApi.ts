@@ -1035,104 +1035,6 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFeedGroup(request: {
-    feed_group_id: string;
-  }): Promise<StreamResponse<DeleteFeedGroupResponse>> {
-    const pathParams = {
-      feed_group_id: request?.feed_group_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedGroupResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/feed_groups/{feed_group_id}',
-      pathParams,
-      undefined,
-    );
-
-    decoders.DeleteFeedGroupResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getFeedGroup(request: {
-    feed_group_id: string;
-  }): Promise<StreamResponse<GetFeedGroupResponse>> {
-    const pathParams = {
-      feed_group_id: request?.feed_group_id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedGroupResponse>
-    >(
-      'GET',
-      '/api/v2/feeds/feed_groups/{feed_group_id}',
-      pathParams,
-      undefined,
-    );
-
-    decoders.GetFeedGroupResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getOrCreateFeedGroup(
-    request?: GetOrCreateFeedGroupRequest,
-  ): Promise<StreamResponse<GetOrCreateFeedGroupResponse>> {
-    const body = {
-      default_visibility: request?.default_visibility,
-      custom: request?.custom,
-      notification: request?.notification,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateFeedGroupResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{feed_group_id}',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.GetOrCreateFeedGroupResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updateFeedGroup(
-    request: UpdateFeedGroupRequest & { feed_group_id: string },
-  ): Promise<StreamResponse<UpdateFeedGroupResponse>> {
-    const pathParams = {
-      feed_group_id: request?.feed_group_id,
-    };
-    const body = {
-      activity_processors: request?.activity_processors,
-      activity_selectors: request?.activity_selectors,
-      aggregation: request?.aggregation,
-      custom: request?.custom,
-      notification: request?.notification,
-      ranking: request?.ranking,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedGroupResponse>
-    >(
-      'PUT',
-      '/api/v2/feeds/feed_groups/{feed_group_id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpdateFeedGroupResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async deleteFeed(request: {
     feed_group_id: string;
     feed_id: string;
@@ -1472,6 +1374,82 @@ export class FeedsApi {
     );
 
     decoders.GetFollowSuggestionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteFeedGroup(): Promise<StreamResponse<DeleteFeedGroupResponse>> {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteFeedGroupResponse>
+    >('DELETE', '/api/v2/feeds/feed_groups/{id}', undefined, undefined);
+
+    decoders.DeleteFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getFeedGroup(): Promise<StreamResponse<GetFeedGroupResponse>> {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedGroupResponse>
+    >('GET', '/api/v2/feeds/feed_groups/{id}', undefined, undefined);
+
+    decoders.GetFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getOrCreateFeedGroup(
+    request: GetOrCreateFeedGroupRequest & { id: string },
+  ): Promise<StreamResponse<GetOrCreateFeedGroupResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      default_visibility: request?.default_visibility,
+      custom: request?.custom,
+      notification: request?.notification,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOrCreateFeedGroupResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_groups/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetOrCreateFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateFeedGroup(
+    request?: UpdateFeedGroupRequest,
+  ): Promise<StreamResponse<UpdateFeedGroupResponse>> {
+    const body = {
+      activity_processors: request?.activity_processors,
+      activity_selectors: request?.activity_selectors,
+      aggregation: request?.aggregation,
+      custom: request?.custom,
+      notification: request?.notification,
+      ranking: request?.ranking,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateFeedGroupResponse>
+    >(
+      'PUT',
+      '/api/v2/feeds/feed_groups/{id}',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateFeedGroupResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
