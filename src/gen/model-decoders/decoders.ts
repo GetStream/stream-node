@@ -2275,6 +2275,13 @@ decoders.GetOrCreateCallResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetOrCreateFeedGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    feed_group: { type: 'FeedGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activities: { type: 'ActivityResponse', isSingle: false },
@@ -2299,6 +2306,13 @@ decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
     notification_status: { type: 'NotificationStatusResponse', isSingle: true },
 
     own_membership: { type: 'FeedMemberResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.GetOrCreateFeedViewResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    feed_view: { type: 'FeedViewResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4240,6 +4254,17 @@ decoders.UserFlaggedEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'User', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserMessagesDeletedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

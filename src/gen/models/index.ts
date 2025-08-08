@@ -5153,11 +5153,9 @@ export interface FeedGroupDeletedEvent {
 export interface FeedGroupResponse {
   created_at: Date;
 
-  feed_group_id: string;
+  id: string;
 
   updated_at: Date;
-
-  default_view_id?: string;
 
   default_visibility?: string;
 
@@ -6143,6 +6141,27 @@ export interface GetOrCreateCallResponse {
   call: CallResponse;
 }
 
+export interface GetOrCreateFeedGroupRequest {
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
+
+  custom?: Record<string, any>;
+
+  notification?: NotificationConfig;
+}
+
+export interface GetOrCreateFeedGroupResponse {
+  duration: string;
+
+  was_created: boolean;
+
+  feed_group: FeedGroupResponse;
+}
+
 export interface GetOrCreateFeedRequest {
   limit?: number;
 
@@ -6211,6 +6230,24 @@ export interface GetOrCreateFeedResponse {
   notification_status?: NotificationStatusResponse;
 
   own_membership?: FeedMemberResponse;
+}
+
+export interface GetOrCreateFeedViewRequest {
+  activity_processors?: ActivityProcessorConfig[];
+
+  activity_selectors?: ActivitySelectorConfig[];
+
+  aggregation?: AggregationConfig;
+
+  ranking?: RankingConfig;
+}
+
+export interface GetOrCreateFeedViewResponse {
+  duration: string;
+
+  was_created: boolean;
+
+  feed_view: FeedViewResponse;
 }
 
 export interface GetPushTemplatesResponse {
@@ -12526,6 +12563,34 @@ export interface UserFlaggedEvent {
   user?: User;
 }
 
+export interface UserMessagesDeletedEvent {
+  created_at: Date;
+
+  hard_delete: boolean;
+
+  soft_delete: boolean;
+
+  custom: Record<string, any>;
+
+  user: UserResponseCommonFields;
+
+  type: string;
+
+  channel_id?: string;
+
+  channel_member_count?: number;
+
+  channel_type?: string;
+
+  cid?: string;
+
+  received_at?: Date;
+
+  team?: string;
+
+  channel_custom?: Record<string, any>;
+}
+
 export interface UserMute {
   created_at: Date;
 
@@ -13120,6 +13185,7 @@ export type WebhookEvent =
   | ({ type: 'user.deactivated' } & UserDeactivatedEvent)
   | ({ type: 'user.deleted' } & UserDeletedEvent)
   | ({ type: 'user.flagged' } & UserFlaggedEvent)
+  | ({ type: 'user.messages.deleted' } & UserMessagesDeletedEvent)
   | ({ type: 'user.muted' } & UserMutedEvent)
   | ({ type: 'user.reactivated' } & UserReactivatedEvent)
   | ({ type: 'user.unbanned' } & UserUnbannedEvent)

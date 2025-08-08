@@ -48,8 +48,12 @@ import {
   GetFeedGroupResponse,
   GetFeedViewResponse,
   GetFollowSuggestionsResponse,
+  GetOrCreateFeedGroupRequest,
+  GetOrCreateFeedGroupResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
+  GetOrCreateFeedViewRequest,
+  GetOrCreateFeedViewResponse,
   ListFeedGroupsResponse,
   ListFeedViewsResponse,
   MarkActivityRequest,
@@ -1073,6 +1077,31 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getOrCreateFeedGroup(
+    request?: GetOrCreateFeedGroupRequest,
+  ): Promise<StreamResponse<GetOrCreateFeedGroupResponse>> {
+    const body = {
+      default_visibility: request?.default_visibility,
+      custom: request?.custom,
+      notification: request?.notification,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOrCreateFeedGroupResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_groups/{feed_group_id}',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetOrCreateFeedGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async updateFeedGroup(
     request: UpdateFeedGroupRequest & { feed_group_id: string },
   ): Promise<StreamResponse<UpdateFeedGroupResponse>> {
@@ -1512,6 +1541,35 @@ export class FeedsApi {
     >('GET', '/api/v2/feeds/feed_views/{view_id}', pathParams, undefined);
 
     decoders.GetFeedViewResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getOrCreateFeedView(
+    request: GetOrCreateFeedViewRequest & { view_id: string },
+  ): Promise<StreamResponse<GetOrCreateFeedViewResponse>> {
+    const pathParams = {
+      view_id: request?.view_id,
+    };
+    const body = {
+      activity_processors: request?.activity_processors,
+      activity_selectors: request?.activity_selectors,
+      aggregation: request?.aggregation,
+      ranking: request?.ranking,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetOrCreateFeedViewResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_views/{view_id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetOrCreateFeedViewResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
