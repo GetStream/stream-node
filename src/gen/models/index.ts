@@ -4154,6 +4154,26 @@ export interface CreateImportURLResponse {
   upload_url: string;
 }
 
+export interface CreateMembershipLevelRequest {
+  id: string;
+
+  name: string;
+
+  description?: string;
+
+  priority?: number;
+
+  tags?: string[];
+
+  custom?: Record<string, any>;
+}
+
+export interface CreateMembershipLevelResponse {
+  duration: string;
+
+  membership_level: MembershipLevelResponse;
+}
+
 export interface CreatePollOptionRequest {
   text: string;
 
@@ -6924,6 +6944,24 @@ export interface MembersResponse {
   duration: string;
 
   members: ChannelMember[];
+}
+
+export interface MembershipLevelResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  priority: number;
+
+  updated_at: Date;
+
+  tags: string[];
+
+  description?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface Message {

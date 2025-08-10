@@ -1656,6 +1656,13 @@ decoders.CreateImportResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CreateMembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_level: { type: 'MembershipLevelResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CreateRoleResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     role: { type: 'Role', isSingle: true },
@@ -2533,6 +2540,15 @@ decoders.MemberUpdatedEvent = (input?: Record<string, any>) => {
 decoders.MembersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     members: { type: 'ChannelMember', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.MembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
