@@ -5504,29 +5504,33 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
+  entity_id: string;
+
+  entity_type: string;
 
   updated_at: Date;
 
-  approved_at?: Date;
+  result: Array<Record<string, any>>;
+
+  entity_creator_id?: string;
+
+  is_streamed_content?: boolean;
+
+  moderation_payload_hash?: string;
 
   reason?: string;
 
-  rejected_at?: Date;
+  review_queue_item_id?: string;
 
-  reviewed_at?: Date;
+  type?: string;
 
-  reviewed_by?: string;
-
-  target_message_id?: string;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
-  details?: FlagDetails;
+  moderation_payload?: ModerationPayload;
 
-  target_message?: Message;
-
-  target_user?: User;
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
 }
