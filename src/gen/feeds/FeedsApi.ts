@@ -1836,6 +1836,34 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async createMembershipLevel(
+    request: CreateMembershipLevelRequest,
+  ): Promise<StreamResponse<CreateMembershipLevelResponse>> {
+    const body = {
+      id: request?.id,
+      name: request?.name,
+      description: request?.description,
+      priority: request?.priority,
+      tags: request?.tags,
+      custom: request?.custom,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateMembershipLevelResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/membership_levels',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateMembershipLevelResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async unfollowBatch(
     request: UnfollowBatchRequest,
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
