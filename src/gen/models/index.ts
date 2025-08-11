@@ -6169,9 +6169,17 @@ export interface GetOrCreateFeedGroupRequest {
     | 'members'
     | 'private';
 
+  activity_processors?: ActivityProcessorConfig[];
+
+  activity_selectors?: ActivitySelectorConfig[];
+
+  aggregation?: AggregationConfig;
+
   custom?: Record<string, any>;
 
   notification?: NotificationConfig;
+
+  ranking?: RankingConfig;
 }
 
 export interface GetOrCreateFeedGroupResponse {

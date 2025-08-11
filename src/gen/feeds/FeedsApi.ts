@@ -1426,8 +1426,12 @@ export class FeedsApi {
     };
     const body = {
       default_visibility: request?.default_visibility,
+      activity_processors: request?.activity_processors,
+      activity_selectors: request?.activity_selectors,
+      aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
+      ranking: request?.ranking,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1828,34 +1832,6 @@ export class FeedsApi {
     );
 
     decoders.UnfollowResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async createMembershipLevel(
-    request: CreateMembershipLevelRequest,
-  ): Promise<StreamResponse<CreateMembershipLevelResponse>> {
-    const body = {
-      id: request?.id,
-      name: request?.name,
-      description: request?.description,
-      priority: request?.priority,
-      tags: request?.tags,
-      custom: request?.custom,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateMembershipLevelResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/membership_levels',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.CreateMembershipLevelResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
