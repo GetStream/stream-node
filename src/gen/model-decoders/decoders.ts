@@ -3319,6 +3319,13 @@ decoders.QueryFollowsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.QueryMembershipLevelsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_levels: { type: 'MembershipLevelResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.QueryMessageFlagsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     flags: { type: 'MessageFlagResponse', isSingle: false },
