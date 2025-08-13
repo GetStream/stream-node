@@ -12186,6 +12186,24 @@ export interface UpdateMemberPartialResponse {
   channel_member?: ChannelMemberResponse;
 }
 
+export interface UpdateMembershipLevelRequest {
+  description?: string;
+
+  name?: string;
+
+  priority?: number;
+
+  tags?: string[];
+
+  custom?: Record<string, any>;
+}
+
+export interface UpdateMembershipLevelResponse {
+  duration: string;
+
+  membership_level: MembershipLevelResponse;
+}
+
 export interface UpdateMessagePartialRequest {
   skip_enrich_url?: boolean;
 
