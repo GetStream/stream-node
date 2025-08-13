@@ -9110,6 +9110,28 @@ export interface QueryMembersPayload {
   user?: UserRequest;
 }
 
+export interface QueryMembershipLevelsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryMembershipLevelsResponse {
+  duration: string;
+
+  membership_levels: MembershipLevelResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryMessageFlagsPayload {
   limit?: number;
 
