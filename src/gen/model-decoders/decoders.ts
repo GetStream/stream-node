@@ -4130,6 +4130,13 @@ decoders.UpdateMemberPartialResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UpdateMembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_level: { type: 'MembershipLevelResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.UpdateMessagePartialResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     message: { type: 'MessageResponse', isSingle: true },

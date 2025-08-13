@@ -112,6 +112,8 @@ import {
   UpdateFeedViewResponse,
   UpdateFollowRequest,
   UpdateFollowResponse,
+  UpdateMembershipLevelRequest,
+  UpdateMembershipLevelResponse,
   UpsertActivitiesRequest,
   UpsertActivitiesResponse,
 } from '../models';
@@ -1862,6 +1864,36 @@ export class FeedsApi {
     );
 
     decoders.CreateMembershipLevelResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateMembershipLevel(
+    request: UpdateMembershipLevelRequest & { id: string },
+  ): Promise<StreamResponse<UpdateMembershipLevelResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      description: request?.description,
+      name: request?.name,
+      priority: request?.priority,
+      tags: request?.tags,
+      custom: request?.custom,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateMembershipLevelResponse>
+    >(
+      'PATCH',
+      '/api/v2/feeds/membership_levels/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateMembershipLevelResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
