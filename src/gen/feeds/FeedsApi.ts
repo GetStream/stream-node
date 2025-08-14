@@ -1897,6 +1897,25 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async deleteMembershipLevel(request: {
+    id: string;
+  }): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/feeds/membership_levels/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async updateMembershipLevel(
     request: UpdateMembershipLevelRequest & { id: string },
   ): Promise<StreamResponse<UpdateMembershipLevelResponse>> {
