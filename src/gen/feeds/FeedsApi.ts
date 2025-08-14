@@ -1364,9 +1364,11 @@ export class FeedsApi {
   async getFollowSuggestions(request: {
     feed_group_id: string;
     limit?: number;
+    user_id?: string;
   }): Promise<StreamResponse<GetFollowSuggestionsResponse>> {
     const queryParams = {
       limit: request?.limit,
+      user_id: request?.user_id,
     };
     const pathParams = {
       feed_group_id: request?.feed_group_id,
@@ -1868,6 +1870,33 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async queryMembershipLevels(
+    request?: QueryMembershipLevelsRequest,
+  ): Promise<StreamResponse<QueryMembershipLevelsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryMembershipLevelsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/membership_levels/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryMembershipLevelsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async updateMembershipLevel(
     request: UpdateMembershipLevelRequest & { id: string },
   ): Promise<StreamResponse<UpdateMembershipLevelResponse>> {
@@ -1894,33 +1923,6 @@ export class FeedsApi {
     );
 
     decoders.UpdateMembershipLevelResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async queryMembershipLevels(
-    request?: QueryMembershipLevelsRequest,
-  ): Promise<StreamResponse<QueryMembershipLevelsResponse>> {
-    const body = {
-      limit: request?.limit,
-      next: request?.next,
-      prev: request?.prev,
-      sort: request?.sort,
-      filter: request?.filter,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryMembershipLevelsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/membership_levels/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.QueryMembershipLevelsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

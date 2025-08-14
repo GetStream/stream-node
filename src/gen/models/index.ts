@@ -242,6 +242,12 @@ export interface ActiveCallsMetrics {
   subscribers?: SubscribersMetrics;
 }
 
+export interface ActiveCallsResolutionStats {
+  p10: number;
+
+  p50: number;
+}
+
 export interface ActiveCallsSummary {
   active_calls: number;
 
@@ -308,8 +314,6 @@ export interface ActivityFeedbackResponse {
   activity_id: string;
 
   duration: string;
-
-  success: boolean;
 }
 
 export interface ActivityLocation {
@@ -1935,6 +1939,8 @@ export interface CallParticipant {
   joined_at: Date;
 
   online: boolean;
+
+  role: string;
 
   role: string;
 
@@ -7607,11 +7613,11 @@ export interface ModerationFlagResponse {
 
   entity_type: string;
 
-  id: string;
-
   type: string;
 
   updated_at: string;
+
+  user_id: string;
 
   entity_creator_id?: string;
 
@@ -8454,6 +8460,8 @@ export interface PublisherVideoMetrics {
   frame_encoding_time_ms?: ActiveCallsLatencyStats;
 
   jitter_ms?: ActiveCallsLatencyStats;
+
+  resolution?: ActiveCallsResolutionStats;
 }
 
 export interface PublishersMetrics {
@@ -10063,7 +10071,7 @@ export interface ReviewQueueItemNewEvent {
 
   received_at?: Date;
 
-  flags?: FlagResponse[];
+  flags?: ModerationFlagResponse[];
 
   action?: ActionLogResponse;
 
@@ -10097,7 +10105,7 @@ export interface ReviewQueueItemResponse {
 
   bans: Ban[];
 
-  flags: FlagResponse[];
+  flags: ModerationFlagResponse[];
 
   languages: string[];
 
@@ -10139,7 +10147,7 @@ export interface ReviewQueueItemUpdatedEvent {
 
   received_at?: Date;
 
-  flags?: FlagResponse[];
+  flags?: ModerationFlagResponse[];
 
   action?: ActionLogResponse;
 

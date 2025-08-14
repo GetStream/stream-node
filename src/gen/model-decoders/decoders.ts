@@ -3588,6 +3588,8 @@ decoders.ReviewQueueItemNewEvent = (input?: Record<string, any>) => {
 
     received_at: { type: 'DatetimeType', isSingle: true },
 
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
+
     action: { type: 'ActionLogResponse', isSingle: true },
 
     review_queue_item: { type: 'ReviewQueueItemResponse', isSingle: true },
@@ -3604,6 +3606,8 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     actions: { type: 'ActionLogResponse', isSingle: false },
 
     bans: { type: 'Ban', isSingle: false },
+
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
 
     completed_at: { type: 'DatetimeType', isSingle: true },
 
@@ -3629,6 +3633,8 @@ decoders.ReviewQueueItemUpdatedEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
+
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
 
     action: { type: 'ActionLogResponse', isSingle: true },
 
