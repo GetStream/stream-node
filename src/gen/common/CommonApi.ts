@@ -1335,6 +1335,7 @@ export class CommonApi {
       user_ids: request?.user_ids,
       calls: request?.calls,
       conversations: request?.conversations,
+      files: request?.files,
       messages: request?.messages,
       new_call_owner_id: request?.new_call_owner_id,
       new_channel_owner_id: request?.new_channel_owner_id,

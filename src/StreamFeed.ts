@@ -1,7 +1,7 @@
 import { FeedApi } from './gen/feeds/FeedApi';
 
 export class StreamFeed extends FeedApi {
-  get fid() {
+  get feed() {
     return `${this.group}:${this.id}`;
   }
 }
