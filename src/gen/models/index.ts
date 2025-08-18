@@ -2784,6 +2784,8 @@ export interface ChannelConfigWithInfo {
 
   connect_events: boolean;
 
+  count_messages: boolean;
+
   created_at: Date;
 
   custom_events: boolean;
@@ -3142,6 +3144,8 @@ export interface ChannelResponse {
   last_message_at?: Date;
 
   member_count?: number;
+
+  message_count?: number;
 
   mute_expires_at?: Date;
 
