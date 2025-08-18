@@ -1656,6 +1656,13 @@ decoders.CreateImportResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CreateMembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_level: { type: 'MembershipLevelResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CreateRoleResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     role: { type: 'Role', isSingle: true },
@@ -1888,6 +1895,8 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+
+    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2531,6 +2540,15 @@ decoders.MemberUpdatedEvent = (input?: Record<string, any>) => {
 decoders.MembersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     members: { type: 'ChannelMember', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.MembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3301,6 +3319,13 @@ decoders.QueryFollowsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.QueryMembershipLevelsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_levels: { type: 'MembershipLevelResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.QueryMessageFlagsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     flags: { type: 'MessageFlagResponse', isSingle: false },
@@ -3563,6 +3588,8 @@ decoders.ReviewQueueItemNewEvent = (input?: Record<string, any>) => {
 
     received_at: { type: 'DatetimeType', isSingle: true },
 
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
+
     action: { type: 'ActionLogResponse', isSingle: true },
 
     review_queue_item: { type: 'ReviewQueueItemResponse', isSingle: true },
@@ -3579,6 +3606,8 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     actions: { type: 'ActionLogResponse', isSingle: false },
 
     bans: { type: 'Ban', isSingle: false },
+
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
 
     completed_at: { type: 'DatetimeType', isSingle: true },
 
@@ -3604,6 +3633,8 @@ decoders.ReviewQueueItemUpdatedEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
+
+    flags: { type: 'ModerationFlagResponse', isSingle: false },
 
     action: { type: 'ActionLogResponse', isSingle: true },
 
@@ -4105,6 +4136,13 @@ decoders.UpdateMemberPartialResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UpdateMembershipLevelResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    membership_level: { type: 'MembershipLevelResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.UpdateMessagePartialResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     message: { type: 'MessageResponse', isSingle: true },
@@ -4252,6 +4290,17 @@ decoders.UserFlaggedEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'User', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserMessagesDeletedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
