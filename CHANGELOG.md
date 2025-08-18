@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/GetStream/stream-node/compare/v0.5.1...v0.6.0) (2025-08-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* API naming review ([#130](https://github.com/GetStream/stream-node/issues/130))
+
+### Features
+
+* add method and request/response for new endpoint ([#126](https://github.com/GetStream/stream-node/issues/126)) ([40a65d2](https://github.com/GetStream/stream-node/commit/40a65d2b349fb2d1b38d0ae01a7281ec7b626d1a))
+* API naming review ([#130](https://github.com/GetStream/stream-node/issues/130)) ([d15d50f](https://github.com/GetStream/stream-node/commit/d15d50f0114a087c33790c38e49b7edff853f3ac))
+* new endpoint GetOrCreateFeedGroup ([#127](https://github.com/GetStream/stream-node/issues/127)) ([7c58c64](https://github.com/GetStream/stream-node/commit/7c58c648ce8d33eb3446e49ceb7f23ae3f32c824))
+
 ## [0.5.1](https://github.com/GetStream/stream-node/compare/v0.5.0...v0.5.1) (2025-07-25)
 
 
