@@ -1936,6 +1936,8 @@ decoders.FeedMemberResponse = (input?: Record<string, any>) => {
     invite_accepted_at: { type: 'DatetimeType', isSingle: true },
 
     invite_rejected_at: { type: 'DatetimeType', isSingle: true },
+
+    membership_level: { type: 'MembershipLevelResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };

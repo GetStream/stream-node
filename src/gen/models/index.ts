@@ -5276,6 +5276,8 @@ export interface FeedMemberResponse {
   invite_rejected_at?: Date;
 
   custom?: Record<string, any>;
+
+  membership_level?: MembershipLevelResponse;
 }
 
 export interface FeedMemberUpdatedEvent {
