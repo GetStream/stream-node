@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.1](https://github.com/GetStream/stream-node/compare/v0.6.0...v0.6.1) (2025-08-19)
+
+
+### Features
+
+* add membership level in FeedMemberResponse ([#137](https://github.com/GetStream/stream-node/issues/137)) ([db7aa1e](https://github.com/GetStream/stream-node/commit/db7aa1e9fe06108de73f12db969360541096d879))
+
+
+### Bug Fixes
+
+* extend openai-realtime-api version range ([#138](https://github.com/GetStream/stream-node/issues/138)) ([bc65845](https://github.com/GetStream/stream-node/commit/bc6584524386f4a35ec39379548dd99ae1cbcd35))
+
 ## [0.6.0](https://github.com/GetStream/stream-node/compare/v0.5.1...v0.6.0) (2025-08-18)
 
 
