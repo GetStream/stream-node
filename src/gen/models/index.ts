@@ -218,6 +218,12 @@ export interface ActionSequence {
   warning_text: string;
 }
 
+export interface ActiveCallsBitrateStats {
+  p10: number;
+
+  p50: number;
+}
+
 export interface ActiveCallsFPSStats {
   p05: number;
 
@@ -830,6 +836,8 @@ export interface AppResponseFields {
   moderation_bulk_submit_action_enabled: boolean;
 
   moderation_enabled: boolean;
+
+  moderation_llm_configurability_enabled: boolean;
 
   moderation_multitenant_blocklist_enabled: boolean;
 
@@ -2746,6 +2754,8 @@ export interface Channel {
 
   member_count?: number;
 
+  message_count_updated_at?: Date;
+
   team?: string;
 
   active_live_locations?: SharedLocation[];
@@ -2769,6 +2779,8 @@ export interface ChannelConfig {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -2835,6 +2847,8 @@ export interface ChannelConfigWithInfo {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -3044,6 +3058,8 @@ export interface ChannelMember {
 
   user_id?: string;
 
+  deleted_messages?: string[];
+
   user?: UserResponse;
 }
 
@@ -3195,6 +3211,8 @@ export interface ChannelResponse {
 
   member_count?: number;
 
+  message_count?: number;
+
   mute_expires_at?: Date;
 
   muted?: boolean;
@@ -3233,6 +3251,8 @@ export interface ChannelStateResponse {
 
   active_live_locations?: SharedLocationResponseData[];
 
+  deleted_messages?: string[];
+
   pending_messages?: PendingMessageResponse[];
 
   read?: ReadStateResponse[];
@@ -3264,6 +3284,8 @@ export interface ChannelStateResponseFields {
   watcher_count?: number;
 
   active_live_locations?: SharedLocationResponseData[];
+
+  deleted_messages?: string[];
 
   pending_messages?: PendingMessageResponse[];
 
@@ -3302,6 +3324,8 @@ export interface ChannelTypeConfig {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -3774,6 +3798,8 @@ export interface ConfigOverrides {
 
   blocklist_behavior?: 'flag' | 'block';
 
+  count_messages?: boolean;
+
   max_message_length?: number;
 
   quotes?: boolean;
@@ -3817,6 +3843,8 @@ export interface ConfigResponse {
   automod_toxicity_config?: AutomodToxicityConfig;
 
   block_list_config?: BlockListConfig;
+
+  llm_config?: LLMConfig;
 
   rule_builder_config?: RuleBuilderConfig;
 
@@ -3949,6 +3977,8 @@ export interface CreateChannelTypeResponse {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -5510,33 +5540,29 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
 }
@@ -5925,6 +5951,8 @@ export interface GetChannelTypeResponse {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -6650,6 +6678,59 @@ export interface JoinCallAPIMetrics {
   latency?: ActiveCallsLatencyStats;
 }
 
+export interface KickUserRequest {
+  user_id: string;
+
+  block?: boolean;
+
+  kicked_by_id?: string;
+
+  kicked_by?: UserRequest;
+}
+
+export interface KickUserResponse {
+  duration: string;
+}
+
+export interface KickedUserEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  user: UserResponse;
+
+  type: string;
+
+  kicked_by_user?: UserResponse;
+}
+
+export interface LLMConfig {
+  enabled: boolean;
+
+  rules: LLMRule[];
+
+  async?: boolean;
+
+  severity_descriptions?: Record<string, string>;
+}
+
+export interface LLMRule {
+  action:
+    | 'flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove'
+    | 'keep';
+
+  description: string;
+
+  label: string;
+
+  severity_rules: BodyguardSeverityRule[];
+}
+
 export interface Label {
   name: string;
 
@@ -7031,6 +7112,8 @@ export interface Message {
 
   deleted_at?: Date;
 
+  deleted_for_me?: boolean;
+
   message_text_updated_at?: Date;
 
   mml?: string;
@@ -7365,6 +7448,8 @@ export interface MessageResponse {
 
   deleted_at?: Date;
 
+  deleted_for_me?: boolean;
+
   message_text_updated_at?: Date;
 
   mml?: string;
@@ -7517,6 +7602,8 @@ export interface MessageWithChannelResponse {
 
   deleted_at?: Date;
 
+  deleted_for_me?: boolean;
+
   message_text_updated_at?: Date;
 
   mml?: string;
@@ -7619,6 +7706,8 @@ export interface ModerationFlagResponse {
 
   user_id: string;
 
+  result: Array<Record<string, any>>;
+
   entity_creator_id?: string;
 
   reason?: string;
@@ -7626,8 +7715,6 @@ export interface ModerationFlagResponse {
   review_queue_item_id?: string;
 
   labels?: string[];
-
-  result?: Array<Record<string, any>>;
 
   custom?: Record<string, any>;
 
@@ -7894,6 +7981,7 @@ export const OwnCapability = {
   JOIN_BACKSTAGE: 'join-backstage',
   JOIN_CALL: 'join-call',
   JOIN_ENDED_CALL: 'join-ended-call',
+  KICK_USER: 'kick-user',
   MUTE_USERS: 'mute-users',
   PIN_FOR_EVERYONE: 'pin-for-everyone',
   READ_CALL: 'read-call',
@@ -8455,6 +8543,8 @@ export interface PublisherStatsResponse {
 }
 
 export interface PublisherVideoMetrics {
+  bitrate?: ActiveCallsBitrateStats;
+
   fps_30?: ActiveCallsFPSStats;
 
   frame_encoding_time_ms?: ActiveCallsLatencyStats;
@@ -10407,6 +10497,8 @@ export interface SearchResultMessage {
 
   deleted_at?: Date;
 
+  deleted_for_me?: boolean;
+
   message_text_updated_at?: Date;
 
   mml?: string;
@@ -11683,6 +11775,8 @@ export interface UpdateAppRequest {
 
   image_moderation_enabled?: boolean;
 
+  max_aggregated_activities_length?: number;
+
   migrate_permissions_to_v2?: boolean;
 
   moderation_enabled?: boolean;
@@ -11929,6 +12023,8 @@ export interface UpdateChannelTypeRequest {
 
   connect_events?: boolean;
 
+  count_messages?: boolean;
+
   custom_events?: boolean;
 
   mark_messages_pending?: boolean;
@@ -11986,6 +12082,8 @@ export interface UpdateChannelTypeResponse {
   automod_behavior: 'flag' | 'block' | 'shadow_block';
 
   connect_events: boolean;
+
+  count_messages: boolean;
 
   created_at: Date;
 
@@ -12437,6 +12535,8 @@ export interface UpsertConfigRequest {
 
   google_vision_config?: GoogleVisionConfig;
 
+  llm_config?: LLMConfig;
+
   rule_builder_config?: RuleBuilderConfig;
 
   user?: UserRequest;
@@ -12660,8 +12760,6 @@ export interface UserFlaggedEvent {
 export interface UserMessagesDeletedEvent {
   created_at: Date;
 
-  hard_delete: boolean;
-
   soft_delete: boolean;
 
   custom: Record<string, any>;
@@ -12677,6 +12775,8 @@ export interface UserMessagesDeletedEvent {
   channel_type?: string;
 
   cid?: string;
+
+  hard_delete?: boolean;
 
   received_at?: Date;
 
@@ -13144,6 +13244,7 @@ export type WebhookEvent =
   | ({
       type: 'call.hls_broadcasting_stopped';
     } & CallHLSBroadcastingStoppedEvent)
+  | ({ type: 'call.kicked_user' } & KickedUserEvent)
   | ({ type: 'call.live_started' } & CallLiveStartedEvent)
   | ({ type: 'call.member_added' } & CallMemberAddedEvent)
   | ({ type: 'call.member_removed' } & CallMemberRemovedEvent)

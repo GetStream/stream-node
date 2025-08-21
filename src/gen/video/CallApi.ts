@@ -15,6 +15,8 @@ import {
   GetOrCreateCallResponse,
   GoLiveRequest,
   GoLiveResponse,
+  KickUserRequest,
+  KickUserResponse,
   ListRecordingsResponse,
   ListTranscriptionsResponse,
   MuteUsersRequest,
@@ -30,10 +32,10 @@ import {
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRTMPBroadcastsRequest,
-  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -43,9 +45,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
+  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
-  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -138,6 +140,12 @@ export class CallApi {
 
   goLive(request?: GoLiveRequest): Promise<StreamResponse<GoLiveResponse>> {
     return this.videoApi.goLive({ id: this.id, type: this.type, ...request });
+  }
+
+  kickUser(
+    request: KickUserRequest,
+  ): Promise<StreamResponse<KickUserResponse>> {
+    return this.videoApi.kickUser({ id: this.id, type: this.type, ...request });
   }
 
   end(): Promise<StreamResponse<EndCallResponse>> {

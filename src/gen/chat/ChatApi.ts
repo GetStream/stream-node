@@ -67,10 +67,10 @@ import {
   QueryReactionsResponse,
   QueryRemindersRequest,
   QueryRemindersResponse,
-  QuerySegmentTargetsRequest,
-  QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
   QuerySegmentsResponse,
+  QuerySegmentTargetsRequest,
+  QuerySegmentTargetsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
   ReminderResponseData,
@@ -1009,6 +1009,7 @@ export class ChatApi {
       blocklist: request?.blocklist,
       blocklist_behavior: request?.blocklist_behavior,
       connect_events: request?.connect_events,
+      count_messages: request?.count_messages,
       custom_events: request?.custom_events,
       mark_messages_pending: request?.mark_messages_pending,
       mutes: request?.mutes,
@@ -1253,10 +1254,12 @@ export class ChatApi {
     id: string;
     hard?: boolean;
     deleted_by?: string;
+    delete_for_me?: boolean;
   }): Promise<StreamResponse<DeleteMessageResponse>> {
     const queryParams = {
       hard: request?.hard,
       deleted_by: request?.deleted_by,
+      delete_for_me: request?.delete_for_me,
     };
     const pathParams = {
       id: request?.id,

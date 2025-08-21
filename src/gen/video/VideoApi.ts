@@ -20,6 +20,8 @@ import {
   GetOrCreateCallResponse,
   GoLiveRequest,
   GoLiveResponse,
+  KickUserRequest,
+  KickUserResponse,
   ListCallTypeResponse,
   ListRecordingsResponse,
   ListTranscriptionsResponse,
@@ -33,10 +35,10 @@ import {
   QueryCallMembersResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
-  QueryCallStatsRequest,
-  QueryCallStatsResponse,
   QueryCallsRequest,
   QueryCallsResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
   Response,
@@ -47,10 +49,10 @@ import {
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRTMPBroadcastsRequest,
-  StartRTMPBroadcastsResponse,
   StartRecordingRequest,
   StartRecordingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -60,9 +62,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
+  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
-  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -412,6 +414,36 @@ export class VideoApi {
     );
 
     decoders.GoLiveResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async kickUser(
+    request: KickUserRequest & { type: string; id: string },
+  ): Promise<StreamResponse<KickUserResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      block: request?.block,
+      kicked_by_id: request?.kicked_by_id,
+      kicked_by: request?.kicked_by,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<KickUserResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/kick',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.KickUserResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
