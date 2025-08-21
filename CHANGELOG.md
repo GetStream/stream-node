@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/GetStream/stream-node/compare/v0.6.1...v0.6.2) (2025-08-21)
+
+
+### Features
+
+* Kick user & upgrade to the latest OpenAPI ([#140](https://github.com/GetStream/stream-node/issues/140)) ([9dfe81f](https://github.com/GetStream/stream-node/commit/9dfe81f9c733cb66346c97053fe6e86ab90e0c05))
+
 ## [0.6.1](https://github.com/GetStream/stream-node/compare/v0.6.0...v0.6.1) (2025-08-19)
 
 
