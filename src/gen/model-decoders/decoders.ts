@@ -1145,6 +1145,8 @@ decoders.Channel = (input?: Record<string, any>) => {
 
     last_message_at: { type: 'DatetimeType', isSingle: true },
 
+    message_count_updated_at: { type: 'DatetimeType', isSingle: true },
+
     active_live_locations: { type: 'SharedLocation', isSingle: false },
 
     invites: { type: 'ChannelMember', isSingle: false },
@@ -2398,6 +2400,17 @@ decoders.ImportTask = (input?: Record<string, any>) => {
 decoders.ImportTaskHistory = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.KickedUserEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
+
+    kicked_by_user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
