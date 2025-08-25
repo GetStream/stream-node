@@ -202,7 +202,7 @@ describe('messages API', () => {
     expect(response.messages.length).toBe(0);
   });
 
-  it('delete message (hard delete)', async () => {
+  it('delete message', async () => {
     const response = await client.chat.deleteMessage({
       id: messageId!,
       hard: true,
