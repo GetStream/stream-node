@@ -15,13 +15,12 @@ describe('member message role propagation', () => {
   const user1 = {
     id: 'stream-node-role-user1-' + uuidv4(),
     name: 'Stream Node Role User 1',
-    role: 'custom_role',
+    channel_role: 'custom_role',
   };
 
   const user2 = {
     id: 'stream-node-role-user2-' + uuidv4(),
     name: 'Stream Node Role User 2',
-    role: 'user',
   };
 
   let messageId1: string | undefined;
@@ -30,10 +29,8 @@ describe('member message role propagation', () => {
   beforeAll(async () => {
     client = createTestClient();
 
-    // upsert both users with their roles
     await client.upsertUsers([user1, user2]);
 
-    // create channel with both members
     channel = client.chat.channel('messaging', channelId);
 
     await channel.getOrCreate({
