@@ -107,6 +107,6 @@ describe('member message role propagation', () => {
 
   afterAll(async () => {
     // Clean up the channel after test run
-    // await channel.delete({ hard_delete: true });
+    await channel.delete({ hard_delete: true });
   });
 });
