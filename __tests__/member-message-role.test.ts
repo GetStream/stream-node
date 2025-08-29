@@ -21,6 +21,7 @@ describe('member message role propagation', () => {
   const user2 = {
     id: 'stream-node-role-user2-' + uuidv4(),
     name: 'Stream Node Role User 2',
+    channel_role: 'channel_member',
   };
 
   let messageId1: string | undefined;
@@ -36,7 +37,24 @@ describe('member message role propagation', () => {
     await channel.getOrCreate({
       data: {
         created_by: { id: user1.id },
-        members: [{ user: user1 }, { user: user2 }],
+        members: [{
+          user_id: user1.id, channel_role: user1.channel_role,
+          banned: false,
+          created_at: new Date(),
+          notifications_muted: false,
+          shadow_banned: false,
+          updated_at: new Date(),
+          custom: []
+        }, {
+          user_id: user2.id,
+          banned: false,
+          channel_role: '',
+          created_at: new Date(),
+          notifications_muted: false,
+          shadow_banned: false,
+          updated_at: new Date(),
+          custom: []
+        }],
       },
     });
   });
@@ -53,9 +71,8 @@ describe('member message role propagation', () => {
     messageId1 = resp1.message.id;
 
     expect(resp1.message?.user?.id).toBe(user1.id);
-    expect(resp1.message?.user?.role).toBe(user1.role);
+    expect(resp1.message?.member?.channel_role).toBe();
 
-    // user2 sends a message
     const resp2 = await channel.sendMessage({
       message: {
         text: 'Message from user2',
@@ -66,7 +83,7 @@ describe('member message role propagation', () => {
     messageId2 = resp2.message.id;
 
     expect(resp2.message?.user?.id).toBe(user2.id);
-    expect(resp2.message?.user?.role).toBe(user2.role);
+    expect(resp2.message?.member?.channel_role).toBe(user2.channel_role);
   });
 
   it('channel state messages should include creator role', async () => {
@@ -76,8 +93,8 @@ describe('member message role propagation', () => {
     const msg1 = state.messages.find((m) => m.id === messageId1);
     const msg2 = state.messages.find((m) => m.id === messageId2);
 
-    expect(msg1?.user?.role).toBe(user1.role);
-    expect(msg2?.user?.role).toBe(user2.role);
+    expect(msg1?.member?.channel_role).toBe(user1.channel_role);
+    expect(msg2?.member?.channel_role).toBe(user2.channel_role);
   });
 
   afterAll(async () => {
