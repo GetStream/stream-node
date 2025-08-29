@@ -6,7 +6,6 @@ import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { StreamChannel } from '../src/StreamChannel';
 
-
 describe('member message role propagation', () => {
   let client: StreamClient;
   let channel: StreamChannel;
@@ -37,24 +36,28 @@ describe('member message role propagation', () => {
     await channel.getOrCreate({
       data: {
         created_by: { id: user1.id },
-        members: [{
-          user_id: user1.id, channel_role: user1.channel_role,
-          banned: false,
-          created_at: new Date(),
-          notifications_muted: false,
-          shadow_banned: false,
-          updated_at: new Date(),
-          custom: []
-        }, {
-          user_id: user2.id,
-          banned: false,
-          channel_role: '',
-          created_at: new Date(),
-          notifications_muted: false,
-          shadow_banned: false,
-          updated_at: new Date(),
-          custom: []
-        }],
+        members: [
+          {
+            user_id: user1.id,
+            channel_role: user1.channel_role,
+            banned: false,
+            created_at: new Date(),
+            notifications_muted: false,
+            shadow_banned: false,
+            updated_at: new Date(),
+            custom: [],
+          },
+          {
+            user_id: user2.id,
+            banned: false,
+            channel_role: '',
+            created_at: new Date(),
+            notifications_muted: false,
+            shadow_banned: false,
+            updated_at: new Date(),
+            custom: [],
+          },
+        ],
       },
     });
   });
@@ -71,7 +74,7 @@ describe('member message role propagation', () => {
     messageId1 = resp1.message.id;
 
     expect(resp1.message?.user?.id).toBe(user1.id);
-    expect(resp1.message?.member?.channel_role).toBe();
+    expect(resp1.message?.member?.channel_role).toBe(user1.channel_role);
 
     const resp2 = await channel.sendMessage({
       message: {
@@ -87,11 +90,16 @@ describe('member message role propagation', () => {
   });
 
   it('channel state messages should include creator role', async () => {
-    const state = await channel.getOrCreate();
+    const queryResp = await client.chat.queryChannels({
+      filter_conditions: { id: channelId },
+      limit: 1,
+      message_limit: 10,
+      state: true,
+    });
 
-    // Ensure both messages are present with correct roles.
-    const msg1 = state.messages.find((m) => m.id === messageId1);
-    const msg2 = state.messages.find((m) => m.id === messageId2);
+    const messages = queryResp.channels[0].messages;
+    const msg1 = messages.find((m) => m.id === messageId1);
+    const msg2 = messages.find((m) => m.id === messageId2);
 
     expect(msg1?.member?.channel_role).toBe(user1.channel_role);
     expect(msg2?.member?.channel_role).toBe(user2.channel_role);
@@ -99,6 +107,6 @@ describe('member message role propagation', () => {
 
   afterAll(async () => {
     // Clean up the channel after test run
-    await channel.delete({ hard_delete: true });
+    // await channel.delete({ hard_delete: true });
   });
 });
