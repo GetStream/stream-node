@@ -7487,6 +7487,8 @@ export interface MessageResponse {
   reminder?: ReminderResponseData;
 
   shared_location?: SharedLocationResponseData;
+
+  member?: ChannelMemberResponse;
 }
 
 export interface MessageStatsResponse {
