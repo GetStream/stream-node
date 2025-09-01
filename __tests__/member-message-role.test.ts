@@ -20,7 +20,6 @@ describe('member message role propagation', () => {
   const user2 = {
     id: 'stream-node-role-user2-' + uuidv4(),
     name: 'Stream Node Role User 2',
-    channel_role: 'channel_member',
   };
 
   let messageId1: string | undefined;
@@ -38,24 +37,11 @@ describe('member message role propagation', () => {
         created_by: { id: user1.id },
         members: [
           {
-            user_id: user1.id,
+            user: user1,
             channel_role: user1.channel_role,
-            banned: false,
-            created_at: new Date(),
-            notifications_muted: false,
-            shadow_banned: false,
-            updated_at: new Date(),
-            custom: [],
           },
           {
-            user_id: user2.id,
-            banned: false,
-            channel_role: '',
-            created_at: new Date(),
-            notifications_muted: false,
-            shadow_banned: false,
-            updated_at: new Date(),
-            custom: [],
+            user: user2,
           },
         ],
       },
@@ -86,7 +72,7 @@ describe('member message role propagation', () => {
     messageId2 = resp2.message.id;
 
     expect(resp2.message?.user?.id).toBe(user2.id);
-    expect(resp2.message?.member?.channel_role).toBe(user2.channel_role);
+    expect(resp2.message?.member?.channel_role).toBe('channel_member');
   });
 
   it('channel state messages should include creator role', async () => {
@@ -102,7 +88,7 @@ describe('member message role propagation', () => {
     const msg2 = messages.find((m) => m.id === messageId2);
 
     expect(msg1?.member?.channel_role).toBe(user1.channel_role);
-    expect(msg2?.member?.channel_role).toBe(user2.channel_role);
+    expect(msg2?.member?.channel_role).toBe('channel_member');
   });
 
   afterAll(async () => {
