@@ -35,24 +35,26 @@ import {
   QueryCallMembersResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
-  QueryCallsRequest,
-  QueryCallsResponse,
   QueryCallStatsRequest,
   QueryCallStatsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
   Response,
   SendCallEventRequest,
   SendCallEventResponse,
+  SendClosedCaptionRequest,
+  SendClosedCaptionResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRecordingRequest,
-  StartRecordingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -62,9 +64,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
-  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
+  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -294,6 +296,41 @@ export class VideoApi {
     );
 
     decoders.BlockUserResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async sendClosedCaption(
+    request: SendClosedCaptionRequest & { type: string; id: string },
+  ): Promise<StreamResponse<SendClosedCaptionResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      speaker_id: request?.speaker_id,
+      text: request?.text,
+      end_time: request?.end_time,
+      language: request?.language,
+      service: request?.service,
+      start_time: request?.start_time,
+      translated: request?.translated,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SendClosedCaptionResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/closed_captions',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.SendClosedCaptionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

@@ -27,15 +27,17 @@ import {
   QueryCallParticipantsResponse,
   SendCallEventRequest,
   SendCallEventResponse,
+  SendClosedCaptionRequest,
+  SendClosedCaptionResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRecordingRequest,
-  StartRecordingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -45,9 +47,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
-  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
+  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -102,6 +104,16 @@ export class CallApi {
     request: BlockUserRequest,
   ): Promise<StreamResponse<BlockUserResponse>> {
     return this.videoApi.blockUser({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  sendClosedCaption(
+    request: SendClosedCaptionRequest,
+  ): Promise<StreamResponse<SendClosedCaptionResponse>> {
+    return this.videoApi.sendClosedCaption({
       id: this.id,
       type: this.type,
       ...request,

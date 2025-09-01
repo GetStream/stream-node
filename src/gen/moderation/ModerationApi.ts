@@ -9,10 +9,12 @@ import {
   CustomCheckRequest,
   CustomCheckResponse,
   DeleteModerationConfigResponse,
+  DeleteModerationRuleResponse,
   DeleteModerationTemplateResponse,
   FlagRequest,
   FlagResponse,
   GetConfigResponse,
+  GetModerationRuleResponse,
   GetReviewQueueItemResponse,
   MuteRequest,
   MuteResponse,
@@ -23,6 +25,8 @@ import {
   QueryModerationFlagsResponse,
   QueryModerationLogsRequest,
   QueryModerationLogsResponse,
+  QueryModerationRulesRequest,
+  QueryModerationRulesResponse,
   QueryReviewQueueRequest,
   QueryReviewQueueResponse,
   SubmitActionRequest,
@@ -33,6 +37,8 @@ import {
   UnmuteResponse,
   UpsertConfigRequest,
   UpsertConfigResponse,
+  UpsertModerationRuleRequest,
+  UpsertModerationRuleResponse,
   UpsertModerationTemplateRequest,
   UpsertModerationTemplateResponse,
 } from '../models';
@@ -95,13 +101,14 @@ export class ModerationApi {
 
   async check(request: CheckRequest): Promise<StreamResponse<CheckResponse>> {
     const body = {
-      config_key: request?.config_key,
       entity_creator_id: request?.entity_creator_id,
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
+      config_key: request?.config_key,
       config_team: request?.config_team,
       test_mode: request?.test_mode,
       user_id: request?.user_id,
+      config: request?.config,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
       user: request?.user,
@@ -401,6 +408,97 @@ export class ModerationApi {
     );
 
     decoders.QueryModerationLogsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async upsertModerationRule(
+    request: UpsertModerationRuleRequest,
+  ): Promise<StreamResponse<UpsertModerationRuleResponse>> {
+    const body = {
+      name: request?.name,
+      rule_type: request?.rule_type,
+      action: request?.action,
+      cooldown_period: request?.cooldown_period,
+      description: request?.description,
+      enabled: request?.enabled,
+      logic: request?.logic,
+      team: request?.team,
+      conditions: request?.conditions,
+      config_keys: request?.config_keys,
+      groups: request?.groups,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpsertModerationRuleResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/moderation_rule',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpsertModerationRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteModerationRule(): Promise<
+    StreamResponse<DeleteModerationRuleResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteModerationRuleResponse>
+    >(
+      'DELETE',
+      '/api/v2/moderation/moderation_rule/{id}',
+      undefined,
+      undefined,
+    );
+
+    decoders.DeleteModerationRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getModerationRule(): Promise<
+    StreamResponse<GetModerationRuleResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetModerationRuleResponse>
+    >('GET', '/api/v2/moderation/moderation_rule/{id}', undefined, undefined);
+
+    decoders.GetModerationRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryModerationRules(
+    request?: QueryModerationRulesRequest,
+  ): Promise<StreamResponse<QueryModerationRulesResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryModerationRulesResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/moderation_rules',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryModerationRulesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
