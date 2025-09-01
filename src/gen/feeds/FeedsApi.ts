@@ -424,6 +424,7 @@ export class FeedsApi {
     const body = {
       type: request?.type,
       create_notification_activity: request?.create_notification_activity,
+      skip_push: request?.skip_push,
       user_id: request?.user_id,
       custom: request?.custom,
       user: request?.user,
@@ -746,6 +747,7 @@ export class FeedsApi {
       object_type: request?.object_type,
       create_notification_activity: request?.create_notification_activity,
       parent_id: request?.parent_id,
+      skip_push: request?.skip_push,
       user_id: request?.user_id,
       attachments: request?.attachments,
       mentioned_user_ids: request?.mentioned_user_ids,
@@ -863,6 +865,7 @@ export class FeedsApi {
     };
     const body = {
       comment: request?.comment,
+      skip_push: request?.skip_push,
       custom: request?.custom,
     };
 
@@ -891,6 +894,7 @@ export class FeedsApi {
     const body = {
       type: request?.type,
       create_notification_activity: request?.create_notification_activity,
+      skip_push: request?.skip_push,
       user_id: request?.user_id,
       custom: request?.custom,
       user: request?.user,
@@ -1020,6 +1024,7 @@ export class FeedsApi {
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
+      push_notification: request?.push_notification,
       ranking: request?.ranking,
     };
 
@@ -1437,6 +1442,7 @@ export class FeedsApi {
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
+      push_notification: request?.push_notification,
       ranking: request?.ranking,
     };
 
@@ -1468,6 +1474,7 @@ export class FeedsApi {
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
+      push_notification: request?.push_notification,
       ranking: request?.ranking,
     };
 
@@ -1674,6 +1681,7 @@ export class FeedsApi {
       create_notification_activity: request?.create_notification_activity,
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
+      skip_push: request?.skip_push,
       custom: request?.custom,
     };
 
@@ -1701,6 +1709,7 @@ export class FeedsApi {
       target: request?.target,
       create_notification_activity: request?.create_notification_activity,
       push_preference: request?.push_preference,
+      skip_push: request?.skip_push,
       custom: request?.custom,
     };
 
