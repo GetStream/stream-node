@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.3](https://github.com/GetStream/stream-node/compare/v0.6.2...v0.6.3) (2025-09-01)
+
+
+### Features
+
+* [CHA-1153] adding channel message count ([#136](https://github.com/GetStream/stream-node/issues/136)) ([446d9e5](https://github.com/GetStream/stream-node/commit/446d9e5e08dea93b2a762417de048d6f799f2d21))
+* update to api spec v191.7.0 ([#145](https://github.com/GetStream/stream-node/issues/145)) ([38c971f](https://github.com/GetStream/stream-node/commit/38c971fe4c4388c9b855d2d5bb1b6ebe6003aaaf))
+
 ## [0.6.2](https://github.com/GetStream/stream-node/compare/v0.6.1...v0.6.2) (2025-08-21)
 
 
