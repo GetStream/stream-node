@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.4](https://github.com/GetStream/stream-node/compare/v0.6.3...v0.6.4) (2025-09-03)
+
+
+### Features
+
+* add DeleteFeedTaskID in DeleteFeedResponse ([#146](https://github.com/GetStream/stream-node/issues/146)) ([ec9464f](https://github.com/GetStream/stream-node/commit/ec9464fa729acde5042d833e364246083d3f4eb2))
+
 ## [0.6.3](https://github.com/GetStream/stream-node/compare/v0.6.2...v0.6.3) (2025-09-01)
 
 
