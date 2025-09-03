@@ -4507,6 +4507,8 @@ export interface DeleteFeedGroupResponse {
 }
 
 export interface DeleteFeedResponse {
+  delete_feed_task_id: string;
+
   duration: string;
 }
 
@@ -5455,30 +5457,24 @@ export interface FeedViewResponse {
   ranking?: RankingConfig;
 }
 
-export interface FeedsEventPreferences {
-  comments?: string;
-
-  mentions?: string;
-
-  new_followers?: string;
-
-  reactions?: string;
-}
-
-export interface FeedsEventPreferencesInput {
-  comments?: 'all' | 'none';
-
-  mentions?: 'all' | 'none';
-
-  new_followers?: 'all' | 'none';
-
-  reactions?: 'all' | 'none';
-}
-
 export interface FeedsModerationTemplateConfig {
   config_key: string;
 
   data_types: Record<string, string>;
+}
+
+export interface FeedsPreferences {
+  comment?: string;
+
+  comment_reaction?: string;
+
+  follow?: string;
+
+  mention?: string;
+
+  reaction?: string;
+
+  custom_activity_types?: Record<string, string>;
 }
 
 export interface FeedsReactionResponse {
@@ -8678,9 +8674,9 @@ export interface PushConfig {
 }
 
 export interface PushNotificationConfig {
-  enabled?: boolean;
+  enable_push?: boolean;
 
-  activity_types?: 'follow' | 'comment' | 'reaction' | 'comment_reaction';
+  push_types?: string[];
 }
 
 export interface PushNotificationFields {
@@ -8720,7 +8716,7 @@ export interface PushPreferenceInput {
 
   user_id?: string;
 
-  feeds_events?: FeedsEventPreferencesInput;
+  feeds_preferences?: FeedsPreferences;
 }
 
 export interface PushPreferences {
@@ -8732,7 +8728,7 @@ export interface PushPreferences {
 
   feeds_level?: string;
 
-  feeds_events?: FeedsEventPreferences;
+  feeds_preferences?: FeedsPreferences;
 }
 
 export interface PushProvider {
@@ -10549,6 +10545,8 @@ export interface STTEgressConfig {
   translation_languages?: string[];
 
   external_storage?: ExternalStorage;
+
+  speech_segment_config?: SpeechSegmentConfig;
 }
 
 export interface ScreensharingSettings {
@@ -10977,6 +10975,12 @@ export interface SortParamRequest {
   field?: string;
 }
 
+export interface SpeechSegmentConfig {
+  max_speech_caption_ms?: number;
+
+  silence_duration_ms?: number;
+}
+
 export interface StartCampaignRequest {
   scheduled_for?: Date;
 
@@ -11034,6 +11038,8 @@ export interface StartClosedCaptionsRequest {
     | 'et'
     | 'sl'
     | 'sk';
+
+  speech_segment_config?: SpeechSegmentConfig;
 }
 
 export interface StartClosedCaptionsResponse {
@@ -11552,11 +11558,11 @@ export interface TranscriptionSettings {
     | 'sk';
 
   mode: 'available' | 'disabled' | 'auto-on';
+
+  speech_segment_config?: SpeechSegmentConfig;
 }
 
 export interface TranscriptionSettingsRequest {
-  mode: 'available' | 'disabled' | 'auto-on';
-
   closed_caption_mode?: 'available' | 'disabled' | 'auto-on';
 
   language?:
@@ -11597,6 +11603,10 @@ export interface TranscriptionSettingsRequest {
     | 'et'
     | 'sl'
     | 'sk';
+
+  mode?: 'available' | 'disabled' | 'auto-on';
+
+  speech_segment_config?: SpeechSegmentConfig;
 }
 
 export interface TranscriptionSettingsResponse {
@@ -11642,6 +11652,8 @@ export interface TranscriptionSettingsResponse {
     | 'sk';
 
   mode: 'available' | 'disabled' | 'auto-on';
+
+  speech_segment_config?: SpeechSegmentConfig;
 }
 
 export interface TranslateMessageRequest {
