@@ -4510,6 +4510,8 @@ export interface DeleteFeedResponse {
   delete_feed_task_id: string;
 
   duration: string;
+
+  task_id: string;
 }
 
 export interface DeleteFeedUserDataResponse {
