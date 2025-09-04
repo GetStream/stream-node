@@ -805,6 +805,8 @@ export interface AggregatedActivityResponse {
 
   user_count: number;
 
+  user_count_truncated: boolean;
+
   activities: ActivityResponse[];
 }
 
@@ -5723,6 +5725,8 @@ export interface FollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  user_id?: string;
 
   custom?: Record<string, any>;
 }
@@ -12491,6 +12495,8 @@ export interface UpdateFollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  user_id?: string;
 
   custom?: Record<string, any>;
 }
