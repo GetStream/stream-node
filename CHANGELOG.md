@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/GetStream/stream-node/compare/v0.6.4...v0.6.5) (2025-09-04)
+
+
+### Bug Fixes
+
+* Add task id in delete feed response ([#148](https://github.com/GetStream/stream-node/issues/148)) ([aa1c5eb](https://github.com/GetStream/stream-node/commit/aa1c5eb9c3dbd7f0e5f2cbcbba16f90a42536c2e))
+
 ## [0.6.4](https://github.com/GetStream/stream-node/compare/v0.6.3...v0.6.4) (2025-09-03)
 
 
