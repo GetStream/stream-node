@@ -5726,8 +5726,6 @@ export interface FollowRequest {
 
   skip_push?: boolean;
 
-  user_id?: string;
-
   custom?: Record<string, any>;
 }
 
@@ -8054,6 +8052,8 @@ export interface NotificationSettings {
 }
 
 export interface NotificationStatusResponse {
+  count_truncated: boolean;
+
   unread: number;
 
   unseen: number;
@@ -12495,8 +12495,6 @@ export interface UpdateFollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
-
-  user_id?: string;
 
   custom?: Record<string, any>;
 }

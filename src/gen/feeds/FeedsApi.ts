@@ -1682,7 +1682,6 @@ export class FeedsApi {
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
-      user_id: request?.user_id,
       custom: request?.custom,
     };
 
@@ -1711,7 +1710,6 @@ export class FeedsApi {
       create_notification_activity: request?.create_notification_activity,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
-      user_id: request?.user_id,
       custom: request?.custom,
     };
 
