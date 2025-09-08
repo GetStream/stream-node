@@ -1968,6 +1968,8 @@ export interface CallParticipant {
 
   role: string;
 
+  role: string;
+
   user_session_id: string;
 
   custom: Record<string, any>;
@@ -2315,6 +2317,8 @@ export interface CallSessionParticipantLeftEvent {
   participant: CallParticipantResponse;
 
   type: string;
+
+  reason?: string;
 }
 
 export interface CallSessionResponse {
@@ -4507,8 +4511,6 @@ export interface DeleteFeedGroupResponse {
 }
 
 export interface DeleteFeedResponse {
-  delete_feed_task_id: string;
-
   duration: string;
 
   task_id: string;
@@ -5466,15 +5468,15 @@ export interface FeedsModerationTemplateConfig {
 }
 
 export interface FeedsPreferences {
-  comment?: string;
+  comment?: 'all' | 'none';
 
-  comment_reaction?: string;
+  comment_reaction?: 'all' | 'none';
 
-  follow?: string;
+  follow?: 'all' | 'none';
 
-  mention?: string;
+  mention?: 'all' | 'none';
 
-  reaction?: string;
+  reaction?: 'all' | 'none';
 
   custom_activity_types?: Record<string, string>;
 }
@@ -7371,6 +7373,8 @@ export interface MessageReadEvent {
   last_read_message_id?: string;
 
   team?: string;
+
+  channel?: ChannelResponse;
 
   thread?: ThreadResponse;
 
@@ -12818,7 +12822,7 @@ export interface UpsertPushPreferencesResponse {
 
   user_channel_preferences: Record<
     string,
-    Record<string, ChannelPushPreferences>
+    Record<string, ChannelPushPreferences | null>
   >;
 
   user_preferences: Record<string, PushPreferences>;
