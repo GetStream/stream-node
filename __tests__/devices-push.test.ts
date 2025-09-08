@@ -69,16 +69,6 @@ describe('devices and push', () => {
     expect(response).toBeDefined();
   });
 
-  // Wait for backend deployment
-  it.skip(`list push templates`, async () => {
-    const response = await client.getPushTemplates({
-      push_provider_type: 'firebase',
-      push_provider_name: 'firebase',
-    });
-
-    expect(response.templates).toBeDefined();
-  });
-
   // TODO: can't test delete because we can't upsert
   // it('delete push provider', async () => {
   //     const response = await client.deletePushProvider({name: pushProvider.push_provider!.name, type: DeletePushProviderTypeEnum.FIREBASE});
