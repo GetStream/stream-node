@@ -805,6 +805,8 @@ export interface AggregatedActivityResponse {
 
   user_count: number;
 
+  user_count_truncated: boolean;
+
   activities: ActivityResponse[];
 }
 
