@@ -8052,8 +8052,6 @@ export interface NotificationSettings {
 }
 
 export interface NotificationStatusResponse {
-  count_truncated: boolean;
-
   unread: number;
 
   unseen: number;
