@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.6](https://github.com/GetStream/stream-node/compare/v0.6.5...v0.6.6) (2025-09-10)
+
+
+### Features
+
+* Added user_count_truncated ([#150](https://github.com/GetStream/stream-node/issues/150)) ([97a0c03](https://github.com/GetStream/stream-node/commit/97a0c038d29873aa889a30866c665f2bf4ae3898))
+
 ## [0.6.5](https://github.com/GetStream/stream-node/compare/v0.6.4...v0.6.5) (2025-09-04)
 
 
