@@ -791,6 +791,7 @@ export class VideoApi {
       enable_transcription: request?.enable_transcription,
       external_storage: request?.external_storage,
       language: request?.language,
+      speech_segment_config: request?.speech_segment_config,
     };
 
     const response = await this.apiClient.sendRequest<

@@ -2687,6 +2687,8 @@ decoders.MessageReadEvent = (input?: Record<string, any>) => {
 
     channel_last_message_at: { type: 'DatetimeType', isSingle: true },
 
+    channel: { type: 'ChannelResponse', isSingle: true },
+
     thread: { type: 'ThreadResponse', isSingle: true },
 
     user: { type: 'UserResponseCommonFields', isSingle: true },
