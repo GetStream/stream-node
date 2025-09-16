@@ -42,6 +42,7 @@ import {
   GetCustomPermissionResponse,
   GetImportResponse,
   GetOGResponse,
+  GetPushTemplatesResponse,
   GetRateLimitsResponse,
   GetTaskResponse,
   ImageUploadRequest,
@@ -83,8 +84,12 @@ import {
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
+  UpsertPushPreferencesRequest,
+  UpsertPushPreferencesResponse,
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
+  UpsertPushTemplateRequest,
+  UpsertPushTemplateResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -987,6 +992,29 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async updatePushNotificationPreferences(
+    request: UpsertPushPreferencesRequest,
+  ): Promise<StreamResponse<UpsertPushPreferencesResponse>> {
+    const body = {
+      preferences: request?.preferences,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpsertPushPreferencesResponse>
+    >(
+      'POST',
+      '/api/v2/push_preferences',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpsertPushPreferencesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async listPushProviders(): Promise<
     StreamResponse<ListPushProvidersResponse>
   > {
@@ -1039,6 +1067,51 @@ export class CommonApi {
     );
 
     decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPushTemplates(request: {
+    push_provider_type: string;
+    push_provider_name?: string;
+  }): Promise<StreamResponse<GetPushTemplatesResponse>> {
+    const queryParams = {
+      push_provider_type: request?.push_provider_type,
+      push_provider_name: request?.push_provider_name,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetPushTemplatesResponse>
+    >('GET', '/api/v2/push_templates', undefined, queryParams);
+
+    decoders.GetPushTemplatesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async upsertPushTemplate(
+    request: UpsertPushTemplateRequest,
+  ): Promise<StreamResponse<UpsertPushTemplateResponse>> {
+    const body = {
+      event_type: request?.event_type,
+      push_provider_type: request?.push_provider_type,
+      enable_push: request?.enable_push,
+      push_provider_name: request?.push_provider_name,
+      template: request?.template,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpsertPushTemplateResponse>
+    >(
+      'POST',
+      '/api/v2/push_templates',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpsertPushTemplateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

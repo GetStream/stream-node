@@ -805,8 +805,6 @@ export interface AggregatedActivityResponse {
 
   user_count: number;
 
-  user_count_truncated: boolean;
-
   activities: ActivityResponse[];
 }
 
@@ -1821,6 +1819,10 @@ export interface CallHLSBroadcastingStoppedEvent {
 
 export interface CallIngressResponse {
   rtmp: RTMPIngress;
+
+  srt: SRTIngress;
+
+  whip: WHIPIngress;
 }
 
 export interface CallLiveStartedEvent {
@@ -2144,6 +2146,8 @@ export interface CallResponse {
 
   transcribing: boolean;
 
+  translating: boolean;
+
   type: string;
 
   updated_at: Date;
@@ -2317,6 +2321,8 @@ export interface CallSessionParticipantLeftEvent {
   participant: CallParticipantResponse;
 
   type: string;
+
+  reason?: string;
 }
 
 export interface CallSessionResponse {
@@ -2792,6 +2798,8 @@ export interface Channel {
 
   created_by?: User;
 
+  members_lookup?: Record<string, ChannelMemberLookup>;
+
   truncated_by?: User;
 }
 
@@ -3083,6 +3091,22 @@ export interface ChannelMember {
   deleted_messages?: string[];
 
   user?: UserResponse;
+}
+
+export interface ChannelMemberLookup {
+  archived: boolean;
+
+  banned: boolean;
+
+  hidden: boolean;
+
+  pinned: boolean;
+
+  archived_at?: Date;
+
+  ban_expires?: Date;
+
+  pinned_at?: Date;
 }
 
 export interface ChannelMemberResponse {
@@ -4498,6 +4522,8 @@ export interface DeleteCommentReactionResponse {
 
 export interface DeleteCommentResponse {
   duration: string;
+
+  comment: CommentResponse;
 }
 
 export interface DeleteExternalStorageResponse {
@@ -4509,8 +4535,6 @@ export interface DeleteFeedGroupResponse {
 }
 
 export interface DeleteFeedResponse {
-  delete_feed_task_id: string;
-
   duration: string;
 
   task_id: string;
@@ -5338,35 +5362,34 @@ export interface FeedMemberUpdatedEvent {
 
 export const FeedOwnCapability = {
   ADD_ACTIVITY: 'add-activity',
+  ADD_ACTIVITY_BOOKMARK: 'add-activity-bookmark',
   ADD_ACTIVITY_REACTION: 'add-activity-reaction',
   ADD_COMMENT: 'add-comment',
   ADD_COMMENT_REACTION: 'add-comment-reaction',
-  BOOKMARK_ACTIVITY: 'bookmark-activity',
   CREATE_FEED: 'create-feed',
-  DELETE_BOOKMARK: 'delete-bookmark',
-  DELETE_COMMENT: 'delete-comment',
+  DELETE_ANY_ACTIVITY: 'delete-any-activity',
+  DELETE_ANY_COMMENT: 'delete-any-comment',
   DELETE_FEED: 'delete-feed',
-  EDIT_BOOKMARK: 'edit-bookmark',
+  DELETE_OWN_ACTIVITY: 'delete-own-activity',
+  DELETE_OWN_ACTIVITY_BOOKMARK: 'delete-own-activity-bookmark',
+  DELETE_OWN_ACTIVITY_REACTION: 'delete-own-activity-reaction',
+  DELETE_OWN_COMMENT: 'delete-own-comment',
+  DELETE_OWN_COMMENT_REACTION: 'delete-own-comment-reaction',
   FOLLOW: 'follow',
-  INVITE_FEED: 'invite-feed',
-  JOIN_FEED: 'join-feed',
-  LEAVE_FEED: 'leave-feed',
-  MANAGE_FEED_GROUP: 'manage-feed-group',
-  MARK_ACTIVITY: 'mark-activity',
   PIN_ACTIVITY: 'pin-activity',
   QUERY_FEED_MEMBERS: 'query-feed-members',
   QUERY_FOLLOWS: 'query-follows',
   READ_ACTIVITIES: 'read-activities',
   READ_FEED: 'read-feed',
-  REMOVE_ACTIVITY: 'remove-activity',
-  REMOVE_ACTIVITY_REACTION: 'remove-activity-reaction',
-  REMOVE_COMMENT_REACTION: 'remove-comment-reaction',
   UNFOLLOW: 'unfollow',
-  UPDATE_ACTIVITY: 'update-activity',
-  UPDATE_COMMENT: 'update-comment',
+  UPDATE_ANY_ACTIVITY: 'update-any-activity',
+  UPDATE_ANY_COMMENT: 'update-any-comment',
   UPDATE_FEED: 'update-feed',
   UPDATE_FEED_FOLLOWERS: 'update-feed-followers',
   UPDATE_FEED_MEMBERS: 'update-feed-members',
+  UPDATE_OWN_ACTIVITY: 'update-own-activity',
+  UPDATE_OWN_ACTIVITY_BOOKMARK: 'update-own-activity-bookmark',
+  UPDATE_OWN_COMMENT: 'update-own-comment',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -5461,6 +5484,14 @@ export interface FeedViewResponse {
   ranking?: RankingConfig;
 }
 
+export interface FeedVisibilityResponse {
+  description: string;
+
+  name: string;
+
+  grants: Record<string, string[]>;
+}
+
 export interface FeedsModerationTemplateConfig {
   config_key: string;
 
@@ -5468,15 +5499,15 @@ export interface FeedsModerationTemplateConfig {
 }
 
 export interface FeedsPreferences {
-  comment?: string;
+  comment?: 'all' | 'none';
 
-  comment_reaction?: string;
+  comment_reaction?: 'all' | 'none';
 
-  follow?: string;
+  follow?: 'all' | 'none';
 
-  mention?: string;
+  mention?: 'all' | 'none';
 
-  reaction?: string;
+  reaction?: 'all' | 'none';
 
   custom_activity_types?: Record<string, string>;
 }
@@ -5935,6 +5966,8 @@ export interface GetCallReportResponse {
   video_reactions?: VideoReactionsResponse[];
 
   chat_activity?: ChatActivityStatsResponse;
+
+  session?: CallSessionResponse;
 }
 
 export interface GetCallResponse {
@@ -6123,6 +6156,12 @@ export interface GetFeedViewResponse {
   duration: string;
 
   feed_view: FeedViewResponse;
+}
+
+export interface GetFeedVisibilityResponse {
+  duration: string;
+
+  feed_visibility: FeedVisibilityResponse;
 }
 
 export interface GetFollowSuggestionsResponse {
@@ -6905,6 +6944,12 @@ export interface ListFeedViewsResponse {
   views: Record<string, FeedViewResponse>;
 }
 
+export interface ListFeedVisibilitiesResponse {
+  duration: string;
+
+  feed_visibilities: Record<string, FeedVisibilityResponse>;
+}
+
 export interface ListImportsResponse {
   duration: string;
 
@@ -7373,6 +7418,8 @@ export interface MessageReadEvent {
   last_read_message_id?: string;
 
   team?: string;
+
+  channel?: ChannelResponse;
 
   thread?: ThreadResponse;
 
@@ -10533,6 +10580,10 @@ export interface SFUIDLastSeen {
   process_start_time: number;
 }
 
+export interface SRTIngress {
+  address: string;
+}
+
 export interface STTEgressConfig {
   closed_captions_enabled?: boolean;
 
@@ -11564,6 +11615,8 @@ export interface TranscriptionSettings {
   mode: 'available' | 'disabled' | 'auto-on';
 
   speech_segment_config?: SpeechSegmentConfig;
+
+  translation?: TranslationSettings;
 }
 
 export interface TranscriptionSettingsRequest {
@@ -11611,6 +11664,8 @@ export interface TranscriptionSettingsRequest {
   mode?: 'available' | 'disabled' | 'auto-on';
 
   speech_segment_config?: SpeechSegmentConfig;
+
+  translation?: TranslationSettings;
 }
 
 export interface TranscriptionSettingsResponse {
@@ -11658,6 +11713,8 @@ export interface TranscriptionSettingsResponse {
   mode: 'available' | 'disabled' | 'auto-on';
 
   speech_segment_config?: SpeechSegmentConfig;
+
+  translation?: TranslationSettings;
 }
 
 export interface TranslateMessageRequest {
@@ -11719,6 +11776,12 @@ export interface TranslateMessageRequest {
     | 'vi'
     | 'lt'
     | 'ht';
+}
+
+export interface TranslationSettings {
+  enabled: boolean;
+
+  languages: string[];
 }
 
 export interface TruncateChannelRequest {
@@ -11935,6 +11998,8 @@ export interface UpdateActivityRequest {
   visibility?: string;
 
   attachments?: Attachment[];
+
+  feeds?: string[];
 
   filter_tags?: string[];
 
@@ -12820,7 +12885,7 @@ export interface UpsertPushPreferencesResponse {
 
   user_channel_preferences: Record<
     string,
-    Record<string, ChannelPushPreferences>
+    Record<string, ChannelPushPreferences | null>
   >;
 
   user_preferences: Record<string, PushPreferences>;
@@ -13416,6 +13481,10 @@ export interface VoteData {
   answer_text?: string;
 
   option_id?: string;
+}
+
+export interface WHIPIngress {
+  address: string;
 }
 
 export interface WSEvent {

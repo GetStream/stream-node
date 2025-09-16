@@ -29,7 +29,6 @@ import {
   GetDraftResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
-  GetPushTemplatesResponse,
   GetReactionsResponse,
   GetRepliesResponse,
   GetSegmentResponse,
@@ -114,10 +113,6 @@ import {
   UpdateReminderResponse,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
-  UpsertPushPreferencesRequest,
-  UpsertPushPreferencesResponse,
-  UpsertPushTemplateRequest,
-  UpsertPushTemplateResponse,
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
@@ -1404,6 +1399,36 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async ephemeralMessageUpdate(
+    request: UpdateMessagePartialRequest & { id: string },
+  ): Promise<StreamResponse<UpdateMessagePartialResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      skip_enrich_url: request?.skip_enrich_url,
+      user_id: request?.user_id,
+      unset: request?.unset,
+      set: request?.set,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateMessagePartialResponse>
+    >(
+      'PATCH',
+      '/api/v2/chat/messages/{id}/ephemeral',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateMessagePartialResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async sendReaction(
     request: SendReactionRequest & { id: string },
   ): Promise<StreamResponse<SendReactionResponse>> {
@@ -1819,74 +1844,6 @@ export class ChatApi {
     );
 
     decoders.UnmuteResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async updatePushNotificationPreferences(
-    request: UpsertPushPreferencesRequest,
-  ): Promise<StreamResponse<UpsertPushPreferencesResponse>> {
-    const body = {
-      preferences: request?.preferences,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertPushPreferencesResponse>
-    >(
-      'POST',
-      '/api/v2/chat/push_preferences',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpsertPushPreferencesResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getPushTemplates(request: {
-    push_provider_type: string;
-    push_provider_name?: string;
-  }): Promise<StreamResponse<GetPushTemplatesResponse>> {
-    const queryParams = {
-      push_provider_type: request?.push_provider_type,
-      push_provider_name: request?.push_provider_name,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetPushTemplatesResponse>
-    >('GET', '/api/v2/chat/push_templates', undefined, queryParams);
-
-    decoders.GetPushTemplatesResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async upsertPushTemplate(
-    request: UpsertPushTemplateRequest,
-  ): Promise<StreamResponse<UpsertPushTemplateResponse>> {
-    const body = {
-      event_type: request?.event_type,
-      push_provider_type: request?.push_provider_type,
-      enable_push: request?.enable_push,
-      push_provider_name: request?.push_provider_name,
-      template: request?.template,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertPushTemplateResponse>
-    >(
-      'POST',
-      '/api/v2/chat/push_templates',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpsertPushTemplateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

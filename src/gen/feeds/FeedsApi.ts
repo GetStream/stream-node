@@ -49,6 +49,7 @@ import {
   GetCommentsResponse,
   GetFeedGroupResponse,
   GetFeedViewResponse,
+  GetFeedVisibilityResponse,
   GetFollowSuggestionsResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
@@ -58,6 +59,7 @@ import {
   GetOrCreateFeedViewResponse,
   ListFeedGroupsResponse,
   ListFeedViewsResponse,
+  ListFeedVisibilitiesResponse,
   MarkActivityRequest,
   PinActivityRequest,
   PinActivityResponse,
@@ -581,6 +583,7 @@ export class FeedsApi {
       user_id: request?.user_id,
       visibility: request?.visibility,
       attachments: request?.attachments,
+      feeds: request?.feeds,
       filter_tags: request?.filter_tags,
       interest_tags: request?.interest_tags,
       custom: request?.custom,
@@ -1617,6 +1620,34 @@ export class FeedsApi {
     );
 
     decoders.UpdateFeedViewResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listFeedVisibilities(): Promise<
+    StreamResponse<ListFeedVisibilitiesResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListFeedVisibilitiesResponse>
+    >('GET', '/api/v2/feeds/feed_visibilities', undefined, undefined);
+
+    decoders.ListFeedVisibilitiesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getFeedVisibility(request: {
+    name: string;
+  }): Promise<StreamResponse<GetFeedVisibilityResponse>> {
+    const pathParams = {
+      name: request?.name,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedVisibilityResponse>
+    >('GET', '/api/v2/feeds/feed_visibilities/{name}', pathParams, undefined);
+
+    decoders.GetFeedVisibilityResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
