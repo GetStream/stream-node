@@ -1,11 +1,10 @@
 {
-  "bump-minor-pre-major": true,
-  "bump-patch-for-minor-pre-major": true,
   "packages": {
     ".": {
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true,
+      "release-type": "node",
       "package-name": ""
     }
-  },
-  "release-type": "node",
-  "prerelease": true
+  }
 }
