@@ -587,7 +587,7 @@ export interface ActivityResponse {
 
   moderation?: ModerationV2Response;
 
-  notification_context?: Record<string, any>;
+  notification_context?: NotificationContext;
 
   parent?: ActivityResponse;
 
@@ -804,6 +804,8 @@ export interface AggregatedActivityResponse {
   updated_at: Date;
 
   user_count: number;
+
+  user_count_truncated: boolean;
 
   activities: ActivityResponse[];
 }
@@ -4523,6 +4525,8 @@ export interface DeleteCommentReactionResponse {
 export interface DeleteCommentResponse {
   duration: string;
 
+  activity: ActivityResponse;
+
   comment: CommentResponse;
 }
 
@@ -5593,33 +5597,29 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
 }
@@ -7817,6 +7817,8 @@ export interface ModerationCustomActionEvent {
 }
 
 export interface ModerationDashboardPreferences {
+  disable_flagging_reviewed_entity?: boolean;
+
   flag_user_on_flagged_content?: boolean;
 
   media_queue_blur_enabled?: boolean;
@@ -8026,6 +8028,12 @@ export interface NotificationConfig {
   track_seen?: boolean;
 }
 
+export interface NotificationContext {
+  target?: NotificationTarget;
+
+  trigger?: NotificationTrigger;
+}
+
 export interface NotificationFeedUpdatedEvent {
   created_at: Date;
 
@@ -8110,6 +8118,26 @@ export interface NotificationStatusResponse {
   read_activities?: string[];
 
   seen_activities?: string[];
+}
+
+export interface NotificationTarget {
+  id: string;
+
+  name?: string;
+
+  text?: string;
+
+  type?: string;
+
+  user_id?: string;
+
+  attachments?: Attachment[];
+}
+
+export interface NotificationTrigger {
+  text: string;
+
+  type: string;
 }
 
 export interface NullTime {}

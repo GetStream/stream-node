@@ -1732,6 +1732,8 @@ decoders.DeleteCommentReactionResponse = (input?: Record<string, any>) => {
 
 decoders.DeleteCommentResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
+    activity: { type: 'ActivityResponse', isSingle: true },
+
     comment: { type: 'CommentResponse', isSingle: true },
   };
   return decode(typeMappings, input);
