@@ -1157,6 +1157,8 @@ decoders.Channel = (input?: Record<string, any>) => {
 
     created_by: { type: 'User', isSingle: true },
 
+    members_lookup: { type: 'ChannelMemberLookup', isSingle: false },
+
     truncated_by: { type: 'User', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -1235,6 +1237,17 @@ decoders.ChannelMember = (input?: Record<string, any>) => {
     pinned_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ChannelMemberLookup = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    archived_at: { type: 'DatetimeType', isSingle: true },
+
+    ban_expires: { type: 'DatetimeType', isSingle: true },
+
+    pinned_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1717,6 +1730,15 @@ decoders.DeleteCommentReactionResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.DeleteCommentResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    activity: { type: 'ActivityResponse', isSingle: true },
+
+    comment: { type: 'CommentResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.DeleteMessageResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     message: { type: 'MessageResponse', isSingle: true },
@@ -2141,6 +2163,8 @@ decoders.GetCallReportResponse = (input?: Record<string, any>) => {
     video_reactions: { type: 'VideoReactionsResponse', isSingle: false },
 
     chat_activity: { type: 'ChatActivityStatsResponse', isSingle: true },
+
+    session: { type: 'CallSessionResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };

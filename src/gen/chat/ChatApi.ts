@@ -1399,6 +1399,36 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async ephemeralMessageUpdate(
+    request: UpdateMessagePartialRequest & { id: string },
+  ): Promise<StreamResponse<UpdateMessagePartialResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      skip_enrich_url: request?.skip_enrich_url,
+      user_id: request?.user_id,
+      unset: request?.unset,
+      set: request?.set,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateMessagePartialResponse>
+    >(
+      'PATCH',
+      '/api/v2/chat/messages/{id}/ephemeral',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateMessagePartialResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async sendReaction(
     request: SendReactionRequest & { id: string },
   ): Promise<StreamResponse<SendReactionResponse>> {
