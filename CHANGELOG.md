@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.7](https://github.com/GetStream/stream-node/compare/v0.6.6...v0.6.7) (2025-09-16)
+
+
+### Features
+
+* [FEEDS-767] add feed_visibility methods ([#154](https://github.com/GetStream/stream-node/issues/154)) ([75586d3](https://github.com/GetStream/stream-node/commit/75586d3fea121a74018308456e0c9e45a09ccaf7))
+* update to version 193.9.1 ([#151](https://github.com/GetStream/stream-node/issues/151)) ([cde1438](https://github.com/GetStream/stream-node/commit/cde14380153430ed060a49758d11eb9f7eb4d046))
+
 ## [0.6.6](https://github.com/GetStream/stream-node/compare/v0.6.5...v0.6.6) (2025-09-10)
 
 
