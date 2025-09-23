@@ -707,6 +707,8 @@ export interface AddCommentReactionRequest {
 
   create_notification_activity?: boolean;
 
+  enforce_unique?: boolean;
+
   skip_push?: boolean;
 
   user_id?: string;
@@ -774,6 +776,8 @@ export interface AddReactionRequest {
   type: string;
 
   create_notification_activity?: boolean;
+
+  enforce_unique?: boolean;
 
   skip_push?: boolean;
 
@@ -1231,6 +1235,8 @@ export interface BanActionRequest {
 }
 
 export interface BanOptions {
+  delete_messages?: 'soft' | 'pruning' | 'hard';
+
   duration?: number;
 
   ip_ban?: boolean;
@@ -1274,10 +1280,6 @@ export interface BanResponse {
   channel?: ChannelResponse;
 
   user?: UserResponse;
-}
-
-export interface BlockContentOptions {
-  reason?: string;
 }
 
 export interface BlockListConfig {
@@ -2622,6 +2624,8 @@ export interface CallUserMutedEvent {
 
   from_user_id: string;
 
+  reason: string;
+
   muted_user_ids: string[];
 
   type: string;
@@ -2683,6 +2687,8 @@ export interface CampaignResponse {
   sender_id: string;
 
   sender_mode: string;
+
+  sender_visibility: string;
 
   show_channels: boolean;
 
@@ -3849,6 +3855,8 @@ export interface ConfigResponse {
   team: string;
 
   updated_at: Date;
+
+  supported_video_call_harm_types: string[];
 
   ai_image_config?: AIImageConfig;
 
@@ -5451,9 +5459,13 @@ export interface FeedResponse {
 
   filter_tags?: string[];
 
+  own_capabilities?: FeedOwnCapability[];
+
   own_follows?: FollowResponse[];
 
   custom?: Record<string, any>;
+
+  own_membership?: FeedMemberResponse;
 }
 
 export interface FeedUpdatedEvent {
@@ -5597,35 +5609,35 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  created_by_automod: boolean;
+  entity_id: string;
+
+  entity_type: string;
 
   updated_at: Date;
 
-  approved_at?: Date;
+  result: Array<Record<string, any>>;
+
+  entity_creator_id?: string;
+
+  is_streamed_content?: boolean;
+
+  moderation_payload_hash?: string;
 
   reason?: string;
 
-  rejected_at?: Date;
+  review_queue_item_id?: string;
 
-  reviewed_at?: Date;
+  type?: string;
 
-  reviewed_by?: string;
-
-  target_message_id?: string;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
-  details?: FlagDetails;
+  moderation_payload?: ModerationPayload;
 
-  target_message?: Message;
-
-  target_user?: User;
+  review_queue_item?: ReviewQueueItem;
 
   user?: User;
-}
-
-export interface FlagContentOptions {
-  reason?: string;
 }
 
 export interface FlagDetails {
@@ -6346,8 +6358,6 @@ export interface GetOrCreateFeedResponse {
 
   members: FeedMemberResponse[];
 
-  own_capabilities: FeedOwnCapability[];
-
   pinned_activities: ActivityPinResponse[];
 
   feed: FeedResponse;
@@ -6356,8 +6366,6 @@ export interface GetOrCreateFeedResponse {
 
   prev?: string;
 
-  own_follows?: FollowResponse[];
-
   followers_pagination?: PagerResponse;
 
   following_pagination?: PagerResponse;
@@ -6365,8 +6373,6 @@ export interface GetOrCreateFeedResponse {
   member_pagination?: PagerResponse;
 
   notification_status?: NotificationStatusResponse;
-
-  own_membership?: FeedMemberResponse;
 }
 
 export interface GetOrCreateFeedViewRequest {
@@ -6522,9 +6528,15 @@ export interface HLSSettingsResponse {
 }
 
 export interface HarmConfig {
+  cooldown_period?: number;
+
   severity?: number;
 
+  threshold?: number;
+
   action_sequences?: ActionSequence[];
+
+  harm_types?: string[];
 }
 
 export interface HideChannelRequest {
@@ -7778,6 +7790,8 @@ export interface ModerationConfig {
   team?: string;
 
   updated_at?: Date;
+
+  supported_video_call_harm_types?: string[];
 
   ai_image_config?: AIImageConfig;
 
@@ -10521,11 +10535,7 @@ export interface RuleBuilderAction {
 
   ban_options?: BanOptions;
 
-  flag_content_options?: FlagContentOptions;
-
   flag_user_options?: FlagUserOptions;
-
-  remove_content_options?: BlockContentOptions;
 }
 
 export interface RuleBuilderCondition {
@@ -13436,7 +13446,11 @@ export interface VelocityFilterConfigRule {
 }
 
 export interface VideoCallRuleConfig {
-  rules?: Record<string, HarmConfig>;
+  flag_all_labels?: boolean;
+
+  flagged_labels?: string[];
+
+  rules?: HarmConfig[];
 }
 
 export interface VideoContentParameters {

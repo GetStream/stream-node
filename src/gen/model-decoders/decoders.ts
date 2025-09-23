@@ -1973,6 +1973,8 @@ decoders.FeedResponse = (input?: Record<string, any>) => {
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
     own_follows: { type: 'FollowResponse', isSingle: false },
+
+    own_membership: { type: 'FeedMemberResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2326,11 +2328,7 @@ decoders.GetOrCreateFeedResponse = (input?: Record<string, any>) => {
 
     feed: { type: 'FeedResponse', isSingle: true },
 
-    own_follows: { type: 'FollowResponse', isSingle: false },
-
     notification_status: { type: 'NotificationStatusResponse', isSingle: true },
-
-    own_membership: { type: 'FeedMemberResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
