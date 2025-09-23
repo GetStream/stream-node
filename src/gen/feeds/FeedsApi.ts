@@ -1019,6 +1019,18 @@ export class FeedsApi {
   async createFeedGroup(
     request: CreateFeedGroupRequest,
   ): Promise<StreamResponse<CreateFeedGroupResponse>> {
+    (globalThis as any).console?.log(
+      '[createFeedGroup] Starting feed group creation',
+      {
+        feedGroupId: request?.id,
+        defaultVisibility: request?.default_visibility,
+        hasActivityProcessors: !!request?.activity_processors?.length,
+        hasActivitySelectors: !!request?.activity_selectors?.length,
+        hasCustomFields:
+          !!request?.custom && Object.keys(request.custom).length > 0,
+      },
+    );
+
     const body = {
       id: request?.id,
       default_visibility: request?.default_visibility,
@@ -1031,20 +1043,44 @@ export class FeedsApi {
       ranking: request?.ranking,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateFeedGroupResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    try {
+      const response = await this.apiClient.sendRequest<
+        StreamResponse<CreateFeedGroupResponse>
+      >(
+        'POST',
+        '/api/v2/feeds/feed_groups',
+        undefined,
+        undefined,
+        body,
+        'application/json',
+      );
 
-    decoders.CreateFeedGroupResponse?.(response.body);
+      (globalThis as any).console?.log(
+        '[createFeedGroup] Successfully created feed group',
+        {
+          feedGroupId: request?.id,
+          responseCode: response.metadata.responseCode,
+          clientRequestId: response.metadata.clientRequestId,
+        },
+      );
 
-    return { ...response.body, metadata: response.metadata };
+      decoders.CreateFeedGroupResponse?.(response.body);
+
+      return { ...response.body, metadata: response.metadata };
+    } catch (error) {
+      (globalThis as any).console?.error(
+        '[createFeedGroup] Failed to create feed group',
+        {
+          feedGroupId: request?.id,
+          error: error instanceof Error ? error.message : error,
+          clientRequestId:
+            error instanceof Error && 'metadata' in error
+              ? (error as any).metadata?.clientRequestId
+              : undefined,
+        },
+      );
+      throw error;
+    }
   }
 
   async deleteFeed(request: {
