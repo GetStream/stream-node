@@ -1026,8 +1026,7 @@ export class FeedsApi {
         defaultVisibility: request?.default_visibility,
         hasActivityProcessors: !!request?.activity_processors?.length,
         hasActivitySelectors: !!request?.activity_selectors?.length,
-        hasCustomFields:
-          !!request?.custom && Object.keys(request.custom).length > 0,
+        custom: request?.custom,
       },
     );
 
@@ -1053,6 +1052,15 @@ export class FeedsApi {
         undefined,
         body,
         'application/json',
+      );
+
+      (globalThis as any).console?.log(
+        '[createFeedGroup] Response',
+        JSON.stringify(response?.body),
+      );
+      (globalThis as any).console?.log(
+        '[createFeedGroup] Metadata',
+        JSON.stringify(response?.metadata),
       );
 
       (globalThis as any).console?.log(
