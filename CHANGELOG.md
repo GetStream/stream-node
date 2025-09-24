@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.0](https://github.com/GetStream/stream-node/compare/v0.6.7...v0.7.0) (2025-09-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* [FEEDS-782] Move own_ to FeedResponse ([#159](https://github.com/GetStream/stream-node/issues/159))
+
+### Features
+
+* [FEEDS-782] Move own_ to FeedResponse ([#159](https://github.com/GetStream/stream-node/issues/159)) ([04129f9](https://github.com/GetStream/stream-node/commit/04129f9bc399b2824ed9c37271ac18822c98f999))
+
 ## [0.6.7](https://github.com/GetStream/stream-node/compare/v0.6.6...v0.6.7) (2025-09-16)
 
 
