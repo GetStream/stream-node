@@ -96,6 +96,15 @@ export class ApiClient {
         );
       }
 
+      (globalThis as any).console?.log(
+        '[sendRequest] Response',
+        JSON.stringify(response),
+      );
+      (globalThis as any).console?.log(
+        '[sendRequest] Metadata',
+        JSON.stringify(metadata),
+      );
+
       const responseBody = (await response.json()) as T;
 
       return { body: responseBody, metadata };
