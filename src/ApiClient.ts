@@ -122,6 +122,8 @@ export class ApiClient {
           error,
         );
       } else {
+        (globalThis as any).console?.error('[sendRequest] Error', error);
+
         throw new StreamError(
           `The request failed due to an unexpected error`,
           metadata,
