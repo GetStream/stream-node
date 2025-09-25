@@ -96,14 +96,10 @@ export class ApiClient {
         );
       }
 
-      (globalThis as any).console?.log(
-        '[sendRequest] Response',
-        await response.text(),
-      );
-
       (globalThis as any).console?.log('[sendRequest] Metadata', metadata);
 
       const responseBody = (await response.json()) as T;
+      (globalThis as any).console?.log('[sendRequest] Response', responseBody);
 
       return { body: responseBody, metadata };
     } catch (error: any) {
