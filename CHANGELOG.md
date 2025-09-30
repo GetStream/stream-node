@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/GetStream/stream-node/compare/v0.7.2...v0.7.3) (2025-09-30)
+
+
+### Features
+
+* hifi audio support ([#167](https://github.com/GetStream/stream-node/issues/167)) ([e48f890](https://github.com/GetStream/stream-node/commit/e48f890aaeabeb601a32a80739897b1911e97ec5))
+
 ## [0.7.2](https://github.com/GetStream/stream-node/compare/v0.7.1...v0.7.2) (2025-09-30)
 
 
