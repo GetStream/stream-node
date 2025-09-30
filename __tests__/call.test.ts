@@ -204,6 +204,14 @@ describe('call API', () => {
     expect(response.call.settings.backstage.enabled).toBe(true);
   });
 
+  it('generate SRT credentials', () => {
+    const creds = call.createSRTCredetials('john');
+
+    expect(creds).toBeDefined();
+    expect(creds.address).toBeDefined();
+    expect(creds.address).not.toBe('');
+  });
+
   it('go live', async () => {
     const response = await call.goLive();
 
