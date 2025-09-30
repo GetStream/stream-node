@@ -595,6 +595,18 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
+  cutoff_time?: string;
+
+  min_popularity?: number;
+
+  type?: string;
+
+  sort?: SortParam[];
+
+  filter?: Record<string, any>;
+}
+
+export interface ActivitySelectorConfigResponse {
   cutoff_time?: Date;
 
   min_popularity?: number;
@@ -5257,7 +5269,7 @@ export interface FeedGroupResponse {
 
   activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
 
@@ -5493,7 +5505,7 @@ export interface FeedViewResponse {
 
   activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
 
