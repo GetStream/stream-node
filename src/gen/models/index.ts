@@ -595,18 +595,6 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
-  cutoff_time?: string;
-
-  min_popularity?: number;
-
-  type?: string;
-
-  sort?: SortParam[];
-
-  filter?: Record<string, any>;
-}
-
-export interface ActivitySelectorConfigResponse {
   cutoff_time?: Date;
 
   min_popularity?: number;
@@ -1095,6 +1083,8 @@ export interface AudioSettings {
 
   speaker_default_on: boolean;
 
+  hifi_audio_enabled?: boolean;
+
   noise_cancellation?: NoiseCancellationSettings;
 }
 
@@ -1102,6 +1092,8 @@ export interface AudioSettingsRequest {
   default_device: 'speaker' | 'earpiece';
 
   access_request_enabled?: boolean;
+
+  hifi_audio_enabled?: boolean;
 
   mic_default_on?: boolean;
 
@@ -1126,6 +1118,8 @@ export interface AudioSettingsResponse {
   redundant_coding_enabled: boolean;
 
   speaker_default_on: boolean;
+
+  hifi_audio_enabled?: boolean;
 
   noise_cancellation?: NoiseCancellationSettings;
 }
@@ -5269,7 +5263,7 @@ export interface FeedGroupResponse {
 
   activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: ActivitySelectorConfigResponse[];
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -5505,7 +5499,7 @@ export interface FeedViewResponse {
 
   activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: ActivitySelectorConfigResponse[];
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -5621,33 +5615,29 @@ export interface FirebaseConfigFields {
 export interface Flag {
   created_at: Date;
 
-  entity_id: string;
-
-  entity_type: string;
+  created_by_automod: boolean;
 
   updated_at: Date;
 
-  result: Array<Record<string, any>>;
-
-  entity_creator_id?: string;
-
-  is_streamed_content?: boolean;
-
-  moderation_payload_hash?: string;
+  approved_at?: Date;
 
   reason?: string;
 
-  review_queue_item_id?: string;
+  rejected_at?: Date;
 
-  type?: string;
+  reviewed_at?: Date;
 
-  labels?: string[];
+  reviewed_by?: string;
+
+  target_message_id?: string;
 
   custom?: Record<string, any>;
 
-  moderation_payload?: ModerationPayload;
+  details?: FlagDetails;
 
-  review_queue_item?: ReviewQueueItem;
+  target_message?: Message;
+
+  target_user?: User;
 
   user?: User;
 }
@@ -9935,9 +9925,9 @@ export interface RTMPSettingsResponse {
 }
 
 export interface RankingConfig {
-  score?: string;
+  type: 'recency' | 'expression' | 'interest';
 
-  type?: string;
+  score?: string;
 
   defaults?: Record<string, any>;
 
