@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/GetStream/stream-node/compare/v0.7.0...v0.7.1) (2025-09-30)
+
+
+### Features
+
+* change cutoff_time in feed group/view request to be string, and on response to be time or omitted ([#161](https://github.com/GetStream/stream-node/issues/161)) ([c449e35](https://github.com/GetStream/stream-node/commit/c449e356d7d6ec0ff88762ce31d36dcffc9075f7))
+
 ## [0.7.0](https://github.com/GetStream/stream-node/compare/v0.6.7...v0.7.0) (2025-09-24)
 
 
