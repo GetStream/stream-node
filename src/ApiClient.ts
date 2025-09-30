@@ -1,11 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import {
-  ApiConfig,
-  RequestMetadata,
-  StreamError,
-  UserTokenPayload,
-} from './types';
-import { JWTUserToken } from './utils/create-token';
+import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 
@@ -152,51 +146,5 @@ export class ApiClient {
     }
 
     return newParams.join('&');
-  };
-
-  /**
-   *
-   * @param payload
-   * - user_id - the id of the user the token is for
-   * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
-   * - exp - when the token expires, unix timestamp in seconds
-   * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
-   */
-  generateUserToken = (
-    payload: {
-      user_id: string;
-      validity_in_seconds?: number;
-      exp?: number;
-      iat?: number;
-    } & Record<string, unknown>,
-  ) => {
-    if (!this.apiConfig.secret) {
-      throw new Error('API secret is not set');
-    }
-
-    const defaultIat = Math.floor((Date.now() - 1000) / 1000);
-    payload.iat = payload.iat ?? defaultIat;
-    const validityInSeconds = payload.validity_in_seconds ?? 60 * 60;
-    payload.exp = payload.exp ?? payload.iat + validityInSeconds;
-
-    return JWTUserToken(this.apiConfig.secret, payload as UserTokenPayload);
-  };
-
-  createToken = (
-    userID: string,
-    exp = Math.round(Date.now() / 1000) + 60 * 60,
-    iat = Math.floor((Date.now() - 1000) / 1000),
-  ) => {
-    if (!this.apiConfig.secret) {
-      throw new Error('API secret is not set');
-    }
-
-    const payload: UserTokenPayload = {
-      user_id: userID,
-      exp,
-      iat,
-    };
-
-    return JWTUserToken(this.apiConfig.secret, payload);
   };
 }

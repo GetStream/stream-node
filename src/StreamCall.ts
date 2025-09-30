@@ -57,7 +57,9 @@ export class StreamCall extends CallApi {
       );
     }
 
-    const token = this.videoApi.apiClient.createToken(userID, undefined);
+    const token = this.streamClient.generateUserToken({
+      user_id: userID,
+    });
     const segments = token.split('.');
     if (segments.length !== 3) {
       throw new Error('Invalid token format');

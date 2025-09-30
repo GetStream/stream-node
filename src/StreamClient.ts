@@ -3,7 +3,7 @@ import { CommonApi } from './gen/common/CommonApi';
 import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
-import { CallTokenPayload } from './types';
+import { CallTokenPayload, UserTokenPayload } from './types';
 import {
   FileUploadRequest,
   ImageUploadRequest,
@@ -54,7 +54,6 @@ export class StreamClient extends CommonApi {
       baseUrl: chatBaseUrl,
       timeout,
       agent: config?.agent as RequestInit['dispatcher'],
-      secret,
     });
 
     const videoApiClient = new ApiClient({
@@ -63,7 +62,6 @@ export class StreamClient extends CommonApi {
       baseUrl: videoBaseUrl,
       timeout,
       agent: config?.agent as RequestInit['dispatcher'],
-      secret,
     });
 
     const feedsApiClient = new ApiClient({
@@ -72,7 +70,6 @@ export class StreamClient extends CommonApi {
       baseUrl: feedsBaseUrl,
       timeout,
       agent: config?.agent as RequestInit['dispatcher'],
-      secret,
     });
 
     super(chatApiClient);
@@ -139,7 +136,14 @@ export class StreamClient extends CommonApi {
       exp?: number;
       iat?: number;
     } & Record<string, unknown>,
-  ) => this.apiClient.generateUserToken(payload);
+  ) => {
+    const defaultIat = Math.floor((Date.now() - 1000) / 1000);
+    payload.iat = payload.iat ?? defaultIat;
+    const validityInSeconds = payload.validity_in_seconds ?? 60 * 60;
+    payload.exp = payload.exp ?? payload.iat + validityInSeconds;
+
+    return JWTUserToken(this.secret, payload as UserTokenPayload);
+  };
 
   /**
    *
@@ -175,7 +179,15 @@ export class StreamClient extends CommonApi {
     userID: string,
     exp = Math.round(Date.now() / 1000) + 60 * 60,
     iat = Math.floor((Date.now() - 1000) / 1000),
-  ) => this.apiClient.createToken(userID, exp, iat);
+  ) => {
+    const payload: UserTokenPayload = {
+      user_id: userID,
+      exp,
+      iat,
+    };
+
+    return JWTUserToken(this.secret, payload);
+  };
 
   /**
    *
