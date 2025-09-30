@@ -3,7 +3,7 @@ import { CommonApi } from './gen/common/CommonApi';
 import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
-import { CallTokenPayload, UserTokenPayload } from './types';
+import { CallTokenPayload } from './types';
 import {
   FileUploadRequest,
   ImageUploadRequest,
