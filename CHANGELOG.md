@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/GetStream/stream-node/compare/v0.7.1...v0.7.2) (2025-09-30)
+
+
+### Features
+
+* add createSRTCredetials method to StreamCall ([#165](https://github.com/GetStream/stream-node/issues/165)) ([2a9d950](https://github.com/GetStream/stream-node/commit/2a9d950a2ef9b66f6fc7f0dd5e1a296f49328f5f))
+
 ## [0.7.1](https://github.com/GetStream/stream-node/compare/v0.7.0...v0.7.1) (2025-09-30)
 
 
