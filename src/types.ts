@@ -7,6 +7,7 @@ export interface ApiConfig {
   /** The timeout for requests in milliseconds. The default is 3000. */
   timeout: number;
   agent?: RequestInit['dispatcher'];
+  secret?: string;
 }
 
 export interface RequestMetadata {
@@ -39,7 +40,7 @@ export interface RateLimit {
 
 interface BaseTokenPayload {
   user_id: string;
-  exp: number;
+  exp?: number;
   iat: number;
   call_cids?: string[];
 }

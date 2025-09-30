@@ -149,6 +149,24 @@ export class StreamClient extends CommonApi {
    *
    * @param payload
    * - user_id - the id of the user the token is for
+   * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   */
+  generatePermanentUserToken = (
+    payload: {
+      user_id: string;
+      iat?: number;
+    } & Record<string, unknown>,
+  ) => {
+    const defaultIat = Math.floor((Date.now() - 1000) / 1000);
+    payload.iat = payload.iat ?? defaultIat;
+
+    return JWTUserToken(this.secret, payload as UserTokenPayload);
+  };
+
+  /**
+   *
+   * @param payload
+   * - user_id - the id of the user the token is for
    * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
    * - exp - when the token expires, unix timestamp in seconds
    * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
