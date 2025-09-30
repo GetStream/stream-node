@@ -1,8 +1,14 @@
-import { GetOrCreateCallRequest, QueryCallMembersRequest } from './gen/models';
+import {
+  CallResponse,
+  GetOrCreateCallRequest,
+  QueryCallMembersRequest,
+} from './gen/models';
 import { CallApi } from './gen/video/CallApi';
 import { OmitTypeId } from './types';
 
 export class StreamCall extends CallApi {
+  data?: CallResponse;
+
   get cid() {
     return `${this.type}:${this.id}`;
   }
@@ -15,5 +21,41 @@ export class StreamCall extends CallApi {
       type: this.type,
       ...(request ?? {}),
     });
+  };
+
+  getOrCreate = async (request?: GetOrCreateCallRequest) => {
+    const response = await super.getOrCreate(request);
+    this.data = response.call;
+    return response;
+  };
+
+  get = async () => {
+    const response = await super.get();
+    this.data = response.call;
+    return response;
+  };
+
+  createSRTCredetials = (
+    userID: string,
+  ): {
+    address: string;
+  } => {
+    if (!this.data) {
+      throw new Error(
+        'Object is not initialized, call get() or getOrCreate() first',
+      );
+    }
+
+    const token = this.videoApi.apiClient.createToken(userID, undefined);
+    const segments = token.split('.');
+    if (segments.length !== 3) {
+      throw new Error('Invalid token format');
+    }
+
+    return {
+      address: this.data.ingress.srt.address
+        .replace('{passphrase}', segments[2])
+        .replace('{token}', token),
+    };
   };
 }
