@@ -205,7 +205,8 @@ describe('call API', () => {
   });
 
   it('generate SRT credentials', () => {
-    const creds = call.createSRTCredetials('john');
+    const call = client.video.call('default', `call${uuidv4()}`);
+    const creds = call.createSRTCredentials('john');
 
     expect(creds).toBeDefined();
     expect(creds.address).toBeDefined();

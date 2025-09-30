@@ -46,7 +46,7 @@ export class StreamCall extends CallApi {
     return response;
   };
 
-  createSRTCredetials = (
+  createSRTCredentials = (
     userID: string,
   ): {
     address: string;
