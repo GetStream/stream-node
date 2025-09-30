@@ -57,7 +57,7 @@ export class StreamCall extends CallApi {
       );
     }
 
-    const token = this.streamClient.generateUserToken({
+    const token = this.streamClient.generatePermanentUserToken({
       user_id: userID,
     });
     const segments = token.split('.');

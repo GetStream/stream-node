@@ -40,7 +40,7 @@ export interface RateLimit {
 
 interface BaseTokenPayload {
   user_id: string;
-  exp: number;
+  exp?: number;
   iat: number;
   call_cids?: string[];
 }
