@@ -226,13 +226,6 @@ decoders.ActivityResponse = (input?: Record<string, any>) => {
 
 decoders.ActivitySelectorConfig = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    cutoff_time: { type: 'StringType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.ActivitySelectorConfigResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
     cutoff_time: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -1910,10 +1903,7 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    activity_selectors: {
-      type: 'ActivitySelectorConfigResponse',
-      isSingle: false,
-    },
+    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2006,10 +1996,7 @@ decoders.FeedViewResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     last_used_at: { type: 'DatetimeType', isSingle: true },
 
-    activity_selectors: {
-      type: 'ActivitySelectorConfigResponse',
-      isSingle: false,
-    },
+    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
   };
   return decode(typeMappings, input);
 };
