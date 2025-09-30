@@ -25,7 +25,7 @@ export class StreamVideoClient extends VideoApi {
   }
 
   call = (type: string, id: string) => {
-    return new StreamCall(this, type, id);
+    return new StreamCall(this, type, id, this.streamClient);
   };
 
   connectOpenAi = async (options: {

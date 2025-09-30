@@ -1,13 +1,24 @@
+import { VideoApi } from './gen-imports';
 import {
   CallResponse,
   GetOrCreateCallRequest,
   QueryCallMembersRequest,
 } from './gen/models';
 import { CallApi } from './gen/video/CallApi';
+import { StreamClient } from './StreamClient';
 import { OmitTypeId } from './types';
 
 export class StreamCall extends CallApi {
   data?: CallResponse;
+
+  constructor(
+    videoApi: VideoApi,
+    readonly type: string,
+    readonly id: string,
+    private readonly streamClient: StreamClient,
+  ) {
+    super(videoApi, type, id);
+  }
 
   get cid() {
     return `${this.type}:${this.id}`;
