@@ -11313,8 +11313,6 @@ export interface StopTranscriptionResponse {
 }
 
 export interface StoriesConfig {
-  expiration_behaviour?: string;
-
   skip_watched?: boolean;
 
   track_watched?: boolean;
