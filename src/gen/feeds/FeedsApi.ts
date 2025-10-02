@@ -1031,6 +1031,7 @@ export class FeedsApi {
       notification: request?.notification,
       push_notification: request?.push_notification,
       ranking: request?.ranking,
+      stories: request?.stories,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1449,6 +1450,7 @@ export class FeedsApi {
       notification: request?.notification,
       push_notification: request?.push_notification,
       ranking: request?.ranking,
+      stories: request?.stories,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1481,6 +1483,7 @@ export class FeedsApi {
       notification: request?.notification,
       push_notification: request?.push_notification,
       ranking: request?.ranking,
+      stories: request?.stories,
     };
 
     const response = await this.apiClient.sendRequest<

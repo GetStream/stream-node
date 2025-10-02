@@ -6309,6 +6309,8 @@ export interface GetOrCreateFeedGroupRequest {
   push_notification?: PushNotificationConfig;
 
   ranking?: RankingConfig;
+
+  stories?: StoriesConfig;
 }
 
 export interface GetOrCreateFeedGroupResponse {
@@ -12552,6 +12554,8 @@ export interface UpdateFeedGroupRequest {
   push_notification?: PushNotificationConfig;
 
   ranking?: RankingConfig;
+
+  stories?: StoriesConfig;
 }
 
 export interface UpdateFeedGroupResponse {
