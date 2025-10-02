@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.5](https://github.com/GetStream/stream-node/compare/v0.7.4...v0.7.5) (2025-10-02)
+
+
+### Bug Fixes
+
+* stories config ([#174](https://github.com/GetStream/stream-node/issues/174)) ([232d044](https://github.com/GetStream/stream-node/commit/232d0446cddd6cdc5f75347f34dd5555ff355887))
+
 ## [0.7.4](https://github.com/GetStream/stream-node/compare/v0.7.3...v0.7.4) (2025-10-02)
 
 
