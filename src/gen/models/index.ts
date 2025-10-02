@@ -4154,6 +4154,8 @@ export interface CreateFeedGroupRequest {
   push_notification?: PushNotificationConfig;
 
   ranking?: RankingConfig;
+
+  stories?: StoriesConfig;
 }
 
 export interface CreateFeedGroupResponse {
