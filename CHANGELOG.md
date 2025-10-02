@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.6](https://github.com/GetStream/stream-node/compare/v0.7.5...v0.7.6) (2025-10-02)
+
+
+### Bug Fixes
+
+* rename addReaction method to addActivityReaction ([#176](https://github.com/GetStream/stream-node/issues/176)) ([69b9233](https://github.com/GetStream/stream-node/commit/69b9233cd0bcfa1351bfad0b13134e2662cc2585))
+
 ## [0.7.5](https://github.com/GetStream/stream-node/compare/v0.7.4...v0.7.5) (2025-10-02)
 
 
