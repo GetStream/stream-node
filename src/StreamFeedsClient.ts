@@ -10,4 +10,9 @@ export class StreamFeedsClient extends FeedsApi {
   queryFeeds = (request: QueryFeedsRequest) => {
     return super._queryFeeds(request);
   };
+
+  /**
+   * @deprecated Use addActivityReaction instead
+   */
+  addReaction = this.addActivityReaction;
 }
