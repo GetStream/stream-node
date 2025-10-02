@@ -3867,6 +3867,22 @@ decoders.StopLiveResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.StoriesFeedUpdatedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    aggregated_activities: {
+      type: 'AggregatedActivityResponse',
+      isSingle: false,
+    },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.SubmitActionResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     item: { type: 'ReviewQueueItemResponse', isSingle: true },
