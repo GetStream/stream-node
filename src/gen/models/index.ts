@@ -577,6 +577,8 @@ export interface ActivityResponse {
 
   hidden?: boolean;
 
+  is_watched?: boolean;
+
   text?: string;
 
   visibility_tag?: string;
@@ -810,6 +812,8 @@ export interface AggregatedActivityResponse {
   user_count: number;
 
   user_count_truncated: boolean;
+
+  is_watched?: boolean;
 
   activities: ActivityResponse[];
 }
@@ -10624,6 +10628,24 @@ export interface SRTIngress {
   address: string;
 }
 
+export interface StoriesFeedUpdatedEvent {
+  created_at: Date;
+
+  fid: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  feed_visibility?: string;
+
+  received_at?: Date;
+
+  aggregated_activities?: AggregatedActivityResponse[];
+
+  user?: UserResponseCommonFields;
+}
+
 export interface STTEgressConfig {
   closed_captions_enabled?: boolean;
 
@@ -11292,6 +11314,8 @@ export interface StoriesConfig {
   expiration_behaviour?: string;
 
   skip_watched?: boolean;
+
+  track_watched?: boolean;
 }
 
 export interface SubmitActionRequest {
@@ -13714,6 +13738,7 @@ export type WebhookEvent =
   | ({ type: 'feeds.follow.deleted' } & FollowDeletedEvent)
   | ({ type: 'feeds.follow.updated' } & FollowUpdatedEvent)
   | ({ type: 'feeds.notification_feed.updated' } & NotificationFeedUpdatedEvent)
+  | ({ type: 'feeds.stories_feed.updated' } & StoriesFeedUpdatedEvent)
   | ({ type: 'flag.updated' } & FlagUpdatedEvent)
   | ({ type: 'member.added' } & MemberAddedEvent)
   | ({ type: 'member.removed' } & MemberRemovedEvent)
