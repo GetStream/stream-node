@@ -1,5 +1,5 @@
 import { FeedsApi } from './gen/feeds/FeedsApi';
-import { QueryFeedsRequest } from './gen/models';
+import { AddReactionRequest, QueryFeedsRequest } from './gen/models';
 import { StreamFeed } from './StreamFeed';
 
 export class StreamFeedsClient extends FeedsApi {
@@ -14,5 +14,7 @@ export class StreamFeedsClient extends FeedsApi {
   /**
    * @deprecated Use addActivityReaction instead
    */
-  addReaction = this.addActivityReaction;
+  addReaction = (request: AddReactionRequest & { activity_id: string }) => {
+    return super.addActivityReaction(request);
+  };
 }
