@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.4](https://github.com/GetStream/stream-node/compare/v0.7.3...v0.7.4) (2025-10-02)
+
+
+### Features
+
+* stories feed implementation ([#170](https://github.com/GetStream/stream-node/issues/170)) ([ca75fb5](https://github.com/GetStream/stream-node/commit/ca75fb5706fe1ed49df6f21c921e67059612579d))
+
+
+### Bug Fixes
+
+* removed expiration from stories config ([#172](https://github.com/GetStream/stream-node/issues/172)) ([a30b855](https://github.com/GetStream/stream-node/commit/a30b855f37335396fd24ff53c99225b955abbc73))
+
 ## [0.7.3](https://github.com/GetStream/stream-node/compare/v0.7.2...v0.7.3) (2025-09-30)
 
 
