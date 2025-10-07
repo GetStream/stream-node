@@ -12614,6 +12614,16 @@ export interface UpdateFeedViewResponse {
   feed_view: FeedViewResponse;
 }
 
+export interface UpdateFeedVisibilityRequest {
+  grants?: Record<string, string[]>;
+}
+
+export interface UpdateFeedVisibilityResponse {
+  duration: string;
+
+  feed_visibility: FeedVisibilityResponse;
+}
+
 export interface UpdateFollowRequest {
   source: string;
 
