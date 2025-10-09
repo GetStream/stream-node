@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.7](https://github.com/GetStream/stream-node/compare/v0.7.6...v0.7.7) (2025-10-09)
+
+
+### Features
+
+* [FEEDS-795] add updateFeedVisibility ([#178](https://github.com/GetStream/stream-node/issues/178)) ([735a934](https://github.com/GetStream/stream-node/commit/735a934701df4e4c4e5e05c1b3ab7786bfef8e7f))
+
 ## [0.7.6](https://github.com/GetStream/stream-node/compare/v0.7.5...v0.7.6) (2025-10-02)
 
 
