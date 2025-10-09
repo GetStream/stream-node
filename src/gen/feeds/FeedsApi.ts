@@ -112,6 +112,8 @@ import {
   UpdateFeedResponse,
   UpdateFeedViewRequest,
   UpdateFeedViewResponse,
+  UpdateFeedVisibilityRequest,
+  UpdateFeedVisibilityResponse,
   UpdateFollowRequest,
   UpdateFollowResponse,
   UpdateMembershipLevelRequest,
@@ -1653,6 +1655,32 @@ export class FeedsApi {
     >('GET', '/api/v2/feeds/feed_visibilities/{name}', pathParams, undefined);
 
     decoders.GetFeedVisibilityResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateFeedVisibility(
+    request: UpdateFeedVisibilityRequest & { name: string },
+  ): Promise<StreamResponse<UpdateFeedVisibilityResponse>> {
+    const pathParams = {
+      name: request?.name,
+    };
+    const body = {
+      grants: request?.grants,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateFeedVisibilityResponse>
+    >(
+      'PUT',
+      '/api/v2/feeds/feed_visibilities/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateFeedVisibilityResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
