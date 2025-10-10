@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.8](https://github.com/GetStream/stream-node/compare/v0.7.7...v0.7.8) (2025-10-10)
+
+
+### Features
+
+* Added individual activities array to stories feed updated event ([#180](https://github.com/GetStream/stream-node/issues/180)) ([db36a8e](https://github.com/GetStream/stream-node/commit/db36a8e9298da82d7e18a577eb79d7a00d62a803))
+
 ## [0.7.7](https://github.com/GetStream/stream-node/compare/v0.7.6...v0.7.7) (2025-10-09)
 
 
