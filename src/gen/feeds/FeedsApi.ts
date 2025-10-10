@@ -1010,10 +1010,15 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async listFeedGroups(): Promise<StreamResponse<ListFeedGroupsResponse>> {
+  async listFeedGroups(request?: {
+    include_soft_deleted?: boolean;
+  }): Promise<StreamResponse<ListFeedGroupsResponse>> {
+    const queryParams = {
+      include_soft_deleted: request?.include_soft_deleted,
+    };
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListFeedGroupsResponse>
-    >('GET', '/api/v2/feeds/feed_groups', undefined, undefined);
+    >('GET', '/api/v2/feeds/feed_groups', undefined, queryParams);
 
     decoders.ListFeedGroupsResponse?.(response.body);
 
@@ -1423,14 +1428,18 @@ export class FeedsApi {
 
   async getFeedGroup(request: {
     id: string;
+    include_soft_deleted?: boolean;
   }): Promise<StreamResponse<GetFeedGroupResponse>> {
+    const queryParams = {
+      include_soft_deleted: request?.include_soft_deleted,
+    };
     const pathParams = {
       id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetFeedGroupResponse>
-    >('GET', '/api/v2/feeds/feed_groups/{id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
 
     decoders.GetFeedGroupResponse?.(response.body);
 

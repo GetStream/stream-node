@@ -5265,6 +5265,8 @@ export interface FeedGroupResponse {
 
   updated_at: Date;
 
+  deleted_at?: Date;
+
   default_visibility?: string;
 
   activity_processors?: ActivityProcessorConfig[];
