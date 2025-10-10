@@ -3873,6 +3873,8 @@ decoders.StoriesFeedUpdatedEvent = (input?: Record<string, any>) => {
 
     received_at: { type: 'DatetimeType', isSingle: true },
 
+    activities: { type: 'ActivityResponse', isSingle: false },
+
     aggregated_activities: {
       type: 'AggregatedActivityResponse',
       isSingle: false,

@@ -10645,6 +10645,8 @@ export interface StoriesFeedUpdatedEvent {
 
   received_at?: Date;
 
+  activities?: ActivityResponse[];
+
   aggregated_activities?: AggregatedActivityResponse[];
 
   user?: UserResponseCommonFields;
