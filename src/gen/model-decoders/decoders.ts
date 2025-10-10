@@ -1903,6 +1903,8 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
     activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
   };
   return decode(typeMappings, input);
