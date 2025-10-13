@@ -224,7 +224,7 @@ decoders.ActivityResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ActivitySelectorConfig = (input?: Record<string, any>) => {
+decoders.ActivitySelectorConfigResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     cutoff_time: { type: 'DatetimeType', isSingle: true },
   };
@@ -1903,9 +1903,10 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
+    activity_selectors: {
+      type: 'ActivitySelectorConfigResponse',
+      isSingle: false,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -1998,7 +1999,10 @@ decoders.FeedViewResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     last_used_at: { type: 'DatetimeType', isSingle: true },
 
-    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
+    activity_selectors: {
+      type: 'ActivitySelectorConfigResponse',
+      isSingle: false,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -3273,6 +3277,28 @@ decoders.QueryCallParticipantsResponse = (input?: Record<string, any>) => {
     participants: { type: 'CallParticipantResponse', isSingle: false },
 
     call: { type: 'CallResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.QueryCallSessionParticipantStatsResponse = (
+  input?: Record<string, any>,
+) => {
+  const typeMappings: TypeMapping = {
+    participants: { type: 'CallStatsParticipant', isSingle: false },
+
+    call_ended_at: { type: 'DatetimeType', isSingle: true },
+
+    call_started_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.QueryCallSessionParticipantStatsTimelineResponse = (
+  input?: Record<string, any>,
+) => {
+  const typeMappings: TypeMapping = {
+    events: { type: 'CallParticipantTimeline', isSingle: false },
   };
   return decode(typeMappings, input);
 };

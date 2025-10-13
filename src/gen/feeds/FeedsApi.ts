@@ -80,6 +80,8 @@ import {
   QueryFeedMembersResponse,
   QueryFeedsRequest,
   QueryFeedsResponse,
+  QueryFeedsUsageStatsRequest,
+  QueryFeedsUsageStatsResponse,
   QueryFollowsRequest,
   QueryFollowsResponse,
   QueryMembershipLevelsRequest,
@@ -341,6 +343,7 @@ export class FeedsApi {
       reason: request?.reason,
       report: request?.report,
       show_less: request?.show_less,
+      show_more: request?.show_more,
       user_id: request?.user_id,
       user: request?.user,
     };
@@ -2024,6 +2027,30 @@ export class FeedsApi {
     );
 
     decoders.UpdateMembershipLevelResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryFeedsUsageStats(
+    request?: QueryFeedsUsageStatsRequest,
+  ): Promise<StreamResponse<QueryFeedsUsageStatsResponse>> {
+    const body = {
+      from: request?.from,
+      to: request?.to,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryFeedsUsageStatsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/stats/usage',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryFeedsUsageStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
