@@ -9440,6 +9440,8 @@ export interface QueryFeedsUsageStatsResponse {
   api_requests: DailyMetricStatsResponse;
 
   follows: DailyMetricStatsResponse;
+
+  openai_requests: DailyMetricStatsResponse;
 }
 
 export interface QueryFollowsRequest {
