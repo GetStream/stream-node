@@ -311,6 +311,8 @@ export interface ActivityFeedbackRequest {
 
   show_less?: boolean;
 
+  show_more?: boolean;
+
   user_id?: string;
 
   user?: UserRequest;
@@ -597,6 +599,18 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
+  cutoff_time?: Date;
+
+  min_popularity?: number;
+
+  type?: string;
+
+  sort?: SortParam[];
+
+  filter?: Record<string, any>;
+}
+
+export interface ActivitySelectorConfigResponse {
   cutoff_time?: Date;
 
   min_popularity?: number;
@@ -4394,6 +4408,18 @@ export interface DailyAggregateUserFeedbackReportResponse {
   report: UserFeedbackReport;
 }
 
+export interface DailyMetricResponse {
+  date: string;
+
+  value: number;
+}
+
+export interface DailyMetricStatsResponse {
+  total: number;
+
+  daily: DailyMetricResponse[];
+}
+
 export interface Data {
   id: string;
 }
@@ -5507,7 +5533,7 @@ export interface FeedViewResponse {
 
   activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
 
@@ -9398,6 +9424,22 @@ export interface QueryFeedsResponse {
   next?: string;
 
   prev?: string;
+}
+
+export interface QueryFeedsUsageStatsRequest {
+  from?: string;
+
+  to?: string;
+}
+
+export interface QueryFeedsUsageStatsResponse {
+  duration: string;
+
+  activities: DailyMetricStatsResponse;
+
+  api_requests: DailyMetricStatsResponse;
+
+  follows: DailyMetricStatsResponse;
 }
 
 export interface QueryFollowsRequest {
