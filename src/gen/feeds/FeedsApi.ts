@@ -61,6 +61,8 @@ import {
   ListFeedViewsResponse,
   ListFeedVisibilitiesResponse,
   MarkActivityRequest,
+  OwnCapabilitiesBatchRequest,
+  OwnCapabilitiesBatchResponse,
   PinActivityRequest,
   PinActivityResponse,
   PollVoteResponse,
@@ -80,8 +82,6 @@ import {
   QueryFeedMembersResponse,
   QueryFeedsRequest,
   QueryFeedsResponse,
-  QueryFeedsUsageStatsRequest,
-  QueryFeedsUsageStatsResponse,
   QueryFollowsRequest,
   QueryFollowsResponse,
   QueryMembershipLevelsRequest,
@@ -1019,6 +1019,7 @@ export class FeedsApi {
     const queryParams = {
       include_soft_deleted: request?.include_soft_deleted,
     };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListFeedGroupsResponse>
     >('GET', '/api/v2/feeds/feed_groups', undefined, queryParams);
@@ -1720,6 +1721,31 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async ownCapabilitiesBatch(
+    request: OwnCapabilitiesBatchRequest,
+  ): Promise<StreamResponse<OwnCapabilitiesBatchResponse>> {
+    const body = {
+      feeds: request?.feeds,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<OwnCapabilitiesBatchResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feeds/own_capabilities/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.OwnCapabilitiesBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   protected async _queryFeeds(
     request?: QueryFeedsRequest,
   ): Promise<StreamResponse<QueryFeedsResponse>> {
@@ -2027,30 +2053,6 @@ export class FeedsApi {
     );
 
     decoders.UpdateMembershipLevelResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async queryFeedsUsageStats(
-    request?: QueryFeedsUsageStatsRequest,
-  ): Promise<StreamResponse<QueryFeedsUsageStatsResponse>> {
-    const body = {
-      from: request?.from,
-      to: request?.to,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryFeedsUsageStatsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/stats/usage',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.QueryFeedsUsageStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
