@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.11](https://github.com/GetStream/stream-node/compare/v0.7.10...v0.7.11) (2025-10-14)
+
+
+### Bug Fixes
+
+* Feeds usage stats endpoint plus cutoff time ([#186](https://github.com/GetStream/stream-node/issues/186)) ([527f09a](https://github.com/GetStream/stream-node/commit/527f09a4a1ca0078cd6aa797085c8e04fe41d212))
+
 ## [0.7.10](https://github.com/GetStream/stream-node/compare/v0.7.9...v0.7.10) (2025-10-13)
 
 
