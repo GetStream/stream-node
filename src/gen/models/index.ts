@@ -7333,6 +7333,8 @@ export interface MessageDeletedEvent {
 
   thread_participants?: User[];
 
+  deleted_for_me?: boolean;
+
   message?: Message;
 
   user?: User;
