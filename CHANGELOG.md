@@ -12,8 +12,7 @@
 
 ### Features
 
-* [FEEDS-831] add support for soft deleted feed groups ([#182](https://github.com/GetStream/stream-node/issues/182)) ([006f170](https://github.com/GetStream/stream-node/commit/006f170d9c032c81139db2b03a5b8cb11d059572))
-
+* [FEEDS-831] add support for soft deleted feed groups ([#182](https://github.com/GetStream/stream-node/issues/182)) ([006f170](https://github.com/GetStream/stream-node/commit/006f170d9c032c81139db2b03a5b8cb11d059572))
 ## [0.7.8](https://github.com/GetStream/stream-node/compare/v0.7.7...v0.7.8) (2025-10-10)
 
 
