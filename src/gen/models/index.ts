@@ -599,7 +599,7 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
-  cutoff_time?: Date;
+  cutoff_time?: string;
 
   min_popularity?: number;
 
