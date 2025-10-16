@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.12](https://github.com/GetStream/stream-node/compare/v0.7.11...v0.7.12) (2025-10-16)
+
+
+### Bug Fixes
+
+* cutoff time on req should be string ([#189](https://github.com/GetStream/stream-node/issues/189)) ([55ccb83](https://github.com/GetStream/stream-node/commit/55ccb83da0a65c9d95a831c9e9f82a4f838470af))
+
 ## [0.7.11](https://github.com/GetStream/stream-node/compare/v0.7.10...v0.7.11) (2025-10-14)
 
 
