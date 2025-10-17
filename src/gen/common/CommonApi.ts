@@ -1,95 +1,1035 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
+  AIImageConfig,
+  AITextConfig,
+  AIVideoConfig,
+  APIError,
+  APNConfig,
+  APNConfigFields,
+  APNS,
+  AWSRekognitionRule,
+  AcceptFeedMemberInviteRequest,
+  AcceptFeedMemberInviteResponse,
+  AcceptFollowRequest,
+  AcceptFollowResponse,
+  Action,
+  ActionLogResponse,
+  ActionSequence,
+  ActiveCallsBitrateStats,
+  ActiveCallsFPSStats,
+  ActiveCallsLatencyStats,
+  ActiveCallsMetrics,
+  ActiveCallsResolutionStats,
+  ActiveCallsSummary,
+  ActivityAddedEvent,
+  ActivityDeletedEvent,
+  ActivityFeedbackRequest,
+  ActivityFeedbackResponse,
+  ActivityLocation,
+  ActivityMarkEvent,
+  ActivityMarkedEvent,
+  ActivityPinResponse,
+  ActivityPinnedEvent,
+  ActivityProcessorConfig,
+  ActivityReactionAddedEvent,
+  ActivityReactionDeletedEvent,
+  ActivityReactionUpdatedEvent,
+  ActivityRemovedFromFeedEvent,
+  ActivityRequest,
+  ActivityResponse,
+  ActivitySelectorConfig,
+  ActivitySelectorConfigResponse,
+  ActivityUnpinnedEvent,
+  ActivityUpdatedEvent,
+  AddActivityRequest,
+  AddActivityResponse,
+  AddBookmarkRequest,
+  AddBookmarkResponse,
+  AddCommentReactionRequest,
+  AddCommentReactionResponse,
+  AddCommentRequest,
+  AddCommentResponse,
+  AddCommentsBatchRequest,
+  AddCommentsBatchResponse,
+  AddFolderRequest,
+  AddReactionRequest,
+  AddReactionResponse,
+  AggregatedActivityResponse,
+  AggregationConfig,
+  AnyEvent,
+  AppResponseFields,
+  AsyncBulkImageModerationEvent,
+  AsyncExportChannelsEvent,
+  AsyncExportErrorEvent,
+  AsyncExportModerationLogsEvent,
+  AsyncExportUsersEvent,
+  AsyncModerationCallbackConfig,
+  AsyncModerationConfiguration,
+  Attachment,
+  AudioSettings,
+  AudioSettingsRequest,
+  AudioSettingsResponse,
+  AutomodDetails,
+  AutomodPlatformCircumventionConfig,
+  AutomodRule,
+  AutomodSemanticFiltersConfig,
+  AutomodSemanticFiltersRule,
+  AutomodToxicityConfig,
+  AzureRequest,
+  BackstageSettings,
+  BackstageSettingsRequest,
+  BackstageSettingsResponse,
+  Ban,
+  BanActionRequest,
+  BanOptions,
+  BanRequest,
+  BanResponse,
+  BlockListConfig,
+  BlockListOptions,
+  BlockListResponse,
+  BlockListRule,
+  BlockUserRequest,
+  BlockUserResponse,
   BlockUsersRequest,
   BlockUsersResponse,
+  BlockedUserEvent,
+  BlockedUserResponse,
+  BodyguardImageAnalysisConfig,
+  BodyguardRule,
+  BodyguardSeverityRule,
+  BookmarkAddedEvent,
+  BookmarkDeletedEvent,
+  BookmarkFolderDeletedEvent,
+  BookmarkFolderResponse,
+  BookmarkFolderUpdatedEvent,
+  BookmarkResponse,
+  BookmarkUpdatedEvent,
+  Bound,
+  BroadcastSettings,
+  BroadcastSettingsRequest,
+  BroadcastSettingsResponse,
+  BrowserDataResponse,
+  BulkImageModerationRequest,
+  BulkImageModerationResponse,
+  CallAcceptedEvent,
+  CallClosedCaption,
+  CallClosedCaptionsFailedEvent,
+  CallClosedCaptionsStartedEvent,
+  CallClosedCaptionsStoppedEvent,
+  CallCreatedEvent,
+  CallDeletedEvent,
+  CallDurationReport,
+  CallDurationReportResponse,
+  CallEndedEvent,
+  CallFrameRecordingFailedEvent,
+  CallFrameRecordingFrameReadyEvent,
+  CallFrameRecordingStartedEvent,
+  CallFrameRecordingStoppedEvent,
+  CallHLSBroadcastingFailedEvent,
+  CallHLSBroadcastingStartedEvent,
+  CallHLSBroadcastingStoppedEvent,
+  CallIngressResponse,
+  CallLiveStartedEvent,
+  CallMemberAddedEvent,
+  CallMemberRemovedEvent,
+  CallMemberUpdatedEvent,
+  CallMemberUpdatedPermissionEvent,
+  CallMissedEvent,
+  CallModerationBlurEvent,
+  CallModerationWarningEvent,
+  CallNotificationEvent,
+  CallParticipantCountReport,
+  CallParticipantCountReportResponse,
+  CallParticipantResponse,
+  CallParticipantTimeline,
+  CallReactionEvent,
+  CallRecording,
+  CallRecordingFailedEvent,
+  CallRecordingReadyEvent,
+  CallRecordingStartedEvent,
+  CallRecordingStoppedEvent,
+  CallRejectedEvent,
+  CallReportResponse,
+  CallRequest,
+  CallResponse,
+  CallRingEvent,
+  CallRtmpBroadcastFailedEvent,
+  CallRtmpBroadcastStartedEvent,
+  CallRtmpBroadcastStoppedEvent,
+  CallSessionEndedEvent,
+  CallSessionParticipantCountsUpdatedEvent,
+  CallSessionParticipantJoinedEvent,
+  CallSessionParticipantLeftEvent,
+  CallSessionResponse,
+  CallSessionStartedEvent,
+  CallSettings,
+  CallSettingsRequest,
+  CallSettingsResponse,
+  CallStateResponseFields,
+  CallStatsParticipant,
+  CallStatsParticipantCounts,
+  CallStatsParticipantSession,
+  CallStatsReportReadyEvent,
+  CallStatsReportSummaryResponse,
+  CallTranscription,
+  CallTranscriptionFailedEvent,
+  CallTranscriptionReadyEvent,
+  CallTranscriptionStartedEvent,
+  CallTranscriptionStoppedEvent,
+  CallType,
+  CallTypeResponse,
+  CallUpdatedEvent,
+  CallUserFeedbackSubmittedEvent,
+  CallUserMutedEvent,
+  CallsPerDayReport,
+  CallsPerDayReportResponse,
+  CampaignChannelTemplate,
+  CampaignCompletedEvent,
+  CampaignMessageTemplate,
+  CampaignResponse,
+  CampaignStartedEvent,
+  CampaignStatsResponse,
+  CastPollVoteRequest,
+  Channel,
+  ChannelConfig,
+  ChannelConfigWithInfo,
+  ChannelCreatedEvent,
+  ChannelDeletedEvent,
+  ChannelExport,
+  ChannelFrozenEvent,
+  ChannelGetOrCreateRequest,
+  ChannelHiddenEvent,
+  ChannelInput,
+  ChannelMember,
+  ChannelMemberLookup,
+  ChannelMemberResponse,
+  ChannelMessages,
+  ChannelMute,
+  ChannelMutedEvent,
+  ChannelOwnCapability,
+  ChannelPushPreferences,
+  ChannelResponse,
+  ChannelStateResponse,
+  ChannelStateResponseFields,
+  ChannelTruncatedEvent,
+  ChannelTypeConfig,
+  ChannelUnFrozenEvent,
+  ChannelUnmutedEvent,
+  ChannelUpdatedEvent,
+  ChannelVisibleEvent,
+  ChatActivityStatsResponse,
   CheckExternalStorageResponse,
   CheckPushRequest,
   CheckPushResponse,
+  CheckRequest,
+  CheckResponse,
   CheckSNSRequest,
   CheckSNSResponse,
   CheckSQSRequest,
   CheckSQSResponse,
+  ClientOSDataResponse,
+  ClosedCaptionEvent,
+  CollectUserFeedbackRequest,
+  CollectUserFeedbackResponse,
+  Command,
+  CommentAddedEvent,
+  CommentDeletedEvent,
+  CommentReactionAddedEvent,
+  CommentReactionDeletedEvent,
+  CommentReactionUpdatedEvent,
+  CommentResponse,
+  CommentUpdatedEvent,
+  CommitMessageRequest,
+  ConfigOverrides,
+  ConfigResponse,
+  ContentCountRuleParameters,
+  CountByMinuteResponse,
   CreateBlockListRequest,
   CreateBlockListResponse,
+  CreateCallTypeRequest,
+  CreateCallTypeResponse,
+  CreateChannelTypeRequest,
+  CreateChannelTypeResponse,
+  CreateCommandRequest,
+  CreateCommandResponse,
   CreateDeviceRequest,
   CreateExternalStorageRequest,
   CreateExternalStorageResponse,
+  CreateFeedGroupRequest,
+  CreateFeedGroupResponse,
+  CreateFeedViewRequest,
+  CreateFeedViewResponse,
+  CreateFeedsBatchRequest,
+  CreateFeedsBatchResponse,
   CreateGuestRequest,
   CreateGuestResponse,
   CreateImportRequest,
   CreateImportResponse,
   CreateImportURLRequest,
   CreateImportURLResponse,
+  CreateMembershipLevelRequest,
+  CreateMembershipLevelResponse,
   CreatePollOptionRequest,
   CreatePollRequest,
+  CreateReminderRequest,
   CreateRoleRequest,
   CreateRoleResponse,
+  CustomActionRequest,
+  CustomCheckFlag,
+  CustomCheckRequest,
+  CustomCheckResponse,
+  CustomVideoEvent,
+  DailyAggregateCallDurationReportResponse,
+  DailyAggregateCallParticipantCountReportResponse,
+  DailyAggregateCallsPerDayReportResponse,
+  DailyAggregateQualityScoreReportResponse,
+  DailyAggregateSDKUsageReportResponse,
+  DailyAggregateUserFeedbackReportResponse,
+  DailyMetricResponse,
+  DailyMetricStatsResponse,
+  Data,
+  DataDogInfo,
   DeactivateUserRequest,
   DeactivateUserResponse,
   DeactivateUsersRequest,
   DeactivateUsersResponse,
+  DecayFunctionConfig,
+  DeleteActivitiesRequest,
+  DeleteActivitiesResponse,
+  DeleteActivityReactionResponse,
+  DeleteActivityRequest,
+  DeleteActivityResponse,
+  DeleteBookmarkFolderResponse,
+  DeleteBookmarkResponse,
+  DeleteCallRequest,
+  DeleteCallResponse,
+  DeleteChannelResponse,
+  DeleteChannelsRequest,
+  DeleteChannelsResponse,
+  DeleteChannelsResultResponse,
+  DeleteCommandResponse,
+  DeleteCommentReactionResponse,
+  DeleteCommentResponse,
   DeleteExternalStorageResponse,
+  DeleteFeedGroupResponse,
+  DeleteFeedResponse,
+  DeleteFeedUserDataResponse,
+  DeleteFeedViewResponse,
+  DeleteMessageRequest,
+  DeleteMessageResponse,
+  DeleteModerationConfigResponse,
+  DeleteModerationRuleResponse,
+  DeleteModerationTemplateResponse,
+  DeleteReactionRequest,
+  DeleteReactionResponse,
+  DeleteRecordingResponse,
+  DeleteReminderResponse,
+  DeleteSegmentTargetsRequest,
+  DeleteTranscriptionResponse,
+  DeleteUserRequest,
   DeleteUsersRequest,
   DeleteUsersResponse,
+  DeliveryReceipts,
+  DeliveryReceiptsResponse,
+  Device,
+  DeviceDataResponse,
+  DeviceErrorInfo,
+  DeviceResponse,
+  DraftPayloadResponse,
+  DraftResponse,
+  EdgeResponse,
+  EgressHLSResponse,
+  EgressRTMPResponse,
+  EgressResponse,
+  EndCallRequest,
+  EndCallResponse,
+  EnrichedActivity,
+  EnrichedReaction,
+  EntityCreatorResponse,
+  ErrorResult,
+  EventHook,
+  EventNotificationSettings,
+  EventRequest,
+  EventResponse,
+  ExportChannelsRequest,
+  ExportChannelsResponse,
+  ExportFeedUserDataRequest,
+  ExportFeedUserDataResponse,
   ExportUserResponse,
   ExportUsersRequest,
   ExportUsersResponse,
+  ExternalStorageResponse,
+  FCM,
+  FeedCreatedEvent,
+  FeedDeletedEvent,
+  FeedGroup,
+  FeedGroupChangedEvent,
+  FeedGroupDeletedEvent,
+  FeedGroupResponse,
+  FeedInput,
+  FeedMemberAddedEvent,
+  FeedMemberRemovedEvent,
+  FeedMemberRequest,
+  FeedMemberResponse,
+  FeedMemberUpdatedEvent,
+  FeedOwnCapability,
+  FeedRequest,
+  FeedResponse,
+  FeedUpdatedEvent,
+  FeedViewResponse,
+  FeedVisibilityResponse,
+  FeedsModerationTemplateConfig,
+  FeedsPreferences,
+  FeedsReactionResponse,
+  Field,
+  FileUploadConfig,
   FileUploadRequest,
   FileUploadResponse,
+  FirebaseConfig,
+  FirebaseConfigFields,
+  Flag,
+  FlagDetails,
+  FlagFeedback,
+  FlagMessageDetails,
+  FlagRequest,
+  FlagResponse,
+  FlagUpdatedEvent,
+  FlagUserOptions,
+  FollowBatchRequest,
+  FollowBatchResponse,
+  FollowCreatedEvent,
+  FollowDeletedEvent,
+  FollowPair,
+  FollowRequest,
+  FollowResponse,
+  FollowUpdatedEvent,
+  FrameRecordSettings,
+  FrameRecordingResponse,
+  FrameRecordingSettingsRequest,
+  FrameRecordingSettingsResponse,
+  FullUserResponse,
+  GeofenceResponse,
+  GeofenceSettings,
+  GeofenceSettingsRequest,
+  GeofenceSettingsResponse,
+  GetActiveCallsStatusResponse,
+  GetActivityResponse,
   GetApplicationResponse,
   GetBlockListResponse,
   GetBlockedUsersResponse,
+  GetCallReportResponse,
+  GetCallResponse,
+  GetCallSessionParticipantStatsDetailsResponse,
+  GetCallTypeResponse,
+  GetCampaignResponse,
+  GetChannelTypeResponse,
+  GetCommandResponse,
+  GetCommentRepliesResponse,
+  GetCommentResponse,
+  GetCommentsResponse,
+  GetConfigResponse,
   GetCustomPermissionResponse,
+  GetDraftResponse,
+  GetEdgesResponse,
+  GetFeedGroupResponse,
+  GetFeedViewResponse,
+  GetFeedVisibilityResponse,
+  GetFeedsRateLimitsResponse,
+  GetFollowSuggestionsResponse,
   GetImportResponse,
+  GetManyMessagesResponse,
+  GetMessageResponse,
+  GetModerationRuleResponse,
   GetOGResponse,
+  GetOrCreateCallRequest,
+  GetOrCreateCallResponse,
+  GetOrCreateFeedGroupRequest,
+  GetOrCreateFeedGroupResponse,
+  GetOrCreateFeedRequest,
+  GetOrCreateFeedResponse,
+  GetOrCreateFeedViewRequest,
+  GetOrCreateFeedViewResponse,
   GetPushTemplatesResponse,
   GetRateLimitsResponse,
+  GetReactionsResponse,
+  GetRepliesResponse,
+  GetReviewQueueItemResponse,
+  GetSegmentResponse,
   GetTaskResponse,
+  GetThreadResponse,
+  GoLiveRequest,
+  GoLiveResponse,
+  GoogleVisionConfig,
+  GroupedStatsResponse,
+  HLSSettings,
+  HLSSettingsRequest,
+  HLSSettingsResponse,
+  HarmConfig,
+  HideChannelRequest,
+  HideChannelResponse,
+  HuaweiConfig,
+  HuaweiConfigFields,
+  ImageContentParameters,
+  ImageData,
+  ImageRuleParameters,
+  ImageSize,
   ImageUploadRequest,
   ImageUploadResponse,
+  Images,
+  ImportTask,
+  ImportTaskHistory,
+  IngressAudioEncodingOptions,
+  IngressAudioEncodingOptionsRequest,
+  IngressAudioEncodingResponse,
+  IngressSettings,
+  IngressSettingsRequest,
+  IngressSettingsResponse,
+  IngressSource,
+  IngressSourceRequest,
+  IngressSourceResponse,
+  IngressVideoEncodingOptions,
+  IngressVideoEncodingOptionsRequest,
+  IngressVideoEncodingResponse,
+  IngressVideoLayer,
+  IngressVideoLayerRequest,
+  IngressVideoLayerResponse,
+  JoinCallAPIMetrics,
+  KickUserRequest,
+  KickUserResponse,
+  KickedUserEvent,
+  LLMConfig,
+  LLMRule,
+  Label,
+  LabelThresholds,
+  LayoutSettings,
+  LayoutSettingsRequest,
+  LayoutSettingsResponse,
+  LimitInfo,
+  LimitsSettings,
+  LimitsSettingsRequest,
+  LimitsSettingsResponse,
   ListBlockListResponse,
+  ListCallTypeResponse,
+  ListChannelTypesResponse,
+  ListCommandsResponse,
   ListDevicesResponse,
   ListExternalStorageResponse,
+  ListFeedGroupsResponse,
+  ListFeedViewsResponse,
+  ListFeedVisibilitiesResponse,
   ListImportsResponse,
   ListPermissionsResponse,
   ListPushProvidersResponse,
+  ListRecordingsResponse,
   ListRolesResponse,
+  ListTranscriptionsResponse,
+  MarkActivityRequest,
+  MarkChannelsReadRequest,
+  MarkReadRequest,
+  MarkReadResponse,
+  MarkReviewedRequest,
+  MarkUnreadRequest,
+  MemberAddedEvent,
+  MemberRemovedEvent,
+  MemberRequest,
+  MemberResponse,
+  MemberUpdatedEvent,
+  MembersResponse,
+  MembershipLevelResponse,
+  Message,
+  MessageActionRequest,
+  MessageChangeSet,
+  MessageDeletedEvent,
+  MessageFlagResponse,
+  MessageFlaggedEvent,
+  MessageHistoryEntryResponse,
+  MessageModerationResult,
+  MessageNewEvent,
+  MessageOptions,
+  MessagePaginationParams,
+  MessageReadEvent,
+  MessageReminder,
+  MessageRequest,
+  MessageResponse,
+  MessageStatsResponse,
+  MessageUnblockedEvent,
+  MessageUndeletedEvent,
+  MessageUpdate,
+  MessageUpdatedEvent,
+  MessageWithChannelResponse,
+  MetricThreshold,
+  ModerationActionConfig,
+  ModerationCheckCompletedEvent,
+  ModerationConfig,
+  ModerationCustomActionEvent,
+  ModerationDashboardPreferences,
+  ModerationFlagResponse,
+  ModerationFlaggedEvent,
+  ModerationMarkReviewedEvent,
+  ModerationPayload,
+  ModerationResponse,
+  ModerationRuleV2Response,
+  ModerationV2Response,
+  MuteChannelRequest,
+  MuteChannelResponse,
+  MuteRequest,
+  MuteResponse,
+  MuteUsersRequest,
+  MuteUsersResponse,
+  NetworkMetricsReportResponse,
+  NoiseCancellationSettings,
+  NotificationConfig,
+  NotificationContext,
+  NotificationFeedUpdatedEvent,
+  NotificationMarkUnreadEvent,
+  NotificationSettings,
+  NotificationStatusResponse,
+  NotificationTarget,
+  NotificationTrigger,
+  OCRRule,
+  OnlyUserID,
+  OverviewDashboardConfig,
+  OwnCapabilitiesBatchRequest,
+  OwnCapabilitiesBatchResponse,
+  OwnCapability,
+  OwnUser,
+  OwnUserResponse,
+  PagerRequest,
+  PagerResponse,
+  PaginationParams,
+  ParticipantCountByMinuteResponse,
+  ParticipantCountOverTimeResponse,
+  ParticipantReportResponse,
+  ParticipantSeriesPublisherStats,
+  ParticipantSeriesSubscriberStats,
+  ParticipantSeriesSubscriptionTrackMetrics,
+  ParticipantSeriesTimeframe,
+  ParticipantSeriesTrackMetrics,
+  ParticipantSeriesUserStats,
+  PendingMessageEvent,
+  PendingMessageResponse,
+  PerSDKUsageReport,
+  Permission,
+  PermissionRequestEvent,
+  PinActivityRequest,
+  PinActivityResponse,
+  PinRequest,
+  PinResponse,
+  PlatformDataResponse,
+  Policy,
+  PolicyRequest,
+  Poll,
+  PollOption,
+  PollOptionInput,
+  PollOptionRequest,
   PollOptionResponse,
+  PollOptionResponseData,
   PollResponse,
+  PollResponseData,
+  PollVote,
+  PollVoteResponse,
+  PollVoteResponseData,
   PollVotesResponse,
+  PrivacySettings,
+  PrivacySettingsResponse,
+  PublishedTrackFlags,
+  PublisherAllMetrics,
+  PublisherAudioMetrics,
+  PublisherStatsResponse,
+  PublisherVideoMetrics,
+  PublishersMetrics,
+  PushConfig,
+  PushNotificationConfig,
+  PushNotificationFields,
+  PushNotificationSettingsResponse,
+  PushPreferenceInput,
+  PushPreferences,
+  PushProvider,
+  PushProviderResponse,
+  PushTemplate,
+  QualityScoreReport,
+  QualityScoreReportResponse,
+  QueryActivitiesRequest,
+  QueryActivitiesResponse,
+  QueryActivityReactionsRequest,
+  QueryActivityReactionsResponse,
+  QueryAggregateCallStatsRequest,
+  QueryAggregateCallStatsResponse,
+  QueryBannedUsersPayload,
+  QueryBannedUsersResponse,
+  QueryBookmarkFoldersRequest,
+  QueryBookmarkFoldersResponse,
+  QueryBookmarksRequest,
+  QueryBookmarksResponse,
+  QueryCallMembersRequest,
+  QueryCallMembersResponse,
+  QueryCallParticipantsRequest,
+  QueryCallParticipantsResponse,
+  QueryCallSessionParticipantStatsResponse,
+  QueryCallSessionParticipantStatsTimelineResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
+  QueryCampaignsRequest,
+  QueryCampaignsResponse,
+  QueryChannelsRequest,
+  QueryChannelsResponse,
+  QueryCommentReactionsRequest,
+  QueryCommentReactionsResponse,
+  QueryCommentsRequest,
+  QueryCommentsResponse,
+  QueryDraftsRequest,
+  QueryDraftsResponse,
+  QueryFeedMembersRequest,
+  QueryFeedMembersResponse,
+  QueryFeedModerationTemplate,
+  QueryFeedModerationTemplatesResponse,
+  QueryFeedsRequest,
+  QueryFeedsResponse,
+  QueryFeedsUsageStatsRequest,
+  QueryFeedsUsageStatsResponse,
+  QueryFollowsRequest,
+  QueryFollowsResponse,
+  QueryMembersPayload,
+  QueryMembershipLevelsRequest,
+  QueryMembershipLevelsResponse,
+  QueryMessageFlagsPayload,
+  QueryMessageFlagsResponse,
+  QueryMessageHistoryRequest,
+  QueryMessageHistoryResponse,
+  QueryModerationConfigsRequest,
+  QueryModerationConfigsResponse,
+  QueryModerationFlagsRequest,
+  QueryModerationFlagsResponse,
+  QueryModerationLogsRequest,
+  QueryModerationLogsResponse,
+  QueryModerationRulesRequest,
+  QueryModerationRulesResponse,
   QueryPollVotesRequest,
   QueryPollsRequest,
   QueryPollsResponse,
+  QueryReactionsRequest,
+  QueryReactionsResponse,
+  QueryRemindersRequest,
+  QueryRemindersResponse,
+  QueryReviewQueueRequest,
+  QueryReviewQueueResponse,
+  QuerySegmentTargetsRequest,
+  QuerySegmentTargetsResponse,
+  QuerySegmentsRequest,
+  QuerySegmentsResponse,
+  QueryThreadsRequest,
+  QueryThreadsResponse,
+  QueryUserFeedbackRequest,
+  QueryUserFeedbackResponse,
   QueryUsersPayload,
   QueryUsersResponse,
+  RTMPBroadcastRequest,
+  RTMPIngress,
+  RTMPLocation,
+  RTMPSettings,
+  RTMPSettingsRequest,
+  RTMPSettingsResponse,
+  RankingConfig,
+  Reaction,
+  ReactionDeletedEvent,
+  ReactionGroupResponse,
+  ReactionNewEvent,
+  ReactionRequest,
+  ReactionResponse,
+  ReactionUpdatedEvent,
   ReactivateUserRequest,
   ReactivateUserResponse,
   ReactivateUsersRequest,
   ReactivateUsersResponse,
+  ReadReceipts,
+  ReadReceiptsResponse,
+  ReadStateResponse,
+  RecordSettings,
+  RecordSettingsRequest,
+  RecordSettingsResponse,
+  RejectFeedMemberInviteRequest,
+  RejectFeedMemberInviteResponse,
+  RejectFollowRequest,
+  RejectFollowResponse,
+  ReminderCreatedEvent,
+  ReminderDeletedEvent,
+  ReminderNotificationEvent,
+  ReminderResponseData,
+  ReminderUpdatedEvent,
+  RepliesMeta,
+  ReportByHistogramBucket,
+  ReportResponse,
   Response,
+  RestoreActionRequest,
   RestoreUsersRequest,
+  ReviewQueueItemNewEvent,
+  ReviewQueueItemResponse,
+  ReviewQueueItemUpdatedEvent,
+  RingSettings,
+  RingSettingsRequest,
+  RingSettingsResponse,
+  Role,
+  RuleBuilderAction,
+  RuleBuilderCondition,
+  RuleBuilderConditionGroup,
+  RuleBuilderConfig,
+  RuleBuilderRule,
+  S3Request,
+  SDKUsageReport,
+  SDKUsageReportResponse,
+  SRTIngress,
+  ScreensharingSettings,
+  ScreensharingSettingsRequest,
+  ScreensharingSettingsResponse,
+  SearchPayload,
+  SearchResponse,
+  SearchResult,
+  SearchResultMessage,
+  SearchWarning,
+  Segment,
+  SegmentResponse,
+  SegmentTargetResponse,
+  SendCallEventRequest,
+  SendCallEventResponse,
+  SendClosedCaptionRequest,
+  SendClosedCaptionResponse,
+  SendEventRequest,
+  SendMessageRequest,
+  SendMessageResponse,
+  SendReactionRequest,
+  SendReactionResponse,
+  SendUserCustomEventRequest,
+  SessionSettings,
+  SessionSettingsRequest,
+  SessionSettingsResponse,
+  ShadowBlockActionRequest,
+  SharedLocation,
   SharedLocationResponse,
+  SharedLocationResponseData,
   SharedLocationsResponse,
+  ShowChannelRequest,
+  ShowChannelResponse,
+  SingleFollowResponse,
+  SortParam,
+  SortParamRequest,
+  SpeechSegmentConfig,
+  StartCampaignRequest,
+  StartCampaignResponse,
+  StartClosedCaptionsRequest,
+  StartClosedCaptionsResponse,
+  StartFrameRecordingRequest,
+  StartFrameRecordingResponse,
+  StartHLSBroadcastingRequest,
+  StartHLSBroadcastingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
+  StartTranscriptionRequest,
+  StartTranscriptionResponse,
+  StopAllRTMPBroadcastsRequest,
+  StopAllRTMPBroadcastsResponse,
+  StopCampaignRequest,
+  StopClosedCaptionsRequest,
+  StopClosedCaptionsResponse,
+  StopFrameRecordingRequest,
+  StopFrameRecordingResponse,
+  StopHLSBroadcastingRequest,
+  StopHLSBroadcastingResponse,
+  StopLiveRequest,
+  StopLiveResponse,
+  StopRTMPBroadcastsRequest,
+  StopRTMPBroadcastsResponse,
+  StopRecordingRequest,
+  StopRecordingResponse,
+  StopTranscriptionRequest,
+  StopTranscriptionResponse,
+  StoriesConfig,
+  StoriesFeedUpdatedEvent,
+  SubmitActionRequest,
+  SubmitActionResponse,
+  SubscriberAllMetrics,
+  SubscriberAudioMetrics,
+  SubscriberStatsResponse,
+  SubscriberVideoMetrics,
+  SubscribersMetrics,
+  TargetResolution,
+  TextContentParameters,
+  TextRuleParameters,
+  ThreadParticipant,
+  ThreadResponse,
+  ThreadStateResponse,
+  ThreadUpdatedEvent,
+  ThreadedCommentResponse,
+  Thresholds,
+  ThumbnailResponse,
+  ThumbnailsSettings,
+  ThumbnailsSettingsRequest,
+  ThumbnailsSettingsResponse,
+  Time,
+  TrackStatsResponse,
+  TranscriptionSettings,
+  TranscriptionSettingsRequest,
+  TranscriptionSettingsResponse,
+  TranslateMessageRequest,
+  TranslationSettings,
+  TruncateChannelRequest,
+  TruncateChannelResponse,
+  TypingIndicators,
+  TypingIndicatorsResponse,
+  UnbanActionRequest,
+  UnbanRequest,
+  UnbanResponse,
+  UnblockActionRequest,
+  UnblockUserRequest,
+  UnblockUserResponse,
   UnblockUsersRequest,
   UnblockUsersResponse,
+  UnblockedUserEvent,
+  UnfollowBatchRequest,
+  UnfollowBatchResponse,
+  UnfollowResponse,
+  UnmuteChannelRequest,
+  UnmuteRequest,
+  UnmuteResponse,
+  UnpinActivityResponse,
+  UnpinRequest,
+  UnpinResponse,
+  UnreadCountsBatchRequest,
+  UnreadCountsBatchResponse,
+  UnreadCountsChannel,
+  UnreadCountsChannelType,
+  UnreadCountsResponse,
+  UnreadCountsThread,
+  UpdateActivityPartialRequest,
+  UpdateActivityPartialResponse,
+  UpdateActivityRequest,
+  UpdateActivityResponse,
   UpdateAppRequest,
   UpdateBlockListRequest,
   UpdateBlockListResponse,
+  UpdateBookmarkFolderRequest,
+  UpdateBookmarkFolderResponse,
+  UpdateBookmarkRequest,
+  UpdateBookmarkResponse,
+  UpdateCallMembersRequest,
+  UpdateCallMembersResponse,
+  UpdateCallRequest,
+  UpdateCallResponse,
+  UpdateCallTypeRequest,
+  UpdateCallTypeResponse,
+  UpdateChannelPartialRequest,
+  UpdateChannelPartialResponse,
+  UpdateChannelRequest,
+  UpdateChannelResponse,
+  UpdateChannelTypeRequest,
+  UpdateChannelTypeResponse,
+  UpdateCommandRequest,
+  UpdateCommandResponse,
+  UpdateCommentRequest,
+  UpdateCommentResponse,
   UpdateExternalStorageRequest,
   UpdateExternalStorageResponse,
+  UpdateFeedGroupRequest,
+  UpdateFeedGroupResponse,
+  UpdateFeedMembersRequest,
+  UpdateFeedMembersResponse,
+  UpdateFeedRequest,
+  UpdateFeedResponse,
+  UpdateFeedViewRequest,
+  UpdateFeedViewResponse,
+  UpdateFeedVisibilityRequest,
+  UpdateFeedVisibilityResponse,
+  UpdateFollowRequest,
+  UpdateFollowResponse,
   UpdateLiveLocationRequest,
+  UpdateMemberPartialRequest,
+  UpdateMemberPartialResponse,
+  UpdateMembershipLevelRequest,
+  UpdateMembershipLevelResponse,
+  UpdateMessagePartialRequest,
+  UpdateMessagePartialResponse,
+  UpdateMessageRequest,
+  UpdateMessageResponse,
   UpdatePollOptionRequest,
   UpdatePollPartialRequest,
   UpdatePollRequest,
+  UpdateReminderRequest,
+  UpdateReminderResponse,
+  UpdateThreadPartialRequest,
+  UpdateThreadPartialResponse,
+  UpdateUserPartialRequest,
+  UpdateUserPermissionsRequest,
+  UpdateUserPermissionsResponse,
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
+  UpdatedCallPermissionsEvent,
+  UploadChannelFileRequest,
+  UploadChannelFileResponse,
+  UploadChannelRequest,
+  UploadChannelResponse,
+  UpsertActivitiesRequest,
+  UpsertActivitiesResponse,
+  UpsertConfigRequest,
+  UpsertConfigResponse,
+  UpsertModerationRuleRequest,
+  UpsertModerationRuleResponse,
+  UpsertModerationTemplateRequest,
+  UpsertModerationTemplateResponse,
   UpsertPushPreferencesRequest,
   UpsertPushPreferencesResponse,
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
   UpsertPushTemplateRequest,
   UpsertPushTemplateResponse,
+  User,
+  UserBannedEvent,
+  UserCreatedWithinParameters,
+  UserCustomEventRequest,
+  UserCustomPropertyParameters,
+  UserDeactivatedEvent,
+  UserDeletedEvent,
+  UserFeedbackReport,
+  UserFeedbackReportResponse,
+  UserFeedbackResponse,
+  UserFlaggedEvent,
+  UserMessagesDeletedEvent,
+  UserMute,
+  UserMuteResponse,
+  UserMutedEvent,
+  UserRatingReportResponse,
+  UserReactivatedEvent,
+  UserRequest,
+  UserResponse,
+  UserResponseCommonFields,
+  UserResponsePrivacyFields,
+  UserRuleParameters,
+  UserUnbannedEvent,
+  UserUnmutedEvent,
+  UserUnreadReminderEvent,
+  UserUpdatedEvent,
+  VelocityFilterConfig,
+  VelocityFilterConfigRule,
+  VideoCallRuleConfig,
+  VideoContentParameters,
+  VideoEndCallRequest,
+  VideoKickUserRequest,
+  VideoReactionOverTimeResponse,
+  VideoReactionsResponse,
+  VideoRuleParameters,
+  VideoSettings,
+  VideoSettingsRequest,
+  VideoSettingsResponse,
+  VoteData,
+  WHIPIngress,
+  WSEvent,
+  WebhookEvent,
+  WrappedUnreadCountsResponse,
+  XiaomiConfig,
+  XiaomiConfigFields,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -101,7 +1041,7 @@ export class CommonApi {
       StreamResponse<GetApplicationResponse>
     >('GET', '/api/v2/app', undefined, undefined);
 
-    decoders.GetApplicationResponse?.(response.body);
+    decoders['GetApplicationResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -170,7 +1110,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -186,7 +1126,7 @@ export class CommonApi {
       StreamResponse<ListBlockListResponse>
     >('GET', '/api/v2/blocklists', undefined, queryParams);
 
-    decoders.ListBlockListResponse?.(response.body);
+    decoders['ListBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -197,6 +1137,8 @@ export class CommonApi {
     const body = {
       name: request?.name,
       words: request?.words,
+      is_leet_check_enabled: request?.is_leet_check_enabled,
+      is_plural_check_enabled: request?.is_plural_check_enabled,
       team: request?.team,
       type: request?.type,
     };
@@ -212,7 +1154,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateBlockListResponse?.(response.body);
+    decoders['CreateBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -235,7 +1177,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -255,7 +1197,7 @@ export class CommonApi {
       StreamResponse<GetBlockListResponse>
     >('GET', '/api/v2/blocklists/{name}', pathParams, queryParams);
 
-    decoders.GetBlockListResponse?.(response.body);
+    decoders['GetBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -267,6 +1209,8 @@ export class CommonApi {
       name: request?.name,
     };
     const body = {
+      is_leet_check_enabled: request?.is_leet_check_enabled,
+      is_plural_check_enabled: request?.is_plural_check_enabled,
       team: request?.team,
       words: request?.words,
     };
@@ -282,7 +1226,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpdateBlockListResponse?.(response.body);
+    decoders['UpdateBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -314,7 +1258,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckPushResponse?.(response.body);
+    decoders['CheckPushResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -339,7 +1283,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckSNSResponse?.(response.body);
+    decoders['CheckSNSResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -364,7 +1308,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckSQSResponse?.(response.body);
+    decoders['CheckSQSResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -385,7 +1329,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -401,7 +1345,7 @@ export class CommonApi {
       StreamResponse<ListDevicesResponse>
     >('GET', '/api/v2/devices', undefined, queryParams);
 
-    decoders.ListDevicesResponse?.(response.body);
+    decoders['ListDevicesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -427,7 +1371,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -450,7 +1394,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ExportUsersResponse?.(response.body);
+    decoders['ExportUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -462,7 +1406,7 @@ export class CommonApi {
       StreamResponse<ListExternalStorageResponse>
     >('GET', '/api/v2/external_storage', undefined, undefined);
 
-    decoders.ListExternalStorageResponse?.(response.body);
+    decoders['ListExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -491,7 +1435,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateExternalStorageResponse?.(response.body);
+    decoders['CreateExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -507,7 +1451,7 @@ export class CommonApi {
       StreamResponse<DeleteExternalStorageResponse>
     >('DELETE', '/api/v2/external_storage/{name}', pathParams, undefined);
 
-    decoders.DeleteExternalStorageResponse?.(response.body);
+    decoders['DeleteExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -538,7 +1482,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpdateExternalStorageResponse?.(response.body);
+    decoders['UpdateExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -554,7 +1498,7 @@ export class CommonApi {
       StreamResponse<CheckExternalStorageResponse>
     >('GET', '/api/v2/external_storage/{name}/check', pathParams, undefined);
 
-    decoders.CheckExternalStorageResponse?.(response.body);
+    decoders['CheckExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -570,7 +1514,7 @@ export class CommonApi {
       StreamResponse<CreateGuestResponse>
     >('POST', '/api/v2/guest', undefined, undefined, body, 'application/json');
 
-    decoders.CreateGuestResponse?.(response.body);
+    decoders['CreateGuestResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -593,7 +1537,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateImportURLResponse?.(response.body);
+    decoders['CreateImportURLResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -603,7 +1547,7 @@ export class CommonApi {
       StreamResponse<ListImportsResponse>
     >('GET', '/api/v2/imports', undefined, undefined);
 
-    decoders.ListImportsResponse?.(response.body);
+    decoders['ListImportsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -627,7 +1571,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateImportResponse?.(response.body);
+    decoders['CreateImportResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -643,7 +1587,7 @@ export class CommonApi {
       StreamResponse<GetImportResponse>
     >('GET', '/api/v2/imports/{id}', pathParams, undefined);
 
-    decoders.GetImportResponse?.(response.body);
+    decoders['GetImportResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -659,7 +1603,7 @@ export class CommonApi {
       StreamResponse<GetOGResponse>
     >('GET', '/api/v2/og', undefined, queryParams);
 
-    decoders.GetOGResponse?.(response.body);
+    decoders['GetOGResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -669,7 +1613,7 @@ export class CommonApi {
       StreamResponse<ListPermissionsResponse>
     >('GET', '/api/v2/permissions', undefined, undefined);
 
-    decoders.ListPermissionsResponse?.(response.body);
+    decoders['ListPermissionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -685,7 +1629,7 @@ export class CommonApi {
       StreamResponse<GetCustomPermissionResponse>
     >('GET', '/api/v2/permissions/{id}', pathParams, undefined);
 
-    decoders.GetCustomPermissionResponse?.(response.body);
+    decoders['GetCustomPermissionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -713,7 +1657,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('POST', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -741,7 +1685,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('PUT', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -771,7 +1715,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.QueryPollsResponse?.(response.body);
+    decoders['QueryPollsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -794,7 +1738,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -814,7 +1758,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('GET', '/api/v2/polls/{poll_id}', pathParams, queryParams);
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -843,7 +1787,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -872,7 +1816,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -902,7 +1846,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -927,7 +1871,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -954,7 +1898,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -987,7 +1931,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollVotesResponse?.(response.body);
+    decoders['PollVotesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1010,7 +1954,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushPreferencesResponse?.(response.body);
+    decoders['UpsertPushPreferencesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1022,7 +1966,7 @@ export class CommonApi {
       StreamResponse<ListPushProvidersResponse>
     >('GET', '/api/v2/push_providers', undefined, undefined);
 
-    decoders.ListPushProvidersResponse?.(response.body);
+    decoders['ListPushProvidersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1045,7 +1989,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushProviderResponse?.(response.body);
+    decoders['UpsertPushProviderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1066,7 +2010,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1084,7 +2028,7 @@ export class CommonApi {
       StreamResponse<GetPushTemplatesResponse>
     >('GET', '/api/v2/push_templates', undefined, queryParams);
 
-    decoders.GetPushTemplatesResponse?.(response.body);
+    decoders['GetPushTemplatesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1111,7 +2055,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushTemplateResponse?.(response.body);
+    decoders['UpsertPushTemplateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1135,7 +2079,7 @@ export class CommonApi {
       StreamResponse<GetRateLimitsResponse>
     >('GET', '/api/v2/rate_limits', undefined, queryParams);
 
-    decoders.GetRateLimitsResponse?.(response.body);
+    decoders['GetRateLimitsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1145,7 +2089,7 @@ export class CommonApi {
       StreamResponse<ListRolesResponse>
     >('GET', '/api/v2/roles', undefined, undefined);
 
-    decoders.ListRolesResponse?.(response.body);
+    decoders['ListRolesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1161,7 +2105,7 @@ export class CommonApi {
       StreamResponse<CreateRoleResponse>
     >('POST', '/api/v2/roles', undefined, undefined, body, 'application/json');
 
-    decoders.CreateRoleResponse?.(response.body);
+    decoders['CreateRoleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1180,7 +2124,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1196,7 +2140,7 @@ export class CommonApi {
       StreamResponse<GetTaskResponse>
     >('GET', '/api/v2/tasks/{id}', pathParams, undefined);
 
-    decoders.GetTaskResponse?.(response.body);
+    decoders['GetTaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1215,7 +2159,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1239,7 +2183,7 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders.FileUploadResponse?.(response.body);
+    decoders['FileUploadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1258,7 +2202,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1283,7 +2227,7 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders.ImageUploadResponse?.(response.body);
+    decoders['ImageUploadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1299,7 +2243,7 @@ export class CommonApi {
       StreamResponse<QueryUsersResponse>
     >('GET', '/api/v2/users', undefined, queryParams);
 
-    decoders.QueryUsersResponse?.(response.body);
+    decoders['QueryUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1315,7 +2259,7 @@ export class CommonApi {
       StreamResponse<UpdateUsersResponse>
     >('PATCH', '/api/v2/users', undefined, undefined, body, 'application/json');
 
-    decoders.UpdateUsersResponse?.(response.body);
+    decoders['UpdateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1331,7 +2275,7 @@ export class CommonApi {
       StreamResponse<UpdateUsersResponse>
     >('POST', '/api/v2/users', undefined, undefined, body, 'application/json');
 
-    decoders.UpdateUsersResponse?.(response.body);
+    decoders['UpdateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1347,7 +2291,7 @@ export class CommonApi {
       StreamResponse<GetBlockedUsersResponse>
     >('GET', '/api/v2/users/block', undefined, queryParams);
 
-    decoders.GetBlockedUsersResponse?.(response.body);
+    decoders['GetBlockedUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1372,7 +2316,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.BlockUsersResponse?.(response.body);
+    decoders['BlockUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1398,7 +2342,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeactivateUsersResponse?.(response.body);
+    decoders['DeactivateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1428,7 +2372,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeleteUsersResponse?.(response.body);
+    decoders['DeleteUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1444,7 +2388,7 @@ export class CommonApi {
       StreamResponse<SharedLocationsResponse>
     >('GET', '/api/v2/users/live_locations', undefined, queryParams);
 
-    decoders.SharedLocationsResponse?.(response.body);
+    decoders['SharedLocationsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1473,7 +2417,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.SharedLocationResponse?.(response.body);
+    decoders['SharedLocationResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1499,7 +2443,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ReactivateUsersResponse?.(response.body);
+    decoders['ReactivateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1520,7 +2464,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1545,7 +2489,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UnblockUsersResponse?.(response.body);
+    decoders['UnblockUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1572,7 +2516,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeactivateUserResponse?.(response.body);
+    decoders['DeactivateUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1588,7 +2532,7 @@ export class CommonApi {
       StreamResponse<ExportUserResponse>
     >('GET', '/api/v2/users/{user_id}/export', pathParams, undefined);
 
-    decoders.ExportUserResponse?.(response.body);
+    decoders['ExportUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1616,7 +2560,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ReactivateUserResponse?.(response.body);
+    decoders['ReactivateUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
