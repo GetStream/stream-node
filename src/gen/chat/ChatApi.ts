@@ -1,100 +1,925 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
+  AIImageConfig,
+  AITextConfig,
+  AIVideoConfig,
+  APIError,
+  APNConfig,
+  APNConfigFields,
+  APNS,
+  AWSRekognitionRule,
+  AcceptFeedMemberInviteRequest,
+  AcceptFeedMemberInviteResponse,
+  AcceptFollowRequest,
+  AcceptFollowResponse,
+  Action,
+  ActionLogResponse,
+  ActionSequence,
+  ActiveCallsBitrateStats,
+  ActiveCallsFPSStats,
+  ActiveCallsLatencyStats,
+  ActiveCallsMetrics,
+  ActiveCallsResolutionStats,
+  ActiveCallsSummary,
+  ActivityAddedEvent,
+  ActivityDeletedEvent,
+  ActivityFeedbackRequest,
+  ActivityFeedbackResponse,
+  ActivityLocation,
+  ActivityMarkEvent,
+  ActivityMarkedEvent,
+  ActivityPinResponse,
+  ActivityPinnedEvent,
+  ActivityProcessorConfig,
+  ActivityReactionAddedEvent,
+  ActivityReactionDeletedEvent,
+  ActivityReactionUpdatedEvent,
+  ActivityRemovedFromFeedEvent,
+  ActivityRequest,
+  ActivityResponse,
+  ActivitySelectorConfig,
+  ActivitySelectorConfigResponse,
+  ActivityUnpinnedEvent,
+  ActivityUpdatedEvent,
+  AddActivityRequest,
+  AddActivityResponse,
+  AddBookmarkRequest,
+  AddBookmarkResponse,
+  AddCommentReactionRequest,
+  AddCommentReactionResponse,
+  AddCommentRequest,
+  AddCommentResponse,
+  AddCommentsBatchRequest,
+  AddCommentsBatchResponse,
+  AddFolderRequest,
+  AddReactionRequest,
+  AddReactionResponse,
+  AggregatedActivityResponse,
+  AggregationConfig,
+  AnyEvent,
+  AppResponseFields,
+  AsyncBulkImageModerationEvent,
+  AsyncExportChannelsEvent,
+  AsyncExportErrorEvent,
+  AsyncExportModerationLogsEvent,
+  AsyncExportUsersEvent,
+  AsyncModerationCallbackConfig,
+  AsyncModerationConfiguration,
+  Attachment,
+  AudioSettings,
+  AudioSettingsRequest,
+  AudioSettingsResponse,
+  AutomodDetails,
+  AutomodPlatformCircumventionConfig,
+  AutomodRule,
+  AutomodSemanticFiltersConfig,
+  AutomodSemanticFiltersRule,
+  AutomodToxicityConfig,
+  AzureRequest,
+  BackstageSettings,
+  BackstageSettingsRequest,
+  BackstageSettingsResponse,
+  Ban,
+  BanActionRequest,
+  BanOptions,
+  BanRequest,
+  BanResponse,
+  BlockListConfig,
+  BlockListOptions,
+  BlockListResponse,
+  BlockListRule,
+  BlockUserRequest,
+  BlockUserResponse,
+  BlockUsersRequest,
+  BlockUsersResponse,
+  BlockedUserEvent,
+  BlockedUserResponse,
+  BodyguardImageAnalysisConfig,
+  BodyguardRule,
+  BodyguardSeverityRule,
+  BookmarkAddedEvent,
+  BookmarkDeletedEvent,
+  BookmarkFolderDeletedEvent,
+  BookmarkFolderResponse,
+  BookmarkFolderUpdatedEvent,
+  BookmarkResponse,
+  BookmarkUpdatedEvent,
+  Bound,
+  BroadcastSettings,
+  BroadcastSettingsRequest,
+  BroadcastSettingsResponse,
+  BrowserDataResponse,
+  BulkImageModerationRequest,
+  BulkImageModerationResponse,
+  CallAcceptedEvent,
+  CallClosedCaption,
+  CallClosedCaptionsFailedEvent,
+  CallClosedCaptionsStartedEvent,
+  CallClosedCaptionsStoppedEvent,
+  CallCreatedEvent,
+  CallDeletedEvent,
+  CallDurationReport,
+  CallDurationReportResponse,
+  CallEndedEvent,
+  CallFrameRecordingFailedEvent,
+  CallFrameRecordingFrameReadyEvent,
+  CallFrameRecordingStartedEvent,
+  CallFrameRecordingStoppedEvent,
+  CallHLSBroadcastingFailedEvent,
+  CallHLSBroadcastingStartedEvent,
+  CallHLSBroadcastingStoppedEvent,
+  CallIngressResponse,
+  CallLiveStartedEvent,
+  CallMemberAddedEvent,
+  CallMemberRemovedEvent,
+  CallMemberUpdatedEvent,
+  CallMemberUpdatedPermissionEvent,
+  CallMissedEvent,
+  CallModerationBlurEvent,
+  CallModerationWarningEvent,
+  CallNotificationEvent,
+  CallParticipantCountReport,
+  CallParticipantCountReportResponse,
+  CallParticipantResponse,
+  CallParticipantTimeline,
+  CallReactionEvent,
+  CallRecording,
+  CallRecordingFailedEvent,
+  CallRecordingReadyEvent,
+  CallRecordingStartedEvent,
+  CallRecordingStoppedEvent,
+  CallRejectedEvent,
+  CallReportResponse,
+  CallRequest,
+  CallResponse,
+  CallRingEvent,
+  CallRtmpBroadcastFailedEvent,
+  CallRtmpBroadcastStartedEvent,
+  CallRtmpBroadcastStoppedEvent,
+  CallSessionEndedEvent,
+  CallSessionParticipantCountsUpdatedEvent,
+  CallSessionParticipantJoinedEvent,
+  CallSessionParticipantLeftEvent,
+  CallSessionResponse,
+  CallSessionStartedEvent,
+  CallSettings,
+  CallSettingsRequest,
+  CallSettingsResponse,
+  CallStateResponseFields,
+  CallStatsParticipant,
+  CallStatsParticipantCounts,
+  CallStatsParticipantSession,
+  CallStatsReportReadyEvent,
+  CallStatsReportSummaryResponse,
+  CallTranscription,
+  CallTranscriptionFailedEvent,
+  CallTranscriptionReadyEvent,
+  CallTranscriptionStartedEvent,
+  CallTranscriptionStoppedEvent,
+  CallType,
+  CallTypeResponse,
+  CallUpdatedEvent,
+  CallUserFeedbackSubmittedEvent,
+  CallUserMutedEvent,
+  CallsPerDayReport,
+  CallsPerDayReportResponse,
+  CampaignChannelTemplate,
+  CampaignCompletedEvent,
+  CampaignMessageTemplate,
   CampaignResponse,
+  CampaignStartedEvent,
+  CampaignStatsResponse,
   CastPollVoteRequest,
+  Channel,
+  ChannelConfig,
+  ChannelConfigWithInfo,
+  ChannelCreatedEvent,
+  ChannelDeletedEvent,
+  ChannelExport,
+  ChannelFrozenEvent,
   ChannelGetOrCreateRequest,
+  ChannelHiddenEvent,
+  ChannelInput,
+  ChannelMember,
+  ChannelMemberLookup,
+  ChannelMemberResponse,
+  ChannelMessages,
+  ChannelMute,
+  ChannelMutedEvent,
+  ChannelOwnCapability,
+  ChannelPushPreferences,
+  ChannelResponse,
   ChannelStateResponse,
+  ChannelStateResponseFields,
+  ChannelTruncatedEvent,
+  ChannelTypeConfig,
+  ChannelUnFrozenEvent,
+  ChannelUnmutedEvent,
+  ChannelUpdatedEvent,
+  ChannelVisibleEvent,
+  ChatActivityStatsResponse,
+  CheckExternalStorageResponse,
+  CheckPushRequest,
+  CheckPushResponse,
+  CheckRequest,
+  CheckResponse,
+  CheckSNSRequest,
+  CheckSNSResponse,
+  CheckSQSRequest,
+  CheckSQSResponse,
+  ClientOSDataResponse,
+  ClosedCaptionEvent,
+  CollectUserFeedbackRequest,
+  CollectUserFeedbackResponse,
+  Command,
+  CommentAddedEvent,
+  CommentDeletedEvent,
+  CommentReactionAddedEvent,
+  CommentReactionDeletedEvent,
+  CommentReactionUpdatedEvent,
+  CommentResponse,
+  CommentUpdatedEvent,
   CommitMessageRequest,
+  ConfigOverrides,
+  ConfigResponse,
+  ContentCountRuleParameters,
+  CountByMinuteResponse,
+  CreateBlockListRequest,
+  CreateBlockListResponse,
+  CreateCallTypeRequest,
+  CreateCallTypeResponse,
   CreateChannelTypeRequest,
   CreateChannelTypeResponse,
   CreateCommandRequest,
   CreateCommandResponse,
+  CreateDeviceRequest,
+  CreateExternalStorageRequest,
+  CreateExternalStorageResponse,
+  CreateFeedGroupRequest,
+  CreateFeedGroupResponse,
+  CreateFeedViewRequest,
+  CreateFeedViewResponse,
+  CreateFeedsBatchRequest,
+  CreateFeedsBatchResponse,
+  CreateGuestRequest,
+  CreateGuestResponse,
+  CreateImportRequest,
+  CreateImportResponse,
+  CreateImportURLRequest,
+  CreateImportURLResponse,
+  CreateMembershipLevelRequest,
+  CreateMembershipLevelResponse,
+  CreatePollOptionRequest,
+  CreatePollRequest,
   CreateReminderRequest,
+  CreateRoleRequest,
+  CreateRoleResponse,
+  CustomActionRequest,
+  CustomCheckFlag,
+  CustomCheckRequest,
+  CustomCheckResponse,
+  CustomVideoEvent,
+  DailyAggregateCallDurationReportResponse,
+  DailyAggregateCallParticipantCountReportResponse,
+  DailyAggregateCallsPerDayReportResponse,
+  DailyAggregateQualityScoreReportResponse,
+  DailyAggregateSDKUsageReportResponse,
+  DailyAggregateUserFeedbackReportResponse,
+  DailyMetricResponse,
+  DailyMetricStatsResponse,
+  Data,
+  DataDogInfo,
+  DeactivateUserRequest,
+  DeactivateUserResponse,
+  DeactivateUsersRequest,
+  DeactivateUsersResponse,
+  DecayFunctionConfig,
+  DeleteActivitiesRequest,
+  DeleteActivitiesResponse,
+  DeleteActivityReactionResponse,
+  DeleteActivityRequest,
+  DeleteActivityResponse,
+  DeleteBookmarkFolderResponse,
+  DeleteBookmarkResponse,
+  DeleteCallRequest,
+  DeleteCallResponse,
   DeleteChannelResponse,
   DeleteChannelsRequest,
   DeleteChannelsResponse,
+  DeleteChannelsResultResponse,
   DeleteCommandResponse,
+  DeleteCommentReactionResponse,
+  DeleteCommentResponse,
+  DeleteExternalStorageResponse,
+  DeleteFeedGroupResponse,
+  DeleteFeedResponse,
+  DeleteFeedUserDataResponse,
+  DeleteFeedViewResponse,
+  DeleteMessageRequest,
   DeleteMessageResponse,
+  DeleteModerationConfigResponse,
+  DeleteModerationRuleResponse,
+  DeleteModerationTemplateResponse,
+  DeleteReactionRequest,
   DeleteReactionResponse,
+  DeleteRecordingResponse,
   DeleteReminderResponse,
   DeleteSegmentTargetsRequest,
+  DeleteTranscriptionResponse,
+  DeleteUserRequest,
+  DeleteUsersRequest,
+  DeleteUsersResponse,
+  DeliveryReceipts,
+  DeliveryReceiptsResponse,
+  Device,
+  DeviceDataResponse,
+  DeviceErrorInfo,
+  DeviceResponse,
+  DraftPayloadResponse,
+  DraftResponse,
+  EdgeResponse,
+  EgressHLSResponse,
+  EgressRTMPResponse,
+  EgressResponse,
+  EndCallRequest,
+  EndCallResponse,
+  EnrichedActivity,
+  EnrichedReaction,
+  EntityCreatorResponse,
+  ErrorResult,
+  EventHook,
+  EventNotificationSettings,
+  EventRequest,
   EventResponse,
   ExportChannelsRequest,
   ExportChannelsResponse,
+  ExportFeedUserDataRequest,
+  ExportFeedUserDataResponse,
+  ExportUserResponse,
+  ExportUsersRequest,
+  ExportUsersResponse,
+  ExternalStorageResponse,
+  FCM,
+  FeedCreatedEvent,
+  FeedDeletedEvent,
+  FeedGroup,
+  FeedGroupChangedEvent,
+  FeedGroupDeletedEvent,
+  FeedGroupResponse,
+  FeedInput,
+  FeedMemberAddedEvent,
+  FeedMemberRemovedEvent,
+  FeedMemberRequest,
+  FeedMemberResponse,
+  FeedMemberUpdatedEvent,
+  FeedOwnCapability,
+  FeedRequest,
+  FeedResponse,
+  FeedUpdatedEvent,
+  FeedViewResponse,
+  FeedVisibilityResponse,
+  FeedsModerationTemplateConfig,
+  FeedsPreferences,
+  FeedsReactionResponse,
+  Field,
+  FileUploadConfig,
   FileUploadRequest,
   FileUploadResponse,
+  FirebaseConfig,
+  FirebaseConfigFields,
+  Flag,
+  FlagDetails,
+  FlagFeedback,
+  FlagMessageDetails,
+  FlagRequest,
+  FlagResponse,
+  FlagUpdatedEvent,
+  FlagUserOptions,
+  FollowBatchRequest,
+  FollowBatchResponse,
+  FollowCreatedEvent,
+  FollowDeletedEvent,
+  FollowPair,
+  FollowRequest,
+  FollowResponse,
+  FollowUpdatedEvent,
+  FrameRecordSettings,
+  FrameRecordingResponse,
+  FrameRecordingSettingsRequest,
+  FrameRecordingSettingsResponse,
+  FullUserResponse,
+  GeofenceResponse,
+  GeofenceSettings,
+  GeofenceSettingsRequest,
+  GeofenceSettingsResponse,
+  GetActiveCallsStatusResponse,
+  GetActivityResponse,
+  GetApplicationResponse,
+  GetBlockListResponse,
+  GetBlockedUsersResponse,
+  GetCallReportResponse,
+  GetCallResponse,
+  GetCallSessionParticipantStatsDetailsResponse,
+  GetCallTypeResponse,
   GetCampaignResponse,
   GetChannelTypeResponse,
   GetCommandResponse,
+  GetCommentRepliesResponse,
+  GetCommentResponse,
+  GetCommentsResponse,
+  GetConfigResponse,
+  GetCustomPermissionResponse,
   GetDraftResponse,
+  GetEdgesResponse,
+  GetFeedGroupResponse,
+  GetFeedViewResponse,
+  GetFeedVisibilityResponse,
+  GetFeedsRateLimitsResponse,
+  GetFollowSuggestionsResponse,
+  GetImportResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
+  GetModerationRuleResponse,
+  GetOGResponse,
+  GetOrCreateCallRequest,
+  GetOrCreateCallResponse,
+  GetOrCreateFeedGroupRequest,
+  GetOrCreateFeedGroupResponse,
+  GetOrCreateFeedRequest,
+  GetOrCreateFeedResponse,
+  GetOrCreateFeedViewRequest,
+  GetOrCreateFeedViewResponse,
+  GetPushTemplatesResponse,
+  GetRateLimitsResponse,
   GetReactionsResponse,
   GetRepliesResponse,
+  GetReviewQueueItemResponse,
   GetSegmentResponse,
+  GetTaskResponse,
   GetThreadResponse,
+  GoLiveRequest,
+  GoLiveResponse,
+  GoogleVisionConfig,
+  GroupedStatsResponse,
+  HLSSettings,
+  HLSSettingsRequest,
+  HLSSettingsResponse,
+  HarmConfig,
   HideChannelRequest,
   HideChannelResponse,
+  HuaweiConfig,
+  HuaweiConfigFields,
+  ImageContentParameters,
+  ImageData,
+  ImageRuleParameters,
+  ImageSize,
   ImageUploadRequest,
   ImageUploadResponse,
+  Images,
+  ImportTask,
+  ImportTaskHistory,
+  IngressAudioEncodingOptions,
+  IngressAudioEncodingOptionsRequest,
+  IngressAudioEncodingResponse,
+  IngressSettings,
+  IngressSettingsRequest,
+  IngressSettingsResponse,
+  IngressSource,
+  IngressSourceRequest,
+  IngressSourceResponse,
+  IngressVideoEncodingOptions,
+  IngressVideoEncodingOptionsRequest,
+  IngressVideoEncodingResponse,
+  IngressVideoLayer,
+  IngressVideoLayerRequest,
+  IngressVideoLayerResponse,
+  JoinCallAPIMetrics,
+  KickUserRequest,
+  KickUserResponse,
+  KickedUserEvent,
+  LLMConfig,
+  LLMRule,
+  Label,
+  LabelThresholds,
+  LayoutSettings,
+  LayoutSettingsRequest,
+  LayoutSettingsResponse,
+  LimitInfo,
+  LimitsSettings,
+  LimitsSettingsRequest,
+  LimitsSettingsResponse,
+  ListBlockListResponse,
+  ListCallTypeResponse,
   ListChannelTypesResponse,
   ListCommandsResponse,
+  ListDevicesResponse,
+  ListExternalStorageResponse,
+  ListFeedGroupsResponse,
+  ListFeedViewsResponse,
+  ListFeedVisibilitiesResponse,
+  ListImportsResponse,
+  ListPermissionsResponse,
+  ListPushProvidersResponse,
+  ListRecordingsResponse,
+  ListRolesResponse,
+  ListTranscriptionsResponse,
+  MarkActivityRequest,
   MarkChannelsReadRequest,
   MarkReadRequest,
   MarkReadResponse,
+  MarkReviewedRequest,
   MarkUnreadRequest,
+  MemberAddedEvent,
+  MemberRemovedEvent,
+  MemberRequest,
+  MemberResponse,
+  MemberUpdatedEvent,
   MembersResponse,
+  MembershipLevelResponse,
+  Message,
   MessageActionRequest,
+  MessageChangeSet,
+  MessageDeletedEvent,
+  MessageFlagResponse,
+  MessageFlaggedEvent,
+  MessageHistoryEntryResponse,
+  MessageModerationResult,
+  MessageNewEvent,
+  MessageOptions,
+  MessagePaginationParams,
+  MessageReadEvent,
+  MessageReminder,
+  MessageRequest,
   MessageResponse,
+  MessageStatsResponse,
+  MessageUnblockedEvent,
+  MessageUndeletedEvent,
+  MessageUpdate,
+  MessageUpdatedEvent,
+  MessageWithChannelResponse,
+  MetricThreshold,
+  ModerationActionConfig,
+  ModerationCheckCompletedEvent,
+  ModerationConfig,
+  ModerationCustomActionEvent,
+  ModerationDashboardPreferences,
+  ModerationFlagResponse,
+  ModerationFlaggedEvent,
+  ModerationMarkReviewedEvent,
+  ModerationPayload,
+  ModerationResponse,
+  ModerationRuleV2Response,
+  ModerationV2Response,
   MuteChannelRequest,
   MuteChannelResponse,
+  MuteRequest,
+  MuteResponse,
+  MuteUsersRequest,
+  MuteUsersResponse,
+  NetworkMetricsReportResponse,
+  NoiseCancellationSettings,
+  NotificationConfig,
+  NotificationContext,
+  NotificationFeedUpdatedEvent,
+  NotificationMarkUnreadEvent,
+  NotificationSettings,
+  NotificationStatusResponse,
+  NotificationTarget,
+  NotificationTrigger,
+  OCRRule,
+  OnlyUserID,
+  OverviewDashboardConfig,
+  OwnCapabilitiesBatchRequest,
+  OwnCapabilitiesBatchResponse,
+  OwnCapability,
+  OwnUser,
+  OwnUserResponse,
+  PagerRequest,
+  PagerResponse,
+  PaginationParams,
+  ParticipantCountByMinuteResponse,
+  ParticipantCountOverTimeResponse,
+  ParticipantReportResponse,
+  ParticipantSeriesPublisherStats,
+  ParticipantSeriesSubscriberStats,
+  ParticipantSeriesSubscriptionTrackMetrics,
+  ParticipantSeriesTimeframe,
+  ParticipantSeriesTrackMetrics,
+  ParticipantSeriesUserStats,
+  PendingMessageEvent,
+  PendingMessageResponse,
+  PerSDKUsageReport,
+  Permission,
+  PermissionRequestEvent,
+  PinActivityRequest,
+  PinActivityResponse,
+  PinRequest,
+  PinResponse,
+  PlatformDataResponse,
+  Policy,
+  PolicyRequest,
+  Poll,
+  PollOption,
+  PollOptionInput,
+  PollOptionRequest,
+  PollOptionResponse,
+  PollOptionResponseData,
+  PollResponse,
+  PollResponseData,
+  PollVote,
   PollVoteResponse,
+  PollVoteResponseData,
+  PollVotesResponse,
+  PrivacySettings,
+  PrivacySettingsResponse,
+  PublishedTrackFlags,
+  PublisherAllMetrics,
+  PublisherAudioMetrics,
+  PublisherStatsResponse,
+  PublisherVideoMetrics,
+  PublishersMetrics,
+  PushConfig,
+  PushNotificationConfig,
+  PushNotificationFields,
+  PushNotificationSettingsResponse,
+  PushPreferenceInput,
+  PushPreferences,
+  PushProvider,
+  PushProviderResponse,
+  PushTemplate,
+  QualityScoreReport,
+  QualityScoreReportResponse,
+  QueryActivitiesRequest,
+  QueryActivitiesResponse,
+  QueryActivityReactionsRequest,
+  QueryActivityReactionsResponse,
+  QueryAggregateCallStatsRequest,
+  QueryAggregateCallStatsResponse,
   QueryBannedUsersPayload,
   QueryBannedUsersResponse,
+  QueryBookmarkFoldersRequest,
+  QueryBookmarkFoldersResponse,
+  QueryBookmarksRequest,
+  QueryBookmarksResponse,
+  QueryCallMembersRequest,
+  QueryCallMembersResponse,
+  QueryCallParticipantsRequest,
+  QueryCallParticipantsResponse,
+  QueryCallSessionParticipantStatsResponse,
+  QueryCallSessionParticipantStatsTimelineResponse,
+  QueryCallStatsRequest,
+  QueryCallStatsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
   QueryCampaignsRequest,
   QueryCampaignsResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
+  QueryCommentReactionsRequest,
+  QueryCommentReactionsResponse,
+  QueryCommentsRequest,
+  QueryCommentsResponse,
   QueryDraftsRequest,
   QueryDraftsResponse,
+  QueryFeedMembersRequest,
+  QueryFeedMembersResponse,
+  QueryFeedModerationTemplate,
+  QueryFeedModerationTemplatesResponse,
+  QueryFeedsRequest,
+  QueryFeedsResponse,
+  QueryFeedsUsageStatsRequest,
+  QueryFeedsUsageStatsResponse,
+  QueryFollowsRequest,
+  QueryFollowsResponse,
   QueryMembersPayload,
+  QueryMembershipLevelsRequest,
+  QueryMembershipLevelsResponse,
   QueryMessageFlagsPayload,
   QueryMessageFlagsResponse,
   QueryMessageHistoryRequest,
   QueryMessageHistoryResponse,
+  QueryModerationConfigsRequest,
+  QueryModerationConfigsResponse,
+  QueryModerationFlagsRequest,
+  QueryModerationFlagsResponse,
+  QueryModerationLogsRequest,
+  QueryModerationLogsResponse,
+  QueryModerationRulesRequest,
+  QueryModerationRulesResponse,
+  QueryPollVotesRequest,
+  QueryPollsRequest,
+  QueryPollsResponse,
   QueryReactionsRequest,
   QueryReactionsResponse,
   QueryRemindersRequest,
   QueryRemindersResponse,
+  QueryReviewQueueRequest,
+  QueryReviewQueueResponse,
   QuerySegmentTargetsRequest,
   QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
   QuerySegmentsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
+  QueryUserFeedbackRequest,
+  QueryUserFeedbackResponse,
+  QueryUsersPayload,
+  QueryUsersResponse,
+  RTMPBroadcastRequest,
+  RTMPIngress,
+  RTMPLocation,
+  RTMPSettings,
+  RTMPSettingsRequest,
+  RTMPSettingsResponse,
+  RankingConfig,
+  Reaction,
+  ReactionDeletedEvent,
+  ReactionGroupResponse,
+  ReactionNewEvent,
+  ReactionRequest,
+  ReactionResponse,
+  ReactionUpdatedEvent,
+  ReactivateUserRequest,
+  ReactivateUserResponse,
+  ReactivateUsersRequest,
+  ReactivateUsersResponse,
+  ReadReceipts,
+  ReadReceiptsResponse,
+  ReadStateResponse,
+  RecordSettings,
+  RecordSettingsRequest,
+  RecordSettingsResponse,
+  RejectFeedMemberInviteRequest,
+  RejectFeedMemberInviteResponse,
+  RejectFollowRequest,
+  RejectFollowResponse,
+  ReminderCreatedEvent,
+  ReminderDeletedEvent,
+  ReminderNotificationEvent,
   ReminderResponseData,
+  ReminderUpdatedEvent,
+  RepliesMeta,
+  ReportByHistogramBucket,
+  ReportResponse,
   Response,
+  RestoreActionRequest,
+  RestoreUsersRequest,
+  ReviewQueueItemNewEvent,
+  ReviewQueueItemResponse,
+  ReviewQueueItemUpdatedEvent,
+  RingSettings,
+  RingSettingsRequest,
+  RingSettingsResponse,
+  Role,
+  RuleBuilderAction,
+  RuleBuilderCondition,
+  RuleBuilderConditionGroup,
+  RuleBuilderConfig,
+  RuleBuilderRule,
+  S3Request,
+  SDKUsageReport,
+  SDKUsageReportResponse,
+  SRTIngress,
+  ScreensharingSettings,
+  ScreensharingSettingsRequest,
+  ScreensharingSettingsResponse,
   SearchPayload,
   SearchResponse,
+  SearchResult,
+  SearchResultMessage,
+  SearchWarning,
+  Segment,
+  SegmentResponse,
+  SegmentTargetResponse,
+  SendCallEventRequest,
+  SendCallEventResponse,
+  SendClosedCaptionRequest,
+  SendClosedCaptionResponse,
   SendEventRequest,
   SendMessageRequest,
   SendMessageResponse,
   SendReactionRequest,
   SendReactionResponse,
   SendUserCustomEventRequest,
+  SessionSettings,
+  SessionSettingsRequest,
+  SessionSettingsResponse,
+  ShadowBlockActionRequest,
+  SharedLocation,
+  SharedLocationResponse,
+  SharedLocationResponseData,
+  SharedLocationsResponse,
   ShowChannelRequest,
   ShowChannelResponse,
+  SingleFollowResponse,
+  SortParam,
   SortParamRequest,
+  SpeechSegmentConfig,
   StartCampaignRequest,
   StartCampaignResponse,
+  StartClosedCaptionsRequest,
+  StartClosedCaptionsResponse,
+  StartFrameRecordingRequest,
+  StartFrameRecordingResponse,
+  StartHLSBroadcastingRequest,
+  StartHLSBroadcastingResponse,
+  StartRTMPBroadcastsRequest,
+  StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
+  StartTranscriptionRequest,
+  StartTranscriptionResponse,
+  StopAllRTMPBroadcastsRequest,
+  StopAllRTMPBroadcastsResponse,
   StopCampaignRequest,
+  StopClosedCaptionsRequest,
+  StopClosedCaptionsResponse,
+  StopFrameRecordingRequest,
+  StopFrameRecordingResponse,
+  StopHLSBroadcastingRequest,
+  StopHLSBroadcastingResponse,
+  StopLiveRequest,
+  StopLiveResponse,
+  StopRTMPBroadcastsRequest,
+  StopRTMPBroadcastsResponse,
+  StopRecordingRequest,
+  StopRecordingResponse,
+  StopTranscriptionRequest,
+  StopTranscriptionResponse,
+  StoriesConfig,
+  StoriesFeedUpdatedEvent,
+  SubmitActionRequest,
+  SubmitActionResponse,
+  SubscriberAllMetrics,
+  SubscriberAudioMetrics,
+  SubscriberStatsResponse,
+  SubscriberVideoMetrics,
+  SubscribersMetrics,
+  TargetResolution,
+  TextContentParameters,
+  TextRuleParameters,
+  ThreadParticipant,
+  ThreadResponse,
+  ThreadStateResponse,
+  ThreadUpdatedEvent,
+  ThreadedCommentResponse,
+  Thresholds,
+  ThumbnailResponse,
+  ThumbnailsSettings,
+  ThumbnailsSettingsRequest,
+  ThumbnailsSettingsResponse,
+  Time,
+  TrackStatsResponse,
+  TranscriptionSettings,
+  TranscriptionSettingsRequest,
+  TranscriptionSettingsResponse,
   TranslateMessageRequest,
+  TranslationSettings,
   TruncateChannelRequest,
   TruncateChannelResponse,
+  TypingIndicators,
+  TypingIndicatorsResponse,
+  UnbanActionRequest,
+  UnbanRequest,
+  UnbanResponse,
+  UnblockActionRequest,
+  UnblockUserRequest,
+  UnblockUserResponse,
+  UnblockUsersRequest,
+  UnblockUsersResponse,
+  UnblockedUserEvent,
+  UnfollowBatchRequest,
+  UnfollowBatchResponse,
+  UnfollowResponse,
   UnmuteChannelRequest,
+  UnmuteRequest,
   UnmuteResponse,
+  UnpinActivityResponse,
+  UnpinRequest,
+  UnpinResponse,
   UnreadCountsBatchRequest,
   UnreadCountsBatchResponse,
+  UnreadCountsChannel,
+  UnreadCountsChannelType,
+  UnreadCountsResponse,
+  UnreadCountsThread,
+  UpdateActivityPartialRequest,
+  UpdateActivityPartialResponse,
+  UpdateActivityRequest,
+  UpdateActivityResponse,
+  UpdateAppRequest,
+  UpdateBlockListRequest,
+  UpdateBlockListResponse,
+  UpdateBookmarkFolderRequest,
+  UpdateBookmarkFolderResponse,
+  UpdateBookmarkRequest,
+  UpdateBookmarkResponse,
+  UpdateCallMembersRequest,
+  UpdateCallMembersResponse,
+  UpdateCallRequest,
+  UpdateCallResponse,
+  UpdateCallTypeRequest,
+  UpdateCallTypeResponse,
   UpdateChannelPartialRequest,
   UpdateChannelPartialResponse,
   UpdateChannelRequest,
@@ -103,17 +928,108 @@ import {
   UpdateChannelTypeResponse,
   UpdateCommandRequest,
   UpdateCommandResponse,
+  UpdateCommentRequest,
+  UpdateCommentResponse,
+  UpdateExternalStorageRequest,
+  UpdateExternalStorageResponse,
+  UpdateFeedGroupRequest,
+  UpdateFeedGroupResponse,
+  UpdateFeedMembersRequest,
+  UpdateFeedMembersResponse,
+  UpdateFeedRequest,
+  UpdateFeedResponse,
+  UpdateFeedViewRequest,
+  UpdateFeedViewResponse,
+  UpdateFeedVisibilityRequest,
+  UpdateFeedVisibilityResponse,
+  UpdateFollowRequest,
+  UpdateFollowResponse,
+  UpdateLiveLocationRequest,
   UpdateMemberPartialRequest,
   UpdateMemberPartialResponse,
+  UpdateMembershipLevelRequest,
+  UpdateMembershipLevelResponse,
   UpdateMessagePartialRequest,
   UpdateMessagePartialResponse,
   UpdateMessageRequest,
   UpdateMessageResponse,
+  UpdatePollOptionRequest,
+  UpdatePollPartialRequest,
+  UpdatePollRequest,
   UpdateReminderRequest,
   UpdateReminderResponse,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
+  UpdateUserPartialRequest,
+  UpdateUserPermissionsRequest,
+  UpdateUserPermissionsResponse,
+  UpdateUsersPartialRequest,
+  UpdateUsersRequest,
+  UpdateUsersResponse,
+  UpdatedCallPermissionsEvent,
+  UploadChannelFileRequest,
+  UploadChannelFileResponse,
+  UploadChannelRequest,
+  UploadChannelResponse,
+  UpsertActivitiesRequest,
+  UpsertActivitiesResponse,
+  UpsertConfigRequest,
+  UpsertConfigResponse,
+  UpsertModerationRuleRequest,
+  UpsertModerationRuleResponse,
+  UpsertModerationTemplateRequest,
+  UpsertModerationTemplateResponse,
+  UpsertPushPreferencesRequest,
+  UpsertPushPreferencesResponse,
+  UpsertPushProviderRequest,
+  UpsertPushProviderResponse,
+  UpsertPushTemplateRequest,
+  UpsertPushTemplateResponse,
+  User,
+  UserBannedEvent,
+  UserCreatedWithinParameters,
+  UserCustomEventRequest,
+  UserCustomPropertyParameters,
+  UserDeactivatedEvent,
+  UserDeletedEvent,
+  UserFeedbackReport,
+  UserFeedbackReportResponse,
+  UserFeedbackResponse,
+  UserFlaggedEvent,
+  UserMessagesDeletedEvent,
+  UserMute,
+  UserMuteResponse,
+  UserMutedEvent,
+  UserRatingReportResponse,
+  UserReactivatedEvent,
+  UserRequest,
+  UserResponse,
+  UserResponseCommonFields,
+  UserResponsePrivacyFields,
+  UserRuleParameters,
+  UserUnbannedEvent,
+  UserUnmutedEvent,
+  UserUnreadReminderEvent,
+  UserUpdatedEvent,
+  VelocityFilterConfig,
+  VelocityFilterConfigRule,
+  VideoCallRuleConfig,
+  VideoContentParameters,
+  VideoEndCallRequest,
+  VideoKickUserRequest,
+  VideoReactionOverTimeResponse,
+  VideoReactionsResponse,
+  VideoRuleParameters,
+  VideoSettings,
+  VideoSettingsRequest,
+  VideoSettingsResponse,
+  VoteData,
+  WHIPIngress,
+  WSEvent,
+  WebhookEvent,
   WrappedUnreadCountsResponse,
+  XiaomiConfig,
+  XiaomiConfigFields,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -143,7 +1059,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryCampaignsResponse?.(response.body);
+    decoders['QueryCampaignsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -167,7 +1083,7 @@ export class ChatApi {
       StreamResponse<GetCampaignResponse>
     >('GET', '/api/v2/chat/campaigns/{id}', pathParams, queryParams);
 
-    decoders.GetCampaignResponse?.(response.body);
+    decoders['GetCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -194,7 +1110,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.StartCampaignResponse?.(response.body);
+    decoders['StartCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -218,7 +1134,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CampaignResponse?.(response.body);
+    decoders['CampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -249,7 +1165,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryChannelsResponse?.(response.body);
+    decoders['QueryChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -273,7 +1189,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.DeleteChannelsResponse?.(response.body);
+    decoders['DeleteChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -298,7 +1214,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MarkReadResponse?.(response.body);
+    decoders['MarkReadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -330,7 +1246,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ChannelStateResponse?.(response.body);
+    decoders['ChannelStateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -352,7 +1268,7 @@ export class ChatApi {
       StreamResponse<DeleteChannelResponse>
     >('DELETE', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
 
-    decoders.DeleteChannelResponse?.(response.body);
+    decoders['DeleteChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -382,7 +1298,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelPartialResponse?.(response.body);
+    decoders['UpdateChannelPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -423,7 +1339,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelResponse?.(response.body);
+    decoders['UpdateChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -450,7 +1366,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -479,7 +1395,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetDraftResponse?.(response.body);
+    decoders['GetDraftResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -506,12 +1422,12 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.EventResponse?.(response.body);
+    decoders['EventResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFile(request: {
+  async deleteChannelFile(request: {
     type: string;
     id: string;
     url?: string;
@@ -531,14 +1447,14 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadFile(
-    request: FileUploadRequest & { type: string; id: string },
-  ): Promise<StreamResponse<FileUploadResponse>> {
+  async uploadChannelFile(
+    request: UploadChannelFileRequest & { type: string; id: string },
+  ): Promise<StreamResponse<UploadChannelFileResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -549,7 +1465,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<FileUploadResponse>
+      StreamResponse<UploadChannelFileResponse>
     >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/file',
@@ -559,7 +1475,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.FileUploadResponse?.(response.body);
+    decoders['UploadChannelFileResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -588,12 +1504,12 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.HideChannelResponse?.(response.body);
+    decoders['HideChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteImage(request: {
+  async deleteChannelImage(request: {
     type: string;
     id: string;
     url?: string;
@@ -613,14 +1529,14 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadImage(
-    request: ImageUploadRequest & { type: string; id: string },
-  ): Promise<StreamResponse<ImageUploadResponse>> {
+  async uploadChannelImage(
+    request: UploadChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<UploadChannelResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -632,7 +1548,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<ImageUploadResponse>
+      StreamResponse<UploadChannelResponse>
     >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/image',
@@ -642,7 +1558,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.ImageUploadResponse?.(response.body);
+    decoders['UploadChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -677,7 +1593,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMemberPartialResponse?.(response.body);
+    decoders['UpdateMemberPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -710,7 +1626,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.SendMessageResponse?.(response.body);
+    decoders['SendMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -718,7 +1634,7 @@ export class ChatApi {
   async getManyMessages(request: {
     type: string;
     id: string;
-    ids: string[];
+    ids: Array<string>;
   }): Promise<StreamResponse<GetManyMessagesResponse>> {
     const queryParams = {
       ids: request?.ids,
@@ -737,7 +1653,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetManyMessagesResponse?.(response.body);
+    decoders['GetManyMessagesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -770,7 +1686,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ChannelStateResponse?.(response.body);
+    decoders['ChannelStateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -800,7 +1716,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MarkReadResponse?.(response.body);
+    decoders['MarkReadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -828,7 +1744,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ShowChannelResponse?.(response.body);
+    decoders['ShowChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -861,7 +1777,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.TruncateChannelResponse?.(response.body);
+    decoders['TruncateChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -889,7 +1805,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -899,7 +1815,7 @@ export class ChatApi {
       StreamResponse<ListChannelTypesResponse>
     >('GET', '/api/v2/chat/channeltypes', undefined, undefined);
 
-    decoders.ListChannelTypesResponse?.(response.body);
+    decoders['ListChannelTypesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -915,7 +1831,9 @@ export class ChatApi {
       blocklist: request?.blocklist,
       blocklist_behavior: request?.blocklist_behavior,
       connect_events: request?.connect_events,
+      count_messages: request?.count_messages,
       custom_events: request?.custom_events,
+      delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
       message_retention: request?.message_retention,
       mutes: request?.mutes,
@@ -951,7 +1869,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateChannelTypeResponse?.(response.body);
+    decoders['CreateChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -970,7 +1888,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -986,7 +1904,7 @@ export class ChatApi {
       StreamResponse<GetChannelTypeResponse>
     >('GET', '/api/v2/chat/channeltypes/{name}', pathParams, undefined);
 
-    decoders.GetChannelTypeResponse?.(response.body);
+    decoders['GetChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1006,6 +1924,7 @@ export class ChatApi {
       connect_events: request?.connect_events,
       count_messages: request?.count_messages,
       custom_events: request?.custom_events,
+      delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
       mutes: request?.mutes,
       partition_size: request?.partition_size,
@@ -1044,7 +1963,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelTypeResponse?.(response.body);
+    decoders['UpdateChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1054,7 +1973,7 @@ export class ChatApi {
       StreamResponse<ListCommandsResponse>
     >('GET', '/api/v2/chat/commands', undefined, undefined);
 
-    decoders.ListCommandsResponse?.(response.body);
+    decoders['ListCommandsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1080,7 +1999,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateCommandResponse?.(response.body);
+    decoders['CreateCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1096,7 +2015,7 @@ export class ChatApi {
       StreamResponse<DeleteCommandResponse>
     >('DELETE', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
-    decoders.DeleteCommandResponse?.(response.body);
+    decoders['DeleteCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1112,7 +2031,7 @@ export class ChatApi {
       StreamResponse<GetCommandResponse>
     >('GET', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
-    decoders.GetCommandResponse?.(response.body);
+    decoders['GetCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1140,7 +2059,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateCommandResponse?.(response.body);
+    decoders['UpdateCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1169,7 +2088,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryDraftsResponse?.(response.body);
+    decoders['QueryDraftsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1197,7 +2116,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ExportChannelsResponse?.(response.body);
+    decoders['ExportChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1213,7 +2132,7 @@ export class ChatApi {
       StreamResponse<MembersResponse>
     >('GET', '/api/v2/chat/members', undefined, queryParams);
 
-    decoders.MembersResponse?.(response.body);
+    decoders['MembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1240,7 +2159,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryMessageHistoryResponse?.(response.body);
+    decoders['QueryMessageHistoryResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1264,7 +2183,7 @@ export class ChatApi {
       StreamResponse<DeleteMessageResponse>
     >('DELETE', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
-    decoders.DeleteMessageResponse?.(response.body);
+    decoders['DeleteMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1284,7 +2203,7 @@ export class ChatApi {
       StreamResponse<GetMessageResponse>
     >('GET', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
-    decoders.GetMessageResponse?.(response.body);
+    decoders['GetMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1312,7 +2231,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessageResponse?.(response.body);
+    decoders['UpdateMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1342,7 +2261,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessagePartialResponse?.(response.body);
+    decoders['UpdateMessagePartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1370,7 +2289,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders['MessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1394,7 +2313,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders['MessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1424,7 +2343,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessagePartialResponse?.(response.body);
+    decoders['UpdateMessagePartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1452,7 +2371,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.SendReactionResponse?.(response.body);
+    decoders['SendReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1479,7 +2398,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.DeleteReactionResponse?.(response.body);
+    decoders['DeleteReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1501,7 +2420,7 @@ export class ChatApi {
       StreamResponse<GetReactionsResponse>
     >('GET', '/api/v2/chat/messages/{id}/reactions', pathParams, queryParams);
 
-    decoders.GetReactionsResponse?.(response.body);
+    decoders['GetReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1533,7 +2452,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryReactionsResponse?.(response.body);
+    decoders['QueryReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1559,7 +2478,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders['MessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1587,7 +2506,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessageResponse?.(response.body);
+    decoders['UpdateMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1616,7 +2535,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1645,7 +2564,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1670,7 +2589,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.DeleteReminderResponse?.(response.body);
+    decoders['DeleteReminderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1698,7 +2617,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateReminderResponse?.(response.body);
+    decoders['UpdateReminderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1726,7 +2645,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ReminderResponseData?.(response.body);
+    decoders['ReminderResponseData']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1734,32 +2653,20 @@ export class ChatApi {
   async getReplies(request: {
     parent_id: string;
     limit?: number;
-    offset?: number;
     id_gte?: string;
     id_gt?: string;
     id_lte?: string;
     id_lt?: string;
-    created_at_after_or_equal?: Date;
-    created_at_after?: Date;
-    created_at_before_or_equal?: Date;
-    created_at_before?: Date;
     id_around?: string;
-    created_at_around?: Date;
-    sort?: SortParamRequest[];
+    sort?: Array<SortParamRequest>;
   }): Promise<StreamResponse<GetRepliesResponse>> {
     const queryParams = {
       limit: request?.limit,
-      offset: request?.offset,
       id_gte: request?.id_gte,
       id_gt: request?.id_gt,
       id_lte: request?.id_lte,
       id_lt: request?.id_lt,
-      created_at_after_or_equal: request?.created_at_after_or_equal,
-      created_at_after: request?.created_at_after,
-      created_at_before_or_equal: request?.created_at_before_or_equal,
-      created_at_before: request?.created_at_before,
       id_around: request?.id_around,
-      created_at_around: request?.created_at_around,
       sort: request?.sort,
     };
     const pathParams = {
@@ -1775,7 +2682,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetRepliesResponse?.(response.body);
+    decoders['GetRepliesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1791,7 +2698,7 @@ export class ChatApi {
       StreamResponse<QueryMessageFlagsResponse>
     >('GET', '/api/v2/chat/moderation/flags/message', undefined, queryParams);
 
-    decoders.QueryMessageFlagsResponse?.(response.body);
+    decoders['QueryMessageFlagsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1817,7 +2724,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MuteChannelResponse?.(response.body);
+    decoders['MuteChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1843,7 +2750,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UnmuteResponse?.(response.body);
+    decoders['UnmuteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1859,7 +2766,7 @@ export class ChatApi {
       StreamResponse<QueryBannedUsersResponse>
     >('GET', '/api/v2/chat/query_banned_users', undefined, queryParams);
 
-    decoders.QueryBannedUsersResponse?.(response.body);
+    decoders['QueryBannedUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1888,7 +2795,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryRemindersResponse?.(response.body);
+    decoders['QueryRemindersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1904,7 +2811,7 @@ export class ChatApi {
       StreamResponse<SearchResponse>
     >('GET', '/api/v2/chat/search', undefined, queryParams);
 
-    decoders.SearchResponse?.(response.body);
+    decoders['SearchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1931,7 +2838,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QuerySegmentsResponse?.(response.body);
+    decoders['QuerySegmentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1950,7 +2857,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1966,7 +2873,7 @@ export class ChatApi {
       StreamResponse<GetSegmentResponse>
     >('GET', '/api/v2/chat/segments/{id}', pathParams, undefined);
 
-    decoders.GetSegmentResponse?.(response.body);
+    decoders['GetSegmentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1990,7 +2897,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2011,7 +2918,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2041,7 +2948,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QuerySegmentTargetsResponse?.(response.body);
+    decoders['QuerySegmentTargetsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2073,7 +2980,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryThreadsResponse?.(response.body);
+    decoders['QueryThreadsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2097,7 +3004,7 @@ export class ChatApi {
       StreamResponse<GetThreadResponse>
     >('GET', '/api/v2/chat/threads/{message_id}', pathParams, queryParams);
 
-    decoders.GetThreadResponse?.(response.body);
+    decoders['GetThreadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2126,7 +3033,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateThreadPartialResponse?.(response.body);
+    decoders['UpdateThreadPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2136,7 +3043,7 @@ export class ChatApi {
       StreamResponse<WrappedUnreadCountsResponse>
     >('GET', '/api/v2/chat/unread', undefined, undefined);
 
-    decoders.WrappedUnreadCountsResponse?.(response.body);
+    decoders['WrappedUnreadCountsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2159,7 +3066,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UnreadCountsBatchResponse?.(response.body);
+    decoders['UnreadCountsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2183,7 +3090,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
