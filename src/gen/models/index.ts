@@ -3,9 +3,9 @@ export interface AIImageConfig {
 
   enabled?: boolean;
 
-  ocr_rules?: Array<OCRRule>;
+  ocr_rules?: OCRRule[];
 
-  rules?: Array<AWSRekognitionRule>;
+  rules?: AWSRekognitionRule[];
 }
 
 export interface AITextConfig {
@@ -15,9 +15,9 @@ export interface AITextConfig {
 
   profile?: string;
 
-  rules?: Array<BodyguardRule>;
+  rules?: BodyguardRule[];
 
-  severity_rules?: Array<BodyguardSeverityRule>;
+  severity_rules?: BodyguardSeverityRule[];
 }
 
 export interface AIVideoConfig {
@@ -25,7 +25,7 @@ export interface AIVideoConfig {
 
   enabled?: boolean;
 
-  rules?: Array<AWSRekognitionRule>;
+  rules?: AWSRekognitionRule[];
 }
 
 export interface APIError {
@@ -39,7 +39,7 @@ export interface APIError {
 
   status_code: number;
 
-  details: Array<number>;
+  details: number[];
 
   unrecoverable?: boolean;
 
@@ -169,7 +169,7 @@ export interface ActionLogResponse {
 
   user_id: string;
 
-  ai_providers: Array<string>;
+  ai_providers: string[];
 
   custom: Record<string, any>;
 
@@ -325,11 +325,11 @@ export interface ActivityMarkEvent {
 
   received_at?: Date;
 
-  mark_read?: Array<string>;
+  mark_read?: string[];
 
-  mark_seen?: Array<string>;
+  mark_seen?: string[];
 
-  mark_watched?: Array<string>;
+  mark_watched?: string[];
 
   user?: UserResponseCommonFields;
 }
@@ -347,9 +347,9 @@ export interface ActivityMarkedEvent {
 
   type: string;
 
-  marked_read?: Array<string>;
+  marked_read?: string[];
 
-  marked_watched?: Array<string>;
+  marked_watched?: string[];
 }
 
 export interface ActivityPinResponse {
@@ -467,7 +467,7 @@ export interface ActivityRemovedFromFeedEvent {
 export interface ActivityRequest {
   type: string;
 
-  feeds: Array<string>;
+  feeds: string[];
 
   expires_at?: string;
 
@@ -485,13 +485,13 @@ export interface ActivityRequest {
 
   visibility_tag?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  interest_tags?: Array<string>;
+  interest_tags?: string[];
 
-  mentioned_user_ids?: Array<string>;
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -523,23 +523,23 @@ export interface ActivityResponse {
 
   visibility: 'public' | 'private' | 'tag';
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
-  comments: Array<CommentResponse>;
+  comments: CommentResponse[];
 
-  feeds: Array<string>;
+  feeds: string[];
 
-  filter_tags: Array<string>;
+  filter_tags: string[];
 
-  interest_tags: Array<string>;
+  interest_tags: string[];
 
-  latest_reactions: Array<FeedsReactionResponse>;
+  latest_reactions: FeedsReactionResponse[];
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_bookmarks: Array<BookmarkResponse>;
+  own_bookmarks: BookmarkResponse[];
 
-  own_reactions: Array<FeedsReactionResponse>;
+  own_reactions: FeedsReactionResponse[];
 
   custom: Record<string, any>;
 
@@ -583,7 +583,7 @@ export interface ActivitySelectorConfig {
 
   type?: string;
 
-  sort?: Array<SortParam>;
+  sort?: SortParam[];
 
   filter?: Record<string, any>;
 }
@@ -595,7 +595,7 @@ export interface ActivitySelectorConfigResponse {
 
   type?: string;
 
-  sort?: Array<SortParam>;
+  sort?: SortParam[];
 
   filter?: Record<string, any>;
 }
@@ -639,7 +639,7 @@ export interface ActivityUpdatedEvent {
 export interface AddActivityRequest {
   type: string;
 
-  feeds: Array<string>;
+  feeds: string[];
 
   expires_at?: string;
 
@@ -657,13 +657,13 @@ export interface AddActivityRequest {
 
   visibility_tag?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  interest_tags?: Array<string>;
+  interest_tags?: string[];
 
-  mentioned_user_ids?: Array<string>;
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -735,9 +735,9 @@ export interface AddCommentRequest {
 
   user_id?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  mentioned_user_ids?: Array<string>;
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -751,13 +751,13 @@ export interface AddCommentResponse {
 }
 
 export interface AddCommentsBatchRequest {
-  comments: Array<AddCommentRequest>;
+  comments: AddCommentRequest[];
 }
 
 export interface AddCommentsBatchResponse {
   duration: string;
 
-  comments: Array<CommentResponse>;
+  comments: CommentResponse[];
 }
 
 export interface AddFolderRequest {
@@ -805,7 +805,7 @@ export interface AggregatedActivityResponse {
 
   user_count_truncated: boolean;
 
-  activities: Array<ActivityResponse>;
+  activities: ActivityResponse[];
 
   is_watched?: boolean;
 }
@@ -891,11 +891,11 @@ export interface AppResponseFields {
 
   webhook_url: string;
 
-  event_hooks: Array<EventHook>;
+  event_hooks: EventHook[];
 
-  user_search_disallowed_roles: Array<string>;
+  user_search_disallowed_roles: string[];
 
-  webhook_events: Array<string>;
+  webhook_events: string[];
 
   call_types: Record<string, CallType>;
 
@@ -903,11 +903,11 @@ export interface AppResponseFields {
 
   file_upload_config: FileUploadConfig;
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   image_upload_config: FileUploadConfig;
 
-  policies: Record<string, Array<Policy>>;
+  policies: Record<string, Policy[]>;
 
   push_notifications: PushNotificationFields;
 
@@ -915,11 +915,11 @@ export interface AppResponseFields {
 
   revoke_tokens_issued_before?: Date;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  geofences?: Array<GeofenceResponse>;
+  geofences?: GeofenceResponse[];
 
-  image_moderation_labels?: Array<string>;
+  image_moderation_labels?: string[];
 
   datadog_info?: DataDogInfo;
 
@@ -1067,9 +1067,9 @@ export interface Attachment {
 
   type?: string;
 
-  actions?: Array<Action>;
+  actions?: Action[];
 
-  fields?: Array<Field>;
+  fields?: Field[];
 
   giphy?: Images;
 }
@@ -1133,7 +1133,7 @@ export interface AutomodDetails {
 
   original_message_type?: string;
 
-  image_labels?: Array<string>;
+  image_labels?: string[];
 
   message_details?: FlagMessageDetails;
 
@@ -1145,7 +1145,7 @@ export interface AutomodPlatformCircumventionConfig {
 
   enabled?: boolean;
 
-  rules?: Array<AutomodRule>;
+  rules?: AutomodRule[];
 }
 
 export interface AutomodRule {
@@ -1167,7 +1167,7 @@ export interface AutomodSemanticFiltersConfig {
 
   enabled?: boolean;
 
-  rules?: Array<AutomodSemanticFiltersRule>;
+  rules?: AutomodSemanticFiltersRule[];
 }
 
 export interface AutomodSemanticFiltersRule {
@@ -1183,7 +1183,7 @@ export interface AutomodToxicityConfig {
 
   enabled?: boolean;
 
-  rules?: Array<AutomodRule>;
+  rules?: AutomodRule[];
 }
 
 export interface AzureRequest {
@@ -1297,7 +1297,7 @@ export interface BlockListConfig {
 
   enabled?: boolean;
 
-  rules?: Array<BlockListRule>;
+  rules?: BlockListRule[];
 }
 
 export interface BlockListOptions {
@@ -1315,7 +1315,7 @@ export interface BlockListResponse {
 
   type: string;
 
-  words: Array<string>;
+  words: string[];
 
   created_at?: Date;
 
@@ -1392,7 +1392,7 @@ export interface BlockedUserResponse {
 }
 
 export interface BodyguardImageAnalysisConfig {
-  rules?: Array<BodyguardRule>;
+  rules?: BodyguardRule[];
 }
 
 export interface BodyguardRule {
@@ -1406,7 +1406,7 @@ export interface BodyguardRule {
     | 'bounce_flag'
     | 'bounce_remove';
 
-  severity_rules?: Array<BodyguardSeverityRule>;
+  severity_rules?: BodyguardSeverityRule[];
 }
 
 export interface BodyguardSeverityRule {
@@ -1624,7 +1624,7 @@ export interface CallCreatedEvent {
 
   created_at: Date;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -1642,11 +1642,11 @@ export interface CallDeletedEvent {
 }
 
 export interface CallDurationReport {
-  histogram: Array<ReportByHistogramBucket>;
+  histogram: ReportByHistogramBucket[];
 }
 
 export interface CallDurationReportResponse {
-  daily: Array<DailyAggregateCallDurationReportResponse>;
+  daily: DailyAggregateCallDurationReportResponse[];
 }
 
 export interface CallEndedEvent {
@@ -1770,7 +1770,7 @@ export interface CallMemberAddedEvent {
 
   created_at: Date;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -1782,7 +1782,7 @@ export interface CallMemberRemovedEvent {
 
   created_at: Date;
 
-  members: Array<string>;
+  members: string[];
 
   call: CallResponse;
 
@@ -1794,7 +1794,7 @@ export interface CallMemberUpdatedEvent {
 
   created_at: Date;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -1806,11 +1806,11 @@ export interface CallMemberUpdatedPermissionEvent {
 
   created_at: Date;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
-  capabilities_by_role: Record<string, Array<string>>;
+  capabilities_by_role: Record<string, string[]>;
 
   type: string;
 }
@@ -1824,7 +1824,7 @@ export interface CallMissedEvent {
 
   session_id: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -1866,7 +1866,7 @@ export interface CallNotificationEvent {
 
   session_id: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -1876,11 +1876,11 @@ export interface CallNotificationEvent {
 }
 
 export interface CallParticipantCountReport {
-  histogram: Array<ReportByHistogramBucket>;
+  histogram: ReportByHistogramBucket[];
 }
 
 export interface CallParticipantCountReportResponse {
-  daily: Array<DailyAggregateCallParticipantCountReportResponse>;
+  daily: DailyAggregateCallParticipantCountReportResponse[];
 }
 
 export interface CallParticipantResponse {
@@ -2000,7 +2000,7 @@ export interface CallRequest {
 
   video?: boolean;
 
-  members?: Array<MemberRequest>;
+  members?: MemberRequest[];
 
   created_by?: UserRequest;
 
@@ -2032,7 +2032,7 @@ export interface CallResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
   created_by: UserResponse;
 
@@ -2068,7 +2068,7 @@ export interface CallRingEvent {
 
   video: boolean;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   call: CallResponse;
 
@@ -2166,7 +2166,7 @@ export interface CallSessionResponse {
 
   id: string;
 
-  participants: Array<CallParticipantResponse>;
+  participants: CallParticipantResponse[];
 
   accepted_by: Record<string, Date>;
 
@@ -2290,9 +2290,9 @@ export interface CallSettingsResponse {
 }
 
 export interface CallStateResponseFields {
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
   call: CallResponse;
 }
@@ -2300,13 +2300,13 @@ export interface CallStateResponseFields {
 export interface CallStatsParticipant {
   user_id: string;
 
-  sessions: Array<CallStatsParticipantSession>;
+  sessions: CallStatsParticipantSession[];
 
   latest_activity_at?: Date;
 
   name?: string;
 
-  roles?: Array<string>;
+  roles?: string[];
 }
 
 export interface CallStatsParticipantCounts {
@@ -2446,7 +2446,7 @@ export interface CallTypeResponse {
 
   updated_at: Date;
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   notification_settings: NotificationSettings;
 
@@ -2462,7 +2462,7 @@ export interface CallUpdatedEvent {
 
   call: CallResponse;
 
-  capabilities_by_role: Record<string, Array<string>>;
+  capabilities_by_role: Record<string, string[]>;
 
   type: string;
 }
@@ -2498,7 +2498,7 @@ export interface CallUserMutedEvent {
 
   reason: string;
 
-  muted_user_ids: Array<string>;
+  muted_user_ids: string[];
 
   type: string;
 }
@@ -2508,7 +2508,7 @@ export interface CallsPerDayReport {
 }
 
 export interface CallsPerDayReportResponse {
-  daily: Array<DailyAggregateCallsPerDayReportResponse>;
+  daily: DailyAggregateCallsPerDayReportResponse[];
 }
 
 export interface CampaignChannelTemplate {
@@ -2520,7 +2520,7 @@ export interface CampaignChannelTemplate {
 
   team?: string;
 
-  members?: Array<string>;
+  members?: string[];
 }
 
 export interface CampaignCompletedEvent {
@@ -2540,7 +2540,7 @@ export interface CampaignMessageTemplate {
 
   text: string;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
   custom: Record<string, any>;
 }
@@ -2572,13 +2572,13 @@ export interface CampaignResponse {
 
   updated_at: Date;
 
-  segment_ids: Array<string>;
+  segment_ids: string[];
 
-  segments: Array<Segment>;
+  segments: Segment[];
 
-  user_ids: Array<string>;
+  user_ids: string[];
 
-  users: Array<UserResponse>;
+  users: UserResponse[];
 
   stats: CampaignStatsResponse;
 
@@ -2666,11 +2666,11 @@ export interface Channel {
 
   team?: string;
 
-  active_live_locations?: Array<SharedLocation>;
+  active_live_locations?: SharedLocation[];
 
-  invites?: Array<ChannelMember>;
+  invites?: ChannelMember[];
 
-  members?: Array<ChannelMember>;
+  members?: ChannelMember[];
 
   config?: ChannelConfig;
 
@@ -2736,7 +2736,7 @@ export interface ChannelConfig {
 
   user_message_reminders: boolean;
 
-  commands: Array<string>;
+  commands: string[];
 
   blocklist?: string;
 
@@ -2746,9 +2746,9 @@ export interface ChannelConfig {
 
   partition_ttl?: number;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 }
@@ -2806,7 +2806,7 @@ export interface ChannelConfigWithInfo {
 
   user_message_reminders: boolean;
 
-  commands: Array<Command>;
+  commands: Command[];
 
   blocklist?: string;
 
@@ -2816,13 +2816,13 @@ export interface ChannelConfigWithInfo {
 
   partition_ttl?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 }
 
 export interface ChannelCreatedEvent {
@@ -2924,9 +2924,9 @@ export interface ChannelInput {
 
   truncated_by_id?: string;
 
-  invites?: Array<ChannelMember>;
+  invites?: ChannelMember[];
 
-  members?: Array<ChannelMember>;
+  members?: ChannelMember[];
 
   config_overrides?: ChannelConfig;
 
@@ -2972,7 +2972,7 @@ export interface ChannelMember {
 
   user_id?: string;
 
-  deleted_messages?: Array<string>;
+  deleted_messages?: string[];
 
   user?: UserResponse;
 }
@@ -3000,7 +3000,7 @@ export interface ChannelMemberResponse {
 }
 
 export interface ChannelMessages {
-  messages: Array<Message>;
+  messages: Message[];
 
   channel?: ChannelResponse;
 }
@@ -3118,9 +3118,9 @@ export interface ChannelResponse {
 
   truncated_at?: Date;
 
-  members?: Array<ChannelMember>;
+  members?: ChannelMember[];
 
-  own_capabilities?: Array<ChannelOwnCapability>;
+  own_capabilities?: ChannelOwnCapability[];
 
   config?: ChannelConfigWithInfo;
 
@@ -3132,13 +3132,13 @@ export interface ChannelResponse {
 export interface ChannelStateResponse {
   duration: string;
 
-  members: Array<ChannelMember>;
+  members: ChannelMember[];
 
-  messages: Array<MessageResponse>;
+  messages: MessageResponse[];
 
-  pinned_messages: Array<MessageResponse>;
+  pinned_messages: MessageResponse[];
 
-  threads: Array<ThreadStateResponse>;
+  threads: ThreadStateResponse[];
 
   hidden?: boolean;
 
@@ -3146,13 +3146,13 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
-  active_live_locations?: Array<SharedLocationResponseData>;
+  active_live_locations?: SharedLocationResponseData[];
 
-  pending_messages?: Array<PendingMessageResponse>;
+  pending_messages?: PendingMessageResponse[];
 
-  read?: Array<ReadStateResponse>;
+  read?: ReadStateResponse[];
 
-  watchers?: Array<UserResponse>;
+  watchers?: UserResponse[];
 
   channel?: ChannelResponse;
 
@@ -3164,13 +3164,13 @@ export interface ChannelStateResponse {
 }
 
 export interface ChannelStateResponseFields {
-  members: Array<ChannelMember>;
+  members: ChannelMember[];
 
-  messages: Array<MessageResponse>;
+  messages: MessageResponse[];
 
-  pinned_messages: Array<MessageResponse>;
+  pinned_messages: MessageResponse[];
 
-  threads: Array<ThreadStateResponse>;
+  threads: ThreadStateResponse[];
 
   hidden?: boolean;
 
@@ -3178,13 +3178,13 @@ export interface ChannelStateResponseFields {
 
   watcher_count?: number;
 
-  active_live_locations?: Array<SharedLocationResponseData>;
+  active_live_locations?: SharedLocationResponseData[];
 
-  pending_messages?: Array<PendingMessageResponse>;
+  pending_messages?: PendingMessageResponse[];
 
-  read?: Array<ReadStateResponse>;
+  read?: ReadStateResponse[];
 
-  watchers?: Array<UserResponse>;
+  watchers?: UserResponse[];
 
   channel?: ChannelResponse;
 
@@ -3264,11 +3264,11 @@ export interface ChannelTypeConfig {
 
   user_message_reminders: boolean;
 
-  commands: Array<Command>;
+  commands: Command[];
 
-  permissions: Array<PolicyRequest>;
+  permissions: PolicyRequest[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   blocklist?: string;
 
@@ -3278,9 +3278,9 @@ export interface ChannelTypeConfig {
 
   partition_ttl?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 }
@@ -3387,7 +3387,7 @@ export interface CheckPushResponse {
 
   skip_devices?: boolean;
 
-  general_errors?: Array<string>;
+  general_errors?: string[];
 
   device_errors?: Record<string, DeviceErrorInfo>;
 
@@ -3641,9 +3641,9 @@ export interface CommentResponse {
 
   upvote_count: number;
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_reactions: Array<FeedsReactionResponse>;
+  own_reactions: FeedsReactionResponse[];
 
   user: UserResponse;
 
@@ -3655,9 +3655,9 @@ export interface CommentResponse {
 
   text?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  latest_reactions?: Array<FeedsReactionResponse>;
+  latest_reactions?: FeedsReactionResponse[];
 
   custom?: Record<string, any>;
 
@@ -3687,9 +3687,9 @@ export interface CommentUpdatedEvent {
 export interface CommitMessageRequest {}
 
 export interface ConfigOverrides {
-  commands: Array<string>;
+  commands: string[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   blocklist?: string;
 
@@ -3727,7 +3727,7 @@ export interface ConfigResponse {
 
   updated_at: Date;
 
-  supported_video_call_harm_types: Array<string>;
+  supported_video_call_harm_types: string[];
 
   ai_image_config?: AIImageConfig;
 
@@ -3765,7 +3765,7 @@ export interface CountByMinuteResponse {
 export interface CreateBlockListRequest {
   name: string;
 
-  words: Array<string>;
+  words: string[];
 
   is_leet_check_enabled?: boolean;
 
@@ -3787,7 +3787,7 @@ export interface CreateCallTypeRequest {
 
   external_storage?: string;
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 
   notification_settings?: NotificationSettings;
 
@@ -3803,7 +3803,7 @@ export interface CreateCallTypeResponse {
 
   updated_at: Date;
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   notification_settings: NotificationSettings;
 
@@ -3867,13 +3867,13 @@ export interface CreateChannelTypeRequest {
 
   user_message_reminders?: boolean;
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
-  commands?: Array<string>;
+  commands?: string[];
 
-  permissions?: Array<PolicyRequest>;
+  permissions?: PolicyRequest[];
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 }
 
 export interface CreateChannelTypeResponse {
@@ -3931,11 +3931,11 @@ export interface CreateChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: Array<string>;
+  commands: string[];
 
-  permissions: Array<PolicyRequest>;
+  permissions: PolicyRequest[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   blocklist?: string;
 
@@ -3945,9 +3945,9 @@ export interface CreateChannelTypeResponse {
 
   partition_ttl?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 }
@@ -4012,9 +4012,9 @@ export interface CreateFeedGroupRequest {
     | 'members'
     | 'private';
 
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -4038,9 +4038,9 @@ export interface CreateFeedGroupResponse {
 export interface CreateFeedViewRequest {
   id: string;
 
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -4054,13 +4054,13 @@ export interface CreateFeedViewResponse {
 }
 
 export interface CreateFeedsBatchRequest {
-  feeds: Array<FeedRequest>;
+  feeds: FeedRequest[];
 }
 
 export interface CreateFeedsBatchResponse {
   duration: string;
 
-  feeds: Array<FeedResponse>;
+  feeds: FeedResponse[];
 }
 
 export interface CreateGuestRequest {
@@ -4108,7 +4108,7 @@ export interface CreateMembershipLevelRequest {
 
   priority?: number;
 
-  tags?: Array<string>;
+  tags?: string[];
 
   custom?: Record<string, any>;
 }
@@ -4150,7 +4150,7 @@ export interface CreatePollRequest {
 
   voting_visibility?: 'anonymous' | 'public';
 
-  options?: Array<PollOptionInput>;
+  options?: PollOptionInput[];
 
   custom?: Record<string, any>;
 
@@ -4186,7 +4186,7 @@ export interface CustomCheckFlag {
 
   reason?: string;
 
-  labels?: Array<string>;
+  labels?: string[];
 
   custom?: Record<string, any>;
 }
@@ -4196,7 +4196,7 @@ export interface CustomCheckRequest {
 
   entity_type: string;
 
-  flags: Array<CustomCheckFlag>;
+  flags: CustomCheckFlag[];
 
   entity_creator_id?: string;
 
@@ -4274,7 +4274,7 @@ export interface DailyMetricResponse {
 export interface DailyMetricStatsResponse {
   total: number;
 
-  daily: Array<DailyMetricResponse>;
+  daily: DailyMetricResponse[];
 }
 
 export interface Data {
@@ -4302,7 +4302,7 @@ export interface DeactivateUserResponse {
 }
 
 export interface DeactivateUsersRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 
   created_by_id?: string;
 
@@ -4332,7 +4332,7 @@ export interface DecayFunctionConfig {
 }
 
 export interface DeleteActivitiesRequest {
-  ids: Array<string>;
+  ids: string[];
 
   hard_delete?: boolean;
 
@@ -4344,7 +4344,7 @@ export interface DeleteActivitiesRequest {
 export interface DeleteActivitiesResponse {
   duration: string;
 
-  deleted_ids: Array<string>;
+  deleted_ids: string[];
 }
 
 export interface DeleteActivityReactionResponse {
@@ -4392,7 +4392,7 @@ export interface DeleteChannelResponse {
 }
 
 export interface DeleteChannelsRequest {
-  cids: Array<string>;
+  cids: string[];
 
   hard_delete?: boolean;
 }
@@ -4506,7 +4506,7 @@ export interface DeleteReminderResponse {
 }
 
 export interface DeleteSegmentTargetsRequest {
-  target_ids: Array<string>;
+  target_ids: string[];
 }
 
 export interface DeleteTranscriptionResponse {
@@ -4524,7 +4524,7 @@ export interface DeleteUserRequest {
 }
 
 export interface DeleteUsersRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 
   calls?: 'soft' | 'hard';
 
@@ -4628,9 +4628,9 @@ export interface DraftPayloadResponse {
 
   type?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  mentioned_users?: Array<UserResponse>;
+  mentioned_users?: UserResponse[];
 }
 
 export interface DraftResponse {
@@ -4690,7 +4690,7 @@ export interface EgressRTMPResponse {
 export interface EgressResponse {
   broadcasting: boolean;
 
-  rtmps: Array<EgressRTMPResponse>;
+  rtmps: EgressRTMPResponse[];
 
   frame_recording?: FrameRecordingResponse;
 
@@ -4712,17 +4712,17 @@ export interface EnrichedActivity {
 
   verb?: string;
 
-  to?: Array<string>;
+  to?: string[];
 
   actor?: Data;
 
-  latest_reactions?: Record<string, Array<EnrichedReaction>>;
+  latest_reactions?: Record<string, EnrichedReaction[]>;
 
   object?: Data;
 
   origin?: Data;
 
-  own_reactions?: Record<string, Array<EnrichedReaction>>;
+  own_reactions?: Record<string, EnrichedReaction[]>;
 
   reaction_counts?: Record<string, number>;
 
@@ -4740,7 +4740,7 @@ export interface EnrichedReaction {
 
   parent?: string;
 
-  target_feeds?: Array<string>;
+  target_feeds?: string[];
 
   children_counts?: Record<string, number>;
 
@@ -4748,9 +4748,9 @@ export interface EnrichedReaction {
 
   data?: Record<string, any>;
 
-  latest_children?: Record<string, Array<EnrichedReaction>>;
+  latest_children?: Record<string, EnrichedReaction[]>;
 
-  own_children?: Record<string, Array<EnrichedReaction>>;
+  own_children?: Record<string, EnrichedReaction[]>;
 
   updated_at?: Time;
 
@@ -4782,9 +4782,9 @@ export interface EntityCreatorResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -4804,7 +4804,7 @@ export interface EntityCreatorResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  devices?: Array<DeviceResponse>;
+  devices?: DeviceResponse[];
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -4862,7 +4862,7 @@ export interface EventHook {
 
   webhook_url?: string;
 
-  event_types?: Array<string>;
+  event_types?: string[];
 
   callback?: AsyncModerationCallbackConfig;
 }
@@ -4894,7 +4894,7 @@ export interface EventResponse {
 }
 
 export interface ExportChannelsRequest {
-  channels: Array<ChannelExport>;
+  channels: ChannelExport[];
 
   clear_deleted_message_text?: boolean;
 
@@ -4924,15 +4924,15 @@ export interface ExportFeedUserDataResponse {
 export interface ExportUserResponse {
   duration: string;
 
-  messages?: Array<MessageResponse>;
+  messages?: MessageResponse[];
 
-  reactions?: Array<ReactionResponse>;
+  reactions?: ReactionResponse[];
 
   user?: UserResponse;
 }
 
 export interface ExportUsersRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 }
 
 export interface ExportUsersResponse {
@@ -4960,7 +4960,7 @@ export interface FeedCreatedEvent {
 
   fid: string;
 
-  members: Array<FeedMemberResponse>;
+  members: FeedMemberResponse[];
 
   custom: Record<string, any>;
 
@@ -5004,9 +5004,9 @@ export interface FeedGroup {
 
   updated_at: Date;
 
-  activity_processors: Array<ActivityProcessorConfig>;
+  activity_processors: ActivityProcessorConfig[];
 
-  activity_selectors: Array<ActivitySelectorConfig>;
+  activity_selectors: ActivitySelectorConfig[];
 
   custom: Record<string, any>;
 
@@ -5070,9 +5070,9 @@ export interface FeedGroupResponse {
 
   deleted_at?: Date;
 
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfigResponse>;
+  activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
 
@@ -5094,9 +5094,9 @@ export interface FeedInput {
 
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  members?: Array<FeedMemberRequest>;
+  members?: FeedMemberRequest[];
 
   custom?: Record<string, any>;
 }
@@ -5236,9 +5236,9 @@ export interface FeedRequest {
 
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  members?: Array<FeedMemberRequest>;
+  members?: FeedMemberRequest[];
 
   custom?: Record<string, any>;
 }
@@ -5272,11 +5272,11 @@ export interface FeedResponse {
 
   visibility?: string;
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  own_capabilities?: Array<FeedOwnCapability>;
+  own_capabilities?: FeedOwnCapability[];
 
-  own_follows?: Array<FollowResponse>;
+  own_follows?: FollowResponse[];
 
   custom?: Record<string, any>;
 
@@ -5306,9 +5306,9 @@ export interface FeedViewResponse {
 
   last_used_at?: Date;
 
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfigResponse>;
+  activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
 
@@ -5318,9 +5318,9 @@ export interface FeedViewResponse {
 export interface FeedVisibilityResponse {
   name: string;
 
-  permissions: Array<Permission>;
+  permissions: Permission[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 }
 
 export interface FeedsModerationTemplateConfig {
@@ -5370,13 +5370,13 @@ export interface Field {
 export interface FileUploadConfig {
   size_limit: number;
 
-  allowed_file_extensions?: Array<string>;
+  allowed_file_extensions?: string[];
 
-  allowed_mime_types?: Array<string>;
+  allowed_mime_types?: string[];
 
-  blocked_file_extensions?: Array<string>;
+  blocked_file_extensions?: string[];
 
-  blocked_mime_types?: Array<string>;
+  blocked_mime_types?: string[];
 }
 
 export interface FileUploadRequest {
@@ -5464,7 +5464,7 @@ export interface FlagFeedback {
 
   message_id: string;
 
-  labels: Array<Label>;
+  labels: Label[];
 }
 
 export interface FlagMessageDetails {
@@ -5522,13 +5522,13 @@ export interface FlagUserOptions {
 }
 
 export interface FollowBatchRequest {
-  follows: Array<FollowRequest>;
+  follows: FollowRequest[];
 }
 
 export interface FollowBatchResponse {
   duration: string;
 
-  follows: Array<FollowResponse>;
+  follows: FollowResponse[];
 }
 
 export interface FollowCreatedEvent {
@@ -5676,15 +5676,15 @@ export interface FullUserResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
-  channel_mutes: Array<ChannelMute>;
+  channel_mutes: ChannelMute[];
 
-  devices: Array<DeviceResponse>;
+  devices: DeviceResponse[];
 
-  mutes: Array<UserMuteResponse>;
+  mutes: UserMuteResponse[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -5704,7 +5704,7 @@ export interface FullUserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  latest_hidden_channels?: Array<string>;
+  latest_hidden_channels?: string[];
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -5718,19 +5718,19 @@ export interface GeofenceResponse {
 
   type?: string;
 
-  country_codes?: Array<string>;
+  country_codes?: string[];
 }
 
 export interface GeofenceSettings {
-  names: Array<string>;
+  names: string[];
 }
 
 export interface GeofenceSettingsRequest {
-  names?: Array<string>;
+  names?: string[];
 }
 
 export interface GeofenceSettingsResponse {
-  names: Array<string>;
+  names: string[];
 }
 
 export interface GetActiveCallsStatusResponse {
@@ -5766,7 +5766,7 @@ export interface GetBlockListResponse {
 export interface GetBlockedUsersResponse {
   duration: string;
 
-  blocks: Array<BlockedUserResponse>;
+  blocks: BlockedUserResponse[];
 }
 
 export interface GetCallReportResponse {
@@ -5776,7 +5776,7 @@ export interface GetCallReportResponse {
 
   report: ReportResponse;
 
-  video_reactions?: Array<VideoReactionsResponse>;
+  video_reactions?: VideoReactionsResponse[];
 
   chat_activity?: ChatActivityStatsResponse;
 
@@ -5786,9 +5786,9 @@ export interface GetCallReportResponse {
 export interface GetCallResponse {
   duration: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
   call: CallResponse;
 }
@@ -5824,7 +5824,7 @@ export interface GetCallTypeResponse {
 
   updated_at: Date;
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   notification_settings: NotificationSettings;
 
@@ -5896,11 +5896,11 @@ export interface GetChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: Array<Command>;
+  commands: Command[];
 
-  permissions: Array<PolicyRequest>;
+  permissions: PolicyRequest[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   blocklist?: string;
 
@@ -5910,9 +5910,9 @@ export interface GetChannelTypeResponse {
 
   partition_ttl?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 }
@@ -5936,7 +5936,7 @@ export interface GetCommandResponse {
 export interface GetCommentRepliesResponse {
   duration: string;
 
-  comments: Array<ThreadedCommentResponse>;
+  comments: ThreadedCommentResponse[];
 
   next?: string;
 
@@ -5952,7 +5952,7 @@ export interface GetCommentResponse {
 export interface GetCommentsResponse {
   duration: string;
 
-  comments: Array<ThreadedCommentResponse>;
+  comments: ThreadedCommentResponse[];
 
   next?: string;
 
@@ -5980,7 +5980,7 @@ export interface GetDraftResponse {
 export interface GetEdgesResponse {
   duration: string;
 
-  edges: Array<EdgeResponse>;
+  edges: EdgeResponse[];
 }
 
 export interface GetFeedGroupResponse {
@@ -6016,7 +6016,7 @@ export interface GetFeedsRateLimitsResponse {
 export interface GetFollowSuggestionsResponse {
   duration: string;
 
-  suggestions: Array<FeedResponse>;
+  suggestions: FeedResponse[];
 }
 
 export interface GetImportResponse {
@@ -6028,7 +6028,7 @@ export interface GetImportResponse {
 export interface GetManyMessagesResponse {
   duration: string;
 
-  messages: Array<MessageResponse>;
+  messages: MessageResponse[];
 }
 
 export interface GetMessageResponse {
@@ -6086,9 +6086,9 @@ export interface GetOGResponse {
 
   type?: string;
 
-  actions?: Array<Action>;
+  actions?: Action[];
 
-  fields?: Array<Field>;
+  fields?: Field[];
 
   giphy?: Images;
 }
@@ -6110,9 +6110,9 @@ export interface GetOrCreateCallResponse {
 
   duration: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
   call: CallResponse;
 }
@@ -6125,9 +6125,9 @@ export interface GetOrCreateFeedGroupRequest {
     | 'members'
     | 'private';
 
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -6187,17 +6187,17 @@ export interface GetOrCreateFeedResponse {
 
   duration: string;
 
-  activities: Array<ActivityResponse>;
+  activities: ActivityResponse[];
 
-  aggregated_activities: Array<AggregatedActivityResponse>;
+  aggregated_activities: AggregatedActivityResponse[];
 
-  followers: Array<FollowResponse>;
+  followers: FollowResponse[];
 
-  following: Array<FollowResponse>;
+  following: FollowResponse[];
 
-  members: Array<FeedMemberResponse>;
+  members: FeedMemberResponse[];
 
-  pinned_activities: Array<ActivityPinResponse>;
+  pinned_activities: ActivityPinResponse[];
 
   feed: FeedResponse;
 
@@ -6215,9 +6215,9 @@ export interface GetOrCreateFeedResponse {
 }
 
 export interface GetOrCreateFeedViewRequest {
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -6235,7 +6235,7 @@ export interface GetOrCreateFeedViewResponse {
 export interface GetPushTemplatesResponse {
   duration: string;
 
-  templates: Array<PushTemplate>;
+  templates: PushTemplate[];
 }
 
 export interface GetRateLimitsResponse {
@@ -6253,13 +6253,13 @@ export interface GetRateLimitsResponse {
 export interface GetReactionsResponse {
   duration: string;
 
-  reactions: Array<Reaction>;
+  reactions: Reaction[];
 }
 
 export interface GetRepliesResponse {
   duration: string;
 
-  messages: Array<MessageResponse>;
+  messages: MessageResponse[];
 }
 
 export interface GetReviewQueueItemResponse {
@@ -6331,13 +6331,13 @@ export interface HLSSettings {
 
   enabled: boolean;
 
-  quality_tracks: Array<string>;
+  quality_tracks: string[];
 
   layout?: LayoutSettings;
 }
 
 export interface HLSSettingsRequest {
-  quality_tracks: Array<string>;
+  quality_tracks: string[];
 
   auto_on?: boolean;
 
@@ -6351,7 +6351,7 @@ export interface HLSSettingsResponse {
 
   enabled: boolean;
 
-  quality_tracks: Array<string>;
+  quality_tracks: string[];
 
   layout: LayoutSettingsResponse;
 }
@@ -6363,9 +6363,9 @@ export interface HarmConfig {
 
   threshold?: number;
 
-  action_sequences?: Array<ActionSequence>;
+  action_sequences?: ActionSequence[];
 
-  harm_types?: Array<string>;
+  harm_types?: string[];
 }
 
 export interface HideChannelRequest {
@@ -6397,7 +6397,7 @@ export interface HuaweiConfigFields {
 }
 
 export interface ImageContentParameters {
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 }
 
 export interface ImageData {
@@ -6417,7 +6417,7 @@ export interface ImageRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 }
 
 export interface ImageSize {
@@ -6433,7 +6433,7 @@ export interface ImageSize {
 export interface ImageUploadRequest {
   file?: string;
 
-  upload_sizes?: Array<ImageSize>;
+  upload_sizes?: ImageSize[];
 
   user?: OnlyUserID;
 }
@@ -6445,7 +6445,7 @@ export interface ImageUploadResponse {
 
   thumb_url?: string;
 
-  upload_sizes?: Array<ImageSize>;
+  upload_sizes?: ImageSize[];
 }
 
 export interface Images {
@@ -6477,7 +6477,7 @@ export interface ImportTask {
 
   updated_at: Date;
 
-  history: Array<ImportTaskHistory>;
+  history: ImportTaskHistory[];
 
   size?: number;
 }
@@ -6563,19 +6563,19 @@ export interface IngressSourceResponse {
 }
 
 export interface IngressVideoEncodingOptions {
-  layers: Array<IngressVideoLayer>;
+  layers: IngressVideoLayer[];
 
   source?: IngressSource;
 }
 
 export interface IngressVideoEncodingOptionsRequest {
-  layers: Array<IngressVideoLayerRequest>;
+  layers: IngressVideoLayerRequest[];
 
   source: IngressSourceRequest;
 }
 
 export interface IngressVideoEncodingResponse {
-  layers: Array<IngressVideoLayerResponse>;
+  layers: IngressVideoLayerResponse[];
 
   source: IngressSourceResponse;
 }
@@ -6657,7 +6657,7 @@ export interface LLMConfig {
 
   enabled?: boolean;
 
-  rules?: Array<LLMRule>;
+  rules?: LLMRule[];
 
   severity_descriptions?: Record<string, string>;
 }
@@ -6676,15 +6676,15 @@ export interface LLMRule {
     | 'bounce_remove'
     | 'keep';
 
-  severity_rules?: Array<BodyguardSeverityRule>;
+  severity_rules?: BodyguardSeverityRule[];
 }
 
 export interface Label {
   name: string;
 
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 
-  phrase_list_ids?: Array<number>;
+  phrase_list_ids?: number[];
 }
 
 export interface LabelThresholds {
@@ -6738,7 +6738,7 @@ export interface LimitInfo {
 }
 
 export interface LimitsSettings {
-  max_participants_exclude_roles: Array<string>;
+  max_participants_exclude_roles: string[];
 
   max_duration_seconds?: number;
 
@@ -6754,11 +6754,11 @@ export interface LimitsSettingsRequest {
 
   max_participants_exclude_owner?: boolean;
 
-  max_participants_exclude_roles?: Array<string>;
+  max_participants_exclude_roles?: string[];
 }
 
 export interface LimitsSettingsResponse {
-  max_participants_exclude_roles: Array<string>;
+  max_participants_exclude_roles: string[];
 
   max_duration_seconds?: number;
 
@@ -6770,7 +6770,7 @@ export interface LimitsSettingsResponse {
 export interface ListBlockListResponse {
   duration: string;
 
-  blocklists: Array<BlockListResponse>;
+  blocklists: BlockListResponse[];
 }
 
 export interface ListCallTypeResponse {
@@ -6788,13 +6788,13 @@ export interface ListChannelTypesResponse {
 export interface ListCommandsResponse {
   duration: string;
 
-  commands: Array<Command>;
+  commands: Command[];
 }
 
 export interface ListDevicesResponse {
   duration: string;
 
-  devices: Array<DeviceResponse>;
+  devices: DeviceResponse[];
 }
 
 export interface ListExternalStorageResponse {
@@ -6824,37 +6824,37 @@ export interface ListFeedVisibilitiesResponse {
 export interface ListImportsResponse {
   duration: string;
 
-  import_tasks: Array<ImportTask>;
+  import_tasks: ImportTask[];
 }
 
 export interface ListPermissionsResponse {
   duration: string;
 
-  permissions: Array<Permission>;
+  permissions: Permission[];
 }
 
 export interface ListPushProvidersResponse {
   duration: string;
 
-  push_providers: Array<PushProviderResponse>;
+  push_providers: PushProviderResponse[];
 }
 
 export interface ListRecordingsResponse {
   duration: string;
 
-  recordings: Array<CallRecording>;
+  recordings: CallRecording[];
 }
 
 export interface ListRolesResponse {
   duration: string;
 
-  roles: Array<Role>;
+  roles: Role[];
 }
 
 export interface ListTranscriptionsResponse {
   duration: string;
 
-  transcriptions: Array<CallTranscription>;
+  transcriptions: CallTranscription[];
 }
 
 export interface MarkActivityRequest {
@@ -6864,11 +6864,11 @@ export interface MarkActivityRequest {
 
   user_id?: string;
 
-  mark_read?: Array<string>;
+  mark_read?: string[];
 
-  mark_seen?: Array<string>;
+  mark_seen?: string[];
 
-  mark_watched?: Array<string>;
+  mark_watched?: string[];
 
   user?: UserRequest;
 }
@@ -6992,7 +6992,7 @@ export interface MemberUpdatedEvent {
 export interface MembersResponse {
   duration: string;
 
-  members: Array<ChannelMember>;
+  members: ChannelMember[];
 }
 
 export interface MembershipLevelResponse {
@@ -7006,7 +7006,7 @@ export interface MembershipLevelResponse {
 
   updated_at: Date;
 
-  tags: Array<string>;
+  tags: string[];
 
   description?: string;
 
@@ -7038,15 +7038,15 @@ export interface Message {
 
   updated_at: Date;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
-  latest_reactions: Array<Reaction>;
+  latest_reactions: Reaction[];
 
-  mentioned_users: Array<User>;
+  mentioned_users: User[];
 
-  own_reactions: Array<Reaction>;
+  own_reactions: Reaction[];
 
-  restricted_visibility: Array<string>;
+  restricted_visibility: string[];
 
   custom: Record<string, any>;
 
@@ -7080,11 +7080,11 @@ export interface Message {
 
   show_in_channel?: boolean;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, Array<string>>;
+  image_labels?: Record<string, string[]>;
 
   member?: ChannelMember;
 
@@ -7148,7 +7148,7 @@ export interface MessageDeletedEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -7192,7 +7192,7 @@ export interface MessageFlaggedEvent {
 
   type: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   flag?: Flag;
 
@@ -7212,7 +7212,7 @@ export interface MessageHistoryEntryResponse {
 
   text: string;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
   custom: Record<string, any>;
 }
@@ -7256,7 +7256,7 @@ export interface MessageNewEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -7366,11 +7366,11 @@ export interface MessageRequest {
 
   user_id?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  mentioned_users?: Array<string>;
+  mentioned_users?: string[];
 
-  restricted_visibility?: Array<string>;
+  restricted_visibility?: string[];
 
   custom?: Record<string, any>;
 
@@ -7404,15 +7404,15 @@ export interface MessageResponse {
 
   updated_at: Date;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
-  latest_reactions: Array<ReactionResponse>;
+  latest_reactions: ReactionResponse[];
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_reactions: Array<ReactionResponse>;
+  own_reactions: ReactionResponse[];
 
-  restricted_visibility: Array<string>;
+  restricted_visibility: string[];
 
   custom: Record<string, any>;
 
@@ -7444,13 +7444,13 @@ export interface MessageResponse {
 
   show_in_channel?: boolean;
 
-  thread_participants?: Array<UserResponse>;
+  thread_participants?: UserResponse[];
 
   draft?: DraftResponse;
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, Array<string>>;
+  image_labels?: Record<string, string[]>;
 
   member?: ChannelMemberResponse;
 
@@ -7470,7 +7470,7 @@ export interface MessageResponse {
 }
 
 export interface MessageStatsResponse {
-  count_over_time?: Array<CountByMinuteResponse>;
+  count_over_time?: CountByMinuteResponse[];
 }
 
 export interface MessageUnblockedEvent {
@@ -7480,7 +7480,7 @@ export interface MessageUnblockedEvent {
 
   type: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -7500,7 +7500,7 @@ export interface MessageUndeletedEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -7526,7 +7526,7 @@ export interface MessageUpdatedEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -7558,15 +7558,15 @@ export interface MessageWithChannelResponse {
 
   updated_at: Date;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
-  latest_reactions: Array<ReactionResponse>;
+  latest_reactions: ReactionResponse[];
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_reactions: Array<ReactionResponse>;
+  own_reactions: ReactionResponse[];
 
-  restricted_visibility: Array<string>;
+  restricted_visibility: string[];
 
   channel: ChannelResponse;
 
@@ -7600,13 +7600,13 @@ export interface MessageWithChannelResponse {
 
   show_in_channel?: boolean;
 
-  thread_participants?: Array<UserResponse>;
+  thread_participants?: UserResponse[];
 
   draft?: DraftResponse;
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, Array<string>>;
+  image_labels?: Record<string, string[]>;
 
   member?: ChannelMemberResponse;
 
@@ -7680,7 +7680,7 @@ export interface ModerationConfig {
 
   updated_at?: Date;
 
-  supported_video_call_harm_types?: Array<string>;
+  supported_video_call_harm_types?: string[];
 
   ai_image_config?: AIImageConfig;
 
@@ -7756,7 +7756,7 @@ export interface ModerationFlagResponse {
 
   review_queue_item_id?: string;
 
-  labels?: Array<string>;
+  labels?: string[];
 
   custom?: Record<string, any>;
 
@@ -7794,11 +7794,11 @@ export interface ModerationMarkReviewedEvent {
 }
 
 export interface ModerationPayload {
-  images?: Array<string>;
+  images?: string[];
 
-  texts?: Array<string>;
+  texts?: string[];
 
-  videos?: Array<string>;
+  videos?: string[];
 
   custom?: Record<string, any>;
 }
@@ -7830,7 +7830,7 @@ export interface ModerationRuleV2Response {
 
   updated_at: Date;
 
-  config_keys: Array<string>;
+  config_keys: string[];
 
   action: RuleBuilderAction;
 
@@ -7838,9 +7838,9 @@ export interface ModerationRuleV2Response {
 
   logic?: string;
 
-  conditions?: Array<RuleBuilderCondition>;
+  conditions?: RuleBuilderCondition[];
 
-  groups?: Array<RuleBuilderConditionGroup>;
+  groups?: RuleBuilderConditionGroup[];
 }
 
 export interface ModerationV2Response {
@@ -7854,9 +7854,9 @@ export interface ModerationV2Response {
 
   semantic_filter_matched?: string;
 
-  image_harms?: Array<string>;
+  image_harms?: string[];
 
-  text_harms?: Array<string>;
+  text_harms?: string[];
 }
 
 export interface MuteChannelRequest {
@@ -7864,7 +7864,7 @@ export interface MuteChannelRequest {
 
   user_id?: string;
 
-  channel_cids?: Array<string>;
+  channel_cids?: string[];
 
   user?: UserRequest;
 }
@@ -7872,7 +7872,7 @@ export interface MuteChannelRequest {
 export interface MuteChannelResponse {
   duration: string;
 
-  channel_mutes?: Array<ChannelMute>;
+  channel_mutes?: ChannelMute[];
 
   channel_mute?: ChannelMute;
 
@@ -7880,7 +7880,7 @@ export interface MuteChannelResponse {
 }
 
 export interface MuteRequest {
-  target_ids: Array<string>;
+  target_ids: string[];
 
   timeout?: number;
 
@@ -7892,9 +7892,9 @@ export interface MuteRequest {
 export interface MuteResponse {
   duration: string;
 
-  mutes?: Array<UserMute>;
+  mutes?: UserMute[];
 
-  non_existing_users?: Array<string>;
+  non_existing_users?: string[];
 
   own_user?: OwnUser;
 }
@@ -7912,7 +7912,7 @@ export interface MuteUsersRequest {
 
   video?: boolean;
 
-  user_ids?: Array<string>;
+  user_ids?: string[];
 
   muted_by?: UserRequest;
 }
@@ -7960,7 +7960,7 @@ export interface NotificationFeedUpdatedEvent {
 
   received_at?: Date;
 
-  aggregated_activities?: Array<AggregatedActivityResponse>;
+  aggregated_activities?: AggregatedActivityResponse[];
 
   notification_status?: NotificationStatusResponse;
 
@@ -8028,9 +8028,9 @@ export interface NotificationStatusResponse {
 
   last_seen_at?: Date;
 
-  read_activities?: Array<string>;
+  read_activities?: string[];
 
-  seen_activities?: Array<string>;
+  seen_activities?: string[];
 }
 
 export interface NotificationTarget {
@@ -8044,7 +8044,7 @@ export interface NotificationTarget {
 
   user_id?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 }
 
 export interface NotificationTrigger {
@@ -8072,11 +8072,11 @@ export interface OnlyUserID {
 export interface OverviewDashboardConfig {
   default_date_range_days?: number;
 
-  visible_charts?: Array<string>;
+  visible_charts?: string[];
 }
 
 export interface OwnCapabilitiesBatchRequest {
-  feeds: Array<string>;
+  feeds: string[];
 
   user_id?: string;
 
@@ -8086,7 +8086,7 @@ export interface OwnCapabilitiesBatchRequest {
 export interface OwnCapabilitiesBatchResponse {
   duration: string;
 
-  capabilities: Record<string, Array<FeedOwnCapability>>;
+  capabilities: Record<string, FeedOwnCapability[]>;
 }
 
 export const OwnCapability = {
@@ -8150,11 +8150,11 @@ export interface OwnUser {
 
   updated_at: Date;
 
-  channel_mutes: Array<ChannelMute>;
+  channel_mutes: ChannelMute[];
 
-  devices: Array<Device>;
+  devices: Device[];
 
-  mutes: Array<UserMute>;
+  mutes: UserMute[];
 
   custom: Record<string, any>;
 
@@ -8172,11 +8172,11 @@ export interface OwnUser {
 
   last_engaged_at?: Date;
 
-  blocked_user_ids?: Array<string>;
+  blocked_user_ids?: string[];
 
-  latest_hidden_channels?: Array<string>;
+  latest_hidden_channels?: string[];
 
-  teams?: Array<string>;
+  teams?: string[];
 
   privacy_settings?: PrivacySettings;
 
@@ -8210,13 +8210,13 @@ export interface OwnUserResponse {
 
   updated_at: Date;
 
-  channel_mutes: Array<ChannelMute>;
+  channel_mutes: ChannelMute[];
 
-  devices: Array<DeviceResponse>;
+  devices: DeviceResponse[];
 
-  mutes: Array<UserMuteResponse>;
+  mutes: UserMuteResponse[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -8234,9 +8234,9 @@ export interface OwnUserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  blocked_user_ids?: Array<string>;
+  blocked_user_ids?: string[];
 
-  latest_hidden_channels?: Array<string>;
+  latest_hidden_channels?: string[];
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -8280,7 +8280,7 @@ export interface ParticipantCountByMinuteResponse {
 }
 
 export interface ParticipantCountOverTimeResponse {
-  by_minute?: Array<ParticipantCountByMinuteResponse>;
+  by_minute?: ParticipantCountByMinuteResponse[];
 }
 
 export interface ParticipantReportResponse {
@@ -8290,13 +8290,13 @@ export interface ParticipantReportResponse {
 
   max_concurrent?: number;
 
-  by_browser?: Array<GroupedStatsResponse>;
+  by_browser?: GroupedStatsResponse[];
 
-  by_country?: Array<GroupedStatsResponse>;
+  by_country?: GroupedStatsResponse[];
 
-  by_device?: Array<GroupedStatsResponse>;
+  by_device?: GroupedStatsResponse[];
 
-  by_operating_system?: Array<GroupedStatsResponse>;
+  by_operating_system?: GroupedStatsResponse[];
 
   count_over_time?: ParticipantCountOverTimeResponse;
 
@@ -8306,19 +8306,19 @@ export interface ParticipantReportResponse {
 }
 
 export interface ParticipantSeriesPublisherStats {
-  global?: Record<string, Array<Array<number>>>;
+  global?: Record<string, number[][]>;
 
-  global_thresholds?: Record<string, Array<MetricThreshold>>;
+  global_thresholds?: Record<string, MetricThreshold[]>;
 
-  tracks?: Record<string, Array<ParticipantSeriesTrackMetrics>>;
+  tracks?: Record<string, ParticipantSeriesTrackMetrics[]>;
 }
 
 export interface ParticipantSeriesSubscriberStats {
-  subscriptions?: Array<ParticipantSeriesSubscriptionTrackMetrics>;
+  subscriptions?: ParticipantSeriesSubscriptionTrackMetrics[];
 
-  global?: Record<string, Array<Array<number>>>;
+  global?: Record<string, number[][]>;
 
-  global_thresholds?: Record<string, Array<MetricThreshold>>;
+  global_thresholds?: Record<string, MetricThreshold[]>;
 }
 
 export interface ParticipantSeriesSubscriptionTrackMetrics {
@@ -8328,7 +8328,7 @@ export interface ParticipantSeriesSubscriptionTrackMetrics {
 
   publisher_user_session_id?: string;
 
-  tracks?: Record<string, Array<ParticipantSeriesTrackMetrics>>;
+  tracks?: Record<string, ParticipantSeriesTrackMetrics[]>;
 }
 
 export interface ParticipantSeriesTimeframe {
@@ -8352,15 +8352,15 @@ export interface ParticipantSeriesTrackMetrics {
 
   track_type?: string;
 
-  metrics?: Record<string, Array<Array<number>>>;
+  metrics?: Record<string, number[][]>;
 
-  thresholds?: Record<string, Array<MetricThreshold>>;
+  thresholds?: Record<string, MetricThreshold[]>;
 }
 
 export interface ParticipantSeriesUserStats {
-  metrics?: Record<string, Array<Array<number>>>;
+  metrics?: Record<string, number[][]>;
 
-  thresholds?: Record<string, Array<MetricThreshold>>;
+  thresholds?: Record<string, MetricThreshold[]>;
 }
 
 export interface PendingMessageEvent {
@@ -8416,7 +8416,7 @@ export interface Permission {
 
   same_team: boolean;
 
-  tags: Array<string>;
+  tags: string[];
 
   condition?: Record<string, any>;
 }
@@ -8426,7 +8426,7 @@ export interface PermissionRequestEvent {
 
   created_at: Date;
 
-  permissions: Array<string>;
+  permissions: string[];
 
   user: UserResponse;
 
@@ -8482,9 +8482,9 @@ export interface Policy {
 
   updated_at: Date;
 
-  resources: Array<string>;
+  resources: string[];
 
-  roles: Array<string>;
+  roles: string[];
 }
 
 export interface PolicyRequest {
@@ -8496,9 +8496,9 @@ export interface PolicyRequest {
 
   priority: number;
 
-  resources: Array<string>;
+  resources: string[];
 
-  roles: Array<string>;
+  roles: string[];
 }
 
 export interface Poll {
@@ -8524,15 +8524,15 @@ export interface Poll {
 
   vote_count: number;
 
-  latest_answers: Array<PollVote>;
+  latest_answers: PollVote[];
 
-  options: Array<PollOption>;
+  options: PollOption[];
 
-  own_votes: Array<PollVote>;
+  own_votes: PollVote[];
 
   custom: Record<string, any>;
 
-  latest_votes_by_option: Record<string, Array<PollVote>>;
+  latest_votes_by_option: Record<string, PollVote[]>;
 
   vote_counts_by_option: Record<string, number>;
 
@@ -8612,15 +8612,15 @@ export interface PollResponseData {
 
   voting_visibility: string;
 
-  latest_answers: Array<PollVoteResponseData>;
+  latest_answers: PollVoteResponseData[];
 
-  options: Array<PollOptionResponseData>;
+  options: PollOptionResponseData[];
 
-  own_votes: Array<PollVoteResponseData>;
+  own_votes: PollVoteResponseData[];
 
   custom: Record<string, any>;
 
-  latest_votes_by_option: Record<string, Array<PollVoteResponseData>>;
+  latest_votes_by_option: Record<string, PollVoteResponseData[]>;
 
   vote_counts_by_option: Record<string, number>;
 
@@ -8680,7 +8680,7 @@ export interface PollVoteResponseData {
 export interface PollVotesResponse {
   duration: string;
 
-  votes: Array<PollVoteResponseData>;
+  votes: PollVoteResponseData[];
 
   next?: string;
 
@@ -8730,7 +8730,7 @@ export interface PublisherStatsResponse {
 
   unique: number;
 
-  by_track?: Array<TrackStatsResponse>;
+  by_track?: TrackStatsResponse[];
 }
 
 export interface PublisherVideoMetrics {
@@ -8758,7 +8758,7 @@ export interface PushConfig {
 export interface PushNotificationConfig {
   enable_push?: boolean;
 
-  push_types?: Array<string>;
+  push_types?: string[];
 }
 
 export interface PushNotificationFields {
@@ -8774,7 +8774,7 @@ export interface PushNotificationFields {
 
   xiaomi: XiaomiConfigFields;
 
-  providers?: Array<PushProvider>;
+  providers?: PushProvider[];
 }
 
 export interface PushNotificationSettingsResponse {
@@ -8866,7 +8866,7 @@ export interface PushProvider {
 
   xiaomi_package_name?: string;
 
-  push_templates?: Array<PushTemplate>;
+  push_templates?: PushTemplate[];
 }
 
 export interface PushProviderResponse {
@@ -8950,11 +8950,11 @@ export interface PushTemplate {
 }
 
 export interface QualityScoreReport {
-  histogram: Array<ReportByHistogramBucket>;
+  histogram: ReportByHistogramBucket[];
 }
 
 export interface QualityScoreReportResponse {
-  daily: Array<DailyAggregateQualityScoreReportResponse>;
+  daily: DailyAggregateQualityScoreReportResponse[];
 }
 
 export interface QueryActivitiesRequest {
@@ -8964,7 +8964,7 @@ export interface QueryActivitiesRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -8972,7 +8972,7 @@ export interface QueryActivitiesRequest {
 export interface QueryActivitiesResponse {
   duration: string;
 
-  activities: Array<ActivityResponse>;
+  activities: ActivityResponse[];
 
   next?: string;
 
@@ -8986,7 +8986,7 @@ export interface QueryActivityReactionsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -8994,7 +8994,7 @@ export interface QueryActivityReactionsRequest {
 export interface QueryActivityReactionsResponse {
   duration: string;
 
-  reactions: Array<FeedsReactionResponse>;
+  reactions: FeedsReactionResponse[];
 
   next?: string;
 
@@ -9006,7 +9006,7 @@ export interface QueryAggregateCallStatsRequest {
 
   to?: string;
 
-  report_types?: Array<string>;
+  report_types?: string[];
 }
 
 export interface QueryAggregateCallStatsResponse {
@@ -9038,7 +9038,7 @@ export interface QueryBannedUsersPayload {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   user?: UserRequest;
 }
@@ -9046,7 +9046,7 @@ export interface QueryBannedUsersPayload {
 export interface QueryBannedUsersResponse {
   duration: string;
 
-  bans: Array<BanResponse>;
+  bans: BanResponse[];
 }
 
 export interface QueryBookmarkFoldersRequest {
@@ -9056,7 +9056,7 @@ export interface QueryBookmarkFoldersRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9064,7 +9064,7 @@ export interface QueryBookmarkFoldersRequest {
 export interface QueryBookmarkFoldersResponse {
   duration: string;
 
-  bookmark_folders: Array<BookmarkFolderResponse>;
+  bookmark_folders: BookmarkFolderResponse[];
 
   next?: string;
 
@@ -9078,7 +9078,7 @@ export interface QueryBookmarksRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9086,7 +9086,7 @@ export interface QueryBookmarksRequest {
 export interface QueryBookmarksResponse {
   duration: string;
 
-  bookmarks: Array<BookmarkResponse>;
+  bookmarks: BookmarkResponse[];
 
   next?: string;
 
@@ -9104,7 +9104,7 @@ export interface QueryCallMembersRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 }
@@ -9112,7 +9112,7 @@ export interface QueryCallMembersRequest {
 export interface QueryCallMembersResponse {
   duration: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
   next?: string;
 
@@ -9128,11 +9128,11 @@ export interface QueryCallParticipantsResponse {
 
   total_participants: number;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
-  participants: Array<CallParticipantResponse>;
+  participants: CallParticipantResponse[];
 
   call: CallResponse;
 }
@@ -9146,7 +9146,7 @@ export interface QueryCallSessionParticipantStatsResponse {
 
   duration: string;
 
-  participants: Array<CallStatsParticipant>;
+  participants: CallStatsParticipant[];
 
   counts: CallStatsParticipantCounts;
 
@@ -9174,7 +9174,7 @@ export interface QueryCallSessionParticipantStatsTimelineResponse {
 
   user_session_id: string;
 
-  events: Array<CallParticipantTimeline>;
+  events: CallParticipantTimeline[];
 }
 
 export interface QueryCallStatsRequest {
@@ -9184,7 +9184,7 @@ export interface QueryCallStatsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 }
@@ -9192,7 +9192,7 @@ export interface QueryCallStatsRequest {
 export interface QueryCallStatsResponse {
   duration: string;
 
-  reports: Array<CallStatsReportSummaryResponse>;
+  reports: CallStatsReportSummaryResponse[];
 
   next?: string;
 
@@ -9206,7 +9206,7 @@ export interface QueryCallsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 }
@@ -9214,7 +9214,7 @@ export interface QueryCallsRequest {
 export interface QueryCallsResponse {
   duration: string;
 
-  calls: Array<CallStateResponseFields>;
+  calls: CallStateResponseFields[];
 
   next?: string;
 
@@ -9230,7 +9230,7 @@ export interface QueryCampaignsRequest {
 
   user_limit?: number;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9238,7 +9238,7 @@ export interface QueryCampaignsRequest {
 export interface QueryCampaignsResponse {
   duration: string;
 
-  campaigns: Array<CampaignResponse>;
+  campaigns: CampaignResponse[];
 
   next?: string;
 
@@ -9258,7 +9258,7 @@ export interface QueryChannelsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 
@@ -9268,7 +9268,7 @@ export interface QueryChannelsRequest {
 export interface QueryChannelsResponse {
   duration: string;
 
-  channels: Array<ChannelStateResponseFields>;
+  channels: ChannelStateResponseFields[];
 }
 
 export interface QueryCommentReactionsRequest {
@@ -9278,7 +9278,7 @@ export interface QueryCommentReactionsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9286,7 +9286,7 @@ export interface QueryCommentReactionsRequest {
 export interface QueryCommentReactionsResponse {
   duration: string;
 
-  reactions: Array<FeedsReactionResponse>;
+  reactions: FeedsReactionResponse[];
 
   next?: string;
 
@@ -9308,7 +9308,7 @@ export interface QueryCommentsRequest {
 export interface QueryCommentsResponse {
   duration: string;
 
-  comments: Array<CommentResponse>;
+  comments: CommentResponse[];
 
   next?: string;
 
@@ -9324,7 +9324,7 @@ export interface QueryDraftsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9334,7 +9334,7 @@ export interface QueryDraftsRequest {
 export interface QueryDraftsResponse {
   duration: string;
 
-  drafts: Array<DraftResponse>;
+  drafts: DraftResponse[];
 
   next?: string;
 
@@ -9348,7 +9348,7 @@ export interface QueryFeedMembersRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9356,7 +9356,7 @@ export interface QueryFeedMembersRequest {
 export interface QueryFeedMembersResponse {
   duration: string;
 
-  members: Array<FeedMemberResponse>;
+  members: FeedMemberResponse[];
 
   next?: string;
 
@@ -9376,7 +9376,7 @@ export interface QueryFeedModerationTemplate {
 export interface QueryFeedModerationTemplatesResponse {
   duration: string;
 
-  templates: Array<QueryFeedModerationTemplate>;
+  templates: QueryFeedModerationTemplate[];
 }
 
 export interface QueryFeedsRequest {
@@ -9388,7 +9388,7 @@ export interface QueryFeedsRequest {
 
   watch?: boolean;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9396,7 +9396,7 @@ export interface QueryFeedsRequest {
 export interface QueryFeedsResponse {
   duration: string;
 
-  feeds: Array<FeedResponse>;
+  feeds: FeedResponse[];
 
   next?: string;
 
@@ -9428,7 +9428,7 @@ export interface QueryFollowsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9436,7 +9436,7 @@ export interface QueryFollowsRequest {
 export interface QueryFollowsResponse {
   duration: string;
 
-  follows: Array<FollowResponse>;
+  follows: FollowResponse[];
 
   next?: string;
 
@@ -9456,9 +9456,9 @@ export interface QueryMembersPayload {
 
   user_id?: string;
 
-  members?: Array<ChannelMember>;
+  members?: ChannelMember[];
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   user?: UserRequest;
 }
@@ -9470,7 +9470,7 @@ export interface QueryMembershipLevelsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9478,7 +9478,7 @@ export interface QueryMembershipLevelsRequest {
 export interface QueryMembershipLevelsResponse {
   duration: string;
 
-  membership_levels: Array<MembershipLevelResponse>;
+  membership_levels: MembershipLevelResponse[];
 
   next?: string;
 
@@ -9494,7 +9494,7 @@ export interface QueryMessageFlagsPayload {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 
@@ -9504,7 +9504,7 @@ export interface QueryMessageFlagsPayload {
 export interface QueryMessageFlagsResponse {
   duration: string;
 
-  flags: Array<MessageFlagResponse>;
+  flags: MessageFlagResponse[];
 }
 
 export interface QueryMessageHistoryRequest {
@@ -9516,13 +9516,13 @@ export interface QueryMessageHistoryRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 }
 
 export interface QueryMessageHistoryResponse {
   duration: string;
 
-  message_history: Array<MessageHistoryEntryResponse>;
+  message_history: MessageHistoryEntryResponse[];
 
   next?: string;
 
@@ -9538,7 +9538,7 @@ export interface QueryModerationConfigsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9548,7 +9548,7 @@ export interface QueryModerationConfigsRequest {
 export interface QueryModerationConfigsResponse {
   duration: string;
 
-  configs: Array<ConfigResponse>;
+  configs: ConfigResponse[];
 
   next?: string;
 
@@ -9562,7 +9562,7 @@ export interface QueryModerationFlagsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParam>;
+  sort?: SortParam[];
 
   filter?: Record<string, any>;
 }
@@ -9570,7 +9570,7 @@ export interface QueryModerationFlagsRequest {
 export interface QueryModerationFlagsResponse {
   duration: string;
 
-  flags: Array<ModerationFlagResponse>;
+  flags: ModerationFlagResponse[];
 
   next?: string;
 
@@ -9586,7 +9586,7 @@ export interface QueryModerationLogsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9596,7 +9596,7 @@ export interface QueryModerationLogsRequest {
 export interface QueryModerationLogsResponse {
   duration: string;
 
-  logs: Array<ActionLogResponse>;
+  logs: ActionLogResponse[];
 
   next?: string;
 
@@ -9612,7 +9612,7 @@ export interface QueryModerationRulesRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9622,7 +9622,7 @@ export interface QueryModerationRulesRequest {
 export interface QueryModerationRulesResponse {
   duration: string;
 
-  rules: Array<ModerationRuleV2Response>;
+  rules: ModerationRuleV2Response[];
 
   default_llm_labels: Record<string, string>;
 
@@ -9638,7 +9638,7 @@ export interface QueryPollVotesRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9650,7 +9650,7 @@ export interface QueryPollsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9658,7 +9658,7 @@ export interface QueryPollsRequest {
 export interface QueryPollsResponse {
   duration: string;
 
-  polls: Array<PollResponseData>;
+  polls: PollResponseData[];
 
   next?: string;
 
@@ -9674,7 +9674,7 @@ export interface QueryReactionsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9684,7 +9684,7 @@ export interface QueryReactionsRequest {
 export interface QueryReactionsResponse {
   duration: string;
 
-  reactions: Array<ReactionResponse>;
+  reactions: ReactionResponse[];
 
   next?: string;
 
@@ -9700,7 +9700,7 @@ export interface QueryRemindersRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9710,7 +9710,7 @@ export interface QueryRemindersRequest {
 export interface QueryRemindersResponse {
   duration: string;
 
-  reminders: Array<ReminderResponseData>;
+  reminders: ReminderResponseData[];
 
   next?: string;
 
@@ -9734,7 +9734,7 @@ export interface QueryReviewQueueRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9744,9 +9744,9 @@ export interface QueryReviewQueueRequest {
 export interface QueryReviewQueueResponse {
   duration: string;
 
-  items: Array<ReviewQueueItemResponse>;
+  items: ReviewQueueItemResponse[];
 
-  action_config: Record<string, Array<ModerationActionConfig>>;
+  action_config: Record<string, ModerationActionConfig[]>;
 
   stats: Record<string, any>;
 
@@ -9762,7 +9762,7 @@ export interface QuerySegmentTargetsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -9770,7 +9770,7 @@ export interface QuerySegmentTargetsRequest {
 export interface QuerySegmentTargetsResponse {
   duration: string;
 
-  targets: Array<SegmentTargetResponse>;
+  targets: SegmentTargetResponse[];
 
   next?: string;
 
@@ -9786,13 +9786,13 @@ export interface QuerySegmentsRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 }
 
 export interface QuerySegmentsResponse {
   duration: string;
 
-  segments: Array<SegmentResponse>;
+  segments: SegmentResponse[];
 
   next?: string;
 
@@ -9814,7 +9814,7 @@ export interface QueryThreadsRequest {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 
@@ -9824,7 +9824,7 @@ export interface QueryThreadsRequest {
 export interface QueryThreadsResponse {
   duration: string;
 
-  threads: Array<ThreadStateResponse>;
+  threads: ThreadStateResponse[];
 
   next?: string;
 
@@ -9838,7 +9838,7 @@ export interface QueryUserFeedbackRequest {
 
   prev?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   filter_conditions?: Record<string, any>;
 }
@@ -9846,7 +9846,7 @@ export interface QueryUserFeedbackRequest {
 export interface QueryUserFeedbackResponse {
   duration: string;
 
-  user_feedback: Array<UserFeedbackResponse>;
+  user_feedback: UserFeedbackResponse[];
 
   next?: string;
 
@@ -9866,7 +9866,7 @@ export interface QueryUsersPayload {
 
   user_id?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   user?: UserRequest;
 }
@@ -9874,7 +9874,7 @@ export interface QueryUsersPayload {
 export interface QueryUsersResponse {
   duration: string;
 
-  users: Array<FullUserResponse>;
+  users: FullUserResponse[];
 }
 
 export interface RTMPBroadcastRequest {
@@ -9988,7 +9988,7 @@ export interface ReactionDeletedEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -10020,7 +10020,7 @@ export interface ReactionNewEvent {
 
   team?: string;
 
-  thread_participants?: Array<User>;
+  thread_participants?: User[];
 
   message?: Message;
 
@@ -10098,7 +10098,7 @@ export interface ReactivateUserResponse {
 }
 
 export interface ReactivateUsersRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 
   created_by_id?: string;
 
@@ -10336,7 +10336,7 @@ export interface Response {
 export interface RestoreActionRequest {}
 
 export interface RestoreUsersRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 }
 
 export interface ReviewQueueItemNewEvent {
@@ -10348,7 +10348,7 @@ export interface ReviewQueueItemNewEvent {
 
   received_at?: Date;
 
-  flags?: Array<ModerationFlagResponse>;
+  flags?: ModerationFlagResponse[];
 
   action?: ActionLogResponse;
 
@@ -10378,13 +10378,13 @@ export interface ReviewQueueItemResponse {
 
   updated_at: Date;
 
-  actions: Array<ActionLogResponse>;
+  actions: ActionLogResponse[];
 
-  bans: Array<Ban>;
+  bans: Ban[];
 
-  flags: Array<ModerationFlagResponse>;
+  flags: ModerationFlagResponse[];
 
-  languages: Array<string>;
+  languages: string[];
 
   completed_at?: Date;
 
@@ -10394,7 +10394,7 @@ export interface ReviewQueueItemResponse {
 
   reviewed_at?: Date;
 
-  teams?: Array<string>;
+  teams?: string[];
 
   activity?: EnrichedActivity;
 
@@ -10424,7 +10424,7 @@ export interface ReviewQueueItemUpdatedEvent {
 
   received_at?: Date;
 
-  flags?: Array<ModerationFlagResponse>;
+  flags?: ModerationFlagResponse[];
 
   action?: ActionLogResponse;
 
@@ -10464,7 +10464,7 @@ export interface Role {
 
   updated_at: Date;
 
-  scopes: Array<string>;
+  scopes: string[];
 }
 
 export interface RuleBuilderAction {
@@ -10512,13 +10512,13 @@ export interface RuleBuilderCondition {
 export interface RuleBuilderConditionGroup {
   logic?: string;
 
-  conditions?: Array<RuleBuilderCondition>;
+  conditions?: RuleBuilderCondition[];
 }
 
 export interface RuleBuilderConfig {
   async?: boolean;
 
-  rules?: Array<RuleBuilderRule>;
+  rules?: RuleBuilderRule[];
 }
 
 export interface RuleBuilderRule {
@@ -10532,9 +10532,9 @@ export interface RuleBuilderRule {
 
   logic?: string;
 
-  conditions?: Array<RuleBuilderCondition>;
+  conditions?: RuleBuilderCondition[];
 
-  groups?: Array<RuleBuilderConditionGroup>;
+  groups?: RuleBuilderConditionGroup[];
 }
 
 export interface S3Request {
@@ -10552,7 +10552,7 @@ export interface SDKUsageReport {
 }
 
 export interface SDKUsageReportResponse {
-  daily: Array<DailyAggregateSDKUsageReportResponse>;
+  daily: DailyAggregateSDKUsageReportResponse[];
 }
 
 export interface SRTIngress {
@@ -10594,7 +10594,7 @@ export interface SearchPayload {
 
   query?: string;
 
-  sort?: Array<SortParamRequest>;
+  sort?: SortParamRequest[];
 
   message_filter_conditions?: Record<string, any>;
 
@@ -10604,7 +10604,7 @@ export interface SearchPayload {
 export interface SearchResponse {
   duration: string;
 
-  results: Array<SearchResult>;
+  results: SearchResult[];
 
   next?: string;
 
@@ -10642,15 +10642,15 @@ export interface SearchResultMessage {
 
   updated_at: Date;
 
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
 
-  latest_reactions: Array<ReactionResponse>;
+  latest_reactions: ReactionResponse[];
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_reactions: Array<ReactionResponse>;
+  own_reactions: ReactionResponse[];
 
-  restricted_visibility: Array<string>;
+  restricted_visibility: string[];
 
   custom: Record<string, any>;
 
@@ -10682,7 +10682,7 @@ export interface SearchResultMessage {
 
   show_in_channel?: boolean;
 
-  thread_participants?: Array<UserResponse>;
+  thread_participants?: UserResponse[];
 
   channel?: ChannelResponse;
 
@@ -10690,7 +10690,7 @@ export interface SearchResultMessage {
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, Array<string>>;
+  image_labels?: Record<string, string[]>;
 
   member?: ChannelMemberResponse;
 
@@ -10716,7 +10716,7 @@ export interface SearchWarning {
 
   channel_search_count?: number;
 
-  channel_search_cids?: Array<string>;
+  channel_search_cids?: string[];
 }
 
 export interface Segment {
@@ -10954,7 +10954,7 @@ export interface SharedLocationResponseData {
 export interface SharedLocationsResponse {
   duration: string;
 
-  active_live_locations: Array<SharedLocationResponseData>;
+  active_live_locations: SharedLocationResponseData[];
 }
 
 export interface ShowChannelRequest {
@@ -11073,7 +11073,7 @@ export interface StartHLSBroadcastingResponse {
 }
 
 export interface StartRTMPBroadcastsRequest {
-  broadcasts: Array<RTMPBroadcastRequest>;
+  broadcasts: RTMPBroadcastRequest[];
 }
 
 export interface StartRTMPBroadcastsResponse {
@@ -11222,9 +11222,9 @@ export interface StoriesFeedUpdatedEvent {
 
   received_at?: Date;
 
-  activities?: Array<ActivityResponse>;
+  activities?: ActivityResponse[];
 
-  aggregated_activities?: Array<AggregatedActivityResponse>;
+  aggregated_activities?: AggregatedActivityResponse[];
 
   user?: UserResponseCommonFields;
 }
@@ -11324,9 +11324,9 @@ export interface TextContentParameters {
 
   severity?: string;
 
-  blocklist_match?: Array<string>;
+  blocklist_match?: string[];
 
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 
   llm_harm_labels?: Record<string, string>;
 }
@@ -11340,9 +11340,9 @@ export interface TextRuleParameters {
 
   time_window?: string;
 
-  blocklist_match?: Array<string>;
+  blocklist_match?: string[];
 
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 
   llm_harm_labels?: Record<string, string>;
 }
@@ -11394,7 +11394,7 @@ export interface ThreadResponse {
 
   reply_count?: number;
 
-  thread_participants?: Array<ThreadParticipant>;
+  thread_participants?: ThreadParticipant[];
 
   channel?: ChannelResponse;
 
@@ -11420,7 +11420,7 @@ export interface ThreadStateResponse {
 
   updated_at: Date;
 
-  latest_replies: Array<MessageResponse>;
+  latest_replies: MessageResponse[];
 
   custom: Record<string, any>;
 
@@ -11430,9 +11430,9 @@ export interface ThreadStateResponse {
 
   reply_count?: number;
 
-  read?: Array<ReadStateResponse>;
+  read?: ReadStateResponse[];
 
-  thread_participants?: Array<ThreadParticipant>;
+  thread_participants?: ThreadParticipant[];
 
   channel?: ChannelResponse;
 
@@ -11484,9 +11484,9 @@ export interface ThreadedCommentResponse {
 
   upvote_count: number;
 
-  mentioned_users: Array<UserResponse>;
+  mentioned_users: UserResponse[];
 
-  own_reactions: Array<FeedsReactionResponse>;
+  own_reactions: FeedsReactionResponse[];
 
   user: UserResponse;
 
@@ -11498,11 +11498,11 @@ export interface ThreadedCommentResponse {
 
   text?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  latest_reactions?: Array<FeedsReactionResponse>;
+  latest_reactions?: FeedsReactionResponse[];
 
-  replies?: Array<ThreadedCommentResponse>;
+  replies?: ThreadedCommentResponse[];
 
   custom?: Record<string, any>;
 
@@ -11756,7 +11756,7 @@ export interface TranslateMessageRequest {
 export interface TranslationSettings {
   enabled: boolean;
 
-  languages: Array<string>;
+  languages: string[];
 }
 
 export interface TruncateChannelRequest {
@@ -11768,7 +11768,7 @@ export interface TruncateChannelRequest {
 
   user_id?: string;
 
-  member_ids?: Array<string>;
+  member_ids?: string[];
 
   message?: MessageRequest;
 
@@ -11836,13 +11836,13 @@ export interface UnblockedUserEvent {
 }
 
 export interface UnfollowBatchRequest {
-  follows: Array<FollowPair>;
+  follows: FollowPair[];
 }
 
 export interface UnfollowBatchResponse {
   duration: string;
 
-  follows: Array<FollowResponse>;
+  follows: FollowResponse[];
 }
 
 export interface UnfollowResponse {
@@ -11856,13 +11856,13 @@ export interface UnmuteChannelRequest {
 
   user_id?: string;
 
-  channel_cids?: Array<string>;
+  channel_cids?: string[];
 
   user?: UserRequest;
 }
 
 export interface UnmuteRequest {
-  target_ids: Array<string>;
+  target_ids: string[];
 
   user_id?: string;
 
@@ -11872,7 +11872,7 @@ export interface UnmuteRequest {
 export interface UnmuteResponse {
   duration: string;
 
-  non_existing_users?: Array<string>;
+  non_existing_users?: string[];
 }
 
 export interface UnpinActivityResponse {
@@ -11896,7 +11896,7 @@ export interface UnpinResponse {
 }
 
 export interface UnreadCountsBatchRequest {
-  user_ids: Array<string>;
+  user_ids: string[];
 }
 
 export interface UnreadCountsBatchResponse {
@@ -11926,11 +11926,11 @@ export interface UnreadCountsResponse {
 
   total_unread_threads_count: number;
 
-  channel_type: Array<UnreadCountsChannelType>;
+  channel_type: UnreadCountsChannelType[];
 
-  channels: Array<UnreadCountsChannel>;
+  channels: UnreadCountsChannel[];
 
-  threads: Array<UnreadCountsThread>;
+  threads: UnreadCountsThread[];
 
   total_unread_count_by_team?: Record<string, number>;
 }
@@ -11948,7 +11948,7 @@ export interface UnreadCountsThread {
 export interface UpdateActivityPartialRequest {
   user_id?: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 
@@ -11972,13 +11972,13 @@ export interface UpdateActivityRequest {
 
   visibility?: string;
 
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 
-  feeds?: Array<string>;
+  feeds?: string[];
 
-  filter_tags?: Array<string>;
+  filter_tags?: string[];
 
-  interest_tags?: Array<string>;
+  interest_tags?: string[];
 
   custom?: Record<string, any>;
 
@@ -12054,17 +12054,17 @@ export interface UpdateAppRequest {
 
   webhook_url?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  event_hooks?: Array<EventHook>;
+  event_hooks?: EventHook[];
 
-  image_moderation_block_labels?: Array<string>;
+  image_moderation_block_labels?: string[];
 
-  image_moderation_labels?: Array<string>;
+  image_moderation_labels?: string[];
 
-  user_search_disallowed_roles?: Array<string>;
+  user_search_disallowed_roles?: string[];
 
-  webhook_events?: Array<string>;
+  webhook_events?: string[];
 
   apn_config?: APNConfig;
 
@@ -12076,7 +12076,7 @@ export interface UpdateAppRequest {
 
   firebase_config?: FirebaseConfig;
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 
   huawei_config?: HuaweiConfig;
 
@@ -12096,7 +12096,7 @@ export interface UpdateBlockListRequest {
 
   team?: string;
 
-  words?: Array<string>;
+  words?: string[];
 }
 
 export interface UpdateBlockListResponse {
@@ -12142,15 +12142,15 @@ export interface UpdateBookmarkResponse {
 }
 
 export interface UpdateCallMembersRequest {
-  remove_members?: Array<string>;
+  remove_members?: string[];
 
-  update_members?: Array<MemberRequest>;
+  update_members?: MemberRequest[];
 }
 
 export interface UpdateCallMembersResponse {
   duration: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 }
 
 export interface UpdateCallRequest {
@@ -12164,9 +12164,9 @@ export interface UpdateCallRequest {
 export interface UpdateCallResponse {
   duration: string;
 
-  members: Array<MemberResponse>;
+  members: MemberResponse[];
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
   call: CallResponse;
 }
@@ -12174,7 +12174,7 @@ export interface UpdateCallResponse {
 export interface UpdateCallTypeRequest {
   external_storage?: string;
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 
   notification_settings?: NotificationSettings;
 
@@ -12190,7 +12190,7 @@ export interface UpdateCallTypeResponse {
 
   updated_at: Date;
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   notification_settings: NotificationSettings;
 
@@ -12202,7 +12202,7 @@ export interface UpdateCallTypeResponse {
 export interface UpdateChannelPartialRequest {
   user_id?: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 
@@ -12212,7 +12212,7 @@ export interface UpdateChannelPartialRequest {
 export interface UpdateChannelPartialResponse {
   duration: string;
 
-  members: Array<ChannelMemberResponse>;
+  members: ChannelMemberResponse[];
 
   channel?: ChannelResponse;
 }
@@ -12230,17 +12230,17 @@ export interface UpdateChannelRequest {
 
   user_id?: string;
 
-  add_members?: Array<ChannelMember>;
+  add_members?: ChannelMember[];
 
-  add_moderators?: Array<string>;
+  add_moderators?: string[];
 
-  assign_roles?: Array<ChannelMember>;
+  assign_roles?: ChannelMember[];
 
-  demote_moderators?: Array<string>;
+  demote_moderators?: string[];
 
-  invites?: Array<ChannelMember>;
+  invites?: ChannelMember[];
 
-  remove_members?: Array<string>;
+  remove_members?: string[];
 
   data?: ChannelInput;
 
@@ -12252,7 +12252,7 @@ export interface UpdateChannelRequest {
 export interface UpdateChannelResponse {
   duration: string;
 
-  members: Array<ChannelMember>;
+  members: ChannelMember[];
 
   channel?: ChannelResponse;
 
@@ -12314,17 +12314,17 @@ export interface UpdateChannelTypeRequest {
 
   user_message_reminders?: boolean;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
-  commands?: Array<string>;
+  commands?: string[];
 
-  permissions?: Array<PolicyRequest>;
+  permissions?: PolicyRequest[];
 
   automod_thresholds?: Thresholds;
 
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 }
 
 export interface UpdateChannelTypeResponse {
@@ -12382,11 +12382,11 @@ export interface UpdateChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: Array<string>;
+  commands: string[];
 
-  permissions: Array<PolicyRequest>;
+  permissions: PolicyRequest[];
 
-  grants: Record<string, Array<string>>;
+  grants: Record<string, string[]>;
 
   blocklist?: string;
 
@@ -12396,9 +12396,9 @@ export interface UpdateChannelTypeResponse {
 
   partition_ttl?: string;
 
-  allowed_flag_reasons?: Array<string>;
+  allowed_flag_reasons?: string[];
 
-  blocklists?: Array<BlockListOptions>;
+  blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
 }
@@ -12458,9 +12458,9 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -12490,17 +12490,17 @@ export interface UpdateFeedMembersRequest {
 
   prev?: string;
 
-  members?: Array<FeedMemberRequest>;
+  members?: FeedMemberRequest[];
 }
 
 export interface UpdateFeedMembersResponse {
   duration: string;
 
-  added: Array<FeedMemberResponse>;
+  added: FeedMemberResponse[];
 
-  removed_ids: Array<string>;
+  removed_ids: string[];
 
-  updated: Array<FeedMemberResponse>;
+  updated: FeedMemberResponse[];
 }
 
 export interface UpdateFeedRequest {
@@ -12516,9 +12516,9 @@ export interface UpdateFeedResponse {
 }
 
 export interface UpdateFeedViewRequest {
-  activity_processors?: Array<ActivityProcessorConfig>;
+  activity_processors?: ActivityProcessorConfig[];
 
-  activity_selectors?: Array<ActivitySelectorConfig>;
+  activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
 
@@ -12532,7 +12532,7 @@ export interface UpdateFeedViewResponse {
 }
 
 export interface UpdateFeedVisibilityRequest {
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, string[]>;
 }
 
 export interface UpdateFeedVisibilityResponse {
@@ -12574,7 +12574,7 @@ export interface UpdateLiveLocationRequest {
 }
 
 export interface UpdateMemberPartialRequest {
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 }
@@ -12592,7 +12592,7 @@ export interface UpdateMembershipLevelRequest {
 
   priority?: number;
 
-  tags?: Array<string>;
+  tags?: string[];
 
   custom?: Record<string, any>;
 }
@@ -12608,7 +12608,7 @@ export interface UpdateMessagePartialRequest {
 
   user_id?: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 
@@ -12654,7 +12654,7 @@ export interface UpdatePollOptionRequest {
 export interface UpdatePollPartialRequest {
   user_id?: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 
@@ -12682,7 +12682,7 @@ export interface UpdatePollRequest {
 
   voting_visibility?: 'anonymous' | 'public';
 
-  options?: Array<PollOptionRequest>;
+  options?: PollOptionRequest[];
 
   custom?: Record<string, any>;
 
@@ -12706,7 +12706,7 @@ export interface UpdateReminderResponse {
 export interface UpdateThreadPartialRequest {
   user_id?: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 
@@ -12722,7 +12722,7 @@ export interface UpdateThreadPartialResponse {
 export interface UpdateUserPartialRequest {
   id: string;
 
-  unset?: Array<string>;
+  unset?: string[];
 
   set?: Record<string, any>;
 }
@@ -12730,9 +12730,9 @@ export interface UpdateUserPartialRequest {
 export interface UpdateUserPermissionsRequest {
   user_id: string;
 
-  grant_permissions?: Array<string>;
+  grant_permissions?: string[];
 
-  revoke_permissions?: Array<string>;
+  revoke_permissions?: string[];
 }
 
 export interface UpdateUserPermissionsResponse {
@@ -12740,7 +12740,7 @@ export interface UpdateUserPermissionsResponse {
 }
 
 export interface UpdateUsersPartialRequest {
-  users: Array<UpdateUserPartialRequest>;
+  users: UpdateUserPartialRequest[];
 }
 
 export interface UpdateUsersRequest {
@@ -12760,7 +12760,7 @@ export interface UpdatedCallPermissionsEvent {
 
   created_at: Date;
 
-  own_capabilities: Array<OwnCapability>;
+  own_capabilities: OwnCapability[];
 
   user: UserResponse;
 
@@ -12786,7 +12786,7 @@ export interface UploadChannelFileResponse {
 export interface UploadChannelRequest {
   file?: string;
 
-  upload_sizes?: Array<ImageSize>;
+  upload_sizes?: ImageSize[];
 
   user?: OnlyUserID;
 }
@@ -12800,17 +12800,17 @@ export interface UploadChannelResponse {
 
   thumb_url?: string;
 
-  upload_sizes?: Array<ImageSize>;
+  upload_sizes?: ImageSize[];
 }
 
 export interface UpsertActivitiesRequest {
-  activities: Array<ActivityRequest>;
+  activities: ActivityRequest[];
 }
 
 export interface UpsertActivitiesResponse {
   duration: string;
 
-  activities: Array<ActivityResponse>;
+  activities: ActivityResponse[];
 }
 
 export interface UpsertConfigRequest {
@@ -12876,11 +12876,11 @@ export interface UpsertModerationRuleRequest {
 
   team?: string;
 
-  conditions?: Array<RuleBuilderCondition>;
+  conditions?: RuleBuilderCondition[];
 
-  config_keys?: Array<string>;
+  config_keys?: string[];
 
-  groups?: Array<RuleBuilderConditionGroup>;
+  groups?: RuleBuilderConditionGroup[];
 }
 
 export interface UpsertModerationRuleResponse {
@@ -12908,7 +12908,7 @@ export interface UpsertModerationTemplateResponse {
 }
 
 export interface UpsertPushPreferencesRequest {
-  preferences: Array<PushPreferenceInput>;
+  preferences: PushPreferenceInput[];
 }
 
 export interface UpsertPushPreferencesResponse {
@@ -12995,7 +12995,7 @@ export interface User {
 
   updated_at?: Date;
 
-  teams?: Array<string>;
+  teams?: string[];
 
   privacy_settings?: PrivacySettings;
 }
@@ -13071,7 +13071,7 @@ export interface UserFeedbackReport {
 }
 
 export interface UserFeedbackReportResponse {
-  daily: Array<DailyAggregateUserFeedbackReportResponse>;
+  daily: DailyAggregateUserFeedbackReportResponse[];
 }
 
 export interface UserFeedbackResponse {
@@ -13101,7 +13101,7 @@ export interface UserFlaggedEvent {
 
   target_user?: string;
 
-  target_users?: Array<string>;
+  target_users?: string[];
 
   user?: User;
 }
@@ -13165,7 +13165,7 @@ export interface UserMutedEvent {
 
   target_user?: string;
 
-  target_users?: Array<string>;
+  target_users?: string[];
 
   user?: User;
 }
@@ -13197,7 +13197,7 @@ export interface UserRequest {
 
   role?: string;
 
-  teams?: Array<string>;
+  teams?: string[];
 
   custom?: Record<string, any>;
 
@@ -13225,9 +13225,9 @@ export interface UserResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -13247,7 +13247,7 @@ export interface UserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  devices?: Array<DeviceResponse>;
+  devices?: DeviceResponse[];
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -13271,9 +13271,9 @@ export interface UserResponseCommonFields {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -13309,9 +13309,9 @@ export interface UserResponsePrivacyFields {
 
   updated_at: Date;
 
-  blocked_user_ids: Array<string>;
+  blocked_user_ids: string[];
 
-  teams: Array<string>;
+  teams: string[];
 
   custom: Record<string, any>;
 
@@ -13365,7 +13365,7 @@ export interface UserUnmutedEvent {
 
   target_user?: string;
 
-  target_users?: Array<string>;
+  target_users?: string[];
 
   user?: User;
 }
@@ -13405,7 +13405,7 @@ export interface VelocityFilterConfig {
 
   first_message_only?: boolean;
 
-  rules?: Array<VelocityFilterConfigRule>;
+  rules?: VelocityFilterConfigRule[];
 }
 
 export interface VelocityFilterConfigRule {
@@ -13441,13 +13441,13 @@ export interface VelocityFilterConfigRule {
 export interface VideoCallRuleConfig {
   flag_all_labels?: boolean;
 
-  flagged_labels?: Array<string>;
+  flagged_labels?: string[];
 
-  rules?: Array<HarmConfig>;
+  rules?: HarmConfig[];
 }
 
 export interface VideoContentParameters {
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 }
 
 export interface VideoEndCallRequest {}
@@ -13455,7 +13455,7 @@ export interface VideoEndCallRequest {}
 export interface VideoKickUserRequest {}
 
 export interface VideoReactionOverTimeResponse {
-  by_minute?: Array<CountByMinuteResponse>;
+  by_minute?: CountByMinuteResponse[];
 }
 
 export interface VideoReactionsResponse {
@@ -13469,7 +13469,7 @@ export interface VideoRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: Array<string>;
+  harm_labels?: string[];
 }
 
 export interface VideoSettings {
@@ -13749,11 +13749,11 @@ export interface WrappedUnreadCountsResponse {
 
   total_unread_threads_count: number;
 
-  channel_type: Array<UnreadCountsChannelType>;
+  channel_type: UnreadCountsChannelType[];
 
-  channels: Array<UnreadCountsChannel>;
+  channels: UnreadCountsChannel[];
 
-  threads: Array<UnreadCountsThread>;
+  threads: UnreadCountsThread[];
 
   total_unread_count_by_team?: Record<string, number>;
 }
