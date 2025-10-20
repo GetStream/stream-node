@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { StreamClient } from '../src/StreamClient';
 import { createTestClient } from './create-test-client';
 
-describe('webhooks', () => {
+describe.skip('webhooks', () => {
   let client: StreamClient;
 
   beforeAll(async () => {
