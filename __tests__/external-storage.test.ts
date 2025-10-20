@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
@@ -6,6 +6,9 @@ import { StreamClient } from '../src/StreamClient';
 describe('external storage CRUD API', () => {
   let client: StreamClient;
   const storageName = `streamnodetest${uuidv4()}`;
+  const s3name = `streamnodetest-${uuidv4()}`;
+  const gcsName = `streamnodetest-${uuidv4()}`;
+  const azureName = `streamnodetest-${uuidv4()}`;
 
   beforeAll(() => {
     client = createTestClient();
@@ -46,7 +49,6 @@ describe('external storage CRUD API', () => {
   });
 
   it('docs snippets', async () => {
-    const s3name = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
       name: s3name,
       storage_type: 's3',
@@ -61,7 +63,6 @@ describe('external storage CRUD API', () => {
 
     await client.deleteExternalStorage({ name: s3name });
 
-    const gcsName = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
       bucket: 'my-bucket',
       name: gcsName,
@@ -72,7 +73,6 @@ describe('external storage CRUD API', () => {
 
     await client.deleteExternalStorage({ name: gcsName });
 
-    const azureName = `streamnodetest-${uuidv4()}`;
     await client.createExternalStorage({
       name: azureName,
       storage_type: 'abs',
@@ -87,5 +87,20 @@ describe('external storage CRUD API', () => {
     });
 
     await client.deleteExternalStorage({ name: azureName });
+  });
+
+  afterAll(async () => {
+    try {
+      await client.deleteExternalStorage({ name: s3name });
+    } catch (error) {}
+    try {
+      await client.deleteExternalStorage({ name: gcsName });
+    } catch (error) {}
+    try {
+      await client.deleteExternalStorage({ name: azureName });
+    } catch (error) {}
+    try {
+      await client.deleteExternalStorage({ name: storageName });
+    } catch (error) {}
   });
 });
