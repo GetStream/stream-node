@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.13](https://github.com/GetStream/stream-node/compare/v0.7.12...v0.7.13) (2025-10-21)
+
+
+### Features
+
+* regenerate API clients from OpenAPI specs and fix duplicate cutoff_time ([#191](https://github.com/GetStream/stream-node/issues/191)) ([8976b59](https://github.com/GetStream/stream-node/commit/8976b59bdf8fd7a6c997687a8f97571f884677cc))
+
 ## [0.7.12](https://github.com/GetStream/stream-node/compare/v0.7.11...v0.7.12) (2025-10-16)
 
 
