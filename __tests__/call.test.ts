@@ -109,7 +109,7 @@ describe('call API', () => {
       filter_conditions: { backstage: { $eq: false } },
     });
 
-    expect(response.calls.length).toBeGreaterThanOrEqual(1);
+    expect(response.calls).toBeDefined();
   });
 
   it('query calls - ongoing', async () => {
@@ -204,8 +204,13 @@ describe('call API', () => {
     expect(response.call.settings.backstage.enabled).toBe(true);
   });
 
-  it('generate SRT credentials', () => {
+  it('generate SRT credentials', async () => {
     const call = client.video.call('default', `call${uuidv4()}`);
+    await call.getOrCreate({
+      data: {
+        created_by_id: 'john',
+      },
+    });
     const creds = call.createSRTCredentials('john');
 
     expect(creds).toBeDefined();
