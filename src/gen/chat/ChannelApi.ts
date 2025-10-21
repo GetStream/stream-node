@@ -4,14 +4,10 @@ import {
   ChannelStateResponse,
   DeleteChannelResponse,
   EventResponse,
-  FileUploadRequest,
-  FileUploadResponse,
   GetDraftResponse,
   GetManyMessagesResponse,
   HideChannelRequest,
   HideChannelResponse,
-  ImageUploadRequest,
-  ImageUploadResponse,
   MarkReadRequest,
   MarkReadResponse,
   MarkUnreadRequest,
@@ -29,6 +25,10 @@ import {
   UpdateChannelResponse,
   UpdateMemberPartialRequest,
   UpdateMemberPartialResponse,
+  UploadChannelFileRequest,
+  UploadChannelFileResponse,
+  UploadChannelRequest,
+  UploadChannelResponse,
 } from '../models';
 
 export class ChannelApi {
@@ -126,30 +126,32 @@ export class ChannelApi {
     return this.chatApi.sendEvent({ id: this.id, type: this.type, ...request });
   }
 
-  deleteFile(request?: { url?: string }): Promise<StreamResponse<Response>> {
+  deleteChannelFile(request?: {
+    url?: string;
+  }): Promise<StreamResponse<Response>> {
     if (!this.id) {
       throw new Error(
         `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
       );
     }
 
-    return this.chatApi.deleteFile({
+    return this.chatApi.deleteChannelFile({
       id: this.id,
       type: this.type,
       ...request,
     });
   }
 
-  uploadFile(
-    request?: FileUploadRequest,
-  ): Promise<StreamResponse<FileUploadResponse>> {
+  uploadChannelFile(
+    request?: UploadChannelFileRequest,
+  ): Promise<StreamResponse<UploadChannelFileResponse>> {
     if (!this.id) {
       throw new Error(
         `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
       );
     }
 
-    return this.chatApi.uploadFile({
+    return this.chatApi.uploadChannelFile({
       id: this.id,
       type: this.type,
       ...request,
@@ -172,30 +174,32 @@ export class ChannelApi {
     });
   }
 
-  deleteImage(request?: { url?: string }): Promise<StreamResponse<Response>> {
+  deleteChannelImage(request?: {
+    url?: string;
+  }): Promise<StreamResponse<Response>> {
     if (!this.id) {
       throw new Error(
         `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
       );
     }
 
-    return this.chatApi.deleteImage({
+    return this.chatApi.deleteChannelImage({
       id: this.id,
       type: this.type,
       ...request,
     });
   }
 
-  uploadImage(
-    request?: ImageUploadRequest,
-  ): Promise<StreamResponse<ImageUploadResponse>> {
+  uploadChannelImage(
+    request?: UploadChannelRequest,
+  ): Promise<StreamResponse<UploadChannelResponse>> {
     if (!this.id) {
       throw new Error(
         `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
       );
     }
 
-    return this.chatApi.uploadImage({
+    return this.chatApi.uploadChannelImage({
       id: this.id,
       type: this.type,
       ...request,

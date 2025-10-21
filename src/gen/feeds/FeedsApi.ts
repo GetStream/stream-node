@@ -50,6 +50,7 @@ import {
   GetFeedGroupResponse,
   GetFeedViewResponse,
   GetFeedVisibilityResponse,
+  GetFeedsRateLimitsResponse,
   GetFollowSuggestionsResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
@@ -61,6 +62,8 @@ import {
   ListFeedViewsResponse,
   ListFeedVisibilitiesResponse,
   MarkActivityRequest,
+  OwnCapabilitiesBatchRequest,
+  OwnCapabilitiesBatchResponse,
   PinActivityRequest,
   PinActivityResponse,
   PollVoteResponse,
@@ -1019,6 +1022,7 @@ export class FeedsApi {
     const queryParams = {
       include_soft_deleted: request?.include_soft_deleted,
     };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListFeedGroupsResponse>
     >('GET', '/api/v2/feeds/feed_groups', undefined, queryParams);
@@ -1720,6 +1724,31 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async ownCapabilitiesBatch(
+    request: OwnCapabilitiesBatchRequest,
+  ): Promise<StreamResponse<OwnCapabilitiesBatchResponse>> {
+    const body = {
+      feeds: request?.feeds,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<OwnCapabilitiesBatchResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feeds/own_capabilities/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.OwnCapabilitiesBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   protected async _queryFeeds(
     request?: QueryFeedsRequest,
   ): Promise<StreamResponse<QueryFeedsResponse>> {
@@ -1744,6 +1773,30 @@ export class FeedsApi {
     );
 
     decoders.QueryFeedsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getFeedsRateLimits(request?: {
+    endpoints?: string;
+    android?: boolean;
+    ios?: boolean;
+    web?: boolean;
+    server_side?: boolean;
+  }): Promise<StreamResponse<GetFeedsRateLimitsResponse>> {
+    const queryParams = {
+      endpoints: request?.endpoints,
+      android: request?.android,
+      ios: request?.ios,
+      web: request?.web,
+      server_side: request?.server_side,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedsRateLimitsResponse>
+    >('GET', '/api/v2/feeds/feeds/rate_limits', undefined, queryParams);
+
+    decoders.GetFeedsRateLimitsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

@@ -14,6 +14,7 @@ import {
   GetActiveCallsStatusResponse,
   GetCallReportResponse,
   GetCallResponse,
+  GetCallSessionParticipantStatsDetailsResponse,
   GetCallTypeResponse,
   GetEdgesResponse,
   GetOrCreateCallRequest,
@@ -35,6 +36,8 @@ import {
   QueryCallMembersResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
+  QueryCallSessionParticipantStatsResponse,
+  QueryCallSessionParticipantStatsTimelineResponse,
   QueryCallStatsRequest,
   QueryCallStatsResponse,
   QueryCallsRequest,
@@ -46,6 +49,7 @@ import {
   SendCallEventResponse,
   SendClosedCaptionRequest,
   SendClosedCaptionResponse,
+  SortParamRequest,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartFrameRecordingRequest,
@@ -1204,6 +1208,113 @@ export class VideoApi {
     );
 
     decoders.DeleteTranscriptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getCallSessionParticipantStatsDetails(request: {
+    call_type: string;
+    call_id: string;
+    session: string;
+    user: string;
+    user_session: string;
+    since?: string;
+    until?: string;
+    max_points?: number;
+  }): Promise<StreamResponse<GetCallSessionParticipantStatsDetailsResponse>> {
+    const queryParams = {
+      since: request?.since,
+      until: request?.until,
+      max_points: request?.max_points,
+    };
+    const pathParams = {
+      call_type: request?.call_type,
+      call_id: request?.call_id,
+      session: request?.session,
+      user: request?.user,
+      user_session: request?.user_session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCallSessionParticipantStatsDetailsResponse>
+    >(
+      'GET',
+      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participant/{user}/{user_session}/details',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.GetCallSessionParticipantStatsDetailsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryCallSessionParticipantStats(request: {
+    call_type: string;
+    call_id: string;
+    session: string;
+    sort?: SortParamRequest[];
+    filter_conditions?: Record<string, any>;
+  }): Promise<StreamResponse<QueryCallSessionParticipantStatsResponse>> {
+    const queryParams = {
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+    const pathParams = {
+      call_type: request?.call_type,
+      call_id: request?.call_id,
+      session: request?.session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallSessionParticipantStatsResponse>
+    >(
+      'GET',
+      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.QueryCallSessionParticipantStatsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getCallSessionParticipantStatsTimeline(request: {
+    call_type: string;
+    call_id: string;
+    session: string;
+    user: string;
+    user_session: string;
+    start_time?: string;
+    end_time?: string;
+    severity?: string[];
+  }): Promise<
+    StreamResponse<QueryCallSessionParticipantStatsTimelineResponse>
+  > {
+    const queryParams = {
+      start_time: request?.start_time,
+      end_time: request?.end_time,
+      severity: request?.severity,
+    };
+    const pathParams = {
+      call_type: request?.call_type,
+      call_id: request?.call_id,
+      session: request?.session,
+      user: request?.user,
+      user_session: request?.user_session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallSessionParticipantStatsTimelineResponse>
+    >(
+      'GET',
+      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants/{user}/{user_session}/timeline',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.QueryCallSessionParticipantStatsTimelineResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

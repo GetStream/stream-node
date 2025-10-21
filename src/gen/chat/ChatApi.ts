@@ -21,8 +21,6 @@ import {
   EventResponse,
   ExportChannelsRequest,
   ExportChannelsResponse,
-  FileUploadRequest,
-  FileUploadResponse,
   GetCampaignResponse,
   GetChannelTypeResponse,
   GetCommandResponse,
@@ -35,8 +33,6 @@ import {
   GetThreadResponse,
   HideChannelRequest,
   HideChannelResponse,
-  ImageUploadRequest,
-  ImageUploadResponse,
   ListChannelTypesResponse,
   ListCommandsResponse,
   MarkChannelsReadRequest,
@@ -113,6 +109,10 @@ import {
   UpdateReminderResponse,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
+  UploadChannelFileRequest,
+  UploadChannelFileResponse,
+  UploadChannelRequest,
+  UploadChannelResponse,
   WrappedUnreadCountsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
@@ -511,7 +511,7 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFile(request: {
+  async deleteChannelFile(request: {
     type: string;
     id: string;
     url?: string;
@@ -536,9 +536,9 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadFile(
-    request: FileUploadRequest & { type: string; id: string },
-  ): Promise<StreamResponse<FileUploadResponse>> {
+  async uploadChannelFile(
+    request: UploadChannelFileRequest & { type: string; id: string },
+  ): Promise<StreamResponse<UploadChannelFileResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -549,7 +549,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<FileUploadResponse>
+      StreamResponse<UploadChannelFileResponse>
     >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/file',
@@ -559,7 +559,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.FileUploadResponse?.(response.body);
+    decoders.UploadChannelFileResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -593,7 +593,7 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteImage(request: {
+  async deleteChannelImage(request: {
     type: string;
     id: string;
     url?: string;
@@ -618,9 +618,9 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async uploadImage(
-    request: ImageUploadRequest & { type: string; id: string },
-  ): Promise<StreamResponse<ImageUploadResponse>> {
+  async uploadChannelImage(
+    request: UploadChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<UploadChannelResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
@@ -632,7 +632,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<ImageUploadResponse>
+      StreamResponse<UploadChannelResponse>
     >(
       'POST',
       '/api/v2/chat/channels/{type}/{id}/image',
@@ -642,7 +642,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.ImageUploadResponse?.(response.body);
+    decoders.UploadChannelResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -915,7 +915,9 @@ export class ChatApi {
       blocklist: request?.blocklist,
       blocklist_behavior: request?.blocklist_behavior,
       connect_events: request?.connect_events,
+      count_messages: request?.count_messages,
       custom_events: request?.custom_events,
+      delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
       message_retention: request?.message_retention,
       mutes: request?.mutes,
@@ -1006,6 +1008,7 @@ export class ChatApi {
       connect_events: request?.connect_events,
       count_messages: request?.count_messages,
       custom_events: request?.custom_events,
+      delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
       mutes: request?.mutes,
       partition_size: request?.partition_size,
@@ -1734,32 +1737,20 @@ export class ChatApi {
   async getReplies(request: {
     parent_id: string;
     limit?: number;
-    offset?: number;
     id_gte?: string;
     id_gt?: string;
     id_lte?: string;
     id_lt?: string;
-    created_at_after_or_equal?: Date;
-    created_at_after?: Date;
-    created_at_before_or_equal?: Date;
-    created_at_before?: Date;
     id_around?: string;
-    created_at_around?: Date;
     sort?: SortParamRequest[];
   }): Promise<StreamResponse<GetRepliesResponse>> {
     const queryParams = {
       limit: request?.limit,
-      offset: request?.offset,
       id_gte: request?.id_gte,
       id_gt: request?.id_gt,
       id_lte: request?.id_lte,
       id_lt: request?.id_lt,
-      created_at_after_or_equal: request?.created_at_after_or_equal,
-      created_at_after: request?.created_at_after,
-      created_at_before_or_equal: request?.created_at_before_or_equal,
-      created_at_before: request?.created_at_before,
       id_around: request?.id_around,
-      created_at_around: request?.created_at_around,
       sort: request?.sort,
     };
     const pathParams = {

@@ -197,6 +197,8 @@ export class CommonApi {
     const body = {
       name: request?.name,
       words: request?.words,
+      is_leet_check_enabled: request?.is_leet_check_enabled,
+      is_plural_check_enabled: request?.is_plural_check_enabled,
       team: request?.team,
       type: request?.type,
     };
@@ -267,6 +269,8 @@ export class CommonApi {
       name: request?.name,
     };
     const body = {
+      is_leet_check_enabled: request?.is_leet_check_enabled,
+      is_plural_check_enabled: request?.is_plural_check_enabled,
       team: request?.team,
       words: request?.words,
     };
