@@ -12444,7 +12444,11 @@ export interface UpdateCommentRequest {
 
   skip_push?: boolean;
 
+  user_id?: string;
+
   custom?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface UpdateCommentResponse {

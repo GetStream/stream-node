@@ -878,7 +878,9 @@ export class FeedsApi {
     const body = {
       comment: request?.comment,
       skip_push: request?.skip_push,
+      user_id: request?.user_id,
       custom: request?.custom,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
