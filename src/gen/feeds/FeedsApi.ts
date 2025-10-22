@@ -1494,6 +1494,7 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
+      default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,

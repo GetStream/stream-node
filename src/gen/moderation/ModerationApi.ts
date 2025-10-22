@@ -590,6 +590,7 @@ export class ModerationApi {
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,
       mark_reviewed: request?.mark_reviewed,
+      shadow_block: request?.shadow_block,
       unban: request?.unban,
       user: request?.user,
     };
