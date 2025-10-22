@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.15](https://github.com/GetStream/stream-node/compare/v0.7.14...v0.7.15) (2025-10-22)
+
+
+### Bug Fixes
+
+* [FEEDS-819]make user id mandatory in update comment ([#197](https://github.com/GetStream/stream-node/issues/197)) ([4d6479e](https://github.com/GetStream/stream-node/commit/4d6479e5f3832144948d15c9f76db58679d30194))
+
 ## [0.7.14](https://github.com/GetStream/stream-node/compare/v0.7.13...v0.7.14) (2025-10-22)
 
 
