@@ -577,25 +577,31 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
-  cutoff_time?: Date;
+  type:
+    | 'popular'
+    | 'proximity'
+    | 'following'
+    | 'current_feed'
+    | 'query'
+    | 'interest';
+
+  cutoff_time?: string;
 
   min_popularity?: number;
 
-  type?: string;
-
-  sort?: SortParam[];
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
 
 export interface ActivitySelectorConfigResponse {
+  type: string;
+
   cutoff_time?: Date;
 
   min_popularity?: number;
 
-  type?: string;
-
-  sort?: SortParam[];
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -4357,6 +4363,8 @@ export interface DeleteActivityReactionResponse {
 
 export interface DeleteActivityRequest {
   hard_delete?: boolean;
+
+  reason?: string;
 }
 
 export interface DeleteActivityResponse {
@@ -4465,6 +4473,8 @@ export interface DeleteFeedViewResponse {
 
 export interface DeleteMessageRequest {
   hard_delete?: boolean;
+
+  reason?: string;
 }
 
 export interface DeleteMessageResponse {
@@ -4487,6 +4497,8 @@ export interface DeleteModerationTemplateResponse {
 
 export interface DeleteReactionRequest {
   hard_delete?: boolean;
+
+  reason?: string;
 }
 
 export interface DeleteReactionResponse {
@@ -4521,6 +4533,8 @@ export interface DeleteUserRequest {
   hard_delete?: boolean;
 
   mark_messages_deleted?: boolean;
+
+  reason?: string;
 }
 
 export interface DeleteUsersRequest {
@@ -7732,6 +7746,8 @@ export interface ModerationDashboardPreferences {
 
   media_queue_blur_enabled?: boolean;
 
+  allowed_moderation_action_reasons?: string[];
+
   overview_dashboard?: OverviewDashboardConfig;
 }
 
@@ -10368,6 +10384,8 @@ export interface ReviewQueueItemResponse {
 
   id: string;
 
+  latest_moderator_action: string;
+
   recommended_action: string;
 
   reviewed_by: string;
@@ -10875,7 +10893,9 @@ export interface SessionSettingsResponse {
   inactivity_timeout_seconds: number;
 }
 
-export interface ShadowBlockActionRequest {}
+export interface ShadowBlockActionRequest {
+  reason?: string;
+}
 
 export interface SharedLocation {
   channel_cid: string;
@@ -11263,6 +11283,8 @@ export interface SubmitActionRequest {
   delete_user?: DeleteUserRequest;
 
   mark_reviewed?: MarkReviewedRequest;
+
+  shadow_block?: ShadowBlockActionRequest;
 
   unban?: UnbanActionRequest;
 
@@ -12458,6 +12480,13 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
+  default_visibility?:
+    | 'public'
+    | 'visible'
+    | 'followers'
+    | 'members'
+    | 'private';
+
   activity_processors?: ActivityProcessorConfig[];
 
   activity_selectors?: ActivitySelectorConfig[];
