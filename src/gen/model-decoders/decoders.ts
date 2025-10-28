@@ -87,6 +87,17 @@ decoders.ActivityDeletedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ActivityFeedbackEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ActivityMarkEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2009,6 +2020,23 @@ decoders.FeedResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.FeedSuggestionResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    created_by: { type: 'UserResponse', isSingle: true },
+
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    own_follows: { type: 'FollowResponse', isSingle: false },
+
+    own_membership: { type: 'FeedMemberResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.FeedUpdatedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2293,7 +2321,7 @@ decoders.GetFeedViewResponse = (input?: Record<string, any>) => {
 
 decoders.GetFollowSuggestionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    suggestions: { type: 'FeedResponse', isSingle: false },
+    suggestions: { type: 'FeedSuggestionResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -3741,6 +3769,10 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     entity_creator: { type: 'EntityCreatorResponse', isSingle: true },
 
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
+
+    feeds_v3_activity: { type: 'ActivityResponse', isSingle: true },
+
+    feeds_v3_comment: { type: 'CommentResponse', isSingle: true },
 
     message: { type: 'MessageResponse', isSingle: true },
 

@@ -278,14 +278,36 @@ export interface ActivityDeletedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface ActivityFeedbackEvent {
+  created_at: Date;
+
+  activity_feedback: ActivityFeedbackEventPayload;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
+export interface ActivityFeedbackEventPayload {
+  action: string;
+
+  activity_id: string;
+
+  created_at: Date;
+
+  updated_at: Date;
+
+  value: string;
+
+  user: UserResponse;
+}
+
 export interface ActivityFeedbackRequest {
   hide?: boolean;
-
-  mute_user?: boolean;
-
-  reason?: string;
-
-  report?: boolean;
 
   show_less?: boolean;
 
@@ -559,6 +581,8 @@ export interface ActivityResponse {
 
   is_watched?: boolean;
 
+  moderation_action?: string;
+
   text?: string;
 
   visibility_tag?: string;
@@ -587,6 +611,8 @@ export interface ActivitySelectorConfig {
 
   cutoff_time?: string;
 
+  cutoff_window?: string;
+
   min_popularity?: number;
 
   sort?: SortParamRequest[];
@@ -598,6 +624,8 @@ export interface ActivitySelectorConfigResponse {
   type: string;
 
   cutoff_time?: Date;
+
+  cutoff_window?: string;
 
   min_popularity?: number;
 
@@ -1296,6 +1324,10 @@ export interface BanResponse {
   channel?: ChannelResponse;
 
   user?: UserResponse;
+}
+
+export interface BlockActionRequest {
+  reason?: string;
 }
 
 export interface BlockListConfig {
@@ -2428,15 +2460,15 @@ export interface CallTranscriptionStoppedEvent {
 }
 
 export interface CallType {
-  app_pk: number;
+  app: number;
 
   created_at: Date;
 
-  external_storage: string;
+  id: number;
 
   name: string;
 
-  pk: number;
+  recording_external_storage: string;
 
   updated_at: Date;
 
@@ -4433,6 +4465,12 @@ export interface DeleteCommentReactionResponse {
   reaction: FeedsReactionResponse;
 }
 
+export interface DeleteCommentRequest {
+  hard_delete?: boolean;
+
+  reason?: string;
+}
+
 export interface DeleteCommentResponse {
   duration: string;
 
@@ -5014,7 +5052,7 @@ export interface FeedGroup {
 
   default_visibility: string;
 
-  id: string;
+  group_id: string;
 
   updated_at: Date;
 
@@ -5291,6 +5329,52 @@ export interface FeedResponse {
   own_capabilities?: FeedOwnCapability[];
 
   own_follows?: FollowResponse[];
+
+  custom?: Record<string, any>;
+
+  own_membership?: FeedMemberResponse;
+}
+
+export interface FeedSuggestionResponse {
+  created_at: Date;
+
+  description: string;
+
+  feed: string;
+
+  follower_count: number;
+
+  following_count: number;
+
+  group_id: string;
+
+  id: string;
+
+  member_count: number;
+
+  name: string;
+
+  pin_count: number;
+
+  updated_at: Date;
+
+  created_by: UserResponse;
+
+  deleted_at?: Date;
+
+  reason?: string;
+
+  recommendation_score?: number;
+
+  visibility?: string;
+
+  filter_tags?: string[];
+
+  own_capabilities?: FeedOwnCapability[];
+
+  own_follows?: FollowResponse[];
+
+  algorithm_scores?: Record<string, number>;
 
   custom?: Record<string, any>;
 
@@ -6030,7 +6114,9 @@ export interface GetFeedsRateLimitsResponse {
 export interface GetFollowSuggestionsResponse {
   duration: string;
 
-  suggestions: FeedResponse[];
+  suggestions: FeedSuggestionResponse[];
+
+  algorithm_used?: string;
 }
 
 export interface GetImportResponse {
@@ -8878,6 +8964,8 @@ export interface PushProvider {
 
   huawei_app_secret?: string;
 
+  huawei_host?: string;
+
   xiaomi_app_secret?: string;
 
   xiaomi_package_name?: string;
@@ -10426,6 +10514,10 @@ export interface ReviewQueueItemResponse {
 
   feeds_v2_reaction?: Reaction;
 
+  feeds_v3_activity?: ActivityResponse;
+
+  feeds_v3_comment?: CommentResponse;
+
   message?: MessageResponse;
 
   moderation_payload?: ModerationPayload;
@@ -11254,6 +11346,7 @@ export interface SubmitActionRequest {
     | 'mark_reviewed'
     | 'delete_message'
     | 'delete_activity'
+    | 'delete_comment'
     | 'delete_reaction'
     | 'ban'
     | 'custom'
@@ -11261,6 +11354,7 @@ export interface SubmitActionRequest {
     | 'restore'
     | 'delete_user'
     | 'unblock'
+    | 'block'
     | 'shadow_block'
     | 'unmask'
     | 'kick_user'
@@ -11272,9 +11366,13 @@ export interface SubmitActionRequest {
 
   ban?: BanActionRequest;
 
+  block?: BlockActionRequest;
+
   custom?: CustomActionRequest;
 
   delete_activity?: DeleteActivityRequest;
+
+  delete_comment?: DeleteCommentRequest;
 
   delete_message?: DeleteMessageRequest;
 
@@ -12978,7 +13076,7 @@ export interface UpsertPushTemplateRequest {
     | 'feeds.follow.created'
     | 'feeds.notification_feed.updated';
 
-  push_provider_type: 'firebase' | 'apn';
+  push_provider_type: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
 
   enable_push?: boolean;
 
@@ -13701,6 +13799,7 @@ export type WebhookEvent =
   | ({ type: 'export.users.success' } & AsyncExportUsersEvent)
   | ({ type: 'feeds.activity.added' } & ActivityAddedEvent)
   | ({ type: 'feeds.activity.deleted' } & ActivityDeletedEvent)
+  | ({ type: 'feeds.activity.feedback' } & ActivityFeedbackEvent)
   | ({ type: 'feeds.activity.marked' } & ActivityMarkEvent)
   | ({ type: 'feeds.activity.pinned' } & ActivityPinnedEvent)
   | ({ type: 'feeds.activity.reaction.added' } & ActivityReactionAddedEvent)
