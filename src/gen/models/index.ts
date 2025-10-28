@@ -242,104 +242,6 @@ export interface ActiveCallsSummary {
   participants: number;
 }
 
-export interface Activity {
-  app_pk: number;
-
-  bookmark_count: number;
-
-  comment_count: number;
-
-  created_at: Date;
-
-  current_feed_fid: string;
-
-  id: string;
-
-  interest_score: number;
-
-  is_watched: boolean;
-
-  moderation_action: string;
-
-  parent_id: string;
-
-  poll_id: string;
-
-  popularity: number;
-
-  reaction_count: number;
-
-  restrict_replies: number;
-
-  score: number;
-
-  share_count: number;
-
-  text: string;
-
-  text_tsv: string;
-
-  track_is_watched: boolean;
-
-  type: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  visibility: string;
-
-  visibility_tag: string;
-
-  attachments: Attachment[];
-
-  comments: Comment[];
-
-  fi_ds: string[];
-
-  filter_tags: string[];
-
-  interest_tags: string[];
-
-  latest_reactions: DenormalizedFeedsReaction[];
-
-  mentioned_user_i_ds: string[];
-
-  mentioned_users: User[];
-
-  own_bookmarks: Bookmark[];
-
-  own_reactions: DenormalizedFeedsReaction[];
-
-  aggregation_groups: Record<string, string>;
-
-  custom: Record<string, any>;
-
-  reaction_groups: Record<string, FeedsReactionGroup>;
-
-  search_data: Record<string, any>;
-
-  deleted_at?: Date;
-
-  edited_at?: Date;
-
-  expires_at?: Date;
-
-  current_feed?: Feed;
-
-  location?: ActivityLocation;
-
-  moderation?: ModerationV2Response;
-
-  notification_context?: NotificationContext;
-
-  parent?: Activity;
-
-  poll?: Poll;
-
-  user?: User;
-}
-
 export interface ActivityAddedEvent {
   created_at: Date;
 
@@ -376,14 +278,36 @@ export interface ActivityDeletedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface ActivityFeedbackEvent {
+  created_at: Date;
+
+  activity_feedback: ActivityFeedbackEventPayload;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
+export interface ActivityFeedbackEventPayload {
+  action: string;
+
+  activity_id: string;
+
+  created_at: Date;
+
+  updated_at: Date;
+
+  value: string;
+
+  user: UserResponse;
+}
+
 export interface ActivityFeedbackRequest {
   hide?: boolean;
-
-  mute_user?: boolean;
-
-  reason?: string;
-
-  report?: boolean;
 
   show_less?: boolean;
 
@@ -482,10 +406,6 @@ export interface ActivityPinnedEvent {
 
 export interface ActivityProcessorConfig {
   type: string;
-
-  openai_key?: string;
-
-  config?: Record<string, any>;
 }
 
 export interface ActivityReactionAddedEvent {
@@ -681,15 +601,21 @@ export interface ActivityResponse {
 }
 
 export interface ActivitySelectorConfig {
-  cutoff_time: Date;
+  type:
+    | 'popular'
+    | 'proximity'
+    | 'following'
+    | 'current_feed'
+    | 'query'
+    | 'interest';
+
+  cutoff_time?: string;
 
   cutoff_window?: string;
 
   min_popularity?: number;
 
-  type?: string;
-
-  sort?: SortParam[];
+  sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
 }
@@ -920,8 +846,6 @@ export interface AggregatedActivityResponse {
 
 export interface AggregationConfig {
   format?: string;
-
-  group_size?: number;
 }
 
 export interface AnyEvent {
@@ -1535,28 +1459,6 @@ export interface BodyguardSeverityRule {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
-export interface Bookmark {
-  activity_id: string;
-
-  app_pk: number;
-
-  created_at: Date;
-
-  folder_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  custom: Record<string, any>;
-
-  activity?: Activity;
-
-  folder?: BookmarkFolder;
-
-  user?: User;
-}
-
 export interface BookmarkAddedEvent {
   created_at: Date;
 
@@ -1583,22 +1485,6 @@ export interface BookmarkDeletedEvent {
   received_at?: Date;
 
   user?: UserResponseCommonFields;
-}
-
-export interface BookmarkFolder {
-  app_pk: number;
-
-  created_at: Date;
-
-  id: string;
-
-  name: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  custom: Record<string, any>;
 }
 
 export interface BookmarkFolderDeletedEvent {
@@ -3668,68 +3554,6 @@ export interface Command {
   updated_at?: Date;
 }
 
-export interface Comment {
-  app_pk: number;
-
-  confidence_score: number;
-
-  controversy_score: number;
-
-  created_at: Date;
-
-  depth: number;
-
-  downvote_count: number;
-
-  id: string;
-
-  object_id: string;
-
-  object_type: string;
-
-  path: string;
-
-  reply_count: number;
-
-  score: number;
-
-  status: string;
-
-  text: string;
-
-  updated_at: Date;
-
-  upvote_count: number;
-
-  user_id: string;
-
-  attachments: Attachment[];
-
-  latest_reactions: DenormalizedFeedsReaction[];
-
-  mentioned_user_i_ds: string[];
-
-  mentioned_users: User[];
-
-  own_reactions: DenormalizedFeedsReaction[];
-
-  custom: Record<string, any>;
-
-  reaction_groups: Record<string, FeedsReactionGroup>;
-
-  deleted_at?: Date;
-
-  parent_id?: string;
-
-  activity?: Activity;
-
-  moderation?: ModerationV2Response;
-
-  parent?: Comment;
-
-  user?: User;
-}
-
 export interface CommentAddedEvent {
   created_at: Date;
 
@@ -4783,18 +4607,6 @@ export interface DeliveryReceiptsResponse {
   enabled?: boolean;
 }
 
-export interface DenormalizedFeedsReaction {
-  created_at: Date;
-
-  reaction_type: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  custom?: Record<string, any>;
-}
-
 export interface Device {
   created_at: Date;
 
@@ -5193,56 +5005,6 @@ export interface ExternalStorageResponse {
 
 export interface FCM {
   data?: Record<string, any>;
-}
-
-export interface Feed {
-  app_pk: number;
-
-  created_at: Date;
-
-  created_by_id: string;
-
-  description: string;
-
-  description_tsv: string;
-
-  fid: string;
-
-  follower_count: number;
-
-  following_count: number;
-
-  group_id: string;
-
-  id: string;
-
-  member_count: number;
-
-  name: string;
-
-  name_tsv: string;
-
-  pin_count: number;
-
-  updated_at: Date;
-
-  visibility: string;
-
-  filter_tags: string[];
-
-  custom: Record<string, any>;
-
-  deleted_at?: Date;
-
-  last_activity_added_at?: Date;
-
-  last_read_at?: Date;
-
-  last_watched_at?: Date;
-
-  created_by?: User;
-
-  group?: FeedGroup;
 }
 
 export interface FeedCreatedEvent {
@@ -5677,14 +5439,6 @@ export interface FeedsPreferences {
   reaction?: 'all' | 'none';
 
   custom_activity_types?: Record<string, string>;
-}
-
-export interface FeedsReactionGroup {
-  count: number;
-
-  first_reaction_at: Date;
-
-  last_reaction_at: Date;
 }
 
 export interface FeedsReactionResponse {
@@ -10298,9 +10052,9 @@ export interface RTMPSettingsResponse {
 }
 
 export interface RankingConfig {
-  score?: string;
+  type: 'recency' | 'expression' | 'interest';
 
-  type?: string;
+  score?: string;
 
   defaults?: Record<string, any>;
 
@@ -10760,9 +10514,9 @@ export interface ReviewQueueItemResponse {
 
   feeds_v2_reaction?: Reaction;
 
-  feeds_v3_activity?: Activity;
+  feeds_v3_activity?: ActivityResponse;
 
-  feeds_v3_comment?: Comment;
+  feeds_v3_comment?: CommentResponse;
 
   message?: MessageResponse;
 
@@ -11332,9 +11086,9 @@ export interface SingleFollowResponse {
 }
 
 export interface SortParam {
-  direction: number;
+  direction?: number;
 
-  field: string;
+  field?: string;
 }
 
 export interface SortParamRequest {
@@ -14045,6 +13799,7 @@ export type WebhookEvent =
   | ({ type: 'export.users.success' } & AsyncExportUsersEvent)
   | ({ type: 'feeds.activity.added' } & ActivityAddedEvent)
   | ({ type: 'feeds.activity.deleted' } & ActivityDeletedEvent)
+  | ({ type: 'feeds.activity.feedback' } & ActivityFeedbackEvent)
   | ({ type: 'feeds.activity.marked' } & ActivityMarkEvent)
   | ({ type: 'feeds.activity.pinned' } & ActivityPinnedEvent)
   | ({ type: 'feeds.activity.reaction.added' } & ActivityReactionAddedEvent)

@@ -61,41 +61,6 @@ decoders.ActionLogResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.Activity = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    comments: { type: 'Comment', isSingle: false },
-
-    latest_reactions: { type: 'DenormalizedFeedsReaction', isSingle: false },
-
-    mentioned_users: { type: 'User', isSingle: false },
-
-    own_bookmarks: { type: 'Bookmark', isSingle: false },
-
-    own_reactions: { type: 'DenormalizedFeedsReaction', isSingle: false },
-
-    reaction_groups: { type: 'FeedsReactionGroup', isSingle: false },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    edited_at: { type: 'DatetimeType', isSingle: true },
-
-    expires_at: { type: 'DatetimeType', isSingle: true },
-
-    current_feed: { type: 'Feed', isSingle: true },
-
-    parent: { type: 'Activity', isSingle: true },
-
-    poll: { type: 'Poll', isSingle: true },
-
-    user: { type: 'User', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.ActivityAddedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -114,6 +79,17 @@ decoders.ActivityDeletedEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     activity: { type: 'ActivityResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ActivityFeedbackEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
 
@@ -255,13 +231,6 @@ decoders.ActivityResponse = (input?: Record<string, any>) => {
     parent: { type: 'ActivityResponse', isSingle: true },
 
     poll: { type: 'PollResponseData', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.ActivitySelectorConfig = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    cutoff_time: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -518,21 +487,6 @@ decoders.BlockedUserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.Bookmark = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    activity: { type: 'Activity', isSingle: true },
-
-    folder: { type: 'BookmarkFolder', isSingle: true },
-
-    user: { type: 'User', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.BookmarkAddedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -555,15 +509,6 @@ decoders.BookmarkDeletedEvent = (input?: Record<string, any>) => {
     received_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'UserResponseCommonFields', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.BookmarkFolder = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1553,31 +1498,6 @@ decoders.Command = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.Comment = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    latest_reactions: { type: 'DenormalizedFeedsReaction', isSingle: false },
-
-    mentioned_users: { type: 'User', isSingle: false },
-
-    own_reactions: { type: 'DenormalizedFeedsReaction', isSingle: false },
-
-    reaction_groups: { type: 'FeedsReactionGroup', isSingle: false },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    activity: { type: 'Activity', isSingle: true },
-
-    parent: { type: 'Comment', isSingle: true },
-
-    user: { type: 'User', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.CommentAddedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1871,15 +1791,6 @@ decoders.DeleteReactionResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.DenormalizedFeedsReaction = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.Device = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1976,27 +1887,6 @@ decoders.ExportUserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.Feed = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    last_activity_added_at: { type: 'DatetimeType', isSingle: true },
-
-    last_read_at: { type: 'DatetimeType', isSingle: true },
-
-    last_watched_at: { type: 'DatetimeType', isSingle: true },
-
-    created_by: { type: 'User', isSingle: true },
-
-    group: { type: 'FeedGroup', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.FeedCreatedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2023,28 +1913,11 @@ decoders.FeedDeletedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.FeedGroup = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
-    activity_selectors: { type: 'ActivitySelectorConfig', isSingle: false },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    last_feed_get_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.FeedGroupChangedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
-
-    feed_group: { type: 'FeedGroup', isSingle: true },
 
     user: { type: 'UserResponseCommonFields', isSingle: true },
   };
@@ -2185,15 +2058,6 @@ decoders.FeedViewResponse = (input?: Record<string, any>) => {
       type: 'ActivitySelectorConfigResponse',
       isSingle: false,
     },
-  };
-  return decode(typeMappings, input);
-};
-
-decoders.FeedsReactionGroup = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    first_reaction_at: { type: 'DatetimeType', isSingle: true },
-
-    last_reaction_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3906,9 +3770,9 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
 
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
 
-    feeds_v3_activity: { type: 'Activity', isSingle: true },
+    feeds_v3_activity: { type: 'ActivityResponse', isSingle: true },
 
-    feeds_v3_comment: { type: 'Comment', isSingle: true },
+    feeds_v3_comment: { type: 'CommentResponse', isSingle: true },
 
     message: { type: 'MessageResponse', isSingle: true },
 
