@@ -278,14 +278,36 @@ export interface ActivityDeletedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface ActivityFeedbackEvent {
+  created_at: Date;
+
+  activity_feedback: ActivityFeedbackEventPayload;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
+export interface ActivityFeedbackEventPayload {
+  action: string;
+
+  activity_id: string;
+
+  created_at: Date;
+
+  updated_at: Date;
+
+  value: string;
+
+  user: UserResponse;
+}
+
 export interface ActivityFeedbackRequest {
   hide?: boolean;
-
-  mute_user?: boolean;
-
-  reason?: string;
-
-  report?: boolean;
 
   show_less?: boolean;
 
@@ -477,6 +499,8 @@ export interface ActivityRequest {
 
   poll_id?: string;
 
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+
   text?: string;
 
   user_id?: string;
@@ -559,6 +583,8 @@ export interface ActivityResponse {
 
   is_watched?: boolean;
 
+  restrict_replies?: string;
+
   text?: string;
 
   visibility_tag?: string;
@@ -587,6 +613,8 @@ export interface ActivitySelectorConfig {
 
   cutoff_time?: string;
 
+  cutoff_window?: string;
+
   min_popularity?: number;
 
   sort?: SortParamRequest[];
@@ -598,6 +626,8 @@ export interface ActivitySelectorConfigResponse {
   type: string;
 
   cutoff_time?: Date;
+
+  cutoff_window?: string;
 
   min_popularity?: number;
 
@@ -654,6 +684,8 @@ export interface AddActivityRequest {
   parent_id?: string;
 
   poll_id?: string;
+
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
   text?: string;
 
@@ -2428,15 +2460,15 @@ export interface CallTranscriptionStoppedEvent {
 }
 
 export interface CallType {
-  app_pk: number;
+  app: number;
 
   created_at: Date;
 
-  external_storage: string;
+  id: number;
 
   name: string;
 
-  pk: number;
+  recording_external_storage: string;
 
   updated_at: Date;
 
@@ -5014,7 +5046,7 @@ export interface FeedGroup {
 
   default_visibility: string;
 
-  id: string;
+  group_id: string;
 
   updated_at: Date;
 
@@ -5291,6 +5323,52 @@ export interface FeedResponse {
   own_capabilities?: FeedOwnCapability[];
 
   own_follows?: FollowResponse[];
+
+  custom?: Record<string, any>;
+
+  own_membership?: FeedMemberResponse;
+}
+
+export interface FeedSuggestionResponse {
+  created_at: Date;
+
+  description: string;
+
+  feed: string;
+
+  follower_count: number;
+
+  following_count: number;
+
+  group_id: string;
+
+  id: string;
+
+  member_count: number;
+
+  name: string;
+
+  pin_count: number;
+
+  updated_at: Date;
+
+  created_by: UserResponse;
+
+  deleted_at?: Date;
+
+  reason?: string;
+
+  recommendation_score?: number;
+
+  visibility?: string;
+
+  filter_tags?: string[];
+
+  own_capabilities?: FeedOwnCapability[];
+
+  own_follows?: FollowResponse[];
+
+  algorithm_scores?: Record<string, number>;
 
   custom?: Record<string, any>;
 
@@ -6030,7 +6108,9 @@ export interface GetFeedsRateLimitsResponse {
 export interface GetFollowSuggestionsResponse {
   duration: string;
 
-  suggestions: FeedResponse[];
+  suggestions: FeedSuggestionResponse[];
+
+  algorithm_used?: string;
 }
 
 export interface GetImportResponse {
@@ -8877,6 +8957,8 @@ export interface PushProvider {
   huawei_app_id?: string;
 
   huawei_app_secret?: string;
+
+  huawei_host?: string;
 
   xiaomi_app_secret?: string;
 
@@ -11988,6 +12070,8 @@ export interface UpdateActivityRequest {
 
   poll_id?: string;
 
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+
   text?: string;
 
   user_id?: string;
@@ -12978,7 +13062,7 @@ export interface UpsertPushTemplateRequest {
     | 'feeds.follow.created'
     | 'feeds.notification_feed.updated';
 
-  push_provider_type: 'firebase' | 'apn';
+  push_provider_type: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
 
   enable_push?: boolean;
 
@@ -13701,6 +13785,7 @@ export type WebhookEvent =
   | ({ type: 'export.users.success' } & AsyncExportUsersEvent)
   | ({ type: 'feeds.activity.added' } & ActivityAddedEvent)
   | ({ type: 'feeds.activity.deleted' } & ActivityDeletedEvent)
+  | ({ type: 'feeds.activity.feedback' } & ActivityFeedbackEvent)
   | ({ type: 'feeds.activity.marked' } & ActivityMarkEvent)
   | ({ type: 'feeds.activity.pinned' } & ActivityPinnedEvent)
   | ({ type: 'feeds.activity.reaction.added' } & ActivityReactionAddedEvent)
