@@ -537,6 +537,8 @@ export interface ActivityResponse {
 
   reaction_count: number;
 
+  restrict_replies: string;
+
   score: number;
 
   share_count: number;
@@ -583,7 +585,7 @@ export interface ActivityResponse {
 
   is_watched?: boolean;
 
-  restrict_replies?: string;
+  moderation_action?: string;
 
   text?: string;
 
@@ -1328,6 +1330,10 @@ export interface BanResponse {
   channel?: ChannelResponse;
 
   user?: UserResponse;
+}
+
+export interface BlockActionRequest {
+  reason?: string;
 }
 
 export interface BlockListConfig {
@@ -2335,6 +2341,22 @@ export interface CallStateResponseFields {
   call: CallResponse;
 }
 
+export interface CallStatsLocation {
+  accuracy_radius_meters?: number;
+
+  city?: string;
+
+  continent?: string;
+
+  country?: string;
+
+  latitude?: number;
+
+  longitude?: number;
+
+  subdivision?: string;
+}
+
 export interface CallStatsParticipant {
   user_id: string;
 
@@ -2364,15 +2386,33 @@ export interface CallStatsParticipantSession {
 
   published_tracks: PublishedTrackFlags;
 
+  browser?: string;
+
+  browser_version?: string;
+
   cq_score?: number;
+
+  current_ip?: string;
+
+  current_sfu?: string;
+
+  distance_to_sfu_kilometers?: number;
 
   ended_at?: Date;
 
   publisher_type?: string;
 
+  sdk?: string;
+
+  sdk_version?: string;
+
   started_at?: Date;
 
   unified_session_id?: string;
+
+  webrtc_version?: string;
+
+  location?: CallStatsLocation;
 }
 
 export interface CallStatsReportReadyEvent {
@@ -2962,9 +3002,9 @@ export interface ChannelInput {
 
   truncated_by_id?: string;
 
-  invites?: ChannelMember[];
+  invites?: ChannelMemberRequest[];
 
-  members?: ChannelMember[];
+  members?: ChannelMemberRequest[];
 
   config_overrides?: ChannelConfig;
 
@@ -2974,6 +3014,82 @@ export interface ChannelInput {
 }
 
 export interface ChannelMember {
+  banned: boolean;
+
+  channel_role: string;
+
+  created_at: Date;
+
+  is_global_banned: boolean;
+
+  notifications_muted: boolean;
+
+  shadow_banned: boolean;
+
+  updated_at: Date;
+
+  custom: Record<string, any>;
+
+  archived_at?: Date;
+
+  ban_expires?: Date;
+
+  blocked?: boolean;
+
+  deleted_at?: Date;
+
+  hidden?: boolean;
+
+  invite_accepted_at?: Date;
+
+  invite_rejected_at?: Date;
+
+  invited?: boolean;
+
+  is_moderator?: boolean;
+
+  pinned_at?: Date;
+
+  status?: string;
+
+  user_id?: string;
+
+  deleted_messages?: string[];
+
+  channel?: DenormalizedChannelFields;
+
+  user?: User;
+}
+
+export interface ChannelMemberLookup {
+  archived: boolean;
+
+  banned: boolean;
+
+  blocked: boolean;
+
+  hidden: boolean;
+
+  pinned: boolean;
+
+  archived_at?: Date;
+
+  ban_expires?: Date;
+
+  pinned_at?: Date;
+}
+
+export interface ChannelMemberRequest {
+  user_id: string;
+
+  channel_role?: string;
+
+  custom?: Record<string, any>;
+
+  user?: UserResponse;
+}
+
+export interface ChannelMemberResponse {
   banned: boolean;
 
   channel_role: string;
@@ -3013,28 +3129,6 @@ export interface ChannelMember {
   deleted_messages?: string[];
 
   user?: UserResponse;
-}
-
-export interface ChannelMemberLookup {
-  archived: boolean;
-
-  banned: boolean;
-
-  blocked: boolean;
-
-  hidden: boolean;
-
-  pinned: boolean;
-
-  archived_at?: Date;
-
-  ban_expires?: Date;
-
-  pinned_at?: Date;
-}
-
-export interface ChannelMemberResponse {
-  channel_role: string;
 }
 
 export interface ChannelMessages {
@@ -3156,7 +3250,7 @@ export interface ChannelResponse {
 
   truncated_at?: Date;
 
-  members?: ChannelMember[];
+  members?: ChannelMemberResponse[];
 
   own_capabilities?: ChannelOwnCapability[];
 
@@ -3170,7 +3264,7 @@ export interface ChannelResponse {
 export interface ChannelStateResponse {
   duration: string;
 
-  members: ChannelMember[];
+  members: ChannelMemberResponse[];
 
   messages: MessageResponse[];
 
@@ -3196,13 +3290,13 @@ export interface ChannelStateResponse {
 
   draft?: DraftResponse;
 
-  membership?: ChannelMember;
+  membership?: ChannelMemberResponse;
 
   push_preferences?: ChannelPushPreferences;
 }
 
 export interface ChannelStateResponseFields {
-  members: ChannelMember[];
+  members: ChannelMemberResponse[];
 
   messages: MessageResponse[];
 
@@ -3228,7 +3322,7 @@ export interface ChannelStateResponseFields {
 
   draft?: DraftResponse;
 
-  membership?: ChannelMember;
+  membership?: ChannelMemberResponse;
 
   push_preferences?: ChannelPushPreferences;
 }
@@ -4465,6 +4559,12 @@ export interface DeleteCommentReactionResponse {
   reaction: FeedsReactionResponse;
 }
 
+export interface DeleteCommentRequest {
+  hard_delete?: boolean;
+
+  reason?: string;
+}
+
 export interface DeleteCommentResponse {
   duration: string;
 
@@ -4599,6 +4699,30 @@ export interface DeliveryReceipts {
 
 export interface DeliveryReceiptsResponse {
   enabled?: boolean;
+}
+
+export interface DenormalizedChannelFields {
+  created_at?: string;
+
+  created_by_id?: string;
+
+  disabled?: boolean;
+
+  frozen?: boolean;
+
+  id?: string;
+
+  last_message_at?: string;
+
+  member_count?: number;
+
+  team?: string;
+
+  type?: string;
+
+  updated_at?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface Device {
@@ -7086,7 +7210,7 @@ export interface MemberUpdatedEvent {
 export interface MembersResponse {
   duration: string;
 
-  members: ChannelMember[];
+  members: ChannelMemberResponse[];
 }
 
 export interface MembershipLevelResponse {
@@ -9554,7 +9678,7 @@ export interface QueryMembersPayload {
 
   user_id?: string;
 
-  members?: ChannelMember[];
+  members?: ChannelMemberRequest[];
 
   sort?: SortParamRequest[];
 
@@ -10508,6 +10632,10 @@ export interface ReviewQueueItemResponse {
 
   feeds_v2_reaction?: Reaction;
 
+  feeds_v3_activity?: ActivityResponse;
+
+  feeds_v3_comment?: CommentResponse;
+
   message?: MessageResponse;
 
   moderation_payload?: ModerationPayload;
@@ -11336,6 +11464,7 @@ export interface SubmitActionRequest {
     | 'mark_reviewed'
     | 'delete_message'
     | 'delete_activity'
+    | 'delete_comment'
     | 'delete_reaction'
     | 'ban'
     | 'custom'
@@ -11343,6 +11472,7 @@ export interface SubmitActionRequest {
     | 'restore'
     | 'delete_user'
     | 'unblock'
+    | 'block'
     | 'shadow_block'
     | 'unmask'
     | 'kick_user'
@@ -11354,9 +11484,13 @@ export interface SubmitActionRequest {
 
   ban?: BanActionRequest;
 
+  block?: BlockActionRequest;
+
   custom?: CustomActionRequest;
 
   delete_activity?: DeleteActivityRequest;
+
+  delete_comment?: DeleteCommentRequest;
 
   delete_message?: DeleteMessageRequest;
 
@@ -12336,15 +12470,15 @@ export interface UpdateChannelRequest {
 
   user_id?: string;
 
-  add_members?: ChannelMember[];
+  add_members?: ChannelMemberRequest[];
 
   add_moderators?: string[];
 
-  assign_roles?: ChannelMember[];
+  assign_roles?: ChannelMemberRequest[];
 
   demote_moderators?: string[];
 
-  invites?: ChannelMember[];
+  invites?: ChannelMemberRequest[];
 
   remove_members?: string[];
 
@@ -12358,7 +12492,7 @@ export interface UpdateChannelRequest {
 export interface UpdateChannelResponse {
   duration: string;
 
-  members: ChannelMember[];
+  members: ChannelMemberResponse[];
 
   channel?: ChannelResponse;
 
@@ -13674,7 +13808,7 @@ export interface WSEvent {
 
   me?: OwnUserResponse;
 
-  member?: ChannelMember;
+  member?: ChannelMemberResponse;
 
   message?: MessageResponse;
 
