@@ -141,6 +141,7 @@ export class FeedsApi {
       id: request?.id,
       parent_id: request?.parent_id,
       poll_id: request?.poll_id,
+      restrict_replies: request?.restrict_replies,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
@@ -585,6 +586,7 @@ export class FeedsApi {
     const body = {
       expires_at: request?.expires_at,
       poll_id: request?.poll_id,
+      restrict_replies: request?.restrict_replies,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,

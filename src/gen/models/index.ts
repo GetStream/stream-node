@@ -499,6 +499,8 @@ export interface ActivityRequest {
 
   poll_id?: string;
 
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+
   text?: string;
 
   user_id?: string;
@@ -538,6 +540,8 @@ export interface ActivityResponse {
   preview: boolean;
 
   reaction_count: number;
+
+  restrict_replies: string;
 
   score: number;
 
@@ -684,6 +688,8 @@ export interface AddActivityRequest {
   parent_id?: string;
 
   poll_id?: string;
+
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
   text?: string;
 
@@ -12199,6 +12205,8 @@ export interface UpdateActivityRequest {
   expires_at?: Date;
 
   poll_id?: string;
+
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
   text?: string;
 
