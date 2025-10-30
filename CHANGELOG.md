@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.17](https://github.com/GetStream/stream-node/compare/v0.7.16...v0.7.17) (2025-10-30)
+
+
+### Features
+
+* [FEEDS-702] Gen new openapi spec to include the `restrict_replies` field ([#200](https://github.com/GetStream/stream-node/issues/200)) ([950bfb0](https://github.com/GetStream/stream-node/commit/950bfb0f1d818e876ec07550bbd654f672a2b059))
+
 ## [0.7.16](https://github.com/GetStream/stream-node/compare/v0.7.15...v0.7.16) (2025-10-30)
 
 
