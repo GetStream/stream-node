@@ -87,6 +87,17 @@ decoders.ActivityDeletedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ActivityFeedbackEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ActivityMarkEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1261,7 +1272,7 @@ decoders.ChannelMember = (input?: Record<string, any>) => {
 
     pinned_at: { type: 'DatetimeType', isSingle: true },
 
-    user: { type: 'UserResponse', isSingle: true },
+    user: { type: 'User', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1273,6 +1284,29 @@ decoders.ChannelMemberLookup = (input?: Record<string, any>) => {
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
     pinned_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ChannelMemberResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    archived_at: { type: 'DatetimeType', isSingle: true },
+
+    ban_expires: { type: 'DatetimeType', isSingle: true },
+
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    invite_accepted_at: { type: 'DatetimeType', isSingle: true },
+
+    invite_rejected_at: { type: 'DatetimeType', isSingle: true },
+
+    pinned_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1322,7 +1356,7 @@ decoders.ChannelResponse = (input?: Record<string, any>) => {
 
     truncated_at: { type: 'DatetimeType', isSingle: true },
 
-    members: { type: 'ChannelMember', isSingle: false },
+    members: { type: 'ChannelMemberResponse', isSingle: false },
 
     config: { type: 'ChannelConfigWithInfo', isSingle: true },
 
@@ -1335,7 +1369,7 @@ decoders.ChannelResponse = (input?: Record<string, any>) => {
 
 decoders.ChannelStateResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    members: { type: 'ChannelMember', isSingle: false },
+    members: { type: 'ChannelMemberResponse', isSingle: false },
 
     messages: { type: 'MessageResponse', isSingle: false },
 
@@ -1360,7 +1394,7 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
     draft: { type: 'DraftResponse', isSingle: true },
 
-    membership: { type: 'ChannelMember', isSingle: true },
+    membership: { type: 'ChannelMemberResponse', isSingle: true },
 
     push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
   };
@@ -1369,7 +1403,7 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
 decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    members: { type: 'ChannelMember', isSingle: false },
+    members: { type: 'ChannelMemberResponse', isSingle: false },
 
     messages: { type: 'MessageResponse', isSingle: false },
 
@@ -1394,7 +1428,7 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
 
     draft: { type: 'DraftResponse', isSingle: true },
 
-    membership: { type: 'ChannelMember', isSingle: true },
+    membership: { type: 'ChannelMemberResponse', isSingle: true },
 
     push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
   };
@@ -2009,6 +2043,23 @@ decoders.FeedResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.FeedSuggestionResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    created_by: { type: 'UserResponse', isSingle: true },
+
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    own_follows: { type: 'FollowResponse', isSingle: false },
+
+    own_membership: { type: 'FeedMemberResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.FeedUpdatedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2293,7 +2344,7 @@ decoders.GetFeedViewResponse = (input?: Record<string, any>) => {
 
 decoders.GetFollowSuggestionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    suggestions: { type: 'FeedResponse', isSingle: false },
+    suggestions: { type: 'FeedSuggestionResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2599,7 +2650,7 @@ decoders.MemberUpdatedEvent = (input?: Record<string, any>) => {
 
 decoders.MembersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    members: { type: 'ChannelMember', isSingle: false },
+    members: { type: 'ChannelMemberResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2794,6 +2845,8 @@ decoders.MessageResponse = (input?: Record<string, any>) => {
 
     draft: { type: 'DraftResponse', isSingle: true },
 
+    member: { type: 'ChannelMemberResponse', isSingle: true },
+
     pinned_by: { type: 'UserResponse', isSingle: true },
 
     poll: { type: 'PollResponseData', isSingle: true },
@@ -2882,6 +2935,8 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
     thread_participants: { type: 'UserResponse', isSingle: false },
 
     draft: { type: 'DraftResponse', isSingle: true },
+
+    member: { type: 'ChannelMemberResponse', isSingle: true },
 
     pinned_by: { type: 'UserResponse', isSingle: true },
 
@@ -3742,6 +3797,10 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
 
     feeds_v2_reaction: { type: 'Reaction', isSingle: true },
 
+    feeds_v3_activity: { type: 'ActivityResponse', isSingle: true },
+
+    feeds_v3_comment: { type: 'CommentResponse', isSingle: true },
+
     message: { type: 'MessageResponse', isSingle: true },
 
     reaction: { type: 'Reaction', isSingle: true },
@@ -3807,6 +3866,8 @@ decoders.SearchResultMessage = (input?: Record<string, any>) => {
     channel: { type: 'ChannelResponse', isSingle: true },
 
     draft: { type: 'DraftResponse', isSingle: true },
+
+    member: { type: 'ChannelMemberResponse', isSingle: true },
 
     pinned_by: { type: 'UserResponse', isSingle: true },
 
@@ -4190,6 +4251,8 @@ decoders.UpdateCallTypeResponse = (input?: Record<string, any>) => {
 
 decoders.UpdateChannelPartialResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
+    members: { type: 'ChannelMemberResponse', isSingle: false },
+
     channel: { type: 'ChannelResponse', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -4197,7 +4260,7 @@ decoders.UpdateChannelPartialResponse = (input?: Record<string, any>) => {
 
 decoders.UpdateChannelResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    members: { type: 'ChannelMember', isSingle: false },
+    members: { type: 'ChannelMemberResponse', isSingle: false },
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
@@ -4262,6 +4325,13 @@ decoders.UpdateFeedViewResponse = (input?: Record<string, any>) => {
 decoders.UpdateFollowResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     follow: { type: 'FollowResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UpdateMemberPartialResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    channel_member: { type: 'ChannelMemberResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4595,7 +4665,7 @@ decoders.WSEvent = (input?: Record<string, any>) => {
 
     me: { type: 'OwnUserResponse', isSingle: true },
 
-    member: { type: 'ChannelMember', isSingle: true },
+    member: { type: 'ChannelMemberResponse', isSingle: true },
 
     message: { type: 'MessageResponse', isSingle: true },
 
