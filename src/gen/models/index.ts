@@ -293,7 +293,7 @@ export interface ActivityFeedbackEvent {
 }
 
 export interface ActivityFeedbackEventPayload {
-  action: string;
+  action: 'hide' | 'show_more' | 'show_less';
 
   activity_id: string;
 
@@ -531,9 +531,13 @@ export interface ActivityResponse {
 
   created_at: Date;
 
+  hidden: boolean;
+
   id: string;
 
   popularity: number;
+
+  preview: boolean;
 
   reaction_count: number;
 
@@ -580,8 +584,6 @@ export interface ActivityResponse {
   edited_at?: Date;
 
   expires_at?: Date;
-
-  hidden?: boolean;
 
   is_watched?: boolean;
 
