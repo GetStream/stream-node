@@ -1437,45 +1437,6 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  getUserLiveLocations = async (request?: {
-    user_id?: string;
-  }): Promise<StreamResponse<SharedLocationsResponse>> => {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<SharedLocationsResponse>
-    >('GET', '/api/v2/users/live_locations', undefined, queryParams);
-
-    decoders.SharedLocationsResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
-  updateLiveLocation = async (
-    request: UpdateLiveLocationRequest & { user_id?: string },
-  ): Promise<StreamResponse<SharedLocationResponse>> => {
-    const queryParams = {
-      user_id: request?.user_id,
-    };
-    const body = {
-      created_by_device_id: request?.created_by_device_id,
-      message_id: request?.message_id,
-      end_at: request?.end_at,
-      latitude: request?.latitude,
-      longitude: request?.longitude,
-    };
-
-    const response = await this.sendRequest<
-      StreamResponse<SharedLocationResponse>
-    >('PUT', '/api/v2/users/live_locations', undefined, queryParams, body);
-
-    decoders.SharedLocationResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  };
-
   async getUserLiveLocations(request?: {
     user_id?: string;
   }): Promise<StreamResponse<SharedLocationsResponse>> {
