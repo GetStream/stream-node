@@ -4,7 +4,7 @@ export function JWTUserToken(
   apiSecret: Secret,
   payload: {
     user_id: string;
-    exp: number;
+    exp?: number;
     iat: number;
     call_cids?: string[];
   } & { [key: string]: any },

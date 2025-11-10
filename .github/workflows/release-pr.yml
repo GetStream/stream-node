@@ -13,9 +13,4 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v3
-        with:
-          release-type: node
-          package-name: "@stream-io/node-sdk"
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
+      - uses: googleapis/release-please-action@v4

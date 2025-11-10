@@ -3,19 +3,24 @@ import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 
-export class BaseApi {
+export class ApiClient {
   private readonly dispatcher?: RequestInit['dispatcher'];
 
-  constructor(protected readonly apiConfig: ApiConfig) {
+  constructor(public readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
   }
 
-  protected sendRequest = async <T>(
+  /**
+   *
+   * @internal
+   */
+  sendRequest = async <T>(
     method: string,
     url: string,
     pathParams?: Record<string, string>,
     queryParams?: Record<string, any>,
     body?: any,
+    requestContentType?: string,
   ) => {
     queryParams = queryParams ?? {};
     queryParams.api_key = this.apiConfig.apiKey;
@@ -28,22 +33,37 @@ export class BaseApi {
 
     url += `?${encodedParams}`;
     const clientRequestId = uuidv4();
-    const headers = {
+    const headers: Record<string, string> = {
       Authorization: this.apiConfig.token,
       'stream-auth-type': 'jwt',
-      'Content-Type': 'application/json',
       'X-Stream-Client': 'stream-node-' + process.env.PKG_VERSION,
       'Accept-Encoding': 'gzip',
       'x-client-request-id': clientRequestId,
     };
 
+    // https://stackoverflow.com/questions/39280438/fetch-missing-boundary-in-multipart-form-data-post
+    if (requestContentType !== 'multipart/form-data') {
+      headers['Content-Type'] = requestContentType ?? 'application/json';
+    }
+
     const signal = AbortSignal.timeout(this.apiConfig.timeout);
+
+    const encodedBody =
+      requestContentType === 'multipart/form-data'
+        ? new FormData()
+        : JSON.stringify(body);
+    if (requestContentType === 'multipart/form-data') {
+      Object.keys(body).forEach((key) => {
+        (encodedBody as FormData).append(key, body[key]);
+      });
+    }
 
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
-        signal,
+        signal:
+          requestContentType === 'multipart/form-data' ? undefined : signal,
         method,
-        body: JSON.stringify(body),
+        body: encodedBody,
         headers,
         dispatcher: this.dispatcher,
       });

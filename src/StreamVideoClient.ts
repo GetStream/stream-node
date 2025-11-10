@@ -1,7 +1,7 @@
+import { ApiClient } from './ApiClient';
 import { VideoApi } from './gen/video/VideoApi';
 import { StreamCall } from './StreamCall';
 import type { StreamClient } from './StreamClient';
-import type { ApiConfig } from './types';
 // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
 /** @ts-ignore Optional dependency */
 import type {
@@ -15,14 +15,17 @@ export class StreamVideoClient extends VideoApi {
 
   constructor({
     streamClient,
-    ...apiConfig
-  }: ApiConfig & { streamClient: StreamClient }) {
-    super(apiConfig);
+    apiClient,
+  }: {
+    streamClient: StreamClient;
+    apiClient: ApiClient;
+  }) {
+    super(apiClient);
     this.streamClient = streamClient;
   }
 
   call = (type: string, id: string) => {
-    return new StreamCall(this, type, id);
+    return new StreamCall(this, type, id, this.streamClient);
   };
 
   connectOpenAi = async (options: {
@@ -54,9 +57,9 @@ export class StreamVideoClient extends VideoApi {
     });
 
     const realtimeClient = doCreateRealtimeClient({
-      baseUrl: this.apiConfig.baseUrl,
+      baseUrl: this.streamClient.apiClient.apiConfig.baseUrl,
       call: options.call,
-      streamApiKey: this.apiConfig.apiKey,
+      streamApiKey: this.streamClient.apiClient.apiConfig.apiKey,
       streamUserToken: token,
       openAiApiKey: options.openAiApiKey,
       model: options.model,

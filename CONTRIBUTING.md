@@ -32,14 +32,13 @@ If you don't want to squash your commits, make sure that your commits follow the
 
 ### Commands
 
-Checkout the [protocol](https://github.com/GetStream/protocol) or [chat](https://github.com/GetStream/chat) reporisitories and run one of the following commands:
+Checkout the [chat](https://github.com/GetStream/chat) reporisitory and run the following command:
 
 ```shell
-# if you have protocol repo:
 $ yarn generate:open-api
-# if you have chat repo
-$ yarn generate:open-api:dev
 ```
+
+The command expects that chat repo is located at `../chat`.
 
 ## Release (for Stream developers)
 

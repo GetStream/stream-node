@@ -4,8 +4,16 @@ import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
-import { QueryBannedUsersPayload, UserRequest } from './gen/models';
+import {
+  FileUploadRequest,
+  ImageUploadRequest,
+  QueryBannedUsersPayload,
+  UserRequest,
+} from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
+import { ApiClient } from './ApiClient';
+import { StreamFeedsClient } from './StreamFeedsClient';
+import { File } from 'buffer';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -19,6 +27,7 @@ export class StreamClient extends CommonApi {
   public readonly video: StreamVideoClient;
   public readonly chat: StreamChatClient;
   public readonly moderation: StreamModerationClient;
+  public readonly feeds: StreamFeedsClient;
   public readonly options: StreamClientOptions = {};
 
   private static readonly DEFAULT_TIMEOUT = 3000;
@@ -38,36 +47,40 @@ export class StreamClient extends CommonApi {
     const timeout = config?.timeout ?? StreamClient.DEFAULT_TIMEOUT;
     const chatBaseUrl = config?.basePath ?? 'https://chat.stream-io-api.com';
     const videoBaseUrl = config?.basePath ?? 'https://video.stream-io-api.com';
-    super({
+    const feedsBaseUrl = config?.basePath ?? 'https://feeds.stream-io-api.com';
+    const chatApiClient = new ApiClient({
       apiKey,
       token,
-      timeout,
       baseUrl: chatBaseUrl,
+      timeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
+    const videoApiClient = new ApiClient({
+      apiKey,
+      token,
+      baseUrl: videoBaseUrl,
+      timeout,
+      agent: config?.agent as RequestInit['dispatcher'],
+    });
+
+    const feedsApiClient = new ApiClient({
+      apiKey,
+      token,
+      baseUrl: feedsBaseUrl,
+      timeout,
+      agent: config?.agent as RequestInit['dispatcher'],
+    });
+
+    super(chatApiClient);
+
     this.video = new StreamVideoClient({
       streamClient: this,
-      apiKey,
-      token,
-      timeout,
-      baseUrl: videoBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
+      apiClient: videoApiClient,
     });
-    this.chat = new StreamChatClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
-    });
-    this.moderation = new StreamModerationClient({
-      apiKey,
-      token,
-      timeout,
-      baseUrl: chatBaseUrl,
-      agent: config?.agent as RequestInit['dispatcher'],
-    });
+    this.chat = new StreamChatClient(this.apiClient);
+    this.moderation = new StreamModerationClient(chatApiClient);
+    this.feeds = new StreamFeedsClient(feedsApiClient);
   }
 
   upsertUsers = (users: UserRequest[]) => {
@@ -82,6 +95,30 @@ export class StreamClient extends CommonApi {
 
   queryBannedUsers = (request?: { payload?: QueryBannedUsersPayload }) => {
     return this.chat.queryBannedUsers(request);
+  };
+
+  // @ts-expect-error API spec says file should be a string
+  uploadFile = (request: Omit<FileUploadRequest, 'file'> & { file: File }) => {
+    return super.uploadFile({
+      // @ts-expect-error API spec says file should be a string
+      file: request.file,
+      // @ts-expect-error form data will only work if this is a string
+      user: JSON.stringify(request.user),
+    });
+  };
+
+  // @ts-expect-error API spec says file should be a string
+  uploadImage = (
+    request: Omit<ImageUploadRequest, 'file'> & { file: File },
+  ) => {
+    return super.uploadImage({
+      // @ts-expect-error API spec says file should be a string
+      file: request.file,
+      // @ts-expect-error form data will only work if this is a string
+      user: JSON.stringify(request.user),
+      // @ts-expect-error form data will only work if this is a string
+      upload_sizes: JSON.stringify(request.upload_sizes),
+    });
   };
 
   /**
@@ -104,6 +141,24 @@ export class StreamClient extends CommonApi {
     payload.iat = payload.iat ?? defaultIat;
     const validityInSeconds = payload.validity_in_seconds ?? 60 * 60;
     payload.exp = payload.exp ?? payload.iat + validityInSeconds;
+
+    return JWTUserToken(this.secret, payload as UserTokenPayload);
+  };
+
+  /**
+   *
+   * @param payload
+   * - user_id - the id of the user the token is for
+   * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   */
+  generatePermanentUserToken = (
+    payload: {
+      user_id: string;
+      iat?: number;
+    } & Record<string, unknown>,
+  ) => {
+    const defaultIat = Math.floor((Date.now() - 1000) / 1000);
+    payload.iat = payload.iat ?? defaultIat;
 
     return JWTUserToken(this.secret, payload as UserTokenPayload);
   };

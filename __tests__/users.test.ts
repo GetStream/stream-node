@@ -40,7 +40,7 @@ describe('user API', () => {
       payload: {
         sort: [{ field: 'name', direction: 1 }],
         filter_conditions: {
-          id: { $eq: 'zitaszuperagetstreamio' },
+          id: { $eq: user.id },
         },
       },
     });

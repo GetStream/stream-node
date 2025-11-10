@@ -1,11 +1,245 @@
 # Changelog
 
-## [0.4.25](https://github.com/GetStream/stream-node/compare/v0.4.24...v0.4.25) (2025-06-24)
+## [0.7.18](https://github.com/GetStream/stream-node/compare/v0.7.17...v0.7.18) (2025-11-10)
 
 
 ### Features
 
-* Update to API spec v179.7.0 ([#113](https://github.com/GetStream/stream-node/issues/113)) ([898ee9e](https://github.com/GetStream/stream-node/commit/898ee9e692b85075e60147835ff43de3f1179587))
+* [FEEDS-947] add support for querying private activities ([#205](https://github.com/GetStream/stream-node/issues/205)) ([b3c2ddc](https://github.com/GetStream/stream-node/commit/b3c2ddc85686e15bee6bc97262fb1c3ee6e1dc17))
+
+## [0.7.17](https://github.com/GetStream/stream-node/compare/v0.7.16...v0.7.17) (2025-10-30)
+
+
+### Features
+
+* [FEEDS-702] Gen new openapi spec to include the `restrict_replies` field ([#200](https://github.com/GetStream/stream-node/issues/200)) ([950bfb0](https://github.com/GetStream/stream-node/commit/950bfb0f1d818e876ec07550bbd654f672a2b059))
+
+## [0.7.16](https://github.com/GetStream/stream-node/compare/v0.7.15...v0.7.16) (2025-10-30)
+
+
+### Features
+
+* update to latest open api spec ([#201](https://github.com/GetStream/stream-node/issues/201)) ([1b587e3](https://github.com/GetStream/stream-node/commit/1b587e3ad8f6cd29b14755de9ad07bbc27fe38d5))
+
+## [0.7.15](https://github.com/GetStream/stream-node/compare/v0.7.14...v0.7.15) (2025-10-22)
+
+
+### Bug Fixes
+
+* [FEEDS-819]make user id mandatory in update comment ([#197](https://github.com/GetStream/stream-node/issues/197)) ([4d6479e](https://github.com/GetStream/stream-node/commit/4d6479e5f3832144948d15c9f76db58679d30194))
+
+## [0.7.14](https://github.com/GetStream/stream-node/compare/v0.7.13...v0.7.14) (2025-10-22)
+
+
+### Features
+
+* update to API spec v198.27.2 ([#195](https://github.com/GetStream/stream-node/issues/195)) ([9c474de](https://github.com/GetStream/stream-node/commit/9c474de3ce2bc38539e5fb8e9733b8f114638818))
+
+## [0.7.13](https://github.com/GetStream/stream-node/compare/v0.7.12...v0.7.13) (2025-10-21)
+
+
+### Features
+
+* regenerate API clients from OpenAPI specs and fix duplicate cutoff_time ([#191](https://github.com/GetStream/stream-node/issues/191)) ([8976b59](https://github.com/GetStream/stream-node/commit/8976b59bdf8fd7a6c997687a8f97571f884677cc))
+
+## [0.7.12](https://github.com/GetStream/stream-node/compare/v0.7.11...v0.7.12) (2025-10-16)
+
+
+### Bug Fixes
+
+* cutoff time on req should be string ([#189](https://github.com/GetStream/stream-node/issues/189)) ([55ccb83](https://github.com/GetStream/stream-node/commit/55ccb83da0a65c9d95a831c9e9f82a4f838470af))
+
+## [0.7.11](https://github.com/GetStream/stream-node/compare/v0.7.10...v0.7.11) (2025-10-14)
+
+
+### Bug Fixes
+
+* Feeds usage stats endpoint plus cutoff time ([#186](https://github.com/GetStream/stream-node/issues/186)) ([527f09a](https://github.com/GetStream/stream-node/commit/527f09a4a1ca0078cd6aa797085c8e04fe41d212))
+
+## [0.7.10](https://github.com/GetStream/stream-node/compare/v0.7.9...v0.7.10) (2025-10-13)
+
+
+### Features
+
+* change cutoff_time in feed group/view request to be string, and on … ([#184](https://github.com/GetStream/stream-node/issues/184)) ([75f978a](https://github.com/GetStream/stream-node/commit/75f978a512f4e3f4794cd54e4c047e33fd83b847))
+
+## [0.7.9](https://github.com/GetStream/stream-node/compare/v0.7.8...v0.7.9) (2025-10-10)
+
+
+### Features
+
+* [FEEDS-831] add support for soft deleted feed groups ([#182](https://github.com/GetStream/stream-node/issues/182)) ([006f170](https://github.com/GetStream/stream-node/commit/006f170d9c032c81139db2b03a5b8cb11d059572))
+
+## [0.7.8](https://github.com/GetStream/stream-node/compare/v0.7.7...v0.7.8) (2025-10-10)
+
+
+### Features
+
+* Added individual activities array to stories feed updated event ([#180](https://github.com/GetStream/stream-node/issues/180)) ([db36a8e](https://github.com/GetStream/stream-node/commit/db36a8e9298da82d7e18a577eb79d7a00d62a803))
+
+## [0.7.7](https://github.com/GetStream/stream-node/compare/v0.7.6...v0.7.7) (2025-10-09)
+
+
+### Features
+
+* [FEEDS-795] add updateFeedVisibility ([#178](https://github.com/GetStream/stream-node/issues/178)) ([735a934](https://github.com/GetStream/stream-node/commit/735a934701df4e4c4e5e05c1b3ab7786bfef8e7f))
+
+## [0.7.6](https://github.com/GetStream/stream-node/compare/v0.7.5...v0.7.6) (2025-10-02)
+
+
+### Bug Fixes
+
+* rename addReaction method to addActivityReaction ([#176](https://github.com/GetStream/stream-node/issues/176)) ([69b9233](https://github.com/GetStream/stream-node/commit/69b9233cd0bcfa1351bfad0b13134e2662cc2585))
+
+## [0.7.5](https://github.com/GetStream/stream-node/compare/v0.7.4...v0.7.5) (2025-10-02)
+
+
+### Bug Fixes
+
+* stories config ([#174](https://github.com/GetStream/stream-node/issues/174)) ([232d044](https://github.com/GetStream/stream-node/commit/232d0446cddd6cdc5f75347f34dd5555ff355887))
+
+## [0.7.4](https://github.com/GetStream/stream-node/compare/v0.7.3...v0.7.4) (2025-10-02)
+
+
+### Features
+
+* stories feed implementation ([#170](https://github.com/GetStream/stream-node/issues/170)) ([ca75fb5](https://github.com/GetStream/stream-node/commit/ca75fb5706fe1ed49df6f21c921e67059612579d))
+
+
+### Bug Fixes
+
+* removed expiration from stories config ([#172](https://github.com/GetStream/stream-node/issues/172)) ([a30b855](https://github.com/GetStream/stream-node/commit/a30b855f37335396fd24ff53c99225b955abbc73))
+
+## [0.7.3](https://github.com/GetStream/stream-node/compare/v0.7.2...v0.7.3) (2025-09-30)
+
+
+### Features
+
+* hifi audio support ([#167](https://github.com/GetStream/stream-node/issues/167)) ([e48f890](https://github.com/GetStream/stream-node/commit/e48f890aaeabeb601a32a80739897b1911e97ec5))
+
+## [0.7.2](https://github.com/GetStream/stream-node/compare/v0.7.1...v0.7.2) (2025-09-30)
+
+
+### Features
+
+* add createSRTCredetials method to StreamCall ([#165](https://github.com/GetStream/stream-node/issues/165)) ([2a9d950](https://github.com/GetStream/stream-node/commit/2a9d950a2ef9b66f6fc7f0dd5e1a296f49328f5f))
+
+## [0.7.1](https://github.com/GetStream/stream-node/compare/v0.7.0...v0.7.1) (2025-09-30)
+
+
+### Features
+
+* change cutoff_time in feed group/view request to be string, and on response to be time or omitted ([#161](https://github.com/GetStream/stream-node/issues/161)) ([c449e35](https://github.com/GetStream/stream-node/commit/c449e356d7d6ec0ff88762ce31d36dcffc9075f7))
+
+## [0.7.0](https://github.com/GetStream/stream-node/compare/v0.6.7...v0.7.0) (2025-09-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* [FEEDS-782] Move own_ to FeedResponse ([#159](https://github.com/GetStream/stream-node/issues/159))
+
+### Features
+
+* [FEEDS-782] Move own_ to FeedResponse ([#159](https://github.com/GetStream/stream-node/issues/159)) ([04129f9](https://github.com/GetStream/stream-node/commit/04129f9bc399b2824ed9c37271ac18822c98f999))
+
+## [0.6.7](https://github.com/GetStream/stream-node/compare/v0.6.6...v0.6.7) (2025-09-16)
+
+
+### Features
+
+* [FEEDS-767] add feed_visibility methods ([#154](https://github.com/GetStream/stream-node/issues/154)) ([75586d3](https://github.com/GetStream/stream-node/commit/75586d3fea121a74018308456e0c9e45a09ccaf7))
+* update to version 193.9.1 ([#151](https://github.com/GetStream/stream-node/issues/151)) ([cde1438](https://github.com/GetStream/stream-node/commit/cde14380153430ed060a49758d11eb9f7eb4d046))
+
+## [0.6.6](https://github.com/GetStream/stream-node/compare/v0.6.5...v0.6.6) (2025-09-10)
+
+
+### Features
+
+* Added user_count_truncated ([#150](https://github.com/GetStream/stream-node/issues/150)) ([97a0c03](https://github.com/GetStream/stream-node/commit/97a0c038d29873aa889a30866c665f2bf4ae3898))
+
+## [0.6.5](https://github.com/GetStream/stream-node/compare/v0.6.4...v0.6.5) (2025-09-04)
+
+
+### Bug Fixes
+
+* Add task id in delete feed response ([#148](https://github.com/GetStream/stream-node/issues/148)) ([aa1c5eb](https://github.com/GetStream/stream-node/commit/aa1c5eb9c3dbd7f0e5f2cbcbba16f90a42536c2e))
+
+## [0.6.4](https://github.com/GetStream/stream-node/compare/v0.6.3...v0.6.4) (2025-09-03)
+
+
+### Features
+
+* add DeleteFeedTaskID in DeleteFeedResponse ([#146](https://github.com/GetStream/stream-node/issues/146)) ([ec9464f](https://github.com/GetStream/stream-node/commit/ec9464fa729acde5042d833e364246083d3f4eb2))
+
+## [0.6.3](https://github.com/GetStream/stream-node/compare/v0.6.2...v0.6.3) (2025-09-01)
+
+
+### Features
+
+* [CHA-1153] adding channel message count ([#136](https://github.com/GetStream/stream-node/issues/136)) ([446d9e5](https://github.com/GetStream/stream-node/commit/446d9e5e08dea93b2a762417de048d6f799f2d21))
+* update to api spec v191.7.0 ([#145](https://github.com/GetStream/stream-node/issues/145)) ([38c971f](https://github.com/GetStream/stream-node/commit/38c971fe4c4388c9b855d2d5bb1b6ebe6003aaaf))
+
+## [0.6.2](https://github.com/GetStream/stream-node/compare/v0.6.1...v0.6.2) (2025-08-21)
+
+
+### Features
+
+* Kick user & upgrade to the latest OpenAPI ([#140](https://github.com/GetStream/stream-node/issues/140)) ([9dfe81f](https://github.com/GetStream/stream-node/commit/9dfe81f9c733cb66346c97053fe6e86ab90e0c05))
+
+## [0.6.1](https://github.com/GetStream/stream-node/compare/v0.6.0...v0.6.1) (2025-08-19)
+
+
+### Features
+
+* add membership level in FeedMemberResponse ([#137](https://github.com/GetStream/stream-node/issues/137)) ([db7aa1e](https://github.com/GetStream/stream-node/commit/db7aa1e9fe06108de73f12db969360541096d879))
+
+
+### Bug Fixes
+
+* extend openai-realtime-api version range ([#138](https://github.com/GetStream/stream-node/issues/138)) ([bc65845](https://github.com/GetStream/stream-node/commit/bc6584524386f4a35ec39379548dd99ae1cbcd35))
+
+## [0.6.0](https://github.com/GetStream/stream-node/compare/v0.5.1...v0.6.0) (2025-08-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* API naming review ([#130](https://github.com/GetStream/stream-node/issues/130))
+
+### Features
+
+* add method and request/response for new endpoint ([#126](https://github.com/GetStream/stream-node/issues/126)) ([40a65d2](https://github.com/GetStream/stream-node/commit/40a65d2b349fb2d1b38d0ae01a7281ec7b626d1a))
+* API naming review ([#130](https://github.com/GetStream/stream-node/issues/130)) ([d15d50f](https://github.com/GetStream/stream-node/commit/d15d50f0114a087c33790c38e49b7edff853f3ac))
+* new endpoint GetOrCreateFeedGroup ([#127](https://github.com/GetStream/stream-node/issues/127)) ([7c58c64](https://github.com/GetStream/stream-node/commit/7c58c648ce8d33eb3446e49ceb7f23ae3f32c824))
+
+## [0.5.1](https://github.com/GetStream/stream-node/compare/v0.5.0...v0.5.1) (2025-07-25)
+
+
+### Features
+
+* No timeout for fileuploads ([#124](https://github.com/GetStream/stream-node/issues/124)) ([6bad4f0](https://github.com/GetStream/stream-node/commit/6bad4f084b459804899ffb6adbf740302a33d607))
+
+## [0.5.0](https://github.com/GetStream/stream-node/compare/v0.4.26...v0.5.0) (2025-07-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* add support for feeds v3 API ([#118](https://github.com/GetStream/stream-node/issues/118))
+
+### Features
+
+* add support for feeds v3 API ([#118](https://github.com/GetStream/stream-node/issues/118)) ([aa43a6b](https://github.com/GetStream/stream-node/commit/aa43a6b2666c81bff23ee0113c91f61568e5ccc2))
+
+## [0.4.26](https://github.com/GetStream/stream-node/compare/v0.4.25...v0.4.26) (2025-07-16)
+
+### Features
+
+- Update to API spec 186.1.0 ([#120](https://github.com/GetStream/stream-node/issues/120)) ([e1d1f88](https://github.com/GetStream/stream-node/commit/e1d1f88d823f71d6386a1791e285bdbee2cbfb54))
+
+## [0.4.25](https://github.com/GetStream/stream-node/compare/v0.4.24...v0.4.25) (2025-06-24)
+
+### Features
+
+- Update to API spec v179.7.0 ([#113](https://github.com/GetStream/stream-node/issues/113)) ([898ee9e](https://github.com/GetStream/stream-node/commit/898ee9e692b85075e60147835ff43de3f1179587))
 
 ## [0.4.24](https://github.com/GetStream/stream-node/compare/v0.4.23...v0.4.24) (2025-05-06)
 

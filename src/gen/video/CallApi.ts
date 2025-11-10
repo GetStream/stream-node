@@ -1,5 +1,4 @@
-import { VideoApi } from './VideoApi';
-import { StreamResponse } from '../../types';
+import { StreamResponse, VideoApi } from '../../gen-imports';
 import {
   BlockUserRequest,
   BlockUserResponse,
@@ -16,6 +15,8 @@ import {
   GetOrCreateCallResponse,
   GoLiveRequest,
   GoLiveResponse,
+  KickUserRequest,
+  KickUserResponse,
   ListRecordingsResponse,
   ListTranscriptionsResponse,
   MuteUsersRequest,
@@ -26,6 +27,8 @@ import {
   QueryCallParticipantsResponse,
   SendCallEventRequest,
   SendCallEventResponse,
+  SendClosedCaptionRequest,
+  SendClosedCaptionResponse,
   StartClosedCaptionsRequest,
   StartClosedCaptionsResponse,
   StartFrameRecordingRequest,
@@ -68,307 +71,313 @@ export class CallApi {
     public readonly id: string,
   ) {}
 
-  get = (request?: {
+  get(request?: {
     members_limit?: number;
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
     ring_by_id?: string;
     target_member_ids?: string[];
-  }): Promise<StreamResponse<GetCallResponse>> => {
+  }): Promise<StreamResponse<GetCallResponse>> {
     return this.videoApi.getCall({ id: this.id, type: this.type, ...request });
-  };
+  }
 
-  update = (
+  update(
     request?: UpdateCallRequest,
-  ): Promise<StreamResponse<UpdateCallResponse>> => {
+  ): Promise<StreamResponse<UpdateCallResponse>> {
     return this.videoApi.updateCall({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  getOrCreate = (
+  getOrCreate(
     request?: GetOrCreateCallRequest,
-  ): Promise<StreamResponse<GetOrCreateCallResponse>> => {
+  ): Promise<StreamResponse<GetOrCreateCallResponse>> {
     return this.videoApi.getOrCreateCall({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  blockUser = (
+  blockUser(
     request: BlockUserRequest,
-  ): Promise<StreamResponse<BlockUserResponse>> => {
+  ): Promise<StreamResponse<BlockUserResponse>> {
     return this.videoApi.blockUser({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  delete = (
+  sendClosedCaption(
+    request: SendClosedCaptionRequest,
+  ): Promise<StreamResponse<SendClosedCaptionResponse>> {
+    return this.videoApi.sendClosedCaption({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  delete(
     request?: DeleteCallRequest,
-  ): Promise<StreamResponse<DeleteCallResponse>> => {
+  ): Promise<StreamResponse<DeleteCallResponse>> {
     return this.videoApi.deleteCall({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  sendCallEvent = (
+  sendCallEvent(
     request?: SendCallEventRequest,
-  ): Promise<StreamResponse<SendCallEventResponse>> => {
+  ): Promise<StreamResponse<SendCallEventResponse>> {
     return this.videoApi.sendCallEvent({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  collectUserFeedback = (
+  collectUserFeedback(
     request: CollectUserFeedbackRequest,
-  ): Promise<StreamResponse<CollectUserFeedbackResponse>> => {
+  ): Promise<StreamResponse<CollectUserFeedbackResponse>> {
     return this.videoApi.collectUserFeedback({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  goLive = (
-    request?: GoLiveRequest,
-  ): Promise<StreamResponse<GoLiveResponse>> => {
+  goLive(request?: GoLiveRequest): Promise<StreamResponse<GoLiveResponse>> {
     return this.videoApi.goLive({ id: this.id, type: this.type, ...request });
-  };
+  }
 
-  end = (): Promise<StreamResponse<EndCallResponse>> => {
+  kickUser(
+    request: KickUserRequest,
+  ): Promise<StreamResponse<KickUserResponse>> {
+    return this.videoApi.kickUser({ id: this.id, type: this.type, ...request });
+  }
+
+  end(): Promise<StreamResponse<EndCallResponse>> {
     return this.videoApi.endCall({ id: this.id, type: this.type });
-  };
+  }
 
-  updateCallMembers = (
+  updateCallMembers(
     request?: UpdateCallMembersRequest,
-  ): Promise<StreamResponse<UpdateCallMembersResponse>> => {
+  ): Promise<StreamResponse<UpdateCallMembersResponse>> {
     return this.videoApi.updateCallMembers({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  muteUsers = (
+  muteUsers(
     request?: MuteUsersRequest,
-  ): Promise<StreamResponse<MuteUsersResponse>> => {
+  ): Promise<StreamResponse<MuteUsersResponse>> {
     return this.videoApi.muteUsers({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  queryCallParticipants = (
+  queryCallParticipants(
     request?: QueryCallParticipantsRequest & { limit?: number },
-  ): Promise<StreamResponse<QueryCallParticipantsResponse>> => {
+  ): Promise<StreamResponse<QueryCallParticipantsResponse>> {
     return this.videoApi.queryCallParticipants({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  videoPin = (request: PinRequest): Promise<StreamResponse<PinResponse>> => {
+  videoPin(request: PinRequest): Promise<StreamResponse<PinResponse>> {
     return this.videoApi.videoPin({ id: this.id, type: this.type, ...request });
-  };
+  }
 
-  listRecordings = (): Promise<StreamResponse<ListRecordingsResponse>> => {
+  listRecordings(): Promise<StreamResponse<ListRecordingsResponse>> {
     return this.videoApi.listRecordings({ id: this.id, type: this.type });
-  };
+  }
 
-  getCallReport = (request?: {
+  getCallReport(request?: {
     session_id?: string;
-  }): Promise<StreamResponse<GetCallReportResponse>> => {
+  }): Promise<StreamResponse<GetCallReportResponse>> {
     return this.videoApi.getCallReport({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  startRTMPBroadcasts = (
+  startRTMPBroadcasts(
     request: StartRTMPBroadcastsRequest,
-  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> => {
+  ): Promise<StreamResponse<StartRTMPBroadcastsResponse>> {
     return this.videoApi.startRTMPBroadcasts({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  stopAllRTMPBroadcasts = (): Promise<
+  stopAllRTMPBroadcasts(): Promise<
     StreamResponse<StopAllRTMPBroadcastsResponse>
-  > => {
+  > {
     return this.videoApi.stopAllRTMPBroadcasts({
       id: this.id,
       type: this.type,
     });
-  };
+  }
 
-  stopRTMPBroadcast = (
+  stopRTMPBroadcast(
     request: StopRTMPBroadcastsRequest & { name: string },
-  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> => {
+  ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> {
     return this.videoApi.stopRTMPBroadcast({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  startHLSBroadcasting = (): Promise<
+  startHLSBroadcasting(): Promise<
     StreamResponse<StartHLSBroadcastingResponse>
-  > => {
+  > {
     return this.videoApi.startHLSBroadcasting({ id: this.id, type: this.type });
-  };
+  }
 
-  startClosedCaptions = (
+  startClosedCaptions(
     request?: StartClosedCaptionsRequest,
-  ): Promise<StreamResponse<StartClosedCaptionsResponse>> => {
+  ): Promise<StreamResponse<StartClosedCaptionsResponse>> {
     return this.videoApi.startClosedCaptions({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  startFrameRecording = (
+  startFrameRecording(
     request?: StartFrameRecordingRequest,
-  ): Promise<StreamResponse<StartFrameRecordingResponse>> => {
+  ): Promise<StreamResponse<StartFrameRecordingResponse>> {
     return this.videoApi.startFrameRecording({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  startRecording = (
+  startRecording(
     request?: StartRecordingRequest,
-  ): Promise<StreamResponse<StartRecordingResponse>> => {
+  ): Promise<StreamResponse<StartRecordingResponse>> {
     return this.videoApi.startRecording({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  startTranscription = (
+  startTranscription(
     request?: StartTranscriptionRequest,
-  ): Promise<StreamResponse<StartTranscriptionResponse>> => {
+  ): Promise<StreamResponse<StartTranscriptionResponse>> {
     return this.videoApi.startTranscription({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  stopHLSBroadcasting = (): Promise<
-    StreamResponse<StopHLSBroadcastingResponse>
-  > => {
+  stopHLSBroadcasting(): Promise<StreamResponse<StopHLSBroadcastingResponse>> {
     return this.videoApi.stopHLSBroadcasting({ id: this.id, type: this.type });
-  };
+  }
 
-  stopClosedCaptions = (
+  stopClosedCaptions(
     request?: StopClosedCaptionsRequest,
-  ): Promise<StreamResponse<StopClosedCaptionsResponse>> => {
+  ): Promise<StreamResponse<StopClosedCaptionsResponse>> {
     return this.videoApi.stopClosedCaptions({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  stopFrameRecording = (): Promise<
-    StreamResponse<StopFrameRecordingResponse>
-  > => {
+  stopFrameRecording(): Promise<StreamResponse<StopFrameRecordingResponse>> {
     return this.videoApi.stopFrameRecording({ id: this.id, type: this.type });
-  };
+  }
 
-  stopLive = (
+  stopLive(
     request?: StopLiveRequest,
-  ): Promise<StreamResponse<StopLiveResponse>> => {
+  ): Promise<StreamResponse<StopLiveResponse>> {
     return this.videoApi.stopLive({ id: this.id, type: this.type, ...request });
-  };
+  }
 
-  stopRecording = (): Promise<StreamResponse<StopRecordingResponse>> => {
+  stopRecording(): Promise<StreamResponse<StopRecordingResponse>> {
     return this.videoApi.stopRecording({ id: this.id, type: this.type });
-  };
+  }
 
-  stopTranscription = (
+  stopTranscription(
     request?: StopTranscriptionRequest,
-  ): Promise<StreamResponse<StopTranscriptionResponse>> => {
+  ): Promise<StreamResponse<StopTranscriptionResponse>> {
     return this.videoApi.stopTranscription({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  listTranscriptions = (): Promise<
-    StreamResponse<ListTranscriptionsResponse>
-  > => {
+  listTranscriptions(): Promise<StreamResponse<ListTranscriptionsResponse>> {
     return this.videoApi.listTranscriptions({ id: this.id, type: this.type });
-  };
+  }
 
-  unblockUser = (
+  unblockUser(
     request: UnblockUserRequest,
-  ): Promise<StreamResponse<UnblockUserResponse>> => {
+  ): Promise<StreamResponse<UnblockUserResponse>> {
     return this.videoApi.unblockUser({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  videoUnpin = (
-    request: UnpinRequest,
-  ): Promise<StreamResponse<UnpinResponse>> => {
+  videoUnpin(request: UnpinRequest): Promise<StreamResponse<UnpinResponse>> {
     return this.videoApi.videoUnpin({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  updateUserPermissions = (
+  updateUserPermissions(
     request: UpdateUserPermissionsRequest,
-  ): Promise<StreamResponse<UpdateUserPermissionsResponse>> => {
+  ): Promise<StreamResponse<UpdateUserPermissionsResponse>> {
     return this.videoApi.updateUserPermissions({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  deleteRecording = (request: {
+  deleteRecording(request: {
     session: string;
     filename: string;
-  }): Promise<StreamResponse<DeleteRecordingResponse>> => {
+  }): Promise<StreamResponse<DeleteRecordingResponse>> {
     return this.videoApi.deleteRecording({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 
-  deleteTranscription = (request: {
+  deleteTranscription(request: {
     session: string;
     filename: string;
-  }): Promise<StreamResponse<DeleteTranscriptionResponse>> => {
+  }): Promise<StreamResponse<DeleteTranscriptionResponse>> {
     return this.videoApi.deleteTranscription({
       id: this.id,
       type: this.type,
       ...request,
     });
-  };
+  }
 }
