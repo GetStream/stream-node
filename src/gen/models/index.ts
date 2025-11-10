@@ -771,6 +771,8 @@ export interface AddCommentRequest {
 
   create_notification_activity?: boolean;
 
+  id?: string;
+
   parent_id?: string;
 
   skip_push?: boolean;
@@ -853,7 +855,7 @@ export interface AggregatedActivityResponse {
 }
 
 export interface AggregationConfig {
-  format?: string;
+  format: string;
 }
 
 export interface AnyEvent {
@@ -4172,8 +4174,6 @@ export interface CreateFeedGroupResponse {
 export interface CreateFeedViewRequest {
   id: string;
 
-  activity_processors?: ActivityProcessorConfig[];
-
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
@@ -5524,8 +5524,6 @@ export interface FeedViewResponse {
 
   last_used_at?: Date;
 
-  activity_processors?: ActivityProcessorConfig[];
-
   activity_selectors?: ActivitySelectorConfigResponse[];
 
   aggregation?: AggregationConfig;
@@ -6383,8 +6381,6 @@ export interface GetOrCreateFeedRequest {
 
   watch?: boolean;
 
-  activity_selector_options?: Record<string, any>;
-
   data?: FeedInput;
 
   external_ranking?: Record<string, any>;
@@ -6435,8 +6431,6 @@ export interface GetOrCreateFeedResponse {
 }
 
 export interface GetOrCreateFeedViewRequest {
-  activity_processors?: ActivityProcessorConfig[];
-
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
@@ -9182,15 +9176,21 @@ export interface QualityScoreReportResponse {
 }
 
 export interface QueryActivitiesRequest {
+  include_private_activities?: boolean;
+
   limit?: number;
 
   next?: string;
 
   prev?: string;
 
+  user_id?: string;
+
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface QueryActivitiesResponse {
@@ -12769,8 +12769,6 @@ export interface UpdateFeedResponse {
 }
 
 export interface UpdateFeedViewRequest {
-  activity_processors?: ActivityProcessorConfig[];
-
   activity_selectors?: ActivitySelectorConfig[];
 
   aggregation?: AggregationConfig;
