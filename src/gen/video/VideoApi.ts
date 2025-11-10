@@ -43,6 +43,8 @@ import {
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
   Response,
+  RingCallRequest,
+  RingCallResponse,
   SendCallEventRequest,
   SendCallEventResponse,
   SendClosedCaptionRequest,
@@ -53,10 +55,10 @@ import {
   StartFrameRecordingRequest,
   StartFrameRecordingResponse,
   StartHLSBroadcastingResponse,
-  StartRecordingRequest,
-  StartRecordingResponse,
   StartRTMPBroadcastsRequest,
   StartRTMPBroadcastsResponse,
+  StartRecordingRequest,
+  StartRecordingResponse,
   StartTranscriptionRequest,
   StartTranscriptionResponse,
   StopAllRTMPBroadcastsResponse,
@@ -66,9 +68,9 @@ import {
   StopHLSBroadcastingResponse,
   StopLiveRequest,
   StopLiveResponse,
-  StopRecordingResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
+  StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
   UnblockUserRequest,
@@ -83,6 +85,8 @@ import {
   UpdateCallTypeResponse,
   UpdateUserPermissionsRequest,
   UpdateUserPermissionsResponse,
+  QueryCallsRequest,
+  QueryCallsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -194,16 +198,12 @@ export class VideoApi {
     ring?: boolean;
     notify?: boolean;
     video?: boolean;
-    ring_by_id?: string;
-    target_member_ids?: string[];
   }): Promise<StreamResponse<GetCallResponse>> {
     const queryParams = {
       members_limit: request?.members_limit,
       ring: request?.ring,
       notify: request?.notify,
       video: request?.video,
-      ring_by_id: request?.ring_by_id,
-      target_member_ids: request?.target_member_ids,
     };
     const pathParams = {
       type: request?.type,
@@ -679,6 +679,34 @@ export class VideoApi {
     >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
 
     decoders.GetCallReportResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async ringCall(
+    request: RingCallRequest & { type: string; id: string },
+  ): Promise<StreamResponse<RingCallResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      video: request?.video,
+      members_ids: request?.members_ids,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RingCallResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/ring',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RingCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

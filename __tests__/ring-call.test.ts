@@ -35,20 +35,16 @@ describe('ring call API', () => {
   });
 
   it(`ring my-friend`, async () => {
-    const response = await call.ring({ member_ids: ['my-friend'] });
-
-    // Dummy expect
-    expect(response.call.id).toBe(callId);
+    const response = await call.ring({ members_ids: ['my-friend'] });
+    expect(response.members_ids).toEqual(['my-friend']);
   });
 
   it(`ring my-other-friend`, async () => {
     await call.updateCallMembers({
       update_members: [{ user_id: 'my-other-friend' }],
     });
-    const response = await call.ring({ member_ids: ['my-other-friend'] });
-
-    // Dummy expect
-    expect(response.call.id).toBe(callId);
+    const response = await call.ring({ members_ids: ['my-other-friend'] });
+    expect(response.members_ids).toEqual(['my-other-friend']);
   });
 
   it('delete call', async () => {

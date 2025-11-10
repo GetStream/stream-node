@@ -2354,6 +2354,8 @@ export interface CallStatsLocation {
 
   country?: string;
 
+  country_iso_code?: string;
+
   latitude?: number;
 
   longitude?: number;
@@ -2377,6 +2379,10 @@ export interface CallStatsParticipantCounts {
   live_sessions: number;
 
   participants: number;
+
+  peak_concurrent_sessions: number;
+
+  peak_concurrent_users: number;
 
   publishers: number;
 
@@ -2403,6 +2409,8 @@ export interface CallStatsParticipantSession {
   distance_to_sfu_kilometers?: number;
 
   ended_at?: Date;
+
+  os?: string;
 
   publisher_type?: string;
 
@@ -2593,6 +2601,14 @@ export interface CallsPerDayReportResponse {
   daily: DailyAggregateCallsPerDayReportResponse[];
 }
 
+export interface CampaignChannelMember {
+  user_id: string;
+
+  channel_role?: string;
+
+  custom?: Record<string, any>;
+}
+
 export interface CampaignChannelTemplate {
   type: string;
 
@@ -2603,6 +2619,8 @@ export interface CampaignChannelTemplate {
   team?: string;
 
   members?: string[];
+
+  members_template?: CampaignChannelMember[];
 }
 
 export interface CampaignCompletedEvent {
@@ -2749,6 +2767,8 @@ export interface Channel {
   team?: string;
 
   active_live_locations?: SharedLocation[];
+
+  filter_tags?: string[];
 
   invites?: ChannelMember[];
 
@@ -3006,6 +3026,8 @@ export interface ChannelInput {
 
   truncated_by_id?: string;
 
+  filter_tags?: string[];
+
   invites?: ChannelMemberRequest[];
 
   members?: ChannelMemberRequest[];
@@ -3253,6 +3275,8 @@ export interface ChannelResponse {
   team?: string;
 
   truncated_at?: Date;
+
+  filter_tags?: string[];
 
   members?: ChannelMemberResponse[];
 
@@ -4309,6 +4333,18 @@ export interface CreateRoleResponse {
   role: Role;
 }
 
+export interface CreateSIPTrunkRequest {
+  name: string;
+
+  numbers: string[];
+}
+
+export interface CreateSIPTrunkResponse {
+  duration: string;
+
+  sip_trunk?: SIPTrunkResponse;
+}
+
 export interface CustomActionRequest {
   id?: string;
 
@@ -4648,6 +4684,14 @@ export interface DeleteRecordingResponse {
 }
 
 export interface DeleteReminderResponse {
+  duration: string;
+}
+
+export interface DeleteSIPInboundRoutingRuleResponse {
+  duration: string;
+}
+
+export interface DeleteSIPTrunkResponse {
   duration: string;
 }
 
@@ -7065,6 +7109,18 @@ export interface ListRolesResponse {
   roles: Role[];
 }
 
+export interface ListSIPInboundRoutingRuleResponse {
+  duration: string;
+
+  sip_inbound_routing_rules: SIPInboundRoutingRuleResponse[];
+}
+
+export interface ListSIPTrunksResponse {
+  duration: string;
+
+  sip_trunks: SIPTrunkResponse[];
+}
+
 export interface ListTranscriptionsResponse {
   duration: string;
 
@@ -7839,6 +7895,14 @@ export interface MessageWithChannelResponse {
   shared_location?: SharedLocationResponseData;
 }
 
+export interface MetricDescriptor {
+  label: string;
+
+  description?: string;
+
+  unit?: string;
+}
+
 export interface MetricThreshold {
   level: string;
 
@@ -8522,7 +8586,11 @@ export interface ParticipantReportResponse {
 }
 
 export interface ParticipantSeriesPublisherStats {
+  global_metrics_order?: string[];
+
   global?: Record<string, number[][]>;
+
+  global_meta?: Record<string, MetricDescriptor>;
 
   global_thresholds?: Record<string, MetricThreshold[]>;
 
@@ -8530,9 +8598,13 @@ export interface ParticipantSeriesPublisherStats {
 }
 
 export interface ParticipantSeriesSubscriberStats {
+  global_metrics_order?: string[];
+
   subscriptions?: ParticipantSeriesSubscriptionTrackMetrics[];
 
   global?: Record<string, number[][]>;
+
+  global_meta?: Record<string, MetricDescriptor>;
 
   global_thresholds?: Record<string, MetricThreshold[]>;
 }
@@ -8568,13 +8640,21 @@ export interface ParticipantSeriesTrackMetrics {
 
   track_type?: string;
 
+  metrics_order?: string[];
+
   metrics?: Record<string, number[][]>;
+
+  metrics_meta?: Record<string, MetricDescriptor>;
 
   thresholds?: Record<string, MetricThreshold[]>;
 }
 
 export interface ParticipantSeriesUserStats {
+  metrics_order?: string[];
+
   metrics?: Record<string, number[][]>;
+
+  metrics_meta?: Record<string, MetricDescriptor>;
 
   thresholds?: Record<string, MetricThreshold[]>;
 }
@@ -9176,21 +9256,15 @@ export interface QualityScoreReportResponse {
 }
 
 export interface QueryActivitiesRequest {
-  include_private_activities?: boolean;
-
   limit?: number;
 
   next?: string;
 
   prev?: string;
 
-  user_id?: string;
-
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
-
-  user?: UserRequest;
 }
 
 export interface QueryActivitiesResponse {
@@ -10553,6 +10627,26 @@ export interface ReportResponse {
   user_ratings: UserRatingReportResponse;
 }
 
+export interface ResolveSipInboundRequest {
+  sip_caller_number: string;
+
+  sip_trunk_number: string;
+
+  challenge: SIPChallenge;
+
+  sip_headers?: Record<string, string>;
+}
+
+export interface ResolveSipInboundResponse {
+  duration: string;
+
+  credentials: SipInboundCredentials;
+
+  sip_routing_rule?: SIPInboundRoutingRuleResponse;
+
+  sip_trunk?: SIPTrunkResponse;
+}
+
 export interface Response {
   duration: string;
 }
@@ -10659,6 +10753,18 @@ export interface ReviewQueueItemUpdatedEvent {
   action?: ActionLogResponse;
 
   review_queue_item?: ReviewQueueItemResponse;
+}
+
+export interface RingCallRequest {
+  video?: boolean;
+
+  members_ids?: string[];
+}
+
+export interface RingCallResponse {
+  duration: string;
+
+  members_ids: string[];
 }
 
 export interface RingSettings {
@@ -10783,6 +10889,182 @@ export interface SDKUsageReport {
 
 export interface SDKUsageReportResponse {
   daily: DailyAggregateSDKUsageReportResponse[];
+}
+
+export interface SIPCallConfigsRequest {
+  custom_data?: Record<string, any>;
+}
+
+export interface SIPCallConfigsResponse {
+  custom_data: Record<string, any>;
+}
+
+export interface SIPCallerConfigsRequest {
+  id: string;
+
+  custom_data?: Record<string, any>;
+}
+
+export interface SIPCallerConfigsResponse {
+  id: string;
+
+  custom_data: Record<string, any>;
+}
+
+export interface SIPChallenge {
+  a1?: string;
+
+  algorithm?: string;
+
+  charset?: string;
+
+  cnonce?: string;
+
+  method?: string;
+
+  nc?: string;
+
+  nonce?: string;
+
+  opaque?: string;
+
+  realm?: string;
+
+  response?: string;
+
+  stale?: boolean;
+
+  uri?: string;
+
+  userhash?: boolean;
+
+  username?: string;
+
+  domain?: string[];
+
+  qop?: string[];
+}
+
+export interface SIPDirectRoutingRuleCallConfigsRequest {
+  call_id: string;
+
+  call_type: string;
+}
+
+export interface SIPDirectRoutingRuleCallConfigsResponse {
+  call_id: string;
+
+  call_type: string;
+}
+
+export interface SIPInboundRoutingRulePinConfigsRequest {
+  custom_webhook_url?: string;
+
+  pin_failed_attempt_prompt?: string;
+
+  pin_hangup_prompt?: string;
+
+  pin_prompt?: string;
+
+  pin_success_prompt?: string;
+}
+
+export interface SIPInboundRoutingRulePinConfigsResponse {
+  custom_webhook_url?: string;
+
+  pin_failed_attempt_prompt?: string;
+
+  pin_hangup_prompt?: string;
+
+  pin_prompt?: string;
+
+  pin_success_prompt?: string;
+}
+
+export interface SIPInboundRoutingRuleRequest {
+  name: string;
+
+  trunk_ids: string[];
+
+  caller_configs: SIPCallerConfigsRequest;
+
+  called_numbers?: string[];
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsRequest;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsRequest;
+
+  pin_protection_configs?: SIPPinProtectionConfigsRequest;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsRequest;
+}
+
+export interface SIPInboundRoutingRuleResponse {
+  created_at: Date;
+
+  duration: string;
+
+  id: string;
+
+  name: string;
+
+  updated_at: Date;
+
+  called_numbers: string[];
+
+  trunk_ids: string[];
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsResponse;
+
+  caller_configs?: SIPCallerConfigsResponse;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsResponse;
+
+  pin_protection_configs?: SIPPinProtectionConfigsResponse;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsResponse;
+}
+
+export interface SIPPinProtectionConfigsRequest {
+  default_pin?: string;
+
+  enabled?: boolean;
+
+  max_attempts?: number;
+
+  required_pin_digits?: number;
+}
+
+export interface SIPPinProtectionConfigsResponse {
+  enabled: boolean;
+
+  default_pin?: string;
+
+  max_attempts?: number;
+
+  required_pin_digits?: number;
+}
+
+export interface SIPTrunkResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  password: string;
+
+  updated_at: Date;
+
+  uri: string;
+
+  username: string;
+
+  numbers: string[];
 }
 
 export interface SRTIngress {
@@ -11189,86 +11471,6 @@ export interface SharedLocationsResponse {
   active_live_locations: SharedLocationResponseData[];
 }
 
-export interface SharedLocation {
-  channel_cid: string;
-
-  created_at: Date;
-
-  created_by_device_id: string;
-
-  message_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  end_at?: Date;
-
-  latitude?: number;
-
-  longitude?: number;
-
-  channel?: Channel;
-
-  message?: Message;
-}
-
-export interface SharedLocationResponse {
-  channel_cid: string;
-
-  created_at: Date;
-
-  created_by_device_id: string;
-
-  duration: string;
-
-  latitude: number;
-
-  longitude: number;
-
-  message_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  end_at?: Date;
-
-  channel?: ChannelResponse;
-
-  message?: MessageResponse;
-}
-
-export interface SharedLocationResponseData {
-  channel_cid: string;
-
-  created_at: Date;
-
-  created_by_device_id: string;
-
-  latitude: number;
-
-  longitude: number;
-
-  message_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  end_at?: Date;
-
-  channel?: ChannelResponse;
-
-  message?: MessageResponse;
-}
-
-export interface SharedLocationsResponse {
-  duration: string;
-
-  active_live_locations: SharedLocationResponseData[];
-}
-
 export interface ShowChannelRequest {
   user_id?: string;
 
@@ -11283,6 +11485,20 @@ export interface SingleFollowResponse {
   duration: string;
 
   follow: FollowResponse;
+}
+
+export interface SipInboundCredentials {
+  call_id: string;
+
+  call_type: string;
+
+  token: string;
+
+  user_id: string;
+
+  call_custom_data: Record<string, any>;
+
+  user_custom_data: Record<string, any>;
 }
 
 export interface SortParam {
@@ -12546,11 +12762,15 @@ export interface UpdateChannelRequest {
 
   hide_history?: boolean;
 
+  hide_history_before?: Date;
+
   reject_invite?: boolean;
 
   skip_push?: boolean;
 
   user_id?: string;
+
+  add_filter_tags?: string[];
 
   add_members?: ChannelMemberRequest[];
 
@@ -12561,6 +12781,8 @@ export interface UpdateChannelRequest {
   demote_moderators?: string[];
 
   invites?: ChannelMemberRequest[];
+
+  remove_filter_tags?: string[];
 
   remove_members?: string[];
 
