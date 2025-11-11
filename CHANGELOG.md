@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.19](https://github.com/GetStream/stream-node/compare/v0.7.18...v0.7.19) (2025-11-11)
+
+
+### Features
+
+* [FEEDS-849] Feeds collections ([#204](https://github.com/GetStream/stream-node/issues/204)) ([28b7d92](https://github.com/GetStream/stream-node/commit/28b7d92d54725853d9c48c37ecccbe89d7ebeeb8))
+
 ## [0.7.18](https://github.com/GetStream/stream-node/compare/v0.7.17...v0.7.18) (2025-11-10)
 
 
