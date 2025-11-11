@@ -149,6 +149,7 @@ export class FeedsApi {
       id: request?.id,
       parent_id: request?.parent_id,
       poll_id: request?.poll_id,
+      restrict_replies: request?.restrict_replies,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
@@ -232,11 +233,14 @@ export class FeedsApi {
     request?: QueryActivitiesRequest,
   ): Promise<StreamResponse<QueryActivitiesResponse>> {
     const body = {
+      include_private_activities: request?.include_private_activities,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
+      user_id: request?.user_id,
       sort: request?.sort,
       filter: request?.filter,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -351,9 +355,6 @@ export class FeedsApi {
     };
     const body = {
       hide: request?.hide,
-      mute_user: request?.mute_user,
-      reason: request?.reason,
-      report: request?.report,
       show_less: request?.show_less,
       show_more: request?.show_more,
       user_id: request?.user_id,
@@ -597,6 +598,7 @@ export class FeedsApi {
     const body = {
       expires_at: request?.expires_at,
       poll_id: request?.poll_id,
+      restrict_replies: request?.restrict_replies,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
@@ -875,6 +877,7 @@ export class FeedsApi {
       object_type: request?.object_type,
       comment: request?.comment,
       create_notification_activity: request?.create_notification_activity,
+      id: request?.id,
       parent_id: request?.parent_id,
       skip_push: request?.skip_push,
       user_id: request?.user_id,
@@ -1227,7 +1230,6 @@ export class FeedsApi {
       user_id: request?.user_id,
       view: request?.view,
       watch: request?.watch,
-      activity_selector_options: request?.activity_selector_options,
       data: request?.data,
       external_ranking: request?.external_ranking,
       filter: request?.filter,
@@ -1655,7 +1657,6 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedViewResponse>> {
     const body = {
       id: request?.id,
-      activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
@@ -1716,7 +1717,6 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
-      activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
@@ -1745,7 +1745,6 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
-      activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       aggregation: request?.aggregation,
       ranking: request?.ranking,

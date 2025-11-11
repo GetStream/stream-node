@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.7.18](https://github.com/GetStream/stream-node/compare/v0.7.17...v0.7.18) (2025-11-10)
+
+
+### Features
+
+* [FEEDS-947] add support for querying private activities ([#205](https://github.com/GetStream/stream-node/issues/205)) ([b3c2ddc](https://github.com/GetStream/stream-node/commit/b3c2ddc85686e15bee6bc97262fb1c3ee6e1dc17))
+
+## [0.7.17](https://github.com/GetStream/stream-node/compare/v0.7.16...v0.7.17) (2025-10-30)
+
+
+### Features
+
+* [FEEDS-702] Gen new openapi spec to include the `restrict_replies` field ([#200](https://github.com/GetStream/stream-node/issues/200)) ([950bfb0](https://github.com/GetStream/stream-node/commit/950bfb0f1d818e876ec07550bbd654f672a2b059))
+
+## [0.7.16](https://github.com/GetStream/stream-node/compare/v0.7.15...v0.7.16) (2025-10-30)
+
+
+### Features
+
+* update to latest open api spec ([#201](https://github.com/GetStream/stream-node/issues/201)) ([1b587e3](https://github.com/GetStream/stream-node/commit/1b587e3ad8f6cd29b14755de9ad07bbc27fe38d5))
+
 ## [0.7.15](https://github.com/GetStream/stream-node/compare/v0.7.14...v0.7.15) (2025-10-22)
 
 
