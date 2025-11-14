@@ -1526,6 +1526,8 @@ export interface BookmarkFolderResponse {
 
   updated_at: Date;
 
+  user: UserResponseCommonFields;
+
   custom?: Record<string, any>;
 }
 
@@ -1550,7 +1552,7 @@ export interface BookmarkResponse {
 
   activity: ActivityResponse;
 
-  user: UserResponse;
+  user: UserResponseCommonFields;
 
   custom?: Record<string, any>;
 
@@ -2360,6 +2362,8 @@ export interface CallStatsLocation {
 
   country?: string;
 
+  country_iso_code?: string;
+
   latitude?: number;
 
   longitude?: number;
@@ -2383,6 +2387,10 @@ export interface CallStatsParticipantCounts {
   live_sessions: number;
 
   participants: number;
+
+  peak_concurrent_sessions: number;
+
+  peak_concurrent_users: number;
 
   publishers: number;
 
@@ -2409,6 +2417,8 @@ export interface CallStatsParticipantSession {
   distance_to_sfu_kilometers?: number;
 
   ended_at?: Date;
+
+  os?: string;
 
   publisher_type?: string;
 
@@ -2599,6 +2609,14 @@ export interface CallsPerDayReportResponse {
   daily: DailyAggregateCallsPerDayReportResponse[];
 }
 
+export interface CampaignChannelMember {
+  user_id: string;
+
+  channel_role?: string;
+
+  custom?: Record<string, any>;
+}
+
 export interface CampaignChannelTemplate {
   type: string;
 
@@ -2609,6 +2627,8 @@ export interface CampaignChannelTemplate {
   team?: string;
 
   members?: string[];
+
+  members_template?: CampaignChannelMember[];
 }
 
 export interface CampaignCompletedEvent {
@@ -2625,6 +2645,8 @@ export interface CampaignCompletedEvent {
 
 export interface CampaignMessageTemplate {
   poll_id: string;
+
+  searchable: boolean;
 
   text: string;
 
@@ -2756,6 +2778,8 @@ export interface Channel {
 
   active_live_locations?: SharedLocation[];
 
+  filter_tags?: string[];
+
   invites?: ChannelMember[];
 
   members?: ChannelMember[];
@@ -2832,7 +2856,7 @@ export interface ChannelConfig {
 
   partition_size?: number;
 
-  partition_ttl?: number;
+  partition_ttl?: string;
 
   allowed_flag_reasons?: string[];
 
@@ -3012,6 +3036,8 @@ export interface ChannelInput {
 
   truncated_by_id?: string;
 
+  filter_tags?: string[];
+
   invites?: ChannelMemberRequest[];
 
   members?: ChannelMemberRequest[];
@@ -3023,28 +3049,40 @@ export interface ChannelInput {
   custom?: Record<string, any>;
 }
 
+export interface ChannelInputRequest {
+  auto_translation_enabled?: boolean;
+
+  auto_translation_language?: string;
+
+  disabled?: boolean;
+
+  frozen?: boolean;
+
+  team?: string;
+
+  invites?: ChannelMember[];
+
+  members?: ChannelMember[];
+
+  config_overrides?: ConfigOverrides;
+
+  created_by?: User;
+
+  custom?: Record<string, any>;
+}
+
 export interface ChannelMember {
-  banned: boolean;
-
-  channel_role: string;
-
-  created_at: Date;
-
-  is_global_banned: boolean;
-
-  notifications_muted: boolean;
-
-  shadow_banned: boolean;
-
-  updated_at: Date;
-
-  custom: Record<string, any>;
-
   archived_at?: Date;
 
   ban_expires?: Date;
 
+  banned?: boolean;
+
   blocked?: boolean;
+
+  channel_role?: string;
+
+  created_at?: Date;
 
   deleted_at?: Date;
 
@@ -3056,17 +3094,27 @@ export interface ChannelMember {
 
   invited?: boolean;
 
+  is_global_banned?: boolean;
+
   is_moderator?: boolean;
+
+  notifications_muted?: boolean;
 
   pinned_at?: Date;
 
+  shadow_banned?: boolean;
+
   status?: string;
+
+  updated_at?: Date;
 
   user_id?: string;
 
   deleted_messages?: string[];
 
   channel?: DenormalizedChannelFields;
+
+  custom?: Record<string, any>;
 
   user?: User;
 }
@@ -3215,6 +3263,12 @@ export interface ChannelPushPreferences {
   disabled_until?: Date;
 }
 
+export interface ChannelPushPreferencesResponse {
+  chat_level?: string;
+
+  disabled_until?: Date;
+}
+
 export interface ChannelResponse {
   cid: string;
 
@@ -3260,6 +3314,8 @@ export interface ChannelResponse {
 
   truncated_at?: Date;
 
+  filter_tags?: string[];
+
   members?: ChannelMemberResponse[];
 
   own_capabilities?: ChannelOwnCapability[];
@@ -3302,7 +3358,7 @@ export interface ChannelStateResponse {
 
   membership?: ChannelMemberResponse;
 
-  push_preferences?: ChannelPushPreferences;
+  push_preferences?: ChannelPushPreferencesResponse;
 }
 
 export interface ChannelStateResponseFields {
@@ -3334,7 +3390,7 @@ export interface ChannelStateResponseFields {
 
   membership?: ChannelMemberResponse;
 
-  push_preferences?: ChannelPushPreferences;
+  push_preferences?: ChannelPushPreferencesResponse;
 }
 
 export interface ChannelTruncatedEvent {
@@ -3655,17 +3711,17 @@ export interface CollectionRequest {
 }
 
 export interface CollectionResponse {
-  created_at: Date;
-
   id: string;
 
   name: string;
 
-  updated_at: Date;
+  created_at?: Date;
 
-  custom: Record<string, any>;
+  updated_at?: Date;
 
   user_id?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface Command {
@@ -3853,10 +3909,6 @@ export interface CommentUpdatedEvent {
 export interface CommitMessageRequest {}
 
 export interface ConfigOverrides {
-  commands: string[];
-
-  grants: Record<string, string[]>;
-
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block';
@@ -3880,6 +3932,10 @@ export interface ConfigOverrides {
   url_enrichment?: boolean;
 
   user_message_reminders?: boolean;
+
+  commands?: string[];
+
+  grants?: Record<string, string[]>;
 }
 
 export interface ConfigResponse {
@@ -3939,7 +3995,13 @@ export interface CreateBlockListRequest {
 
   team?: string;
 
-  type?: 'regex' | 'domain' | 'domain_allowlist' | 'email' | 'word';
+  type?:
+    | 'regex'
+    | 'domain'
+    | 'domain_allowlist'
+    | 'email'
+    | 'email_allowlist'
+    | 'word';
 }
 
 export interface CreateBlockListResponse {
@@ -4353,6 +4415,18 @@ export interface CreateRoleResponse {
   role: Role;
 }
 
+export interface CreateSIPTrunkRequest {
+  name: string;
+
+  numbers: string[];
+}
+
+export interface CreateSIPTrunkResponse {
+  duration: string;
+
+  sip_trunk?: SIPTrunkResponse;
+}
+
 export interface CustomActionRequest {
   id?: string;
 
@@ -4699,6 +4773,14 @@ export interface DeleteReminderResponse {
   duration: string;
 }
 
+export interface DeleteSIPInboundRoutingRuleResponse {
+  duration: string;
+}
+
+export interface DeleteSIPTrunkResponse {
+  duration: string;
+}
+
 export interface DeleteSegmentTargetsRequest {
   target_ids: string[];
 }
@@ -4743,8 +4825,14 @@ export interface DeleteUsersResponse {
   task_id: string;
 }
 
+export interface DeliveredMessagePayload {
+  cid?: string;
+
+  id?: string;
+}
+
 export interface DeliveryReceipts {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface DeliveryReceiptsResponse {
@@ -4950,19 +5038,19 @@ export interface EnrichedActivity {
 }
 
 export interface EnrichedCollectionResponse {
-  created_at: Date;
-
   id: string;
 
   name: string;
 
   status: 'ok' | 'notfound';
 
-  updated_at: Date;
+  created_at?: Date;
 
-  custom: Record<string, any>;
+  updated_at?: Date;
 
   user_id?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface EnrichedReaction {
@@ -5623,6 +5711,20 @@ export interface FeedsPreferences {
   custom_activity_types?: Record<string, string>;
 }
 
+export interface FeedsPreferencesResponse {
+  comment?: string;
+
+  comment_reaction?: string;
+
+  follow?: string;
+
+  mention?: string;
+
+  reaction?: string;
+
+  custom_activity_types?: Record<string, string>;
+}
+
 export interface FeedsReactionResponse {
   activity_id: string;
 
@@ -5671,6 +5773,12 @@ export interface FileUploadResponse {
   file?: string;
 
   thumb_url?: string;
+}
+
+export interface FilterConfigResponse {
+  llm_labels: string[];
+
+  ai_text_labels?: string[];
 }
 
 export interface FirebaseConfig {
@@ -6531,7 +6639,7 @@ export interface GetRateLimitsResponse {
 export interface GetReactionsResponse {
   duration: string;
 
-  reactions: Reaction[];
+  reactions: ReactionResponse[];
 }
 
 export interface GetRepliesResponse {
@@ -7129,6 +7237,18 @@ export interface ListRolesResponse {
   roles: Role[];
 }
 
+export interface ListSIPInboundRoutingRuleResponse {
+  duration: string;
+
+  sip_inbound_routing_rules: SIPInboundRoutingRuleResponse[];
+}
+
+export interface ListSIPTrunksResponse {
+  duration: string;
+
+  sip_trunks: SIPTrunkResponse[];
+}
+
 export interface ListTranscriptionsResponse {
   duration: string;
 
@@ -7159,6 +7279,14 @@ export interface MarkChannelsReadRequest {
   user?: UserRequest;
 }
 
+export interface MarkDeliveredRequest {
+  latest_delivered_messages?: DeliveredMessagePayload[];
+}
+
+export interface MarkDeliveredResponse {
+  duration: string;
+}
+
 export interface MarkReadRequest {
   message_id?: string;
 
@@ -7183,6 +7311,8 @@ export interface MarkReviewedRequest {
 
 export interface MarkUnreadRequest {
   message_id?: string;
+
+  message_timestamp?: Date;
 
   thread_id?: string;
 
@@ -7903,6 +8033,14 @@ export interface MessageWithChannelResponse {
   shared_location?: SharedLocationResponseData;
 }
 
+export interface MetricDescriptor {
+  label: string;
+
+  description?: string;
+
+  unit?: string;
+}
+
 export interface MetricThreshold {
   level: string;
 
@@ -8520,7 +8658,7 @@ export interface OwnUserResponse {
 
   privacy_settings?: PrivacySettingsResponse;
 
-  push_preferences?: PushPreferences;
+  push_preferences?: PushPreferencesResponse;
 
   teams_role?: Record<string, string>;
 
@@ -8586,7 +8724,11 @@ export interface ParticipantReportResponse {
 }
 
 export interface ParticipantSeriesPublisherStats {
+  global_metrics_order?: string[];
+
   global?: Record<string, number[][]>;
+
+  global_meta?: Record<string, MetricDescriptor>;
 
   global_thresholds?: Record<string, MetricThreshold[]>;
 
@@ -8594,9 +8736,13 @@ export interface ParticipantSeriesPublisherStats {
 }
 
 export interface ParticipantSeriesSubscriberStats {
+  global_metrics_order?: string[];
+
   subscriptions?: ParticipantSeriesSubscriptionTrackMetrics[];
 
   global?: Record<string, number[][]>;
+
+  global_meta?: Record<string, MetricDescriptor>;
 
   global_thresholds?: Record<string, MetricThreshold[]>;
 }
@@ -8632,13 +8778,21 @@ export interface ParticipantSeriesTrackMetrics {
 
   track_type?: string;
 
+  metrics_order?: string[];
+
   metrics?: Record<string, number[][]>;
+
+  metrics_meta?: Record<string, MetricDescriptor>;
 
   thresholds?: Record<string, MetricThreshold[]>;
 }
 
 export interface ParticipantSeriesUserStats {
+  metrics_order?: string[];
+
   metrics?: Record<string, number[][]>;
+
+  metrics_meta?: Record<string, MetricDescriptor>;
 
   thresholds?: Record<string, MetricThreshold[]>;
 }
@@ -9091,6 +9245,18 @@ export interface PushPreferences {
   feeds_level?: string;
 
   feeds_preferences?: FeedsPreferences;
+}
+
+export interface PushPreferencesResponse {
+  call_level?: string;
+
+  chat_level?: string;
+
+  disabled_until?: Date;
+
+  feeds_level?: string;
+
+  feeds_preferences?: FeedsPreferencesResponse;
 }
 
 export interface PushProvider {
@@ -10041,6 +10207,8 @@ export interface QueryReviewQueueResponse {
   next?: string;
 
   prev?: string;
+
+  filter_config?: FilterConfigResponse;
 }
 
 export interface QuerySegmentTargetsRequest {
@@ -10408,7 +10576,7 @@ export interface ReadCollectionsResponse {
 }
 
 export interface ReadReceipts {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface ReadReceiptsResponse {
@@ -10568,9 +10736,9 @@ export interface ReminderResponseData {
 
   channel?: ChannelResponse;
 
-  message?: Message;
+  message?: MessageResponse;
 
-  user?: User;
+  user?: UserResponse;
 }
 
 export interface ReminderUpdatedEvent {
@@ -10621,6 +10789,26 @@ export interface ReportResponse {
   participants: ParticipantReportResponse;
 
   user_ratings: UserRatingReportResponse;
+}
+
+export interface ResolveSipInboundRequest {
+  sip_caller_number: string;
+
+  sip_trunk_number: string;
+
+  challenge: SIPChallenge;
+
+  sip_headers?: Record<string, string>;
+}
+
+export interface ResolveSipInboundResponse {
+  duration: string;
+
+  credentials: SipInboundCredentials;
+
+  sip_routing_rule?: SIPInboundRoutingRuleResponse;
+
+  sip_trunk?: SIPTrunkResponse;
 }
 
 export interface Response {
@@ -10729,6 +10917,18 @@ export interface ReviewQueueItemUpdatedEvent {
   action?: ActionLogResponse;
 
   review_queue_item?: ReviewQueueItemResponse;
+}
+
+export interface RingCallRequest {
+  video?: boolean;
+
+  members_ids?: string[];
+}
+
+export interface RingCallResponse {
+  duration: string;
+
+  members_ids: string[];
 }
 
 export interface RingSettings {
@@ -10853,6 +11053,182 @@ export interface SDKUsageReport {
 
 export interface SDKUsageReportResponse {
   daily: DailyAggregateSDKUsageReportResponse[];
+}
+
+export interface SIPCallConfigsRequest {
+  custom_data?: Record<string, any>;
+}
+
+export interface SIPCallConfigsResponse {
+  custom_data: Record<string, any>;
+}
+
+export interface SIPCallerConfigsRequest {
+  id: string;
+
+  custom_data?: Record<string, any>;
+}
+
+export interface SIPCallerConfigsResponse {
+  id: string;
+
+  custom_data: Record<string, any>;
+}
+
+export interface SIPChallenge {
+  a1?: string;
+
+  algorithm?: string;
+
+  charset?: string;
+
+  cnonce?: string;
+
+  method?: string;
+
+  nc?: string;
+
+  nonce?: string;
+
+  opaque?: string;
+
+  realm?: string;
+
+  response?: string;
+
+  stale?: boolean;
+
+  uri?: string;
+
+  userhash?: boolean;
+
+  username?: string;
+
+  domain?: string[];
+
+  qop?: string[];
+}
+
+export interface SIPDirectRoutingRuleCallConfigsRequest {
+  call_id: string;
+
+  call_type: string;
+}
+
+export interface SIPDirectRoutingRuleCallConfigsResponse {
+  call_id: string;
+
+  call_type: string;
+}
+
+export interface SIPInboundRoutingRulePinConfigsRequest {
+  custom_webhook_url?: string;
+
+  pin_failed_attempt_prompt?: string;
+
+  pin_hangup_prompt?: string;
+
+  pin_prompt?: string;
+
+  pin_success_prompt?: string;
+}
+
+export interface SIPInboundRoutingRulePinConfigsResponse {
+  custom_webhook_url?: string;
+
+  pin_failed_attempt_prompt?: string;
+
+  pin_hangup_prompt?: string;
+
+  pin_prompt?: string;
+
+  pin_success_prompt?: string;
+}
+
+export interface SIPInboundRoutingRuleRequest {
+  name: string;
+
+  trunk_ids: string[];
+
+  caller_configs: SIPCallerConfigsRequest;
+
+  called_numbers?: string[];
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsRequest;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsRequest;
+
+  pin_protection_configs?: SIPPinProtectionConfigsRequest;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsRequest;
+}
+
+export interface SIPInboundRoutingRuleResponse {
+  created_at: Date;
+
+  duration: string;
+
+  id: string;
+
+  name: string;
+
+  updated_at: Date;
+
+  called_numbers: string[];
+
+  trunk_ids: string[];
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsResponse;
+
+  caller_configs?: SIPCallerConfigsResponse;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsResponse;
+
+  pin_protection_configs?: SIPPinProtectionConfigsResponse;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsResponse;
+}
+
+export interface SIPPinProtectionConfigsRequest {
+  default_pin?: string;
+
+  enabled?: boolean;
+
+  max_attempts?: number;
+
+  required_pin_digits?: number;
+}
+
+export interface SIPPinProtectionConfigsResponse {
+  enabled: boolean;
+
+  default_pin?: string;
+
+  max_attempts?: number;
+
+  required_pin_digits?: number;
+}
+
+export interface SIPTrunkResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  password: string;
+
+  updated_at: Date;
+
+  uri: string;
+
+  username: string;
+
+  numbers: string[];
 }
 
 export interface SRTIngress {
@@ -11180,27 +11556,13 @@ export interface ShadowBlockActionRequest {
 }
 
 export interface SharedLocation {
-  channel_cid: string;
+  latitude: number;
 
-  created_at: Date;
+  longitude: number;
 
-  created_by_device_id: string;
-
-  message_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
+  created_by_device_id?: string;
 
   end_at?: Date;
-
-  latitude?: number;
-
-  longitude?: number;
-
-  channel?: Channel;
-
-  message?: Message;
 }
 
 export interface SharedLocationResponse {
@@ -11273,6 +11635,20 @@ export interface SingleFollowResponse {
   duration: string;
 
   follow: FollowResponse;
+}
+
+export interface SipInboundCredentials {
+  call_id: string;
+
+  call_type: string;
+
+  token: string;
+
+  user_id: string;
+
+  call_custom_data: Record<string, any>;
+
+  user_custom_data: Record<string, any>;
 }
 
 export interface SortParam {
@@ -12094,7 +12470,7 @@ export interface TruncateChannelResponse {
 }
 
 export interface TypingIndicators {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface TypingIndicatorsResponse {
@@ -12538,11 +12914,15 @@ export interface UpdateChannelRequest {
 
   hide_history?: boolean;
 
+  hide_history_before?: Date;
+
   reject_invite?: boolean;
 
   skip_push?: boolean;
 
   user_id?: string;
+
+  add_filter_tags?: string[];
 
   add_members?: ChannelMemberRequest[];
 
@@ -12554,9 +12934,11 @@ export interface UpdateChannelRequest {
 
   invites?: ChannelMemberRequest[];
 
+  remove_filter_tags?: string[];
+
   remove_members?: string[];
 
-  data?: ChannelInput;
+  data?: ChannelInputRequest;
 
   message?: MessageRequest;
 
@@ -13048,6 +13430,44 @@ export interface UpdateReminderResponse {
   reminder: ReminderResponseData;
 }
 
+export interface UpdateSIPInboundRoutingRuleRequest {
+  name: string;
+
+  called_numbers: string[];
+
+  trunk_ids: string[];
+
+  caller_configs: SIPCallerConfigsRequest;
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsRequest;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsRequest;
+
+  pin_protection_configs?: SIPPinProtectionConfigsRequest;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsRequest;
+}
+
+export interface UpdateSIPInboundRoutingRuleResponse {
+  duration: string;
+
+  sip_inbound_routing_rule?: SIPInboundRoutingRuleResponse;
+}
+
+export interface UpdateSIPTrunkRequest {
+  name: string;
+
+  numbers: string[];
+}
+
+export interface UpdateSIPTrunkResponse {
+  duration: string;
+
+  sip_trunk?: SIPTrunkResponse;
+}
+
 export interface UpdateThreadPartialRequest {
   user_id?: string;
 
@@ -13316,43 +13736,27 @@ export interface UpsertPushTemplateResponse {
 }
 
 export interface User {
-  banned: boolean;
-
   id: string;
-
-  online: boolean;
-
-  role: string;
-
-  custom: Record<string, any>;
-
-  teams_role: Record<string, string>;
-
-  avg_response_time?: number;
 
   ban_expires?: Date;
 
-  created_at?: Date;
-
-  deactivated_at?: Date;
-
-  deleted_at?: Date;
+  banned?: boolean;
 
   invisible?: boolean;
 
   language?: string;
 
-  last_active?: Date;
-
-  last_engaged_at?: Date;
-
   revoke_tokens_issued_before?: Date;
 
-  updated_at?: Date;
+  role?: string;
 
   teams?: string[];
 
+  custom?: Record<string, any>;
+
   privacy_settings?: PrivacySettings;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserBannedEvent {

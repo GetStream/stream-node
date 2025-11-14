@@ -6,9 +6,13 @@ import {
   CollectUserFeedbackResponse,
   CreateCallTypeRequest,
   CreateCallTypeResponse,
+  CreateSIPTrunkRequest,
+  CreateSIPTrunkResponse,
   DeleteCallRequest,
   DeleteCallResponse,
   DeleteRecordingResponse,
+  DeleteSIPInboundRoutingRuleResponse,
+  DeleteSIPTrunkResponse,
   DeleteTranscriptionResponse,
   EndCallResponse,
   GetActiveCallsStatusResponse,
@@ -25,6 +29,8 @@ import {
   KickUserResponse,
   ListCallTypeResponse,
   ListRecordingsResponse,
+  ListSIPInboundRoutingRuleResponse,
+  ListSIPTrunksResponse,
   ListTranscriptionsResponse,
   MuteUsersRequest,
   MuteUsersResponse,
@@ -44,7 +50,13 @@ import {
   QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
+  ResolveSipInboundRequest,
+  ResolveSipInboundResponse,
   Response,
+  RingCallRequest,
+  RingCallResponse,
+  SIPInboundRoutingRuleRequest,
+  SIPInboundRoutingRuleResponse,
   SendCallEventRequest,
   SendCallEventResponse,
   SendClosedCaptionRequest,
@@ -83,6 +95,10 @@ import {
   UpdateCallResponse,
   UpdateCallTypeRequest,
   UpdateCallTypeResponse,
+  UpdateSIPInboundRoutingRuleRequest,
+  UpdateSIPInboundRoutingRuleResponse,
+  UpdateSIPTrunkRequest,
+  UpdateSIPTrunkResponse,
   UpdateUserPermissionsRequest,
   UpdateUserPermissionsResponse,
 } from '../models';
@@ -677,6 +693,34 @@ export class VideoApi {
     >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
 
     decoders.GetCallReportResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async ringCall(
+    request: RingCallRequest & { type: string; id: string },
+  ): Promise<StreamResponse<RingCallResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      video: request?.video,
+      members_ids: request?.members_ids,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RingCallResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/ring',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RingCallResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1453,6 +1497,202 @@ export class VideoApi {
     >('GET', '/api/v2/video/edges', undefined, undefined);
 
     decoders.GetEdgesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async resolveSipInbound(
+    request: ResolveSipInboundRequest,
+  ): Promise<StreamResponse<ResolveSipInboundResponse>> {
+    const body = {
+      sip_caller_number: request?.sip_caller_number,
+      sip_trunk_number: request?.sip_trunk_number,
+      challenge: request?.challenge,
+      sip_headers: request?.sip_headers,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ResolveSipInboundResponse>
+    >(
+      'POST',
+      '/api/v2/video/sip/resolve',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ResolveSipInboundResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listSIPInboundRoutingRule(): Promise<
+    StreamResponse<ListSIPInboundRoutingRuleResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListSIPInboundRoutingRuleResponse>
+    >('GET', '/api/v2/video/sip/routing_rules', undefined, undefined);
+
+    decoders.ListSIPInboundRoutingRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createSIPInboundRoutingRule(
+    request: SIPInboundRoutingRuleRequest,
+  ): Promise<StreamResponse<SIPInboundRoutingRuleResponse>> {
+    const body = {
+      name: request?.name,
+      trunk_ids: request?.trunk_ids,
+      caller_configs: request?.caller_configs,
+      called_numbers: request?.called_numbers,
+      caller_numbers: request?.caller_numbers,
+      call_configs: request?.call_configs,
+      direct_routing_configs: request?.direct_routing_configs,
+      pin_protection_configs: request?.pin_protection_configs,
+      pin_routing_configs: request?.pin_routing_configs,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SIPInboundRoutingRuleResponse>
+    >(
+      'POST',
+      '/api/v2/video/sip/routing_rules',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.SIPInboundRoutingRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteSIPInboundRoutingRule(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteSIPInboundRoutingRuleResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteSIPInboundRoutingRuleResponse>
+    >('DELETE', '/api/v2/video/sip/routing_rules/{id}', pathParams, undefined);
+
+    decoders.DeleteSIPInboundRoutingRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateSIPInboundRoutingRule(
+    request: UpdateSIPInboundRoutingRuleRequest & { id: string },
+  ): Promise<StreamResponse<UpdateSIPInboundRoutingRuleResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      name: request?.name,
+      called_numbers: request?.called_numbers,
+      trunk_ids: request?.trunk_ids,
+      caller_configs: request?.caller_configs,
+      caller_numbers: request?.caller_numbers,
+      call_configs: request?.call_configs,
+      direct_routing_configs: request?.direct_routing_configs,
+      pin_protection_configs: request?.pin_protection_configs,
+      pin_routing_configs: request?.pin_routing_configs,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateSIPInboundRoutingRuleResponse>
+    >(
+      'PUT',
+      '/api/v2/video/sip/routing_rules/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateSIPInboundRoutingRuleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listSIPTrunks(): Promise<StreamResponse<ListSIPTrunksResponse>> {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListSIPTrunksResponse>
+    >('GET', '/api/v2/video/sip/trunks', undefined, undefined);
+
+    decoders.ListSIPTrunksResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createSIPTrunk(
+    request: CreateSIPTrunkRequest,
+  ): Promise<StreamResponse<CreateSIPTrunkResponse>> {
+    const body = {
+      name: request?.name,
+      numbers: request?.numbers,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateSIPTrunkResponse>
+    >(
+      'POST',
+      '/api/v2/video/sip/trunks',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateSIPTrunkResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteSIPTrunk(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteSIPTrunkResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteSIPTrunkResponse>
+    >('DELETE', '/api/v2/video/sip/trunks/{id}', pathParams, undefined);
+
+    decoders.DeleteSIPTrunkResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateSIPTrunk(
+    request: UpdateSIPTrunkRequest & { id: string },
+  ): Promise<StreamResponse<UpdateSIPTrunkResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      name: request?.name,
+      numbers: request?.numbers,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateSIPTrunkResponse>
+    >(
+      'PUT',
+      '/api/v2/video/sip/trunks/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateSIPTrunkResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

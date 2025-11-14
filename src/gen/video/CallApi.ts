@@ -25,6 +25,8 @@ import {
   PinResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
+  RingCallRequest,
+  RingCallResponse,
   SendCallEventRequest,
   SendCallEventResponse,
   SendClosedCaptionRequest,
@@ -210,6 +212,10 @@ export class CallApi {
       type: this.type,
       ...request,
     });
+  }
+
+  ring(request?: RingCallRequest): Promise<StreamResponse<RingCallResponse>> {
+    return this.videoApi.ringCall({ id: this.id, type: this.type, ...request });
   }
 
   startRTMPBroadcasts(
