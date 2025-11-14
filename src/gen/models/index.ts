@@ -511,6 +511,8 @@ export interface ActivityRequest {
 
   attachments?: Attachment[];
 
+  collection_refs?: string[];
+
   filter_tags?: string[];
 
   interest_tags?: string[];
@@ -570,6 +572,8 @@ export interface ActivityResponse {
   own_bookmarks: BookmarkResponse[];
 
   own_reactions: FeedsReactionResponse[];
+
+  collections: Record<string, EnrichedCollectionResponse>;
 
   custom: Record<string, any>;
 
@@ -700,6 +704,8 @@ export interface AddActivityRequest {
   visibility_tag?: string;
 
   attachments?: Attachment[];
+
+  collection_refs?: string[];
 
   filter_tags?: string[];
 
@@ -3662,6 +3668,30 @@ export interface CollectUserFeedbackResponse {
   duration: string;
 }
 
+export interface CollectionRequest {
+  name: string;
+
+  custom: Record<string, any>;
+
+  id?: string;
+
+  user_id?: string;
+}
+
+export interface CollectionResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  updated_at: Date;
+
+  custom: Record<string, any>;
+
+  user_id?: string;
+}
+
 export interface Command {
   args: string;
 
@@ -4110,6 +4140,20 @@ export interface CreateChannelTypeResponse {
   blocklists?: BlockListOptions[];
 
   automod_thresholds?: Thresholds;
+}
+
+export interface CreateCollectionsRequest {
+  collections: CollectionRequest[];
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface CreateCollectionsResponse {
+  duration: string;
+
+  collections: CollectionResponse[];
 }
 
 export interface CreateCommandRequest {
@@ -4583,6 +4627,10 @@ export interface DeleteChannelsResultResponse {
   error?: string;
 }
 
+export interface DeleteCollectionsResponse {
+  duration: string;
+}
+
 export interface DeleteCommandResponse {
   duration: string;
 
@@ -4943,6 +4991,22 @@ export interface EnrichedActivity {
   reaction_counts?: Record<string, number>;
 
   target?: Data;
+}
+
+export interface EnrichedCollectionResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  status: 'ok' | 'notfound';
+
+  updated_at: Date;
+
+  custom: Record<string, any>;
+
+  user_id?: string;
 }
 
 export interface EnrichedReaction {
@@ -10411,6 +10475,12 @@ export interface ReactivateUsersResponse {
   task_id: string;
 }
 
+export interface ReadCollectionsResponse {
+  duration: string;
+
+  collections: CollectionResponse[];
+}
+
 export interface ReadReceipts {
   enabled: boolean;
 }
@@ -12512,6 +12582,8 @@ export interface UpdateActivityRequest {
 
   attachments?: Attachment[];
 
+  collection_refs?: string[];
+
   feeds?: string[];
 
   filter_tags?: string[];
@@ -12947,6 +13019,28 @@ export interface UpdateChannelTypeResponse {
   automod_thresholds?: Thresholds;
 }
 
+export interface UpdateCollectionRequest {
+  id: string;
+
+  name: string;
+
+  custom: Record<string, any>;
+}
+
+export interface UpdateCollectionsRequest {
+  collections: UpdateCollectionRequest[];
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface UpdateCollectionsResponse {
+  duration: string;
+
+  collections: CollectionResponse[];
+}
+
 export interface UpdateCommandRequest {
   description: string;
 
@@ -13364,6 +13458,16 @@ export interface UpsertActivitiesResponse {
   duration: string;
 
   activities: ActivityResponse[];
+}
+
+export interface UpsertCollectionsRequest {
+  collections: CollectionRequest[];
+}
+
+export interface UpsertCollectionsResponse {
+  duration: string;
+
+  collections: CollectionResponse[];
 }
 
 export interface UpsertConfigRequest {
