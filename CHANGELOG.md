@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.20](https://github.com/GetStream/stream-node/compare/v0.7.19...v0.7.20) (2025-11-14)
+
+
+### Features
+
+* ring individual members ([#105](https://github.com/GetStream/stream-node/issues/105)) ([04ac57e](https://github.com/GetStream/stream-node/commit/04ac57e014fc258829e5e6f58eacdc64c61d9c2a))
+
 ## [0.7.19](https://github.com/GetStream/stream-node/compare/v0.7.18...v0.7.19) (2025-11-11)
 
 
