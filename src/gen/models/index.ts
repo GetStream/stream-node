@@ -1526,6 +1526,8 @@ export interface BookmarkFolderResponse {
 
   updated_at: Date;
 
+  user: UserResponseCommonFields;
+
   custom?: Record<string, any>;
 }
 
@@ -1550,7 +1552,7 @@ export interface BookmarkResponse {
 
   activity: ActivityResponse;
 
-  user: UserResponse;
+  user: UserResponseCommonFields;
 
   custom?: Record<string, any>;
 
@@ -2644,6 +2646,8 @@ export interface CampaignCompletedEvent {
 export interface CampaignMessageTemplate {
   poll_id: string;
 
+  searchable: boolean;
+
   text: string;
 
   attachments: Attachment[];
@@ -2852,7 +2856,7 @@ export interface ChannelConfig {
 
   partition_size?: number;
 
-  partition_ttl?: number;
+  partition_ttl?: string;
 
   allowed_flag_reasons?: string[];
 
@@ -3045,28 +3049,40 @@ export interface ChannelInput {
   custom?: Record<string, any>;
 }
 
+export interface ChannelInputRequest {
+  auto_translation_enabled?: boolean;
+
+  auto_translation_language?: string;
+
+  disabled?: boolean;
+
+  frozen?: boolean;
+
+  team?: string;
+
+  invites?: ChannelMember[];
+
+  members?: ChannelMember[];
+
+  config_overrides?: ConfigOverrides;
+
+  created_by?: User;
+
+  custom?: Record<string, any>;
+}
+
 export interface ChannelMember {
-  banned: boolean;
-
-  channel_role: string;
-
-  created_at: Date;
-
-  is_global_banned: boolean;
-
-  notifications_muted: boolean;
-
-  shadow_banned: boolean;
-
-  updated_at: Date;
-
-  custom: Record<string, any>;
-
   archived_at?: Date;
 
   ban_expires?: Date;
 
+  banned?: boolean;
+
   blocked?: boolean;
+
+  channel_role?: string;
+
+  created_at?: Date;
 
   deleted_at?: Date;
 
@@ -3078,17 +3094,27 @@ export interface ChannelMember {
 
   invited?: boolean;
 
+  is_global_banned?: boolean;
+
   is_moderator?: boolean;
+
+  notifications_muted?: boolean;
 
   pinned_at?: Date;
 
+  shadow_banned?: boolean;
+
   status?: string;
+
+  updated_at?: Date;
 
   user_id?: string;
 
   deleted_messages?: string[];
 
   channel?: DenormalizedChannelFields;
+
+  custom?: Record<string, any>;
 
   user?: User;
 }
@@ -3237,6 +3263,12 @@ export interface ChannelPushPreferences {
   disabled_until?: Date;
 }
 
+export interface ChannelPushPreferencesResponse {
+  chat_level?: string;
+
+  disabled_until?: Date;
+}
+
 export interface ChannelResponse {
   cid: string;
 
@@ -3326,7 +3358,7 @@ export interface ChannelStateResponse {
 
   membership?: ChannelMemberResponse;
 
-  push_preferences?: ChannelPushPreferences;
+  push_preferences?: ChannelPushPreferencesResponse;
 }
 
 export interface ChannelStateResponseFields {
@@ -3358,7 +3390,7 @@ export interface ChannelStateResponseFields {
 
   membership?: ChannelMemberResponse;
 
-  push_preferences?: ChannelPushPreferences;
+  push_preferences?: ChannelPushPreferencesResponse;
 }
 
 export interface ChannelTruncatedEvent {
@@ -3679,17 +3711,17 @@ export interface CollectionRequest {
 }
 
 export interface CollectionResponse {
-  created_at: Date;
-
   id: string;
 
   name: string;
 
-  updated_at: Date;
+  created_at?: Date;
 
-  custom: Record<string, any>;
+  updated_at?: Date;
 
   user_id?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface Command {
@@ -3877,10 +3909,6 @@ export interface CommentUpdatedEvent {
 export interface CommitMessageRequest {}
 
 export interface ConfigOverrides {
-  commands: string[];
-
-  grants: Record<string, string[]>;
-
   blocklist?: string;
 
   blocklist_behavior?: 'flag' | 'block';
@@ -3904,6 +3932,10 @@ export interface ConfigOverrides {
   url_enrichment?: boolean;
 
   user_message_reminders?: boolean;
+
+  commands?: string[];
+
+  grants?: Record<string, string[]>;
 }
 
 export interface ConfigResponse {
@@ -3963,7 +3995,13 @@ export interface CreateBlockListRequest {
 
   team?: string;
 
-  type?: 'regex' | 'domain' | 'domain_allowlist' | 'email' | 'word';
+  type?:
+    | 'regex'
+    | 'domain'
+    | 'domain_allowlist'
+    | 'email'
+    | 'email_allowlist'
+    | 'word';
 }
 
 export interface CreateBlockListResponse {
@@ -4787,8 +4825,14 @@ export interface DeleteUsersResponse {
   task_id: string;
 }
 
+export interface DeliveredMessagePayload {
+  cid?: string;
+
+  id?: string;
+}
+
 export interface DeliveryReceipts {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface DeliveryReceiptsResponse {
@@ -4994,19 +5038,19 @@ export interface EnrichedActivity {
 }
 
 export interface EnrichedCollectionResponse {
-  created_at: Date;
-
   id: string;
 
   name: string;
 
   status: 'ok' | 'notfound';
 
-  updated_at: Date;
+  created_at?: Date;
 
-  custom: Record<string, any>;
+  updated_at?: Date;
 
   user_id?: string;
+
+  custom?: Record<string, any>;
 }
 
 export interface EnrichedReaction {
@@ -5667,6 +5711,20 @@ export interface FeedsPreferences {
   custom_activity_types?: Record<string, string>;
 }
 
+export interface FeedsPreferencesResponse {
+  comment?: string;
+
+  comment_reaction?: string;
+
+  follow?: string;
+
+  mention?: string;
+
+  reaction?: string;
+
+  custom_activity_types?: Record<string, string>;
+}
+
 export interface FeedsReactionResponse {
   activity_id: string;
 
@@ -5715,6 +5773,12 @@ export interface FileUploadResponse {
   file?: string;
 
   thumb_url?: string;
+}
+
+export interface FilterConfigResponse {
+  llm_labels: string[];
+
+  ai_text_labels?: string[];
 }
 
 export interface FirebaseConfig {
@@ -6575,7 +6639,7 @@ export interface GetRateLimitsResponse {
 export interface GetReactionsResponse {
   duration: string;
 
-  reactions: Reaction[];
+  reactions: ReactionResponse[];
 }
 
 export interface GetRepliesResponse {
@@ -7215,6 +7279,14 @@ export interface MarkChannelsReadRequest {
   user?: UserRequest;
 }
 
+export interface MarkDeliveredRequest {
+  latest_delivered_messages?: DeliveredMessagePayload[];
+}
+
+export interface MarkDeliveredResponse {
+  duration: string;
+}
+
 export interface MarkReadRequest {
   message_id?: string;
 
@@ -7239,6 +7311,8 @@ export interface MarkReviewedRequest {
 
 export interface MarkUnreadRequest {
   message_id?: string;
+
+  message_timestamp?: Date;
 
   thread_id?: string;
 
@@ -8584,7 +8658,7 @@ export interface OwnUserResponse {
 
   privacy_settings?: PrivacySettingsResponse;
 
-  push_preferences?: PushPreferences;
+  push_preferences?: PushPreferencesResponse;
 
   teams_role?: Record<string, string>;
 
@@ -9173,6 +9247,18 @@ export interface PushPreferences {
   feeds_preferences?: FeedsPreferences;
 }
 
+export interface PushPreferencesResponse {
+  call_level?: string;
+
+  chat_level?: string;
+
+  disabled_until?: Date;
+
+  feeds_level?: string;
+
+  feeds_preferences?: FeedsPreferencesResponse;
+}
+
 export interface PushProvider {
   created_at: Date;
 
@@ -9320,15 +9406,21 @@ export interface QualityScoreReportResponse {
 }
 
 export interface QueryActivitiesRequest {
+  include_private_activities?: boolean;
+
   limit?: number;
 
   next?: string;
 
   prev?: string;
 
+  user_id?: string;
+
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface QueryActivitiesResponse {
@@ -10115,6 +10207,8 @@ export interface QueryReviewQueueResponse {
   next?: string;
 
   prev?: string;
+
+  filter_config?: FilterConfigResponse;
 }
 
 export interface QuerySegmentTargetsRequest {
@@ -10482,7 +10576,7 @@ export interface ReadCollectionsResponse {
 }
 
 export interface ReadReceipts {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface ReadReceiptsResponse {
@@ -10642,9 +10736,9 @@ export interface ReminderResponseData {
 
   channel?: ChannelResponse;
 
-  message?: Message;
+  message?: MessageResponse;
 
-  user?: User;
+  user?: UserResponse;
 }
 
 export interface ReminderUpdatedEvent {
@@ -11462,27 +11556,13 @@ export interface ShadowBlockActionRequest {
 }
 
 export interface SharedLocation {
-  channel_cid: string;
+  latitude: number;
 
-  created_at: Date;
+  longitude: number;
 
-  created_by_device_id: string;
-
-  message_id: string;
-
-  updated_at: Date;
-
-  user_id: string;
+  created_by_device_id?: string;
 
   end_at?: Date;
-
-  latitude?: number;
-
-  longitude?: number;
-
-  channel?: Channel;
-
-  message?: Message;
 }
 
 export interface SharedLocationResponse {
@@ -12390,7 +12470,7 @@ export interface TruncateChannelResponse {
 }
 
 export interface TypingIndicators {
-  enabled: boolean;
+  enabled?: boolean;
 }
 
 export interface TypingIndicatorsResponse {
@@ -12858,7 +12938,7 @@ export interface UpdateChannelRequest {
 
   remove_members?: string[];
 
-  data?: ChannelInput;
+  data?: ChannelInputRequest;
 
   message?: MessageRequest;
 
@@ -13350,6 +13430,44 @@ export interface UpdateReminderResponse {
   reminder: ReminderResponseData;
 }
 
+export interface UpdateSIPInboundRoutingRuleRequest {
+  name: string;
+
+  called_numbers: string[];
+
+  trunk_ids: string[];
+
+  caller_configs: SIPCallerConfigsRequest;
+
+  caller_numbers?: string[];
+
+  call_configs?: SIPCallConfigsRequest;
+
+  direct_routing_configs?: SIPDirectRoutingRuleCallConfigsRequest;
+
+  pin_protection_configs?: SIPPinProtectionConfigsRequest;
+
+  pin_routing_configs?: SIPInboundRoutingRulePinConfigsRequest;
+}
+
+export interface UpdateSIPInboundRoutingRuleResponse {
+  duration: string;
+
+  sip_inbound_routing_rule?: SIPInboundRoutingRuleResponse;
+}
+
+export interface UpdateSIPTrunkRequest {
+  name: string;
+
+  numbers: string[];
+}
+
+export interface UpdateSIPTrunkResponse {
+  duration: string;
+
+  sip_trunk?: SIPTrunkResponse;
+}
+
 export interface UpdateThreadPartialRequest {
   user_id?: string;
 
@@ -13618,43 +13736,27 @@ export interface UpsertPushTemplateResponse {
 }
 
 export interface User {
-  banned: boolean;
-
   id: string;
-
-  online: boolean;
-
-  role: string;
-
-  custom: Record<string, any>;
-
-  teams_role: Record<string, string>;
-
-  avg_response_time?: number;
 
   ban_expires?: Date;
 
-  created_at?: Date;
-
-  deactivated_at?: Date;
-
-  deleted_at?: Date;
+  banned?: boolean;
 
   invisible?: boolean;
 
   language?: string;
 
-  last_active?: Date;
-
-  last_engaged_at?: Date;
-
   revoke_tokens_issued_before?: Date;
 
-  updated_at?: Date;
+  role?: string;
 
   teams?: string[];
 
+  custom?: Record<string, any>;
+
   privacy_settings?: PrivacySettings;
+
+  teams_role?: Record<string, string>;
 }
 
 export interface UserBannedEvent {

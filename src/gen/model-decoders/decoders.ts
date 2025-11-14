@@ -533,6 +533,8 @@ decoders.BookmarkFolderResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -558,7 +560,7 @@ decoders.BookmarkResponse = (input?: Record<string, any>) => {
 
     activity: { type: 'ActivityResponse', isSingle: true },
 
-    user: { type: 'UserResponse', isSingle: true },
+    user: { type: 'UserResponseCommonFields', isSingle: true },
 
     folder: { type: 'BookmarkFolderResponse', isSingle: true },
   };
@@ -1258,13 +1260,11 @@ decoders.ChannelHiddenEvent = (input?: Record<string, any>) => {
 
 decoders.ChannelMember = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
     archived_at: { type: 'DatetimeType', isSingle: true },
 
     ban_expires: { type: 'DatetimeType', isSingle: true },
+
+    created_at: { type: 'DatetimeType', isSingle: true },
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
@@ -1273,6 +1273,8 @@ decoders.ChannelMember = (input?: Record<string, any>) => {
     invite_rejected_at: { type: 'DatetimeType', isSingle: true },
 
     pinned_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'User', isSingle: true },
   };
@@ -1335,7 +1337,7 @@ decoders.ChannelMutedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.ChannelPushPreferences = (input?: Record<string, any>) => {
+decoders.ChannelPushPreferencesResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     disabled_until: { type: 'DatetimeType', isSingle: true },
   };
@@ -1398,7 +1400,10 @@ decoders.ChannelStateResponse = (input?: Record<string, any>) => {
 
     membership: { type: 'ChannelMemberResponse', isSingle: true },
 
-    push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
+    push_preferences: {
+      type: 'ChannelPushPreferencesResponse',
+      isSingle: true,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -1432,7 +1437,10 @@ decoders.ChannelStateResponseFields = (input?: Record<string, any>) => {
 
     membership: { type: 'ChannelMemberResponse', isSingle: true },
 
-    push_preferences: { type: 'ChannelPushPreferences', isSingle: true },
+    push_preferences: {
+      type: 'ChannelPushPreferencesResponse',
+      isSingle: true,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -1741,6 +1749,13 @@ decoders.CreateMembershipLevelResponse = (input?: Record<string, any>) => {
 decoders.CreateRoleResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     role: { type: 'Role', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.CreateSIPTrunkResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2460,7 +2475,7 @@ decoders.GetPushTemplatesResponse = (input?: Record<string, any>) => {
 
 decoders.GetReactionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    reactions: { type: 'Reaction', isSingle: false },
+    reactions: { type: 'ReactionResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -2611,6 +2626,23 @@ decoders.ListRecordingsResponse = (input?: Record<string, any>) => {
 decoders.ListRolesResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     roles: { type: 'Role', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ListSIPInboundRoutingRuleResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sip_inbound_routing_rules: {
+      type: 'SIPInboundRoutingRuleResponse',
+      isSingle: false,
+    },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ListSIPTrunksResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sip_trunks: { type: 'SIPTrunkResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -3151,7 +3183,7 @@ decoders.OwnUserResponse = (input?: Record<string, any>) => {
 
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
 
-    push_preferences: { type: 'PushPreferences', isSingle: true },
+    push_preferences: { type: 'PushPreferencesResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3311,6 +3343,13 @@ decoders.PushNotificationSettingsResponse = (input?: Record<string, any>) => {
 };
 
 decoders.PushPreferences = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    disabled_until: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PushPreferencesResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     disabled_until: { type: 'DatetimeType', isSingle: true },
   };
@@ -3583,13 +3622,6 @@ decoders.QueryRemindersResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.QueryReviewQueueResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    items: { type: 'ReviewQueueItemResponse', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.QuerySegmentTargetsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     targets: { type: 'SegmentTargetResponse', isSingle: false },
@@ -3774,9 +3806,9 @@ decoders.ReminderResponseData = (input?: Record<string, any>) => {
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
-    message: { type: 'Message', isSingle: true },
+    message: { type: 'MessageResponse', isSingle: true },
 
-    user: { type: 'User', isSingle: true },
+    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3788,6 +3820,15 @@ decoders.ReminderUpdatedEvent = (input?: Record<string, any>) => {
     received_at: { type: 'DatetimeType', isSingle: true },
 
     reminder: { type: 'ReminderResponseData', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sip_routing_rule: { type: 'SIPInboundRoutingRuleResponse', isSingle: true },
+
+    sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3858,6 +3899,24 @@ decoders.ReviewQueueItemUpdatedEvent = (input?: Record<string, any>) => {
 };
 
 decoders.Role = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SIPInboundRoutingRuleResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SIPTrunkResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
@@ -3965,15 +4024,7 @@ decoders.SendReactionResponse = (input?: Record<string, any>) => {
 
 decoders.SharedLocation = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
-
     end_at: { type: 'DatetimeType', isSingle: true },
-
-    channel: { type: 'Channel', isSingle: true },
-
-    message: { type: 'Message', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4405,6 +4456,25 @@ decoders.UpdateReminderResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UpdateSIPInboundRoutingRuleResponse = (
+  input?: Record<string, any>,
+) => {
+  const typeMappings: TypeMapping = {
+    sip_inbound_routing_rule: {
+      type: 'SIPInboundRoutingRuleResponse',
+      isSingle: true,
+    },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UpdateSIPTrunkResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.UpdateThreadPartialResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     thread: { type: 'ThreadResponse', isSingle: true },
@@ -4490,19 +4560,7 @@ decoders.User = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    deactivated_at: { type: 'DatetimeType', isSingle: true },
-
-    deleted_at: { type: 'DatetimeType', isSingle: true },
-
-    last_active: { type: 'DatetimeType', isSingle: true },
-
-    last_engaged_at: { type: 'DatetimeType', isSingle: true },
-
     revoke_tokens_issued_before: { type: 'DatetimeType', isSingle: true },
-
-    updated_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

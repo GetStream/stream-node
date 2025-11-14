@@ -36,6 +36,8 @@ import {
   ListChannelTypesResponse,
   ListCommandsResponse,
   MarkChannelsReadRequest,
+  MarkDeliveredRequest,
+  MarkDeliveredResponse,
   MarkReadRequest,
   MarkReadResponse,
   MarkUnreadRequest,
@@ -62,10 +64,10 @@ import {
   QueryReactionsResponse,
   QueryRemindersRequest,
   QueryRemindersResponse,
-  QuerySegmentsRequest,
-  QuerySegmentsResponse,
   QuerySegmentTargetsRequest,
   QuerySegmentTargetsResponse,
+  QuerySegmentsRequest,
+  QuerySegmentsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
   ReminderResponseData,
@@ -278,6 +280,32 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async markDelivered(
+    request?: MarkDeliveredRequest & { user_id?: string },
+  ): Promise<StreamResponse<MarkDeliveredResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+    const body = {
+      latest_delivered_messages: request?.latest_delivered_messages,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<MarkDeliveredResponse>
+    >(
+      'POST',
+      '/api/v2/chat/channels/delivered',
+      undefined,
+      queryParams,
+      body,
+      'application/json',
+    );
+
+    decoders.MarkDeliveredResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async markChannelsRead(
     request?: MarkChannelsReadRequest,
   ): Promise<StreamResponse<MarkReadResponse>> {
@@ -398,14 +426,17 @@ export class ChatApi {
       accept_invite: request?.accept_invite,
       cooldown: request?.cooldown,
       hide_history: request?.hide_history,
+      hide_history_before: request?.hide_history_before,
       reject_invite: request?.reject_invite,
       skip_push: request?.skip_push,
       user_id: request?.user_id,
+      add_filter_tags: request?.add_filter_tags,
       add_members: request?.add_members,
       add_moderators: request?.add_moderators,
       assign_roles: request?.assign_roles,
       demote_moderators: request?.demote_moderators,
       invites: request?.invites,
+      remove_filter_tags: request?.remove_filter_tags,
       remove_members: request?.remove_members,
       data: request?.data,
       message: request?.message,
@@ -875,6 +906,7 @@ export class ChatApi {
     };
     const body = {
       message_id: request?.message_id,
+      message_timestamp: request?.message_timestamp,
       thread_id: request?.thread_id,
       user_id: request?.user_id,
       user: request?.user,
@@ -2122,10 +2154,16 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async unreadCounts(): Promise<StreamResponse<WrappedUnreadCountsResponse>> {
+  async unreadCounts(request?: {
+    user_id?: string;
+  }): Promise<StreamResponse<WrappedUnreadCountsResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<WrappedUnreadCountsResponse>
-    >('GET', '/api/v2/chat/unread', undefined, undefined);
+    >('GET', '/api/v2/chat/unread', undefined, queryParams);
 
     decoders.WrappedUnreadCountsResponse?.(response.body);
 
