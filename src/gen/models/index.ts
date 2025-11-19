@@ -501,6 +501,8 @@ export interface ActivityRequest {
 
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
+  skip_enrich_url?: boolean;
+
   text?: string;
 
   user_id?: string;
@@ -695,6 +697,8 @@ export interface AddActivityRequest {
 
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
+  skip_enrich_url?: boolean;
+
   text?: string;
 
   user_id?: string;
@@ -780,6 +784,8 @@ export interface AddCommentRequest {
   id?: string;
 
   parent_id?: string;
+
+  skip_enrich_url?: boolean;
 
   skip_push?: boolean;
 
@@ -8354,6 +8360,8 @@ export interface NoiseCancellationSettings {
 }
 
 export interface NotificationConfig {
+  deduplication_window?: string;
+
   track_read?: boolean;
 
   track_seen?: boolean;
@@ -12654,6 +12662,8 @@ export interface UpdateActivityRequest {
 
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
+  skip_enrich_url?: boolean;
+
   text?: string;
 
   user_id?: string;
@@ -13137,6 +13147,8 @@ export interface UpdateCommandResponse {
 
 export interface UpdateCommentRequest {
   comment?: string;
+
+  skip_enrich_url?: boolean;
 
   skip_push?: boolean;
 
