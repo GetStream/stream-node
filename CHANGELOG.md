@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.21](https://github.com/GetStream/stream-node/compare/v0.7.20...v0.7.21) (2025-11-19)
+
+
+### Features
+
+* Add url enrichment fields for activities and comments ([#210](https://github.com/GetStream/stream-node/issues/210)) ([4f6617a](https://github.com/GetStream/stream-node/commit/4f6617aac2e56622fe18a37f001f58783b7be794))
+
 ## [0.7.20](https://github.com/GetStream/stream-node/compare/v0.7.19...v0.7.20) (2025-11-14)
 
 
