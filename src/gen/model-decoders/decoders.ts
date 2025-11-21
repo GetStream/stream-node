@@ -1204,6 +1204,32 @@ decoders.Channel = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ChannelBatchUpdatedCompletedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    batch_created_at: { type: 'DatetimeType', isSingle: true },
+
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ChannelBatchUpdatedStartedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    batch_created_at: { type: 'DatetimeType', isSingle: true },
+
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ChannelConfig = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },

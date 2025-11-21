@@ -1980,6 +1980,8 @@ export interface CallRecording {
 
   filename: string;
 
+  recording_type: string;
+
   session_id: string;
 
   start_time: Date;
@@ -2799,6 +2801,54 @@ export interface Channel {
   members_lookup?: Record<string, ChannelMemberLookup>;
 
   truncated_by?: User;
+}
+
+export interface ChannelBatchUpdatedCompletedEvent {
+  batch_created_at: Date;
+
+  created_at: Date;
+
+  finished_at: Date;
+
+  operation: string;
+
+  status: string;
+
+  success_channels_count: number;
+
+  task_id: string;
+
+  failed_channels: FailedChannelUpdates[];
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
+export interface ChannelBatchUpdatedStartedEvent {
+  batch_created_at: Date;
+
+  created_at: Date;
+
+  finished_at: Date;
+
+  operation: string;
+
+  status: string;
+
+  success_channels_count: number;
+
+  task_id: string;
+
+  failed_channels: FailedChannelUpdates[];
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
 }
 
 export interface ChannelConfig {
@@ -5162,6 +5212,8 @@ export interface EventHook {
 
   product?: string;
 
+  should_send_custom_events?: boolean;
+
   sns_auth_type?: string;
 
   sns_key?: string;
@@ -5283,6 +5335,12 @@ export interface ExternalStorageResponse {
 
 export interface FCM {
   data?: Record<string, any>;
+}
+
+export interface FailedChannelUpdates {
+  reason: string;
+
+  cids: string[];
 }
 
 export interface FeedCreatedEvent {
@@ -5708,6 +5766,8 @@ export interface FeedsPreferences {
 
   comment_reaction?: 'all' | 'none';
 
+  comment_reply?: 'all' | 'none';
+
   follow?: 'all' | 'none';
 
   mention?: 'all' | 'none';
@@ -5843,6 +5903,10 @@ export interface Flag {
   target_user?: User;
 
   user?: User;
+}
+
+export interface FlagCountRuleParameters {
+  threshold?: number;
 }
 
 export interface FlagDetails {
@@ -8359,6 +8423,16 @@ export interface NoiseCancellationSettings {
   mode: 'available' | 'disabled' | 'auto-on';
 }
 
+export interface NotificationComment {
+  comment: string;
+
+  id: string;
+
+  user_id: string;
+
+  attachments?: Attachment[];
+}
+
 export interface NotificationConfig {
   deduplication_window?: string;
 
@@ -8471,12 +8545,16 @@ export interface NotificationTarget {
   user_id?: string;
 
   attachments?: Attachment[];
+
+  comment?: NotificationComment;
 }
 
 export interface NotificationTrigger {
   text: string;
 
   type: string;
+
+  comment?: NotificationComment;
 }
 
 export interface OCRRule {
@@ -10998,6 +11076,8 @@ export interface RuleBuilderCondition {
 
   content_count_rule_params?: ContentCountRuleParameters;
 
+  content_flag_count_rule_params?: FlagCountRuleParameters;
+
   image_content_params?: ImageContentParameters;
 
   image_rule_params?: ImageRuleParameters;
@@ -11009,6 +11089,8 @@ export interface RuleBuilderCondition {
   user_created_within_params?: UserCreatedWithinParameters;
 
   user_custom_property_params?: UserCustomPropertyParameters;
+
+  user_flag_count_rule_params?: FlagCountRuleParameters;
 
   user_rule_params?: UserRuleParameters;
 
@@ -14424,6 +14506,10 @@ export type WebhookEvent =
   | ({ type: 'channel.unmuted' } & ChannelUnmutedEvent)
   | ({ type: 'channel.updated' } & ChannelUpdatedEvent)
   | ({ type: 'channel.visible' } & ChannelVisibleEvent)
+  | ({
+      type: 'channel_batch_update.completed';
+    } & ChannelBatchUpdatedCompletedEvent)
+  | ({ type: 'channel_batch_update.started' } & ChannelBatchUpdatedStartedEvent)
   | ({ type: 'custom' } & CustomVideoEvent)
   | ({ type: 'export.bulk_image_moderation.error' } & AsyncExportErrorEvent)
   | ({
