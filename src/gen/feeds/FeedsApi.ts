@@ -40,6 +40,7 @@ import {
   DeleteCommentResponse,
   DeleteFeedGroupResponse,
   DeleteFeedResponse,
+  DeleteFeedUserDataRequest,
   DeleteFeedUserDataResponse,
   DeleteFeedViewResponse,
   ExportFeedUserDataResponse,
@@ -872,14 +873,14 @@ export class FeedsApi {
   }
 
   async addComment(
-    request: AddCommentRequest,
+    request?: AddCommentRequest,
   ): Promise<StreamResponse<AddCommentResponse>> {
     const body = {
-      object_id: request?.object_id,
-      object_type: request?.object_type,
       comment: request?.comment,
       create_notification_activity: request?.create_notification_activity,
       id: request?.id,
+      object_id: request?.object_id,
+      object_type: request?.object_type,
       parent_id: request?.parent_id,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
@@ -1228,6 +1229,7 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
     const body = {
+      id_around: request?.id_around,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -2254,16 +2256,26 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteFeedUserData(request: {
-    user_id: string;
-  }): Promise<StreamResponse<DeleteFeedUserDataResponse>> {
+  async deleteFeedUserData(
+    request: DeleteFeedUserDataRequest & { user_id: string },
+  ): Promise<StreamResponse<DeleteFeedUserDataResponse>> {
     const pathParams = {
       user_id: request?.user_id,
+    };
+    const body = {
+      hard_delete: request?.hard_delete,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteFeedUserDataResponse>
-    >('DELETE', '/api/v2/feeds/users/{user_id}/delete', pathParams, undefined);
+    >(
+      'POST',
+      '/api/v2/feeds/users/{user_id}/delete',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
 
     decoders.DeleteFeedUserDataResponse?.(response.body);
 
