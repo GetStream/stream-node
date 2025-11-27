@@ -1297,10 +1297,16 @@ export class VideoApi {
     call_type: string;
     call_id: string;
     session: string;
+    limit?: number;
+    prev?: string;
+    next?: string;
     sort?: SortParamRequest[];
     filter_conditions?: Record<string, any>;
   }): Promise<StreamResponse<QueryCallSessionParticipantStatsResponse>> {
     const queryParams = {
+      limit: request?.limit,
+      prev: request?.prev,
+      next: request?.next,
       sort: request?.sort,
       filter_conditions: request?.filter_conditions,
     };

@@ -773,15 +773,15 @@ export interface AddCommentReactionResponse {
 }
 
 export interface AddCommentRequest {
-  object_id: string;
-
-  object_type: string;
-
   comment?: string;
 
   create_notification_activity?: boolean;
 
   id?: string;
+
+  object_id?: string;
+
+  object_type?: string;
 
   parent_id?: string;
 
@@ -867,7 +867,7 @@ export interface AggregatedActivityResponse {
 }
 
 export interface AggregationConfig {
-  format: string;
+  format?: string;
 }
 
 export interface AnyEvent {
@@ -1532,7 +1532,7 @@ export interface BookmarkFolderResponse {
 
   updated_at: Date;
 
-  user: UserResponseCommonFields;
+  user: UserResponse;
 
   custom?: Record<string, any>;
 }
@@ -1558,7 +1558,7 @@ export interface BookmarkResponse {
 
   activity: ActivityResponse;
 
-  user: UserResponseCommonFields;
+  user: UserResponse;
 
   custom?: Record<string, any>;
 
@@ -4767,16 +4767,14 @@ export interface DeleteFeedResponse {
   task_id: string;
 }
 
+export interface DeleteFeedUserDataRequest {
+  hard_delete?: boolean;
+}
+
 export interface DeleteFeedUserDataResponse {
-  deleted_activities: number;
-
-  deleted_bookmarks: number;
-
-  deleted_comments: number;
-
-  deleted_reactions: number;
-
   duration: string;
+
+  task_id: string;
 }
 
 export interface DeleteFeedViewResponse {
@@ -6611,6 +6609,8 @@ export interface GetOrCreateFeedGroupResponse {
 }
 
 export interface GetOrCreateFeedRequest {
+  id_around?: string;
+
   limit?: number;
 
   next?: string;

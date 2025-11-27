@@ -534,7 +534,7 @@ decoders.BookmarkFolderResponse = (input?: Record<string, any>) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
-    user: { type: 'UserResponseCommonFields', isSingle: true },
+    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -560,7 +560,7 @@ decoders.BookmarkResponse = (input?: Record<string, any>) => {
 
     activity: { type: 'ActivityResponse', isSingle: true },
 
-    user: { type: 'UserResponseCommonFields', isSingle: true },
+    user: { type: 'UserResponse', isSingle: true },
 
     folder: { type: 'BookmarkFolderResponse', isSingle: true },
   };
