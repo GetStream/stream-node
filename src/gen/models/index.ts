@@ -619,7 +619,8 @@ export interface ActivitySelectorConfig {
     | 'following'
     | 'current_feed'
     | 'query'
-    | 'interest';
+    | 'interest'
+    | 'follow_suggestion';
 
   cutoff_time?: string;
 
@@ -630,6 +631,8 @@ export interface ActivitySelectorConfig {
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
+
+  params?: Record<string, any>;
 }
 
 export interface ActivitySelectorConfigResponse {
