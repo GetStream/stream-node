@@ -647,6 +647,8 @@ export interface ActivitySelectorConfigResponse {
   sort?: SortParamRequest[];
 
   filter?: Record<string, any>;
+
+  params?: Record<string, any>;
 }
 
 export interface ActivityUnpinnedEvent {
