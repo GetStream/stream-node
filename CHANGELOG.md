@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.24](https://github.com/GetStream/stream-node/compare/v0.7.23...v0.7.24) (2025-12-02)
+
+
+### Features
+
+* New field params in activity selector config ([#217](https://github.com/GetStream/stream-node/issues/217)) ([29d4dee](https://github.com/GetStream/stream-node/commit/29d4dee8ff458a339196e247c72f1d35f4128c2b))
+
 ## [0.7.23](https://github.com/GetStream/stream-node/compare/v0.7.22...v0.7.23) (2025-12-02)
 
 
