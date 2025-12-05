@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.25](https://github.com/GetStream/stream-node/compare/v0.7.24...v0.7.25) (2025-12-05)
+
+
+### Bug Fixes
+
+* bump jsonwebtoken to 9.0.3 ([#219](https://github.com/GetStream/stream-node/issues/219)) ([c3fbe75](https://github.com/GetStream/stream-node/commit/c3fbe756c3d77855e074c7010ec98586e31f8192))
+
 ## [0.7.24](https://github.com/GetStream/stream-node/compare/v0.7.23...v0.7.24) (2025-12-02)
 
 
