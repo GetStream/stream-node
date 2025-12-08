@@ -1,5 +1,10 @@
 import { FeedsApi } from './gen/feeds/FeedsApi';
-import { AddReactionRequest, QueryFeedsRequest } from './gen/models';
+import {
+  AddReactionRequest,
+  FollowBatchRequest,
+  QueryFeedsRequest,
+  UnfollowBatchRequest,
+} from './gen/models';
 import { StreamFeed } from './StreamFeed';
 
 export class StreamFeedsClient extends FeedsApi {
@@ -16,5 +21,19 @@ export class StreamFeedsClient extends FeedsApi {
    */
   addReaction = (request: AddReactionRequest & { activity_id: string }) => {
     return super.addActivityReaction(request);
+  };
+
+  /**
+   * @deprecated use `getOrCreateFollows` instead
+   */
+  followBatch = (request: FollowBatchRequest) => {
+    return super.followBatch(request);
+  };
+
+  /**
+   * @deprecated use `getOrCreateUnfollows` instead
+   */
+  followUnbatch = (request: UnfollowBatchRequest) => {
+    return super.unfollowBatch(request);
   };
 }

@@ -44,6 +44,7 @@ import {
   QueryCallParticipantsResponse,
   QueryCallSessionParticipantStatsResponse,
   QueryCallSessionParticipantStatsTimelineResponse,
+  QueryCallStatsMapResponse,
   QueryCallStatsRequest,
   QueryCallStatsResponse,
   QueryCallsRequest,
@@ -1252,6 +1253,43 @@ export class VideoApi {
     );
 
     decoders.DeleteTranscriptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getCallStatsMap(request: {
+    call_type: string;
+    call_id: string;
+    session: string;
+    start_time?: Date;
+    end_time?: Date;
+    exclude_publishers?: boolean;
+    exclude_subscribers?: boolean;
+    exclude_sfus?: boolean;
+  }): Promise<StreamResponse<QueryCallStatsMapResponse>> {
+    const queryParams = {
+      start_time: request?.start_time,
+      end_time: request?.end_time,
+      exclude_publishers: request?.exclude_publishers,
+      exclude_subscribers: request?.exclude_subscribers,
+      exclude_sfus: request?.exclude_sfus,
+    };
+    const pathParams = {
+      call_type: request?.call_type,
+      call_id: request?.call_id,
+      session: request?.session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallStatsMapResponse>
+    >(
+      'GET',
+      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/map',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.QueryCallStatsMapResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

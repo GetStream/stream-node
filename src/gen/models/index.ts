@@ -2384,6 +2384,56 @@ export interface CallStatsLocation {
   subdivision?: string;
 }
 
+export interface CallStatsMapLocation {
+  count: number;
+
+  live_count: number;
+
+  location?: CallStatsLocation;
+}
+
+export interface CallStatsMapPublisher {
+  is_live: boolean;
+
+  user_id: string;
+
+  user_session_id: string;
+
+  published_tracks: PublishedTrackFlags;
+
+  name?: string;
+
+  publisher_type?: string;
+
+  location?: CallStatsLocation;
+}
+
+export interface CallStatsMapPublishers {
+  publishers: CallStatsMapPublisher[];
+}
+
+export interface CallStatsMapSFUs {
+  locations: SFULocationResponse[];
+}
+
+export interface CallStatsMapSubscriber {
+  is_live: boolean;
+
+  user_id: string;
+
+  user_session_id: string;
+
+  name?: string;
+
+  location?: CallStatsLocation;
+}
+
+export interface CallStatsMapSubscribers {
+  locations: CallStatsMapLocation[];
+
+  participants?: CallStatsMapSubscriber[];
+}
+
 export interface CallStatsParticipant {
   user_id: string;
 
@@ -4039,6 +4089,12 @@ export interface ContentCountRuleParameters {
   time_window?: string;
 }
 
+export interface Coordinates {
+  latitude: number;
+
+  longitude: number;
+}
+
 export interface CountByMinuteResponse {
   count: number;
 
@@ -4786,6 +4842,18 @@ export interface DeleteFeedViewResponse {
   duration: string;
 }
 
+export interface DeleteFeedsBatchRequest {
+  feeds: string[];
+
+  hard_delete?: boolean;
+}
+
+export interface DeleteFeedsBatchResponse {
+  duration: string;
+
+  task_id: string;
+}
+
 export interface DeleteMessageRequest {
   hard_delete?: boolean;
 
@@ -5138,6 +5206,42 @@ export interface EnrichedReaction {
   updated_at?: Time;
 
   user?: Data;
+}
+
+export interface EnrichmentOptions {
+  skip_activity?: boolean;
+
+  skip_activity_collections?: boolean;
+
+  skip_activity_comments?: boolean;
+
+  skip_activity_current_feed?: boolean;
+
+  skip_activity_mentioned_users?: boolean;
+
+  skip_activity_own_bookmarks?: boolean;
+
+  skip_activity_parents?: boolean;
+
+  skip_activity_poll?: boolean;
+
+  skip_activity_reactions?: boolean;
+
+  skip_activity_refresh_image_urls?: boolean;
+
+  skip_all?: boolean;
+
+  skip_feed_member_user?: boolean;
+
+  skip_followers?: boolean;
+
+  skip_following?: boolean;
+
+  skip_own_capabilities?: boolean;
+
+  skip_own_follows?: boolean;
+
+  skip_pins?: boolean;
 }
 
 export interface EntityCreatorResponse {
@@ -5614,6 +5718,14 @@ export const FeedOwnCapability = {
 export type FeedOwnCapability =
   (typeof FeedOwnCapability)[keyof typeof FeedOwnCapability];
 
+export interface FeedOwnData {
+  own_capabilities?: FeedOwnCapability[];
+
+  own_follows?: FollowResponse[];
+
+  own_membership?: FeedMemberResponse;
+}
+
 export interface FeedRequest {
   feed_group_id: string;
 
@@ -5635,6 +5747,8 @@ export interface FeedRequest {
 }
 
 export interface FeedResponse {
+  activity_count: number;
+
   created_at: Date;
 
   description: string;
@@ -5675,6 +5789,8 @@ export interface FeedResponse {
 }
 
 export interface FeedSuggestionResponse {
+  activity_count: number;
+
   created_at: Date;
 
   description: string;
@@ -5988,6 +6104,8 @@ export interface FollowBatchRequest {
 
 export interface FollowBatchResponse {
   duration: string;
+
+  created: FollowResponse[];
 
   follows: FollowResponse[];
 }
@@ -6629,6 +6747,8 @@ export interface GetOrCreateFeedRequest {
   watch?: boolean;
 
   data?: FeedInput;
+
+  enrichment_options?: EnrichmentOptions;
 
   external_ranking?: Record<string, any>;
 
@@ -7328,6 +7448,14 @@ export interface ListTranscriptionsResponse {
   duration: string;
 
   transcriptions: CallTranscription[];
+}
+
+export interface Location {
+  continent_code: string;
+
+  country_iso_code: string;
+
+  subdivision_iso_code: string;
 }
 
 export interface MarkActivityRequest {
@@ -8584,18 +8712,20 @@ export interface OverviewDashboardConfig {
   visible_charts?: string[];
 }
 
-export interface OwnCapabilitiesBatchRequest {
+export interface OwnBatchRequest {
   feeds: string[];
 
   user_id?: string;
 
+  fields?: string[];
+
   user?: UserRequest;
 }
 
-export interface OwnCapabilitiesBatchResponse {
+export interface OwnBatchResponse {
   duration: string;
 
-  capabilities: Record<string, FeedOwnCapability[]>;
+  data: Record<string, FeedOwnData>;
 }
 
 export const OwnCapability = {
@@ -9720,6 +9850,36 @@ export interface QueryCallSessionParticipantStatsTimelineResponse {
   user_session_id: string;
 
   events: CallParticipantTimeline[];
+}
+
+export interface QueryCallStatsMapResponse {
+  call_id: string;
+
+  call_session_id: string;
+
+  call_type: string;
+
+  duration: string;
+
+  counts: CallStatsParticipantCounts;
+
+  call_ended_at?: Date;
+
+  call_started_at?: Date;
+
+  data_source?: string;
+
+  end_time?: Date;
+
+  generated_at?: Date;
+
+  start_time?: Date;
+
+  publishers?: CallStatsMapPublishers;
+
+  sfus?: CallStatsMapSFUs;
+
+  subscribers?: CallStatsMapSubscribers;
 }
 
 export interface QueryCallStatsRequest {
@@ -11148,6 +11308,18 @@ export interface SDKUsageReport {
 
 export interface SDKUsageReportResponse {
   daily: DailyAggregateSDKUsageReportResponse[];
+}
+
+export interface SFULocationResponse {
+  datacenter: string;
+
+  id: string;
+
+  coordinates: Coordinates;
+
+  location: Location;
+
+  count?: number;
 }
 
 export interface SIPCallConfigsRequest {

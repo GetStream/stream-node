@@ -43,6 +43,8 @@ import {
   DeleteFeedUserDataRequest,
   DeleteFeedUserDataResponse,
   DeleteFeedViewResponse,
+  DeleteFeedsBatchRequest,
+  DeleteFeedsBatchResponse,
   ExportFeedUserDataResponse,
   FollowBatchRequest,
   FollowBatchResponse,
@@ -66,8 +68,8 @@ import {
   ListFeedViewsResponse,
   ListFeedVisibilitiesResponse,
   MarkActivityRequest,
-  OwnCapabilitiesBatchRequest,
-  OwnCapabilitiesBatchResponse,
+  OwnBatchRequest,
+  OwnBatchResponse,
   PinActivityRequest,
   PinActivityResponse,
   PollVoteResponse,
@@ -1237,6 +1239,7 @@ export class FeedsApi {
       view: request?.view,
       watch: request?.watch,
       data: request?.data,
+      enrichment_options: request?.enrichment_options,
       external_ranking: request?.external_ranking,
       filter: request?.filter,
       followers_pagination: request?.followers_pagination,
@@ -1849,27 +1852,52 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async ownCapabilitiesBatch(
-    request: OwnCapabilitiesBatchRequest,
-  ): Promise<StreamResponse<OwnCapabilitiesBatchResponse>> {
+  async deleteFeedsBatch(
+    request: DeleteFeedsBatchRequest,
+  ): Promise<StreamResponse<DeleteFeedsBatchResponse>> {
     const body = {
       feeds: request?.feeds,
-      user_id: request?.user_id,
-      user: request?.user,
+      hard_delete: request?.hard_delete,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<OwnCapabilitiesBatchResponse>
+      StreamResponse<DeleteFeedsBatchResponse>
     >(
       'POST',
-      '/api/v2/feeds/feeds/own_capabilities/batch',
+      '/api/v2/feeds/feeds/delete',
       undefined,
       undefined,
       body,
       'application/json',
     );
 
-    decoders.OwnCapabilitiesBatchResponse?.(response.body);
+    decoders.DeleteFeedsBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async ownBatch(
+    request: OwnBatchRequest,
+  ): Promise<StreamResponse<OwnBatchResponse>> {
+    const body = {
+      feeds: request?.feeds,
+      user_id: request?.user_id,
+      fields: request?.fields,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<OwnBatchResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feeds/own/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.OwnBatchResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2020,6 +2048,29 @@ export class FeedsApi {
     >(
       'POST',
       '/api/v2/feeds/follows/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.FollowBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getOrCreateFollows(
+    request: FollowBatchRequest,
+  ): Promise<StreamResponse<FollowBatchResponse>> {
+    const body = {
+      follows: request?.follows,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<FollowBatchResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/follows/batch/upsert',
       undefined,
       undefined,
       body,
@@ -2245,6 +2296,29 @@ export class FeedsApi {
     >(
       'POST',
       '/api/v2/feeds/unfollow/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UnfollowBatchResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getOrCreateUnfollows(
+    request: UnfollowBatchRequest,
+  ): Promise<StreamResponse<UnfollowBatchResponse>> {
+    const body = {
+      follows: request?.follows,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UnfollowBatchResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/unfollow/batch/upsert',
       undefined,
       undefined,
       body,
