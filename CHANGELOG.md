@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.26](https://github.com/GetStream/stream-node/compare/v0.7.25...v0.7.26) (2025-12-08)
+
+
+### Features
+
+* update to latest API spec, deprecate followBatch and unfollowBatch ([#221](https://github.com/GetStream/stream-node/issues/221)) ([691ec6b](https://github.com/GetStream/stream-node/commit/691ec6bc580090799cf7787e40deab1969822db0))
+
 ## [0.7.25](https://github.com/GetStream/stream-node/compare/v0.7.24...v0.7.25) (2025-12-05)
 
 
