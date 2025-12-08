@@ -2094,6 +2094,15 @@ decoders.FeedMemberUpdatedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.FeedOwnData = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    own_follows: { type: 'FollowResponse', isSingle: false },
+
+    own_membership: { type: 'FeedMemberResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.FeedResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2195,6 +2204,8 @@ decoders.FlagUpdatedEvent = (input?: Record<string, any>) => {
 
 decoders.FollowBatchResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
+    created: { type: 'FollowResponse', isSingle: false },
+
     follows: { type: 'FollowResponse', isSingle: false },
   };
   return decode(typeMappings, input);
@@ -3164,6 +3175,13 @@ decoders.NotificationStatusResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.OwnBatchResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    data: { type: 'FeedOwnData', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.OwnUser = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -3486,6 +3504,21 @@ decoders.QueryCallSessionParticipantStatsTimelineResponse = (
 ) => {
   const typeMappings: TypeMapping = {
     events: { type: 'CallParticipantTimeline', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.QueryCallStatsMapResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    call_ended_at: { type: 'DatetimeType', isSingle: true },
+
+    call_started_at: { type: 'DatetimeType', isSingle: true },
+
+    end_time: { type: 'DatetimeType', isSingle: true },
+
+    generated_at: { type: 'DatetimeType', isSingle: true },
+
+    start_time: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

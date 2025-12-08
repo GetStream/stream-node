@@ -6,8 +6,10 @@ import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import {
   FileUploadRequest,
+  FollowBatchRequest,
   ImageUploadRequest,
   QueryBannedUsersPayload,
+  UnfollowBatchRequest,
   UserRequest,
 } from './gen/models';
 import { StreamModerationClient } from './StreamModerationClient';
@@ -239,6 +241,20 @@ export class StreamClient extends CommonApi {
 
     return JWTUserToken(this.secret, payload);
   };
+
+  /**
+   * @deprecated use `getOrCreateFollows` instead
+   */
+  followBatch(request: FollowBatchRequest) {
+    return this.feeds.followBatch(request);
+  }
+
+  /**
+   * @deprecated use `getOrCreateUnfollows` instead
+   */
+  followUnbatch(request: UnfollowBatchRequest) {
+    return this.feeds.unfollowBatch(request);
+  }
 
   verifyWebhook = (requestBody: string | Buffer, xSignature: string) => {
     const key = Buffer.from(this.secret, 'utf8');
