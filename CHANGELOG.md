@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.27](https://github.com/GetStream/stream-node/compare/v0.7.26...v0.7.27) (2025-12-16)
+
+
+### Features
+
+* added new field `own_followings` ([#223](https://github.com/GetStream/stream-node/issues/223)) ([dd77a09](https://github.com/GetStream/stream-node/commit/dd77a09601ddb9ea083862d39b00c3126468692c))
+
 ## [0.7.26](https://github.com/GetStream/stream-node/compare/v0.7.25...v0.7.26) (2025-12-08)
 
 
