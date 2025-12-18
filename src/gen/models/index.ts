@@ -5209,6 +5209,8 @@ export interface EnrichedReaction {
 }
 
 export interface EnrichmentOptions {
+  enrich_own_followings?: boolean;
+
   skip_activity?: boolean;
 
   skip_activity_collections?: boolean;
@@ -5238,8 +5240,6 @@ export interface EnrichmentOptions {
   skip_following?: boolean;
 
   skip_own_capabilities?: boolean;
-
-  skip_own_followings?: boolean;
 
   skip_own_follows?: boolean;
 
@@ -10672,6 +10672,22 @@ export interface RankingConfig {
   functions?: Record<string, DecayFunctionConfig>;
 }
 
+export interface RawRecordSettings {
+  mode: 'available' | 'disabled' | 'auto-on';
+}
+
+export interface RawRecordingResponse {
+  status: string;
+}
+
+export interface RawRecordingSettingsRequest {
+  mode: 'available' | 'disabled' | 'auto-on';
+}
+
+export interface RawRecordingSettingsResponse {
+  mode: 'available' | 'disabled' | 'auto-on';
+}
+
 export interface Reaction {
   created_at: Date;
 
@@ -12946,6 +12962,8 @@ export interface UpdateActivityRequest {
   filter_tags?: string[];
 
   interest_tags?: string[];
+
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
