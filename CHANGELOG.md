@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.28](https://github.com/GetStream/stream-node/compare/v0.7.27...v0.7.28) (2025-12-18)
+
+
+### Bug Fixes
+
+* change own_followings from opt_out to opt_in ([#225](https://github.com/GetStream/stream-node/issues/225)) ([511c7ab](https://github.com/GetStream/stream-node/commit/511c7ab79c8fb908bd65fb8428e3e17f36378b33))
+
 ## [0.7.27](https://github.com/GetStream/stream-node/compare/v0.7.26...v0.7.27) (2025-12-16)
 
 
