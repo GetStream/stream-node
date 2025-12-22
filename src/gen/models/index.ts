@@ -13532,6 +13532,12 @@ export interface UpdateFeedMembersResponse {
 export interface UpdateFeedRequest {
   created_by_id?: string;
 
+  description?: string;
+
+  name?: string;
+
+  filter_tags?: string[];
+
   custom?: Record<string, any>;
 }
 

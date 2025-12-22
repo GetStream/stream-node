@@ -1275,6 +1275,9 @@ export class FeedsApi {
     };
     const body = {
       created_by_id: request?.created_by_id,
+      description: request?.description,
+      name: request?.name,
+      filter_tags: request?.filter_tags,
       custom: request?.custom,
     };
 
