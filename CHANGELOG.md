@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.29](https://github.com/GetStream/stream-node/compare/v0.7.28...v0.7.29) (2025-12-22)
+
+
+### Features
+
+* Feeds 963 expand updateable fields for feeds ([#227](https://github.com/GetStream/stream-node/issues/227)) ([f5161b7](https://github.com/GetStream/stream-node/commit/f5161b71fcdbaa5b9d2a24f1f30ef78e0843c66f))
+
 ## [0.7.28](https://github.com/GetStream/stream-node/compare/v0.7.27...v0.7.28) (2025-12-18)
 
 
