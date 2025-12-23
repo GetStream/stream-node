@@ -9317,6 +9317,8 @@ export interface PollVote {
 export interface PollVoteResponse {
   duration: string;
 
+  poll?: PollResponseData;
+
   vote?: PollVoteResponseData;
 }
 
