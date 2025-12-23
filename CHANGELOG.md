@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.30](https://github.com/GetStream/stream-node/compare/v0.7.29...v0.7.30) (2025-12-23)
+
+
+### Features
+
+* return updated poll on cast/remove poll vote ([#229](https://github.com/GetStream/stream-node/issues/229)) ([bff522e](https://github.com/GetStream/stream-node/commit/bff522e2cdda0c0895f18aa7b1f9f9b81384835f))
+
 ## [0.7.29](https://github.com/GetStream/stream-node/compare/v0.7.28...v0.7.29) (2025-12-22)
 
 
