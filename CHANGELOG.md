@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.31](https://github.com/GetStream/stream-node/compare/v0.7.30...v0.7.31) (2025-12-26)
+
+
+### Features
+
+* Add attachments to update comment request ([#231](https://github.com/GetStream/stream-node/issues/231)) ([a30dbee](https://github.com/GetStream/stream-node/commit/a30dbeecc172f01df2daa690ac6a640154c364e1))
+
 ## [0.7.30](https://github.com/GetStream/stream-node/compare/v0.7.29...v0.7.30) (2025-12-23)
 
 
