@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.32](https://github.com/GetStream/stream-node/compare/v0.7.31...v0.7.32) (2025-12-26)
+
+
+### Features
+
+* Add notification_created when create_notification_activity is sent ([#233](https://github.com/GetStream/stream-node/issues/233)) ([1fabf4d](https://github.com/GetStream/stream-node/commit/1fabf4df2096fc79eb74aaa635ee5841b0f05646))
+
 ## [0.7.31](https://github.com/GetStream/stream-node/compare/v0.7.30...v0.7.31) (2025-12-26)
 
 
