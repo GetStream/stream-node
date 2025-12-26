@@ -1007,6 +1007,7 @@ export class FeedsApi {
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
       user_id: request?.user_id,
+      attachments: request?.attachments,
       custom: request?.custom,
       user: request?.user,
     };

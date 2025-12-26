@@ -13441,6 +13441,8 @@ export interface UpdateCommentRequest {
 
   user_id?: string;
 
+  attachments?: Attachment[];
+
   custom?: Record<string, any>;
 
   user?: UserRequest;
