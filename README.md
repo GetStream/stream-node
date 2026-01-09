@@ -35,5 +35,5 @@ This repo contains the Node server-side SDK developed by the team and Stream com
 
 - How can I submit a sample app?
   - Apps submissions are always welcomed! 🥳 Open a pr with a proper description and we'll review it as soon as possible
-- Spot a bug 🕷 ?
+- Spot a bug 🕷?
   - We welcome code changes that improve the apps or fix a problem. Please make sure to follow all best practices and add tests if applicable before submitting a Pull Request on Github.
