@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.33](https://github.com/GetStream/stream-node/compare/v0.7.32...v0.7.33) (2026-01-09)
+
+
+### Bug Fixes
+
+* update readme to test trusted publisher release flow ([fef0196](https://github.com/GetStream/stream-node/commit/fef019654632292d29bf67e4a388fa96cd2ce07f))
+
 ## [0.7.32](https://github.com/GetStream/stream-node/compare/v0.7.31...v0.7.32) (2025-12-26)
 
 
