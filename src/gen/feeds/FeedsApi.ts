@@ -607,6 +607,7 @@ export class FeedsApi {
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
+      visibility_tag: request?.visibility_tag,
       attachments: request?.attachments,
       collection_refs: request?.collection_refs,
       feeds: request?.feeds,
@@ -851,6 +852,7 @@ export class FeedsApi {
     depth?: number;
     sort?: string;
     replies_limit?: number;
+    user_id?: string;
     limit?: number;
     prev?: string;
     next?: string;
@@ -861,6 +863,7 @@ export class FeedsApi {
       depth: request?.depth,
       sort: request?.sort,
       replies_limit: request?.replies_limit,
+      user_id: request?.user_id,
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,
@@ -1122,6 +1125,7 @@ export class FeedsApi {
     depth?: number;
     sort?: string;
     replies_limit?: number;
+    user_id?: string;
     limit?: number;
     prev?: string;
     next?: string;
@@ -1130,6 +1134,7 @@ export class FeedsApi {
       depth: request?.depth,
       sort: request?.sort,
       replies_limit: request?.replies_limit,
+      user_id: request?.user_id,
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,

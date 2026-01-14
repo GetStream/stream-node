@@ -127,7 +127,6 @@ describe('messages API', () => {
       language: 'hu',
     });
 
-    // @ts-expect-error
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 

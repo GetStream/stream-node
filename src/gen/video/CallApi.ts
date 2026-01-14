@@ -23,6 +23,7 @@ import {
   MuteUsersResponse,
   PinRequest,
   PinResponse,
+  QueryCallParticipantSessionsResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
   RingCallRequest,
@@ -51,6 +52,7 @@ import {
   StopLiveResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
+  StopRecordingRequest,
   StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
@@ -247,6 +249,20 @@ export class CallApi {
     });
   }
 
+  queryCallParticipantSessions(request: {
+    session: string;
+    limit?: number;
+    prev?: string;
+    next?: string;
+    filter_conditions?: Record<string, any>;
+  }): Promise<StreamResponse<QueryCallParticipantSessionsResponse>> {
+    return this.videoApi.queryCallParticipantSessions({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
   startHLSBroadcasting(): Promise<
     StreamResponse<StartHLSBroadcastingResponse>
   > {
@@ -317,8 +333,14 @@ export class CallApi {
     return this.videoApi.stopLive({ id: this.id, type: this.type, ...request });
   }
 
-  stopRecording(): Promise<StreamResponse<StopRecordingResponse>> {
-    return this.videoApi.stopRecording({ id: this.id, type: this.type });
+  stopRecording(
+    request?: StopRecordingRequest,
+  ): Promise<StreamResponse<StopRecordingResponse>> {
+    return this.videoApi.stopRecording({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   }
 
   stopTranscription(

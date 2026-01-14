@@ -43,7 +43,7 @@ import {
   MarkUnreadRequest,
   MembersResponse,
   MessageActionRequest,
-  MessageResponse,
+  MessageActionResponse,
   MuteChannelRequest,
   MuteChannelResponse,
   PollVoteResponse,
@@ -1384,7 +1384,7 @@ export class ChatApi {
 
   async runMessageAction(
     request: MessageActionRequest & { id: string },
-  ): Promise<StreamResponse<MessageResponse>> {
+  ): Promise<StreamResponse<MessageActionResponse>> {
     const pathParams = {
       id: request?.id,
     };
@@ -1395,7 +1395,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<MessageResponse>
+      StreamResponse<MessageActionResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{id}/action',
@@ -1405,21 +1405,21 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders.MessageActionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
   async commitMessage(
     request: CommitMessageRequest & { id: string },
-  ): Promise<StreamResponse<MessageResponse>> {
+  ): Promise<StreamResponse<MessageActionResponse>> {
     const pathParams = {
       id: request?.id,
     };
     const body = {};
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<MessageResponse>
+      StreamResponse<MessageActionResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{id}/commit',
@@ -1429,7 +1429,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders.MessageActionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1575,7 +1575,7 @@ export class ChatApi {
 
   async translateMessage(
     request: TranslateMessageRequest & { id: string },
-  ): Promise<StreamResponse<MessageResponse>> {
+  ): Promise<StreamResponse<MessageActionResponse>> {
     const pathParams = {
       id: request?.id,
     };
@@ -1584,7 +1584,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<MessageResponse>
+      StreamResponse<MessageActionResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{id}/translate',
@@ -1594,7 +1594,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageResponse?.(response.body);
+    decoders.MessageActionResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

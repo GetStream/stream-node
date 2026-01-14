@@ -48,8 +48,8 @@ describe.skip('global file uploads', () => {
       {
         width: 100,
         height: 100,
-        resize: 'scale',
-        crop: 'center',
+        resize: 'scale' as 'scale',
+        crop: 'center' as 'center',
       },
     ];
 
