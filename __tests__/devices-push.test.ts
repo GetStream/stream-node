@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
-import { CreateDeviceRequest, PushProvider } from '../src/gen/models';
+import { CreateDeviceRequest, PushProviderRequest } from '../src/gen/models';
 
 describe('devices and push', () => {
   let client: StreamClient;
@@ -16,7 +16,7 @@ describe('devices and push', () => {
     push_provider_name: 'firebase',
     user_id: user.id,
   };
-  const pushProvider: PushProvider = {
+  const pushProvider: PushProviderRequest = {
     name: 'test-push-provider',
     type: 'xiaomi',
     xiaomi_app_secret: '',

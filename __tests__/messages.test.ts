@@ -29,9 +29,8 @@ describe('messages API', () => {
     channel = client.chat.channel('messaging', channelId);
     await channel.getOrCreate({
       data: {
-        // Type '{ id: string; }' is missing the following properties from type 'UserObject': banned, custom, online, role
         created_by: { id: user.id },
-        members: [{ user }, { user: user2 }],
+        members: [{ user_id: user.id }, { user_id: user2.id }],
       },
     });
   });

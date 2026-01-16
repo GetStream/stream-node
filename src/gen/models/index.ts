@@ -1166,8 +1166,6 @@ export interface AsyncModerationConfiguration {
 }
 
 export interface Attachment {
-  custom: Record<string, any>;
-
   asset_url?: string;
 
   author_icon?: string;
@@ -1207,6 +1205,8 @@ export interface Attachment {
   actions?: Action[];
 
   fields?: Field[];
+
+  custom?: Record<string, any>;
 
   giphy?: Images;
 }
@@ -6758,8 +6758,6 @@ export interface GetModerationRuleResponse {
 export interface GetOGResponse {
   duration: string;
 
-  custom: Record<string, any>;
-
   asset_url?: string;
 
   author_icon?: string;
@@ -6799,6 +6797,8 @@ export interface GetOGResponse {
   actions?: Action[];
 
   fields?: Field[];
+
+  custom?: Record<string, any>;
 
   giphy?: Images;
 }
@@ -9781,6 +9781,56 @@ export interface PushProvider {
   xiaomi_package_name?: string;
 
   push_templates?: PushTemplate[];
+}
+
+export interface PushProviderRequest {
+  name: string;
+
+  apn_auth_key?: string;
+
+  apn_auth_type?: string;
+
+  apn_development?: boolean;
+
+  apn_host?: string;
+
+  apn_key_id?: string;
+
+  apn_notification_template?: string;
+
+  apn_p12_cert?: string;
+
+  apn_team_id?: string;
+
+  apn_topic?: string;
+
+  description?: string;
+
+  disabled_at?: Date;
+
+  disabled_reason?: string;
+
+  firebase_apn_template?: string;
+
+  firebase_credentials?: string;
+
+  firebase_data_template?: string;
+
+  firebase_host?: string;
+
+  firebase_notification_template?: string;
+
+  firebase_server_key?: string;
+
+  huawei_app_id?: string;
+
+  huawei_app_secret?: string;
+
+  type?: string;
+
+  xiaomi_app_secret?: string;
+
+  xiaomi_package_name?: string;
 }
 
 export interface PushProviderResponse {
@@ -12846,7 +12896,7 @@ export interface ThreadedCommentResponse {
 
   score: number;
 
-  status: string;
+  status: 'active' | 'deleted' | 'removed' | 'hidden';
 
   updated_at: Date;
 
@@ -14398,7 +14448,7 @@ export interface UpsertPushPreferencesResponse {
 }
 
 export interface UpsertPushProviderRequest {
-  push_provider?: PushProvider;
+  push_provider?: PushProviderRequest;
 }
 
 export interface UpsertPushProviderResponse {
