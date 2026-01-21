@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.34](https://github.com/GetStream/stream-node/compare/v0.7.33...v0.7.34) (2026-01-21)
+
+
+### Features
+
+* Add selector_source to activity for ranking ([#239](https://github.com/GetStream/stream-node/issues/239)) ([e9c2337](https://github.com/GetStream/stream-node/commit/e9c2337666b8f9d93337096f91814a74de6a0bc6))
+
 ## [0.7.33](https://github.com/GetStream/stream-node/compare/v0.7.32...v0.7.33) (2026-01-09)
 
 
