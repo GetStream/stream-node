@@ -148,12 +148,14 @@ export class FeedsApi {
     const body = {
       type: request?.type,
       feeds: request?.feeds,
+      create_notification_activity: request?.create_notification_activity,
       expires_at: request?.expires_at,
       id: request?.id,
       parent_id: request?.parent_id,
       poll_id: request?.poll_id,
       restrict_replies: request?.restrict_replies,
       skip_enrich_url: request?.skip_enrich_url,
+      skip_push: request?.skip_push,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
@@ -504,9 +506,11 @@ export class FeedsApi {
   async deleteActivityReaction(request: {
     activity_id: string;
     type: string;
+    delete_notification_activity?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<DeleteActivityReactionResponse>> {
     const queryParams = {
+      delete_notification_activity: request?.delete_notification_activity,
       user_id: request?.user_id,
     };
     const pathParams = {
@@ -571,6 +575,7 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
+      handle_mention_notifications: request?.handle_mention_notifications,
       user_id: request?.user_id,
       unset: request?.unset,
       set: request?.set,
@@ -601,12 +606,14 @@ export class FeedsApi {
     };
     const body = {
       expires_at: request?.expires_at,
+      handle_mention_notifications: request?.handle_mention_notifications,
       poll_id: request?.poll_id,
       restrict_replies: request?.restrict_replies,
       skip_enrich_url: request?.skip_enrich_url,
       text: request?.text,
       user_id: request?.user_id,
       visibility: request?.visibility,
+      visibility_tag: request?.visibility_tag,
       attachments: request?.attachments,
       collection_refs: request?.collection_refs,
       feeds: request?.feeds,
@@ -851,6 +858,7 @@ export class FeedsApi {
     depth?: number;
     sort?: string;
     replies_limit?: number;
+    user_id?: string;
     limit?: number;
     prev?: string;
     next?: string;
@@ -861,6 +869,7 @@ export class FeedsApi {
       depth: request?.depth,
       sort: request?.sort,
       replies_limit: request?.replies_limit,
+      user_id: request?.user_id,
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,
@@ -963,9 +972,11 @@ export class FeedsApi {
   async deleteComment(request: {
     id: string;
     hard_delete?: boolean;
+    delete_notification_activity?: boolean;
   }): Promise<StreamResponse<DeleteCommentResponse>> {
     const queryParams = {
       hard_delete: request?.hard_delete,
+      delete_notification_activity: request?.delete_notification_activity,
     };
     const pathParams = {
       id: request?.id,
@@ -1004,10 +1015,12 @@ export class FeedsApi {
     };
     const body = {
       comment: request?.comment,
+      handle_mention_notifications: request?.handle_mention_notifications,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
       user_id: request?.user_id,
       attachments: request?.attachments,
+      mentioned_user_ids: request?.mentioned_user_ids,
       custom: request?.custom,
       user: request?.user,
     };
@@ -1093,9 +1106,11 @@ export class FeedsApi {
   async deleteCommentReaction(request: {
     id: string;
     type: string;
+    delete_notification_activity?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<DeleteCommentReactionResponse>> {
     const queryParams = {
+      delete_notification_activity: request?.delete_notification_activity,
       user_id: request?.user_id,
     };
     const pathParams = {
@@ -1122,6 +1137,7 @@ export class FeedsApi {
     depth?: number;
     sort?: string;
     replies_limit?: number;
+    user_id?: string;
     limit?: number;
     prev?: string;
     next?: string;
@@ -1130,6 +1146,7 @@ export class FeedsApi {
       depth: request?.depth,
       sort: request?.sort,
       replies_limit: request?.replies_limit,
+      user_id: request?.user_id,
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,
@@ -2141,7 +2158,11 @@ export class FeedsApi {
   async unfollow(request: {
     source: string;
     target: string;
+    delete_notification_activity?: boolean;
   }): Promise<StreamResponse<UnfollowResponse>> {
+    const queryParams = {
+      delete_notification_activity: request?.delete_notification_activity,
+    };
     const pathParams = {
       source: request?.source,
       target: request?.target,
@@ -2153,7 +2174,7 @@ export class FeedsApi {
       'DELETE',
       '/api/v2/feeds/follows/{source}/{target}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.UnfollowResponse?.(response.body);
@@ -2294,6 +2315,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      delete_notification_activity: request?.delete_notification_activity,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2317,6 +2339,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      delete_notification_activity: request?.delete_notification_activity,
     };
 
     const response = await this.apiClient.sendRequest<

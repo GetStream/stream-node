@@ -40,6 +40,7 @@ import {
   QueryAggregateCallStatsResponse,
   QueryCallMembersRequest,
   QueryCallMembersResponse,
+  QueryCallParticipantSessionsResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
   QueryCallSessionParticipantStatsResponse,
@@ -83,6 +84,7 @@ import {
   StopLiveResponse,
   StopRTMPBroadcastsRequest,
   StopRTMPBroadcastsResponse,
+  StopRecordingRequest,
   StopRecordingResponse,
   StopTranscriptionRequest,
   StopTranscriptionResponse,
@@ -454,7 +456,10 @@ export class VideoApi {
     const body = {
       recording_storage_name: request?.recording_storage_name,
       start_closed_caption: request?.start_closed_caption,
+      start_composite_recording: request?.start_composite_recording,
       start_hls: request?.start_hls,
+      start_individual_recording: request?.start_individual_recording,
+      start_raw_recording: request?.start_raw_recording,
       start_recording: request?.start_recording,
       start_transcription: request?.start_transcription,
       transcription_storage_name: request?.transcription_storage_name,
@@ -806,6 +811,41 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async queryCallParticipantSessions(request: {
+    type: string;
+    id: string;
+    session: string;
+    limit?: number;
+    prev?: string;
+    next?: string;
+    filter_conditions?: Record<string, any>;
+  }): Promise<StreamResponse<QueryCallParticipantSessionsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      prev: request?.prev,
+      next: request?.next,
+      filter_conditions: request?.filter_conditions,
+    };
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+      session: request?.session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallParticipantSessionsResponse>
+    >(
+      'GET',
+      '/api/v2/video/call/{type}/{id}/session/{session}/participant_sessions',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.QueryCallParticipantSessionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async startHLSBroadcasting(request: {
     type: string;
     id: string;
@@ -1024,7 +1064,10 @@ export class VideoApi {
     };
     const body = {
       continue_closed_caption: request?.continue_closed_caption,
+      continue_composite_recording: request?.continue_composite_recording,
       continue_hls: request?.continue_hls,
+      continue_individual_recording: request?.continue_individual_recording,
+      continue_raw_recording: request?.continue_raw_recording,
       continue_recording: request?.continue_recording,
       continue_rtmp_broadcasts: request?.continue_rtmp_broadcasts,
       continue_transcription: request?.continue_transcription,
@@ -1046,14 +1089,14 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async stopRecording(request: {
-    type: string;
-    id: string;
-  }): Promise<StreamResponse<StopRecordingResponse>> {
+  async stopRecording(
+    request: StopRecordingRequest & { type: string; id: string },
+  ): Promise<StreamResponse<StopRecordingResponse>> {
     const pathParams = {
       type: request?.type,
       id: request?.id,
     };
+    const body = {};
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<StopRecordingResponse>
@@ -1062,6 +1105,8 @@ export class VideoApi {
       '/api/v2/video/call/{type}/{id}/stop_recording',
       pathParams,
       undefined,
+      body,
+      'application/json',
     );
 
     decoders.StopRecordingResponse?.(response.body);
@@ -1545,38 +1590,12 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async resolveSipInbound(
-    request: ResolveSipInboundRequest,
-  ): Promise<StreamResponse<ResolveSipInboundResponse>> {
-    const body = {
-      sip_caller_number: request?.sip_caller_number,
-      sip_trunk_number: request?.sip_trunk_number,
-      challenge: request?.challenge,
-      sip_headers: request?.sip_headers,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ResolveSipInboundResponse>
-    >(
-      'POST',
-      '/api/v2/video/sip/resolve',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.ResolveSipInboundResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async listSIPInboundRoutingRule(): Promise<
     StreamResponse<ListSIPInboundRoutingRuleResponse>
   > {
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListSIPInboundRoutingRuleResponse>
-    >('GET', '/api/v2/video/sip/routing_rules', undefined, undefined);
+    >('GET', '/api/v2/video/sip/inbound_routing_rules', undefined, undefined);
 
     decoders.ListSIPInboundRoutingRuleResponse?.(response.body);
 
@@ -1602,7 +1621,7 @@ export class VideoApi {
       StreamResponse<SIPInboundRoutingRuleResponse>
     >(
       'POST',
-      '/api/v2/video/sip/routing_rules',
+      '/api/v2/video/sip/inbound_routing_rules',
       undefined,
       undefined,
       body,
@@ -1623,7 +1642,12 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteSIPInboundRoutingRuleResponse>
-    >('DELETE', '/api/v2/video/sip/routing_rules/{id}', pathParams, undefined);
+    >(
+      'DELETE',
+      '/api/v2/video/sip/inbound_routing_rules/{id}',
+      pathParams,
+      undefined,
+    );
 
     decoders.DeleteSIPInboundRoutingRuleResponse?.(response.body);
 
@@ -1652,7 +1676,7 @@ export class VideoApi {
       StreamResponse<UpdateSIPInboundRoutingRuleResponse>
     >(
       'PUT',
-      '/api/v2/video/sip/routing_rules/{id}',
+      '/api/v2/video/sip/inbound_routing_rules/{id}',
       pathParams,
       undefined,
       body,
@@ -1667,7 +1691,7 @@ export class VideoApi {
   async listSIPTrunks(): Promise<StreamResponse<ListSIPTrunksResponse>> {
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListSIPTrunksResponse>
-    >('GET', '/api/v2/video/sip/trunks', undefined, undefined);
+    >('GET', '/api/v2/video/sip/inbound_trunks', undefined, undefined);
 
     decoders.ListSIPTrunksResponse?.(response.body);
 
@@ -1686,7 +1710,7 @@ export class VideoApi {
       StreamResponse<CreateSIPTrunkResponse>
     >(
       'POST',
-      '/api/v2/video/sip/trunks',
+      '/api/v2/video/sip/inbound_trunks',
       undefined,
       undefined,
       body,
@@ -1707,7 +1731,7 @@ export class VideoApi {
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteSIPTrunkResponse>
-    >('DELETE', '/api/v2/video/sip/trunks/{id}', pathParams, undefined);
+    >('DELETE', '/api/v2/video/sip/inbound_trunks/{id}', pathParams, undefined);
 
     decoders.DeleteSIPTrunkResponse?.(response.body);
 
@@ -1729,7 +1753,7 @@ export class VideoApi {
       StreamResponse<UpdateSIPTrunkResponse>
     >(
       'PUT',
-      '/api/v2/video/sip/trunks/{id}',
+      '/api/v2/video/sip/inbound_trunks/{id}',
       pathParams,
       undefined,
       body,
@@ -1737,6 +1761,33 @@ export class VideoApi {
     );
 
     decoders.UpdateSIPTrunkResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async resolveSipInbound(
+    request: ResolveSipInboundRequest,
+  ): Promise<StreamResponse<ResolveSipInboundResponse>> {
+    const body = {
+      sip_caller_number: request?.sip_caller_number,
+      sip_trunk_number: request?.sip_trunk_number,
+      challenge: request?.challenge,
+      routing_number: request?.routing_number,
+      sip_headers: request?.sip_headers,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ResolveSipInboundResponse>
+    >(
+      'POST',
+      '/api/v2/video/sip/resolve',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ResolveSipInboundResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
