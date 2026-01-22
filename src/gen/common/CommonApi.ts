@@ -20,6 +20,8 @@ import {
   CreateImportResponse,
   CreateImportURLRequest,
   CreateImportURLResponse,
+  CreateImportV2TaskRequest,
+  CreateImportV2TaskResponse,
   CreatePollOptionRequest,
   CreatePollRequest,
   CreateRoleRequest,
@@ -29,6 +31,7 @@ import {
   DeactivateUsersRequest,
   DeactivateUsersResponse,
   DeleteExternalStorageResponse,
+  DeleteImportV2TaskResponse,
   DeleteUsersRequest,
   DeleteUsersResponse,
   ExportUserResponse,
@@ -41,6 +44,7 @@ import {
   GetBlockedUsersResponse,
   GetCustomPermissionResponse,
   GetImportResponse,
+  GetImportV2TaskResponse,
   GetOGResponse,
   GetPushTemplatesResponse,
   GetRateLimitsResponse,
@@ -50,6 +54,7 @@ import {
   ListBlockListResponse,
   ListDevicesResponse,
   ListExternalStorageResponse,
+  ListImportV2TasksResponse,
   ListImportsResponse,
   ListPermissionsResponse,
   ListPushProvidersResponse,
@@ -632,6 +637,80 @@ export class CommonApi {
     );
 
     decoders.CreateImportResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listImportV2Tasks(request?: {
+    state?: number;
+  }): Promise<StreamResponse<ListImportV2TasksResponse>> {
+    const queryParams = {
+      state: request?.state,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListImportV2TasksResponse>
+    >('GET', '/api/v2/imports/v2', undefined, queryParams);
+
+    decoders.ListImportV2TasksResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createImportV2Task(
+    request: CreateImportV2TaskRequest,
+  ): Promise<StreamResponse<CreateImportV2TaskResponse>> {
+    const body = {
+      product: request?.product,
+      settings: request?.settings,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateImportV2TaskResponse>
+    >(
+      'POST',
+      '/api/v2/imports/v2',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateImportV2TaskResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteImportV2Task(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteImportV2TaskResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteImportV2TaskResponse>
+    >('DELETE', '/api/v2/imports/v2/{id}', pathParams, undefined);
+
+    decoders.DeleteImportV2TaskResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getImportV2Task(request: {
+    id: string;
+  }): Promise<StreamResponse<GetImportV2TaskResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetImportV2TaskResponse>
+    >('GET', '/api/v2/imports/v2/{id}', pathParams, undefined);
+
+    decoders.GetImportV2TaskResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

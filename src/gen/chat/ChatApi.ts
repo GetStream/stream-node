@@ -55,6 +55,8 @@ import {
   QueryChannelsResponse,
   QueryDraftsRequest,
   QueryDraftsResponse,
+  QueryFutureChannelBansPayload,
+  QueryFutureChannelBansResponse,
   QueryMembersPayload,
   QueryMessageFlagsPayload,
   QueryMessageFlagsResponse,
@@ -233,10 +235,13 @@ export class ChatApi {
       member_limit: request?.member_limit,
       message_limit: request?.message_limit,
       offset: request?.offset,
+      predefined_filter: request?.predefined_filter,
       state: request?.state,
       user_id: request?.user_id,
       sort: request?.sort,
       filter_conditions: request?.filter_conditions,
+      filter_values: request?.filter_values,
+      sort_values: request?.sort_values,
       user: request?.user,
     };
 
@@ -1883,6 +1888,22 @@ export class ChatApi {
     >('GET', '/api/v2/chat/query_banned_users', undefined, queryParams);
 
     decoders.QueryBannedUsersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryFutureChannelBans(request?: {
+    payload?: QueryFutureChannelBansPayload;
+  }): Promise<StreamResponse<QueryFutureChannelBansResponse>> {
+    const queryParams = {
+      payload: request?.payload,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryFutureChannelBansResponse>
+    >('GET', '/api/v2/chat/query_future_channel_bans', undefined, queryParams);
+
+    decoders.QueryFutureChannelBansResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
