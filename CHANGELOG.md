@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.35](https://github.com/GetStream/stream-node/compare/v0.7.34...v0.7.35) (2026-01-22)
+
+
+### Features
+
+* [FEEDS-1039] regenerate SDK ([#238](https://github.com/GetStream/stream-node/issues/238)) ([9d9cf0c](https://github.com/GetStream/stream-node/commit/9d9cf0cd627d6cf2e444588da75a1ef0ff6db81a))
+
 ## [0.7.34](https://github.com/GetStream/stream-node/compare/v0.7.33...v0.7.34) (2026-01-21)
 
 
