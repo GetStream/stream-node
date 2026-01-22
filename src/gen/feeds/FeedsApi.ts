@@ -2174,7 +2174,7 @@ export class FeedsApi {
       'DELETE',
       '/api/v2/feeds/follows/{source}/{target}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders.UnfollowResponse?.(response.body);
