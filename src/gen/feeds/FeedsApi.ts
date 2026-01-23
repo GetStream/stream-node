@@ -214,6 +214,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<DeleteActivitiesResponse>> {
     const body = {
       ids: request?.ids,
+      delete_notification_activity: request?.delete_notification_activity,
       hard_delete: request?.hard_delete,
       user_id: request?.user_id,
       user: request?.user,
@@ -535,9 +536,11 @@ export class FeedsApi {
   async deleteActivity(request: {
     id: string;
     hard_delete?: boolean;
+    delete_notification_activity?: boolean;
   }): Promise<StreamResponse<DeleteActivityResponse>> {
     const queryParams = {
       hard_delete: request?.hard_delete,
+      delete_notification_activity: request?.delete_notification_activity,
     };
     const pathParams = {
       id: request?.id,
