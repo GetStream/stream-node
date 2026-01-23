@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.36](https://github.com/GetStream/stream-node/compare/v0.7.35...v0.7.36) (2026-01-23)
+
+
+### Features
+
+* [FEEDS-1039] handle deletion of mention noti activities when deleting activity ([#243](https://github.com/GetStream/stream-node/issues/243)) ([99ba5fe](https://github.com/GetStream/stream-node/commit/99ba5fe8540997cc1557a0b6c1cb5716f468affc))
+* add edited_at field in comment response ([#242](https://github.com/GetStream/stream-node/issues/242)) ([313f521](https://github.com/GetStream/stream-node/commit/313f521c6ad07b81a298f1033dbf631fe9b72f3d))
+
 ## [0.7.35](https://github.com/GetStream/stream-node/compare/v0.7.34...v0.7.35) (2026-01-22)
 
 
