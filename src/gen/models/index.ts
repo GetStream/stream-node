@@ -599,6 +599,8 @@ export interface ActivityResponse {
 
   moderation_action?: string;
 
+  selector_source?: string;
+
   text?: string;
 
   visibility_tag?: string;
@@ -4105,6 +4107,8 @@ export interface CommentResponse {
   controversy_score?: number;
 
   deleted_at?: Date;
+
+  edited_at?: Date;
 
   parent_id?: string;
 
@@ -12927,6 +12931,8 @@ export interface ThreadedCommentResponse {
   controversy_score?: number;
 
   deleted_at?: Date;
+
+  edited_at?: Date;
 
   parent_id?: string;
 
