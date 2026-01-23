@@ -4861,6 +4861,8 @@ export interface DecayFunctionConfig {
 export interface DeleteActivitiesRequest {
   ids: string[];
 
+  delete_notification_activity?: boolean;
+
   hard_delete?: boolean;
 
   user_id?: string;
