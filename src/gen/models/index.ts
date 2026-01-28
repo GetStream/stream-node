@@ -618,6 +618,24 @@ export interface ActivityResponse {
   poll?: PollResponseData;
 }
 
+export interface ActivityRestoredEvent {
+  created_at: Date;
+
+  fid: string;
+
+  activity: ActivityResponse;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  feed_visibility?: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface ActivitySelectorConfig {
   type:
     | 'popular'
@@ -4860,8 +4878,6 @@ export interface DecayFunctionConfig {
 
 export interface DeleteActivitiesRequest {
   ids: string[];
-
-  delete_notification_activity?: boolean;
 
   hard_delete?: boolean;
 
@@ -11518,6 +11534,18 @@ export interface RestoreActionRequest {
   decision_reason?: string;
 }
 
+export interface RestoreActivityRequest {
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface RestoreActivityResponse {
+  duration: string;
+
+  activity: ActivityResponse;
+}
+
 export interface RestoreUsersRequest {
   user_ids: string[];
 }
@@ -13283,8 +13311,6 @@ export interface UnblockedUserEvent {
 
 export interface UnfollowBatchRequest {
   follows: FollowPair[];
-
-  delete_notification_activity?: boolean;
 }
 
 export interface UnfollowBatchResponse {
@@ -13394,8 +13420,6 @@ export interface UnreadCountsThread {
 }
 
 export interface UpdateActivityPartialRequest {
-  handle_mention_notifications?: boolean;
-
   user_id?: string;
 
   unset?: string[];
@@ -13413,8 +13437,6 @@ export interface UpdateActivityPartialResponse {
 
 export interface UpdateActivityRequest {
   expires_at?: Date;
-
-  handle_mention_notifications?: boolean;
 
   poll_id?: string;
 
@@ -13910,8 +13932,6 @@ export interface UpdateCommandResponse {
 export interface UpdateCommentRequest {
   comment?: string;
 
-  handle_mention_notifications?: boolean;
-
   skip_enrich_url?: boolean;
 
   skip_push?: boolean;
@@ -13919,8 +13939,6 @@ export interface UpdateCommentRequest {
   user_id?: string;
 
   attachments?: Attachment[];
-
-  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -15241,6 +15259,7 @@ export type WebhookEvent =
   | ({
       type: 'feeds.activity.removed_from_feed';
     } & ActivityRemovedFromFeedEvent)
+  | ({ type: 'feeds.activity.restored' } & ActivityRestoredEvent)
   | ({ type: 'feeds.activity.unpinned' } & ActivityUnpinnedEvent)
   | ({ type: 'feeds.activity.updated' } & ActivityUpdatedEvent)
   | ({ type: 'feeds.bookmark.added' } & BookmarkAddedEvent)

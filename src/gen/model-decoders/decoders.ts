@@ -237,6 +237,19 @@ decoders.ActivityResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ActivityRestoredEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    activity: { type: 'ActivityResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ActivitySelectorConfigResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     cutoff_time: { type: 'DatetimeType', isSingle: true },
@@ -4054,6 +4067,13 @@ decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
     sip_routing_rule: { type: 'SIPInboundRoutingRuleResponse', isSingle: true },
 
     sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.RestoreActivityResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    activity: { type: 'ActivityResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
