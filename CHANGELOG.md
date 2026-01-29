@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.37](https://github.com/GetStream/stream-node/compare/v0.7.36...v0.7.37) (2026-01-29)
+
+
+### Features
+
+* new endpoint for restoring soft deleted activities ([#245](https://github.com/GetStream/stream-node/issues/245)) ([fe6ff15](https://github.com/GetStream/stream-node/commit/fe6ff15fd4169e39c49b0ea70f68393687d1372e))
+
 ## [0.7.36](https://github.com/GetStream/stream-node/compare/v0.7.35...v0.7.36) (2026-01-23)
 
 
