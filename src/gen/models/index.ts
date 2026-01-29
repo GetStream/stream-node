@@ -4879,6 +4879,8 @@ export interface DecayFunctionConfig {
 export interface DeleteActivitiesRequest {
   ids: string[];
 
+  delete_notification_activity?: boolean;
+
   hard_delete?: boolean;
 
   user_id?: string;
@@ -6354,6 +6356,8 @@ export interface FollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  status?: 'accepted' | 'pending' | 'rejected';
 
   custom?: Record<string, any>;
 }
@@ -11097,7 +11101,7 @@ export interface RTMPSettingsResponse {
 }
 
 export interface RankingConfig {
-  type: 'recency' | 'expression' | 'interest';
+  type: 'expression' | 'interest';
 
   score?: string;
 
@@ -13311,6 +13315,8 @@ export interface UnblockedUserEvent {
 
 export interface UnfollowBatchRequest {
   follows: FollowPair[];
+
+  delete_notification_activity?: boolean;
 }
 
 export interface UnfollowBatchResponse {
@@ -13420,6 +13426,8 @@ export interface UnreadCountsThread {
 }
 
 export interface UpdateActivityPartialRequest {
+  handle_mention_notifications?: boolean;
+
   user_id?: string;
 
   unset?: string[];
@@ -13437,6 +13445,8 @@ export interface UpdateActivityPartialResponse {
 
 export interface UpdateActivityRequest {
   expires_at?: Date;
+
+  handle_mention_notifications?: boolean;
 
   poll_id?: string;
 
@@ -13932,6 +13942,8 @@ export interface UpdateCommandResponse {
 export interface UpdateCommentRequest {
   comment?: string;
 
+  handle_mention_notifications?: boolean;
+
   skip_enrich_url?: boolean;
 
   skip_push?: boolean;
@@ -13939,6 +13951,8 @@ export interface UpdateCommentRequest {
   user_id?: string;
 
   attachments?: Attachment[];
+
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -14084,6 +14098,8 @@ export interface UpdateFollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  status?: 'accepted' | 'pending' | 'rejected';
 
   custom?: Record<string, any>;
 }
