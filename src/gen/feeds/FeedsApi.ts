@@ -101,6 +101,8 @@ import {
   RejectFollowRequest,
   RejectFollowResponse,
   Response,
+  RestoreActivityRequest,
+  RestoreActivityResponse,
   SingleFollowResponse,
   UnfollowBatchRequest,
   UnfollowBatchResponse,
@@ -640,6 +642,33 @@ export class FeedsApi {
     );
 
     decoders.UpdateActivityResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async restoreActivity(
+    request: RestoreActivityRequest & { id: string },
+  ): Promise<StreamResponse<RestoreActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RestoreActivityResponse>
+    >(
+      'PUT',
+      '/api/v2/feeds/activities/{id}/restore',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RestoreActivityResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1989,6 +2018,7 @@ export class FeedsApi {
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
+      status: request?.status,
       custom: request?.custom,
     };
 
@@ -2017,6 +2047,7 @@ export class FeedsApi {
       create_notification_activity: request?.create_notification_activity,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
+      status: request?.status,
       custom: request?.custom,
     };
 

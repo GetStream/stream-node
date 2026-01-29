@@ -618,6 +618,24 @@ export interface ActivityResponse {
   poll?: PollResponseData;
 }
 
+export interface ActivityRestoredEvent {
+  created_at: Date;
+
+  fid: string;
+
+  activity: ActivityResponse;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  feed_visibility?: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
+}
+
 export interface ActivitySelectorConfig {
   type:
     | 'popular'
@@ -6339,6 +6357,8 @@ export interface FollowRequest {
 
   skip_push?: boolean;
 
+  status?: 'accepted' | 'pending' | 'rejected';
+
   custom?: Record<string, any>;
 }
 
@@ -11081,7 +11101,7 @@ export interface RTMPSettingsResponse {
 }
 
 export interface RankingConfig {
-  type: 'recency' | 'expression' | 'interest';
+  type: 'expression' | 'interest';
 
   score?: string;
 
@@ -11516,6 +11536,18 @@ export interface Response {
 
 export interface RestoreActionRequest {
   decision_reason?: string;
+}
+
+export interface RestoreActivityRequest {
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface RestoreActivityResponse {
+  duration: string;
+
+  activity: ActivityResponse;
 }
 
 export interface RestoreUsersRequest {
@@ -14067,6 +14099,8 @@ export interface UpdateFollowRequest {
 
   skip_push?: boolean;
 
+  status?: 'accepted' | 'pending' | 'rejected';
+
   custom?: Record<string, any>;
 }
 
@@ -15241,6 +15275,7 @@ export type WebhookEvent =
   | ({
       type: 'feeds.activity.removed_from_feed';
     } & ActivityRemovedFromFeedEvent)
+  | ({ type: 'feeds.activity.restored' } & ActivityRestoredEvent)
   | ({ type: 'feeds.activity.unpinned' } & ActivityUnpinnedEvent)
   | ({ type: 'feeds.activity.updated' } & ActivityUpdatedEvent)
   | ({ type: 'feeds.bookmark.added' } & BookmarkAddedEvent)
