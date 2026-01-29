@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.38](https://github.com/GetStream/stream-node/compare/v0.7.37...v0.7.38) (2026-01-29)
+
+
+### Bug Fixes
+
+* Feeds 1117 support restoring soft deleted activities ([#247](https://github.com/GetStream/stream-node/issues/247)) ([2221b65](https://github.com/GetStream/stream-node/commit/2221b65e2b20ab0814dfab0167a057eee2ed6de1))
+
 ## [0.7.37](https://github.com/GetStream/stream-node/compare/v0.7.36...v0.7.37) (2026-01-29)
 
 
