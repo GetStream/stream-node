@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.40](https://github.com/GetStream/stream-node/compare/v0.7.39...v0.7.40) (2026-02-03)
+
+
+### Features
+
+* Add parent_activity to activity for NotificationTarget ([#249](https://github.com/GetStream/stream-node/issues/249)) ([ac3dd69](https://github.com/GetStream/stream-node/commit/ac3dd69f8ccd3e4e34278a4e95b310d66dc0528c))
+
 ## [0.7.39](https://github.com/GetStream/stream-node/compare/v0.7.38...v0.7.39) (2026-02-03)
 
 
