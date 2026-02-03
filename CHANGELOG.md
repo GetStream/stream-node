@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.39](https://github.com/GetStream/stream-node/compare/v0.7.38...v0.7.39) (2026-02-03)
+
+
+### Features
+
+* add request field `run_activity_processors` to enable customer setting this when changing activity text/images ([#250](https://github.com/GetStream/stream-node/issues/250)) ([80f0126](https://github.com/GetStream/stream-node/commit/80f0126a3594774d6133449c36bb9a5605fe3402))
+
 ## [0.7.38](https://github.com/GetStream/stream-node/compare/v0.7.37...v0.7.38) (2026-01-29)
 
 
