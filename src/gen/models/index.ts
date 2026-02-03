@@ -13428,6 +13428,8 @@ export interface UnreadCountsThread {
 export interface UpdateActivityPartialRequest {
   handle_mention_notifications?: boolean;
 
+  run_activity_processors?: boolean;
+
   user_id?: string;
 
   unset?: string[];
@@ -13451,6 +13453,8 @@ export interface UpdateActivityRequest {
   poll_id?: string;
 
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+
+  run_activity_processors?: boolean;
 
   skip_enrich_url?: boolean;
 
