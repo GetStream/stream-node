@@ -8988,6 +8988,18 @@ export interface NotificationMarkUnreadEvent {
   user?: User;
 }
 
+export interface NotificationParentActivity {
+  id: string;
+
+  text?: string;
+
+  type?: string;
+
+  user_id?: string;
+
+  attachments?: Attachment[];
+}
+
 export interface NotificationSettings {
   enabled: boolean;
 
@@ -9030,6 +9042,8 @@ export interface NotificationTarget {
   attachments?: Attachment[];
 
   comment?: NotificationComment;
+
+  parent_activity?: NotificationParentActivity;
 }
 
 export interface NotificationTrigger {
