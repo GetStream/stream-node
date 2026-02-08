@@ -9,6 +9,7 @@ import {
   DeleteRecordingResponse,
   DeleteTranscriptionResponse,
   EndCallResponse,
+  GetCallParticipantSessionMetricsResponse,
   GetCallReportResponse,
   GetCallResponse,
   GetOrCreateCallRequest,
@@ -206,6 +207,26 @@ export class CallApi {
     return this.videoApi.listRecordings({ id: this.id, type: this.type });
   }
 
+  startRecording(
+    request: StartRecordingRequest & { recording_type: string },
+  ): Promise<StreamResponse<StartRecordingResponse>> {
+    return this.videoApi.startRecording({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  stopRecording(
+    request: StopRecordingRequest & { recording_type: string },
+  ): Promise<StreamResponse<StopRecordingResponse>> {
+    return this.videoApi.stopRecording({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
   getCallReport(request?: {
     session_id?: string;
   }): Promise<StreamResponse<GetCallReportResponse>> {
@@ -243,6 +264,20 @@ export class CallApi {
     request: StopRTMPBroadcastsRequest & { name: string },
   ): Promise<StreamResponse<StopRTMPBroadcastsResponse>> {
     return this.videoApi.stopRTMPBroadcast({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  getCallParticipantSessionMetrics(request: {
+    session: string;
+    user: string;
+    user_session: string;
+    since?: Date;
+    until?: Date;
+  }): Promise<StreamResponse<GetCallParticipantSessionMetricsResponse>> {
+    return this.videoApi.getCallParticipantSessionMetrics({
       id: this.id,
       type: this.type,
       ...request,
@@ -289,16 +324,6 @@ export class CallApi {
     });
   }
 
-  startRecording(
-    request?: StartRecordingRequest,
-  ): Promise<StreamResponse<StartRecordingResponse>> {
-    return this.videoApi.startRecording({
-      id: this.id,
-      type: this.type,
-      ...request,
-    });
-  }
-
   startTranscription(
     request?: StartTranscriptionRequest,
   ): Promise<StreamResponse<StartTranscriptionResponse>> {
@@ -331,16 +356,6 @@ export class CallApi {
     request?: StopLiveRequest,
   ): Promise<StreamResponse<StopLiveResponse>> {
     return this.videoApi.stopLive({ id: this.id, type: this.type, ...request });
-  }
-
-  stopRecording(
-    request?: StopRecordingRequest,
-  ): Promise<StreamResponse<StopRecordingResponse>> {
-    return this.videoApi.stopRecording({
-      id: this.id,
-      type: this.type,
-      ...request,
-    });
   }
 
   stopTranscription(

@@ -230,6 +230,19 @@ decoders.ActivityResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ActivityRestoredEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    activity: { type: 'ActivityResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ActivitySelectorConfigResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     cutoff_time: { type: 'DatetimeType', isSingle: true },
@@ -647,6 +660,17 @@ decoders.CallCreatedEvent = (input?: Record<string, any>) => {
     members: { type: 'MemberResponse', isSingle: false },
 
     call: { type: 'CallResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.CallDTMFEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    timestamp: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1662,6 +1686,8 @@ decoders.CommentResponse = (input?: Record<string, any>) => {
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
+    edited_at: { type: 'DatetimeType', isSingle: true },
+
     latest_reactions: { type: 'FeedsReactionResponse', isSingle: false },
 
     reaction_groups: { type: 'FeedsReactionGroupResponse', isSingle: false },
@@ -2319,6 +2345,19 @@ decoders.FullUserResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.FutureChannelBanResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    expires: { type: 'DatetimeType', isSingle: true },
+
+    banned_by: { type: 'UserResponse', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetActiveCallsStatusResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     end_time: { type: 'DatetimeType', isSingle: true },
@@ -2359,6 +2398,15 @@ decoders.GetBlockListResponse = (input?: Record<string, any>) => {
 decoders.GetBlockedUsersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     blocks: { type: 'BlockedUserResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.GetCallParticipantSessionMetricsResponse = (
+  input?: Record<string, any>,
+) => {
+  const typeMappings: TypeMapping = {
+    joined_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3604,13 +3652,6 @@ decoders.QueryCampaignsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.QueryChannelsResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    channels: { type: 'ChannelStateResponseFields', isSingle: false },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.QueryCommentReactionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     reactions: { type: 'FeedsReactionResponse', isSingle: false },
@@ -3667,6 +3708,13 @@ decoders.QueryFeedsResponse = (input?: Record<string, any>) => {
 decoders.QueryFollowsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     follows: { type: 'FollowResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.QueryFutureChannelBansResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    bans: { type: 'FutureChannelBanResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -3964,6 +4012,13 @@ decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.RestoreActivityResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    activity: { type: 'ActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ReviewQueueItemNewEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -4155,6 +4210,13 @@ decoders.SendReactionResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.SessionWarningResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    time: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.SharedLocationResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -4324,6 +4386,8 @@ decoders.ThreadedCommentResponse = (input?: Record<string, any>) => {
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
 
+    edited_at: { type: 'DatetimeType', isSingle: true },
+
     latest_reactions: { type: 'FeedsReactionResponse', isSingle: false },
 
     replies: { type: 'ThreadedCommentResponse', isSingle: false },
@@ -4398,6 +4462,15 @@ decoders.UnreadCountsResponse = (input?: Record<string, any>) => {
 decoders.UnreadCountsThread = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     last_read: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UpdateActivitiesPartialBatchResponse = (
+  input?: Record<string, any>,
+) => {
+  const typeMappings: TypeMapping = {
+    activities: { type: 'ActivityResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };

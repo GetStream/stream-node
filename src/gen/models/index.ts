@@ -487,6 +487,10 @@ export interface ActivityRequest {
 
   feeds: string[];
 
+  copy_custom_to_notification?: boolean;
+
+  create_notification_activity?: boolean;
+
   expires_at?: string;
 
   id?: string;
@@ -498,6 +502,8 @@ export interface ActivityRequest {
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
   skip_enrich_url?: boolean;
+
+  skip_push?: boolean;
 
   text?: string;
 
@@ -541,7 +547,7 @@ export interface ActivityResponse {
 
   reaction_count: number;
 
-  restrict_replies: string;
+  restrict_replies: 'everyone' | 'people_i_follow' | 'nobody';
 
   score: number;
 
@@ -591,6 +597,8 @@ export interface ActivityResponse {
 
   moderation_action?: string;
 
+  selector_source?: string;
+
   text?: string;
 
   visibility_tag?: string;
@@ -606,6 +614,24 @@ export interface ActivityResponse {
   parent?: ActivityResponse;
 
   poll?: PollResponseData;
+}
+
+export interface ActivityRestoredEvent {
+  created_at: Date;
+
+  fid: string;
+
+  activity: ActivityResponse;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  feed_visibility?: string;
+
+  received_at?: Date;
+
+  user?: UserResponseCommonFields;
 }
 
 export interface ActivitySelectorConfig {
@@ -688,6 +714,10 @@ export interface AddActivityRequest {
 
   feeds: string[];
 
+  copy_custom_to_notification?: boolean;
+
+  create_notification_activity?: boolean;
+
   expires_at?: string;
 
   id?: string;
@@ -699,6 +729,8 @@ export interface AddActivityRequest {
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
 
   skip_enrich_url?: boolean;
+
+  skip_push?: boolean;
 
   text?: string;
 
@@ -729,6 +761,8 @@ export interface AddActivityResponse {
   duration: string;
 
   activity: ActivityResponse;
+
+  mention_notifications_created?: number;
 }
 
 export interface AddBookmarkRequest {
@@ -751,6 +785,8 @@ export interface AddBookmarkResponse {
 
 export interface AddCommentReactionRequest {
   type: string;
+
+  copy_custom_to_notification?: boolean;
 
   create_notification_activity?: boolean;
 
@@ -777,6 +813,8 @@ export interface AddCommentReactionResponse {
 
 export interface AddCommentRequest {
   comment?: string;
+
+  copy_custom_to_notification?: boolean;
 
   create_notification_activity?: boolean;
 
@@ -808,6 +846,8 @@ export interface AddCommentResponse {
 
   comment: CommentResponse;
 
+  mention_notifications_created?: number;
+
   notification_created?: boolean;
 }
 
@@ -829,6 +869,8 @@ export interface AddFolderRequest {
 
 export interface AddReactionRequest {
   type: string;
+
+  copy_custom_to_notification?: boolean;
 
   create_notification_activity?: boolean;
 
@@ -1166,6 +1208,8 @@ export interface AsyncModerationConfiguration {
 }
 
 export interface Attachment {
+  custom: Record<string, any>;
+
   asset_url?: string;
 
   author_icon?: string;
@@ -1205,8 +1249,6 @@ export interface Attachment {
   actions?: Action[];
 
   fields?: Field[];
-
-  custom?: Record<string, any>;
 
   giphy?: Images;
 }
@@ -1778,6 +1820,24 @@ export interface CallCreatedEvent {
   type: string;
 }
 
+export interface CallDTMFEvent {
+  call_cid: string;
+
+  created_at: Date;
+
+  digit: string;
+
+  duration_ms: number;
+
+  seq_number: number;
+
+  timestamp: Date;
+
+  user: UserResponse;
+
+  type: string;
+}
+
 export interface CallDeletedEvent {
   call_cid: string;
 
@@ -2206,6 +2266,8 @@ export interface CallResponse {
   ended_at?: Date;
 
   join_ahead_time_seconds?: number;
+
+  routing_number?: string;
 
   starts_at?: Date;
 
@@ -3015,6 +3077,8 @@ export interface ChannelConfig {
 
   partition_ttl?: string;
 
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -3084,6 +3148,8 @@ export interface ChannelConfigWithInfo {
   partition_size?: number;
 
   partition_ttl?: string;
+
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
   allowed_flag_reasons?: string[];
 
@@ -3633,6 +3699,8 @@ export interface ChannelTypeConfig {
 
   partition_ttl?: string;
 
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -4068,6 +4136,8 @@ export interface CommentResponse {
 
   deleted_at?: Date;
 
+  edited_at?: Date;
+
   parent_id?: string;
 
   text?: string;
@@ -4278,6 +4348,8 @@ export interface CreateChannelTypeRequest {
 
   polls?: boolean;
 
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
   push_notifications?: boolean;
 
   reactions?: boolean;
@@ -4377,6 +4449,8 @@ export interface CreateChannelTypeResponse {
   partition_size?: number;
 
   partition_ttl?: string;
+
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
   allowed_flag_reasons?: string[];
 
@@ -4828,6 +4902,8 @@ export interface DecayFunctionConfig {
 
 export interface DeleteActivitiesRequest {
   ids: string[];
+
+  delete_notification_activity?: boolean;
 
   hard_delete?: boolean;
 
@@ -6258,11 +6334,15 @@ export interface FollowRequest {
 
   target: string;
 
+  copy_custom_to_notification?: boolean;
+
   create_notification_activity?: boolean;
 
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  status?: 'accepted' | 'pending' | 'rejected';
 
   custom?: Record<string, any>;
 }
@@ -6395,6 +6475,20 @@ export interface FullUserResponse {
   teams_role?: Record<string, string>;
 }
 
+export interface FutureChannelBanResponse {
+  created_at: Date;
+
+  expires?: Date;
+
+  reason?: string;
+
+  shadow?: boolean;
+
+  banned_by?: UserResponse;
+
+  user?: UserResponse;
+}
+
 export interface GeofenceResponse {
   name: string;
 
@@ -6457,6 +6551,26 @@ export interface GetBlockedUsersResponse {
   duration: string;
 
   blocks: BlockedUserResponse[];
+}
+
+export interface GetCallParticipantSessionMetricsResponse {
+  duration: string;
+
+  is_publisher?: boolean;
+
+  is_subscriber?: boolean;
+
+  joined_at?: Date;
+
+  publisher_type?: string;
+
+  user_id?: string;
+
+  user_session_id?: string;
+
+  published_tracks?: PublishedTrackMetrics[];
+
+  client?: SessionClient;
 }
 
 export interface GetCallReportResponse {
@@ -6599,6 +6713,8 @@ export interface GetChannelTypeResponse {
   partition_size?: number;
 
   partition_ttl?: string;
+
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
   allowed_flag_reasons?: string[];
 
@@ -6758,6 +6874,8 @@ export interface GetModerationRuleResponse {
 export interface GetOGResponse {
   duration: string;
 
+  custom: Record<string, any>;
+
   asset_url?: string;
 
   author_icon?: string;
@@ -6797,8 +6915,6 @@ export interface GetOGResponse {
   actions?: Action[];
 
   fields?: Field[];
-
-  custom?: Record<string, any>;
 
   giphy?: Images;
 }
@@ -7233,6 +7349,10 @@ export interface ImportV2TaskItem {
 }
 
 export interface ImportV2TaskSettings {
+  mode?: string;
+
+  path?: string;
+
   skip_references_check?: boolean;
 
   s3?: ImportV2TaskSettingsS3;
@@ -8200,6 +8320,8 @@ export interface MessageRequest {
 
   id?: string;
 
+  mentioned_channel?: boolean;
+
   mml?: string;
 
   parent_id?: string;
@@ -8247,6 +8369,8 @@ export interface MessageResponse {
   html: string;
 
   id: string;
+
+  mentioned_channel: boolean;
 
   pinned: boolean;
 
@@ -8426,6 +8550,8 @@ export interface MessageWithChannelResponse {
 
   id: string;
 
+  mentioned_channel: boolean;
+
   pinned: boolean;
 
   reply_count: number;
@@ -8525,6 +8651,10 @@ export interface MetricThreshold {
   value_unit?: string;
 
   window_seconds?: number;
+}
+
+export interface MetricTimeSeries {
+  data_points?: number[][];
 }
 
 export interface ModerationActionConfigResponse {
@@ -8941,6 +9071,18 @@ export interface NotificationMarkUnreadEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface NotificationParentActivity {
+  id: string;
+
+  text?: string;
+
+  type?: string;
+
+  user_id?: string;
+
+  attachments?: Attachment[];
+}
+
 export interface NotificationSettings {
   enabled: boolean;
 
@@ -9011,6 +9153,8 @@ export interface NotificationTarget {
   attachments?: Attachment[];
 
   comment?: NotificationComment;
+
+  parent_activity?: NotificationParentActivity;
 }
 
 export interface NotificationThreadMessageNewEvent {
@@ -9223,6 +9367,14 @@ export interface PaginationParams {
   limit?: number;
 
   offset?: number;
+}
+
+export interface ParsedPredefinedFilterResponse {
+  name: string;
+
+  filter: Record<string, any>;
+
+  sort?: SortParamRequest[];
 }
 
 export interface ParticipantCountByMinuteResponse {
@@ -9478,7 +9630,7 @@ export interface Policy {
 }
 
 export interface PolicyRequest {
-  action: 'Allow' | 'Deny';
+  action: 'Deny' | 'Allow';
 
   name: string;
 
@@ -9625,6 +9777,22 @@ export interface PublishedTrackFlags {
   video: boolean;
 }
 
+export interface PublishedTrackMetrics {
+  codec?: string;
+
+  track_id?: string;
+
+  track_type?: string;
+
+  warnings?: SessionWarningResponse[];
+
+  bitrate?: MetricTimeSeries;
+
+  framerate?: MetricTimeSeries;
+
+  resolution?: ResolutionMetricsTimeSeries;
+}
+
 export interface PublisherAllMetrics {
   audio?: PublisherAudioMetrics;
 
@@ -9700,7 +9868,13 @@ export interface PushPreferenceInput {
 
   channel_cid?: string;
 
-  chat_level?: 'all' | 'mentions' | 'none' | 'default';
+  chat_level?:
+    | 'all'
+    | 'mentions'
+    | 'direct_mentions'
+    | 'all_mentions'
+    | 'none'
+    | 'default';
 
   disabled_until?: Date;
 
@@ -10316,6 +10490,8 @@ export interface QueryChannelsRequest {
 
   offset?: number;
 
+  predefined_filter?: string;
+
   state?: boolean;
 
   user_id?: string;
@@ -10324,6 +10500,10 @@ export interface QueryChannelsRequest {
 
   filter_conditions?: Record<string, any>;
 
+  filter_values?: Record<string, any>;
+
+  sort_values?: Record<string, any>;
+
   user?: UserRequest;
 }
 
@@ -10331,6 +10511,8 @@ export interface QueryChannelsResponse {
   duration: string;
 
   channels: ChannelStateResponseFields[];
+
+  predefined_filter?: ParsedPredefinedFilterResponse;
 }
 
 export interface QueryCommentReactionsRequest {
@@ -10503,6 +10685,26 @@ export interface QueryFollowsResponse {
   next?: string;
 
   prev?: string;
+}
+
+export interface QueryFutureChannelBansPayload {
+  exclude_expired_bans?: boolean;
+
+  limit?: number;
+
+  offset?: number;
+
+  target_user_id?: string;
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface QueryFutureChannelBansResponse {
+  duration: string;
+
+  bans: FutureChannelBanResponse[];
 }
 
 export interface QueryMembersPayload {
@@ -11012,7 +11214,7 @@ export interface RTMPSettingsResponse {
 }
 
 export interface RankingConfig {
-  type: 'recency' | 'expression' | 'interest';
+  type: 'expression' | 'interest';
 
   score?: string;
 
@@ -11475,12 +11677,20 @@ export interface ReportResponse {
   user_ratings: UserRatingReportResponse;
 }
 
+export interface ResolutionMetricsTimeSeries {
+  height?: MetricTimeSeries;
+
+  width?: MetricTimeSeries;
+}
+
 export interface ResolveSipInboundRequest {
   sip_caller_number: string;
 
   sip_trunk_number: string;
 
   challenge: SIPChallengeRequest;
+
+  routing_number?: string;
 
   sip_headers?: Record<string, string>;
 }
@@ -11501,6 +11711,18 @@ export interface Response {
 
 export interface RestoreActionRequestPayload {
   decision_reason?: string;
+}
+
+export interface RestoreActivityRequest {
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface RestoreActivityResponse {
+  duration: string;
+
+  activity: ActivityResponse;
 }
 
 export interface RestoreUsersRequest {
@@ -12016,6 +12238,8 @@ export interface SearchResultMessage {
 
   id: string;
 
+  mentioned_channel: boolean;
+
   pinned: boolean;
 
   reply_count: number;
@@ -12251,6 +12475,18 @@ export interface SendUserCustomEventRequest {
   event: UserCustomEventRequest;
 }
 
+export interface SessionClient {
+  ip?: string;
+
+  name?: string;
+
+  network_type?: string;
+
+  version?: string;
+
+  location?: CallStatsLocation;
+}
+
 export interface SessionSettings {
   inactivity_timeout_seconds: number;
 }
@@ -12261,6 +12497,14 @@ export interface SessionSettingsRequest {
 
 export interface SessionSettingsResponse {
   inactivity_timeout_seconds: number;
+}
+
+export interface SessionWarningResponse {
+  code: string;
+
+  warning: string;
+
+  time?: Date;
 }
 
 export interface ShadowBlockActionRequestPayload {
@@ -12352,6 +12596,8 @@ export interface SingleFollowResponse {
 }
 
 export interface SipInboundCredentials {
+  api_key: string;
+
   call_id: string;
 
   call_type: string;
@@ -12912,6 +13158,8 @@ export interface ThreadedCommentResponse {
 
   deleted_at?: Date;
 
+  edited_at?: Date;
+
   parent_id?: string;
 
   text?: string;
@@ -13257,6 +13505,8 @@ export interface UnblockedUserEvent {
 
 export interface UnfollowBatchRequest {
   follows: FollowPair[];
+
+  delete_notification_activity?: boolean;
 }
 
 export interface UnfollowBatchResponse {
@@ -13365,7 +13615,35 @@ export interface UnreadCountsThread {
   unread_count: number;
 }
 
+export interface UpdateActivitiesPartialBatchRequest {
+  changes: UpdateActivityPartialChangeRequest[];
+}
+
+export interface UpdateActivitiesPartialBatchResponse {
+  duration: string;
+
+  activities: ActivityResponse[];
+}
+
+export interface UpdateActivityPartialChangeRequest {
+  activity_id: string;
+
+  copy_custom_to_notification?: boolean;
+
+  handle_mention_notifications?: boolean;
+
+  unset?: string[];
+
+  set?: Record<string, any>;
+}
+
 export interface UpdateActivityPartialRequest {
+  copy_custom_to_notification?: boolean;
+
+  handle_mention_notifications?: boolean;
+
+  run_activity_processors?: boolean;
+
   user_id?: string;
 
   unset?: string[];
@@ -13382,11 +13660,17 @@ export interface UpdateActivityPartialResponse {
 }
 
 export interface UpdateActivityRequest {
+  copy_custom_to_notification?: boolean;
+
   expires_at?: Date;
+
+  handle_mention_notifications?: boolean;
 
   poll_id?: string;
 
   restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+
+  run_activity_processors?: boolean;
 
   skip_enrich_url?: boolean;
 
@@ -13724,6 +14008,8 @@ export interface UpdateChannelTypeRequest {
 
   polls?: boolean;
 
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
   push_notifications?: boolean;
 
   quotes?: boolean;
@@ -13832,6 +14118,8 @@ export interface UpdateChannelTypeResponse {
 
   partition_ttl?: string;
 
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
   allowed_flag_reasons?: string[];
 
   blocklists?: BlockListOptions[];
@@ -13878,6 +14166,10 @@ export interface UpdateCommandResponse {
 export interface UpdateCommentRequest {
   comment?: string;
 
+  copy_custom_to_notification?: boolean;
+
+  handle_mention_notifications?: boolean;
+
   skip_enrich_url?: boolean;
 
   skip_push?: boolean;
@@ -13885,6 +14177,8 @@ export interface UpdateCommentRequest {
   user_id?: string;
 
   attachments?: Attachment[];
+
+  mentioned_user_ids?: string[];
 
   custom?: Record<string, any>;
 
@@ -14023,6 +14317,8 @@ export interface UpdateFollowRequest {
 
   target: string;
 
+  copy_custom_to_notification?: boolean;
+
   create_notification_activity?: boolean;
 
   follower_role?: string;
@@ -14030,6 +14326,8 @@ export interface UpdateFollowRequest {
   push_preference?: 'all' | 'none';
 
   skip_push?: boolean;
+
+  status?: 'accepted' | 'pending' | 'rejected';
 
   custom?: Record<string, any>;
 }
@@ -14082,6 +14380,8 @@ export interface UpdateMembershipLevelResponse {
 
 export interface UpdateMessagePartialRequest {
   skip_enrich_url?: boolean;
+
+  skip_push?: boolean;
 
   user_id?: string;
 
@@ -14326,6 +14626,8 @@ export interface UpsertActivitiesResponse {
   duration: string;
 
   activities: ActivityResponse[];
+
+  mention_notifications_created?: number;
 }
 
 export interface UpsertCollectionsRequest {
@@ -15150,6 +15452,7 @@ export type WebhookEvent =
   | ({ type: 'call.closed_captions_stopped' } & CallClosedCaptionsStoppedEvent)
   | ({ type: 'call.created' } & CallCreatedEvent)
   | ({ type: 'call.deleted' } & CallDeletedEvent)
+  | ({ type: 'call.dtmf' } & CallDTMFEvent)
   | ({ type: 'call.ended' } & CallEndedEvent)
   | ({ type: 'call.frame_recording_failed' } & CallFrameRecordingFailedEvent)
   | ({ type: 'call.frame_recording_ready' } & CallFrameRecordingFrameReadyEvent)
@@ -15245,6 +15548,7 @@ export type WebhookEvent =
   | ({
       type: 'feeds.activity.removed_from_feed';
     } & ActivityRemovedFromFeedEvent)
+  | ({ type: 'feeds.activity.restored' } & ActivityRestoredEvent)
   | ({ type: 'feeds.activity.unpinned' } & ActivityUnpinnedEvent)
   | ({ type: 'feeds.activity.updated' } & ActivityUpdatedEvent)
   | ({ type: 'feeds.bookmark.added' } & BookmarkAddedEvent)
