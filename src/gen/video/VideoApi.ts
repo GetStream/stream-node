@@ -16,6 +16,7 @@ import {
   DeleteTranscriptionResponse,
   EndCallResponse,
   GetActiveCallsStatusResponse,
+  GetCallParticipantSessionMetricsResponse,
   GetCallReportResponse,
   GetCallResponse,
   GetCallSessionParticipantStatsDetailsResponse,
@@ -681,6 +682,68 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async startRecording(
+    request: StartRecordingRequest & {
+      type: string;
+      id: string;
+      recording_type: string;
+    },
+  ): Promise<StreamResponse<StartRecordingResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+      recording_type: request?.recording_type,
+    };
+    const body = {
+      recording_external_storage: request?.recording_external_storage,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<StartRecordingResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/recordings/{recording_type}/start',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.StartRecordingResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async stopRecording(
+    request: StopRecordingRequest & {
+      type: string;
+      id: string;
+      recording_type: string;
+    },
+  ): Promise<StreamResponse<StopRecordingResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+      recording_type: request?.recording_type,
+    };
+    const body = {};
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<StopRecordingResponse>
+    >(
+      'POST',
+      '/api/v2/video/call/{type}/{id}/recordings/{recording_type}/stop',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.StopRecordingResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async getCallReport(request: {
     type: string;
     id: string;
@@ -811,6 +874,41 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getCallParticipantSessionMetrics(request: {
+    type: string;
+    id: string;
+    session: string;
+    user: string;
+    user_session: string;
+    since?: Date;
+    until?: Date;
+  }): Promise<StreamResponse<GetCallParticipantSessionMetricsResponse>> {
+    const queryParams = {
+      since: request?.since,
+      until: request?.until,
+    };
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+      session: request?.session,
+      user: request?.user,
+      user_session: request?.user_session,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetCallParticipantSessionMetricsResponse>
+    >(
+      'GET',
+      '/api/v2/video/call/{type}/{id}/session/{session}/participant/{user}/{user_session}/details/track',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.GetCallParticipantSessionMetricsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async queryCallParticipantSessions(request: {
     type: string;
     id: string;
@@ -922,33 +1020,6 @@ export class VideoApi {
     );
 
     decoders.StartFrameRecordingResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async startRecording(
-    request: StartRecordingRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StartRecordingResponse>> {
-    const pathParams = {
-      type: request?.type,
-      id: request?.id,
-    };
-    const body = {
-      recording_external_storage: request?.recording_external_storage,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartRecordingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/start_recording',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.StartRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1085,31 +1156,6 @@ export class VideoApi {
     );
 
     decoders.StopLiveResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async stopRecording(
-    request: StopRecordingRequest & { type: string; id: string },
-  ): Promise<StreamResponse<StopRecordingResponse>> {
-    const pathParams = {
-      type: request?.type,
-      id: request?.id,
-    };
-    const body = {};
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopRecordingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/stop_recording',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.StopRecordingResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
