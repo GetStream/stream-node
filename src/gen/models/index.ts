@@ -10107,6 +10107,8 @@ export interface QualityScoreReportResponse {
 }
 
 export interface QueryActivitiesRequest {
+  include_expired_activities?: boolean;
+
   include_private_activities?: boolean;
 
   limit?: number;
@@ -10886,6 +10888,28 @@ export interface QueryModerationRulesResponse {
   rules: ModerationRuleV2Response[];
 
   default_llm_labels: Record<string, string>;
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryPinnedActivitiesRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+}
+
+export interface QueryPinnedActivitiesResponse {
+  duration: string;
+
+  pinned_activities: ActivityPinResponse[];
 
   next?: string;
 
