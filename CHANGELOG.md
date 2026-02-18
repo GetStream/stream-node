@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.42](https://github.com/GetStream/stream-node/compare/v0.7.41...v0.7.42) (2026-02-18)
+
+
+### Features
+
+* New endpoint queryPinnedActivities ([#256](https://github.com/GetStream/stream-node/issues/256)) ([509da14](https://github.com/GetStream/stream-node/commit/509da1411857f6e5a36d7f05f34d1f049fc30c5d))
+
 ## [0.7.41](https://github.com/GetStream/stream-node/compare/v0.7.40...v0.7.41) (2026-02-16)
 
 
