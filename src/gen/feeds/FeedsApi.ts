@@ -105,6 +105,7 @@ import {
   Response,
   RestoreActivityRequest,
   RestoreActivityResponse,
+  RestoreFeedGroupResponse,
   SingleFollowResponse,
   UnfollowBatchRequest,
   UnfollowBatchResponse,
@@ -828,13 +829,13 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async readCollections(request: {
-    collection_refs: string[];
+  async readCollections(request?: {
     user_id?: string;
+    collection_refs?: string[];
   }): Promise<StreamResponse<ReadCollectionsResponse>> {
     const queryParams = {
-      collection_refs: request?.collection_refs,
       user_id: request?.user_id,
+      collection_refs: request?.collection_refs,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1666,6 +1667,27 @@ export class FeedsApi {
     );
 
     decoders.GetFollowSuggestionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async restoreFeedGroup(request: {
+    feed_group_id: string;
+  }): Promise<StreamResponse<RestoreFeedGroupResponse>> {
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RestoreFeedGroupResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/restore',
+      pathParams,
+      undefined,
+    );
+
+    decoders.RestoreFeedGroupResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

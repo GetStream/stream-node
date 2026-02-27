@@ -324,6 +324,13 @@ decoders.AddReactionResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.AddUserGroupMembersResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_group: { type: 'UserGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.AggregatedActivityResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1080,6 +1087,8 @@ decoders.CallStatsParticipantSession = (input?: Record<string, any>) => {
 decoders.CallStatsReportReadyEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
+
+    participants_overview: { type: 'CallStatsParticipant', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -1830,6 +1839,13 @@ decoders.CreateSIPTrunkResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CreateUserGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_group: { type: 'UserGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CustomCheckResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     item: { type: 'ReviewQueueItemResponse', isSingle: true },
@@ -2082,6 +2098,15 @@ decoders.FeedGroupResponse = (input?: Record<string, any>) => {
       type: 'ActivitySelectorConfigResponse',
       isSingle: false,
     },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.FeedGroupRestoredEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2653,6 +2678,13 @@ decoders.GetThreadResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetUserGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_group: { type: 'UserGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GoLiveResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     call: { type: 'CallResponse', isSingle: true },
@@ -2827,9 +2859,31 @@ decoders.ListTranscriptionsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ListUserGroupsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_groups: { type: 'UserGroupResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.MarkReadResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
-    event: { type: 'MessageReadEvent', isSingle: true },
+    event: { type: 'MarkReadResponseEvent', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.MarkReadResponseEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    channel_last_message_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    thread: { type: 'ThreadResponse', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3016,7 +3070,7 @@ decoders.MessageReadEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
-    channel_last_message_at: { type: 'DatetimeType', isSingle: true },
+    received_at: { type: 'DatetimeType', isSingle: true },
 
     channel: { type: 'ChannelResponse', isSingle: true },
 
@@ -3221,6 +3275,15 @@ decoders.ModerationRuleV2Response = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.ModerationRulesTriggeredEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4012,6 +4075,13 @@ decoders.ReminderUpdatedEvent = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.RemoveUserGroupMembersResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_group: { type: 'UserGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     sip_routing_rule: { type: 'SIPInboundRoutingRuleResponse', isSingle: true },
@@ -4024,6 +4094,13 @@ decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
 decoders.RestoreActivityResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activity: { type: 'ActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.RestoreFeedGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    feed_group: { type: 'FeedGroupResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4170,6 +4247,13 @@ decoders.SearchResultMessage = (input?: Record<string, any>) => {
     reminder: { type: 'ReminderResponseData', isSingle: true },
 
     shared_location: { type: 'SharedLocationResponseData', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.SearchUserGroupsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_groups: { type: 'UserGroupResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -4420,6 +4504,13 @@ decoders.UnblockedUserEvent = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UndeleteMessageResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4692,6 +4783,13 @@ decoders.UpdateThreadPartialResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.UpdateUserGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    user_group: { type: 'UserGroupResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.UpdateUsersResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     users: { type: 'FullUserResponse', isSingle: false },
@@ -4814,6 +4912,79 @@ decoders.UserFlaggedEvent = (input?: Record<string, any>) => {
     received_at: { type: 'DatetimeType', isSingle: true },
 
     target_user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupCreatedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupDeletedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupMember = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupMemberAddedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupMemberRemovedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    members: { type: 'UserGroupMember', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.UserGroupUpdatedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
