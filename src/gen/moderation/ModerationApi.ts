@@ -496,15 +496,16 @@ export class ModerationApi {
     const body = {
       name: request?.name,
       rule_type: request?.rule_type,
-      action: request?.action,
       cooldown_period: request?.cooldown_period,
       description: request?.description,
       enabled: request?.enabled,
       logic: request?.logic,
       team: request?.team,
+      action_sequences: request?.action_sequences,
       conditions: request?.conditions,
       config_keys: request?.config_keys,
       groups: request?.groups,
+      action: request?.action,
     };
 
     const response = await this.apiClient.sendRequest<

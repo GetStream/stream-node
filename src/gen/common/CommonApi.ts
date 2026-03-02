@@ -1,5 +1,7 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
+  AddUserGroupMembersRequest,
+  AddUserGroupMembersResponse,
   BlockUsersRequest,
   BlockUsersResponse,
   CheckExternalStorageResponse,
@@ -26,6 +28,8 @@ import {
   CreatePollRequest,
   CreateRoleRequest,
   CreateRoleResponse,
+  CreateUserGroupRequest,
+  CreateUserGroupResponse,
   DeactivateUserRequest,
   DeactivateUserResponse,
   DeactivateUsersRequest,
@@ -49,6 +53,7 @@ import {
   GetPushTemplatesResponse,
   GetRateLimitsResponse,
   GetTaskResponse,
+  GetUserGroupResponse,
   ImageUploadRequest,
   ImageUploadResponse,
   ListBlockListResponse,
@@ -59,6 +64,7 @@ import {
   ListPermissionsResponse,
   ListPushProvidersResponse,
   ListRolesResponse,
+  ListUserGroupsResponse,
   PollOptionResponse,
   PollResponse,
   PollVotesResponse,
@@ -71,8 +77,10 @@ import {
   ReactivateUserResponse,
   ReactivateUsersRequest,
   ReactivateUsersResponse,
+  RemoveUserGroupMembersResponse,
   Response,
   RestoreUsersRequest,
+  SearchUserGroupsResponse,
   SharedLocationResponse,
   SharedLocationsResponse,
   UnblockUsersRequest,
@@ -86,6 +94,8 @@ import {
   UpdatePollOptionRequest,
   UpdatePollPartialRequest,
   UpdatePollRequest,
+  UpdateUserGroupRequest,
+  UpdateUserGroupResponse,
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
@@ -131,6 +141,7 @@ export class CommonApi {
       max_aggregated_activities_length:
         request?.max_aggregated_activities_length,
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
+      moderation_analytics_enabled: request?.moderation_analytics_enabled,
       moderation_enabled: request?.moderation_enabled,
       moderation_webhook_url: request?.moderation_webhook_url,
       multi_tenant_enabled: request?.multi_tenant_enabled,
@@ -623,6 +634,7 @@ export class CommonApi {
     const body = {
       mode: request?.mode,
       path: request?.path,
+      merge_custom: request?.merge_custom,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1367,6 +1379,193 @@ export class CommonApi {
     );
 
     decoders.ImageUploadResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listUserGroups(request?: {
+    limit?: number;
+    id_gt?: string;
+    created_at_gt?: string;
+    team_id?: string;
+  }): Promise<StreamResponse<ListUserGroupsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      id_gt: request?.id_gt,
+      created_at_gt: request?.created_at_gt,
+      team_id: request?.team_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ListUserGroupsResponse>
+    >('GET', '/api/v2/usergroups', undefined, queryParams);
+
+    decoders.ListUserGroupsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createUserGroup(
+    request: CreateUserGroupRequest,
+  ): Promise<StreamResponse<CreateUserGroupResponse>> {
+    const body = {
+      name: request?.name,
+      description: request?.description,
+      id: request?.id,
+      team_id: request?.team_id,
+      member_ids: request?.member_ids,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateUserGroupResponse>
+    >(
+      'POST',
+      '/api/v2/usergroups',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateUserGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async searchUserGroups(request: {
+    query: string;
+    limit?: number;
+    name_gt?: string;
+    id_gt?: string;
+    team_id?: string;
+  }): Promise<StreamResponse<SearchUserGroupsResponse>> {
+    const queryParams = {
+      query: request?.query,
+      limit: request?.limit,
+      name_gt: request?.name_gt,
+      id_gt: request?.id_gt,
+      team_id: request?.team_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SearchUserGroupsResponse>
+    >('GET', '/api/v2/usergroups/search', undefined, queryParams);
+
+    decoders.SearchUserGroupsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteUserGroup(request: {
+    id: string;
+    team_id?: string;
+  }): Promise<StreamResponse<Response>> {
+    const queryParams = {
+      team_id: request?.team_id,
+    };
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/usergroups/{id}',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getUserGroup(request: {
+    id: string;
+    team_id?: string;
+  }): Promise<StreamResponse<GetUserGroupResponse>> {
+    const queryParams = {
+      team_id: request?.team_id,
+    };
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetUserGroupResponse>
+    >('GET', '/api/v2/usergroups/{id}', pathParams, queryParams);
+
+    decoders.GetUserGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateUserGroup(
+    request: UpdateUserGroupRequest & { id: string },
+  ): Promise<StreamResponse<UpdateUserGroupResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      description: request?.description,
+      name: request?.name,
+      team_id: request?.team_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateUserGroupResponse>
+    >(
+      'PUT',
+      '/api/v2/usergroups/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateUserGroupResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async removeUserGroupMembers(request: {
+    id: string;
+  }): Promise<StreamResponse<RemoveUserGroupMembersResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RemoveUserGroupMembersResponse>
+    >('DELETE', '/api/v2/usergroups/{id}/members', pathParams, undefined);
+
+    decoders.RemoveUserGroupMembersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addUserGroupMembers(
+    request: AddUserGroupMembersRequest & { id: string },
+  ): Promise<StreamResponse<AddUserGroupMembersResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      member_ids: request?.member_ids,
+      team_id: request?.team_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<AddUserGroupMembersResponse>
+    >(
+      'POST',
+      '/api/v2/usergroups/{id}/members',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.AddUserGroupMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

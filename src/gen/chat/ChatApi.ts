@@ -70,6 +70,8 @@ import {
   QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
   QuerySegmentsResponse,
+  QueryTeamUsageStatsRequest,
+  QueryTeamUsageStatsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
   ReminderResponseData,
@@ -91,6 +93,8 @@ import {
   TranslateMessageRequest,
   TruncateChannelRequest,
   TruncateChannelResponse,
+  UndeleteMessageRequest,
+  UndeleteMessageResponse,
   UnmuteChannelRequest,
   UnmuteResponse,
   UnreadCountsBatchRequest,
@@ -203,7 +207,7 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async scheduleCampaign(
+  async stopCampaign(
     request: StopCampaignRequest & { id: string },
   ): Promise<StreamResponse<CampaignResponse>> {
     const pathParams = {
@@ -1609,19 +1613,17 @@ export class ChatApi {
   }
 
   async undeleteMessage(
-    request: UpdateMessageRequest & { id: string },
-  ): Promise<StreamResponse<UpdateMessageResponse>> {
+    request: UndeleteMessageRequest & { id: string },
+  ): Promise<StreamResponse<UndeleteMessageResponse>> {
     const pathParams = {
       id: request?.id,
     };
     const body = {
-      message: request?.message,
-      skip_enrich_url: request?.skip_enrich_url,
-      skip_push: request?.skip_push,
+      undeleted_by: request?.undeleted_by,
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateMessageResponse>
+      StreamResponse<UndeleteMessageResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{id}/undelete',
@@ -1631,7 +1633,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessageResponse?.(response.body);
+    decoders.UndeleteMessageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2090,6 +2092,33 @@ export class ChatApi {
     );
 
     decoders.QuerySegmentTargetsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryTeamUsageStats(
+    request?: QueryTeamUsageStatsRequest,
+  ): Promise<StreamResponse<QueryTeamUsageStatsResponse>> {
+    const body = {
+      end_date: request?.end_date,
+      limit: request?.limit,
+      month: request?.month,
+      next: request?.next,
+      start_date: request?.start_date,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryTeamUsageStatsResponse>
+    >(
+      'POST',
+      '/api/v2/chat/stats/team_usage',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryTeamUsageStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
