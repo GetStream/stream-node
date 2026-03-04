@@ -157,6 +157,7 @@ export class FeedsApi {
       feeds: request?.feeds,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
       expires_at: request?.expires_at,
       id: request?.id,
       parent_id: request?.parent_id,
@@ -199,6 +200,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UpsertActivitiesResponse>> {
     const body = {
       activities: request?.activities,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -271,6 +273,7 @@ export class FeedsApi {
     request?: QueryActivitiesRequest,
   ): Promise<StreamResponse<QueryActivitiesResponse>> {
     const body = {
+      enrich_own_fields: request?.enrich_own_fields,
       include_expired_activities: request?.include_expired_activities,
       include_private_activities: request?.include_private_activities,
       limit: request?.limit,
@@ -612,6 +615,7 @@ export class FeedsApi {
     };
     const body = {
       copy_custom_to_notification: request?.copy_custom_to_notification,
+      enrich_own_fields: request?.enrich_own_fields,
       handle_mention_notifications: request?.handle_mention_notifications,
       run_activity_processors: request?.run_activity_processors,
       user_id: request?.user_id,
@@ -644,6 +648,7 @@ export class FeedsApi {
     };
     const body = {
       copy_custom_to_notification: request?.copy_custom_to_notification,
+      enrich_own_fields: request?.enrich_own_fields,
       expires_at: request?.expires_at,
       handle_mention_notifications: request?.handle_mention_notifications,
       poll_id: request?.poll_id,
@@ -683,8 +688,14 @@ export class FeedsApi {
   }
 
   async restoreActivity(
-    request: RestoreActivityRequest & { id: string },
+    request: RestoreActivityRequest & {
+      id: string;
+      enrich_own_fields?: boolean;
+    },
   ): Promise<StreamResponse<RestoreActivityResponse>> {
+    const queryParams = {
+      enrich_own_fields: request?.enrich_own_fields,
+    };
     const pathParams = {
       id: request?.id,
     };
@@ -699,7 +710,7 @@ export class FeedsApi {
       'POST',
       '/api/v2/feeds/activities/{id}/restore',
       pathParams,
-      undefined,
+      queryParams,
       body,
       'application/json',
     );
@@ -790,6 +801,7 @@ export class FeedsApi {
     request?: QueryBookmarksRequest,
   ): Promise<StreamResponse<QueryBookmarksResponse>> {
     const body = {
+      enrich_own_fields: request?.enrich_own_fields,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -1366,6 +1378,7 @@ export class FeedsApi {
     const body = {
       created_by_id: request?.created_by_id,
       description: request?.description,
+      enrich_own_fields: request?.enrich_own_fields,
       name: request?.name,
       filter_tags: request?.filter_tags,
       custom: request?.custom,
@@ -1422,9 +1435,11 @@ export class FeedsApi {
     feed_group_id: string;
     feed_id: string;
     activity_id: string;
+    enrich_own_fields?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<UnpinActivityResponse>> {
     const queryParams = {
+      enrich_own_fields: request?.enrich_own_fields,
       user_id: request?.user_id,
     };
     const pathParams = {
@@ -1460,6 +1475,7 @@ export class FeedsApi {
       activity_id: request?.activity_id,
     };
     const body = {
+      enrich_own_fields: request?.enrich_own_fields,
       user_id: request?.user_id,
       user: request?.user,
     };
@@ -1621,6 +1637,7 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
     const body = {
+      enrich_own_fields: request?.enrich_own_fields,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -1983,6 +2000,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedsBatchResponse>> {
     const body = {
       feeds: request?.feeds,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2055,6 +2073,7 @@ export class FeedsApi {
     request?: QueryFeedsRequest,
   ): Promise<StreamResponse<QueryFeedsResponse>> {
     const body = {
+      enrich_own_fields: request?.enrich_own_fields,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -2111,6 +2130,7 @@ export class FeedsApi {
       target: request?.target,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
@@ -2142,6 +2162,7 @@ export class FeedsApi {
       target: request?.target,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
       status: request?.status,
@@ -2194,6 +2215,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2217,6 +2239,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2290,9 +2313,11 @@ export class FeedsApi {
     source: string;
     target: string;
     delete_notification_activity?: boolean;
+    enrich_own_fields?: boolean;
   }): Promise<StreamResponse<UnfollowResponse>> {
     const queryParams = {
       delete_notification_activity: request?.delete_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
     };
     const pathParams = {
       source: request?.source,
@@ -2447,6 +2472,7 @@ export class FeedsApi {
     const body = {
       follows: request?.follows,
       delete_notification_activity: request?.delete_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2471,6 +2497,7 @@ export class FeedsApi {
     const body = {
       follows: request?.follows,
       delete_notification_activity: request?.delete_notification_activity,
+      enrich_own_fields: request?.enrich_own_fields,
     };
 
     const response = await this.apiClient.sendRequest<

@@ -735,6 +735,8 @@ export interface AddActivityRequest {
 
   create_notification_activity?: boolean;
 
+  enrich_own_fields?: boolean;
+
   expires_at?: string;
 
   id?: string;
@@ -4659,6 +4661,8 @@ export interface CreateFeedViewResponse {
 
 export interface CreateFeedsBatchRequest {
   feeds: FeedRequest[];
+
+  enrich_own_fields?: boolean;
 }
 
 export interface CreateFeedsBatchResponse {
@@ -6428,6 +6432,8 @@ export interface FlagUserOptions {
 
 export interface FollowBatchRequest {
   follows: FollowRequest[];
+
+  enrich_own_fields?: boolean;
 }
 
 export interface FollowBatchResponse {
@@ -6484,6 +6490,8 @@ export interface FollowRequest {
   copy_custom_to_notification?: boolean;
 
   create_notification_activity?: boolean;
+
+  enrich_own_fields?: boolean;
 
   push_preference?: 'all' | 'none';
 
@@ -9847,6 +9855,8 @@ export interface PermissionRequestEvent {
 }
 
 export interface PinActivityRequest {
+  enrich_own_fields?: boolean;
+
   user_id?: string;
 
   user?: UserRequest;
@@ -10381,6 +10391,8 @@ export interface QualityScoreReportResponse {
 }
 
 export interface QueryActivitiesRequest {
+  enrich_own_fields?: boolean;
+
   include_expired_activities?: boolean;
 
   include_private_activities?: boolean;
@@ -10529,6 +10541,8 @@ export interface QueryBookmarkFoldersResponse {
 }
 
 export interface QueryBookmarksRequest {
+  enrich_own_fields?: boolean;
+
   limit?: number;
 
   next?: string;
@@ -10897,6 +10911,8 @@ export interface QueryFeedModerationTemplatesResponse {
 }
 
 export interface QueryFeedsRequest {
+  enrich_own_fields?: boolean;
+
   limit?: number;
 
   next?: string;
@@ -11173,6 +11189,8 @@ export interface QueryModerationRulesResponse {
 }
 
 export interface QueryPinnedActivitiesRequest {
+  enrich_own_fields?: boolean;
+
   limit?: number;
 
   next?: string;
@@ -13927,6 +13945,8 @@ export interface UnfollowBatchRequest {
   follows: FollowPair[];
 
   delete_notification_activity?: boolean;
+
+  enrich_own_fields?: boolean;
 }
 
 export interface UnfollowBatchResponse {
@@ -14060,6 +14080,8 @@ export interface UpdateActivityPartialChangeRequest {
 export interface UpdateActivityPartialRequest {
   copy_custom_to_notification?: boolean;
 
+  enrich_own_fields?: boolean;
+
   handle_mention_notifications?: boolean;
 
   run_activity_processors?: boolean;
@@ -14081,6 +14103,8 @@ export interface UpdateActivityPartialResponse {
 
 export interface UpdateActivityRequest {
   copy_custom_to_notification?: boolean;
+
+  enrich_own_fields?: boolean;
 
   expires_at?: Date;
 
@@ -14699,6 +14723,8 @@ export interface UpdateFeedRequest {
 
   description?: string;
 
+  enrich_own_fields?: boolean;
+
   name?: string;
 
   filter_tags?: string[];
@@ -14744,6 +14770,8 @@ export interface UpdateFollowRequest {
   copy_custom_to_notification?: boolean;
 
   create_notification_activity?: boolean;
+
+  enrich_own_fields?: boolean;
 
   follower_role?: string;
 
@@ -15058,6 +15086,8 @@ export interface UploadChannelResponse {
 
 export interface UpsertActivitiesRequest {
   activities: ActivityRequest[];
+
+  enrich_own_fields?: boolean;
 }
 
 export interface UpsertActivitiesResponse {

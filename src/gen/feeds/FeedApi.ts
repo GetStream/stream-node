@@ -71,6 +71,7 @@ export class FeedApi {
 
   unpinActivity(request: {
     activity_id: string;
+    enrich_own_fields?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<UnpinActivityResponse>> {
     return this.feedsApi.unpinActivity({
