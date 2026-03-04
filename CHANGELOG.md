@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.44](https://github.com/GetStream/stream-node/compare/v0.7.43...v0.7.44) (2026-03-04)
+
+
+### Features
+
+* Add optional enrich_own_fields param to endpoints ([#260](https://github.com/GetStream/stream-node/issues/260)) ([33ef3e5](https://github.com/GetStream/stream-node/commit/33ef3e517bcb5bae984c860df09e92c24f23d9ee))
+
 ## [0.7.43](https://github.com/GetStream/stream-node/compare/v0.7.42...v0.7.43) (2026-03-02)
 
 
