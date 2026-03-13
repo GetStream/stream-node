@@ -617,6 +617,8 @@ export interface ActivityResponse {
 
   location?: ActivityLocation;
 
+  metrics?: Record<string, number>;
+
   moderation?: ModerationV2Response;
 
   notification_context?: NotificationContext;
@@ -624,6 +626,8 @@ export interface ActivityResponse {
   parent?: ActivityResponse;
 
   poll?: PollResponseData;
+
+  score_vars?: Record<string, any>;
 }
 
 export interface ActivityRestoredEvent {
@@ -1049,6 +1053,8 @@ export interface AppResponseFields {
 
   before_message_send_hook_url?: string;
 
+  moderation_s3_image_access_role_arn?: string;
+
   revoke_tokens_issued_before?: Date;
 
   allowed_flag_reasons?: string[];
@@ -1433,6 +1439,8 @@ export interface BackstageSettingsResponse {
 export interface BanActionRequestPayload {
   channel_ban_only?: boolean;
 
+  channel_cid?: string;
+
   delete_messages?: 'soft' | 'pruning' | 'hard';
 
   ip_ban?: boolean;
@@ -1516,6 +1524,8 @@ export interface BlockListConfig {
   async?: boolean;
 
   enabled?: boolean;
+
+  match_substring?: boolean;
 
   rules?: BlockListRule[];
 }
@@ -3067,6 +3077,12 @@ export interface ChannelBatchCompletedEvent {
   received_at?: Date;
 }
 
+export interface ChannelBatchMemberRequest {
+  user_id: string;
+
+  channel_role?: string;
+}
+
 export interface ChannelBatchStartedEvent {
   batch_created_at: Date;
 
@@ -3089,6 +3105,34 @@ export interface ChannelBatchStartedEvent {
   type: string;
 
   received_at?: Date;
+}
+
+export interface ChannelBatchUpdateRequest {
+  operation:
+    | 'addMembers'
+    | 'removeMembers'
+    | 'inviteMembers'
+    | 'invites'
+    | 'assignRoles'
+    | 'addModerators'
+    | 'demoteModerators'
+    | 'hide'
+    | 'show'
+    | 'archive'
+    | 'unarchive'
+    | 'updateData';
+
+  filter: Record<string, any>;
+
+  members?: ChannelBatchMemberRequest[];
+
+  data?: ChannelDataUpdate;
+}
+
+export interface ChannelBatchUpdateResponse {
+  duration: string;
+
+  task_id?: string;
 }
 
 export interface ChannelConfig {
@@ -3263,6 +3307,22 @@ export interface ChannelCreatedEvent {
   channel_custom?: Record<string, any>;
 
   user?: UserResponseCommonFields;
+}
+
+export interface ChannelDataUpdate {
+  auto_translation_enabled?: boolean;
+
+  auto_translation_language?: string;
+
+  disabled?: boolean;
+
+  frozen?: boolean;
+
+  team?: string;
+
+  config_overrides?: ChannelConfig;
+
+  custom?: Record<string, any>;
 }
 
 export interface ChannelDeletedEvent {
@@ -3966,6 +4026,18 @@ export interface CheckResponse {
   task_id?: string;
 
   item?: ReviewQueueItemResponse;
+}
+
+export interface CheckS3AccessRequest {
+  s3_url?: string;
+}
+
+export interface CheckS3AccessResponse {
+  duration: string;
+
+  success: boolean;
+
+  message?: string;
 }
 
 export interface CheckSNSRequest {
@@ -4817,6 +4889,8 @@ export interface CreateSIPTrunkRequest {
   name: string;
 
   numbers: string[];
+
+  password?: string;
 }
 
 export interface CreateSIPTrunkResponse {
@@ -5511,6 +5585,8 @@ export interface EnrichedReaction {
 
 export interface EnrichmentOptions {
   enrich_own_followings?: boolean;
+
+  include_score_vars?: boolean;
 
   skip_activity?: boolean;
 
@@ -8569,6 +8645,8 @@ export interface MessageRequest {
 
   attachments?: Attachment[];
 
+  mentioned_group_ids?: string[];
+
   mentioned_roles?: string[];
 
   mentioned_users?: string[];
@@ -8650,6 +8728,8 @@ export interface MessageResponse {
   quoted_message_id?: string;
 
   show_in_channel?: boolean;
+
+  mentioned_group_ids?: string[];
 
   mentioned_roles?: string[];
 
@@ -8837,6 +8917,8 @@ export interface MessageWithChannelResponse {
 
   show_in_channel?: boolean;
 
+  mentioned_group_ids?: string[];
+
   mentioned_roles?: string[];
 
   thread_participants?: UserResponse[];
@@ -8994,6 +9076,8 @@ export interface ModerationDashboardPreferences {
   media_queue_blur_enabled?: boolean;
 
   allowed_moderation_action_reasons?: string[];
+
+  keyframe_classifications_map?: Record<string, Record<string, boolean>>;
 
   overview_dashboard?: OverviewDashboardConfig;
 }
@@ -10802,6 +10886,32 @@ export interface QueryChannelsResponse {
   predefined_filter?: ParsedPredefinedFilterResponse;
 }
 
+export interface QueryCollectionsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface QueryCollectionsResponse {
+  duration: string;
+
+  collections: CollectionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryCommentReactionsRequest {
   limit?: number;
 
@@ -10827,6 +10937,8 @@ export interface QueryCommentReactionsResponse {
 export interface QueryCommentsRequest {
   filter: Record<string, any>;
 
+  id_around?: string;
+
   limit?: number;
 
   next?: string;
@@ -10834,6 +10946,10 @@ export interface QueryCommentsRequest {
   prev?: string;
 
   sort?: 'first' | 'last' | 'top' | 'best' | 'controversial';
+
+  user_id?: string;
+
+  user?: UserRequest;
 }
 
 export interface QueryCommentsResponse {
@@ -11182,6 +11298,8 @@ export interface QueryModerationRulesResponse {
   rules: ModerationRuleV2Response[];
 
   default_llm_labels: Record<string, string>;
+
+  keyframe_label_classifications: Record<string, string[]>;
 
   next?: string;
 
@@ -11796,10 +11914,6 @@ export interface ReadCollectionsResponse {
   duration: string;
 
   collections: CollectionResponse[];
-
-  next?: string;
-
-  prev?: string;
 }
 
 export interface ReadReceiptsResponse {
@@ -11988,6 +12102,12 @@ export interface ReminderUpdatedEvent {
   reminder?: ReminderResponseData;
 }
 
+export interface RemoveUserGroupMembersRequest {
+  member_ids: string[];
+
+  team_id?: string;
+}
+
 export interface RemoveUserGroupMembersResponse {
   duration: string;
 
@@ -12030,14 +12150,34 @@ export interface ResolutionMetricsTimeSeries {
   width?: MetricTimeSeries;
 }
 
+export interface ResolveSipAuthRequest {
+  sip_caller_number: string;
+
+  sip_trunk_number: string;
+}
+
+export interface ResolveSipAuthResponse {
+  auth_result: string;
+
+  duration: string;
+
+  password?: string;
+
+  trunk_id?: string;
+
+  username?: string;
+}
+
 export interface ResolveSipInboundRequest {
   sip_caller_number: string;
 
   sip_trunk_number: string;
 
-  challenge: SIPChallengeRequest;
-
   routing_number?: string;
+
+  trunk_id?: string;
+
+  challenge?: SIPChallengeRequest;
 
   sip_headers?: Record<string, string>;
 }
@@ -12673,6 +12813,8 @@ export interface SearchResultMessage {
   quoted_message_id?: string;
 
   show_in_channel?: boolean;
+
+  mentioned_group_ids?: string[];
 
   mentioned_roles?: string[];
 
@@ -13633,6 +13775,38 @@ export interface ThumbnailsSettingsResponse {
 
 export interface Time {}
 
+export interface TrackActivityMetricsEvent {
+  activity_id: string;
+
+  metric: string;
+
+  delta?: number;
+}
+
+export interface TrackActivityMetricsEventResult {
+  activity_id: string;
+
+  allowed: boolean;
+
+  metric: string;
+
+  error?: string;
+}
+
+export interface TrackActivityMetricsRequest {
+  events: TrackActivityMetricsEvent[];
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface TrackActivityMetricsResponse {
+  duration: string;
+
+  results: TrackActivityMetricsEventResult[];
+}
+
 export interface TrackStatsResponse {
   duration_seconds: number;
 
@@ -14187,6 +14361,8 @@ export interface UpdateAppRequest {
   moderation_analytics_enabled?: boolean;
 
   moderation_enabled?: boolean;
+
+  moderation_s3_image_access_role_arn?: string;
 
   moderation_webhook_url?: string;
 
@@ -14935,11 +15111,11 @@ export interface UpdateReminderResponse {
 export interface UpdateSIPInboundRoutingRuleRequest {
   name: string;
 
-  called_numbers: string[];
-
   trunk_ids: string[];
 
   caller_configs: SIPCallerConfigsRequest;
+
+  called_numbers?: string[];
 
   caller_numbers?: string[];
 
@@ -14962,6 +15138,8 @@ export interface UpdateSIPTrunkRequest {
   name: string;
 
   numbers: string[];
+
+  password?: string;
 }
 
 export interface UpdateSIPTrunkResponse {
