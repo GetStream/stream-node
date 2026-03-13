@@ -48,5 +48,6 @@ module.exports = {
     ],
     "@typescript-eslint/no-empty-interface": "off",
     eqeqeq: ["error", "smart"],
+    "@typescript-eslint/no-unsafe-argument": "off",
   },
 };
