@@ -53,7 +53,7 @@ export class ApiClient {
         ? new FormData()
         : JSON.stringify(body);
     if (requestContentType === 'multipart/form-data') {
-      Object.keys(body).forEach((key) => {
+      Object.keys(body as Record<string, any>).forEach((key) => {
         (encodedBody as FormData).append(key, body[key]);
       });
     }
@@ -112,13 +112,13 @@ export class ApiClient {
           `The request was aborted due to to the ${this.apiConfig.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
           metadata,
           undefined,
-          error,
+          error as ErrorOptions,
         );
       } else {
         throw new StreamError(
           `The request failed due to an unexpected error`,
           metadata,
-          error,
+          error as number,
         );
       }
     }
