@@ -2,6 +2,8 @@ import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   CampaignResponse,
   CastPollVoteRequest,
+  ChannelBatchUpdateRequest,
+  ChannelBatchUpdateResponse,
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
   CommitMessageRequest,
@@ -261,6 +263,32 @@ export class ChatApi {
     );
 
     decoders.QueryChannelsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async channelBatchUpdate(
+    request: ChannelBatchUpdateRequest,
+  ): Promise<StreamResponse<ChannelBatchUpdateResponse>> {
+    const body = {
+      operation: request?.operation,
+      filter: request?.filter,
+      members: request?.members,
+      data: request?.data,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ChannelBatchUpdateResponse>
+    >(
+      'PUT',
+      '/api/v2/chat/channels/batch',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ChannelBatchUpdateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
