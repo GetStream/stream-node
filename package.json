@@ -46,7 +46,6 @@
     ".readme-assets"
   ],
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^11.1.4",
     "@stream-io/openai-realtime-api": "~0.1.3",
