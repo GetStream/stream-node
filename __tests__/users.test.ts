@@ -104,7 +104,11 @@ describe('user API', () => {
     });
 
     let queryResponse = await client.queryBannedUsers({
-      payload: { filter_conditions: {} },
+      payload: {
+        filter_conditions: {
+          user_id: { $eq: newUser.id },
+        },
+      },
     });
 
     expect(

@@ -186,7 +186,9 @@ describe('call API', () => {
 
     it('start recording', async () => {
       // somewhat dummy test, we should do a proper test in the future where we join a call and start recording
-      await expect(() => call.startRecording()).rejects.toThrowError(
+      await expect(() =>
+        call.startRecording({ recording_type: 'individual' }),
+      ).rejects.toThrowError(
         'Stream error code 4: StartRecording failed with error: "there is no active session"',
       );
     });

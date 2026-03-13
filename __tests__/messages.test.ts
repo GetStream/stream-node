@@ -92,7 +92,7 @@ describe('messages API', () => {
       id: messageId!,
       message: {
         text: 'https://getstream.io/',
-        attachments: [{ title_link: urlAttachment.title_link }],
+        attachments: [{ title_link: urlAttachment.title_link, custom: {} }],
         user_id: user.id,
       },
     });
@@ -127,7 +127,6 @@ describe('messages API', () => {
       language: 'hu',
     });
 
-    // @ts-expect-error
     expect(response.message?.i18n?.hu_text).toBeDefined();
   });
 
@@ -213,7 +212,7 @@ describe('messages API', () => {
     await expect(() =>
       client.chat.getMessage({ id: messageId! }),
     ).rejects.toThrowError(
-      `Stream error code 4: GetMessage failed with error: "Message with id ${messageId} doesn't exist"`,
+      `Stream error code 16: GetMessage failed with error: "message with id ${messageId} doesn't exist"`,
     );
   });
 
