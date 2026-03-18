@@ -276,6 +276,7 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
       include_expired_activities: request?.include_expired_activities,
       include_private_activities: request?.include_private_activities,
+      include_soft_deleted_activities: request?.include_soft_deleted_activities,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,

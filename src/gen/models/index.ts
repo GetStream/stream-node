@@ -10397,6 +10397,8 @@ export interface QueryActivitiesRequest {
 
   include_private_activities?: boolean;
 
+  include_soft_deleted_activities?: boolean;
+
   limit?: number;
 
   next?: string;
