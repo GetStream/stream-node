@@ -8,6 +8,8 @@ import {
   BulkImageModerationResponse,
   CheckRequest,
   CheckResponse,
+  CheckS3AccessRequest,
+  CheckS3AccessResponse,
   CustomCheckRequest,
   CustomCheckResponse,
   DeleteModerationConfigResponse,
@@ -204,6 +206,29 @@ export class ModerationApi {
     );
 
     decoders.CheckResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async checkS3Access(
+    request?: CheckS3AccessRequest,
+  ): Promise<StreamResponse<CheckS3AccessResponse>> {
+    const body = {
+      s3_url: request?.s3_url,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CheckS3AccessResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/check_s3_access',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CheckS3AccessResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

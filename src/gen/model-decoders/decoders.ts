@@ -699,6 +699,8 @@ decoders.CallEndedEvent = (input?: Record<string, any>) => {
 
     call: { type: 'CallResponse', isSingle: true },
 
+    members: { type: 'MemberResponse', isSingle: false },
+
     user: { type: 'UserResponse', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -1576,13 +1578,6 @@ decoders.ChatActivityStatsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
-decoders.CheckResponse = (input?: Record<string, any>) => {
-  const typeMappings: TypeMapping = {
-    item: { type: 'ReviewQueueItemResponse', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders.ClosedCaptionEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1702,6 +1697,19 @@ decoders.CommentResponse = (input?: Record<string, any>) => {
     latest_reactions: { type: 'FeedsReactionResponse', isSingle: false },
 
     reaction_groups: { type: 'FeedsReactionGroupResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.CommentRestoredEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    comment: { type: 'CommentResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3717,6 +3725,13 @@ decoders.QueryCampaignsResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.QueryCollectionsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    collections: { type: 'CollectionResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.QueryCommentReactionsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     reactions: { type: 'FeedsReactionResponse', isSingle: false },
@@ -4094,6 +4109,15 @@ decoders.ResolveSipInboundResponse = (input?: Record<string, any>) => {
 decoders.RestoreActivityResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     activity: { type: 'ActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.RestoreCommentResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    activity: { type: 'ActivityResponse', isSingle: true },
+
+    comment: { type: 'CommentResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
