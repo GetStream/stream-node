@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.47](https://github.com/GetStream/stream-node/compare/v0.7.46...v0.7.47) (2026-03-23)
+
+
+### Features
+
+* Add id_around for getComments and getCommentReplies ([#268](https://github.com/GetStream/stream-node/issues/268)) ([12fff5a](https://github.com/GetStream/stream-node/commit/12fff5aa8788a059b04315e32cee64f5aefe40e7))
+
 ## [0.7.46](https://github.com/GetStream/stream-node/compare/v0.7.45...v0.7.46) (2026-03-23)
 
 
