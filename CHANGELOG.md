@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.46](https://github.com/GetStream/stream-node/compare/v0.7.45...v0.7.46) (2026-03-23)
+
+
+### Features
+
+* Include "score vars" and ranking expression in getOrCreateFeed response ([#262](https://github.com/GetStream/stream-node/issues/262)) ([601c6dc](https://github.com/GetStream/stream-node/commit/601c6dc034ceab444548b5ba4407b035c468c36d))
+
+## [0.7.45](https://github.com/GetStream/stream-node/compare/v0.7.44...v0.7.45) (2026-03-20)
+
+
+### Features
+
+* [FEEDS-1339] restore feeds comments ([#265](https://github.com/GetStream/stream-node/issues/265)) ([bee8375](https://github.com/GetStream/stream-node/commit/bee8375027232a64e9afff920b312abde159fb4d))
+
 ## [0.7.44](https://github.com/GetStream/stream-node/compare/v0.7.43...v0.7.44) (2026-03-04)
 
 

@@ -53,6 +53,8 @@ import {
   QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
+  ResolveSipAuthRequest,
+  ResolveSipAuthResponse,
   ResolveSipInboundRequest,
   ResolveSipInboundResponse,
   Response,
@@ -1636,6 +1638,32 @@ export class VideoApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async resolveSipAuth(
+    request: ResolveSipAuthRequest,
+  ): Promise<StreamResponse<ResolveSipAuthResponse>> {
+    const body = {
+      sip_caller_number: request?.sip_caller_number,
+      sip_trunk_number: request?.sip_trunk_number,
+      from_host: request?.from_host,
+      source_ip: request?.source_ip,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ResolveSipAuthResponse>
+    >(
+      'POST',
+      '/api/v2/video/sip/auth',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ResolveSipAuthResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async listSIPInboundRoutingRule(): Promise<
     StreamResponse<ListSIPInboundRoutingRuleResponse>
   > {
@@ -1708,9 +1736,9 @@ export class VideoApi {
     };
     const body = {
       name: request?.name,
-      called_numbers: request?.called_numbers,
       trunk_ids: request?.trunk_ids,
       caller_configs: request?.caller_configs,
+      called_numbers: request?.called_numbers,
       caller_numbers: request?.caller_numbers,
       call_configs: request?.call_configs,
       direct_routing_configs: request?.direct_routing_configs,
@@ -1750,6 +1778,8 @@ export class VideoApi {
     const body = {
       name: request?.name,
       numbers: request?.numbers,
+      password: request?.password,
+      allowed_ips: request?.allowed_ips,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1793,6 +1823,8 @@ export class VideoApi {
     const body = {
       name: request?.name,
       numbers: request?.numbers,
+      password: request?.password,
+      allowed_ips: request?.allowed_ips,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1817,8 +1849,9 @@ export class VideoApi {
     const body = {
       sip_caller_number: request?.sip_caller_number,
       sip_trunk_number: request?.sip_trunk_number,
-      challenge: request?.challenge,
       routing_number: request?.routing_number,
+      trunk_id: request?.trunk_id,
+      challenge: request?.challenge,
       sip_headers: request?.sip_headers,
     };
 

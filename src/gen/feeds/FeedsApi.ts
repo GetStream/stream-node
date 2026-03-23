@@ -81,6 +81,8 @@ import {
   QueryBookmarkFoldersResponse,
   QueryBookmarksRequest,
   QueryBookmarksResponse,
+  QueryCollectionsRequest,
+  QueryCollectionsResponse,
   QueryCommentReactionsRequest,
   QueryCommentReactionsResponse,
   QueryCommentsRequest,
@@ -105,8 +107,12 @@ import {
   Response,
   RestoreActivityRequest,
   RestoreActivityResponse,
+  RestoreCommentRequest,
+  RestoreCommentResponse,
   RestoreFeedGroupResponse,
   SingleFollowResponse,
+  TrackActivityMetricsRequest,
+  TrackActivityMetricsResponse,
   UnfollowBatchRequest,
   UnfollowBatchResponse,
   UnfollowResponse,
@@ -265,6 +271,31 @@ export class FeedsApi {
     );
 
     decoders.DeleteActivitiesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async trackActivityMetrics(
+    request: TrackActivityMetricsRequest,
+  ): Promise<StreamResponse<TrackActivityMetricsResponse>> {
+    const body = {
+      events: request?.events,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<TrackActivityMetricsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/activities/metrics/track',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.TrackActivityMetricsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -932,6 +963,35 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async queryCollections(
+    request?: QueryCollectionsRequest,
+  ): Promise<StreamResponse<QueryCollectionsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCollectionsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/collections/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryCollectionsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async getComments(request: {
     object_id: string;
     object_type: string;
@@ -1030,10 +1090,13 @@ export class FeedsApi {
   ): Promise<StreamResponse<QueryCommentsResponse>> {
     const body = {
       filter: request?.filter,
+      id_around: request?.id_around,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
       sort: request?.sort,
+      user_id: request?.user_id,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1247,6 +1310,33 @@ export class FeedsApi {
     >('GET', '/api/v2/feeds/comments/{id}/replies', pathParams, queryParams);
 
     decoders.GetCommentRepliesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async restoreComment(
+    request: RestoreCommentRequest & { id: string },
+  ): Promise<StreamResponse<RestoreCommentResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RestoreCommentResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/comments/{id}/restore',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RestoreCommentResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

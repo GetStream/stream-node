@@ -77,6 +77,7 @@ import {
   ReactivateUserResponse,
   ReactivateUsersRequest,
   ReactivateUsersResponse,
+  RemoveUserGroupMembersRequest,
   RemoveUserGroupMembersResponse,
   Response,
   RestoreUsersRequest,
@@ -143,6 +144,8 @@ export class CommonApi {
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
       moderation_analytics_enabled: request?.moderation_analytics_enabled,
       moderation_enabled: request?.moderation_enabled,
+      moderation_s3_image_access_role_arn:
+        request?.moderation_s3_image_access_role_arn,
       moderation_webhook_url: request?.moderation_webhook_url,
       multi_tenant_enabled: request?.multi_tenant_enabled,
       permission_version: request?.permission_version,
@@ -163,6 +166,7 @@ export class CommonApi {
       image_moderation_labels: request?.image_moderation_labels,
       user_search_disallowed_roles: request?.user_search_disallowed_roles,
       webhook_events: request?.webhook_events,
+      activity_metrics_config: request?.activity_metrics_config,
       apn_config: request?.apn_config,
       async_moderation_config: request?.async_moderation_config,
       datadog_info: request?.datadog_info,
@@ -1527,22 +1531,6 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async removeUserGroupMembers(request: {
-    id: string;
-  }): Promise<StreamResponse<RemoveUserGroupMembersResponse>> {
-    const pathParams = {
-      id: request?.id,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RemoveUserGroupMembersResponse>
-    >('DELETE', '/api/v2/usergroups/{id}/members', pathParams, undefined);
-
-    decoders.RemoveUserGroupMembersResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async addUserGroupMembers(
     request: AddUserGroupMembersRequest & { id: string },
   ): Promise<StreamResponse<AddUserGroupMembersResponse>> {
@@ -1566,6 +1554,33 @@ export class CommonApi {
     );
 
     decoders.AddUserGroupMembersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async removeUserGroupMembers(
+    request: RemoveUserGroupMembersRequest & { id: string },
+  ): Promise<StreamResponse<RemoveUserGroupMembersResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      member_ids: request?.member_ids,
+      team_id: request?.team_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RemoveUserGroupMembersResponse>
+    >(
+      'POST',
+      '/api/v2/usergroups/{id}/members/delete',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RemoveUserGroupMembersResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
