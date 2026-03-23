@@ -166,6 +166,7 @@ export class CommonApi {
       image_moderation_labels: request?.image_moderation_labels,
       user_search_disallowed_roles: request?.user_search_disallowed_roles,
       webhook_events: request?.webhook_events,
+      activity_metrics_config: request?.activity_metrics_config,
       apn_config: request?.apn_config,
       async_moderation_config: request?.async_moderation_config,
       datadog_info: request?.datadog_info,

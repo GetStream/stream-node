@@ -1644,6 +1644,8 @@ export class VideoApi {
     const body = {
       sip_caller_number: request?.sip_caller_number,
       sip_trunk_number: request?.sip_trunk_number,
+      from_host: request?.from_host,
+      source_ip: request?.source_ip,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1777,6 +1779,7 @@ export class VideoApi {
       name: request?.name,
       numbers: request?.numbers,
       password: request?.password,
+      allowed_ips: request?.allowed_ips,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1821,6 +1824,7 @@ export class VideoApi {
       name: request?.name,
       numbers: request?.numbers,
       password: request?.password,
+      allowed_ips: request?.allowed_ips,
     };
 
     const response = await this.apiClient.sendRequest<

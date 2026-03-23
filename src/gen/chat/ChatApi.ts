@@ -1009,6 +1009,7 @@ export class ChatApi {
       blocklists: request?.blocklists,
       commands: request?.commands,
       permissions: request?.permissions,
+      chat_preferences: request?.chat_preferences,
       grants: request?.grants,
     };
 
@@ -1104,6 +1105,7 @@ export class ChatApi {
       commands: request?.commands,
       permissions: request?.permissions,
       automod_thresholds: request?.automod_thresholds,
+      chat_preferences: request?.chat_preferences,
       grants: request?.grants,
     };
 

@@ -107,6 +107,8 @@ import {
   Response,
   RestoreActivityRequest,
   RestoreActivityResponse,
+  RestoreCommentRequest,
+  RestoreCommentResponse,
   RestoreFeedGroupResponse,
   SingleFollowResponse,
   TrackActivityMetricsRequest,
@@ -1304,6 +1306,33 @@ export class FeedsApi {
     >('GET', '/api/v2/feeds/comments/{id}/replies', pathParams, queryParams);
 
     decoders.GetCommentRepliesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async restoreComment(
+    request: RestoreCommentRequest & { id: string },
+  ): Promise<StreamResponse<RestoreCommentResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<RestoreCommentResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/comments/{id}/restore',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.RestoreCommentResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

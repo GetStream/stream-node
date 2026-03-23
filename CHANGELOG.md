@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.45](https://github.com/GetStream/stream-node/compare/v0.7.44...v0.7.45) (2026-03-20)
+
+
+### Features
+
+* [FEEDS-1339] restore feeds comments ([#265](https://github.com/GetStream/stream-node/issues/265)) ([bee8375](https://github.com/GetStream/stream-node/commit/bee8375027232a64e9afff920b312abde159fb4d))
+
 ## [0.7.44](https://github.com/GetStream/stream-node/compare/v0.7.43...v0.7.44) (2026-03-04)
 
 
