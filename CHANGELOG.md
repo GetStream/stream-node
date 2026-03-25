@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.48](https://github.com/GetStream/stream-node/compare/v0.7.47...v0.7.48) (2026-03-25)
+
+
+### Features
+
+* Add keep_history flag when unfollowing ([#270](https://github.com/GetStream/stream-node/issues/270)) ([2ab6c4c](https://github.com/GetStream/stream-node/commit/2ab6c4c5abde4dc6d042fd4bf994ec80a2766d4b))
+
 ## [0.7.47](https://github.com/GetStream/stream-node/compare/v0.7.46...v0.7.47) (2026-03-23)
 
 
