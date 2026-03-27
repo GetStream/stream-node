@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.49](https://github.com/GetStream/stream-node/compare/v0.7.48...v0.7.49) (2026-03-27)
+
+
+### Features
+
+* Add custom to trigger and target for notifications and description to… ([#272](https://github.com/GetStream/stream-node/issues/272)) ([108a282](https://github.com/GetStream/stream-node/commit/108a2827b7cca416503e4bfafc90a7e381979b30))
+
 ## [0.7.48](https://github.com/GetStream/stream-node/compare/v0.7.47...v0.7.48) (2026-03-25)
 
 
