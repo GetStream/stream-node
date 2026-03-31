@@ -19,6 +19,8 @@ import {
   DeleteMessageResponse,
   DeleteReactionResponse,
   DeleteReminderResponse,
+  DeleteRetentionPolicyRequest,
+  DeleteRetentionPolicyResponse,
   DeleteSegmentTargetsRequest,
   EventResponse,
   ExportChannelsRequest,
@@ -31,6 +33,9 @@ import {
   GetMessageResponse,
   GetReactionsResponse,
   GetRepliesResponse,
+  GetRetentionPolicyResponse,
+  GetRetentionPolicyRunsRequest,
+  GetRetentionPolicyRunsResponse,
   GetSegmentResponse,
   GetThreadResponse,
   HideChannelRequest,
@@ -86,6 +91,8 @@ import {
   SendReactionRequest,
   SendReactionResponse,
   SendUserCustomEventRequest,
+  SetRetentionPolicyRequest,
+  SetRetentionPolicyResponse,
   ShowChannelRequest,
   ShowChannelResponse,
   SortParamRequest,
@@ -1969,6 +1976,92 @@ export class ChatApi {
     );
 
     decoders.QueryRemindersResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getRetentionPolicy(): Promise<
+    StreamResponse<GetRetentionPolicyResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetRetentionPolicyResponse>
+    >('GET', '/api/v2/chat/retention_policy', undefined, undefined);
+
+    decoders.GetRetentionPolicyResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async setRetentionPolicy(
+    request: SetRetentionPolicyRequest,
+  ): Promise<StreamResponse<SetRetentionPolicyResponse>> {
+    const body = {
+      max_age_hours: request?.max_age_hours,
+      policy: request?.policy,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SetRetentionPolicyResponse>
+    >(
+      'POST',
+      '/api/v2/chat/retention_policy',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.SetRetentionPolicyResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteRetentionPolicy(
+    request: DeleteRetentionPolicyRequest,
+  ): Promise<StreamResponse<DeleteRetentionPolicyResponse>> {
+    const body = {
+      policy: request?.policy,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteRetentionPolicyResponse>
+    >(
+      'POST',
+      '/api/v2/chat/retention_policy/delete',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.DeleteRetentionPolicyResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getRetentionPolicyRuns(
+    request?: GetRetentionPolicyRunsRequest,
+  ): Promise<StreamResponse<GetRetentionPolicyRunsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetRetentionPolicyRunsResponse>
+    >(
+      'POST',
+      '/api/v2/chat/retention_policy/runs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetRetentionPolicyRunsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

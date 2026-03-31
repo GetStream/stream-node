@@ -2590,6 +2590,15 @@ decoders.GetDraftResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetExternalStorageResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetFeedGroupResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     feed_group: { type: 'FeedGroupResponse', isSingle: true },
@@ -4242,6 +4251,8 @@ decoders.ReviewQueueItemResponse = (input?: Record<string, any>) => {
     flags: { type: 'ModerationFlagResponse', isSingle: false },
 
     completed_at: { type: 'DatetimeType', isSingle: true },
+
+    escalated_at: { type: 'DatetimeType', isSingle: true },
 
     reviewed_at: { type: 'DatetimeType', isSingle: true },
 

@@ -19,8 +19,12 @@ import {
   FlagResponse,
   GetAppealResponse,
   GetConfigResponse,
+  GetFlagCountRequest,
+  GetFlagCountResponse,
   GetModerationRuleResponse,
   GetReviewQueueItemResponse,
+  InsertActionLogRequest,
+  InsertActionLogResponse,
   MuteRequest,
   MuteResponse,
   QueryAppealsRequest,
@@ -53,6 +57,34 @@ import { decoders } from '../model-decoders/decoders';
 
 export class ModerationApi {
   constructor(public readonly apiClient: ApiClient) {}
+
+  async insertActionLog(
+    request: InsertActionLogRequest,
+  ): Promise<StreamResponse<InsertActionLogResponse>> {
+    const body = {
+      action_type: request?.action_type,
+      entity_creator_id: request?.entity_creator_id,
+      entity_id: request?.entity_id,
+      entity_type: request?.entity_type,
+      reason: request?.reason,
+      custom: request?.custom,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<InsertActionLogResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/action_logs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.InsertActionLogResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
 
   async appeal(
     request: AppealRequest,
@@ -186,6 +218,7 @@ export class ModerationApi {
       entity_type: request?.entity_type,
       config_key: request?.config_key,
       config_team: request?.config_team,
+      content_published_at: request?.content_published_at,
       test_mode: request?.test_mode,
       user_id: request?.user_id,
       config: request?.config,
@@ -459,6 +492,30 @@ export class ModerationApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async getFlagCount(
+    request: GetFlagCountRequest,
+  ): Promise<StreamResponse<GetFlagCountResponse>> {
+    const body = {
+      entity_creator_id: request?.entity_creator_id,
+      entity_type: request?.entity_type,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFlagCountResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/flag_count',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GetFlagCountResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async queryModerationFlags(
     request?: QueryModerationFlagsRequest,
   ): Promise<StreamResponse<QueryModerationFlagsResponse>> {
@@ -696,6 +753,7 @@ export class ModerationApi {
       delete_message: request?.delete_message,
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,
+      escalate: request?.escalate,
       flag: request?.flag,
       mark_reviewed: request?.mark_reviewed,
       reject_appeal: request?.reject_appeal,
