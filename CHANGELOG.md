@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.50](https://github.com/GetStream/stream-node/compare/v0.7.49...v0.7.50) (2026-03-31)
+
+
+### Features
+
+* [CHA-2563] regenerate OpenAPI client with retention policy endpoints ([#274](https://github.com/GetStream/stream-node/issues/274)) ([2136d55](https://github.com/GetStream/stream-node/commit/2136d556fed806010e674616fbb08943bd88539d))
+
 ## [0.7.49](https://github.com/GetStream/stream-node/compare/v0.7.48...v0.7.49) (2026-03-27)
 
 
