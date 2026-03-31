@@ -47,6 +47,7 @@ import {
   GetBlockListResponse,
   GetBlockedUsersResponse,
   GetCustomPermissionResponse,
+  GetExternalStorageResponse,
   GetImportResponse,
   GetImportV2TaskResponse,
   GetOGResponse,
@@ -100,12 +101,15 @@ import {
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
+  UpsertExternalStorageRequest,
+  UpsertExternalStorageResponse,
   UpsertPushPreferencesRequest,
   UpsertPushPreferencesResponse,
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
   UpsertPushTemplateRequest,
   UpsertPushTemplateResponse,
+  ValidateExternalStorageResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -695,6 +699,71 @@ export class CommonApi {
     );
 
     decoders.CreateImportV2TaskResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteImporterExternalStorage(): Promise<
+    StreamResponse<DeleteExternalStorageResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteExternalStorageResponse>
+    >('DELETE', '/api/v2/imports/v2/external-storage', undefined, undefined);
+
+    decoders.DeleteExternalStorageResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getImporterExternalStorage(): Promise<
+    StreamResponse<GetExternalStorageResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetExternalStorageResponse>
+    >('GET', '/api/v2/imports/v2/external-storage', undefined, undefined);
+
+    decoders.GetExternalStorageResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async upsertImporterExternalStorage(
+    request: UpsertExternalStorageRequest,
+  ): Promise<StreamResponse<UpsertExternalStorageResponse>> {
+    const body = {
+      type: request?.type,
+      aws_s3: request?.aws_s3,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpsertExternalStorageResponse>
+    >(
+      'PUT',
+      '/api/v2/imports/v2/external-storage',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpsertExternalStorageResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async validateImporterExternalStorage(): Promise<
+    StreamResponse<ValidateExternalStorageResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ValidateExternalStorageResponse>
+    >(
+      'POST',
+      '/api/v2/imports/v2/external-storage/validate',
+      undefined,
+      undefined,
+    );
+
+    decoders.ValidateExternalStorageResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1539,6 +1608,7 @@ export class CommonApi {
     };
     const body = {
       member_ids: request?.member_ids,
+      as_admin: request?.as_admin,
       team_id: request?.team_id,
     };
 

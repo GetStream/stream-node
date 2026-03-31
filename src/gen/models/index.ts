@@ -679,7 +679,7 @@ export interface ActivityRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -1172,7 +1172,7 @@ export interface AddActivityRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -1321,7 +1321,7 @@ export interface AddCommentReactionRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -1371,7 +1371,7 @@ export interface AddCommentRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -1479,7 +1479,7 @@ export interface AddReactionRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -2146,6 +2146,11 @@ export interface BackstageSettingsResponse {
 }
 
 export interface BanActionRequestPayload {
+  /**
+   * Also ban user from all channels this moderator creates in the future
+   */
+  ban_from_future_channels?: boolean;
+
   /**
    * Ban only from specific channel
    */
@@ -2987,6 +2992,16 @@ export interface CallIngressResponse {
   srt: SRTIngress;
 
   whip: WHIPIngress;
+}
+
+export interface CallLevelEventPayload {
+  event_type: string;
+
+  timestamp: number;
+
+  user_id: string;
+
+  payload?: Record<string, any>;
 }
 
 export interface CallLiveStartedEvent {
@@ -3872,6 +3887,8 @@ export interface CallStatsParticipantCounts {
   publishers: number;
 
   sessions: number;
+
+  call_event_count?: number;
 
   cq_score?: number;
 
@@ -5725,6 +5742,11 @@ export interface CheckRequest {
    * Team associated with the configuration
    */
   config_team?: string;
+
+  /**
+   * Original timestamp when the content was produced (for correlating flagged content with source video timeline)
+   */
+  content_published_at?: Date;
 
   /**
    * Whether to run moderation in test mode
@@ -8500,6 +8522,31 @@ export interface ErrorResult {
   version?: string;
 }
 
+export interface EscalatePayload {
+  /**
+   * Additional context for the reviewer
+   */
+  notes?: string;
+
+  /**
+   * Priority of the escalation (low, medium, high)
+   */
+  priority?: string;
+
+  /**
+   * Reason for the escalation (from configured escalation_reasons)
+   */
+  reason?: string;
+}
+
+export interface EscalationMetadata {
+  notes?: string;
+
+  priority?: string;
+
+  reason?: string;
+}
+
 export interface EventHook {
   created_at?: Date;
 
@@ -9952,7 +9999,7 @@ export interface FollowRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -10538,6 +10585,31 @@ export interface GetEdgesResponse {
   edges: EdgeResponse[];
 }
 
+export interface GetExternalStorageAWSS3Response {
+  bucket: string;
+
+  region: string;
+
+  role_arn: string;
+
+  path_prefix?: string;
+}
+
+export interface GetExternalStorageResponse {
+  created_at: Date;
+
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  type: string;
+
+  updated_at: Date;
+
+  aws_s3?: GetExternalStorageAWSS3Response;
+}
+
 export interface GetFeedGroupResponse {
   duration: string;
 
@@ -10578,6 +10650,27 @@ export interface GetFeedsRateLimitsResponse {
    * Rate limits for Web platform (endpoint name -> limit info)
    */
   web?: Record<string, LimitInfoResponse>;
+}
+
+export interface GetFlagCountRequest {
+  /**
+   * ID of the user whose content was flagged
+   */
+  entity_creator_id: string;
+
+  /**
+   * Optional entity type filter (e.g., stream:chat:v1:message, stream:user)
+   */
+  entity_type?: string;
+}
+
+export interface GetFlagCountResponse {
+  /**
+   * Total number of flags against the specified user's content
+   */
+  count: number;
+
+  duration: string;
 }
 
 export interface GetFollowSuggestionsResponse {
@@ -10967,8 +11060,14 @@ export interface GetRetentionPolicyRunsRequest {
 
   prev?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -13557,6 +13656,11 @@ export interface ModerationActionConfigResponse {
   order: number;
 
   /**
+   * Queue type this action config belongs to
+   */
+  queue_type?: string;
+
+  /**
    * Custom data for the action
    */
   custom?: Record<string, any>;
@@ -13661,11 +13765,15 @@ export interface ModerationDashboardPreferences {
 
   disable_flagging_reviewed_entity?: boolean;
 
+  escalation_queue_enabled?: boolean;
+
   flag_user_on_flagged_content?: boolean;
 
   media_queue_blur_enabled?: boolean;
 
   allowed_moderation_action_reasons?: string[];
+
+  escalation_reasons?: string[];
 
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
 
@@ -15591,6 +15699,9 @@ export interface QueryAppealsResponse {
 }
 
 export interface QueryBannedUsersPayload {
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions: Record<string, any>;
 
   /**
@@ -15717,8 +15828,14 @@ export interface QueryCallMembersRequest {
 
   prev?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -15761,6 +15878,9 @@ export interface QueryCallParticipantSessionsResponse {
 }
 
 export interface QueryCallParticipantsRequest {
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -15806,6 +15926,8 @@ export interface QueryCallSessionParticipantStatsResponse {
   prev?: string;
 
   tmp_data_source?: string;
+
+  call_events?: CallLevelEventPayload[];
 }
 
 export interface QueryCallSessionParticipantStatsTimelineResponse {
@@ -15867,8 +15989,14 @@ export interface QueryCallStatsRequest {
 
   prev?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -15897,6 +16025,9 @@ export interface QueryCallsRequest {
    */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -15978,6 +16109,9 @@ export interface QueryChannelsRequest {
    */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 
   /**
@@ -16369,6 +16503,9 @@ export interface QueryFutureChannelBansResponse {
 export interface QueryMembersPayload {
   type: string;
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions: Record<string, any>;
 
   id?: string;
@@ -16381,6 +16518,9 @@ export interface QueryMembersPayload {
 
   members?: ChannelMemberRequest[];
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
   user?: UserRequest;
@@ -16432,8 +16572,14 @@ export interface QueryMessageFlagsPayload {
 
   user_id?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 
   user?: UserRequest;
@@ -17042,8 +17188,14 @@ export interface QueryUserFeedbackRequest {
 
   prev?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions?: Record<string, any>;
 }
 
@@ -17061,6 +17213,9 @@ export interface QueryUserFeedbackResponse {
 }
 
 export interface QueryUsersPayload {
+  /**
+   * Filter conditions to apply to the query
+   */
   filter_conditions: Record<string, any>;
 
   include_deactivated_users?: boolean;
@@ -17073,6 +17228,9 @@ export interface QueryUsersPayload {
 
   user_id?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
   user?: UserRequest;
@@ -18149,6 +18307,11 @@ export interface ReviewQueueItemResponse {
    */
   entity_type: string;
 
+  /**
+   * Whether the item has been escalated
+   */
+  escalated: boolean;
+
   flags_count: number;
 
   /**
@@ -18216,6 +18379,16 @@ export interface ReviewQueueItemResponse {
   entity_creator_id?: string;
 
   /**
+   * When the item was escalated
+   */
+  escalated_at?: Date;
+
+  /**
+   * ID of the moderator who escalated the item
+   */
+  escalated_by?: string;
+
+  /**
    * When the item was reviewed
    */
   reviewed_at?: Date;
@@ -18234,6 +18407,8 @@ export interface ReviewQueueItemResponse {
   call?: CallResponse;
 
   entity_creator?: EntityCreatorResponse;
+
+  escalation_metadata?: EscalationMetadata;
 
   feeds_v2_activity?: EnrichedActivity;
 
@@ -19296,9 +19471,9 @@ export interface SessionWarningResponse {
 }
 
 export interface SetRetentionPolicyRequest {
-  policy: 'old-messages' | 'inactive-channels';
+  max_age_hours: number;
 
-  max_age_hours?: number;
+  policy: 'old-messages' | 'inactive-channels';
 }
 
 export interface SetRetentionPolicyResponse {
@@ -19823,7 +19998,7 @@ export interface StoriesFeedUpdatedEvent {
 
 export interface SubmitActionRequest {
   /**
-   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, ban, custom, unban, restore, delete_user, unblock, block, shadow_block, unmask, kick_user, end_call
+   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, ban, custom, unban, restore, delete_user, unblock, block, shadow_block, unmask, kick_user, end_call, escalate, de_escalate
    */
 
   action_type:
@@ -19844,7 +20019,9 @@ export interface SubmitActionRequest {
     | 'unmask'
     | 'kick_user'
     | 'end_call'
-    | 'reject_appeal';
+    | 'reject_appeal'
+    | 'escalate'
+    | 'de_escalate';
 
   /**
    * UUID of the appeal to act on (required for reject_appeal, optional for other actions)
@@ -19873,6 +20050,8 @@ export interface SubmitActionRequest {
   delete_reaction?: DeleteReactionRequestPayload;
 
   delete_user?: DeleteUserRequestPayload;
+
+  escalate?: EscalatePayload;
 
   flag?: FlagRequest;
 
@@ -20677,6 +20856,11 @@ export interface UnbanActionRequestPayload {
    * Reason for the appeal decision
    */
   decision_reason?: string;
+
+  /**
+   * Also remove the future channels ban for this user
+   */
+  remove_future_channels_ban?: boolean;
 }
 
 export interface UnbanRequest {
@@ -20954,7 +21138,7 @@ export interface UpdateActivityPartialChangeRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when handle_mention_notifications creates notifications) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -20977,7 +21161,7 @@ export interface UpdateActivityPartialChangeRequest {
 export interface UpdateActivityPartialRequest {
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when handle_mention_notifications creates notifications) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -21020,7 +21204,7 @@ export interface UpdateActivityPartialResponse {
 export interface UpdateActivityRequest {
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when handle_mention_notifications creates notifications) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -21727,7 +21911,7 @@ export interface UpdateCommandResponse {
 export interface UpdateCommentPartialRequest {
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to notification activities Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -21775,7 +21959,7 @@ export interface UpdateCommentRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when handle_mention_notifications creates notifications) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -22009,7 +22193,7 @@ export interface UpdateFollowRequest {
 
   /**
    * @deprecated
-   * Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
 
@@ -22625,6 +22809,29 @@ export interface UpsertConfigResponse {
   duration: string;
 
   config?: ConfigResponse;
+}
+
+export interface UpsertExternalStorageAWSS3Request {
+  bucket: string;
+
+  region: string;
+
+  role_arn: string;
+
+  path_prefix?: string;
+}
+
+export interface UpsertExternalStorageRequest {
+  type: 'aws_s3';
+
+  aws_s3?: UpsertExternalStorageAWSS3Request;
+}
+
+export interface UpsertExternalStorageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
 }
 
 export interface UpsertModerationRuleRequest {
@@ -23623,6 +23830,13 @@ export interface UserUpdatedEvent {
   type: string;
 
   received_at?: Date;
+}
+
+export interface ValidateExternalStorageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
 }
 
 export interface VelocityFilterConfig {
