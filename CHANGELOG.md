@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.51](https://github.com/GetStream/stream-node/compare/v0.7.50...v0.7.51) (2026-04-02)
+
+
+### Features
+
+* Add activity_copy_limit for follow ([#277](https://github.com/GetStream/stream-node/issues/277)) ([2cf3738](https://github.com/GetStream/stream-node/commit/2cf373862b27685093e8f0f3a9f16c70c4db4b28))
+
 ## [0.7.50](https://github.com/GetStream/stream-node/compare/v0.7.49...v0.7.50) (2026-03-31)
 
 
