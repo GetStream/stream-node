@@ -9998,6 +9998,11 @@ export interface FollowRequest {
   target: string;
 
   /**
+   * Maximum number of historical activities to copy from the target feed when the follow is first materialized. Not set = unlimited (default). 0 = copy nothing. Range: 0-1000.
+   */
+  activity_copy_limit?: number;
+
+  /**
    * @deprecated
    * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
@@ -15568,6 +15573,11 @@ export interface QueryActivitiesRequest {
   include_expired_activities?: boolean;
 
   include_private_activities?: boolean;
+
+  /**
+   * When true, include soft-deleted activities in the result.
+   */
+  include_soft_deleted_activities?: boolean;
 
   limit?: number;
 
@@ -22190,6 +22200,11 @@ export interface UpdateFollowRequest {
    * Fully qualified ID of the target feed
    */
   target: string;
+
+  /**
+   * Maximum number of historical activities to copy from the target feed when the follow is first materialized. Not set = unlimited (default). 0 = copy nothing. Range: 0-1000.
+   */
+  activity_copy_limit?: number;
 
   /**
    * @deprecated

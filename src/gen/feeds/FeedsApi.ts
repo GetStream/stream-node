@@ -309,6 +309,7 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
       include_expired_activities: request?.include_expired_activities,
       include_private_activities: request?.include_private_activities,
+      include_soft_deleted_activities: request?.include_soft_deleted_activities,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -2257,6 +2258,7 @@ export class FeedsApi {
     const body = {
       source: request?.source,
       target: request?.target,
+      activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
@@ -2289,6 +2291,7 @@ export class FeedsApi {
     const body = {
       source: request?.source,
       target: request?.target,
+      activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
