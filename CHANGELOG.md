@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.52](https://github.com/GetStream/stream-node/compare/v0.7.51...v0.7.52) (2026-04-07)
+
+
+### Features
+
+* Add include_flat_activities to enrichment options ([#279](https://github.com/GetStream/stream-node/issues/279)) ([38522e0](https://github.com/GetStream/stream-node/commit/38522e00c7644ab2b7117e1d1f1020a03b4c1127))
+
 ## [0.7.51](https://github.com/GetStream/stream-node/compare/v0.7.50...v0.7.51) (2026-04-02)
 
 
