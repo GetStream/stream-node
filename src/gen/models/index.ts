@@ -8359,6 +8359,11 @@ export interface EnrichmentOptions {
   enrich_own_followings?: boolean;
 
   /**
+   * Default: false. When true, includes the top-level flat 'activities' array in responses for aggregated feeds. By default, aggregated feeds only return 'aggregated_activities'.
+   */
+  include_flat_activities?: boolean;
+
+  /**
    * Default: false. When true, includes score_vars in activity responses containing variable values used at ranking time.
    */
   include_score_vars?: boolean;
@@ -16901,8 +16906,14 @@ export interface QueryReactionsRequest {
 
   user_id?: string;
 
+  /**
+   * Array of sort parameters
+   */
   sort?: SortParamRequest[];
 
+  /**
+   * Filter to apply to the query
+   */
   filter?: Record<string, any>;
 
   user?: UserRequest;
@@ -17163,12 +17174,12 @@ export interface QueryThreadsRequest {
   user_id?: string;
 
   /**
-   * Sort conditions to apply to threads
+   * Array of sort parameters
    */
   sort?: SortParamRequest[];
 
   /**
-   * Filter conditions to apply to threads
+   * Filter to apply to the query
    */
   filter?: Record<string, any>;
 
