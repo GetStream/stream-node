@@ -106,6 +106,7 @@ describe('Date conversion', () => {
   it('users', async () => {
     const newUser: UserRequest = {
       id: uuidv4(),
+      name: 'streamnodetest' + uuidv4(),
       custom: {
         created_at: new Date(),
       },
@@ -118,7 +119,5 @@ describe('Date conversion', () => {
     expect(
       typeof response.users[newUser.id].custom.created_at === 'string',
     ).toBe(true);
-
-    await client.deleteUsers({ user_ids: [newUser.id] });
   });
 });
