@@ -450,18 +450,6 @@ export interface ActivityFeedbackResponse {
   duration: string;
 }
 
-export interface ActivityLocation {
-  /**
-   * Latitude coordinate
-   */
-  lat: number;
-
-  /**
-   * Longitude coordinate
-   */
-  lng: number;
-}
-
 export interface ActivityMarkEvent {
   /**
    * Date/time of creation
@@ -775,7 +763,7 @@ export interface ActivityRequest {
    */
   custom?: Record<string, any>;
 
-  location?: ActivityLocation;
+  location?: Location;
 
   /**
    * Additional data for search indexing
@@ -979,7 +967,7 @@ export interface ActivityResponse {
 
   current_feed?: FeedResponse;
 
-  location?: ActivityLocation;
+  location?: Location;
 
   metrics?: Record<string, number>;
 
@@ -1270,7 +1258,7 @@ export interface AddActivityRequest {
    */
   custom?: Record<string, any>;
 
-  location?: ActivityLocation;
+  location?: Location;
 
   /**
    * Additional data for search indexing
@@ -1593,6 +1581,12 @@ export interface AggregatedActivityResponse {
 }
 
 export interface AggregationConfig {
+  /**
+   * Order of member activities inside each aggregated group for non-stories feeds: created_at_desc (newest first, default) or created_at_asc (oldest first). Stories feeds ignore this and always use oldest first.
+   */
+
+  activities_sort?: 'created_at_asc' | 'created_at_desc';
+
   /**
    * Format for activity aggregation
    */
@@ -2677,6 +2671,26 @@ export interface BulkImageModerationResponse {
    * ID of the task for processing the bulk image moderation
    */
   task_id: string;
+}
+
+export interface BypassActionRequest {
+  enabled?: boolean;
+}
+
+export interface BypassRequest {
+  /**
+   * Whether to enable moderation bypass for this user
+   */
+  enabled: boolean;
+
+  /**
+   * ID of the user to update
+   */
+  target_user_id: string;
+}
+
+export interface BypassResponse {
+  duration: string;
 }
 
 export interface CallAcceptedEvent {
@@ -3888,9 +3902,17 @@ export interface CallStatsParticipantCounts {
 
   sessions: number;
 
+  sfus_used: number;
+
+  average_jitter_ms?: number;
+
+  average_latency_ms?: number;
+
   call_event_count?: number;
 
   cq_score?: number;
+
+  max_freezes_duration_ms?: number;
 
   total_participant_duration?: number;
 }
@@ -3915,6 +3937,12 @@ export interface CallStatsParticipantSession {
   distance_to_sfu_kilometers?: number;
 
   ended_at?: Date;
+
+  freezes_duration_ms?: number;
+
+  jitter_ms?: number;
+
+  latency_ms?: number;
 
   os?: string;
 
@@ -8359,11 +8387,6 @@ export interface EnrichmentOptions {
   enrich_own_followings?: boolean;
 
   /**
-   * Default: false. When true, includes the top-level flat 'activities' array in responses for aggregated feeds. By default, aggregated feeds only return 'aggregated_activities'.
-   */
-  include_flat_activities?: boolean;
-
-  /**
    * Default: false. When true, includes score_vars in activity responses containing variable values used at ranking time.
    */
   include_score_vars?: boolean;
@@ -8497,6 +8520,8 @@ export interface EntityCreatorResponse {
   avg_response_time?: number;
 
   ban_expires?: Date;
+
+  bypass_moderation?: boolean;
 
   deactivated_at?: Date;
 
@@ -8978,6 +9003,8 @@ export interface FeedInput {
   members?: FeedMemberRequest[];
 
   custom?: Record<string, any>;
+
+  location?: Location;
 }
 
 export interface FeedMemberAddedEvent {
@@ -9222,6 +9249,8 @@ export interface FeedRequest {
    * Custom data for the feed
    */
   custom?: Record<string, any>;
+
+  location?: Location;
 }
 
 export interface FeedResponse {
@@ -9319,6 +9348,8 @@ export interface FeedResponse {
    * Custom data for the feed
    */
   custom?: Record<string, any>;
+
+  location?: Location;
 
   own_membership?: FeedMemberResponse;
 }
@@ -9424,6 +9455,8 @@ export interface FeedSuggestionResponse {
    * Custom data for the feed
    */
   custom?: Record<string, any>;
+
+  location?: Location;
 
   own_membership?: FeedMemberResponse;
 }
@@ -10205,6 +10238,8 @@ export interface FullUserResponse {
 
   ban_expires?: Date;
 
+  bypass_moderation?: boolean;
+
   deactivated_at?: Date;
 
   deleted_at?: Date;
@@ -10722,6 +10757,8 @@ export interface GetImportV2TaskResponse {
   updated_at: Date;
 
   settings: ImportV2TaskSettings;
+
+  result?: Record<string, any>;
 }
 
 export interface GetManyMessagesResponse {
@@ -11405,6 +11442,8 @@ export interface ImportV2TaskItem {
   updated_at: Date;
 
   settings: ImportV2TaskSettings;
+
+  result?: Record<string, any>;
 }
 
 export interface ImportV2TaskSettings {
@@ -12067,6 +12106,18 @@ export interface ListUserGroupsResponse {
    * List of user groups
    */
   user_groups: UserGroupResponse[];
+}
+
+export interface Location {
+  /**
+   * Latitude coordinate
+   */
+  lat: number;
+
+  /**
+   * Longitude coordinate
+   */
+  lng: number;
 }
 
 export interface LocationResponse {
@@ -16221,7 +16272,7 @@ export interface QueryCommentReactionsResponse {
 
 export interface QueryCommentsRequest {
   /**
-   * MongoDB-style filter for querying comments
+   * Filter to apply to the query
    */
   filter: Record<string, any>;
 
@@ -16240,7 +16291,7 @@ export interface QueryCommentsRequest {
   prev?: string;
 
   /**
-   * first (oldest), last (newest) or top. One of: first, last, top, best, controversial
+   * Array of sort parameters
    */
 
   sort?: 'first' | 'last' | 'top' | 'best' | 'controversial';
@@ -17384,6 +17435,8 @@ export interface RankingConfig {
 
 export interface RawRecordSettings {
   mode: 'available' | 'disabled' | 'auto-on';
+
+  audio_only?: boolean;
 }
 
 export interface RawRecordingResponse {
@@ -17396,10 +17449,17 @@ export interface RawRecordingSettingsRequest {
    */
 
   mode: 'available' | 'disabled' | 'auto-on';
+
+  /**
+   * If true, only audio tracks will be recorded
+   */
+  audio_only?: boolean;
 }
 
 export interface RawRecordingSettingsResponse {
   mode: 'available' | 'disabled' | 'auto-on';
+
+  audio_only?: boolean;
 }
 
 export interface Reaction {
@@ -20042,7 +20102,8 @@ export interface SubmitActionRequest {
     | 'end_call'
     | 'reject_appeal'
     | 'escalate'
-    | 'de_escalate';
+    | 'de_escalate'
+    | 'bypass';
 
   /**
    * UUID of the appeal to act on (required for reject_appeal, optional for other actions)
@@ -20059,6 +20120,8 @@ export interface SubmitActionRequest {
   ban?: BanActionRequestPayload;
 
   block?: BlockActionRequestPayload;
+
+  bypass?: BypassActionRequest;
 
   custom?: CustomActionRequestPayload;
 
@@ -21318,7 +21381,7 @@ export interface UpdateActivityRequest {
    */
   custom?: Record<string, any>;
 
-  location?: ActivityLocation;
+  location?: Location;
 
   /**
    * Additional data for search indexing
@@ -22135,6 +22198,11 @@ export interface UpdateFeedMembersResponse {
 
 export interface UpdateFeedRequest {
   /**
+   * If true, removes the geographic location from the feed
+   */
+  clear_location?: boolean;
+
+  /**
    * ID of the new feed creator (owner)
    */
   created_by_id?: string;
@@ -22163,6 +22231,8 @@ export interface UpdateFeedRequest {
    * Custom data for the feed
    */
   custom?: Record<string, any>;
+
+  location?: Location;
 }
 
 export interface UpdateFeedResponse {
@@ -22798,6 +22868,9 @@ export interface UpsertConfigRequest {
    */
   team?: string;
 
+  /**
+   * Optional user ID to associate with the audit log entry
+   */
   user_id?: string;
 
   ai_image_config?: AIImageConfig;
@@ -22861,29 +22934,69 @@ export interface UpsertExternalStorageResponse {
 }
 
 export interface UpsertModerationRuleRequest {
+  /**
+   * Unique rule name
+   */
   name: string;
 
+  /**
+   * Type of rule: user, content, or call
+   */
   rule_type: string;
 
+  /**
+   * Duration before rule can trigger again (e.g. 24h, 7d)
+   */
   cooldown_period?: string;
 
+  /**
+   * Optional description of the rule
+   */
   description?: string;
 
+  /**
+   * Whether the rule is active
+   */
   enabled?: boolean;
 
+  /**
+   * Logical operator between conditions/groups: AND or OR
+   */
   logic?: string;
 
+  /**
+   * Team scope for the rule
+   */
   team?: string;
 
+  /**
+   * Optional user ID to associate with the audit log entry
+   */
+  user_id?: string;
+
+  /**
+   * Escalation sequences for call rules
+   */
   action_sequences?: CallRuleActionSequence[];
 
+  /**
+   * Flat list of conditions (legacy)
+   */
   conditions?: RuleBuilderCondition[];
 
+  /**
+   * List of config keys this rule applies to
+   */
   config_keys?: string[];
 
+  /**
+   * Nested condition groups
+   */
   groups?: RuleBuilderConditionGroup[];
 
   action?: RuleBuilderAction;
+
+  user?: UserRequest;
 }
 
 export interface UpsertModerationRuleResponse {
@@ -23611,6 +23724,8 @@ export interface UserResponse {
    * Date when ban expires
    */
   ban_expires?: Date;
+
+  bypass_moderation?: boolean;
 
   /**
    * Date of deactivation
