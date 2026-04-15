@@ -61,8 +61,7 @@ describe('Date conversion', () => {
     await call.delete();
   });
 
-  // Skipping for now, will fix in a follow up PR
-  it.skip('channel + members', async () => {
+  it('channel + members', async () => {
     const id = uuidv4();
     const channel = client.chat.channel('messaging', id);
     const response = await channel.getOrCreate({
