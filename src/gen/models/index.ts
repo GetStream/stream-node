@@ -1301,6 +1301,30 @@ export interface AddBookmarkResponse {
   bookmark: BookmarkResponse;
 }
 
+export interface AddCommentBookmarkRequest {
+  /**
+   * ID of the folder to add the bookmark to
+   */
+  folder_id?: string;
+
+  user_id?: string;
+
+  /**
+   * Custom data for the bookmark
+   */
+  custom?: Record<string, any>;
+
+  new_folder?: AddFolderRequest;
+
+  user?: UserRequest;
+}
+
+export interface AddCommentBookmarkResponse {
+  duration: string;
+
+  bookmark: BookmarkResponse;
+}
+
 export interface AddCommentReactionRequest {
   /**
    * The type of reaction, eg upvote, like, ...
@@ -2585,6 +2609,16 @@ export interface BookmarkResponse {
   created_at: Date;
 
   /**
+   * ID of the bookmarked object
+   */
+  object_id: string;
+
+  /**
+   * Type of the bookmarked object (activity or comment)
+   */
+  object_type: string;
+
+  /**
    * When the bookmark was last updated
    */
   updated_at: Date;
@@ -2592,6 +2626,10 @@ export interface BookmarkResponse {
   activity: ActivityResponse;
 
   user: UserResponse;
+
+  activity_id?: string;
+
+  comment?: CommentResponse;
 
   /**
    * Custom data for the bookmark
@@ -6178,6 +6216,8 @@ export interface CommentReactionUpdatedEvent {
 }
 
 export interface CommentResponse {
+  bookmark_count: number;
+
   /**
    * Confidence score of the comment
    */
@@ -7723,6 +7763,12 @@ export interface DeleteCommandResponse {
    * Command name
    */
   name: string;
+}
+
+export interface DeleteCommentBookmarkResponse {
+  duration: string;
+
+  bookmark: BookmarkResponse;
 }
 
 export interface DeleteCommentReactionResponse {
@@ -11454,6 +11500,8 @@ export interface ImportV2TaskSettings {
   path?: string;
 
   skip_references_check?: boolean;
+
+  source?: string;
 
   s3?: ImportV2TaskSettingsS3;
 }
@@ -20484,6 +20532,8 @@ export interface ThreadUpdatedEvent {
 }
 
 export interface ThreadedCommentResponse {
+  bookmark_count: number;
+
   confidence_score: number;
 
   created_at: Date;
@@ -21545,10 +21595,13 @@ export interface UpdateBookmarkFolderResponse {
 
 export interface UpdateBookmarkRequest {
   /**
-   * ID of the folder to move the bookmark to
+   * ID of the folder containing the bookmark
    */
   folder_id?: string;
 
+  /**
+   * Move the bookmark to this folder (empty string removes the folder)
+   */
   new_folder_id?: string;
 
   user_id?: string;
@@ -21990,6 +22043,35 @@ export interface UpdateCommandResponse {
   duration: string;
 
   command?: Command;
+}
+
+export interface UpdateCommentBookmarkRequest {
+  /**
+   * ID of the folder containing the bookmark
+   */
+  folder_id?: string;
+
+  /**
+   * Move the bookmark to this folder (empty string removes the folder)
+   */
+  new_folder_id?: string;
+
+  user_id?: string;
+
+  /**
+   * Custom data for the bookmark
+   */
+  custom?: Record<string, any>;
+
+  new_folder?: AddFolderRequest;
+
+  user?: UserRequest;
+}
+
+export interface UpdateCommentBookmarkResponse {
+  duration: string;
+
+  bookmark: BookmarkResponse;
 }
 
 export interface UpdateCommentPartialRequest {
