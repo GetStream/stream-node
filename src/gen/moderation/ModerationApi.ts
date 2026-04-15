@@ -6,6 +6,8 @@ import {
   BanResponse,
   BulkImageModerationRequest,
   BulkImageModerationResponse,
+  BypassRequest,
+  BypassResponse,
   CheckRequest,
   CheckResponse,
   CheckS3AccessRequest,
@@ -211,6 +213,30 @@ export class ModerationApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async bypass(
+    request: BypassRequest,
+  ): Promise<StreamResponse<BypassResponse>> {
+    const body = {
+      enabled: request?.enabled,
+      target_user_id: request?.target_user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BypassResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/bypass',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.BypassResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async check(request: CheckRequest): Promise<StreamResponse<CheckResponse>> {
     const body = {
       entity_creator_id: request?.entity_creator_id,
@@ -311,9 +337,11 @@ export class ModerationApi {
   async deleteConfig(request: {
     key: string;
     team?: string;
+    user_id?: string;
   }): Promise<StreamResponse<DeleteModerationConfigResponse>> {
     const queryParams = {
       team: request?.team,
+      user_id: request?.user_id,
     };
     const pathParams = {
       key: request?.key,
@@ -583,11 +611,13 @@ export class ModerationApi {
       enabled: request?.enabled,
       logic: request?.logic,
       team: request?.team,
+      user_id: request?.user_id,
       action_sequences: request?.action_sequences,
       conditions: request?.conditions,
       config_keys: request?.config_keys,
       groups: request?.groups,
       action: request?.action,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -606,16 +636,20 @@ export class ModerationApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteModerationRule(): Promise<
-    StreamResponse<DeleteModerationRuleResponse>
-  > {
+  async deleteModerationRule(request?: {
+    user_id?: string;
+  }): Promise<StreamResponse<DeleteModerationRuleResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<DeleteModerationRuleResponse>
     >(
       'DELETE',
       '/api/v2/moderation/moderation_rule/{id}',
       undefined,
-      undefined,
+      queryParams,
     );
 
     decoders.DeleteModerationRuleResponse?.(response.body);
@@ -747,6 +781,7 @@ export class ModerationApi {
       user_id: request?.user_id,
       ban: request?.ban,
       block: request?.block,
+      bypass: request?.bypass,
       custom: request?.custom,
       delete_activity: request?.delete_activity,
       delete_comment: request?.delete_comment,
