@@ -10,6 +10,8 @@ import {
   AddActivityResponse,
   AddBookmarkRequest,
   AddBookmarkResponse,
+  AddCommentBookmarkRequest,
+  AddCommentBookmarkResponse,
   AddCommentReactionRequest,
   AddCommentReactionResponse,
   AddCommentRequest,
@@ -36,6 +38,7 @@ import {
   DeleteBookmarkFolderResponse,
   DeleteBookmarkResponse,
   DeleteCollectionsResponse,
+  DeleteCommentBookmarkResponse,
   DeleteCommentReactionResponse,
   DeleteCommentResponse,
   DeleteFeedGroupResponse,
@@ -129,6 +132,8 @@ import {
   UpdateBookmarkResponse,
   UpdateCollectionsRequest,
   UpdateCollectionsResponse,
+  UpdateCommentBookmarkRequest,
+  UpdateCommentBookmarkResponse,
   UpdateCommentPartialRequest,
   UpdateCommentPartialResponse,
   UpdateCommentRequest,
@@ -1114,6 +1119,94 @@ export class FeedsApi {
     );
 
     decoders.QueryCommentsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deleteCommentBookmark(request: {
+    comment_id: string;
+    folder_id?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<DeleteCommentBookmarkResponse>> {
+    const queryParams = {
+      folder_id: request?.folder_id,
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteCommentBookmarkResponse>
+    >(
+      'DELETE',
+      '/api/v2/feeds/comments/{comment_id}/bookmarks',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.DeleteCommentBookmarkResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateCommentBookmark(
+    request: UpdateCommentBookmarkRequest & { comment_id: string },
+  ): Promise<StreamResponse<UpdateCommentBookmarkResponse>> {
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+    const body = {
+      folder_id: request?.folder_id,
+      new_folder_id: request?.new_folder_id,
+      user_id: request?.user_id,
+      custom: request?.custom,
+      new_folder: request?.new_folder,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateCommentBookmarkResponse>
+    >(
+      'PATCH',
+      '/api/v2/feeds/comments/{comment_id}/bookmarks',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateCommentBookmarkResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addCommentBookmark(
+    request: AddCommentBookmarkRequest & { comment_id: string },
+  ): Promise<StreamResponse<AddCommentBookmarkResponse>> {
+    const pathParams = {
+      comment_id: request?.comment_id,
+    };
+    const body = {
+      folder_id: request?.folder_id,
+      user_id: request?.user_id,
+      custom: request?.custom,
+      new_folder: request?.new_folder,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<AddCommentBookmarkResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/comments/{comment_id}/bookmarks',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.AddCommentBookmarkResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
