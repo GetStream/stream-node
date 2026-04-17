@@ -172,6 +172,7 @@ export class FeedsApi {
       create_notification_activity: request?.create_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
       expires_at: request?.expires_at,
+      force_moderation: request?.force_moderation,
       id: request?.id,
       parent_id: request?.parent_id,
       poll_id: request?.poll_id,
@@ -214,6 +215,7 @@ export class FeedsApi {
     const body = {
       activities: request?.activities,
       enrich_own_fields: request?.enrich_own_fields,
+      force_moderation: request?.force_moderation,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -237,6 +239,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UpdateActivitiesPartialBatchResponse>> {
     const body = {
       changes: request?.changes,
+      force_moderation: request?.force_moderation,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -632,14 +635,22 @@ export class FeedsApi {
 
   async getActivity(request: {
     id: string;
+    comment_sort?: string;
+    comment_limit?: number;
+    user_id?: string;
   }): Promise<StreamResponse<GetActivityResponse>> {
+    const queryParams = {
+      comment_sort: request?.comment_sort,
+      comment_limit: request?.comment_limit,
+      user_id: request?.user_id,
+    };
     const pathParams = {
       id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetActivityResponse>
-    >('GET', '/api/v2/feeds/activities/{id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
 
     decoders.GetActivityResponse?.(response.body);
 
@@ -655,6 +666,7 @@ export class FeedsApi {
     const body = {
       copy_custom_to_notification: request?.copy_custom_to_notification,
       enrich_own_fields: request?.enrich_own_fields,
+      force_moderation: request?.force_moderation,
       handle_mention_notifications: request?.handle_mention_notifications,
       run_activity_processors: request?.run_activity_processors,
       user_id: request?.user_id,
@@ -689,6 +701,7 @@ export class FeedsApi {
       copy_custom_to_notification: request?.copy_custom_to_notification,
       enrich_own_fields: request?.enrich_own_fields,
       expires_at: request?.expires_at,
+      force_moderation: request?.force_moderation,
       handle_mention_notifications: request?.handle_mention_notifications,
       poll_id: request?.poll_id,
       restrict_replies: request?.restrict_replies,
@@ -1041,6 +1054,7 @@ export class FeedsApi {
       comment: request?.comment,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      force_moderation: request?.force_moderation,
       id: request?.id,
       object_id: request?.object_id,
       object_type: request?.object_type,
@@ -1235,14 +1249,18 @@ export class FeedsApi {
 
   async getComment(request: {
     id: string;
+    user_id?: string;
   }): Promise<StreamResponse<GetCommentResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
     const pathParams = {
       id: request?.id,
     };
 
     const response = await this.apiClient.sendRequest<
       StreamResponse<GetCommentResponse>
-    >('GET', '/api/v2/feeds/comments/{id}', pathParams, undefined);
+    >('GET', '/api/v2/feeds/comments/{id}', pathParams, queryParams);
 
     decoders.GetCommentResponse?.(response.body);
 
@@ -1258,6 +1276,7 @@ export class FeedsApi {
     const body = {
       comment: request?.comment,
       copy_custom_to_notification: request?.copy_custom_to_notification,
+      force_moderation: request?.force_moderation,
       handle_mention_notifications: request?.handle_mention_notifications,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
@@ -1292,6 +1311,7 @@ export class FeedsApi {
     };
     const body = {
       copy_custom_to_notification: request?.copy_custom_to_notification,
+      force_moderation: request?.force_moderation,
       handle_mention_notifications: request?.handle_mention_notifications,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
@@ -2356,6 +2376,7 @@ export class FeedsApi {
       activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
@@ -2389,6 +2410,7 @@ export class FeedsApi {
       activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
@@ -2442,6 +2464,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
 
@@ -2466,6 +2489,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
 

@@ -46,6 +46,8 @@ import {
   QueryCallParticipantsResponse,
   QueryCallSessionParticipantStatsResponse,
   QueryCallSessionParticipantStatsTimelineResponse,
+  QueryCallSessionStatsRequest,
+  QueryCallSessionStatsResponse,
   QueryCallStatsMapResponse,
   QueryCallStatsRequest,
   QueryCallStatsResponse,
@@ -1346,6 +1348,33 @@ export class VideoApi {
     );
 
     decoders.DeleteTranscriptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryCallSessionStats(
+    request?: QueryCallSessionStatsRequest,
+  ): Promise<StreamResponse<QueryCallSessionStatsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryCallSessionStatsResponse>
+    >(
+      'POST',
+      '/api/v2/video/call_stats',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryCallSessionStatsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

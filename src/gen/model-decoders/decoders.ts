@@ -1115,6 +1115,17 @@ decoders.CallStatsReportSummaryResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.CallStatsSessionResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    generated_at: { type: 'DatetimeType', isSingle: true },
+
+    call_ended_at: { type: 'DatetimeType', isSingle: true },
+
+    call_started_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.CallTranscription = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     end_time: { type: 'DatetimeType', isSingle: true },
@@ -3830,6 +3841,13 @@ decoders.QueryCallSessionParticipantStatsTimelineResponse = (
 ) => {
   const typeMappings: TypeMapping = {
     events: { type: 'CallParticipantTimeline', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.QueryCallSessionStatsResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    call_stats: { type: 'CallStatsSessionResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };

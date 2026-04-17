@@ -1176,6 +1176,8 @@ export interface AddActivityRequest {
    */
   expires_at?: string;
 
+  force_moderation?: boolean;
+
   /**
    * Optional ID for the activity
    */
@@ -1391,6 +1393,11 @@ export interface AddCommentRequest {
    * Whether to create a notification activity for this comment
    */
   create_notification_activity?: boolean;
+
+  /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
 
   /**
    * Optional custom ID for the comment (max 255 characters). If not provided, a UUID will be generated.
@@ -4009,6 +4016,8 @@ export interface CallStatsReportReadyEvent {
    */
   session_id: string;
 
+  counts: CallStatsParticipantCounts;
+
   /**
    * The type of event, "call.report_ready" in this case
    */
@@ -4041,6 +4050,22 @@ export interface CallStatsReportSummaryResponse {
   min_user_rating?: number;
 
   quality_score?: number;
+}
+
+export interface CallStatsSessionResponse {
+  call_id: string;
+
+  call_session_id: string;
+
+  call_type: string;
+
+  generated_at: Date;
+
+  counts: CallStatsParticipantCounts;
+
+  call_ended_at?: Date;
+
+  call_started_at?: Date;
 }
 
 export interface CallTranscription {
@@ -8255,6 +8280,23 @@ export interface DraftResponse {
   quoted_message?: MessageResponse;
 }
 
+export interface EMAUStatsResponse {
+  /**
+   * Per-day unique engaged user counts
+   */
+  daily: DailyMetricResponse[];
+
+  /**
+   * Rolling 30-day engaged user count snapshots
+   */
+  last_30_days: DailyMetricResponse[];
+
+  /**
+   * Calendar month-to-date engaged user count snapshots
+   */
+  month_to_date: DailyMetricResponse[];
+}
+
 export interface EdgeResponse {
   continent_code: string;
 
@@ -10007,6 +10049,11 @@ export interface FollowBatchRequest {
   follows: FollowRequest[];
 
   /**
+   * If true, auto-creates users referenced by source/target FIDs in the batch when they don't already exist. Server-side only. Defaults to false. This top-level field is the only supported batch/upsert create_users control.
+   */
+  create_users?: boolean;
+
+  /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
    */
   enrich_own_fields?: boolean;
@@ -10096,6 +10143,11 @@ export interface FollowRequest {
    * Whether to create a notification activity for this follow
    */
   create_notification_activity?: boolean;
+
+  /**
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -16063,6 +16115,37 @@ export interface QueryCallSessionParticipantStatsTimelineResponse {
   events: CallParticipantTimeline[];
 }
 
+export interface QueryCallSessionStatsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  /**
+   * Array of sort parameters
+   */
+  sort?: SortParamRequest[];
+
+  /**
+   * Filter conditions to apply to the query
+   */
+  filter_conditions?: Record<string, any>;
+}
+
+export interface QueryCallSessionStatsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  call_stats: CallStatsSessionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryCallStatsMapResponse {
   call_id: string;
 
@@ -16537,6 +16620,8 @@ export interface QueryFeedsUsageStatsResponse {
   follows: DailyMetricStatsResponse;
 
   openai_requests: DailyMetricStatsResponse;
+
+  emau?: EMAUStatsResponse;
 }
 
 export interface QueryFollowsRequest {
@@ -21253,6 +21338,11 @@ export interface UpdateActivitiesPartialBatchRequest {
    * List of activity changes to apply. Each change specifies an activity ID and the fields to set/unset
    */
   changes: UpdateActivityPartialChangeRequest[];
+
+  /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
 }
 
 export interface UpdateActivitiesPartialBatchResponse {
@@ -21305,6 +21395,11 @@ export interface UpdateActivityPartialRequest {
   enrich_own_fields?: boolean;
 
   /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
+
+  /**
    * If true, creates notification activities for newly mentioned users and deletes notifications for users no longer mentioned
    */
   handle_mention_notifications?: boolean;
@@ -21351,6 +21446,11 @@ export interface UpdateActivityRequest {
    * Time when the activity will expire
    */
   expires_at?: Date;
+
+  /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
 
   /**
    * If true, creates notification activities for newly mentioned users and deletes notifications for users no longer mentioned
@@ -22082,6 +22182,11 @@ export interface UpdateCommentPartialRequest {
   copy_custom_to_notification?: boolean;
 
   /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
+
+  /**
    * Whether to handle mention notification changes
    */
   handle_mention_notifications?: boolean;
@@ -22128,6 +22233,11 @@ export interface UpdateCommentRequest {
    * Whether to copy custom data to the notification activity (only applies when handle_mention_notifications creates notifications) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
    */
   copy_custom_to_notification?: boolean;
+
+  /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
 
   /**
    * If true, creates notification activities for newly mentioned users and deletes notifications for users no longer mentioned
@@ -22379,6 +22489,11 @@ export interface UpdateFollowRequest {
    * Whether to create a notification activity for this follow
    */
   create_notification_activity?: boolean;
+
+  /**
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -22902,6 +23017,11 @@ export interface UpsertActivitiesRequest {
    * If true, enriches the activities' current_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
    */
   enrich_own_fields?: boolean;
+
+  /**
+   * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
 }
 
 export interface UpsertActivitiesResponse {
