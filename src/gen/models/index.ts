@@ -10049,6 +10049,11 @@ export interface FollowBatchRequest {
   follows: FollowRequest[];
 
   /**
+   * If true, auto-creates users referenced by source/target FIDs in the batch when they don't already exist. Server-side only. Defaults to false. This top-level field is the only supported batch/upsert create_users control.
+   */
+  create_users?: boolean;
+
+  /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
    */
   enrich_own_fields?: boolean;
@@ -10138,6 +10143,11 @@ export interface FollowRequest {
    * Whether to create a notification activity for this follow
    */
   create_notification_activity?: boolean;
+
+  /**
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -22479,6 +22489,11 @@ export interface UpdateFollowRequest {
    * Whether to create a notification activity for this follow
    */
   create_notification_activity?: boolean;
+
+  /**
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the follow's source_feed and target_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.

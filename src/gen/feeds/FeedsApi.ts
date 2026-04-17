@@ -2376,6 +2376,7 @@ export class FeedsApi {
       activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       follower_role: request?.follower_role,
       push_preference: request?.push_preference,
@@ -2409,6 +2410,7 @@ export class FeedsApi {
       activity_copy_limit: request?.activity_copy_limit,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       push_preference: request?.push_preference,
       skip_push: request?.skip_push,
@@ -2462,6 +2464,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
 
@@ -2486,6 +2489,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
 
