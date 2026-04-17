@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.53](https://github.com/GetStream/stream-node/compare/v0.7.52...v0.7.53) (2026-04-17)
+
+
+### Features
+
+* add bookmark for comments ([#285](https://github.com/GetStream/stream-node/issues/285)) ([6d1615a](https://github.com/GetStream/stream-node/commit/6d1615a88b74b684bd7e52246eea5294a7bcd484))
+* update to open api version 225.16.0 ([#283](https://github.com/GetStream/stream-node/issues/283)) ([5349ec1](https://github.com/GetStream/stream-node/commit/5349ec18ee462b70ffd01d95c8270c135fcf8aaa))
+
 ## [0.7.52](https://github.com/GetStream/stream-node/compare/v0.7.51...v0.7.52) (2026-04-07)
 
 
