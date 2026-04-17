@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.54](https://github.com/GetStream/stream-node/compare/v0.7.53...v0.7.54) (2026-04-17)
+
+
+### Features
+
+* [FEEDS-1413] support automatic user creation in follows ([#287](https://github.com/GetStream/stream-node/issues/287)) ([9ac6744](https://github.com/GetStream/stream-node/commit/9ac67441b73af00d3986c9b63bf1992c50dfc9df))
+
 ## [0.7.53](https://github.com/GetStream/stream-node/compare/v0.7.52...v0.7.53) (2026-04-17)
 
 
