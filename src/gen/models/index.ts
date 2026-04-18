@@ -450,6 +450,13 @@ export interface ActivityFeedbackResponse {
   duration: string;
 }
 
+export interface ActivityFilterConfig {
+  /**
+   * When true, activities authored by the feed owner are excluded from feed reads
+   */
+  exclude_owner_activities?: boolean;
+}
+
 export interface ActivityMarkEvent {
   /**
    * Date/time of creation
@@ -7048,6 +7055,8 @@ export interface CreateFeedGroupRequest {
    */
   activity_selectors?: ActivitySelectorConfig[];
 
+  activity_filter?: ActivityFilterConfig;
+
   aggregation?: AggregationConfig;
 
   /**
@@ -7080,6 +7089,8 @@ export interface CreateFeedViewRequest {
    * Configuration for selecting activities
    */
   activity_selectors?: ActivitySelectorConfig[];
+
+  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -8939,6 +8950,8 @@ export interface FeedGroup {
 
   last_feed_get_at?: Date;
 
+  activity_filter?: ActivityFilterConfig;
+
   aggregation?: AggregationConfig;
 
   notification?: NotificationConfig;
@@ -9037,6 +9050,8 @@ export interface FeedGroupResponse {
    * Configuration for activity selectors
    */
   activity_selectors?: ActivitySelectorConfigResponse[];
+
+  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -9585,6 +9600,8 @@ export interface FeedViewResponse {
    * Configured activity selectors
    */
   activity_selectors?: ActivitySelectorConfigResponse[];
+
+  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -11018,6 +11035,8 @@ export interface GetOrCreateFeedGroupRequest {
    */
   activity_selectors?: ActivitySelectorConfig[];
 
+  activity_filter?: ActivityFilterConfig;
+
   aggregation?: AggregationConfig;
 
   /**
@@ -11121,6 +11140,8 @@ export interface GetOrCreateFeedViewRequest {
    * Configuration for selecting activities
    */
   activity_selectors?: ActivitySelectorConfig[];
+
+  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -22334,6 +22355,8 @@ export interface UpdateFeedGroupRequest {
    */
   activity_selectors?: ActivitySelectorConfig[];
 
+  activity_filter?: ActivityFilterConfig;
+
   aggregation?: AggregationConfig;
 
   /**
@@ -22438,6 +22461,8 @@ export interface UpdateFeedViewRequest {
    * Updated configuration for selecting activities
    */
   activity_selectors?: ActivitySelectorConfig[];
+
+  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
