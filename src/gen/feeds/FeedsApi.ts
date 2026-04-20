@@ -1514,6 +1514,7 @@ export class FeedsApi {
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
@@ -2004,6 +2005,7 @@ export class FeedsApi {
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
@@ -2038,6 +2040,7 @@ export class FeedsApi {
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       custom: request?.custom,
       notification: request?.notification,
@@ -2078,6 +2081,7 @@ export class FeedsApi {
     const body = {
       id: request?.id,
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
@@ -2138,6 +2142,7 @@ export class FeedsApi {
     };
     const body = {
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
@@ -2166,6 +2171,7 @@ export class FeedsApi {
     };
     const body = {
       activity_selectors: request?.activity_selectors,
+      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
