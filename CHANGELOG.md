@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.55](https://github.com/GetStream/stream-node/compare/v0.7.54...v0.7.55) (2026-04-20)
+
+
+### Features
+
+* [FEEDS-1415] exclude owner activities ([#289](https://github.com/GetStream/stream-node/issues/289)) ([ab8a09b](https://github.com/GetStream/stream-node/commit/ab8a09b7c93f1c276b56055ff3322a27e616bf20))
+
 ## [0.7.54](https://github.com/GetStream/stream-node/compare/v0.7.53...v0.7.54) (2026-04-17)
 
 
