@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.56](https://github.com/GetStream/stream-node/compare/v0.7.55...v0.7.56) (2026-04-24)
+
+
+### Features
+
+* add query revision endpoint for querying audit logs for activities an… ([#292](https://github.com/GetStream/stream-node/issues/292)) ([84d1670](https://github.com/GetStream/stream-node/commit/84d1670b63eaa0cc08c792f32fcfe8c25f5d282b))
+
 ## [0.7.55](https://github.com/GetStream/stream-node/compare/v0.7.54...v0.7.55) (2026-04-20)
 
 
