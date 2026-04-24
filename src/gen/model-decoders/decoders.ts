@@ -4053,6 +4053,13 @@ decoders.QueryReviewQueueResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.QueryRevisionHistoryResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    revisions: { type: 'RevisionHistoryResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.QuerySegmentTargetsResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     targets: { type: 'SegmentTargetResponse', isSingle: false },
@@ -4398,6 +4405,13 @@ decoders.ReviewQueueItemUpdatedEvent = (input?: Record<string, any>) => {
     action: { type: 'ActionLogResponse', isSingle: true },
 
     review_queue_item: { type: 'ReviewQueueItemResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.RevisionHistoryResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

@@ -102,6 +102,8 @@ import {
   QueryMembershipLevelsResponse,
   QueryPinnedActivitiesRequest,
   QueryPinnedActivitiesResponse,
+  QueryRevisionHistoryRequest,
+  QueryRevisionHistoryResponse,
   ReadCollectionsResponse,
   RejectFeedMemberInviteRequest,
   RejectFeedMemberInviteResponse,
@@ -2081,7 +2083,6 @@ export class FeedsApi {
     const body = {
       id: request?.id,
       activity_selectors: request?.activity_selectors,
-      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
@@ -2142,7 +2143,6 @@ export class FeedsApi {
     };
     const body = {
       activity_selectors: request?.activity_selectors,
-      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
@@ -2171,7 +2171,6 @@ export class FeedsApi {
     };
     const body = {
       activity_selectors: request?.activity_selectors,
-      activity_filter: request?.activity_filter,
       aggregation: request?.aggregation,
       ranking: request?.ranking,
     };
@@ -2697,6 +2696,33 @@ export class FeedsApi {
     );
 
     decoders.UpdateMembershipLevelResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async queryRevisionHistory(
+    request: QueryRevisionHistoryRequest,
+  ): Promise<StreamResponse<QueryRevisionHistoryResponse>> {
+    const body = {
+      filter: request?.filter,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryRevisionHistoryResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/revisions/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.QueryRevisionHistoryResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
