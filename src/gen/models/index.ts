@@ -7090,8 +7090,6 @@ export interface CreateFeedViewRequest {
    */
   activity_selectors?: ActivitySelectorConfig[];
 
-  activity_filter?: ActivityFilterConfig;
-
   aggregation?: AggregationConfig;
 
   ranking?: RankingConfig;
@@ -8486,6 +8484,11 @@ export interface EnrichmentOptions {
   enrich_own_followings?: boolean;
 
   /**
+   * Controls the top-level flat 'activities' array for aggregated feeds. For new apps, defaults to false (excluded); set to true to include. For older apps, defaults to true (included) for backward compatibility; set to false to exclude.
+   */
+  include_flat_activities?: boolean;
+
+  /**
    * Default: false. When true, includes score_vars in activity responses containing variable values used at ranking time.
    */
   include_score_vars?: boolean;
@@ -9600,8 +9603,6 @@ export interface FeedViewResponse {
    * Configured activity selectors
    */
   activity_selectors?: ActivitySelectorConfigResponse[];
-
-  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -11140,8 +11141,6 @@ export interface GetOrCreateFeedViewRequest {
    * Configuration for selecting activities
    */
   activity_selectors?: ActivitySelectorConfig[];
-
-  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
@@ -17242,6 +17241,40 @@ export interface QueryReviewQueueResponse {
   filter_config?: FilterConfigResponse;
 }
 
+export interface QueryRevisionHistoryRequest {
+  /**
+   * Filter to apply to the query
+   */
+  filter: Record<string, any>;
+
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  /**
+   * Array of sort parameters
+   */
+  sort?: SortParamRequest[];
+}
+
+export interface QueryRevisionHistoryResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Revision history entries
+   */
+  revisions: RevisionHistoryResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QuerySegmentTargetsRequest {
   /**
    * Limit
@@ -18677,6 +18710,24 @@ export interface ReviewQueueItemUpdatedEvent {
   action?: ActionLogResponse;
 
   review_queue_item?: ReviewQueueItemResponse;
+}
+
+export interface RevisionHistoryResponse {
+  action_type: string;
+
+  actor_type: string;
+
+  created_at: Date;
+
+  object_id: string;
+
+  object_type: string;
+
+  user_id: string;
+
+  changed_fields?: string[];
+
+  previous_obj_serialized?: Record<string, any>;
 }
 
 export interface RingCallRequest {
@@ -22461,8 +22512,6 @@ export interface UpdateFeedViewRequest {
    * Updated configuration for selecting activities
    */
   activity_selectors?: ActivitySelectorConfig[];
-
-  activity_filter?: ActivityFilterConfig;
 
   aggregation?: AggregationConfig;
 
