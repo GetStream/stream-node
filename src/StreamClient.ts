@@ -303,5 +303,3 @@ export class StreamClient extends CommonApi {
    */
   parseSns = (notificationBody: string) => parseSnsHelper(notificationBody);
 }
-
-export { InvalidWebhookError, InvalidWebhookErrorMessages };

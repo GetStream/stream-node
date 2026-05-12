@@ -9,12 +9,4 @@ export * from './src/StreamFeed';
 export {
   InvalidWebhookError,
   InvalidWebhookErrorMessages,
-  decodeSnsPayload,
-  decodeSqsPayload,
-  gunzipPayload,
-  parseEvent,
-  parseSns,
-  parseSqs,
-  verifyAndParseWebhook,
-  verifySignature,
 } from './src/utils/webhook';
