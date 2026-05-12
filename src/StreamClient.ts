@@ -1,4 +1,11 @@
 import { JWTServerToken, JWTUserToken } from './utils/create-token';
+import {
+  InvalidWebhookError,
+  InvalidWebhookErrorMessages,
+  parseSns as parseSnsHelper,
+  parseSqs as parseSqsHelper,
+  verifyAndParseWebhook as verifyAndParseWebhookHelper,
+} from './utils/webhook';
 import { CommonApi } from './gen/common/CommonApi';
 import { StreamVideoClient } from './StreamVideoClient';
 import crypto from 'crypto';
@@ -253,4 +260,48 @@ export class StreamClient extends CommonApi {
       return false;
     }
   };
+
+  /**
+   * Verify and parse an HTTP webhook event.
+   *
+   * Decompresses `rawBody` when gzipped (detected from the body bytes),
+   * verifies the `X-Signature` header against the app's API secret, and
+   * returns the parsed typed event. Works whether or not Stream is
+   * currently compressing payloads for this app, and stays correct behind
+   * middleware that auto-decompresses the request.
+   *
+   * @param rawBody Raw HTTP request body bytes Stream signed
+   * @param signature Value of the `X-Signature` header
+   * @throws {InvalidWebhookError} When the signature does not match or
+   *   the gzip / JSON envelope is malformed.
+   */
+  verifyAndParseWebhook = (rawBody: string | Buffer, signature: string) => {
+    if (!this.secret) {
+      throw new InvalidWebhookError(
+        'cannot verify webhook signature without an API secret on the client',
+      );
+    }
+    return verifyAndParseWebhookHelper(rawBody, signature, this.secret);
+  };
+
+  /**
+   * Parse an SQS firehose event: decodes the message `Body` (base64 +
+   * optional gzip) and returns the parsed typed event. No HMAC
+   * verification (Stream does not sign SQS bodies).
+   *
+   * @param messageBody SQS message `Body` string
+   * @throws {InvalidWebhookError} When the base64 / gzip envelope is malformed.
+   */
+  parseSqs = (messageBody: string) => parseSqsHelper(messageBody);
+
+  /**
+   * Parse an SNS-delivered event (unwraps envelope JSON when needed, then
+   * same decode path as SQS). No HMAC verification.
+   *
+   * @param notificationBody Raw SNS POST body or pre-extracted `Message` string
+   * @throws {InvalidWebhookError} When the envelope cannot be decoded.
+   */
+  parseSns = (notificationBody: string) => parseSnsHelper(notificationBody);
 }
+
+export { InvalidWebhookError, InvalidWebhookErrorMessages };
