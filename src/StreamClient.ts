@@ -1,7 +1,6 @@
 import { JWTServerToken, JWTUserToken } from './utils/create-token';
 import {
   InvalidWebhookError,
-  InvalidWebhookErrorMessages,
   parseSns as parseSnsHelper,
   parseSqs as parseSqsHelper,
   verifyAndParseWebhook as verifyAndParseWebhookHelper,
