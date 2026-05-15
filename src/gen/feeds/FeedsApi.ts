@@ -1545,9 +1545,11 @@ export class FeedsApi {
     feed_group_id: string;
     feed_id: string;
     hard_delete?: boolean;
+    purge_user_activities?: boolean;
   }): Promise<StreamResponse<DeleteFeedResponse>> {
     const queryParams = {
       hard_delete: request?.hard_delete,
+      purge_user_activities: request?.purge_user_activities,
     };
     const pathParams = {
       feed_group_id: request?.feed_group_id,
@@ -2275,6 +2277,7 @@ export class FeedsApi {
     const body = {
       feeds: request?.feeds,
       hard_delete: request?.hard_delete,
+      purge_user_activities: request?.purge_user_activities,
     };
 
     const response = await this.apiClient.sendRequest<

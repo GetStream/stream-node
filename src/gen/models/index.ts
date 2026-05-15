@@ -1041,7 +1041,7 @@ export interface ActivitySelectorConfig {
   cutoff_window?: string;
 
   /**
-   * Minimum popularity threshold
+   * Minimum popularity threshold. For the 'popular' selector, omit to use the default (5); values below 1 are rejected
    */
   min_popularity?: number;
 
@@ -1083,7 +1083,7 @@ export interface ActivitySelectorConfigResponse {
   cutoff_window?: string;
 
   /**
-   * Minimum popularity threshold
+   * Minimum popularity threshold. For the 'popular' selector, values below 1 are normalized to the default (5) at read time.
    */
   min_popularity?: number;
 
@@ -1655,6 +1655,8 @@ export interface AppResponseFields {
   disable_permissions_checks: boolean;
 
   enforce_unique_usernames: string;
+
+  feed_audit_logs_enabled: boolean;
 
   guest_user_creation_disabled: boolean;
 
@@ -7896,6 +7898,11 @@ export interface DeleteFeedsBatchRequest {
    * Whether to permanently delete the feeds instead of soft delete
    */
   hard_delete?: boolean;
+
+  /**
+   * When hard-deleting, also fully delete activities authored by each feed's owner from every other feed those activities were fanned out to. Default false preserves existing fan-out. Requires 'hard_delete' to be true; the request is rejected otherwise. Feeds with no recorded owner (created_by_id is empty) are silently skipped for the purge step — owner-matching against an empty string is a safety guard, not a wildcard.
+   */
+  purge_user_activities?: boolean;
 }
 
 export interface DeleteFeedsBatchResponse {
