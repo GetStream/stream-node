@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.57](https://github.com/GetStream/stream-node/compare/v0.7.56...v0.7.57) (2026-05-15)
+
+
+### Features
+
+* new opt-in (purge_user_activities) on DeleteFeedRequest ([#296](https://github.com/GetStream/stream-node/issues/296)) ([eb7744f](https://github.com/GetStream/stream-node/commit/eb7744f69dc85701a6c6cd490f2c97c74529c0ab))
+* **webhooks:** verifyAndParse* API for compressed payloads (CHA-3071) ([#294](https://github.com/GetStream/stream-node/issues/294)) ([5aa6e03](https://github.com/GetStream/stream-node/commit/5aa6e0326da85f7fec92e6541714dba833bc61de))
+
 ## [0.7.56](https://github.com/GetStream/stream-node/compare/v0.7.55...v0.7.56) (2026-04-24)
 
 
