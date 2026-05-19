@@ -2767,6 +2767,20 @@ decoders.GetOrCreateFeedViewResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetOrCreateFollowResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    follow: { type: 'FollowResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.GetOrCreateUnfollowResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    follow: { type: 'FollowResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetPushTemplatesResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     templates: { type: 'PushTemplateResponse', isSingle: false },
