@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.58](https://github.com/GetStream/stream-node/compare/v0.7.57...v0.7.58) (2026-05-20)
+
+
+### Features
+
+* Add get or create follow and unfollow endpoints and fix generate command ([#297](https://github.com/GetStream/stream-node/issues/297)) ([0f3f5ab](https://github.com/GetStream/stream-node/commit/0f3f5abedeb21d621f4c270a31f7f3ec3fd3307a))
+
 ## [0.7.57](https://github.com/GetStream/stream-node/compare/v0.7.56...v0.7.57) (2026-05-15)
 
 
