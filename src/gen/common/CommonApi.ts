@@ -133,6 +133,8 @@ export class CommonApi {
       async_url_enrich_enabled: request?.async_url_enrich_enabled,
       auto_translation_enabled: request?.auto_translation_enabled,
       before_message_send_hook_url: request?.before_message_send_hook_url,
+      before_message_send_hook_attempt_timeout_ms:
+        request?.before_message_send_hook_attempt_timeout_ms,
       cdn_expiration_seconds: request?.cdn_expiration_seconds,
       channel_hide_members_only: request?.channel_hide_members_only,
       custom_action_handler_url: request?.custom_action_handler_url,

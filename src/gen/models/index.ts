@@ -1734,6 +1734,8 @@ export interface AppResponseFields {
 
   before_message_send_hook_url?: string;
 
+  before_message_send_hook_attempt_timeout_ms?: number;
+
   moderation_s3_image_access_role_arn?: string;
 
   revoke_tokens_issued_before?: Date;
@@ -21707,6 +21709,8 @@ export interface UpdateAppRequest {
   auto_translation_enabled?: boolean;
 
   before_message_send_hook_url?: string;
+
+  before_message_send_hook_attempt_timeout_ms?: number;
 
   cdn_expiration_seconds?: number;
 
