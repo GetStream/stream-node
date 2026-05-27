@@ -70,6 +70,7 @@ import {
   GetOrCreateFollowResponse,
   GetOrCreateUnfollowRequest,
   GetOrCreateUnfollowResponse,
+  GetUserInterestsResponse,
   ListFeedGroupsResponse,
   ListFeedViewsResponse,
   ListFeedVisibilitiesResponse,
@@ -2905,6 +2906,31 @@ export class FeedsApi {
     >('POST', '/api/v2/feeds/users/{user_id}/export', pathParams, undefined);
 
     decoders.ExportFeedUserDataResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getUserInterests(request: {
+    user_id: string;
+    limit?: number;
+  }): Promise<StreamResponse<GetUserInterestsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+    };
+    const pathParams = {
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetUserInterestsResponse>
+    >(
+      'GET',
+      '/api/v2/feeds/users/{user_id}/interests',
+      pathParams,
+      queryParams,
+    );
+
+    decoders.GetUserInterestsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

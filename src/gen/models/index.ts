@@ -11364,6 +11364,15 @@ export interface GetUserGroupResponse {
   user_group?: UserGroupResponse;
 }
 
+export interface GetUserInterestsResponse {
+  duration: string;
+
+  /**
+   * Top-N interest tags sorted by descending count, then alphabetically by tag
+   */
+  interests: InterestTagResponse[];
+}
+
 export interface GoLiveRequest {
   recording_storage_name?: string;
 
@@ -11931,6 +11940,18 @@ export interface InsertActionLogRequest {
 
 export interface InsertActionLogResponse {
   duration: string;
+}
+
+export interface InterestTagResponse {
+  /**
+   * Number of distinct reacted-to activities tagged with this value
+   */
+  count: number;
+
+  /**
+   * The interest tag value
+   */
+  tag: string;
 }
 
 export interface JoinCallAPIMetrics {

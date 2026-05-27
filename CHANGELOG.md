@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.59](https://github.com/GetStream/stream-node/compare/v0.7.58...v0.7.59) (2026-05-22)
+
+
+### Features
+
+* new endpoint for retrieving user interests ([#305](https://github.com/GetStream/stream-node/issues/305)) ([6b31470](https://github.com/GetStream/stream-node/commit/6b31470dfea3a5c6d0527a059be672fc6c969c30))
+
 ## [0.7.58](https://github.com/GetStream/stream-node/compare/v0.7.57...v0.7.58) (2026-05-20)
 
 
