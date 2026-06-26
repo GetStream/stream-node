@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.60](https://github.com/GetStream/stream-node/compare/v0.7.59...v0.7.60) (2026-06-26)
+
+
+### Features
+
+* Add batch query activity and comment reactions endpoints ([#310](https://github.com/GetStream/stream-node/issues/310)) ([3185b46](https://github.com/GetStream/stream-node/commit/3185b46463b81d0962509037b3312ff3bafd58af))
+
 ## [0.7.59](https://github.com/GetStream/stream-node/compare/v0.7.58...v0.7.59) (2026-05-22)
 
 
