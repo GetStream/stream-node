@@ -20,6 +20,10 @@ import {
   AddCommentsBatchResponse,
   AddReactionRequest,
   AddReactionResponse,
+  BatchQueryActivityReactionsRequest,
+  BatchQueryActivityReactionsResponse,
+  BatchQueryCommentReactionsRequest,
+  BatchQueryCommentReactionsResponse,
   CastPollVoteRequest,
   CreateCollectionsRequest,
   CreateCollectionsResponse,
@@ -345,6 +349,36 @@ export class FeedsApi {
     );
 
     decoders.QueryActivitiesResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async batchQueryActivityReactions(
+    request: BatchQueryActivityReactionsRequest,
+  ): Promise<StreamResponse<BatchQueryActivityReactionsResponse>> {
+    const body = {
+      activity_ids: request?.activity_ids,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BatchQueryActivityReactionsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/activities/reactions/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.BatchQueryActivityReactionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1139,6 +1173,36 @@ export class FeedsApi {
     );
 
     decoders.QueryCommentsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async batchQueryCommentReactions(
+    request: BatchQueryCommentReactionsRequest,
+  ): Promise<StreamResponse<BatchQueryCommentReactionsResponse>> {
+    const body = {
+      comment_ids: request?.comment_ids,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<BatchQueryCommentReactionsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/comments/reactions/query',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.BatchQueryCommentReactionsResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
