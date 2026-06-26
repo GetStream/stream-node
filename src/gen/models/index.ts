@@ -2321,6 +2321,86 @@ export interface BanResponse {
   user?: UserResponse;
 }
 
+export interface BatchQueryActivityReactionsRequest {
+  /**
+   * Activity IDs to fetch the user's reactions for (max 100)
+   */
+  activity_ids: string[];
+
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  /**
+   * Server-side only. The user whose reactions to fetch; defaults to the authenticated user for client-side requests
+   */
+  user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  /**
+   * Optional filter on reaction_type or created_at
+   */
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface BatchQueryActivityReactionsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  reactions: FeedsReactionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface BatchQueryCommentReactionsRequest {
+  /**
+   * Comment IDs to fetch the user's reactions for (max 100)
+   */
+  comment_ids: string[];
+
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  /**
+   * Server-side only. The user whose reactions to fetch; defaults to the authenticated user for client-side requests
+   */
+  user_id?: string;
+
+  sort?: SortParamRequest[];
+
+  /**
+   * Optional filter on reaction_type or created_at
+   */
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface BatchQueryCommentReactionsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  reactions: FeedsReactionResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface BlockActionRequestPayload {
   /**
    * Reason for blocking
