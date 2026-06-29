@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.61](https://github.com/GetStream/stream-node/compare/v0.7.60...v0.7.61) (2026-06-29)
+
+
+### Bug Fixes
+
+* allow @stream-io/openai-realtime-api ~0.4.0 as peer dependency ([df76feb](https://github.com/GetStream/stream-node/commit/df76feb442bf30d18d8392fba81565c3c5d0a7df))
+
 ## [0.7.60](https://github.com/GetStream/stream-node/compare/v0.7.59...v0.7.60) (2026-06-26)
 
 
