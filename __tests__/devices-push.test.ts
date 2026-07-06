@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { CreateDeviceRequest, PushProvider } from '../src/gen/models';
@@ -11,7 +11,7 @@ describe('devices and push', () => {
     role: 'admin',
   };
   const device: CreateDeviceRequest = {
-    id: uuidv4(),
+    id: randomUUID(),
     push_provider: 'firebase',
     push_provider_name: 'firebase',
     user_id: user.id,

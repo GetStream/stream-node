@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
@@ -32,7 +32,7 @@ export class ApiClient {
     }
 
     url += `?${encodedParams}`;
-    const clientRequestId = uuidv4();
+    const clientRequestId = randomUUID();
     const headers: Record<string, string> = {
       Authorization: this.apiConfig.token,
       'stream-auth-type': 'jwt',

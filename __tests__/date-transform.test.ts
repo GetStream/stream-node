@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { UserRequest } from '../src/gen/models';
@@ -21,7 +21,7 @@ describe('Date conversion', () => {
   });
 
   it('call + members', async () => {
-    const id = uuidv4();
+    const id = randomUUID();
     const call = client.video.call('default', id);
     const startsAt = new Date();
     const response = await call.create({
@@ -62,7 +62,7 @@ describe('Date conversion', () => {
   });
 
   it('channel + members', async () => {
-    const id = uuidv4();
+    const id = randomUUID();
     const channel = client.chat.channel('messaging', id);
     const response = await channel.getOrCreate({
       data: {
@@ -104,8 +104,8 @@ describe('Date conversion', () => {
 
   it('users', async () => {
     const newUser: UserRequest = {
-      id: uuidv4(),
-      name: 'streamnodetest' + uuidv4(),
+      id: randomUUID(),
+      name: 'streamnodetest' + randomUUID(),
       custom: {
         created_at: new Date(),
       },

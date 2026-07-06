@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { vi, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client.js';
 import { StreamClient } from '../src/StreamClient.js';
@@ -8,7 +8,7 @@ const enableDebugLogging = false;
 
 async function createTestStreamAndRealtimeClients() {
   const streamClient = createTestClient();
-  const call = streamClient.video.call('default', `call${uuidv4()}`);
+  const call = streamClient.video.call('default', `call${randomUUID()}`);
 
   const realtimeClient = await streamClient.video.connectOpenAi({
     call,
@@ -37,7 +37,7 @@ describe.skip('AI agent integration', () => {
 
   it('should throw on invalid OpenAI credentials', async () => {
     const streamClient = createTestClient();
-    const call = streamClient.video.call('default', `call${uuidv4()}`);
+    const call = streamClient.video.call('default', `call${randomUUID()}`);
 
     await expect(
       streamClient.video.connectOpenAi({
@@ -51,7 +51,7 @@ describe.skip('AI agent integration', () => {
 
   it('should throw on invalid Stream credentials', async () => {
     const streamClient = new StreamClient('', 'secret');
-    const call = streamClient.video.call('default', `call${uuidv4()}`);
+    const call = streamClient.video.call('default', `call${randomUUID()}`);
 
     await expect(
       streamClient.video.connectOpenAi({

@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 
 describe('user-video compatibility API', () => {
   let client: StreamClient;
   const user = {
-    id: uuidv4(),
+    id: randomUUID(),
     role: 'admin',
     name: 'Test User for user API compatibily',
     custom: {
@@ -20,7 +20,7 @@ describe('user-video compatibility API', () => {
   });
 
   it('create call', async () => {
-    const call = client.video.call('default', uuidv4());
+    const call = client.video.call('default', randomUUID());
     const response = await call.create({ data: { created_by: user } });
 
     // Backend returns: {custom: { custom: { note: 'compatibilty test' } }}
