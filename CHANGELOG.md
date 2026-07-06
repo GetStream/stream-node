@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.62](https://github.com/GetStream/stream-node/compare/v0.7.61...v0.7.62) (2026-07-06)
+
+
+### Bug Fixes
+
+* remove uuid as a dependency ([#318](https://github.com/GetStream/stream-node/issues/318)) ([eecbd6b](https://github.com/GetStream/stream-node/commit/eecbd6b18823ee6e160369d4d5a3b4624f6182e1))
+
 ## [0.7.61](https://github.com/GetStream/stream-node/compare/v0.7.60...v0.7.61) (2026-06-29)
 
 
