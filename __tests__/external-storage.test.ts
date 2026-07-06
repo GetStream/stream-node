@@ -1,14 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 
 describe('external storage CRUD API', () => {
   let client: StreamClient;
-  const storageName = `streamnodetest${uuidv4()}`;
-  const s3name = `streamnodetest-${uuidv4()}`;
-  const gcsName = `streamnodetest-${uuidv4()}`;
-  const azureName = `streamnodetest-${uuidv4()}`;
+  const storageName = `streamnodetest${randomUUID()}`;
+  const s3name = `streamnodetest-${randomUUID()}`;
+  const gcsName = `streamnodetest-${randomUUID()}`;
+  const azureName = `streamnodetest-${randomUUID()}`;
 
   beforeAll(() => {
     client = createTestClient();

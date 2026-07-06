@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { StreamCall } from '../src/StreamCall';
@@ -8,7 +8,7 @@ import { UserRequest } from '../src/gen/models';
 // Skipping to avoid issues when tests run in parallel
 describe.skip('teams', () => {
   let client: StreamClient;
-  const userId = 'streamnodetest' + uuidv4();
+  const userId = 'streamnodetest' + randomUUID();
   const newUser: UserRequest = {
     id: userId,
     role: 'user',
@@ -23,7 +23,7 @@ describe.skip('teams', () => {
     id: 'stream-node-test-user',
     role: 'admin',
   };
-  const callId = `call${uuidv4()}`;
+  const callId = `call${randomUUID()}`;
   let call: StreamCall;
 
   beforeAll(async () => {

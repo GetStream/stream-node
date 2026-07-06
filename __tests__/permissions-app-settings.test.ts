@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { CreateRoleRequest, OwnCapability } from '../src/gen/models';
@@ -10,7 +10,7 @@ describe('permissions and app settings API', () => {
 
   beforeAll(() => {
     role = {
-      name: 'streamnodetest' + uuidv4(),
+      name: 'streamnodetest' + randomUUID(),
     };
     client = createTestClient();
   });

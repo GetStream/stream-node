@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { CreateBlockListRequest } from '../src/gen/models';
@@ -11,7 +11,7 @@ describe('block lists CRUD API', () => {
   beforeAll(() => {
     client = createTestClient();
     blockList = {
-      name: 'streamnodetest-F1' + uuidv4(),
+      name: 'streamnodetest-F1' + randomUUID(),
       words: ['Ricciardo should retire'],
     };
   });

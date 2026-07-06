@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { StreamChannel } from '../src/StreamChannel';
 
 describe('channel API', () => {
   let client: StreamClient;
-  const channelId = 'streamnodetest' + uuidv4();
+  const channelId = 'streamnodetest' + randomUUID();
   let channel: StreamChannel;
   const user = {
     id: 'stream-node-test-user',

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
@@ -7,7 +7,7 @@ import { OwnCapability } from '../src/gen/models';
 
 describe('call members API', () => {
   let client: StreamClient;
-  const callId = `call${uuidv4()}`;
+  const callId = `call${randomUUID()}`;
   let call: StreamCall;
 
   beforeAll(async () => {

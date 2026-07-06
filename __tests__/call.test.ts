@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamCall } from '../src/StreamCall';
 import { StreamClient } from '../src/StreamClient';
 
 describe('call API', () => {
   let client: StreamClient;
-  const callId = `call${uuidv4()}`;
+  const callId = `call${randomUUID()}`;
   let call: StreamCall;
 
   beforeAll(async () => {
@@ -207,7 +207,7 @@ describe('call API', () => {
   });
 
   it('generate SRT credentials', async () => {
-    const call = client.video.call('default', `call${uuidv4()}`);
+    const call = client.video.call('default', `call${randomUUID()}`);
     await call.getOrCreate({
       data: {
         created_by_id: 'john',

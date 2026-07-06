@@ -1,11 +1,11 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 
 describe('channel types CRUD API', () => {
   let client: StreamClient;
-  const channelType = 'streamnodetest' + uuidv4();
+  const channelType = 'streamnodetest' + randomUUID();
 
   beforeAll(() => {
     client = createTestClient();

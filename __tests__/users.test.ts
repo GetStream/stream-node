@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { UserRequest } from '../src/gen/models';
 
 describe('user API', () => {
   let client: StreamClient;
-  const userId = 'streamnodetest' + uuidv4();
+  const userId = 'streamnodetest' + randomUUID();
   const newUser: UserRequest = {
     id: userId,
     role: 'user',
@@ -77,7 +77,7 @@ describe('user API', () => {
 
   it('create guest', async () => {
     const guest: UserRequest = {
-      id: uuidv4(),
+      id: randomUUID(),
       name: 'Guest 3',
       image: ': )',
       custom: {
