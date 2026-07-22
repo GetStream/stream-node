@@ -2,6 +2,8 @@ import { StreamResponse, FeedsApi } from '../../gen-imports';
 import {
   AcceptFeedMemberInviteRequest,
   AcceptFeedMemberInviteResponse,
+  ChangeFeedVisibilityRequest,
+  ChangeFeedVisibilityResponse,
   DeleteFeedResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
@@ -41,7 +43,10 @@ export class FeedApi {
   }
 
   getOrCreate(
-    request?: GetOrCreateFeedRequest,
+    request?: GetOrCreateFeedRequest & {
+      language?: string;
+      translate_text?: boolean;
+    },
   ): Promise<StreamResponse<GetOrCreateFeedResponse>> {
     return this.feedsApi.getOrCreateFeed({
       feed_id: this.id,
@@ -92,6 +97,16 @@ export class FeedApi {
     });
   }
 
+  changeFeedVisibility(
+    request: ChangeFeedVisibilityRequest,
+  ): Promise<StreamResponse<ChangeFeedVisibilityResponse>> {
+    return this.feedsApi.changeFeedVisibility({
+      feed_id: this.id,
+      feed_group_id: this.group,
+      ...request,
+    });
+  }
+
   updateFeedMembers(
     request: UpdateFeedMembersRequest,
   ): Promise<StreamResponse<UpdateFeedMembersResponse>> {
@@ -133,7 +148,10 @@ export class FeedApi {
   }
 
   queryPinnedActivities(
-    request?: QueryPinnedActivitiesRequest,
+    request?: QueryPinnedActivitiesRequest & {
+      language?: string;
+      translate_text?: boolean;
+    },
   ): Promise<StreamResponse<QueryPinnedActivitiesResponse>> {
     return this.feedsApi.queryPinnedActivities({
       feed_id: this.id,

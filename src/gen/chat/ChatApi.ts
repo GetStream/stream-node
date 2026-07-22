@@ -1,5 +1,6 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
+  AddSegmentTargetsRequest,
   CampaignResponse,
   CastPollVoteRequest,
   ChannelBatchUpdateRequest,
@@ -7,11 +8,16 @@ import {
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
   CommitMessageRequest,
+  CreateCampaignRequest,
+  CreateCampaignResponse,
   CreateChannelTypeRequest,
   CreateChannelTypeResponse,
   CreateCommandRequest,
   CreateCommandResponse,
   CreateReminderRequest,
+  CreateSegmentRequest,
+  CreateSegmentResponse,
+  DeleteCampaignResponse,
   DeleteChannelResponse,
   DeleteChannelsRequest,
   DeleteChannelsResponse,
@@ -38,6 +44,8 @@ import {
   GetRetentionPolicyRunsResponse,
   GetSegmentResponse,
   GetThreadResponse,
+  GroupedQueryChannelsRequest,
+  GroupedQueryChannelsResponse,
   HideChannelRequest,
   HideChannelResponse,
   ListChannelTypesResponse,
@@ -108,6 +116,7 @@ import {
   UnmuteResponse,
   UnreadCountsBatchRequest,
   UnreadCountsBatchResponse,
+  UpdateCampaignRequest,
   UpdateChannelPartialRequest,
   UpdateChannelPartialResponse,
   UpdateChannelRequest,
@@ -124,6 +133,8 @@ import {
   UpdateMessageResponse,
   UpdateReminderRequest,
   UpdateReminderResponse,
+  UpdateSegmentRequest,
+  UpdateSegmentResponse,
   UpdateThreadPartialRequest,
   UpdateThreadPartialResponse,
   UploadChannelFileRequest,
@@ -136,6 +147,42 @@ import { decoders } from '../model-decoders/decoders';
 
 export class ChatApi {
   constructor(public readonly apiClient: ApiClient) {}
+
+  async createCampaign(
+    request: CreateCampaignRequest,
+  ): Promise<StreamResponse<CreateCampaignResponse>> {
+    const body = {
+      sender_id: request?.sender_id,
+      message_template: request?.message_template,
+      create_channels: request?.create_channels,
+      description: request?.description,
+      id: request?.id,
+      name: request?.name,
+      sender_mode: request?.sender_mode,
+      sender_visibility: request?.sender_visibility,
+      show_channels: request?.show_channels,
+      skip_push: request?.skip_push,
+      skip_webhook: request?.skip_webhook,
+      segment_ids: request?.segment_ids,
+      user_ids: request?.user_ids,
+      channel_template: request?.channel_template,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateCampaignResponse>
+    >(
+      'POST',
+      '/api/v2/chat/campaigns',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateCampaignResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
 
   async queryCampaigns(
     request?: QueryCampaignsRequest,
@@ -165,6 +212,22 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async deleteCampaign(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteCampaignResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteCampaignResponse>
+    >('DELETE', '/api/v2/chat/campaigns/{id}', pathParams, undefined);
+
+    decoders.DeleteCampaignResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async getCampaign(request: {
     id: string;
     prev?: string;
@@ -185,6 +248,45 @@ export class ChatApi {
     >('GET', '/api/v2/chat/campaigns/{id}', pathParams, queryParams);
 
     decoders.GetCampaignResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateCampaign(
+    request: UpdateCampaignRequest & { id: string },
+  ): Promise<StreamResponse<CampaignResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      sender_id: request?.sender_id,
+      message_template: request?.message_template,
+      create_channels: request?.create_channels,
+      description: request?.description,
+      id: request?.id,
+      name: request?.name,
+      sender_mode: request?.sender_mode,
+      sender_visibility: request?.sender_visibility,
+      show_channels: request?.show_channels,
+      skip_push: request?.skip_push,
+      skip_webhook: request?.skip_webhook,
+      segment_ids: request?.segment_ids,
+      user_ids: request?.user_ids,
+      channel_template: request?.channel_template,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CampaignResponse>
+    >(
+      'PUT',
+      '/api/v2/chat/campaigns/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CampaignResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -350,6 +452,32 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async groupedQueryChannels(
+    request?: GroupedQueryChannelsRequest,
+  ): Promise<StreamResponse<GroupedQueryChannelsResponse>> {
+    const body = {
+      limit: request?.limit,
+      user_id: request?.user_id,
+      groups: request?.groups,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GroupedQueryChannelsResponse>
+    >(
+      'POST',
+      '/api/v2/chat/channels/grouped',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.GroupedQueryChannelsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async markChannelsRead(
     request?: MarkChannelsReadRequest,
   ): Promise<StreamResponse<MarkReadResponse>> {
@@ -425,6 +553,34 @@ export class ChatApi {
     >('DELETE', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
 
     decoders.DeleteChannelResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getChannel(request: {
+    type: string;
+    id: string;
+    state?: boolean;
+    messages_limit?: number;
+    members_limit?: number;
+    watchers_limit?: number;
+  }): Promise<StreamResponse<ChannelStateResponse>> {
+    const queryParams = {
+      state: request?.state,
+      messages_limit: request?.messages_limit,
+      members_limit: request?.members_limit,
+      watchers_limit: request?.watchers_limit,
+    };
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ChannelStateResponse>
+    >('GET', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
+
+    decoders.ChannelStateResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2082,6 +2238,35 @@ export class ChatApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async createSegment(
+    request: CreateSegmentRequest,
+  ): Promise<StreamResponse<CreateSegmentResponse>> {
+    const body = {
+      type: request?.type,
+      all_sender_channels: request?.all_sender_channels,
+      all_users: request?.all_users,
+      description: request?.description,
+      id: request?.id,
+      name: request?.name,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreateSegmentResponse>
+    >(
+      'POST',
+      '/api/v2/chat/segments',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.CreateSegmentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async querySegments(
     request: QuerySegmentsRequest,
   ): Promise<StreamResponse<QuerySegmentsResponse>> {
@@ -2140,6 +2325,58 @@ export class ChatApi {
     >('GET', '/api/v2/chat/segments/{id}', pathParams, undefined);
 
     decoders.GetSegmentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updateSegment(
+    request: UpdateSegmentRequest & { id: string },
+  ): Promise<StreamResponse<UpdateSegmentResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      description: request?.description,
+      name: request?.name,
+      filter: request?.filter,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdateSegmentResponse>
+    >(
+      'PUT',
+      '/api/v2/chat/segments/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.UpdateSegmentResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async addSegmentTargets(
+    request: AddSegmentTargetsRequest & { id: string },
+  ): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      target_ids: request?.target_ids,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'POST',
+      '/api/v2/chat/segments/{id}/addtargets',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.Response?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

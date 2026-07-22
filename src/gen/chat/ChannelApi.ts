@@ -54,6 +54,25 @@ export class ChannelApi {
     });
   }
 
+  get(request?: {
+    state?: boolean;
+    messages_limit?: number;
+    members_limit?: number;
+    watchers_limit?: number;
+  }): Promise<StreamResponse<ChannelStateResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.getChannel({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
   updateChannelPartial(
     request?: UpdateChannelPartialRequest,
   ): Promise<StreamResponse<UpdateChannelPartialResponse>> {

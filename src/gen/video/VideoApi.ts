@@ -55,6 +55,8 @@ import {
   QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
+  ReportClientEventRequest,
+  ReportClientEventResponse,
   ResolveSipAuthRequest,
   ResolveSipAuthResponse,
   ResolveSipInboundRequest,
@@ -1348,6 +1350,29 @@ export class VideoApi {
     );
 
     decoders.DeleteTranscriptionResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async reportClientCallEvent(
+    request: ReportClientEventRequest,
+  ): Promise<StreamResponse<ReportClientEventResponse>> {
+    const body = {
+      events: request?.events,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ReportClientEventResponse>
+    >(
+      'POST',
+      '/api/v2/video/call_client_event',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ReportClientEventResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
