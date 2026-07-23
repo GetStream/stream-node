@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.63](https://github.com/GetStream/stream-node/compare/v0.7.62...v0.7.63) (2026-07-23)
+
+
+### Features
+
+* update to open api version 233.9.1 ([#324](https://github.com/GetStream/stream-node/issues/324)) ([56cbcdd](https://github.com/GetStream/stream-node/commit/56cbcdd13b293ace14b6145508c1250df1021935)), closes [#323](https://github.com/GetStream/stream-node/issues/323)
+
 ## [0.7.62](https://github.com/GetStream/stream-node/compare/v0.7.61...v0.7.62) (2026-07-06)
 
 
