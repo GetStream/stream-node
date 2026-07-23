@@ -4,6 +4,7 @@ import {
   AddUserGroupMembersResponse,
   BlockUsersRequest,
   BlockUsersResponse,
+  CancelImportV2TaskResponse,
   CheckExternalStorageResponse,
   CheckPushRequest,
   CheckPushResponse,
@@ -47,7 +48,6 @@ import {
   GetBlockListResponse,
   GetBlockedUsersResponse,
   GetCustomPermissionResponse,
-  GetExternalStorageResponse,
   GetImportResponse,
   GetImportV2TaskResponse,
   GetOGResponse,
@@ -57,6 +57,8 @@ import {
   GetUserGroupResponse,
   ImageUploadRequest,
   ImageUploadResponse,
+  ImportBlockListRequest,
+  ImportBlockListResponse,
   ListBlockListResponse,
   ListDevicesResponse,
   ListExternalStorageResponse,
@@ -82,6 +84,7 @@ import {
   RemoveUserGroupMembersResponse,
   Response,
   RestoreUsersRequest,
+  SearchRolesResponse,
   SearchUserGroupsResponse,
   SharedLocationResponse,
   SharedLocationsResponse,
@@ -101,15 +104,12 @@ import {
   UpdateUsersPartialRequest,
   UpdateUsersRequest,
   UpdateUsersResponse,
-  UpsertExternalStorageRequest,
-  UpsertExternalStorageResponse,
   UpsertPushPreferencesRequest,
   UpsertPushPreferencesResponse,
   UpsertPushProviderRequest,
   UpsertPushProviderResponse,
   UpsertPushTemplateRequest,
   UpsertPushTemplateResponse,
-  ValidateExternalStorageResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -132,15 +132,18 @@ export class CommonApi {
     const body = {
       async_url_enrich_enabled: request?.async_url_enrich_enabled,
       auto_translation_enabled: request?.auto_translation_enabled,
-      before_message_send_hook_url: request?.before_message_send_hook_url,
       before_message_send_hook_attempt_timeout_ms:
         request?.before_message_send_hook_attempt_timeout_ms,
+      before_message_send_hook_url: request?.before_message_send_hook_url,
       cdn_expiration_seconds: request?.cdn_expiration_seconds,
       channel_hide_members_only: request?.channel_hide_members_only,
+      chat_primary_use_case: request?.chat_primary_use_case,
       custom_action_handler_url: request?.custom_action_handler_url,
       disable_auth_checks: request?.disable_auth_checks,
       disable_permissions_checks: request?.disable_permissions_checks,
+      enable_hook_payload_compression: request?.enable_hook_payload_compression,
       enforce_unique_usernames: request?.enforce_unique_usernames,
+      feed_audit_logs_enabled: request?.feed_audit_logs_enabled,
       feeds_moderation_enabled: request?.feeds_moderation_enabled,
       feeds_v2_region: request?.feeds_v2_region,
       guest_user_creation_disabled: request?.guest_user_creation_disabled,
@@ -150,6 +153,7 @@ export class CommonApi {
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
       moderation_analytics_enabled: request?.moderation_analytics_enabled,
       moderation_enabled: request?.moderation_enabled,
+      moderation_onboarding_complete: request?.moderation_onboarding_complete,
       moderation_s3_image_access_role_arn:
         request?.moderation_s3_image_access_role_arn,
       moderation_webhook_url: request?.moderation_webhook_url,
@@ -157,6 +161,7 @@ export class CommonApi {
       permission_version: request?.permission_version,
       reminders_interval: request?.reminders_interval,
       reminders_max_members: request?.reminders_max_members,
+      reminders_max_per_user: request?.reminders_max_per_user,
       revoke_tokens_issued_before: request?.revoke_tokens_issued_before,
       sns_key: request?.sns_key,
       sns_secret: request?.sns_secret,
@@ -165,6 +170,7 @@ export class CommonApi {
       sqs_secret: request?.sqs_secret,
       sqs_url: request?.sqs_url,
       user_response_time_enabled: request?.user_response_time_enabled,
+      video_primary_use_case: request?.video_primary_use_case,
       webhook_url: request?.webhook_url,
       allowed_flag_reasons: request?.allowed_flag_reasons,
       event_hooks: request?.event_hooks,
@@ -203,9 +209,13 @@ export class CommonApi {
 
   async listBlockLists(request?: {
     team?: string;
+    cursor?: string;
+    limit?: number;
   }): Promise<StreamResponse<ListBlockListResponse>> {
     const queryParams = {
       team: request?.team,
+      cursor: request?.cursor,
+      limit: request?.limit,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -223,8 +233,10 @@ export class CommonApi {
     const body = {
       name: request?.name,
       words: request?.words,
+      is_confusable_folding_enabled: request?.is_confusable_folding_enabled,
       is_leet_check_enabled: request?.is_leet_check_enabled,
       is_plural_check_enabled: request?.is_plural_check_enabled,
+      is_substring_matching_enabled: request?.is_substring_matching_enabled,
       team: request?.team,
       type: request?.type,
     };
@@ -241,6 +253,33 @@ export class CommonApi {
     );
 
     decoders.CreateBlockListResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async importBlockList(
+    request: ImportBlockListRequest & { id: string },
+  ): Promise<StreamResponse<ImportBlockListResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      items: request?.items,
+      chunk_size: request?.chunk_size,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<ImportBlockListResponse>
+    >(
+      'POST',
+      '/api/v2/blocklists/{id}/import',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.ImportBlockListResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -295,8 +334,10 @@ export class CommonApi {
       name: request?.name,
     };
     const body = {
+      is_confusable_folding_enabled: request?.is_confusable_folding_enabled,
       is_leet_check_enabled: request?.is_leet_check_enabled,
       is_plural_check_enabled: request?.is_plural_check_enabled,
+      is_substring_matching_enabled: request?.is_substring_matching_enabled,
       team: request?.team,
       words: request?.words,
     };
@@ -442,6 +483,7 @@ export class CommonApi {
     const body = {
       id: request?.id,
       push_provider: request?.push_provider,
+      hardware_id: request?.hardware_id,
       push_provider_name: request?.push_provider_name,
       user_id: request?.user_id,
       voip_token: request?.voip_token,
@@ -705,71 +747,6 @@ export class CommonApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async deleteImporterExternalStorage(): Promise<
-    StreamResponse<DeleteExternalStorageResponse>
-  > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteExternalStorageResponse>
-    >('DELETE', '/api/v2/imports/v2/external-storage', undefined, undefined);
-
-    decoders.DeleteExternalStorageResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async getImporterExternalStorage(): Promise<
-    StreamResponse<GetExternalStorageResponse>
-  > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetExternalStorageResponse>
-    >('GET', '/api/v2/imports/v2/external-storage', undefined, undefined);
-
-    decoders.GetExternalStorageResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async upsertImporterExternalStorage(
-    request: UpsertExternalStorageRequest,
-  ): Promise<StreamResponse<UpsertExternalStorageResponse>> {
-    const body = {
-      type: request?.type,
-      aws_s3: request?.aws_s3,
-    };
-
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertExternalStorageResponse>
-    >(
-      'PUT',
-      '/api/v2/imports/v2/external-storage',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
-
-    decoders.UpsertExternalStorageResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
-  async validateImporterExternalStorage(): Promise<
-    StreamResponse<ValidateExternalStorageResponse>
-  > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ValidateExternalStorageResponse>
-    >(
-      'POST',
-      '/api/v2/imports/v2/external-storage/validate',
-      undefined,
-      undefined,
-    );
-
-    decoders.ValidateExternalStorageResponse?.(response.body);
-
-    return { ...response.body, metadata: response.metadata };
-  }
-
   async deleteImportV2Task(request: {
     id: string;
   }): Promise<StreamResponse<DeleteImportV2TaskResponse>> {
@@ -798,6 +775,22 @@ export class CommonApi {
     >('GET', '/api/v2/imports/v2/{id}', pathParams, undefined);
 
     decoders.GetImportV2TaskResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async cancelImportV2Task(request: {
+    id: string;
+  }): Promise<StreamResponse<CancelImportV2TaskResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CancelImportV2TaskResponse>
+    >('POST', '/api/v2/imports/v2/{id}/cancel', pathParams, undefined);
+
+    decoders.CancelImportV2TaskResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1332,6 +1325,30 @@ export class CommonApi {
     >('POST', '/api/v2/roles', undefined, undefined, body, 'application/json');
 
     decoders.CreateRoleResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async searchRoles(request: {
+    query: string;
+    limit?: number;
+    name_gt?: string;
+    role_type?: string;
+    include_global_roles?: boolean;
+  }): Promise<StreamResponse<SearchRolesResponse>> {
+    const queryParams = {
+      query: request?.query,
+      limit: request?.limit,
+      name_gt: request?.name_gt,
+      role_type: request?.role_type,
+      include_global_roles: request?.include_global_roles,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SearchRolesResponse>
+    >('GET', '/api/v2/roles/search', undefined, queryParams);
+
+    decoders.SearchRolesResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

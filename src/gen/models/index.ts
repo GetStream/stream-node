@@ -1,3 +1,17 @@
+export interface AIAudioConfigRequest {
+  profile?: string;
+
+  rules?: BodyguardRule[];
+}
+
+export interface AIAudioConfigResponse {
+  enabled: boolean;
+
+  profile: string;
+
+  rules: BodyguardRule[];
+}
+
 export interface AIImageConfig {
   async?: boolean;
 
@@ -230,6 +244,11 @@ export interface ActionLogResponse {
    * Reason for the moderation action
    */
   reason: string;
+
+  /**
+   * Classification of who triggered the action (e.g. user, moderator, automod, api_integration)
+   */
+  reporter_type: string;
 
   /**
    * ID of the user who was the target of the action
@@ -972,7 +991,14 @@ export interface ActivityResponse {
    */
   friend_reactions?: FeedsReactionResponse[];
 
+  /**
+   * Recent shares of the activity, one entry per share (org-gated)
+   */
+  latest_shares?: ShareResponse[];
+
   current_feed?: FeedResponse;
+
+  i18n?: Record<string, string>;
 
   location?: Location;
 
@@ -1176,6 +1202,8 @@ export interface AddActivityRequest {
    */
   create_notification_activity?: boolean;
 
+  create_users?: boolean;
+
   enrich_own_fields?: boolean;
 
   /**
@@ -1361,6 +1389,11 @@ export interface AddCommentReactionRequest {
   user_id?: string;
 
   /**
+   * Optional list of feeds to create a reference (share) activity of the commented-on activity in. The reference activity's type mirrors the reaction type.
+   */
+  target_feeds?: string[];
+
+  /**
    * Optional custom data to add to the reaction
    */
   custom?: Record<string, any>;
@@ -1379,9 +1412,22 @@ export interface AddCommentReactionResponse {
   reaction: FeedsReactionResponse;
 
   /**
-   * Whether a notification activity was successfully created
+   * Whether notification creation was accepted for asynchronous processing
+   */
+  notification_accepted?: boolean;
+
+  /**
+   * @deprecated
+   * Deprecated. Mirrors notification_accepted; use notification_accepted for async enqueue status Deprecated: use notification_accepted
    */
   notification_created?: boolean;
+
+  /**
+   * ID of the async notification-creation task; poll GET /tasks/{id} for its status
+   */
+  notification_task_id?: string;
+
+  reference_activity?: ActivityResponse;
 }
 
 export interface AddCommentRequest {
@@ -1515,6 +1561,11 @@ export interface AddReactionRequest {
   create_notification_activity?: boolean;
 
   /**
+   * Server-side only. If true, auto-creates the reacting user identified by user_id when they don't already exist. Default: false.
+   */
+  create_users?: boolean;
+
+  /**
    * Whether to enforce unique reactions per user (remove other reaction types from the user when adding this one)
    */
   enforce_unique?: boolean;
@@ -1522,6 +1573,11 @@ export interface AddReactionRequest {
   skip_push?: boolean;
 
   user_id?: string;
+
+  /**
+   * Optional list of feeds to create a reference (share) activity of the original activity in. The reference activity's type mirrors the reaction type.
+   */
+  target_feeds?: string[];
 
   /**
    * Custom data for the reaction
@@ -1539,9 +1595,29 @@ export interface AddReactionResponse {
   reaction: FeedsReactionResponse;
 
   /**
-   * Whether a notification activity was successfully created
+   * Whether notification creation was accepted for asynchronous processing
+   */
+  notification_accepted?: boolean;
+
+  /**
+   * @deprecated
+   * Deprecated. Mirrors notification_accepted; use notification_accepted for async enqueue status Deprecated: use notification_accepted
    */
   notification_created?: boolean;
+
+  /**
+   * ID of the async notification-creation task; poll GET /tasks/{id} for its status
+   */
+  notification_task_id?: string;
+
+  reference_activity?: ActivityResponse;
+}
+
+export interface AddSegmentTargetsRequest {
+  /**
+   * Target IDs
+   */
+  target_ids: string[];
 }
 
 export interface AddUserGroupMembersRequest {
@@ -1637,6 +1713,140 @@ export interface AggregationConfig {
   score_strategy?: 'sum' | 'max' | 'avg';
 }
 
+export interface AnalyzeImageField {
+  /**
+   * Per-image action: keep | flag | remove.
+   */
+  action?: string;
+
+  /**
+   * Highest confidence (0–1) across detected classifications + sub-classifications. Convenience aggregate over the nested values in `classifications`.
+   */
+  confidence?: number;
+
+  /**
+   * Set when moderation couldn't be determined for this image — action is absent.
+   */
+  error?: string;
+
+  /**
+   * Echo of `content_ids[label]` when supplied on the request; omitted otherwise.
+   */
+  id?: string;
+
+  /**
+   * Hierarchical list of L1 (parent) classifications. Each entry: `name`, `confidence` (0–1), and nested `subclassifications` (L2 leaves with their own confidence). Resolved against the app's effective taxonomy (custom taxonomy when configured, otherwise the standard Bodyguard catalogue).
+   */
+  classifications?: Classification[];
+
+  /**
+   * Flat list of Bodyguard OCR text-moderation labels on the image's extracted text (e.g. VULGARITY, PII). Each entry: `name` + `severity`. Populated when BG's OCR pipeline returned non-empty results for this image.
+   */
+  ocr_classifications?: Classification[];
+}
+
+export interface AnalyzeRequest {
+  /**
+   * When true, the response carries no verdicts (status `pending`) and per-modality results arrive via `moderation.text_analysis.complete` and `moderation.image_analysis.complete` webhooks. Image moderation runs on a background worker; text moderation runs synchronously and is then delivered via webhook.
+   */
+  async_response?: boolean;
+
+  /**
+   * Moderation policy key. Optional in stateful mode, required in stateless mode.
+   */
+  config_key?: string;
+
+  /**
+   * Original timestamp when the content was produced. Used as the `published_at` timestamp on per-content log entries that surface in `matched_contents` on aggregation-rule webhooks.
+   */
+  content_published_at?: Date;
+
+  /**
+   * ID of the user who created the content. Required with entity_type + entity_id; omit all three for stateless mode.
+   */
+  entity_creator_id?: string;
+
+  /**
+   * Caller-supplied content identifier. Required with entity_type + entity_creator_id; omit all three for stateless mode.
+   */
+  entity_id?: string;
+
+  /**
+   * Caller-defined entity type. Required with entity_id + entity_creator_id; omit all three for stateless mode.
+   */
+  entity_type?: string;
+
+  user_id?: string;
+
+  /**
+   * Optional map from a content label (either a `texts` key or an `image:<key>` multipart label) to a caller-supplied per-instance identifier. Echoed on per-field verdicts and surfaced in `matched_contents` when an aggregation rule fires.
+   */
+  content_ids?: Record<string, string>;
+
+  /**
+   * Arbitrary metadata surfaced in the dashboard.
+   */
+  custom?: Record<string, any>;
+
+  /**
+   * Named text fields to moderate, keyed by caller label (e.g. title, description).
+   */
+  texts?: Record<string, string>;
+
+  user?: UserRequest;
+}
+
+export interface AnalyzeResponse {
+  duration: string;
+
+  /**
+   * Always `complete` — /analyze is sync-only and the full verdict is in the response.
+   */
+  status: string;
+
+  /**
+   * Per-image moderation verdicts keyed by caller label.
+   */
+  images?: Record<string, AnalyzeImageField>;
+
+  /**
+   * Per-text-field moderation verdicts keyed by caller label.
+   */
+  texts?: Record<string, AnalyzeTextField>;
+}
+
+export interface AnalyzeTextField {
+  /**
+   * Per-field action: keep | flag | remove.
+   */
+  action?: string;
+
+  /**
+   * Set when moderation couldn't be determined for this field — action is absent.
+   */
+  error?: string;
+
+  /**
+   * Echo of `content_ids[label]` when supplied on the request; omitted otherwise.
+   */
+  id?: string;
+
+  /**
+   * Detected language code.
+   */
+  language?: string;
+
+  /**
+   * Aggregate severity across the field: LOW | MEDIUM | HIGH | CRITICAL.
+   */
+  severity?: string;
+
+  /**
+   * Flat list of detected Bodyguard text labels (e.g. INSULT, VULGARITY). Each entry carries `name` and `severity`.
+   */
+  classifications?: Classification[];
+}
+
 export interface AppResponseFields {
   allow_multi_user_devices: boolean;
 
@@ -1669,6 +1879,8 @@ export interface AppResponseFields {
   moderation_audio_call_moderation_enabled: boolean;
 
   moderation_enabled: boolean;
+
+  moderation_flood_rules_enabled: boolean;
 
   moderation_llm_configurability_enabled: boolean;
 
@@ -1732,13 +1944,19 @@ export interface AppResponseFields {
 
   push_notifications: PushNotificationFields;
 
+  before_message_send_hook_attempt_timeout_ms?: number;
+
   before_message_send_hook_url?: string;
 
-  before_message_send_hook_attempt_timeout_ms?: number;
+  chat_primary_use_case?: string;
+
+  moderation_onboarding_complete?: boolean;
 
   moderation_s3_image_access_role_arn?: string;
 
   revoke_tokens_issued_before?: Date;
+
+  video_primary_use_case?: string;
 
   allowed_flag_reasons?: string[];
 
@@ -1811,16 +2029,70 @@ export interface AppealItemResponse {
   updated_at: Date;
 
   /**
+   * Text severity level assigned by the AI provider
+   */
+  ai_text_severity?: string;
+
+  /**
+   * CID of the channel the entity belongs to, if applicable
+   */
+  channel_cid?: string;
+
+  /**
+   * Moderation policy key that was applied
+   */
+  config_key?: string;
+
+  /**
    * Decision Reason of the Appeal Item
    */
   decision_reason?: string;
+
+  /**
+   * Action recommended by the automated moderation system (e.g. flag, remove, shadow)
+   */
+  recommended_action?: string;
+
+  /**
+   * ID of the review queue item linked to this appeal, if the appeal was submitted with one
+   */
+  review_queue_item_id?: string;
+
+  /**
+   * Overall content severity score (1–100)
+   */
+  severity?: number;
+
+  /**
+   * Full chronological history of all moderation actions on the review queue item
+   */
+  actions?: ActionLogResponse[];
 
   /**
    * Attachments(e.g. Images) of the Appeal Item
    */
   attachments?: string[];
 
+  /**
+   * Classification labels from automated and manual review
+   */
+  flag_labels?: string[];
+
+  /**
+   * Types of flags applied to the entity (e.g. user_report, bodyguard)
+   */
+  flag_types?: string[];
+
+  /**
+   * Per-provider flag records explaining why the action was taken
+   */
+  flags?: ModerationFlagResponse[];
+
   entity_content?: ModerationPayload;
+
+  moderation_action?: ActionLogResponse;
+
+  original_moderation_action?: ActionLogResponse;
 
   user?: UserResponse;
 }
@@ -1852,6 +2124,11 @@ export interface AppealRequest {
    * Type of entity being appealed (e.g., message, user)
    */
   entity_type: string;
+
+  /**
+   * ID of the review queue item (flagged message) that triggered the ban. Applicable only for user ban appeals.
+   */
+  review_queue_item_id?: string;
 
   user_id?: string;
 
@@ -1927,6 +2204,24 @@ export interface AsyncExportErrorEvent {
 }
 
 export interface AsyncExportModerationLogsEvent {
+  created_at: Date;
+
+  finished_at: Date;
+
+  started_at: Date;
+
+  task_id: string;
+
+  url: string;
+
+  custom: Record<string, any>;
+
+  type: string;
+
+  received_at?: Date;
+}
+
+export interface AsyncExportReviewQueueEvent {
   created_at: Date;
 
   finished_at: Date;
@@ -2233,6 +2528,11 @@ export interface BanInfoResponse {
   created_at: Date;
 
   /**
+   * The channel this ban applies to. Empty if this is an app-wide (global) ban rather than a per-channel ban.
+   */
+  channel_cid?: string;
+
+  /**
    * When the ban expires
    */
   expires?: Date;
@@ -2246,6 +2546,8 @@ export interface BanInfoResponse {
    * Whether this is a shadow ban
    */
   shadow?: boolean;
+
+  channel?: ChannelMetadata;
 
   created_by?: UserResponse;
 
@@ -2432,9 +2734,13 @@ export interface BlockListOptions {
 }
 
 export interface BlockListResponse {
+  is_confusable_folding_enabled: boolean;
+
   is_leet_check_enabled: boolean;
 
   is_plural_check_enabled: boolean;
+
+  is_substring_matching_enabled: boolean;
 
   /**
    * Block list name
@@ -2458,6 +2764,8 @@ export interface BlockListResponse {
 
   id?: string;
 
+  owner_user_id?: string;
+
   team?: string;
 
   /**
@@ -2469,6 +2777,7 @@ export interface BlockListResponse {
 export interface BlockListRule {
   action:
     | 'flag'
+    | 'mask'
     | 'mask_flag'
     | 'shadow'
     | 'remove'
@@ -2565,11 +2874,22 @@ export interface BodyguardImageAnalysisConfig {
   rules?: BodyguardRule[];
 }
 
+export interface BodyguardProfileSummary {
+  name: string;
+
+  display_name?: string;
+
+  text_type?: string;
+}
+
 export interface BodyguardRule {
   label: string;
 
   action?:
+    | 'keep'
     | 'flag'
+    | 'mask'
+    | 'mask_flag'
     | 'shadow'
     | 'remove'
     | 'bounce'
@@ -2581,7 +2901,9 @@ export interface BodyguardRule {
 
 export interface BodyguardSeverityRule {
   action:
+    | 'keep'
     | 'flag'
+    | 'mask'
     | 'shadow'
     | 'remove'
     | 'bounce'
@@ -2793,6 +3115,84 @@ export interface BrowserDataResponse {
   version?: string;
 }
 
+export interface BulkActionAppealsRequest {
+  /**
+   * Action to apply: unban, restore, unblock, mark_reviewed, or reject_appeal
+   */
+
+  action_type:
+    | 'unban'
+    | 'restore'
+    | 'unblock'
+    | 'mark_reviewed'
+    | 'reject_appeal';
+
+  /**
+   * List of appeal UUIDs to process
+   */
+  appeal_ids: string[];
+
+  user_id?: string;
+
+  mark_reviewed?: MarkReviewedRequestPayload;
+
+  reject_appeal?: RejectAppealRequestPayload;
+
+  restore?: RestoreActionRequestPayload;
+
+  unban?: UnbanActionRequestPayload;
+
+  unblock?: UnblockActionRequestPayload;
+
+  user?: UserRequest;
+}
+
+export interface BulkActionAppealsResponse {
+  duration: string;
+
+  /**
+   * Appeals that could not be processed, with per-item error messages
+   */
+  errors: BulkAppealError[];
+
+  /**
+   * Successfully processed appeals
+   */
+  results: BulkAppealResult[];
+}
+
+export interface BulkAppealError {
+  appeal_id: string;
+
+  error: string;
+}
+
+export interface BulkAppealResult {
+  appeal_id: string;
+
+  appeal_item?: AppealItemResponse;
+}
+
+export interface BulkDeleteActionConfigRequest {
+  /**
+   * UUIDs of the action configs to delete
+   */
+  ids: string[];
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface BulkDeleteActionConfigResponse {
+  /**
+   * Number of action configs deleted
+   */
+  deleted: number;
+
+  duration: string;
+}
+
 export interface BulkImageModerationRequest {
   /**
    * URL to CSV file containing image URLs to moderate
@@ -2807,6 +3207,26 @@ export interface BulkImageModerationResponse {
    * ID of the task for processing the bulk image moderation
    */
   task_id: string;
+}
+
+export interface BulkUpsertActionConfigRequest {
+  /**
+   * List of action configs to create or update
+   */
+  action_configs: UpsertActionConfigItem[];
+
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
+export interface BulkUpsertActionConfigResponse {
+  duration: string;
+
+  /**
+   * The created or updated action configs in the same order as the request
+   */
+  action_configs: ModerationActionConfigResponse[];
 }
 
 export interface BypassActionRequest {
@@ -3873,6 +4293,8 @@ export interface CallSettingsRequest {
 
   broadcasting?: BroadcastSettingsRequest;
 
+  encryption?: EncryptionSettingsRequest;
+
   frame_recording?: FrameRecordingSettingsRequest;
 
   geofencing?: GeofenceSettingsRequest;
@@ -3906,6 +4328,8 @@ export interface CallSettingsResponse {
   backstage: BackstageSettingsResponse;
 
   broadcasting: BroadcastSettingsResponse;
+
+  encryption: EncryptionSettingsResponse;
 
   frame_recording: FrameRecordingSettingsResponse;
 
@@ -4044,11 +4468,15 @@ export interface CallStatsParticipantCounts {
 
   average_latency_ms?: number;
 
+  avg_user_rating?: number;
+
   call_event_count?: number;
 
   cq_score?: number;
 
   max_freezes_duration_ms?: number;
+
+  min_user_rating?: number;
 
   total_participant_duration?: number;
 }
@@ -4075,6 +4503,8 @@ export interface CallStatsParticipantSession {
   ended_at?: Date;
 
   freezes_duration_ms?: number;
+
+  ingress?: string;
 
   jitter_ms?: number;
 
@@ -4380,8 +4810,6 @@ export interface CampaignChannelMember {
 export interface CampaignChannelTemplate {
   type: string;
 
-  custom: Record<string, any>;
-
   id?: string;
 
   team?: string;
@@ -4389,6 +4817,8 @@ export interface CampaignChannelTemplate {
   members?: string[];
 
   members_template?: CampaignChannelMember[];
+
+  custom?: Record<string, any>;
 }
 
 export interface CampaignCompletedEvent {
@@ -4404,15 +4834,15 @@ export interface CampaignCompletedEvent {
 }
 
 export interface CampaignMessageTemplate {
-  poll_id: string;
-
-  searchable: boolean;
-
   text: string;
 
-  attachments: Attachment[];
+  poll_id?: string;
 
-  custom: Record<string, any>;
+  searchable?: boolean;
+
+  attachments?: Attachment[];
+
+  custom?: Record<string, any>;
 }
 
 export interface CampaignResponse {
@@ -4491,12 +4921,41 @@ export interface CampaignStatsResponse {
   stats_users_sent: number;
 }
 
+export interface CancelImportV2TaskRequest {}
+
+export interface CancelImportV2TaskResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+}
+
 export interface CastPollVoteRequest {
   user_id?: string;
 
   user?: UserRequest;
 
   vote?: VoteData;
+}
+
+export interface ChangeFeedVisibilityRequest {
+  /**
+   * Feed visibility level: public, visible, followers, members, or private
+   */
+
+  visibility: 'public' | 'visible' | 'followers' | 'members' | 'private';
+
+  /**
+   * What to do with existing pending follows when loosening visibility from 'followers': auto_approve (default) or reject
+   */
+
+  pending_follows_action?: 'auto_approve' | 'reject';
+}
+
+export interface ChangeFeedVisibilityResponse {
+  duration: string;
+
+  feed: FeedResponse;
 }
 
 export interface ChannelBatchCompletedEvent {
@@ -4661,6 +5120,77 @@ export interface ChannelConfig {
   chat_preferences?: ChatPreferences;
 }
 
+export interface ChannelConfigOverrides {
+  blocklist?: string;
+
+  blocklist_behavior?: 'flag' | 'block';
+
+  /**
+   * Enable/disable message counting
+   */
+  count_messages?: boolean;
+
+  /**
+   * Overrides max message length
+   */
+  max_message_length?: number;
+
+  /**
+   * Overrides the push notification level for this channel
+   */
+
+  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
+  /**
+   * Enables message quotes
+   */
+  quotes?: boolean;
+
+  /**
+   * Enables or disables reactions
+   */
+  reactions?: boolean;
+
+  /**
+   * Enables message replies (threads)
+   */
+  replies?: boolean;
+
+  /**
+   * Enable/disable shared locations
+   */
+  shared_locations?: boolean;
+
+  /**
+   * Enables or disables typing events
+   */
+  typing_events?: boolean;
+
+  /**
+   * Enables or disables file uploads
+   */
+  uploads?: boolean;
+
+  /**
+   * Enables or disables URL enrichment
+   */
+  url_enrichment?: boolean;
+
+  /**
+   * Enable/disable user message reminders
+   */
+  user_message_reminders?: boolean;
+
+  /**
+   * List of commands that channel supports
+   */
+  commands?: string[];
+
+  chat_preferences?: ChatPreferences;
+
+  grants?: Record<string, string[]>;
+}
+
 export interface ChannelConfigWithInfo {
   automod: 'disabled' | 'simple' | 'AI';
 
@@ -4797,7 +5327,7 @@ export interface ChannelDataUpdate {
 
   team?: string;
 
-  config_overrides?: ChannelConfig;
+  config_overrides?: ChannelConfigOverrides;
 
   custom?: Record<string, any>;
 }
@@ -5015,7 +5545,7 @@ export interface ChannelInput {
 
   members?: ChannelMemberRequest[];
 
-  config_overrides?: ChannelConfig;
+  config_overrides?: ChannelConfigOverrides;
 
   created_by?: UserRequest;
 
@@ -5042,6 +5572,18 @@ export interface ChannelInputRequest {
   created_by?: UserRequest;
 
   custom?: Record<string, any>;
+}
+
+export interface ChannelMemberPartialResponse {
+  /**
+   * Role of the member in the channel
+   */
+  channel_role: string;
+
+  /**
+   * Whether the user muted notifications for this channel
+   */
+  notifications_muted: boolean;
 }
 
 export interface ChannelMemberRequest {
@@ -5132,6 +5674,12 @@ export interface ChannelMemberResponse {
   user?: UserResponse;
 }
 
+export interface ChannelMessageCountRuleParameters {
+  operator?: string;
+
+  threshold?: number;
+}
+
 export interface ChannelMessagesResponse {
   /**
    * List of messages
@@ -5139,6 +5687,26 @@ export interface ChannelMessagesResponse {
   messages: MessageResponse[];
 
   channel: ChannelResponse;
+}
+
+export interface ChannelMetadata {
+  cid: string;
+
+  id: string;
+
+  type: string;
+
+  custom: Record<string, any>;
+
+  last_message_at?: Date;
+
+  member_count?: number;
+
+  message_count?: number;
+
+  push_level?: string;
+
+  team?: string;
 }
 
 export interface ChannelMute {
@@ -5192,6 +5760,7 @@ export const ChannelOwnCapability = {
   CAST_POLL_VOTE: 'cast-poll-vote',
   CONNECT_EVENTS: 'connect-events',
   CREATE_ATTACHMENT: 'create-attachment',
+  CREATE_MENTION: 'create-mention',
   DELETE_ANY_MESSAGE: 'delete-any-message',
   DELETE_CHANNEL: 'delete-channel',
   DELETE_OWN_MESSAGE: 'delete-own-message',
@@ -5201,6 +5770,10 @@ export const ChannelOwnCapability = {
   JOIN_CHANNEL: 'join-channel',
   LEAVE_CHANNEL: 'leave-channel',
   MUTE_CHANNEL: 'mute-channel',
+  NOTIFY_CHANNEL: 'notify-channel',
+  NOTIFY_GROUP: 'notify-group',
+  NOTIFY_HERE: 'notify-here',
+  NOTIFY_ROLE: 'notify-role',
   PIN_MESSAGE: 'pin-message',
   QUERY_POLL_VOTES: 'query-poll-votes',
   QUOTE_MESSAGE: 'quote-message',
@@ -5758,6 +6331,166 @@ export interface ChatActivityStatsResponse {
   messages?: MessageStatsResponse;
 }
 
+export interface ChatDraftPayloadResponse {
+  id: string;
+
+  text: string;
+
+  custom: Record<string, any>;
+
+  html?: string;
+
+  mml?: string;
+
+  parent_id?: string;
+
+  poll_id?: string;
+
+  quoted_message_id?: string;
+
+  show_in_channel?: boolean;
+
+  silent?: boolean;
+
+  type?: string;
+
+  attachments?: Attachment[];
+
+  mentioned_users?: UserResponse[];
+}
+
+export interface ChatDraftResponse {
+  channel_cid: string;
+
+  created_at: Date;
+
+  message: ChatDraftPayloadResponse;
+
+  parent_id?: string;
+
+  parent_message?: ChatMessageResponse;
+
+  quoted_message?: ChatMessageResponse;
+}
+
+export interface ChatMessageResponse {
+  cid: string;
+
+  created_at: Date;
+
+  deleted_reply_count: number;
+
+  html: string;
+
+  id: string;
+
+  mentioned_channel: boolean;
+
+  mentioned_here: boolean;
+
+  pinned: boolean;
+
+  reply_count: number;
+
+  shadowed: boolean;
+
+  silent: boolean;
+
+  text: string;
+
+  type: string;
+
+  updated_at: Date;
+
+  attachments: Attachment[];
+
+  latest_reactions: ChatReactionResponse[];
+
+  mentioned_users: UserResponse[];
+
+  own_reactions: ChatReactionResponse[];
+
+  restricted_visibility: string[];
+
+  custom: Record<string, any>;
+
+  reaction_counts: Record<string, number>;
+
+  reaction_scores: Record<string, number>;
+
+  user: UserResponse;
+
+  command?: string;
+
+  deleted_at?: Date;
+
+  deleted_for_me?: boolean;
+
+  message_text_updated_at?: Date;
+
+  mml?: string;
+
+  parent_id?: string;
+
+  pin_expires?: Date;
+
+  pinned_at?: Date;
+
+  poll_id?: string;
+
+  quoted_message_id?: string;
+
+  show_in_channel?: boolean;
+
+  mentioned_group_ids?: string[];
+
+  mentioned_groups?: UserGroupResponse[];
+
+  mentioned_roles?: string[];
+
+  thread_participants?: UserResponse[];
+
+  draft?: ChatDraftResponse;
+
+  i18n?: Record<string, string>;
+
+  image_labels?: Record<string, string[]>;
+
+  member?: ChannelMemberPartialResponse;
+
+  moderation?: ChatModerationV2Response;
+
+  pinned_by?: UserResponse;
+
+  poll?: PollResponseData;
+
+  quoted_message?: ChatMessageResponse;
+
+  reaction_groups?: Record<string, ChatReactionGroupResponse>;
+
+  reminder?: ChatReminderResponseData;
+
+  shared_location?: ChatSharedLocationResponseData;
+}
+
+export interface ChatModerationV2Response {
+  action: string;
+
+  original_text: string;
+
+  blocklist_matched?: string;
+
+  platform_circumvented?: boolean;
+
+  semantic_filter_matched?: string;
+
+  blocklists_matched?: string[];
+
+  image_harms?: string[];
+
+  text_harms?: string[];
+}
+
 export interface ChatPreferences {
   channel_mentions?: string;
 
@@ -5806,6 +6539,84 @@ export interface ChatPreferencesResponse {
   role_mentions?: string;
 
   thread_replies?: string;
+}
+
+export interface ChatReactionGroupResponse {
+  count: number;
+
+  first_reaction_at: Date;
+
+  last_reaction_at: Date;
+
+  sum_scores: number;
+
+  latest_reactions_by: ChatReactionGroupUserResponse[];
+}
+
+export interface ChatReactionGroupUserResponse {
+  created_at: Date;
+
+  user_id: string;
+
+  user?: UserResponse;
+}
+
+export interface ChatReactionResponse {
+  created_at: Date;
+
+  message_id: string;
+
+  score: number;
+
+  type: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+
+  user: UserResponse;
+}
+
+export interface ChatReminderResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  remind_at?: Date;
+
+  message?: ChatMessageResponse;
+
+  user?: UserResponse;
+}
+
+export interface ChatSharedLocationResponseData {
+  channel_cid: string;
+
+  created_at: Date;
+
+  created_by_device_id: string;
+
+  latitude: number;
+
+  longitude: number;
+
+  message_id: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  end_at?: Date;
+
+  message?: ChatMessageResponse;
 }
 
 export interface CheckExternalStorageResponse {
@@ -5967,6 +6778,11 @@ export interface CheckResponse {
    */
   task_id?: string;
 
+  /**
+   * All moderation rules triggered by this check (content, user, and call rules), with their resolved actions
+   */
+  triggered_rules?: TriggeredRuleResponse[];
+
   item?: ReviewQueueItemResponse;
 
   triggered_rule?: TriggeredRuleResponse;
@@ -6065,6 +6881,153 @@ export interface CheckSQSResponse {
   data?: Record<string, any>;
 }
 
+export interface Classification {
+  name: string;
+
+  confidence?: number;
+
+  severity?: string;
+
+  subclassifications?: Classification[];
+}
+
+export interface ClientEvent {
+  /**
+   * Call session ID associated with the attempt. Required on every event except CoordinatorJoin initiation and CoordinatorJoin failure (where the call session is not yet established); optional on MediaDevicePermission.
+   */
+  call_session_id?: string;
+
+  /**
+   * Camera permission status: INITIATED, FAILED, GRANTED, or NOT_INITIATED. Required on every MediaDevicePermission event.
+   */
+  camera_permission_status?: string;
+
+  /**
+   * UUID generated by the client and shared across every event of the same coordinator connection. Required on every event except JoinInitiated, which is reported before a coordinator connection exists.
+   */
+  coordinator_connect_id?: string;
+
+  /**
+   * Milliseconds elapsed between the stage attempt's initiation and this event.
+   */
+  elapsed_time?: number;
+
+  /**
+   * Whether the event marks the start (initiated) or resolution (completed) of a stage attempt, or another event-specific value
+   */
+  event_type?: string;
+
+  /**
+   * Terminal state of the peer connection. Required on PeerConnectionConnect failure.
+   */
+  ice_state?: string;
+
+  /**
+   * Call ID associated with the event. Required on every stage except CoordinatorWS, where it is optional.
+   */
+  id?: string;
+
+  /**
+   * UUID generated by the client and shared across JoinInitiated and the join-lifecycle events (CoordinatorJoin, WSJoin, PeerConnectionConnect) of the same overall join attempt. Required on every join event except CoordinatorWS, which is reported before a join attempt is established.
+   */
+  join_attempt_id?: string;
+
+  /**
+   * Reason the client initiated the join. Optional on CoordinatorJoin events; empty when not provided.
+   */
+  join_reason?: string;
+
+  /**
+   * Microphone permission status: INITIATED, FAILED, GRANTED, or NOT_INITIATED. Required on every MediaDevicePermission event.
+   */
+  microphone_permission_status?: string;
+
+  /**
+   * Resolution of a completed event: success or failure. Required on completed join events; forbidden on initiated join events.
+   */
+  outcome?: string;
+
+  /**
+   * Which peer connection a PeerConnectionConnect event reports on: publish or subscribe. Required on every PeerConnectionConnect event.
+   */
+  peer_connection?: string;
+
+  /**
+   * UTC timestamp at which the ICE connection was established earlier in the session, when applicable
+   */
+  previously_connected_timestamp?: Date;
+
+  /**
+   * Total in-stage retries the client made before resolving (0–1000). Required on completed join events.
+   */
+  retry_count_attempt?: number;
+
+  /**
+   * Failure code string. Required on CoordinatorJoin, CoordinatorWS, WSJoin, and PeerConnectionConnect failure.
+   */
+  retry_failure_code?: string;
+
+  /**
+   * Failure reason string. Required on CoordinatorJoin, CoordinatorWS, WSJoin, and PeerConnectionConnect failure.
+   */
+  retry_failure_reason?: string;
+
+  /**
+   * Screen-share permission status: INITIATED, FAILED, GRANTED, or NOT_INITIATED. Optional on MediaDevicePermission events.
+   */
+  screen_share_status?: string;
+
+  /**
+   * Version of the client SDK
+   */
+  sdk_version?: string;
+
+  /**
+   * Identifier of the SFU the client was attempting to connect to. Required on WSJoin and PeerConnectionConnect failure, and on FirstAudioFrame and FirstVideoFrame.
+   */
+  sfu_id?: string;
+
+  /**
+   * Discriminator identifying the event kind. JoinInitiated marks the start of a join attempt; join-lifecycle events use CoordinatorJoin, CoordinatorWS, WSJoin, or PeerConnectionConnect; media-readiness events use FirstAudioFrame or FirstVideoFrame; MediaDevicePermission reports device permission results; other values denote generic client events.
+   */
+  stage?: string;
+
+  /**
+   * UUID generated by the client at initiation. Identical on the matching completion event. Absent on JoinInitiated.
+   */
+  stage_id?: string;
+
+  /**
+   * UTC timestamp at which the event was recorded
+   */
+  timestamp?: Date;
+
+  /**
+   * Identifier of the media track the frame belongs to. Required on FirstVideoFrame; optional on FirstAudioFrame.
+   */
+  track_id?: string;
+
+  /**
+   * Call type associated with the event. Required on every stage except CoordinatorWS, where it is optional.
+   */
+  type?: string;
+
+  /**
+   * User agent string of the client SDK
+   */
+  user_agent?: string;
+
+  /**
+   * ID of the user the event was recorded for
+   */
+  user_id?: string;
+
+  /**
+   * Whether the ICE connection had been established earlier in the same session. Required on every PeerConnectionConnect event so reconnects can be distinguished from fresh connects.
+   */
+  was_previously_connected?: boolean;
+}
+
 export interface ClientOSDataResponse {
   architecture?: string;
 
@@ -6087,7 +7050,11 @@ export interface ClosedCaptionEvent {
 }
 
 export interface ClosedCaptionRuleParameters {
+  severity?: string;
+
   threshold?: number;
+
+  time_window?: string;
 
   harm_labels?: string[];
 
@@ -6447,6 +7414,8 @@ export interface CommentResponse {
    */
   custom?: Record<string, any>;
 
+  i18n?: Record<string, string>;
+
   moderation?: ModerationV2Response;
 
   /**
@@ -6619,6 +7588,13 @@ export interface ConfigResponse {
    */
   ai_image_label_definitions?: AIImageLabelDefinition[];
 
+  /**
+   * Names of Bodyguard credential profiles registered on this app. The dashboard uses this list to render the profile picker on the AI Text section.
+   */
+  available_bodyguard_profiles?: BodyguardProfileSummary[];
+
+  ai_audio_config?: AIAudioConfigResponse;
+
   ai_image_config?: AIImageConfig;
 
   /**
@@ -6638,6 +7614,8 @@ export interface ConfigResponse {
 
   block_list_config?: BlockListConfig;
 
+  flood_config?: FloodConfig;
+
   llm_config?: LLMConfig;
 
   velocity_filter_config?: VelocityFilterConfig;
@@ -6649,6 +7627,22 @@ export interface ContentCountRuleParameters {
   threshold?: number;
 
   time_window?: string;
+}
+
+export interface ContentCustomPropertyCountParameters {
+  operator?: string;
+
+  property_key?: string;
+
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface ContentCustomPropertyParameters {
+  operator?: string;
+
+  property_key?: string;
 }
 
 export interface CoordinatesResponse {
@@ -6680,9 +7674,13 @@ export interface CreateBlockListRequest {
    */
   words: string[];
 
+  is_confusable_folding_enabled?: boolean;
+
   is_leet_check_enabled?: boolean;
 
   is_plural_check_enabled?: boolean;
+
+  is_substring_matching_enabled?: boolean;
 
   team?: string;
 
@@ -6757,6 +7755,82 @@ export interface CreateCallTypeResponse {
    * the external storage for the call type
    */
   external_storage?: string;
+}
+
+export interface CreateCampaignRequest {
+  /**
+   * The user ID of the sender
+   */
+  sender_id: string;
+
+  message_template: CampaignMessageTemplate;
+
+  /**
+   * Whether to create channels for the campaign, if they don't exist
+   */
+  create_channels?: boolean;
+
+  /**
+   * The description of the campaign
+   */
+  description?: string;
+
+  id?: string;
+
+  /**
+   * The name of the campaign
+   */
+  name?: string;
+
+  /**
+   * The sender mode of the campaign
+   */
+
+  sender_mode?: 'exclude' | 'include';
+
+  /**
+   * The visibility of the created channels for the sender
+   */
+
+  sender_visibility?: 'hidden' | 'archived';
+
+  /**
+   * Whether the campaign should show channels, if they are hidden
+   */
+  show_channels?: boolean;
+
+  /**
+   * Whether to skip push notifications
+   */
+  skip_push?: boolean;
+
+  /**
+   * Whether to skip webhooks
+   */
+  skip_webhook?: boolean;
+
+  /**
+   * The IDs of the segments to send the campaign to. Duplicate user IDs are removed. Use either user_ids or segment_ids, not both
+   */
+  segment_ids?: string[];
+
+  /**
+   * The userIDs to send the campaign to. Use either segment ids or user ids not both
+   */
+  user_ids?: string[];
+
+  channel_template?: CampaignChannelTemplate;
+}
+
+export interface CreateCampaignResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  campaign?: CampaignResponse;
+
+  users?: PagerResponse;
 }
 
 export interface CreateChannelTypeRequest {
@@ -7057,6 +8131,11 @@ export interface CreateDeviceRequest {
    */
 
   push_provider: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
+
+  /**
+   * Stable physical device identifier used to deduplicate pushes across push providers (e.g. APNs VoIP and Firebase on the same iOS device). Distinct from 'id', which is the push token.
+   */
+  hardware_id?: string;
 
   /**
    * Push provider name
@@ -7384,6 +8463,22 @@ export interface CreatePollRequest {
   user?: UserRequest;
 }
 
+export interface CreateQueueRequest {
+  name: string;
+
+  type: 'personal_view' | 'operational_queue';
+
+  description?: string;
+
+  user_id?: string;
+
+  sort?: Array<Record<string, any>>;
+
+  filters?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
 export interface CreateReminderRequest {
   remind_at?: Date;
 
@@ -7434,6 +8529,53 @@ export interface CreateSIPTrunkResponse {
   duration: string;
 
   sip_trunk?: SIPTrunkResponse;
+}
+
+export interface CreateSegmentRequest {
+  /**
+   * The type of the segment
+   */
+
+  type: 'user' | 'channel';
+
+  /**
+   * If true, all sender channels are included in the segment
+   */
+  all_sender_channels?: boolean;
+
+  /**
+   * If true, all users are included in the segment
+   */
+  all_users?: boolean;
+
+  /**
+   * The description of the segment (max 256 characters)
+   */
+  description?: string;
+
+  /**
+   * The ID of the segment
+   */
+  id?: string;
+
+  /**
+   * The name of the segment (max 128 characters)
+   */
+  name?: string;
+
+  /**
+   * Filter to apply to the query
+   */
+  filter?: Record<string, any>;
+}
+
+export interface CreateSegmentResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  segment?: SegmentResponse;
 }
 
 export interface CreateUserGroupRequest {
@@ -7740,6 +8882,15 @@ export interface DecayFunctionConfig {
   scale?: string;
 }
 
+export interface DeleteActionConfigResponse {
+  /**
+   * Number of action configs deleted (0 or 1)
+   */
+  deleted: number;
+
+  duration: string;
+}
+
 export interface DeleteActivitiesRequest {
   /**
    * List of activity IDs to delete
@@ -7827,6 +8978,13 @@ export interface DeleteCallResponse {
   call: CallResponse;
 
   task_id?: string;
+}
+
+export interface DeleteCampaignResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
 }
 
 export interface DeleteChannelResponse {
@@ -8049,6 +9207,12 @@ export interface DeleteModerationTemplateResponse {
   duration: string;
 }
 
+export interface DeleteQueueRequest {
+  user_id?: string;
+
+  user?: UserRequest;
+}
+
 export interface DeleteReactionRequestPayload {
   /**
    * ID of the reaction to delete (alternative to item_id)
@@ -8242,7 +9406,7 @@ export interface DeliveredMessagePayload {
 }
 
 export interface DeliveryReceiptsResponse {
-  enabled?: boolean;
+  enabled: boolean;
 }
 
 export interface DeviceDataResponse {
@@ -8289,6 +9453,11 @@ export interface DeviceResponse {
    * Reason explaining why device had been disabled
    */
   disabled_reason?: string;
+
+  /**
+   * Stable physical device identifier used to deduplicate pushes across push providers
+   */
+  hardware_id?: string;
 
   /**
    * Push provider name
@@ -8449,6 +9618,20 @@ export interface EgressResponse {
   raw_recording?: RawRecordingResponse;
 }
 
+export interface EncryptionSettingsRequest {
+  /**
+   * if true, the call is created end-to-end encrypted
+   */
+  enabled?: boolean;
+}
+
+export interface EncryptionSettingsResponse {
+  /**
+   * whether the call is end-to-end encrypted
+   */
+  enabled: boolean;
+}
+
 export interface EndCallRequest {}
 
 export interface EndCallResponse {
@@ -8482,22 +9665,6 @@ export interface EnrichedActivity {
   reaction_counts?: Record<string, number>;
 
   target?: Data;
-}
-
-export interface EnrichedCollection {
-  created_at: Date;
-
-  id: string;
-
-  name: string;
-
-  status: string;
-
-  updated_at: Date;
-
-  user_id: string;
-
-  custom: Record<string, any>;
 }
 
 export interface EnrichedCollectionResponse {
@@ -8736,6 +9903,8 @@ export interface EntityCreatorResponse {
 }
 
 export interface ErrorResult {
+  description: string;
+
   type: string;
 
   stacktrace?: string;
@@ -8816,6 +9985,8 @@ export interface EventHook {
   event_types?: string[];
 
   callback?: AsyncModerationCallbackConfig;
+
+  failover_config?: WebhookFailoverConfig;
 }
 
 export interface EventNotificationSettings {
@@ -9715,6 +10886,82 @@ export interface FeedVisibilityResponse {
   grants: Record<string, string[]>;
 }
 
+export interface FeedsActivityLocation {
+  lat: number;
+
+  lng: number;
+}
+
+export interface FeedsBookmarkResponse {
+  created_at: Date;
+
+  object_id: string;
+
+  object_type: string;
+
+  updated_at: Date;
+
+  user: UserResponse;
+
+  activity_id?: string;
+
+  custom?: Record<string, any>;
+}
+
+export interface FeedsEnrichedCollectionResponse {
+  created_at: Date;
+
+  id: string;
+
+  name: string;
+
+  status: string;
+
+  updated_at: Date;
+
+  user_id: string;
+
+  custom: Record<string, any>;
+}
+
+export interface FeedsFeedResponse {
+  activity_count: number;
+
+  created_at: Date;
+
+  description: string;
+
+  feed: string;
+
+  follower_count: number;
+
+  following_count: number;
+
+  group_id: string;
+
+  id: string;
+
+  member_count: number;
+
+  name: string;
+
+  pin_count: number;
+
+  updated_at: Date;
+
+  created_by: UserResponse;
+
+  deleted_at?: Date;
+
+  visibility?: string;
+
+  filter_tags?: string[];
+
+  custom?: Record<string, any>;
+
+  location?: FeedsActivityLocation;
+}
+
 export interface FeedsModerationTemplateConfigPayload {
   /**
    * Map of data type names to their content types
@@ -9725,6 +10972,64 @@ export interface FeedsModerationTemplateConfigPayload {
    * Key of the moderation configuration to use
    */
   config_key?: string;
+}
+
+export interface FeedsNotificationComment {
+  comment: string;
+
+  id: string;
+
+  user_id: string;
+
+  attachments?: Attachment[];
+}
+
+export interface FeedsNotificationContext {
+  target?: FeedsNotificationTarget;
+
+  trigger?: FeedsNotificationTrigger;
+}
+
+export interface FeedsNotificationParentActivity {
+  id: string;
+
+  text?: string;
+
+  type?: string;
+
+  user_id?: string;
+
+  attachments?: Attachment[];
+}
+
+export interface FeedsNotificationTarget {
+  id: string;
+
+  name?: string;
+
+  text?: string;
+
+  type?: string;
+
+  user_id?: string;
+
+  attachments?: Attachment[];
+
+  comment?: FeedsNotificationComment;
+
+  custom?: Record<string, any>;
+
+  parent_activity?: FeedsNotificationParentActivity;
+}
+
+export interface FeedsNotificationTrigger {
+  text: string;
+
+  type: string;
+
+  comment?: FeedsNotificationComment;
+
+  custom?: Record<string, any>;
 }
 
 export interface FeedsPreferences {
@@ -9794,63 +11099,36 @@ export interface FeedsPreferencesResponse {
   custom_activity_types?: Record<string, string>;
 }
 
-export interface FeedsReactionGroup {
-  count: number;
-
-  first_reaction_at: Date;
-
-  last_reaction_at: Date;
-}
-
 export interface FeedsReactionGroupResponse {
-  /**
-   * Number of reactions in this group
-   */
   count: number;
 
-  /**
-   * Time of the first reaction
-   */
   first_reaction_at: Date;
 
-  /**
-   * Time of the most recent reaction
-   */
   last_reaction_at: Date;
 }
 
 export interface FeedsReactionResponse {
-  /**
-   * ID of the activity that was reacted to
-   */
   activity_id: string;
 
-  /**
-   * When the reaction was created
-   */
   created_at: Date;
 
-  /**
-   * Type of reaction
-   */
   type: string;
 
-  /**
-   * When the reaction was last updated
-   */
   updated_at: Date;
 
   user: UserResponse;
 
-  /**
-   * ID of the comment that was reacted to
-   */
   comment_id?: string;
 
-  /**
-   * Custom data for the reaction
-   */
   custom?: Record<string, any>;
+}
+
+export interface FeedsShareResponse {
+  activity_id: string;
+
+  created_at: Date;
+
+  user: UserResponse;
 }
 
 export interface FeedsV3ActivityResponse {
@@ -9892,19 +11170,19 @@ export interface FeedsV3ActivityResponse {
 
   interest_tags: string[];
 
-  latest_reactions: any[];
+  latest_reactions: FeedsReactionResponse[];
 
   mentioned_users: UserResponse[];
 
-  own_bookmarks: any[];
+  own_bookmarks: FeedsBookmarkResponse[];
 
-  own_reactions: any[];
+  own_reactions: FeedsReactionResponse[];
 
-  collections: Record<string, EnrichedCollection>;
+  collections: Record<string, FeedsEnrichedCollectionResponse>;
 
   custom: Record<string, any>;
 
-  reaction_groups: Record<string, FeedsReactionGroup>;
+  reaction_groups: Record<string, FeedsReactionGroupResponse>;
 
   search_data: Record<string, any>;
 
@@ -9916,18 +11194,48 @@ export interface FeedsV3ActivityResponse {
 
   expires_at?: Date;
 
+  friend_reaction_count?: number;
+
+  is_read?: boolean;
+
+  is_seen?: boolean;
+
+  is_watched?: boolean;
+
   moderation_action?: string;
+
+  selector_source?: string;
 
   text?: string;
 
   visibility_tag?: string;
 
+  friend_reactions?: FeedsReactionResponse[];
+
+  latest_shares?: FeedsShareResponse[];
+
+  current_feed?: FeedsFeedResponse;
+
+  i18n?: Record<string, string>;
+
+  location?: FeedsActivityLocation;
+
   metrics?: Record<string, number>;
 
   moderation?: ModerationV2Response;
+
+  notification_context?: FeedsNotificationContext;
+
+  parent?: FeedsV3ActivityResponse;
+
+  poll?: PollResponseData;
+
+  score_vars?: Record<string, any>;
 }
 
 export interface FeedsV3CommentResponse {
+  bookmark_count: number;
+
   confidence_score: number;
 
   created_at: Date;
@@ -9954,7 +11262,7 @@ export interface FeedsV3CommentResponse {
 
   mentioned_users: UserResponse[];
 
-  own_reactions: any[];
+  own_reactions: FeedsReactionResponse[];
 
   user: UserResponse;
 
@@ -9970,9 +11278,15 @@ export interface FeedsV3CommentResponse {
 
   attachments?: Attachment[];
 
+  latest_reactions?: FeedsReactionResponse[];
+
   custom?: Record<string, any>;
 
+  i18n?: Record<string, string>;
+
   moderation?: ModerationV2Response;
+
+  reaction_groups?: Record<string, FeedsReactionGroupResponse>;
 }
 
 export interface Field {
@@ -10022,11 +11336,30 @@ export interface FileUploadResponse {
 }
 
 export interface FilterConfigResponse {
+  /**
+   * LLM moderation labels available as filter values
+   */
   llm_labels: string[];
 
+  /**
+   * AI image moderation labels available as filter values. Reflects the app's effective image taxonomy: custom Bodyguard taxonomy when enabled, otherwise the standard L1 label set.
+   */
+  ai_image_labels?: string[];
+
+  /**
+   * AI text moderation labels available as filter values
+   */
   ai_text_labels?: string[];
 
+  /**
+   * Moderation config keys present in the queue, available as filter values
+   */
   config_keys?: string[];
+
+  /**
+   * The moderation_payload.custom keys the app has configured as review-queue filter chips (via moderation_dashboard_preferences.filterable_custom_keys). Discovery hint for the dashboard only — the filter accepts any custom key regardless of this list.
+   */
+  filterable_custom_keys?: string[];
 }
 
 export interface FirebaseConfig {
@@ -10061,6 +11394,12 @@ export interface FlagCountRuleParameters {
   threshold?: number;
 }
 
+export interface FlagDetails {
+  original_text: string;
+
+  automod?: AutomodDetailsResponse;
+}
+
 export interface FlagDetailsResponse {
   original_text: string;
 
@@ -10075,6 +11414,15 @@ export interface FlagFeedbackResponse {
   message_id: string;
 
   labels: LabelResponse[];
+}
+
+export interface FlagItemResponse {
+  duration: string;
+
+  /**
+   * Unique identifier of the created moderation item
+   */
+  item_id: string;
 }
 
 export interface FlagMessageDetailsResponse {
@@ -10121,12 +11469,33 @@ export interface FlagRequest {
 }
 
 export interface FlagResponse {
-  duration: string;
+  created_at: Date;
 
-  /**
-   * Unique identifier of the created moderation item
-   */
-  item_id: string;
+  created_by_automod: boolean;
+
+  updated_at: Date;
+
+  approved_at?: Date;
+
+  reason?: string;
+
+  rejected_at?: Date;
+
+  reviewed_at?: Date;
+
+  reviewed_by?: string;
+
+  target_message_id?: string;
+
+  custom?: Record<string, any>;
+
+  details?: FlagDetails;
+
+  target_message?: MessageResponse;
+
+  target_user?: UserResponse;
+
+  user?: UserResponse;
 }
 
 export interface FlagUpdatedEvent {
@@ -10147,6 +11516,48 @@ export interface FlagUpdatedEvent {
 
 export interface FlagUserOptions {
   reason?: string;
+}
+
+export interface FloodConfig {
+  identical?: FloodIdenticalConfig;
+
+  similar?: FloodSimilarConfig;
+}
+
+export interface FloodIdenticalConfig {
+  action?: string;
+
+  enabled?: boolean;
+
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface FloodIdenticalRuleParameters {
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface FloodSimilarConfig {
+  action?: string;
+
+  enabled?: boolean;
+
+  similarity_distance?: number;
+
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface FloodSimilarRuleParameters {
+  similarity_distance?: number;
+
+  threshold?: number;
+
+  time_window?: string;
 }
 
 export interface FollowBatchRequest {
@@ -10252,7 +11663,7 @@ export interface FollowRequest {
   create_notification_activity?: boolean;
 
   /**
-   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. Use directly on single follow endpoints (Follow, GetOrCreateFollow). On batch endpoints (FollowBatch, GetOrCreateFollows), use the top-level create_users field; per-item follows[i].create_users is rejected.
    */
   create_users?: boolean;
 
@@ -10498,6 +11909,15 @@ export interface GeofenceSettingsRequest {
 
 export interface GeofenceSettingsResponse {
   names: string[];
+}
+
+export interface GetActionConfigResponse {
+  duration: string;
+
+  /**
+   * Moderation action configs grouped by entity type, sorted by order ascending
+   */
+  action_config: Record<string, ModerationActionConfigResponse[]>;
 }
 
 export interface GetActiveCallsStatusResponse {
@@ -10835,31 +12255,6 @@ export interface GetEdgesResponse {
   edges: EdgeResponse[];
 }
 
-export interface GetExternalStorageAWSS3Response {
-  bucket: string;
-
-  region: string;
-
-  role_arn: string;
-
-  path_prefix?: string;
-}
-
-export interface GetExternalStorageResponse {
-  created_at: Date;
-
-  /**
-   * Duration of the request in milliseconds
-   */
-  duration: string;
-
-  type: string;
-
-  updated_at: Date;
-
-  aws_s3?: GetExternalStorageAWSS3Response;
-}
-
 export interface GetFeedGroupResponse {
   duration: string;
 
@@ -11161,6 +12556,8 @@ export interface GetOrCreateFeedRequest {
 
   next?: string;
 
+  overwrite_interest_weights?: boolean;
+
   prev?: string;
 
   user_id?: string;
@@ -11407,6 +12804,12 @@ export interface GetSegmentResponse {
   segment?: SegmentResponse;
 }
 
+export interface GetSetupSessionResponse {
+  duration: string;
+
+  setup_session?: SetupSession;
+}
+
 export interface GetTaskResponse {
   created_at: Date;
 
@@ -11484,6 +12887,64 @@ export interface GoLiveResponse {
 
 export interface GoogleVisionConfig {
   enabled?: boolean;
+}
+
+export interface GroupedChannelsBucket {
+  /**
+   * Channels returned for this bucket
+   */
+  channels: ChannelStateResponseFields[];
+
+  /**
+   * Cursor for the next page of this group
+   */
+  next?: string;
+
+  /**
+   * Cursor for the previous page of this group
+   */
+  prev?: string;
+
+  /**
+   * Unread channels currently classified into this bucket
+   */
+  unread_channels?: number;
+}
+
+export interface GroupedChannelsGroupRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface GroupedQueryChannelsRequest {
+  /**
+   * Default max channels per group (default 10)
+   */
+  limit?: number;
+
+  user_id?: string;
+
+  /**
+   * Groups to return, keyed by group name. Each group can define limit, next, or prev. 'next' and 'prev' cursors are only allowed when the request contains exactly one group; multi-group pagination is rejected.
+   */
+  groups?: Record<string, GroupedChannelsGroupRequest>;
+
+  user?: UserRequest;
+}
+
+export interface GroupedQueryChannelsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Predefined channel groups keyed by group name
+   */
+  groups: Record<string, GroupedChannelsBucket>;
 }
 
 export interface GroupedStatsResponse {
@@ -11575,6 +13036,22 @@ export interface HuaweiConfigFields {
   id?: string;
 
   secret?: string;
+}
+
+export interface IPContentCountRuleParameters {
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface IPFlagCountRuleParameters {
+  severity?: string;
+
+  threshold?: number;
+
+  time_window?: string;
+
+  harm_labels?: string[];
 }
 
 export interface ImageContentParameters {
@@ -11672,6 +13149,21 @@ export interface Images {
   original: ImageData;
 }
 
+export interface ImportBlockListRequest {
+  items: string[];
+
+  chunk_size?: number;
+}
+
+export interface ImportBlockListResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  task_id: string;
+}
+
 export interface ImportTask {
   created_at: Date;
 
@@ -11725,7 +13217,7 @@ export interface ImportV2TaskSettings {
 
   skip_references_check?: boolean;
 
-  source?: string;
+  use_import_time_as_op_time?: boolean;
 
   s3?: ImportV2TaskSettingsS3;
 }
@@ -12013,6 +13505,16 @@ export interface InsertActionLogRequest {
   reason?: string;
 
   /**
+   * Type of reporter; 'api_integration' when the action was triggered by an API integration call with no authenticated user
+   */
+  reporter_type?: string;
+
+  /**
+   * ID of the user who triggered the action; empty for automated actions
+   */
+  reporter_user_id?: string;
+
+  /**
    * Custom metadata for the action log
    */
   custom?: Record<string, any>;
@@ -12042,10 +13544,20 @@ export interface JoinCallAPIMetrics {
   latency?: ActiveCallsLatencyStats;
 }
 
+export interface KeyframeOCRRuleParameters {
+  threshold?: number;
+
+  time_window?: string;
+
+  harm_labels?: string[];
+}
+
 export interface KeyframeRuleParameters {
   min_confidence?: number;
 
   threshold?: number;
+
+  time_window?: string;
 
   harm_labels?: string[];
 }
@@ -12104,8 +13616,6 @@ export interface LLMConfig {
 }
 
 export interface LLMRule {
-  description: string;
-
   label: string;
 
   action?:
@@ -12116,6 +13626,8 @@ export interface LLMRule {
     | 'bounce_flag'
     | 'bounce_remove'
     | 'keep';
+
+  description?: string;
 
   severity_rules?: BodyguardSeverityRule[];
 }
@@ -12128,6 +13640,82 @@ export interface LabelResponse {
   phrase_list_ids?: number[];
 }
 
+export interface LabelResultResponse {
+  /**
+   * Category
+   */
+  category: string;
+
+  /**
+   * The moderated content
+   */
+  content: string;
+
+  content_type: string;
+
+  /**
+   * Timestamp
+   */
+  created_at: Date;
+
+  /**
+   * High-level harm category
+   */
+  harm_type: string;
+
+  /**
+   * Unique identifier
+   */
+  id: string;
+
+  /**
+   * Detected language
+   */
+  language: string;
+
+  /**
+   * Provider recommended action
+   */
+  recommended_action: string;
+
+  /**
+   * Severity level
+   */
+  severity: string;
+
+  /**
+   * Moderation labels
+   */
+  labels: string[];
+
+  /**
+   * Customer-supplied identifier for the moderated content
+   */
+  content_id?: string;
+
+  /**
+   * Who the content is directed at (USER, GROUP, EVERYONE, NONE, etc.)
+   */
+  directed_at?: string;
+
+  /**
+   * The stored content with every non-whitespace character masked. Present only when recommended_action is not 'keep'. Derived at runtime and never stored.
+   */
+  fully_masked_content?: string;
+
+  /**
+   * Content with blocklisted tokens masked (when a blocklist rule with action=mask rewrote the original)
+   */
+  masked_content?: string;
+
+  policy?: string;
+
+  /**
+   * Customer-supplied user identifier for the content author
+   */
+  user_id?: string;
+}
+
 export interface LabelThresholds {
   /**
    * Threshold for automatic message block
@@ -12138,6 +13726,93 @@ export interface LabelThresholds {
    * Threshold for automatic message flag
    */
   flag?: number;
+}
+
+export interface LabelsRequest {
+  /**
+   * Content to moderate
+   */
+  content: string;
+
+  /**
+   * Optional category for filtering (max 128 chars)
+   */
+  category?: string;
+
+  /**
+   * Customer-supplied identifier for the moderated content, for tracing
+   */
+  content_id?: string;
+
+  /**
+   * Type of content: 'text' (default), 'message', or 'username'. Stored as-sent; only 'username' routes to the username moderation API.
+   */
+
+  content_type?: 'text' | 'message' | 'username';
+
+  /**
+   * When true, run moderation and return labels without persisting the result. Useful for one-off checks (e.g. UI testers) that should not be recorded in the stored history.
+   */
+  dry_run?: boolean;
+
+  /**
+   * Optional moderation policy key (max 128 chars). For username moderation, set this to a policy whose key starts with 'username:' (e.g. 'username:default') to opt into the low-latency fast-path: blocklists (customer + Stream-managed defaults) short-circuit the LLM, and the LLM fallback uses gpt-4.1-nano with a 24h Valkey verdict cache. Without a 'username:' prefix the request falls through to the standard Bodyguard Analyze v1 username path.
+   */
+  policy?: string;
+
+  /**
+   * Optional customer-supplied user identifier for the content author (max 256 chars). Enables filtering stored results by user_id.
+   */
+  user_id?: string;
+}
+
+export interface LabelsResponse {
+  duration: string;
+
+  /**
+   * Provider recommended action
+   */
+  recommended_action: string;
+
+  /**
+   * Customer-supplied identifier for the moderated content, for tracing
+   */
+  content_id?: string;
+
+  /**
+   * Who the content is directed at (USER, GROUP, EVERYONE, NONE, etc.), when the provider exposes it
+   */
+  directed_at?: string;
+
+  /**
+   * The original content with every non-whitespace character masked. Present only when recommended_action is not 'keep'. Derived at runtime and never stored.
+   */
+  fully_masked_content?: string;
+
+  /**
+   * High-level harm category
+   */
+  harm_type?: string;
+
+  /**
+   * Detected language
+   */
+  language?: string;
+
+  /**
+   * Content with blocklisted tokens masked or substituted. Present only when a blocklist rewrote the original content.
+   */
+  masked_content?: string;
+
+  /**
+   * Severity level
+   */
+  severity?: string;
+
+  /**
+   * Moderation labels detected
+   */
+  labels?: string[];
 }
 
 export interface LayoutSettings {
@@ -12230,6 +13905,8 @@ export interface ListBlockListResponse {
   duration: string;
 
   blocklists: BlockListResponse[];
+
+  next_cursor?: string;
 }
 
 export interface ListCallTypeResponse {
@@ -12339,6 +14016,15 @@ export interface ListPushProvidersResponse {
   duration: string;
 
   push_providers: PushProviderResponse[];
+}
+
+export interface ListQueuesResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  queues: ModerationQueueResponse[];
 }
 
 export interface ListRecordingsResponse {
@@ -12559,6 +14245,43 @@ export interface MarkUnreadRequest {
   user_id?: string;
 
   user?: UserRequest;
+}
+
+export interface MatchedContent {
+  /**
+   * The `content_ids[label]` value supplied on the `/analyze` request that contributed this entry.
+   */
+  id: string;
+
+  /**
+   * `content_published_at` from the contributing `/analyze` request, or server receive time when that field was omitted.
+   */
+  published_at: Date;
+
+  /**
+   * Content type that contributed this entry: `image` or `text`.
+   */
+  type: string;
+
+  /**
+   * Image-classification entries only. Aggregate (max) confidence score across the entry's classifications + sub-classifications. Absent on text and OCR entries.
+   */
+  confidence?: number;
+
+  /**
+   * Text and OCR entries. Aggregate (max) Bodyguard severity level (`LOW` / `MEDIUM` / `HIGH` / `CRITICAL`). Absent on image-classification entries.
+   */
+  severity?: string;
+
+  /**
+   * Image-classification entries (keyframe rule, Type=image) carry nested L1 → L2 classifications. Text entries (closed_caption rule, Type=text) carry flat label + severity. Resolved against the app's effective taxonomy on the image side.
+   */
+  classifications?: Classification[];
+
+  /**
+   * OCR entries only (keyframe_ocr rule, Type=image). Bodyguard labels that fired against the keyframe's OCR-extracted text (e.g. `INSULT`, `HATE_SPEECH`). Distinct from `classifications` so consumers can route OCR matches separately from image-classification matches.
+   */
+  ocr_classifications?: Classification[];
 }
 
 export interface MaxStreakChangedEvent {
@@ -13175,6 +14898,8 @@ export interface MessageNewEvent {
 
   channel_custom?: Record<string, any>;
 
+  grouped_unread_channels?: Record<string, number>;
+
   user?: UserResponseCommonFields;
 }
 
@@ -13556,6 +15281,11 @@ export interface MessageResponse {
   mentioned_group_ids?: string[];
 
   /**
+   * List of mentioned user group objects.
+   */
+  mentioned_groups?: UserGroupResponse[];
+
+  /**
    * List of roles mentioned in the message (e.g. admin, channel_moderator, custom roles). Members with matching roles will receive push notifications based on their push preferences. Max 10 roles
    */
   mentioned_roles?: string[];
@@ -13577,7 +15307,7 @@ export interface MessageResponse {
    */
   image_labels?: Record<string, string[]>;
 
-  member?: ChannelMemberResponse;
+  member?: ChannelMemberPartialResponse;
 
   moderation?: ModerationV2Response;
 
@@ -13900,6 +15630,11 @@ export interface MessageWithChannelResponse {
   mentioned_group_ids?: string[];
 
   /**
+   * List of mentioned user group objects.
+   */
+  mentioned_groups?: UserGroupResponse[];
+
+  /**
    * List of roles mentioned in the message (e.g. admin, channel_moderator, custom roles). Members with matching roles will receive push notifications based on their push preferences. Max 10 roles
    */
   mentioned_roles?: string[];
@@ -13921,7 +15656,7 @@ export interface MessageWithChannelResponse {
    */
   image_labels?: Record<string, string[]>;
 
-  member?: ChannelMemberResponse;
+  member?: ChannelMemberPartialResponse;
 
   moderation?: ModerationV2Response;
 
@@ -14000,6 +15735,8 @@ export interface ModerationActionConfigResponse {
    */
   order: number;
 
+  id?: string;
+
   /**
    * Queue type this action config belongs to
    */
@@ -14009,6 +15746,52 @@ export interface ModerationActionConfigResponse {
    * Custom data for the action
    */
   custom?: Record<string, any>;
+}
+
+export interface ModerationBanResponse {
+  duration: string;
+}
+
+export interface ModerationCallResponse {
+  backstage: boolean;
+
+  captioning: boolean;
+
+  cid: string;
+
+  created_at: Date;
+
+  current_session_id: string;
+
+  id: string;
+
+  recording: boolean;
+
+  transcribing: boolean;
+
+  translating: boolean;
+
+  type: string;
+
+  updated_at: Date;
+
+  blocked_user_ids: string[];
+
+  custom: Record<string, any>;
+
+  channel_cid?: string;
+
+  ended_at?: Date;
+
+  join_ahead_time_seconds?: number;
+
+  routing_number?: string;
+
+  starts_at?: Date;
+
+  team?: string;
+
+  created_by?: UserResponse;
 }
 
 export interface ModerationCheckCompletedEvent {
@@ -14070,6 +15853,8 @@ export interface ModerationConfig {
 
   block_list_config?: BlockListConfig;
 
+  flood_config?: FloodConfig;
+
   google_vision_config?: GoogleVisionConfig;
 
   llm_config?: LLMConfig;
@@ -14106,6 +15891,10 @@ export interface ModerationCustomActionEvent {
 export interface ModerationDashboardPreferences {
   async_review_queue_upsert?: boolean;
 
+  block_foreign_cdn_attachments?: boolean;
+
+  custom_views_enabled?: boolean;
+
   disable_audit_logs?: boolean;
 
   disable_flagging_reviewed_entity?: boolean;
@@ -14114,11 +15903,15 @@ export interface ModerationDashboardPreferences {
 
   flag_user_on_flagged_content?: boolean;
 
+  include_attachment_payload?: boolean;
+
   media_queue_blur_enabled?: boolean;
 
   allowed_moderation_action_reasons?: string[];
 
   escalation_reasons?: string[];
+
+  filterable_custom_keys?: string[];
 
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
 
@@ -14177,6 +15970,54 @@ export interface ModerationFlaggedEvent {
   received_at?: Date;
 }
 
+export interface ModerationImageAnalysisCompleteEvent {
+  created_at: Date;
+
+  type: string;
+
+  /**
+   * The moderation policy key that was applied.
+   */
+  config_key?: string;
+
+  /**
+   * Echo of the `entity_creator_id` on the /analyze request.
+   */
+  entity_creator_id?: string;
+
+  /**
+   * Echo of the `entity_id` on the /analyze request.
+   */
+  entity_id?: string;
+
+  /**
+   * Echo of the `entity_type` on the /analyze request.
+   */
+  entity_type?: string;
+
+  received_at?: Date;
+
+  /**
+   * Review queue row ID for deep-linking into the dashboard.
+   */
+  review_queue_item_id?: string;
+
+  /**
+   * Echo of the `custom` metadata on the /analyze request.
+   */
+  custom?: Record<string, any>;
+
+  /**
+   * Per-image verdicts, same shape as the /analyze HTTP response. Each entry carries `id` when the request supplied `content_ids`.
+   */
+  images?: Record<string, AnalyzeImageField>;
+
+  /**
+   * Per-text-field verdicts, same shape as the /analyze HTTP response. Each entry carries `id` when the request supplied `content_ids`.
+   */
+  texts?: Record<string, AnalyzeTextField>;
+}
+
 export interface ModerationMarkReviewedEvent {
   created_at: Date;
 
@@ -14192,16 +16033,31 @@ export interface ModerationMarkReviewedEvent {
 }
 
 export interface ModerationPayload {
+  audios?: string[];
+
+  image_ordered_keys?: string[];
+
   images?: string[];
+
+  text_ordered_keys?: string[];
 
   texts?: string[];
 
   videos?: string[];
 
   custom?: Record<string, any>;
+
+  image_ids?: Record<string, string>;
+
+  text_ids?: Record<string, string>;
 }
 
 export interface ModerationPayloadRequest {
+  /**
+   * Audio URLs to moderate
+   */
+  audios?: string[];
+
   /**
    * Image URLs to moderate (max 30)
    */
@@ -14225,9 +16081,24 @@ export interface ModerationPayloadRequest {
 
 export interface ModerationPayloadResponse {
   /**
+   * Audio URLs to moderate
+   */
+  audios?: string[];
+
+  /**
+   * Caller-supplied keys for images, index-aligned with images[]
+   */
+  image_ordered_keys?: string[];
+
+  /**
    * Image URLs to moderate
    */
   images?: string[];
+
+  /**
+   * Caller-supplied keys for texts (e.g. "title", "description"), index-aligned with texts[]
+   */
+  text_ordered_keys?: string[];
 
   /**
    * Text content to moderate
@@ -14243,6 +16114,38 @@ export interface ModerationPayloadResponse {
    * Custom data for moderation
    */
   custom?: Record<string, any>;
+
+  /**
+   * Caller-supplied content IDs per image key (from content_ids on /analyze)
+   */
+  image_ids?: Record<string, string>;
+
+  /**
+   * Caller-supplied content IDs per text key (from content_ids on /analyze)
+   */
+  text_ids?: Record<string, string>;
+}
+
+export interface ModerationQueueResponse {
+  created_at: Date;
+
+  created_by: string;
+
+  description: string;
+
+  id: string;
+
+  item_count: number;
+
+  name: string;
+
+  type: string;
+
+  updated_at: Date;
+
+  sort: Array<Record<string, any>>;
+
+  filters: Record<string, any>;
 }
 
 export interface ModerationResponse {
@@ -14337,6 +16240,54 @@ export interface ModerationRulesTriggeredEvent {
    * The violation number for call rules (optional)
    */
   violation_number?: number;
+
+  /**
+   * Ordered list of contents whose verdicts contributed to an aggregation rule's threshold. Populated only for aggregation rules when callers supplied `content_ids`.
+   */
+  matched_contents?: MatchedContent[];
+}
+
+export interface ModerationTextAnalysisCompleteEvent {
+  created_at: Date;
+
+  type: string;
+
+  /**
+   * The moderation policy key that was applied.
+   */
+  config_key?: string;
+
+  /**
+   * Echo of the `entity_creator_id` on the /analyze request.
+   */
+  entity_creator_id?: string;
+
+  /**
+   * Echo of the `entity_id` on the /analyze request.
+   */
+  entity_id?: string;
+
+  /**
+   * Echo of the `entity_type` on the /analyze request.
+   */
+  entity_type?: string;
+
+  received_at?: Date;
+
+  /**
+   * Review queue row ID for deep-linking into the dashboard.
+   */
+  review_queue_item_id?: string;
+
+  /**
+   * Echo of the `custom` metadata on the /analyze request.
+   */
+  custom?: Record<string, any>;
+
+  /**
+   * Per-text-field verdicts, same shape as the /analyze HTTP response. Each entry carries `id` when the request supplied `content_ids`.
+   */
+  texts?: Record<string, AnalyzeTextField>;
 }
 
 export interface ModerationV2Response {
@@ -14618,6 +16569,8 @@ export interface NotificationMarkUnreadEvent {
 
   channel_custom?: Record<string, any>;
 
+  grouped_unread_channels?: Record<string, number>;
+
   user?: UserResponseCommonFields;
 }
 
@@ -14834,6 +16787,14 @@ export interface NotificationTrigger {
    * Custom data from the trigger object (comment, reaction, etc.)
    */
   custom?: Record<string, any>;
+}
+
+export interface OCRContentParameters {
+  label_operator?: string;
+
+  severity?: string;
+
+  harm_labels?: string[];
 }
 
 export interface OCRRule {
@@ -15226,6 +17187,11 @@ export interface Permission {
    * Whether this permission applies to resource owner or not
    */
   owner: boolean;
+
+  /**
+   * Resource type that defines ownership for this permission's action (e.g. 'Channel' for CreateMessage, 'Message' for UpdateMessage). Identical across all variants of an action; primarily meaningful for owner grants.
+   */
+  owner_resource: string;
 
   /**
    * Whether this permission applies to teammates (multi-tenancy mode only)
@@ -15984,6 +17950,19 @@ export interface QueryActivityReactionsResponse {
   prev?: string;
 }
 
+export interface QueryActivitySharesResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  shares: ShareResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryAggregateCallStatsRequest {
   from?: string;
 
@@ -16137,6 +18116,8 @@ export interface QueryBookmarksRequest {
 
   prev?: string;
 
+  user_id?: string;
+
   /**
    * Sorting parameters for the query
    */
@@ -16146,6 +18127,8 @@ export interface QueryBookmarksRequest {
    * Filters to apply to the query
    */
   filter?: Record<string, any>;
+
+  user?: UserRequest;
 }
 
 export interface QueryBookmarksResponse {
@@ -16883,6 +18866,41 @@ export interface QueryFutureChannelBansResponse {
   bans: FutureChannelBanResponse[];
 }
 
+export interface QueryLabelResultsRequest {
+  limit?: number;
+
+  next?: string;
+
+  prev?: string;
+
+  user_id?: string;
+
+  /**
+   * Sorting parameters
+   */
+  sort?: SortParamRequest[];
+
+  /**
+   * Filter conditions
+   */
+  filter?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface QueryLabelResultsResponse {
+  duration: string;
+
+  /**
+   * List of moderation label results
+   */
+  label_results: LabelResultResponse[];
+
+  next?: string;
+
+  prev?: string;
+}
+
 export interface QueryMembersPayload {
   type: string;
 
@@ -17150,6 +19168,11 @@ export interface QueryModerationRulesResponse {
   keyframe_labels: string[];
 
   /**
+   * Available harm labels for OCR-based rule conditions (keyframe_ocr_rule and ocr_content). Mirrors `closed_caption_labels` today but kept as a separate field so the pickers can diverge later.
+   */
+  ocr_labels: string[];
+
+  /**
    * List of moderation rules
    */
   rules: ModerationRuleV2Response[];
@@ -17163,6 +19186,11 @@ export interface QueryModerationRulesResponse {
    * Default LLM label descriptions
    */
   default_llm_labels: Record<string, string>;
+
+  /**
+   * Recommended LLM label descriptions for username-scoped policies (key starts with 'username:'). Used by /moderation/v2/labels fast-path.
+   */
+  default_username_llm_labels: Record<string, string>;
 
   /**
    * L1 to L2 mapping of keyframe harm label classifications
@@ -17339,6 +19367,8 @@ export interface QueryRemindersResponse {
 }
 
 export interface QueryReviewQueueRequest {
+  exclude_default_action_config?: boolean;
+
   limit?: number;
 
   /**
@@ -17373,7 +19403,7 @@ export interface QueryReviewQueueRequest {
   sort?: SortParamRequest[];
 
   /**
-   * Filter conditions for review queue items
+   * Filter conditions for review queue items. Accepts built-in fields (e.g. status, channel_cid, severity, recommended_action) and customer-supplied moderation_payload.custom keys: any key that is not a built-in field is matched against the item's custom moderation data (e.g. {"location_id": "loc-42"}). Use filter_config.filterable_custom_keys to discover which custom keys the app exposes as chips.
    */
   filter?: Record<string, any>;
 
@@ -17401,6 +19431,8 @@ export interface QueryReviewQueueResponse {
   next?: string;
 
   prev?: string;
+
+  default_action_config?: Record<string, ModerationActionConfigResponse[]>;
 
   filter_config?: FilterConfigResponse;
 }
@@ -17669,6 +19701,15 @@ export interface QueryUsersResponse {
    * Array of users as result of filters applied.
    */
   users: FullUserResponse[];
+}
+
+export interface QueueResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  queue?: ModerationQueueResponse;
 }
 
 export interface RTMPBroadcastRequest {
@@ -18205,7 +20246,7 @@ export interface ReadCollectionsResponse {
 }
 
 export interface ReadReceiptsResponse {
-  enabled?: boolean;
+  enabled: boolean;
 }
 
 export interface ReadStateResponse {
@@ -18528,6 +20569,20 @@ export interface ReportByHistogramBucket {
   upper_bound?: Bound;
 }
 
+export interface ReportClientEventRequest {
+  /**
+   * Client-side events to report (1-100 per request)
+   */
+  events: ClientEvent[];
+}
+
+export interface ReportClientEventResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+}
+
 export interface ReportResponse {
   call: CallReportResponse;
 
@@ -18836,7 +20891,7 @@ export interface ReviewQueueItemResponse {
 
   assigned_to?: UserResponse;
 
-  call?: CallResponse;
+  call?: ModerationCallResponse;
 
   entity_creator?: EntityCreatorResponse;
 
@@ -18850,7 +20905,7 @@ export interface ReviewQueueItemResponse {
 
   feeds_v3_comment?: FeedsV3CommentResponse;
 
-  message?: MessageResponse;
+  message?: ChatMessageResponse;
 
   moderation_payload?: ModerationPayloadResponse;
 
@@ -18976,6 +21031,8 @@ export interface Role {
 }
 
 export interface RuleBuilderAction {
+  reason?: string;
+
   skip_inbox?: boolean;
 
   type?:
@@ -19015,17 +21072,35 @@ export interface RuleBuilderCondition {
 
   call_violation_count_params?: CallViolationCountParameters;
 
+  channel_message_count_rule_params?: ChannelMessageCountRuleParameters;
+
   closed_caption_rule_params?: ClosedCaptionRuleParameters;
 
   content_count_rule_params?: ContentCountRuleParameters;
 
+  content_custom_property_count_params?: ContentCustomPropertyCountParameters;
+
+  content_custom_property_params?: ContentCustomPropertyParameters;
+
   content_flag_count_rule_params?: FlagCountRuleParameters;
+
+  flood_identical_params?: FloodIdenticalRuleParameters;
+
+  flood_similar_params?: FloodSimilarRuleParameters;
 
   image_content_params?: ImageContentParameters;
 
   image_rule_params?: ImageRuleParameters;
 
+  ip_content_count_rule_params?: IPContentCountRuleParameters;
+
+  ip_flag_count_rule_params?: IPFlagCountRuleParameters;
+
+  keyframe_ocr_rule_params?: KeyframeOCRRuleParameters;
+
   keyframe_rule_params?: KeyframeRuleParameters;
+
+  ocr_content_params?: OCRContentParameters;
 
   text_content_params?: TextContentParameters;
 
@@ -19666,6 +21741,8 @@ export interface SearchResultMessage {
 
   mentioned_group_ids?: string[];
 
+  mentioned_groups?: UserGroupResponse[];
+
   mentioned_roles?: string[];
 
   thread_participants?: UserResponse[];
@@ -19678,7 +21755,7 @@ export interface SearchResultMessage {
 
   image_labels?: Record<string, string[]>;
 
-  member?: ChannelMemberResponse;
+  member?: ChannelMemberPartialResponse;
 
   moderation?: ModerationV2Response;
 
@@ -19693,6 +21770,15 @@ export interface SearchResultMessage {
   reminder?: ReminderResponseData;
 
   shared_location?: SharedLocationResponseData;
+}
+
+export interface SearchRolesResponse {
+  duration: string;
+
+  /**
+   * Matching roles, sorted ascending by name
+   */
+  roles: Role[];
 }
 
 export interface SearchUserGroupsResponse {
@@ -19935,11 +22021,39 @@ export interface SetRetentionPolicyResponse {
   policy: RetentionPolicy;
 }
 
+export interface SetupSession {
+  created_at: Date;
+
+  current_step: string;
+
+  status: string;
+
+  updated_at: Date;
+
+  setup_data: Record<string, any>;
+
+  completed_at?: Date;
+}
+
 export interface ShadowBlockActionRequestPayload {
   /**
    * Reason for shadow blocking
    */
   reason?: string;
+}
+
+export interface ShareResponse {
+  /**
+   * ID of the sharing (child) activity
+   */
+  activity_id: string;
+
+  /**
+   * When the share occurred
+   */
+  created_at: Date;
+
+  user: UserResponse;
 }
 
 export interface SharedLocation {
@@ -20526,9 +22640,65 @@ export interface SubmitActionRequest {
 export interface SubmitActionResponse {
   duration: string;
 
+  /**
+   * Present when the appeal was accepted but the entity could not be restored automatically. The moderator should restore it manually.
+   */
+  auto_restore_warning?: string;
+
   appeal_item?: AppealItemResponse;
 
   item?: ReviewQueueItemResponse;
+}
+
+export interface SubmitModerationFeedbackRequest {
+  /**
+   * The moderated content the moderator is providing feedback on
+   */
+  message: string;
+
+  /**
+   * Original publication time of the moderated content (RFC3339)
+   */
+  published_at: string;
+
+  /**
+   * Provider-side reference identifying the moderated content
+   */
+  reference: string;
+
+  /**
+   * Optional moderation channel UUID for context
+   */
+  channel_id?: string;
+
+  /**
+   * Action originally produced by the moderation system
+   */
+  current_recommended_action?: string;
+
+  /**
+   * Optional free-form note explaining why the classification was wrong
+   */
+  description?: string;
+
+  /**
+   * Optional moderator-supplied action
+   */
+  expected_recommended_action?: string;
+
+  /**
+   * Classifications originally produced by the moderation system
+   */
+  current_labels?: string[];
+
+  /**
+   * Optional moderator-supplied classifications (up to 16 entries)
+   */
+  expected_labels?: string[];
+}
+
+export interface SubmitModerationFeedbackResponse {
+  duration: string;
 }
 
 export interface SubscriberAllMetrics {
@@ -20568,11 +22738,11 @@ export interface SubscribersMetrics {
 }
 
 export interface TargetResolution {
-  bitrate: number;
-
   height: number;
 
   width: number;
+
+  bitrate?: number;
 }
 
 export interface TeamUsageStats {
@@ -20620,6 +22790,10 @@ export interface TextContentParameters {
   label_operator?: string;
 
   severity?: string;
+
+  text_length?: number;
+
+  text_length_operator?: string;
 
   blocklist_match?: string[];
 
@@ -20910,6 +23084,8 @@ export interface ThreadedCommentResponse {
 
   custom?: Record<string, any>;
 
+  i18n?: Record<string, string>;
+
   meta?: RepliesMeta;
 
   moderation?: ModerationV2Response;
@@ -21163,6 +23339,38 @@ export interface TranscriptionSettingsResponse {
   translation?: TranslationSettings;
 }
 
+export interface TranslateActivityRequest {
+  /**
+   * ISO 639-1 language code to translate to
+   */
+  language: string;
+}
+
+export interface TranslateActivityResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  activity: ActivityResponse;
+}
+
+export interface TranslateCommentRequest {
+  /**
+   * ISO 639-1 language code to translate to
+   */
+  language: string;
+}
+
+export interface TranslateCommentResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  comment: CommentResponse;
+}
+
 export interface TranslateMessageRequest {
   /**
    * Language to translate message to
@@ -21229,9 +23437,9 @@ export interface TranslateMessageRequest {
 }
 
 export interface TranslationSettings {
-  enabled: boolean;
+  enabled?: boolean;
 
-  languages: string[];
+  languages?: string[];
 }
 
 export interface TriggeredRuleResponse {
@@ -21249,6 +23457,11 @@ export interface TriggeredRuleResponse {
    * Name of the moderation rule that triggered
    */
   rule_name?: string;
+
+  /**
+   * Type of the moderation rule that triggered (content, user, or call)
+   */
+  type?: string;
 
   /**
    * Violation count for action sequence rules (1-based)
@@ -21298,7 +23511,7 @@ export interface TruncateChannelResponse {
 }
 
 export interface TypingIndicatorsResponse {
-  enabled?: boolean;
+  enabled: boolean;
 }
 
 export interface UnbanActionRequestPayload {
@@ -21788,13 +24001,28 @@ export interface UpdateAppRequest {
 
   auto_translation_enabled?: boolean;
 
-  before_message_send_hook_url?: string;
-
   before_message_send_hook_attempt_timeout_ms?: number;
+
+  before_message_send_hook_url?: string;
 
   cdn_expiration_seconds?: number;
 
   channel_hide_members_only?: boolean;
+
+  chat_primary_use_case?:
+    | 'messaging'
+    | 'customer-support'
+    | 'community'
+    | 'marketplace'
+    | 'gaming'
+    | 'telehealth'
+    | 'on-demand'
+    | 'workforce-management'
+    | 'dating'
+    | 'education'
+    | 'financial'
+    | 'sports'
+    | 'real-money-gaming';
 
   custom_action_handler_url?: string;
 
@@ -21802,7 +24030,11 @@ export interface UpdateAppRequest {
 
   disable_permissions_checks?: boolean;
 
+  enable_hook_payload_compression?: boolean;
+
   enforce_unique_usernames?: 'no' | 'app' | 'team';
+
+  feed_audit_logs_enabled?: boolean;
 
   feeds_moderation_enabled?: boolean;
 
@@ -21820,6 +24052,8 @@ export interface UpdateAppRequest {
 
   moderation_enabled?: boolean;
 
+  moderation_onboarding_complete?: boolean;
+
   moderation_s3_image_access_role_arn?: string;
 
   moderation_webhook_url?: string;
@@ -21831,6 +24065,8 @@ export interface UpdateAppRequest {
   reminders_interval?: number;
 
   reminders_max_members?: number;
+
+  reminders_max_per_user?: number;
 
   revoke_tokens_issued_before?: Date;
 
@@ -21847,6 +24083,15 @@ export interface UpdateAppRequest {
   sqs_url?: string;
 
   user_response_time_enabled?: boolean;
+
+  video_primary_use_case?:
+    | 'video-calling'
+    | 'voice-calling'
+    | 'livestreaming'
+    | 'audio-rooms'
+    | 'ai-agents'
+    | 'live-shopping'
+    | 'other';
 
   webhook_url?: string;
 
@@ -21888,9 +24133,13 @@ export interface UpdateAppRequest {
 }
 
 export interface UpdateBlockListRequest {
+  is_confusable_folding_enabled?: boolean;
+
   is_leet_check_enabled?: boolean;
 
   is_plural_check_enabled?: boolean;
+
+  is_substring_matching_enabled?: boolean;
 
   team?: string;
 
@@ -22046,6 +24295,36 @@ export interface UpdateCallTypeResponse {
    * the external storage for the call type
    */
   external_storage?: string;
+}
+
+export interface UpdateCampaignRequest {
+  sender_id: string;
+
+  message_template: CampaignMessageTemplate;
+
+  create_channels?: boolean;
+
+  description?: string;
+
+  id?: string;
+
+  name?: string;
+
+  sender_mode?: 'exclude' | 'include';
+
+  sender_visibility?: 'hidden' | 'archived';
+
+  show_channels?: boolean;
+
+  skip_push?: boolean;
+
+  skip_webhook?: boolean;
+
+  segment_ids?: string[];
+
+  user_ids?: string[];
+
+  channel_template?: CampaignChannelTemplate;
 }
 
 export interface UpdateChannelPartialRequest {
@@ -22731,7 +25010,7 @@ export interface UpdateFollowRequest {
   create_notification_activity?: boolean;
 
   /**
-   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. For FollowBatch/GetOrCreateFollows, use the top-level create_users field; per-item follows[i].create_users is rejected.
+   * If true, auto-creates users referenced by the source and target FIDs when they don't already exist. Server-side only. Defaults to false. Use directly on single follow endpoints (Follow, GetOrCreateFollow). On batch endpoints (FollowBatch, GetOrCreateFollows), use the top-level create_users field; per-item follows[i].create_users is rejected.
    */
   create_users?: boolean;
 
@@ -22993,6 +25272,20 @@ export interface UpdatePollRequest {
   user?: UserRequest;
 }
 
+export interface UpdateQueueRequest {
+  description?: string;
+
+  name?: string;
+
+  user_id?: string;
+
+  sort?: Array<Record<string, any>>;
+
+  filters?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
 export interface UpdateReminderRequest {
   remind_at?: Date;
 
@@ -23074,6 +25367,32 @@ export interface UpdateSIPTrunkResponse {
   duration: string;
 
   sip_trunk?: SIPTrunkResponse;
+}
+
+export interface UpdateSegmentRequest {
+  /**
+   * The description of the segment (max 256 characters)
+   */
+  description?: string;
+
+  /**
+   * The name of the segment (max 128 characters)
+   */
+  name?: string;
+
+  /**
+   * Filter to apply to the query
+   */
+  filter?: Record<string, any>;
+}
+
+export interface UpdateSegmentResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  segment: SegmentResponse;
 }
 
 export interface UpdateThreadPartialRequest {
@@ -23247,11 +25566,89 @@ export interface UploadChannelResponse {
   upload_sizes?: ImageSize[];
 }
 
+export interface UpsertActionConfigItem {
+  action: string;
+
+  entity_type: string;
+
+  order: number;
+
+  description?: string;
+
+  icon?: string;
+
+  id?: string;
+
+  queue_type?: string;
+
+  custom?: Record<string, any>;
+}
+
+export interface UpsertActionConfigRequest {
+  /**
+   * The action to perform (e.g. ban, delete_message, custom)
+   */
+  action: string;
+
+  /**
+   * Type of entity this action applies to (e.g. stream:chat:v1:message)
+   */
+  entity_type: string;
+
+  /**
+   * Display order in the dashboard (0–100, lower numbers shown first)
+   */
+  order: number;
+
+  /**
+   * Human-readable label for the dashboard button
+   */
+  description?: string;
+
+  /**
+   * Icon identifier for the dashboard button
+   */
+  icon?: string;
+
+  /**
+   * UUID of an existing action config to update; omit to create a new record
+   */
+  id?: string;
+
+  /**
+   * Queue this config belongs to; null means the default queue
+   */
+  queue_type?: string;
+
+  /**
+   * Optional user ID to associate with the audit log entry
+   */
+  user_id?: string;
+
+  /**
+   * Action-specific parameters passed to the action handler
+   */
+  custom?: Record<string, any>;
+
+  user?: UserRequest;
+}
+
+export interface UpsertActionConfigResponse {
+  duration: string;
+
+  action_config?: ModerationActionConfigResponse;
+}
+
 export interface UpsertActivitiesRequest {
   /**
    * List of activities to create or update
    */
   activities: ActivityRequest[];
+
+  /**
+   * Server-side only. If true, auto-creates users referenced by activity user_id values that don't already exist. Default: false.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the activities' current_feed with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -23315,6 +25712,8 @@ export interface UpsertConfigRequest {
    */
   user_id?: string;
 
+  ai_audio_config?: AIAudioConfigRequest;
+
   ai_image_config?: AIImageConfig;
 
   ai_text_config?: AITextConfig;
@@ -23332,6 +25731,8 @@ export interface UpsertConfigRequest {
   block_list_config?: BlockListConfig;
 
   bodyguard_config?: AITextConfig;
+
+  flood_config?: FloodConfig;
 
   google_vision_config?: GoogleVisionConfig;
 
@@ -23352,29 +25753,6 @@ export interface UpsertConfigResponse {
   config?: ConfigResponse;
 }
 
-export interface UpsertExternalStorageAWSS3Request {
-  bucket: string;
-
-  region: string;
-
-  role_arn: string;
-
-  path_prefix?: string;
-}
-
-export interface UpsertExternalStorageRequest {
-  type: 'aws_s3';
-
-  aws_s3?: UpsertExternalStorageAWSS3Request;
-}
-
-export interface UpsertExternalStorageResponse {
-  /**
-   * Duration of the request in milliseconds
-   */
-  duration: string;
-}
-
 export interface UpsertModerationRuleRequest {
   /**
    * Unique rule name
@@ -23382,7 +25760,7 @@ export interface UpsertModerationRuleRequest {
   name: string;
 
   /**
-   * Type of rule: user, content, or call
+   * Type of rule: user, content, call, or flood
    */
   rule_type: string;
 
@@ -23498,7 +25876,7 @@ export interface UpsertPushPreferencesResponse {
    */
   user_channel_preferences: Record<
     string,
-    Record<string, ChannelPushPreferencesResponse | null>
+    Record<string, ChannelPushPreferencesResponse>
   >;
 
   /**
@@ -23568,6 +25946,31 @@ export interface UpsertPushTemplateResponse {
   template?: PushTemplateResponse;
 }
 
+export interface UpsertSetupSessionRequest {
+  /**
+   * The current step of the setup wizard. One of: welcome, input, configure, live
+   */
+
+  current_step: 'welcome' | 'input' | 'configure' | 'live';
+
+  /**
+   * The status of the setup session. One of: in_progress, completed
+   */
+
+  status: 'in_progress' | 'completed';
+
+  /**
+   * Per-step data keyed by step name (welcome, input, configure, live)
+   */
+  setup_data?: Record<string, any>;
+}
+
+export interface UpsertSetupSessionResponse {
+  duration: string;
+
+  setup_session?: SetupSession;
+}
+
 export interface User {
   id: string;
 
@@ -23619,6 +26022,11 @@ export interface UserBannedEvent {
   reason?: string;
 
   received_at?: Date;
+
+  /**
+   * ID of the review queue item (flagged message) that triggered the ban, if the ban was applied from the moderation review queue
+   */
+  review_queue_item_id?: string;
 
   /**
    * Whether the user was shadow banned
@@ -24415,13 +26823,6 @@ export interface UserUpdatedEvent {
   received_at?: Date;
 }
 
-export interface ValidateExternalStorageResponse {
-  /**
-   * Duration of the request in milliseconds
-   */
-  duration: string;
-}
-
 export interface VelocityFilterConfig {
   advanced_filters?: boolean;
 
@@ -24652,6 +27053,8 @@ export type WHEvent =
   | ({
       type: 'export.moderation_logs.success';
     } & AsyncExportModerationLogsEvent)
+  | ({ type: 'export.review_queue.error' } & AsyncExportErrorEvent)
+  | ({ type: 'export.review_queue.success' } & AsyncExportReviewQueueEvent)
   | ({ type: 'export.users.error' } & AsyncExportErrorEvent)
   | ({ type: 'export.users.success' } & AsyncExportUsersEvent)
   | ({ type: 'feeds.activity.added' } & ActivityAddedEvent)
@@ -24711,7 +27114,13 @@ export type WHEvent =
   | ({ type: 'message.updated' } & MessageUpdatedEvent)
   | ({ type: 'moderation.custom_action' } & ModerationCustomActionEvent)
   | ({ type: 'moderation.flagged' } & ModerationFlaggedEvent)
+  | ({
+      type: 'moderation.image_analysis.complete';
+    } & ModerationImageAnalysisCompleteEvent)
   | ({ type: 'moderation.mark_reviewed' } & ModerationMarkReviewedEvent)
+  | ({
+      type: 'moderation.text_analysis.complete';
+    } & ModerationTextAnalysisCompleteEvent)
   | ({ type: 'moderation_check.completed' } & ModerationCheckCompletedEvent)
   | ({ type: 'moderation_rule.triggered' } & ModerationRulesTriggeredEvent)
   | ({ type: 'notification.mark_unread' } & NotificationMarkUnreadEvent)
@@ -24806,6 +27215,16 @@ export interface WSEvent {
   thread?: ThreadResponse;
 
   user?: UserResponse;
+}
+
+export interface WebhookFailoverConfig {
+  gcs_bucket?: string;
+
+  gcs_credentials?: string;
+
+  gcs_path?: string;
+
+  type?: string;
 }
 
 export interface WrappedUnreadCountsResponse {
