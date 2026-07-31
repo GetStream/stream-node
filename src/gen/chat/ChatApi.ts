@@ -353,6 +353,7 @@ export class ChatApi {
       predefined_filter: request?.predefined_filter,
       state: request?.state,
       user_id: request?.user_id,
+      member_custom_include: request?.member_custom_include,
       sort: request?.sort,
       filter_conditions: request?.filter_conditions,
       filter_values: request?.filter_values,
@@ -513,6 +514,7 @@ export class ChatApi {
       hide_for_creator: request?.hide_for_creator,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
+      member_custom_include: request?.member_custom_include,
       data: request?.data,
       members: request?.members,
       messages: request?.messages,
@@ -950,9 +952,11 @@ export class ChatApi {
     type: string;
     id: string;
     ids: string[];
+    member_custom_include?: string[];
   }): Promise<StreamResponse<GetManyMessagesResponse>> {
     const queryParams = {
       ids: request?.ids,
+      member_custom_include: request?.member_custom_include,
     };
     const pathParams = {
       type: request?.type,
@@ -984,6 +988,7 @@ export class ChatApi {
       hide_for_creator: request?.hide_for_creator,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
+      member_custom_include: request?.member_custom_include,
       data: request?.data,
       members: request?.members,
       messages: request?.messages,
@@ -1979,6 +1984,7 @@ export class ChatApi {
     id_lt?: string;
     id_around?: string;
     sort?: SortParamRequest[];
+    member_custom_include?: string[];
   }): Promise<StreamResponse<GetRepliesResponse>> {
     const queryParams = {
       limit: request?.limit,
@@ -1988,6 +1994,7 @@ export class ChatApi {
       id_lt: request?.id_lt,
       id_around: request?.id_around,
       sort: request?.sort,
+      member_custom_include: request?.member_custom_include,
     };
     const pathParams = {
       parent_id: request?.parent_id,

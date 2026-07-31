@@ -1235,6 +1235,7 @@ export class ModerationApi {
       delete_message: request?.delete_message,
       delete_reaction: request?.delete_reaction,
       delete_user: request?.delete_user,
+      delete_user_messages: request?.delete_user_messages,
       escalate: request?.escalate,
       flag: request?.flag,
       mark_reviewed: request?.mark_reviewed,

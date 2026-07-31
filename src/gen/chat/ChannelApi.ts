@@ -259,6 +259,7 @@ export class ChannelApi {
 
   getManyMessages(request: {
     ids: string[];
+    member_custom_include?: string[];
   }): Promise<StreamResponse<GetManyMessagesResponse>> {
     if (!this.id) {
       throw new Error(
