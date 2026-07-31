@@ -239,6 +239,8 @@ export class CommonApi {
       is_substring_matching_enabled: request?.is_substring_matching_enabled,
       team: request?.team,
       type: request?.type,
+      user_id: request?.user_id,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -287,9 +289,11 @@ export class CommonApi {
   async deleteBlockList(request: {
     name: string;
     team?: string;
+    user_id?: string;
   }): Promise<StreamResponse<Response>> {
     const queryParams = {
       team: request?.team,
+      user_id: request?.user_id,
     };
     const pathParams = {
       name: request?.name,
@@ -339,7 +343,9 @@ export class CommonApi {
       is_plural_check_enabled: request?.is_plural_check_enabled,
       is_substring_matching_enabled: request?.is_substring_matching_enabled,
       team: request?.team,
+      user_id: request?.user_id,
       words: request?.words,
+      user: request?.user,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -1284,6 +1290,7 @@ export class CommonApi {
     android?: boolean;
     ios?: boolean;
     web?: boolean;
+    unity?: boolean;
     endpoints?: string;
   }): Promise<StreamResponse<GetRateLimitsResponse>> {
     const queryParams = {
@@ -1291,6 +1298,7 @@ export class CommonApi {
       android: request?.android,
       ios: request?.ios,
       web: request?.web,
+      unity: request?.unity,
       endpoints: request?.endpoints,
     };
 

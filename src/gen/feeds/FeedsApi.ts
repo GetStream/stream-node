@@ -2600,6 +2600,7 @@ export class FeedsApi {
     android?: boolean;
     ios?: boolean;
     web?: boolean;
+    unity?: boolean;
     server_side?: boolean;
   }): Promise<StreamResponse<GetFeedsRateLimitsResponse>> {
     const queryParams = {
@@ -2607,6 +2608,7 @@ export class FeedsApi {
       android: request?.android,
       ios: request?.ios,
       web: request?.web,
+      unity: request?.unity,
       server_side: request?.server_side,
     };
 

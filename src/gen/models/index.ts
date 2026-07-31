@@ -5449,6 +5449,11 @@ export interface ChannelGetOrCreateRequest {
 
   thread_unread_counts?: boolean;
 
+  /**
+   * Top-level keys of the message sender's channel-member custom data to include under member.custom (max 8 keys, 64 chars each)
+   */
+  member_custom_include?: string[];
+
   data?: ChannelInput;
 
   members?: PaginationParams;
@@ -5584,6 +5589,11 @@ export interface ChannelMemberPartialResponse {
    * Whether the user muted notifications for this channel
    */
   notifications_muted: boolean;
+
+  /**
+   * Channel-member custom fields projected via `member_custom_include`
+   */
+  custom?: Record<string, any>;
 }
 
 export interface ChannelMemberRequest {
@@ -7695,6 +7705,10 @@ export interface CreateBlockListRequest {
     | 'email'
     | 'email_allowlist'
     | 'word';
+
+  user_id?: string;
+
+  user?: UserRequest;
 }
 
 export interface CreateBlockListResponse {
@@ -8412,6 +8426,9 @@ export interface CreatePollOptionRequest {
 
   user_id?: string;
 
+  /**
+   * Custom data for this object
+   */
   custom?: Record<string, any>;
 
   user?: UserRequest;
@@ -8458,6 +8475,9 @@ export interface CreatePollRequest {
 
   options?: PollOptionInput[];
 
+  /**
+   * Custom data for this object
+   */
   custom?: Record<string, any>;
 
   user?: UserRequest;
@@ -9293,6 +9313,39 @@ export interface DeleteTranscriptionResponse {
   duration: string;
 }
 
+export interface DeleteUserMessagesRequestPayload {
+  /**
+   * Message deletion mode: soft, pruning, or hard
+   */
+
+  delete_messages: 'soft' | 'pruning' | 'hard';
+
+  /**
+   * Optional: scope deletion to a single channel (alternative to app-wide deletion)
+   */
+  channel_cid?: string;
+
+  /**
+   * Whether to also delete the user's reactions on other users' messages
+   */
+  delete_reactions?: boolean;
+
+  /**
+   * ID of the user whose messages should be deleted (alternative to item_id)
+   */
+  entity_id?: string;
+
+  /**
+   * Type of the entity
+   */
+  entity_type?: string;
+
+  /**
+   * Reason for the deletion
+   */
+  reason?: string;
+}
+
 export interface DeleteUserRequestPayload {
   /**
    * Also delete all user conversations
@@ -9620,16 +9673,18 @@ export interface EgressResponse {
 
 export interface EncryptionSettingsRequest {
   /**
-   * if true, the call is created end-to-end encrypted
+   * Encryption mode. One of: available, disabled, auto-on
    */
-  enabled?: boolean;
+
+  mode?: 'available' | 'disabled' | 'auto-on';
 }
 
 export interface EncryptionSettingsResponse {
   /**
-   * whether the call is end-to-end encrypted
+   * the resolved encryption mode for the call
    */
-  enabled: boolean;
+
+  mode: 'available' | 'disabled' | 'auto-on';
 }
 
 export interface EndCallRequest {}
@@ -11360,6 +11415,11 @@ export interface FilterConfigResponse {
    * The moderation_payload.custom keys the app has configured as review-queue filter chips (via moderation_dashboard_preferences.filterable_custom_keys). Discovery hint for the dashboard only — the filter accepts any custom key regardless of this list.
    */
   filterable_custom_keys?: string[];
+
+  /**
+   * AI image moderation labels available as filter values, as a map of L1 label to its L2 sub-labels. Reflects the app's effective image taxonomy: custom Bodyguard taxonomy when enabled, otherwise the standard catalogue of the org's enabled image providers.
+   */
+  ai_image_taxonomy?: Record<string, string[]>;
 }
 
 export interface FirebaseConfig {
@@ -11519,6 +11579,8 @@ export interface FlagUserOptions {
 }
 
 export interface FloodConfig {
+  allowlist?: string[];
+
   identical?: FloodIdenticalConfig;
 
   similar?: FloodSimilarConfig;
@@ -11538,6 +11600,8 @@ export interface FloodIdenticalRuleParameters {
   threshold?: number;
 
   time_window?: string;
+
+  allowlist?: string[];
 }
 
 export interface FloodSimilarConfig {
@@ -11558,6 +11622,8 @@ export interface FloodSimilarRuleParameters {
   threshold?: number;
 
   time_window?: string;
+
+  allowlist?: string[];
 }
 
 export interface FollowBatchRequest {
@@ -12292,6 +12358,11 @@ export interface GetFeedsRateLimitsResponse {
   server_side?: Record<string, LimitInfoResponse>;
 
   /**
+   * Rate limits for Unity platform (endpoint name -> limit info)
+   */
+  unity?: Record<string, LimitInfoResponse>;
+
+  /**
    * Rate limits for Web platform (endpoint name -> limit info)
    */
   web?: Record<string, LimitInfoResponse>;
@@ -12724,6 +12795,11 @@ export interface GetRateLimitsResponse {
    * Map of endpoint rate limits for the server-side platform
    */
   server_side?: Record<string, LimitInfoResponse>;
+
+  /**
+   * Map of endpoint rate limits for the Unity platform
+   */
+  unity?: Record<string, LimitInfoResponse>;
 
   /**
    * Map of endpoint rate limits for the web platform
@@ -14273,6 +14349,8 @@ export interface MatchedContent {
    */
   severity?: string;
 
+  text?: string;
+
   /**
    * Image-classification entries (keyframe rule, Type=image) carry nested L1 → L2 classifications. Text entries (closed_caption rule, Type=text) carry flat label + severity. Resolved against the app's effective taxonomy on the image side.
    */
@@ -14905,6 +14983,8 @@ export interface MessageNewEvent {
 
 export interface MessageOptions {
   include_thread_participants?: boolean;
+
+  member_custom_include?: string[];
 }
 
 export interface MessagePaginationParams {
@@ -18467,6 +18547,11 @@ export interface QueryChannelsRequest {
   state?: boolean;
 
   user_id?: string;
+
+  /**
+   * Top-level keys of the message sender's channel-member custom data to include under member.custom (max 8 keys, 64 chars each)
+   */
+  member_custom_include?: string[];
 
   /**
    * List of sort parameters
@@ -22562,7 +22647,7 @@ export interface StoriesFeedUpdatedEvent {
 
 export interface SubmitActionRequest {
   /**
-   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, ban, custom, unban, restore, delete_user, unblock, block, shadow_block, unmask, kick_user, end_call, escalate, de_escalate
+   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, ban, custom, unban, restore, delete_user, delete_user_messages, unblock, block, shadow_block, unmask, kick_user, end_call, escalate, de_escalate
    */
 
   action_type:
@@ -22577,6 +22662,7 @@ export interface SubmitActionRequest {
     | 'unban'
     | 'restore'
     | 'delete_user'
+    | 'delete_user_messages'
     | 'unblock'
     | 'block'
     | 'shadow_block'
@@ -22617,6 +22703,8 @@ export interface SubmitActionRequest {
   delete_reaction?: DeleteReactionRequestPayload;
 
   delete_user?: DeleteUserRequestPayload;
+
+  delete_user_messages?: DeleteUserMessagesRequestPayload;
 
   escalate?: EscalatePayload;
 
@@ -24143,10 +24231,14 @@ export interface UpdateBlockListRequest {
 
   team?: string;
 
+  user_id?: string;
+
   /**
    * List of words to block
    */
   words?: string[];
+
+  user?: UserRequest;
 }
 
 export interface UpdateBlockListResponse {
@@ -25192,6 +25284,9 @@ export interface UpdatePollOptionRequest {
 
   user_id?: string;
 
+  /**
+   * Custom data for this object
+   */
   custom?: Record<string, any>;
 
   user?: UserRequest;
@@ -25267,6 +25362,9 @@ export interface UpdatePollRequest {
    */
   options?: PollOptionRequest[];
 
+  /**
+   * Custom data for this object
+   */
   custom?: Record<string, any>;
 
   user?: UserRequest;
