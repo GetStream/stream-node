@@ -203,6 +203,7 @@ export class FeedsApi {
       visibility_tag: request?.visibility_tag,
       attachments: request?.attachments,
       collection_refs: request?.collection_refs,
+      collections: request?.collections,
       filter_tags: request?.filter_tags,
       interest_tags: request?.interest_tags,
       mentioned_user_ids: request?.mentioned_user_ids,

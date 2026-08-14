@@ -21,6 +21,7 @@ import {
   GetCallResponse,
   GetCallSessionParticipantStatsDetailsResponse,
   GetCallTypeResponse,
+  GetDailyDigestResponse,
   GetEdgesResponse,
   GetOrCreateCallRequest,
   GetOrCreateCallResponse,
@@ -1946,6 +1947,24 @@ export class VideoApi {
     );
 
     decoders.QueryAggregateCallStatsResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getDailyDigest(request?: {
+    date?: string;
+    app_id?: string;
+  }): Promise<StreamResponse<GetDailyDigestResponse>> {
+    const queryParams = {
+      date: request?.date,
+      app_id: request?.app_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetDailyDigestResponse>
+    >('GET', '/api/v2/video/stats/daily_digest', undefined, queryParams);
+
+    decoders.GetDailyDigestResponse?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

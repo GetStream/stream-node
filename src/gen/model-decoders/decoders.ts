@@ -1372,6 +1372,13 @@ decoders.ChannelConfigWithInfo = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ChannelContextResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_by: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ChannelCreatedEvent = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1431,6 +1438,8 @@ decoders.ChannelMemberResponse = (input?: Record<string, any>) => {
     ban_expires: { type: 'DatetimeType', isSingle: true },
 
     deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    future_channel_ban_expires: { type: 'DatetimeType', isSingle: true },
 
     invite_accepted_at: { type: 'DatetimeType', isSingle: true },
 
@@ -2920,6 +2929,15 @@ decoders.GetDraftResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.GetExternalStorageResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.GetFeedGroupResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     feed_group: { type: 'FeedGroupResponse', isSingle: true },
@@ -3667,6 +3685,15 @@ decoders.MessageWithChannelResponse = (input?: Record<string, any>) => {
   return decode(typeMappings, input);
 };
 
+decoders.ModerationAnalysisFailedEvent = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders.ModerationCallResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -3979,6 +4006,62 @@ decoders.PinActivityResponse = (input?: Record<string, any>) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     activity: { type: 'ActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestResult = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestRun = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    completed_at: { type: 'DatetimeType', isSingle: true },
+
+    config_updated_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestRunResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    results: { type: 'PolicyTestResult', isSingle: false },
+
+    run: { type: 'PolicyTestRun', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestSet = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    last_run: { type: 'PolicyTestRun', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestSetListResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    sets: { type: 'PolicyTestSet', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders.PolicyTestSetResponse = (input?: Record<string, any>) => {
+  const typeMappings: TypeMapping = {
+    recent_runs: { type: 'PolicyTestRun', isSingle: false },
+
+    set: { type: 'PolicyTestSet', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4922,6 +5005,8 @@ decoders.SegmentTargetResponse = (input?: Record<string, any>) => {
 decoders.SendMessageResponse = (input?: Record<string, any>) => {
   const typeMappings: TypeMapping = {
     message: { type: 'MessageResponse', isSingle: true },
+
+    channel_context: { type: 'ChannelContextResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };

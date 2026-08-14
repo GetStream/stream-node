@@ -19,6 +19,7 @@ import {
   CheckResponse,
   CheckS3AccessRequest,
   CheckS3AccessResponse,
+  CreatePolicyTestSetRequest,
   CreateQueueRequest,
   CustomCheckRequest,
   CustomCheckResponse,
@@ -45,6 +46,9 @@ import {
   ModerationBanResponse,
   MuteRequest,
   MuteResponse,
+  PolicyTestRunResponse,
+  PolicyTestSetListResponse,
+  PolicyTestSetResponse,
   QueryAppealsRequest,
   QueryAppealsResponse,
   QueryFeedModerationTemplatesResponse,
@@ -61,6 +65,7 @@ import {
   QueryReviewQueueRequest,
   QueryReviewQueueResponse,
   QueueResponse,
+  Response,
   SubmitActionRequest,
   SubmitActionResponse,
   SubmitModerationFeedbackRequest,
@@ -1016,10 +1021,138 @@ export class ModerationApi {
     return { ...response.body, metadata: response.metadata };
   }
 
-  async listQueues(): Promise<StreamResponse<ListQueuesResponse>> {
+  async getPolicyTestRun(request: {
+    id: string;
+  }): Promise<StreamResponse<PolicyTestRunResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PolicyTestRunResponse>
+    >(
+      'GET',
+      '/api/v2/moderation/policy_tests/runs/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders.PolicyTestRunResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listPolicyTestSets(): Promise<
+    StreamResponse<PolicyTestSetListResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PolicyTestSetListResponse>
+    >('GET', '/api/v2/moderation/policy_tests/sets', undefined, undefined);
+
+    decoders.PolicyTestSetListResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createPolicyTestSet(
+    request: CreatePolicyTestSetRequest,
+  ): Promise<StreamResponse<PolicyTestSetResponse>> {
+    const body = {
+      name: request?.name,
+      config_key: request?.config_key,
+      mode: request?.mode,
+      team: request?.team,
+      rows: request?.rows,
+      seed: request?.seed,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PolicyTestSetResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/policy_tests/sets',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders.PolicyTestSetResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deletePolicyTestSet(request: {
+    id: string;
+  }): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/moderation/policy_tests/sets/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders.Response?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPolicyTestSet(request: {
+    id: string;
+  }): Promise<StreamResponse<PolicyTestSetResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PolicyTestSetResponse>
+    >(
+      'GET',
+      '/api/v2/moderation/policy_tests/sets/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders.PolicyTestSetResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async startPolicyTestRun(request: {
+    id: string;
+  }): Promise<StreamResponse<PolicyTestRunResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<PolicyTestRunResponse>
+    >(
+      'POST',
+      '/api/v2/moderation/policy_tests/sets/{id}/runs',
+      pathParams,
+      undefined,
+    );
+
+    decoders.PolicyTestRunResponse?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async listQueues(request?: {
+    user_id?: string;
+  }): Promise<StreamResponse<ListQueuesResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
+
     const response = await this.apiClient.sendRequest<
       StreamResponse<ListQueuesResponse>
-    >('GET', '/api/v2/moderation/queues', undefined, undefined);
+    >('GET', '/api/v2/moderation/queues', undefined, queryParams);
 
     decoders.ListQueuesResponse?.(response.body);
 
