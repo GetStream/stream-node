@@ -19,17 +19,17 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
-    "prepare": "husky install",
+    "postinstall": "husky",
     "prepublish": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
     "start": "rollup -w -c",
     "build": "rm -rf dist && rollup -c",
     "generate:open-api": "./generate-openapi.sh",
-    "lint": "eslint **/*.ts",
-    "lint:fix": "eslint --fix **/*.ts",
+    "lint": "eslint --ext .ts src __tests__ index.ts",
+    "lint:fix": "eslint --fix --ext .ts src __tests__ index.ts",
     "prettier:fix": "prettier . --write",
-    "lint:gen": "eslint --fix src/gen/**/*ts && prettier src/gen/**/*.ts --write"
+    "lint:gen": "eslint --fix \"src/gen/**/*.ts\" && prettier \"src/gen/**/*.ts\" --write"
   },
   "lint-staged": {
     "**/*": [
@@ -85,5 +85,5 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  "packageManager": "yarn@4.18.0"
 }
