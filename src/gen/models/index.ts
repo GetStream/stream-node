@@ -168,12 +168,7 @@ export interface APNSPayload {
 
 export interface AWSRekognitionRule {
   action:
-    | 'flag'
-    | 'shadow'
-    | 'remove'
-    | 'bounce'
-    | 'bounce_flag'
-    | 'bounce_remove';
+    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
 
   label: string;
 
@@ -2482,12 +2477,7 @@ export interface AutomodPlatformCircumventionConfig {
 
 export interface AutomodRule {
   action:
-    | 'flag'
-    | 'shadow'
-    | 'remove'
-    | 'bounce'
-    | 'bounce_flag'
-    | 'bounce_remove';
+    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
 
   label: string;
 
@@ -2504,12 +2494,7 @@ export interface AutomodSemanticFiltersConfig {
 
 export interface AutomodSemanticFiltersRule {
   action:
-    | 'flag'
-    | 'shadow'
-    | 'remove'
-    | 'bounce'
-    | 'bounce_flag'
-    | 'bounce_remove';
+    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
 
   name: string;
 
@@ -3344,11 +3329,7 @@ export interface BulkActionAppealsRequest {
    */
 
   action_type:
-    | 'unban'
-    | 'restore'
-    | 'unblock'
-    | 'mark_reviewed'
-    | 'reject_appeal';
+    'unban' | 'restore' | 'unblock' | 'mark_reviewed' | 'reject_appeal';
 
   /**
    * List of appeal UUIDs to process
@@ -8769,11 +8750,7 @@ export interface CreateFeedGroupRequest {
    */
 
   default_visibility?:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'members'
-    | 'private';
+    'public' | 'visible' | 'followers' | 'members' | 'private';
 
   /**
    * Configuration for activity processors
@@ -11085,11 +11062,7 @@ export interface FeedGroupResponse {
    */
 
   default_visibility?:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'members'
-    | 'private';
+    'public' | 'visible' | 'followers' | 'members' | 'private';
 
   deleted_at?: Date;
 
@@ -13444,11 +13417,7 @@ export interface GetOrCreateFeedGroupRequest {
    */
 
   default_visibility?:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'members'
-    | 'private';
+    'public' | 'visible' | 'followers' | 'members' | 'private';
 
   /**
    * Configuration for activity processors
@@ -17979,12 +17948,7 @@ export interface OCRContentParameters {
 
 export interface OCRRule {
   action:
-    | 'flag'
-    | 'shadow'
-    | 'remove'
-    | 'bounce'
-    | 'bounce_flag'
-    | 'bounce_remove';
+    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
 
   label: string;
 }
@@ -26869,11 +26833,7 @@ export interface UpdateExternalStorageResponse {
 
 export interface UpdateFeedGroupRequest {
   default_visibility?:
-    | 'public'
-    | 'visible'
-    | 'followers'
-    | 'members'
-    | 'private';
+    'public' | 'visible' | 'followers' | 'members' | 'private';
 
   /**
    * Configuration for activity processors
