@@ -19,7 +19,7 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
-    "postinstall": "husky",
+    "postinstall": "node -e \"try{require.resolve('husky')}catch{process.exit(0)};require('child_process').execSync('husky',{stdio:'inherit'})\"",
     "prepack": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
