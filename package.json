@@ -49,6 +49,7 @@
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
     "@stream-io/openai-realtime-api": "~0.3.3",
+    "@types/node": "^22.20.1",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "dotenv": "^17.3.1",
@@ -70,7 +71,6 @@
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22.20.1",
     "jsonwebtoken": "^9.0.3"
   },
   "peerDependencies": {
