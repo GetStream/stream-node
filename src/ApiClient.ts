@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { ApiConfig, RequestMetadata, StreamError } from './types';
 import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
+import { isScalar, stringifyArrayParam } from './utils/query-params';
 
 export class ApiClient {
   private readonly dispatcher?: RequestInit['dispatcher'];
@@ -128,20 +129,17 @@ export class ApiClient {
     const newParams = [];
     for (const k in params) {
       const param = params[k];
+      if (param === null || param === undefined) continue;
       if (Array.isArray(param)) {
-        newParams.push(`${k}=${encodeURIComponent(param.join(','))}`);
+        newParams.push(
+          `${k}=${encodeURIComponent(stringifyArrayParam(param))}`,
+        );
       } else if (param instanceof Date) {
-        newParams.push(param.toISOString());
+        newParams.push(`${k}=${encodeURIComponent(param.toISOString())}`);
       } else if (typeof param === 'object') {
         newParams.push(`${k}=${encodeURIComponent(JSON.stringify(param))}`);
-      } else {
-        if (
-          typeof param === 'string' ||
-          typeof param === 'number' ||
-          typeof param === 'boolean'
-        ) {
-          newParams.push(`${k}=${encodeURIComponent(param)}`);
-        }
+      } else if (isScalar(param)) {
+        newParams.push(`${k}=${encodeURIComponent(param)}`);
       }
     }
 
