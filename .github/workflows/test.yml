@@ -36,7 +36,7 @@ jobs:
   test-node:
     strategy:
       matrix:
-        version: [18, 20, 22, 24]
+        version: [22, 24, 26]
     runs-on: ubuntu-latest
     needs: [lint]
     steps:
