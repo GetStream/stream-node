@@ -20,7 +20,7 @@
   },
   "scripts": {
     "postinstall": "husky",
-    "prepublish": "yarn build",
+    "prepack": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
     "start": "vite build --watch",
