@@ -45,6 +45,9 @@
     "LICENSE",
     ".readme-assets"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stream-io/openai-realtime-api": "~0.3.3",
