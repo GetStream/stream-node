@@ -566,12 +566,22 @@ export class ChatApi {
     messages_limit?: number;
     members_limit?: number;
     watchers_limit?: number;
+    messages_id_lt?: string;
+    messages_id_lte?: string;
+    messages_id_gt?: string;
+    messages_id_gte?: string;
+    messages_id_around?: string;
   }): Promise<StreamResponse<ChannelStateResponse>> {
     const queryParams = {
       state: request?.state,
       messages_limit: request?.messages_limit,
       members_limit: request?.members_limit,
       watchers_limit: request?.watchers_limit,
+      messages_id_lt: request?.messages_id_lt,
+      messages_id_lte: request?.messages_id_lte,
+      messages_id_gt: request?.messages_id_gt,
+      messages_id_gte: request?.messages_id_gte,
+      messages_id_around: request?.messages_id_around,
     };
     const pathParams = {
       type: request?.type,
@@ -925,6 +935,8 @@ export class ChatApi {
     const body = {
       message: request?.message,
       force_moderation: request?.force_moderation,
+      include_channel_context: request?.include_channel_context,
+      include_mentioned_members: request?.include_mentioned_members,
       keep_channel_hidden: request?.keep_channel_hidden,
       pending: request?.pending,
       skip_enrich_url: request?.skip_enrich_url,
@@ -1425,9 +1437,11 @@ export class ChatApi {
       channels: request?.channels,
       clear_deleted_message_text: request?.clear_deleted_message_text,
       export_users: request?.export_users,
+      format: request?.format,
       include_soft_deleted_channels: request?.include_soft_deleted_channels,
       include_truncated_messages: request?.include_truncated_messages,
       version: request?.version,
+      include_fields: request?.include_fields,
     };
 
     const response = await this.apiClient.sendRequest<
