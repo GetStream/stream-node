@@ -28,7 +28,7 @@ describe('devices and push', () => {
     await client.upsertUsers([user]);
   });
 
-  it('create device', async () => {
+  it('create device', () => {
     expect(async () => await client.createDevice(device)).not.toThrowError();
   });
 

@@ -118,7 +118,7 @@ yarn lint
 yarn prettier:fix
 ```
 
-• Respect .eslintrc and .prettierrc configurations. Do not suppress rules broadly; justify and scope exceptions.
+• Respect the eslint.config.mjs and .editorconfig configurations. Do not suppress rules broadly; justify and scope exceptions.
 • The project uses lint-staged with Husky for pre-commit hooks.
 
 Commit / PR conventions

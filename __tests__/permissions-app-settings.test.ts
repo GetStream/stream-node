@@ -66,7 +66,7 @@ describe('permissions and app settings API', () => {
 
     try {
       response = await client.deleteRole({ name: role.name });
-    } catch (e) {
+    } catch {
       // the first request fails on backend sometimes
       // retry it
       await new Promise<void>((resolve) => {

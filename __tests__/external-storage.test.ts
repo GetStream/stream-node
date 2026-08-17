@@ -94,15 +94,23 @@ describe('external storage CRUD API', () => {
   afterAll(async () => {
     try {
       await client.deleteExternalStorage({ name: s3name });
-    } catch (error) {}
+    } catch {
+      // best-effort cleanup; the storage may not have been created
+    }
     try {
       await client.deleteExternalStorage({ name: gcsName });
-    } catch (error) {}
+    } catch {
+      // best-effort cleanup; the storage may not have been created
+    }
     try {
       await client.deleteExternalStorage({ name: azureName });
-    } catch (error) {}
+    } catch {
+      // best-effort cleanup; the storage may not have been created
+    }
     try {
       await client.deleteExternalStorage({ name: storageName });
-    } catch (error) {}
+    } catch {
+      // best-effort cleanup; the storage may not have been created
+    }
   });
 });

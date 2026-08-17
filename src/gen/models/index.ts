@@ -6263,7 +6263,6 @@ export const ChannelOwnCapability = {
   UPLOAD_FILE: 'upload-file',
 } as const;
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ChannelOwnCapability =
   (typeof ChannelOwnCapability)[keyof typeof ChannelOwnCapability];
 
@@ -11339,7 +11338,6 @@ export const FeedOwnCapability = {
   UPDATE_OWN_COMMENT: 'update-own-comment',
 } as const;
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type FeedOwnCapability =
   (typeof FeedOwnCapability)[keyof typeof FeedOwnCapability];
 
@@ -18068,7 +18066,6 @@ export const OwnCapability = {
   UPDATE_CALL_SETTINGS: 'update-call-settings',
 } as const;
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type OwnCapability = (typeof OwnCapability)[keyof typeof OwnCapability];
 
 export interface OwnUserResponse {

@@ -91,7 +91,7 @@ describe.skip('teams', () => {
 
     expect(response.calls.length).toBeGreaterThan(0);
 
-    response = await client.video.queryCalls({
+    await client.video.queryCalls({
       filter_conditions: {
         team: null,
       },

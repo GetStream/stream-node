@@ -16,10 +16,10 @@ export function JWTUserToken(
     );
   }
 
-  const opts: SignOptions = Object.assign({
+  const opts: SignOptions = {
     algorithm: 'HS256',
     noTimestamp: true,
-  });
+  };
 
   if (payload.iat) {
     opts.noTimestamp = false;

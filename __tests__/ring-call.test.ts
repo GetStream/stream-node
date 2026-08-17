@@ -50,7 +50,7 @@ describe('ring call API', () => {
   it('delete call', async () => {
     try {
       await call.delete({ hard: true });
-    } catch (e) {
+    } catch {
       // the first request fails on backend sometimes
       // retry it
       await new Promise<void>((resolve) => {
