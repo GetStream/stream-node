@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
@@ -13,6 +13,22 @@ describe('permissions and app settings API', () => {
       name: 'streamnodetest' + randomUUID(),
     };
     client = createTestClient();
+  });
+
+  // The role is created and deleted by separate tests below, so any failure
+  // between the two would leak it. Apps allow only 25 custom roles, so leaked
+  // roles eventually break every later run of this suite.
+  afterAll(async () => {
+    try {
+      await client.updateApp({ grants: { [role.name]: [] } });
+    } catch {
+      // the grant was never created
+    }
+    try {
+      await client.deleteRole({ name: role.name });
+    } catch {
+      // the role was never created, or the delete test already removed it
+    }
   });
 
   it('list permissions', async () => {
