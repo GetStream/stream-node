@@ -72,19 +72,38 @@ describe('channel API', () => {
   });
 
   it('queryChannels', async () => {
-    const unfilteredResponse = await client.chat.queryChannels();
-
-    expect(unfilteredResponse.channels.length).toBeGreaterThan(1);
-
-    const filteredResponse = await client.chat.queryChannels({
-      filter_conditions: { cid: channel.cid },
+    // The unfiltered query needs more than one channel to exist. Create the
+    // second one here so the test does not depend on channels that happen to
+    // be left over in the test app.
+    const otherChannel = client.chat.channel(
+      'messaging',
+      'streamnodetest' + randomUUID(),
+    );
+    await otherChannel.getOrCreate({
+      data: {
+        created_by_id: user.id,
+        members: [{ user_id: user.id }, { user_id: user2.id }],
+      },
     });
 
-    expect(filteredResponse.channels.length).toBe(1);
+    try {
+      const unfilteredResponse = await client.chat.queryChannels();
 
-    const channelFromResponse = filteredResponse.channels[0];
+      expect(unfilteredResponse.channels.length).toBeGreaterThan(1);
 
-    expect(channelFromResponse.channel?.custom?.name).toBe(channelId);
+      const filteredResponse = await client.chat.queryChannels({
+        filter_conditions: { cid: channel.cid },
+      });
+
+      expect(filteredResponse.channels.length).toBe(1);
+
+      const channelFromResponse = filteredResponse.channels[0];
+
+      expect(channelFromResponse.channel?.custom?.name).toBe(channelId);
+    } finally {
+      // delete even when an assertion fails, so repeated runs do not pile up
+      await otherChannel.delete();
+    }
   });
 
   it('query members', async () => {
