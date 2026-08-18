@@ -6,6 +6,7 @@ import {
   EventResponse,
   GetDraftResponse,
   GetManyMessagesResponse,
+  GetPinnedMessagesResponse,
   HideChannelRequest,
   HideChannelResponse,
   MarkReadRequest,
@@ -17,6 +18,7 @@ import {
   SendMessageResponse,
   ShowChannelRequest,
   ShowChannelResponse,
+  SortParamRequest,
   TruncateChannelRequest,
   TruncateChannelResponse,
   UpdateChannelPartialRequest,
@@ -64,6 +66,7 @@ export class ChannelApi {
     messages_id_gt?: string;
     messages_id_gte?: string;
     messages_id_around?: string;
+    user_id?: string;
   }): Promise<StreamResponse<ChannelStateResponse>> {
     if (!this.id) {
       throw new Error(
@@ -263,8 +266,8 @@ export class ChannelApi {
   }
 
   getManyMessages(request: {
-    ids: string[];
-    member_custom_include?: string[];
+    ids: Array<string>;
+    member_custom_include?: Array<string>;
   }): Promise<StreamResponse<GetManyMessagesResponse>> {
     if (!this.id) {
       throw new Error(
@@ -273,6 +276,36 @@ export class ChannelApi {
     }
 
     return this.chatApi.getManyMessages({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  getPinnedMessages(request?: {
+    limit?: number;
+    offset?: number;
+    id_gte?: string;
+    id_gt?: string;
+    id_lte?: string;
+    id_lt?: string;
+    pinned_at_after_or_equal?: Date;
+    pinned_at_after?: Date;
+    pinned_at_before_or_equal?: Date;
+    pinned_at_before?: Date;
+    id_around?: string;
+    pinned_at_around?: Date;
+    user_id?: string;
+    sort?: Array<SortParamRequest>;
+    member_custom_include?: Array<string>;
+  }): Promise<StreamResponse<GetPinnedMessagesResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.getPinnedMessages({
       id: this.id,
       type: this.type,
       ...request,

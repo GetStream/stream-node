@@ -14,6 +14,8 @@ import {
   CreateChannelTypeResponse,
   CreateCommandRequest,
   CreateCommandResponse,
+  CreatePredefinedFilterRequest,
+  CreatePredefinedFilterResponse,
   CreateReminderRequest,
   CreateSegmentRequest,
   CreateSegmentResponse,
@@ -37,6 +39,8 @@ import {
   GetDraftResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
+  GetPinnedMessagesResponse,
+  GetPredefinedFilterResponse,
   GetReactionsResponse,
   GetRepliesResponse,
   GetRetentionPolicyResponse,
@@ -77,6 +81,7 @@ import {
   QueryMessageFlagsResponse,
   QueryMessageHistoryRequest,
   QueryMessageHistoryResponse,
+  QueryPredefinedFiltersResponse,
   QueryReactionsRequest,
   QueryReactionsResponse,
   QueryRemindersRequest,
@@ -131,6 +136,8 @@ import {
   UpdateMessagePartialResponse,
   UpdateMessageRequest,
   UpdateMessageResponse,
+  UpdatePredefinedFilterRequest,
+  UpdatePredefinedFilterResponse,
   UpdateReminderRequest,
   UpdateReminderResponse,
   UpdateSegmentRequest,
@@ -179,7 +186,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateCampaignResponse?.(response.body);
+    decoders['CreateCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -207,7 +214,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryCampaignsResponse?.(response.body);
+    decoders['QueryCampaignsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -223,7 +230,7 @@ export class ChatApi {
       StreamResponse<DeleteCampaignResponse>
     >('DELETE', '/api/v2/chat/campaigns/{id}', pathParams, undefined);
 
-    decoders.DeleteCampaignResponse?.(response.body);
+    decoders['DeleteCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -247,7 +254,7 @@ export class ChatApi {
       StreamResponse<GetCampaignResponse>
     >('GET', '/api/v2/chat/campaigns/{id}', pathParams, queryParams);
 
-    decoders.GetCampaignResponse?.(response.body);
+    decoders['GetCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -286,7 +293,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CampaignResponse?.(response.body);
+    decoders['CampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -313,7 +320,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.StartCampaignResponse?.(response.body);
+    decoders['StartCampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -337,7 +344,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CampaignResponse?.(response.body);
+    decoders['CampaignResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -372,7 +379,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryChannelsResponse?.(response.body);
+    decoders['QueryChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -398,7 +405,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ChannelBatchUpdateResponse?.(response.body);
+    decoders['ChannelBatchUpdateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -422,7 +429,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.DeleteChannelsResponse?.(response.body);
+    decoders['DeleteChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -448,7 +455,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MarkDeliveredResponse?.(response.body);
+    decoders['MarkDeliveredResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -474,7 +481,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.GroupedQueryChannelsResponse?.(response.body);
+    decoders['GroupedQueryChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -499,7 +506,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MarkReadResponse?.(response.body);
+    decoders['MarkReadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -532,7 +539,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ChannelStateResponse?.(response.body);
+    decoders['ChannelStateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -554,7 +561,7 @@ export class ChatApi {
       StreamResponse<DeleteChannelResponse>
     >('DELETE', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
 
-    decoders.DeleteChannelResponse?.(response.body);
+    decoders['DeleteChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -571,6 +578,7 @@ export class ChatApi {
     messages_id_gt?: string;
     messages_id_gte?: string;
     messages_id_around?: string;
+    user_id?: string;
   }): Promise<StreamResponse<ChannelStateResponse>> {
     const queryParams = {
       state: request?.state,
@@ -582,6 +590,7 @@ export class ChatApi {
       messages_id_gt: request?.messages_id_gt,
       messages_id_gte: request?.messages_id_gte,
       messages_id_around: request?.messages_id_around,
+      user_id: request?.user_id,
     };
     const pathParams = {
       type: request?.type,
@@ -592,7 +601,7 @@ export class ChatApi {
       StreamResponse<ChannelStateResponse>
     >('GET', '/api/v2/chat/channels/{type}/{id}', pathParams, queryParams);
 
-    decoders.ChannelStateResponse?.(response.body);
+    decoders['ChannelStateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -622,7 +631,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelPartialResponse?.(response.body);
+    decoders['UpdateChannelPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -666,7 +675,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelResponse?.(response.body);
+    decoders['UpdateChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -693,7 +702,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -722,7 +731,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetDraftResponse?.(response.body);
+    decoders['GetDraftResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -749,7 +758,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.EventResponse?.(response.body);
+    decoders['EventResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -774,7 +783,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -802,7 +811,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.UploadChannelFileResponse?.(response.body);
+    decoders['UploadChannelFileResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -831,7 +840,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.HideChannelResponse?.(response.body);
+    decoders['HideChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -856,7 +865,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -885,7 +894,7 @@ export class ChatApi {
       'multipart/form-data',
     );
 
-    decoders.UploadChannelResponse?.(response.body);
+    decoders['UploadChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -920,7 +929,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMemberPartialResponse?.(response.body);
+    decoders['UpdateMemberPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -955,7 +964,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.SendMessageResponse?.(response.body);
+    decoders['SendMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -963,8 +972,8 @@ export class ChatApi {
   async getManyMessages(request: {
     type: string;
     id: string;
-    ids: string[];
-    member_custom_include?: string[];
+    ids: Array<string>;
+    member_custom_include?: Array<string>;
   }): Promise<StreamResponse<GetManyMessagesResponse>> {
     const queryParams = {
       ids: request?.ids,
@@ -984,7 +993,62 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetManyMessagesResponse?.(response.body);
+    decoders['GetManyMessagesResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPinnedMessages(request: {
+    type: string;
+    id: string;
+    limit?: number;
+    offset?: number;
+    id_gte?: string;
+    id_gt?: string;
+    id_lte?: string;
+    id_lt?: string;
+    pinned_at_after_or_equal?: Date;
+    pinned_at_after?: Date;
+    pinned_at_before_or_equal?: Date;
+    pinned_at_before?: Date;
+    id_around?: string;
+    pinned_at_around?: Date;
+    user_id?: string;
+    sort?: Array<SortParamRequest>;
+    member_custom_include?: Array<string>;
+  }): Promise<StreamResponse<GetPinnedMessagesResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      offset: request?.offset,
+      id_gte: request?.id_gte,
+      id_gt: request?.id_gt,
+      id_lte: request?.id_lte,
+      id_lt: request?.id_lt,
+      pinned_at_after_or_equal: request?.pinned_at_after_or_equal,
+      pinned_at_after: request?.pinned_at_after,
+      pinned_at_before_or_equal: request?.pinned_at_before_or_equal,
+      pinned_at_before: request?.pinned_at_before,
+      id_around: request?.id_around,
+      pinned_at_around: request?.pinned_at_around,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      member_custom_include: request?.member_custom_include,
+    };
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetPinnedMessagesResponse>
+    >(
+      'GET',
+      '/api/v2/chat/channels/{type}/{id}/pinned_messages',
+      pathParams,
+      queryParams,
+    );
+
+    decoders['GetPinnedMessagesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1018,7 +1082,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ChannelStateResponse?.(response.body);
+    decoders['ChannelStateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1048,7 +1112,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MarkReadResponse?.(response.body);
+    decoders['MarkReadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1076,7 +1140,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ShowChannelResponse?.(response.body);
+    decoders['ShowChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1109,7 +1173,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.TruncateChannelResponse?.(response.body);
+    decoders['TruncateChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1138,7 +1202,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1148,7 +1212,7 @@ export class ChatApi {
       StreamResponse<ListChannelTypesResponse>
     >('GET', '/api/v2/chat/channeltypes', undefined, undefined);
 
-    decoders.ListChannelTypesResponse?.(response.body);
+    decoders['ListChannelTypesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1204,7 +1268,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateChannelTypeResponse?.(response.body);
+    decoders['CreateChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1223,7 +1287,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1239,7 +1303,7 @@ export class ChatApi {
       StreamResponse<GetChannelTypeResponse>
     >('GET', '/api/v2/chat/channeltypes/{name}', pathParams, undefined);
 
-    decoders.GetChannelTypeResponse?.(response.body);
+    decoders['GetChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1300,7 +1364,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateChannelTypeResponse?.(response.body);
+    decoders['UpdateChannelTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1310,7 +1374,7 @@ export class ChatApi {
       StreamResponse<ListCommandsResponse>
     >('GET', '/api/v2/chat/commands', undefined, undefined);
 
-    decoders.ListCommandsResponse?.(response.body);
+    decoders['ListCommandsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1336,7 +1400,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateCommandResponse?.(response.body);
+    decoders['CreateCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1352,7 +1416,7 @@ export class ChatApi {
       StreamResponse<DeleteCommandResponse>
     >('DELETE', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
-    decoders.DeleteCommandResponse?.(response.body);
+    decoders['DeleteCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1368,7 +1432,7 @@ export class ChatApi {
       StreamResponse<GetCommandResponse>
     >('GET', '/api/v2/chat/commands/{name}', pathParams, undefined);
 
-    decoders.GetCommandResponse?.(response.body);
+    decoders['GetCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1396,7 +1460,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateCommandResponse?.(response.body);
+    decoders['UpdateCommandResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1425,7 +1489,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryDraftsResponse?.(response.body);
+    decoders['QueryDraftsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1455,7 +1519,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ExportChannelsResponse?.(response.body);
+    decoders['ExportChannelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1471,7 +1535,7 @@ export class ChatApi {
       StreamResponse<MembersResponse>
     >('GET', '/api/v2/chat/members', undefined, queryParams);
 
-    decoders.MembersResponse?.(response.body);
+    decoders['MembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1498,7 +1562,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryMessageHistoryResponse?.(response.body);
+    decoders['QueryMessageHistoryResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1522,7 +1586,7 @@ export class ChatApi {
       StreamResponse<DeleteMessageResponse>
     >('DELETE', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
-    decoders.DeleteMessageResponse?.(response.body);
+    decoders['DeleteMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1542,7 +1606,7 @@ export class ChatApi {
       StreamResponse<GetMessageResponse>
     >('GET', '/api/v2/chat/messages/{id}', pathParams, queryParams);
 
-    decoders.GetMessageResponse?.(response.body);
+    decoders['GetMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1570,7 +1634,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessageResponse?.(response.body);
+    decoders['UpdateMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1601,7 +1665,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessagePartialResponse?.(response.body);
+    decoders['UpdateMessagePartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1629,7 +1693,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageActionResponse?.(response.body);
+    decoders['MessageActionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1653,7 +1717,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageActionResponse?.(response.body);
+    decoders['MessageActionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1684,7 +1748,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateMessagePartialResponse?.(response.body);
+    decoders['UpdateMessagePartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1712,7 +1776,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.SendReactionResponse?.(response.body);
+    decoders['SendReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1739,7 +1803,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.DeleteReactionResponse?.(response.body);
+    decoders['DeleteReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1761,7 +1825,7 @@ export class ChatApi {
       StreamResponse<GetReactionsResponse>
     >('GET', '/api/v2/chat/messages/{id}/reactions', pathParams, queryParams);
 
-    decoders.GetReactionsResponse?.(response.body);
+    decoders['GetReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1793,7 +1857,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryReactionsResponse?.(response.body);
+    decoders['QueryReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1819,7 +1883,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MessageActionResponse?.(response.body);
+    decoders['MessageActionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1845,7 +1909,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UndeleteMessageResponse?.(response.body);
+    decoders['UndeleteMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1874,7 +1938,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1903,7 +1967,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1928,7 +1992,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.DeleteReminderResponse?.(response.body);
+    decoders['DeleteReminderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1956,7 +2020,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateReminderResponse?.(response.body);
+    decoders['UpdateReminderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1984,7 +2048,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.ReminderResponseData?.(response.body);
+    decoders['ReminderResponseData']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1997,8 +2061,8 @@ export class ChatApi {
     id_lte?: string;
     id_lt?: string;
     id_around?: string;
-    sort?: SortParamRequest[];
-    member_custom_include?: string[];
+    sort?: Array<SortParamRequest>;
+    member_custom_include?: Array<string>;
   }): Promise<StreamResponse<GetRepliesResponse>> {
     const queryParams = {
       limit: request?.limit,
@@ -2023,7 +2087,7 @@ export class ChatApi {
       queryParams,
     );
 
-    decoders.GetRepliesResponse?.(response.body);
+    decoders['GetRepliesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2039,7 +2103,7 @@ export class ChatApi {
       StreamResponse<QueryMessageFlagsResponse>
     >('GET', '/api/v2/chat/moderation/flags/message', undefined, queryParams);
 
-    decoders.QueryMessageFlagsResponse?.(response.body);
+    decoders['QueryMessageFlagsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2065,7 +2129,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.MuteChannelResponse?.(response.body);
+    decoders['MuteChannelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2091,7 +2155,116 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UnmuteResponse?.(response.body);
+    decoders['UnmuteResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPredefinedFilters(request?: {
+    include_stats?: boolean;
+    sort?: Array<SortParamRequest>;
+  }): Promise<StreamResponse<QueryPredefinedFiltersResponse>> {
+    const queryParams = {
+      include_stats: request?.include_stats,
+      sort: request?.sort,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<QueryPredefinedFiltersResponse>
+    >('GET', '/api/v2/chat/predefined_filters', undefined, queryParams);
+
+    decoders['QueryPredefinedFiltersResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createPredefinedFilter(
+    request: CreatePredefinedFilterRequest,
+  ): Promise<StreamResponse<CreatePredefinedFilterResponse>> {
+    const body = {
+      name: request?.name,
+      operation: request?.operation,
+      filter: request?.filter,
+      description: request?.description,
+      sort: request?.sort,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<CreatePredefinedFilterResponse>
+    >(
+      'POST',
+      '/api/v2/chat/predefined_filters',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['CreatePredefinedFilterResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deletePredefinedFilter(request: {
+    name: string;
+  }): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      name: request?.name,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/chat/predefined_filters/{name}',
+      pathParams,
+      undefined,
+    );
+
+    decoders['Response']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getPredefinedFilter(request: {
+    name: string;
+  }): Promise<StreamResponse<GetPredefinedFilterResponse>> {
+    const pathParams = {
+      name: request?.name,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetPredefinedFilterResponse>
+    >('GET', '/api/v2/chat/predefined_filters/{name}', pathParams, undefined);
+
+    decoders['GetPredefinedFilterResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updatePredefinedFilter(
+    request: UpdatePredefinedFilterRequest & { name: string },
+  ): Promise<StreamResponse<UpdatePredefinedFilterResponse>> {
+    const pathParams = {
+      name: request?.name,
+    };
+    const body = {
+      operation: request?.operation,
+      filter: request?.filter,
+      description: request?.description,
+      sort: request?.sort,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpdatePredefinedFilterResponse>
+    >(
+      'PUT',
+      '/api/v2/chat/predefined_filters/{name}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['UpdatePredefinedFilterResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2107,7 +2280,7 @@ export class ChatApi {
       StreamResponse<QueryBannedUsersResponse>
     >('GET', '/api/v2/chat/query_banned_users', undefined, queryParams);
 
-    decoders.QueryBannedUsersResponse?.(response.body);
+    decoders['QueryBannedUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2123,7 +2296,7 @@ export class ChatApi {
       StreamResponse<QueryFutureChannelBansResponse>
     >('GET', '/api/v2/chat/query_future_channel_bans', undefined, queryParams);
 
-    decoders.QueryFutureChannelBansResponse?.(response.body);
+    decoders['QueryFutureChannelBansResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2152,7 +2325,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryRemindersResponse?.(response.body);
+    decoders['QueryRemindersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2164,7 +2337,7 @@ export class ChatApi {
       StreamResponse<GetRetentionPolicyResponse>
     >('GET', '/api/v2/chat/retention_policy', undefined, undefined);
 
-    decoders.GetRetentionPolicyResponse?.(response.body);
+    decoders['GetRetentionPolicyResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2188,7 +2361,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.SetRetentionPolicyResponse?.(response.body);
+    decoders['SetRetentionPolicyResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2211,7 +2384,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.DeleteRetentionPolicyResponse?.(response.body);
+    decoders['DeleteRetentionPolicyResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2238,7 +2411,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.GetRetentionPolicyRunsResponse?.(response.body);
+    decoders['GetRetentionPolicyRunsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2254,7 +2427,7 @@ export class ChatApi {
       StreamResponse<SearchResponse>
     >('GET', '/api/v2/chat/search', undefined, queryParams);
 
-    decoders.SearchResponse?.(response.body);
+    decoders['SearchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2283,7 +2456,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.CreateSegmentResponse?.(response.body);
+    decoders['CreateSegmentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2310,7 +2483,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QuerySegmentsResponse?.(response.body);
+    decoders['QuerySegmentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2329,7 +2502,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2345,7 +2518,7 @@ export class ChatApi {
       StreamResponse<GetSegmentResponse>
     >('GET', '/api/v2/chat/segments/{id}', pathParams, undefined);
 
-    decoders.GetSegmentResponse?.(response.body);
+    decoders['GetSegmentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2373,7 +2546,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateSegmentResponse?.(response.body);
+    decoders['UpdateSegmentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2397,7 +2570,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2421,7 +2594,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2442,7 +2615,7 @@ export class ChatApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2472,7 +2645,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QuerySegmentTargetsResponse?.(response.body);
+    decoders['QuerySegmentTargetsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2486,6 +2659,7 @@ export class ChatApi {
       month: request?.month,
       next: request?.next,
       start_date: request?.start_date,
+      team: request?.team,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -2499,7 +2673,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryTeamUsageStatsResponse?.(response.body);
+    decoders['QueryTeamUsageStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2531,7 +2705,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.QueryThreadsResponse?.(response.body);
+    decoders['QueryThreadsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2555,7 +2729,7 @@ export class ChatApi {
       StreamResponse<GetThreadResponse>
     >('GET', '/api/v2/chat/threads/{message_id}', pathParams, queryParams);
 
-    decoders.GetThreadResponse?.(response.body);
+    decoders['GetThreadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2584,7 +2758,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UpdateThreadPartialResponse?.(response.body);
+    decoders['UpdateThreadPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2600,7 +2774,7 @@ export class ChatApi {
       StreamResponse<WrappedUnreadCountsResponse>
     >('GET', '/api/v2/chat/unread', undefined, queryParams);
 
-    decoders.WrappedUnreadCountsResponse?.(response.body);
+    decoders['WrappedUnreadCountsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2623,7 +2797,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.UnreadCountsBatchResponse?.(response.body);
+    decoders['UnreadCountsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2647,7 +2821,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

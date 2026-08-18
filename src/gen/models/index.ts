@@ -1,7 +1,7 @@
 export interface AIAudioConfigRequest {
   profile?: string;
 
-  rules?: BodyguardRule[];
+  rules?: Array<BodyguardRule>;
 }
 
 export interface AIAudioConfigResponse {
@@ -9,7 +9,7 @@ export interface AIAudioConfigResponse {
 
   profile: string;
 
-  rules: BodyguardRule[];
+  rules: Array<BodyguardRule>;
 }
 
 export interface AIImageConfig {
@@ -17,9 +17,9 @@ export interface AIImageConfig {
 
   enabled?: boolean;
 
-  ocr_rules?: OCRRule[];
+  ocr_rules?: Array<OCRRule>;
 
-  rules?: AWSRekognitionRule[];
+  rules?: Array<AWSRekognitionRule>;
 }
 
 export interface AIImageLabelDefinition {
@@ -39,9 +39,9 @@ export interface AITextConfig {
 
   profile?: string;
 
-  rules?: BodyguardRule[];
+  rules?: Array<BodyguardRule>;
 
-  severity_rules?: BodyguardSeverityRule[];
+  severity_rules?: Array<BodyguardSeverityRule>;
 }
 
 export interface AIVideoConfig {
@@ -49,7 +49,7 @@ export interface AIVideoConfig {
 
   enabled?: boolean;
 
-  rules?: AWSRekognitionRule[];
+  rules?: Array<AWSRekognitionRule>;
 }
 
 export interface APIError {
@@ -81,7 +81,7 @@ export interface APIError {
   /**
    * Additional error-specific information
    */
-  details: number[];
+  details: Array<number>;
 
   /**
    * Flag that indicates if the error is unrecoverable, requests that return unrecoverable errors should not be retried, this error only applies to the request that caused it
@@ -269,7 +269,7 @@ export interface ActionLogResponse {
    */
   user_id: string;
 
-  ai_providers: string[];
+  ai_providers: Array<string>;
 
   /**
    * Additional metadata about the action
@@ -524,17 +524,17 @@ export interface ActivityMarkEvent {
   /**
    * The IDs of activities marked as read
    */
-  mark_read?: string[];
+  mark_read?: Array<string>;
 
   /**
    * The IDs of activities marked as seen
    */
-  mark_seen?: string[];
+  mark_seen?: Array<string>;
 
   /**
    * The IDs of activities marked as watched
    */
-  mark_watched?: string[];
+  mark_watched?: Array<string>;
 
   user?: UserResponseCommonFields;
 }
@@ -708,7 +708,7 @@ export interface ActivityRequest {
   /**
    * List of feeds to add the activity to with a default max limit of 25 feeds
    */
-  feeds: string[];
+  feeds: Array<string>;
 
   /**
    * @deprecated
@@ -781,32 +781,32 @@ export interface ActivityRequest {
   /**
    * List of attachments for the activity
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * Collections that this activity references
    */
-  collection_refs?: string[];
+  collection_refs?: Array<string>;
 
   /**
    * Collections to create or update as part of this request, so an activity and the collections it references can be written in one call. Their refs (name:id) are added to collection_refs automatically; you do not need to restate them, and they count toward the same per-activity collection-reference limit, which is the effective cap here. A collection that already exists has its custom data updated. Use collection_refs instead when the collection already exists and you are only referencing it, which requires no collection permissions.
    */
-  collections?: CollectionRequest[];
+  collections?: Array<CollectionRequest>;
 
   /**
    * Tags for filtering activities
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Tags for indicating user interests
    */
-  interest_tags?: string[];
+  interest_tags?: Array<string>;
 
   /**
    * List of users mentioned in the activity
    */
-  mentioned_user_ids?: string[];
+  mentioned_user_ids?: Array<string>;
 
   /**
    * Custom data for the activity
@@ -897,47 +897,47 @@ export interface ActivityResponse {
   /**
    * Media attachments for the activity
    */
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
   /**
    * Latest 5 comments of this activity (comment replies excluded)
    */
-  comments: CommentResponse[];
+  comments: Array<CommentResponse>;
 
   /**
    * List of feed IDs containing this activity
    */
-  feeds: string[];
+  feeds: Array<string>;
 
   /**
    * Tags for filtering
    */
-  filter_tags: string[];
+  filter_tags: Array<string>;
 
   /**
    * Tags for user interests
    */
-  interest_tags: string[];
+  interest_tags: Array<string>;
 
   /**
    * Recent reactions to the activity
    */
-  latest_reactions: FeedsReactionResponse[];
+  latest_reactions: Array<FeedsReactionResponse>;
 
   /**
    * Users mentioned in the activity
    */
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
   /**
    * Current user's bookmarks for this activity
    */
-  own_bookmarks: BookmarkResponse[];
+  own_bookmarks: Array<BookmarkResponse>;
 
   /**
    * Current user's reactions to this activity
    */
-  own_reactions: FeedsReactionResponse[];
+  own_reactions: Array<FeedsReactionResponse>;
 
   /**
    * Enriched collection data referenced by this activity
@@ -1016,12 +1016,12 @@ export interface ActivityResponse {
   /**
    * Reactions from users the current user follows or has mutual follows with
    */
-  friend_reactions?: FeedsReactionResponse[];
+  friend_reactions?: Array<FeedsReactionResponse>;
 
   /**
    * Recent shares of the activity, one entry per share (org-gated)
    */
-  latest_shares?: ShareResponse[];
+  latest_shares?: Array<ShareResponse>;
 
   current_feed?: FeedResponse;
 
@@ -1101,7 +1101,7 @@ export interface ActivitySelectorConfig {
   /**
    * Sort parameters for activity selection
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter for activity selection
@@ -1143,7 +1143,7 @@ export interface ActivitySelectorConfigResponse {
   /**
    * Sort parameters for activity selection
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter for activity selection
@@ -1216,7 +1216,7 @@ export interface AddActivityRequest {
   /**
    * List of feeds to add the activity to with a default max limit of 25 feeds
    */
-  feeds: string[];
+  feeds: Array<string>;
 
   /**
    * @deprecated
@@ -1295,32 +1295,32 @@ export interface AddActivityRequest {
   /**
    * List of attachments for the activity
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * Collections that this activity references
    */
-  collection_refs?: string[];
+  collection_refs?: Array<string>;
 
   /**
    * Collections to create or update as part of this request, so an activity and the collections it references can be written in one call. Their refs (name:id) are added to collection_refs automatically; you do not need to restate them, and they count toward the same per-activity collection-reference limit, which is the effective cap here. A collection that already exists has its custom data updated. Use collection_refs instead when the collection already exists and you are only referencing it, which requires no collection permissions.
    */
-  collections?: CollectionRequest[];
+  collections?: Array<CollectionRequest>;
 
   /**
    * Tags for filtering activities
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Tags for indicating user interests
    */
-  interest_tags?: string[];
+  interest_tags?: Array<string>;
 
   /**
    * List of users mentioned in the activity
    */
-  mentioned_user_ids?: string[];
+  mentioned_user_ids?: Array<string>;
 
   /**
    * Custom data for the activity
@@ -1429,7 +1429,7 @@ export interface AddCommentReactionRequest {
   /**
    * Optional list of feeds to create a reference (share) activity of the commented-on activity in. The reference activity's type mirrors the reaction type.
    */
-  target_feeds?: string[];
+  target_feeds?: Array<string>;
 
   /**
    * Optional custom data to add to the reaction
@@ -1525,12 +1525,12 @@ export interface AddCommentRequest {
   /**
    * Media attachments for the reply
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * List of users mentioned in the reply
    */
-  mentioned_user_ids?: string[];
+  mentioned_user_ids?: Array<string>;
 
   /**
    * Custom data for the comment
@@ -1563,7 +1563,7 @@ export interface AddCommentsBatchRequest {
   /**
    * List of comments to add
    */
-  comments: AddCommentRequest[];
+  comments: Array<AddCommentRequest>;
 }
 
 export interface AddCommentsBatchResponse {
@@ -1572,7 +1572,7 @@ export interface AddCommentsBatchResponse {
   /**
    * List of comments added
    */
-  comments: CommentResponse[];
+  comments: Array<CommentResponse>;
 }
 
 export interface AddFolderRequest {
@@ -1621,7 +1621,7 @@ export interface AddReactionRequest {
   /**
    * Optional list of feeds to create a reference (share) activity of the original activity in. The reference activity's type mirrors the reaction type.
    */
-  target_feeds?: string[];
+  target_feeds?: Array<string>;
 
   /**
    * Custom data for the reaction
@@ -1664,14 +1664,14 @@ export interface AddSegmentTargetsRequest {
   /**
    * Target IDs
    */
-  target_ids: string[];
+  target_ids: Array<string>;
 }
 
 export interface AddUserGroupMembersRequest {
   /**
    * List of user IDs to add as members
    */
-  member_ids: string[];
+  member_ids: Array<string>;
 
   /**
    * Whether to add the members as group admins. Defaults to false
@@ -1726,7 +1726,7 @@ export interface AggregatedActivityResponse {
   /**
    * List of activities in this aggregation
    */
-  activities: ActivityResponse[];
+  activities: Array<ActivityResponse>;
 
   /**
    * Whether this aggregated group has been read. Only set for feed groups with notification config (track_seen/track_read enabled).
@@ -1784,12 +1784,12 @@ export interface AnalyzeImageField {
   /**
    * Hierarchical list of L1 (parent) classifications. Each entry: `name`, `confidence` (0–1), and nested `subclassifications` (L2 leaves with their own confidence). Resolved against the app's effective taxonomy (custom taxonomy when configured, otherwise the standard Bodyguard catalogue).
    */
-  classifications?: Classification[];
+  classifications?: Array<Classification>;
 
   /**
    * Flat list of Bodyguard OCR text-moderation labels on the image's extracted text (e.g. VULGARITY, PII). Each entry: `name` + `severity`. Populated when BG's OCR pipeline returned non-empty results for this image.
    */
-  ocr_classifications?: Classification[];
+  ocr_classifications?: Array<Classification>;
 }
 
 export interface AnalyzeRequest {
@@ -1894,7 +1894,7 @@ export interface AnalyzeTextField {
   /**
    * Flat list of detected Bodyguard text labels (e.g. INSULT, VULGARITY). Each entry carries `name` and `severity`.
    */
-  classifications?: Classification[];
+  classifications?: Array<Classification>;
 }
 
 export interface AppResponseFields {
@@ -1974,11 +1974,11 @@ export interface AppResponseFields {
 
   webhook_url: string;
 
-  event_hooks: EventHook[];
+  event_hooks: Array<EventHook>;
 
-  user_search_disallowed_roles: string[];
+  user_search_disallowed_roles: Array<string>;
 
-  webhook_events: string[];
+  webhook_events: Array<string>;
 
   call_types: Record<string, CallType>;
 
@@ -1986,11 +1986,11 @@ export interface AppResponseFields {
 
   file_upload_config: FileUploadConfig;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   image_upload_config: FileUploadConfig;
 
-  policies: Record<string, Policy[]>;
+  policies: Record<string, Array<Policy>>;
 
   push_notifications: PushNotificationFields;
 
@@ -2008,11 +2008,11 @@ export interface AppResponseFields {
 
   video_primary_use_case?: string;
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  geofences?: GeofenceResponse[];
+  geofences?: Array<GeofenceResponse>;
 
-  image_moderation_labels?: string[];
+  image_moderation_labels?: Array<string>;
 
   activity_metrics_config?: Record<string, number>;
 
@@ -2116,27 +2116,27 @@ export interface AppealItemResponse {
   /**
    * Full chronological history of all moderation actions on the review queue item
    */
-  actions?: ActionLogResponse[];
+  actions?: Array<ActionLogResponse>;
 
   /**
    * Attachments(e.g. Images) of the Appeal Item
    */
-  attachments?: string[];
+  attachments?: Array<string>;
 
   /**
    * Classification labels from automated and manual review
    */
-  flag_labels?: string[];
+  flag_labels?: Array<string>;
 
   /**
    * Types of flags applied to the entity (e.g. user_report, bodyguard)
    */
-  flag_types?: string[];
+  flag_types?: Array<string>;
 
   /**
    * Per-provider flag records explaining why the action was taken
    */
-  flags?: ModerationFlagResponse[];
+  flags?: Array<ModerationFlagResponse>;
 
   entity_content?: ModerationPayload;
 
@@ -2188,7 +2188,7 @@ export interface AppealRequest {
   /**
    * Array of Attachment URLs(e.g., images)
    */
-  attachments?: string[];
+  attachments?: Array<string>;
 
   /**
    * User request object
@@ -2367,9 +2367,9 @@ export interface Attachment {
    */
   type?: string;
 
-  actions?: Action[];
+  actions?: Array<Action>;
 
-  fields?: Field[];
+  fields?: Array<Field>;
 
   giphy?: Images;
 }
@@ -2385,7 +2385,7 @@ export interface Audience {
 
   viewer_connections: number;
 
-  concurrency_by_minute: ConcurrencyMinute[];
+  concurrency_by_minute: Array<ConcurrencyMinute>;
 
   peak_at?: string;
 
@@ -2457,7 +2457,7 @@ export interface AutomodDetailsResponse {
 
   original_message_type?: string;
 
-  image_labels?: string[];
+  image_labels?: Array<string>;
 
   message_details?: FlagMessageDetailsResponse;
 
@@ -2472,7 +2472,7 @@ export interface AutomodPlatformCircumventionConfig {
 
   enabled?: boolean;
 
-  rules?: AutomodRule[];
+  rules?: Array<AutomodRule>;
 }
 
 export interface AutomodRule {
@@ -2489,7 +2489,7 @@ export interface AutomodSemanticFiltersConfig {
 
   enabled?: boolean;
 
-  rules?: AutomodSemanticFiltersRule[];
+  rules?: Array<AutomodSemanticFiltersRule>;
 }
 
 export interface AutomodSemanticFiltersRule {
@@ -2506,7 +2506,7 @@ export interface AutomodToxicityConfig {
 
   enabled?: boolean;
 
-  rules?: AutomodRule[];
+  rules?: Array<AutomodRule>;
 }
 
 export interface AzureRequest {
@@ -2718,7 +2718,7 @@ export interface BatchQueryActivityReactionsRequest {
   /**
    * Activity IDs to fetch the user's reactions for (max 100)
    */
-  activity_ids: string[];
+  activity_ids: Array<string>;
 
   limit?: number;
 
@@ -2731,7 +2731,7 @@ export interface BatchQueryActivityReactionsRequest {
    */
   user_id?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Optional filter on reaction_type or created_at
@@ -2750,7 +2750,7 @@ export interface BatchQueryActivityReactionsResponse {
    */
   duration: string;
 
-  reactions: FeedsReactionResponse[];
+  reactions: Array<FeedsReactionResponse>;
 
   next?: string;
 
@@ -2761,7 +2761,7 @@ export interface BatchQueryCommentReactionsRequest {
   /**
    * Comment IDs to fetch the user's reactions for (max 100)
    */
-  comment_ids: string[];
+  comment_ids: Array<string>;
 
   limit?: number;
 
@@ -2774,7 +2774,7 @@ export interface BatchQueryCommentReactionsRequest {
    */
   user_id?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Optional filter on reaction_type or created_at
@@ -2793,7 +2793,7 @@ export interface BatchQueryCommentReactionsResponse {
    */
   duration: string;
 
-  reactions: FeedsReactionResponse[];
+  reactions: Array<FeedsReactionResponse>;
 
   next?: string;
 
@@ -2814,7 +2814,7 @@ export interface BlockListConfig {
 
   match_substring?: boolean;
 
-  rules?: BlockListRule[];
+  rules?: Array<BlockListRule>;
 }
 
 export interface BlockListOptions {
@@ -2852,7 +2852,7 @@ export interface BlockListResponse {
   /**
    * List of words to block
    */
-  words: string[];
+  words: Array<string>;
 
   /**
    * Date/time of creation
@@ -2983,7 +2983,7 @@ export interface BlockedUserResponse {
 }
 
 export interface BodyguardImageAnalysisConfig {
-  rules?: BodyguardRule[];
+  rules?: Array<BodyguardRule>;
 }
 
 export interface BodyguardProfileSummary {
@@ -3008,7 +3008,7 @@ export interface BodyguardRule {
     | 'bounce_flag'
     | 'bounce_remove';
 
-  severity_rules?: BodyguardSeverityRule[];
+  severity_rules?: Array<BodyguardSeverityRule>;
 }
 
 export interface BodyguardSeverityRule {
@@ -3224,7 +3224,7 @@ export interface BroadcastDailyRollup {
 
   unique_viewers_sum: number;
 
-  top_broadcasts: TopBroadcast[];
+  top_broadcasts: Array<TopBroadcast>;
 
   poor_viewers_by_cause: PoorByCause;
 }
@@ -3266,7 +3266,7 @@ export interface BroadcastInfo {
 
   started_at: string;
 
-  creators: string[];
+  creators: Array<string>;
 
   source_mode?: string;
 }
@@ -3334,7 +3334,7 @@ export interface BulkActionAppealsRequest {
   /**
    * List of appeal UUIDs to process
    */
-  appeal_ids: string[];
+  appeal_ids: Array<string>;
 
   user_id?: string;
 
@@ -3349,7 +3349,7 @@ export interface BulkActionAppealsRequest {
   reject_appeal?: RejectAppealRequestPayload;
 
   /**
-   * Configuration for restore action
+   * Configuration for restore action. State-aware: reverses whichever of a delete, a block, or a shadow block currently applies to the content (including both a delete and a block/shadow block at once).
    */
   restore?: RestoreActionRequestPayload;
 
@@ -3359,7 +3359,7 @@ export interface BulkActionAppealsRequest {
   unban?: UnbanActionRequestPayload;
 
   /**
-   * Configuration for unblock action
+   * Deprecated: use restore instead — it now also reverses a block or shadow block. Configuration for unblock action.
    */
   unblock?: UnblockActionRequestPayload;
 
@@ -3375,12 +3375,12 @@ export interface BulkActionAppealsResponse {
   /**
    * Appeals that could not be processed, with per-item error messages
    */
-  errors: BulkAppealError[];
+  errors: Array<BulkAppealError>;
 
   /**
    * Successfully processed appeals
    */
-  results: BulkAppealResult[];
+  results: Array<BulkAppealResult>;
 }
 
 export interface BulkAppealError {
@@ -3399,7 +3399,7 @@ export interface BulkDeleteActionConfigRequest {
   /**
    * UUIDs of the action configs to delete
    */
-  ids: string[];
+  ids: Array<string>;
 
   user_id?: string;
 
@@ -3438,7 +3438,7 @@ export interface BulkUpsertActionConfigRequest {
   /**
    * List of action configs to create or update
    */
-  action_configs: UpsertActionConfigItem[];
+  action_configs: Array<UpsertActionConfigItem>;
 
   user_id?: string;
 
@@ -3454,7 +3454,7 @@ export interface BulkUpsertActionConfigResponse {
   /**
    * The created or updated action configs in the same order as the request
    */
-  action_configs: ModerationActionConfigResponse[];
+  action_configs: Array<ModerationActionConfigResponse>;
 }
 
 export interface BypassActionRequest {
@@ -3578,7 +3578,7 @@ export interface CallCreatedEvent {
   /**
    * the members added to this call
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -3650,11 +3650,11 @@ export interface CallDeletedEvent {
 }
 
 export interface CallDurationReport {
-  histogram: ReportByHistogramBucket[];
+  histogram: Array<ReportByHistogramBucket>;
 }
 
 export interface CallDurationReportResponse {
-  daily: DailyAggregateCallDurationReportResponse[];
+  daily: Array<DailyAggregateCallDurationReportResponse>;
 }
 
 export interface CallEndedEvent {
@@ -3680,7 +3680,7 @@ export interface CallEndedEvent {
   /**
    * The list of members in the call
    */
-  members?: MemberResponse[];
+  members?: Array<MemberResponse>;
 
   /**
    * User response object
@@ -3865,7 +3865,7 @@ export interface CallMemberAddedEvent {
   /**
    * the members added to this call
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -3886,7 +3886,7 @@ export interface CallMemberRemovedEvent {
   /**
    * the list of member IDs removed from the call
    */
-  members: string[];
+  members: Array<string>;
 
   /**
    * Represents a call
@@ -3907,7 +3907,7 @@ export interface CallMemberUpdatedEvent {
   /**
    * The list of members that were updated
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -3928,7 +3928,7 @@ export interface CallMemberUpdatedPermissionEvent {
   /**
    * The list of members that were updated
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -3938,7 +3938,7 @@ export interface CallMemberUpdatedPermissionEvent {
   /**
    * The capabilities by role for this call
    */
-  capabilities_by_role: Record<string, string[]>;
+  capabilities_by_role: Record<string, Array<string>>;
 
   /**
    * The type of event: "call.member_added" in this case
@@ -3961,7 +3961,7 @@ export interface CallMissedEvent {
   /**
    * List of members who missed the call
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -4039,7 +4039,7 @@ export interface CallNotificationEvent {
   /**
    * Call members
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -4058,11 +4058,11 @@ export interface CallNotificationEvent {
 }
 
 export interface CallParticipantCountReport {
-  histogram: ReportByHistogramBucket[];
+  histogram: Array<ReportByHistogramBucket>;
 }
 
 export interface CallParticipantCountReportResponse {
-  daily: DailyAggregateCallParticipantCountReportResponse[];
+  daily: Array<DailyAggregateCallParticipantCountReportResponse>;
 }
 
 export interface CallParticipantResponse {
@@ -4241,7 +4241,7 @@ export interface CallRequest {
 
   video?: boolean;
 
-  members?: MemberRequest[];
+  members?: Array<MemberRequest>;
 
   /**
    * User request object
@@ -4291,7 +4291,7 @@ export interface CallResponse {
    */
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
   /**
    * User response object
@@ -4353,7 +4353,7 @@ export interface CallRingEvent {
   /**
    * Call members
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   /**
    * Represents a call
@@ -4440,7 +4440,7 @@ export interface CallRtmpBroadcastStoppedEvent {
 export interface CallRuleActionSequence {
   violation_number?: number;
 
-  actions?: string[];
+  actions?: Array<string>;
 
   call_options?: CallActionOptions;
 }
@@ -4537,7 +4537,7 @@ export interface CallSessionResponse {
 
   id: string;
 
-  participants: CallParticipantResponse[];
+  participants: Array<CallParticipantResponse>;
 
   accepted_by: Record<string, Date>;
 
@@ -4698,9 +4698,9 @@ export interface CallStateResponseFields {
   /**
    * List of call members
    */
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * Represents a call
@@ -4751,11 +4751,11 @@ export interface CallStatsMapPublisher {
 }
 
 export interface CallStatsMapPublishers {
-  publishers: CallStatsMapPublisher[];
+  publishers: Array<CallStatsMapPublisher>;
 }
 
 export interface CallStatsMapSFUs {
-  locations: SFULocationResponse[];
+  locations: Array<SFULocationResponse>;
 }
 
 export interface CallStatsMapSubscriber {
@@ -4771,21 +4771,21 @@ export interface CallStatsMapSubscriber {
 }
 
 export interface CallStatsMapSubscribers {
-  locations: CallStatsMapLocation[];
+  locations: Array<CallStatsMapLocation>;
 
-  participants?: CallStatsMapSubscriber[];
+  participants?: Array<CallStatsMapSubscriber>;
 }
 
 export interface CallStatsParticipant {
   user_id: string;
 
-  sessions: CallStatsParticipantSession[];
+  sessions: Array<CallStatsParticipantSession>;
 
   latest_activity_at?: Date;
 
   name?: string;
 
-  roles?: string[];
+  roles?: Array<string>;
 }
 
 export interface CallStatsParticipantCounts {
@@ -4891,7 +4891,7 @@ export interface CallStatsReportReadyEvent {
   /**
    * Top participant sessions overview
    */
-  participants_overview?: CallStatsParticipant[];
+  participants_overview?: Array<CallStatsParticipant>;
 }
 
 export interface CallStatsReportSummaryResponse {
@@ -5039,7 +5039,7 @@ export interface CallTypeResponse {
   /**
    * the permissions granted to each role
    */
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   notification_settings: NotificationSettingsResponse;
 
@@ -5068,7 +5068,7 @@ export interface CallUpdatedEvent {
   /**
    * The capabilities by role for this call
    */
-  capabilities_by_role: Record<string, string[]>;
+  capabilities_by_role: Record<string, Array<string>>;
 
   /**
    * The type of event: "call.updated" in this case
@@ -5125,7 +5125,7 @@ export interface CallUserMutedEvent {
 
   reason: string;
 
-  muted_user_ids: string[];
+  muted_user_ids: Array<string>;
 
   /**
    * The type of event: "call.user_muted" in this case
@@ -5144,7 +5144,7 @@ export interface CallsPerDayReport {
 }
 
 export interface CallsPerDayReportResponse {
-  daily: DailyAggregateCallsPerDayReportResponse[];
+  daily: Array<DailyAggregateCallsPerDayReportResponse>;
 }
 
 export interface CampaignChannelMember {
@@ -5162,9 +5162,9 @@ export interface CampaignChannelTemplate {
 
   team?: string;
 
-  members?: string[];
+  members?: Array<string>;
 
-  members_template?: CampaignChannelMember[];
+  members_template?: Array<CampaignChannelMember>;
 
   custom?: Record<string, any>;
 }
@@ -5188,7 +5188,7 @@ export interface CampaignMessageTemplate {
 
   searchable?: boolean;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   custom?: Record<string, any>;
 }
@@ -5220,13 +5220,13 @@ export interface CampaignResponse {
 
   updated_at: Date;
 
-  segment_ids: string[];
+  segment_ids: Array<string>;
 
-  segments: Segment[];
+  segments: Array<Segment>;
 
-  user_ids: string[];
+  user_ids: Array<string>;
 
-  users: UserResponse[];
+  users: Array<UserResponse>;
 
   stats: CampaignStatsResponse;
 
@@ -5327,7 +5327,7 @@ export interface ChannelBatchCompletedEvent {
 
   task_id: string;
 
-  failed_channels: FailedChannelUpdates[];
+  failed_channels: Array<FailedChannelUpdates>;
 
   custom: Record<string, any>;
 
@@ -5357,7 +5357,7 @@ export interface ChannelBatchStartedEvent {
 
   task_id: string;
 
-  failed_channels: FailedChannelUpdates[];
+  failed_channels: Array<FailedChannelUpdates>;
 
   custom: Record<string, any>;
 
@@ -5386,7 +5386,7 @@ export interface ChannelBatchUpdateRequest {
    */
   filter: Record<string, any>;
 
-  members?: ChannelBatchMemberRequest[];
+  members?: Array<ChannelBatchMemberRequest>;
 
   data?: ChannelDataUpdate;
 }
@@ -5456,7 +5456,7 @@ export interface ChannelConfig {
   /**
    * List of commands that channel supports
    */
-  commands: string[];
+  commands: Array<string>;
 
   blocklist?: string;
 
@@ -5468,9 +5468,9 @@ export interface ChannelConfig {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -5544,11 +5544,11 @@ export interface ChannelConfigOverrides {
   /**
    * List of commands that channel supports
    */
-  commands?: string[];
+  commands?: Array<string>;
 
   chat_preferences?: ChatPreferences;
 
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface ChannelConfigWithInfo {
@@ -5604,7 +5604,7 @@ export interface ChannelConfigWithInfo {
 
   user_message_reminders: boolean;
 
-  commands: Command[];
+  commands: Array<Command>;
 
   blocklist?: string;
 
@@ -5616,9 +5616,9 @@ export interface ChannelConfigWithInfo {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -5627,7 +5627,7 @@ export interface ChannelConfigWithInfo {
 
   chat_preferences?: ChatPreferences;
 
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface ChannelContextResponse {
@@ -5846,7 +5846,7 @@ export interface ChannelGetOrCreateRequest {
   /**
    * Top-level keys of the message sender's channel-member custom data to include under member.custom (max 8 keys, 64 chars each)
    */
-  member_custom_include?: string[];
+  member_custom_include?: Array<string>;
 
   data?: ChannelInput;
 
@@ -5941,11 +5941,11 @@ export interface ChannelInput {
 
   truncated_by_id?: string;
 
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
-  invites?: ChannelMemberRequest[];
+  invites?: Array<ChannelMemberRequest>;
 
-  members?: ChannelMemberRequest[];
+  members?: Array<ChannelMemberRequest>;
 
   /**
    * Channel configuration overrides
@@ -5971,9 +5971,9 @@ export interface ChannelInputRequest {
 
   team?: string;
 
-  invites?: ChannelMemberRequest[];
+  invites?: Array<ChannelMemberRequest>;
 
-  members?: ChannelMemberRequest[];
+  members?: Array<ChannelMemberRequest>;
 
   /**
    * Channel configuration overrides
@@ -6101,7 +6101,7 @@ export interface ChannelMemberResponse {
 
   user_id?: string;
 
-  deleted_messages?: string[];
+  deleted_messages?: Array<string>;
 
   /**
    * User response object
@@ -6119,7 +6119,7 @@ export interface ChannelMessagesResponse {
   /**
    * List of messages
    */
-  messages: MessageResponse[];
+  messages: Array<MessageResponse>;
 
   /**
    * Represents channel in chat
@@ -6192,7 +6192,7 @@ export interface ChannelMutedEvent {
   /**
    * The mute objects
    */
-  mutes?: ChannelMute[];
+  mutes?: Array<ChannelMute>;
 
   mute?: ChannelMute;
 
@@ -6366,17 +6366,17 @@ export interface ChannelResponse {
   /**
    * List of filter tags associated with the channel
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * List of channel members (max 100)
    */
-  members?: ChannelMemberResponse[];
+  members?: Array<ChannelMemberResponse>;
 
   /**
    * List of channel capabilities of authenticated user
    */
-  own_capabilities?: ChannelOwnCapability[];
+  own_capabilities?: Array<ChannelOwnCapability>;
 
   config?: ChannelConfigWithInfo;
 
@@ -6394,13 +6394,13 @@ export interface ChannelResponse {
 export interface ChannelStateResponse {
   duration: string;
 
-  members: ChannelMemberResponse[];
+  members: Array<ChannelMemberResponse>;
 
-  messages: MessageResponse[];
+  messages: Array<MessageResponse>;
 
-  pinned_messages: MessageResponse[];
+  pinned_messages: Array<MessageResponse>;
 
-  threads: ThreadStateResponse[];
+  threads: Array<ThreadStateResponse>;
 
   hidden?: boolean;
 
@@ -6408,13 +6408,13 @@ export interface ChannelStateResponse {
 
   watcher_count?: number;
 
-  active_live_locations?: SharedLocationResponseData[];
+  active_live_locations?: Array<SharedLocationResponseData>;
 
-  pending_messages?: PendingMessageResponse[];
+  pending_messages?: Array<PendingMessageResponse>;
 
-  read?: ReadStateResponse[];
+  read?: Array<ReadStateResponse>;
 
-  watchers?: UserResponse[];
+  watchers?: Array<UserResponse>;
 
   /**
    * Represents channel in chat
@@ -6432,19 +6432,19 @@ export interface ChannelStateResponseFields {
   /**
    * List of channel members
    */
-  members: ChannelMemberResponse[];
+  members: Array<ChannelMemberResponse>;
 
   /**
    * List of channel messages
    */
-  messages: MessageResponse[];
+  messages: Array<MessageResponse>;
 
   /**
    * List of pinned messages in the channel
    */
-  pinned_messages: MessageResponse[];
+  pinned_messages: Array<MessageResponse>;
 
-  threads: ThreadStateResponse[];
+  threads: Array<ThreadStateResponse>;
 
   /**
    * Whether this channel is hidden or not
@@ -6464,22 +6464,22 @@ export interface ChannelStateResponseFields {
   /**
    * Active live locations in the channel
    */
-  active_live_locations?: SharedLocationResponseData[];
+  active_live_locations?: Array<SharedLocationResponseData>;
 
   /**
    * Pending messages that this user has sent
    */
-  pending_messages?: PendingMessageResponse[];
+  pending_messages?: Array<PendingMessageResponse>;
 
   /**
    * List of read states
    */
-  read?: ReadStateResponse[];
+  read?: Array<ReadStateResponse>;
 
   /**
    * List of user who is watching the channel
    */
-  watchers?: UserResponse[];
+  watchers?: Array<UserResponse>;
 
   /**
    * Represents channel in chat
@@ -6605,11 +6605,11 @@ export interface ChannelTypeConfig {
 
   user_message_reminders: boolean;
 
-  commands: Command[];
+  commands: Array<Command>;
 
-  permissions: PolicyRequest[];
+  permissions: Array<PolicyRequest>;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   blocklist?: string;
 
@@ -6621,9 +6621,9 @@ export interface ChannelTypeConfig {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -6682,7 +6682,7 @@ export interface ChannelUnmutedEvent {
   /**
    * The mute objects
    */
-  mutes?: ChannelMute[];
+  mutes?: Array<ChannelMute>;
 
   mute?: ChannelMute;
 
@@ -6827,9 +6827,9 @@ export interface ChatDraftPayloadResponse {
 
   type?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
-  mentioned_users?: UserResponse[];
+  mentioned_users?: Array<UserResponse>;
 }
 
 export interface ChatDraftResponse {
@@ -6875,15 +6875,15 @@ export interface ChatMessageResponse {
 
   updated_at: Date;
 
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
-  latest_reactions: ChatReactionResponse[];
+  latest_reactions: Array<ChatReactionResponse>;
 
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
-  own_reactions: ChatReactionResponse[];
+  own_reactions: Array<ChatReactionResponse>;
 
-  restricted_visibility: string[];
+  restricted_visibility: Array<string>;
 
   custom: Record<string, any>;
 
@@ -6918,19 +6918,19 @@ export interface ChatMessageResponse {
 
   show_in_channel?: boolean;
 
-  mentioned_group_ids?: string[];
+  mentioned_group_ids?: Array<string>;
 
-  mentioned_groups?: UserGroupResponse[];
+  mentioned_groups?: Array<UserGroupResponse>;
 
-  mentioned_roles?: string[];
+  mentioned_roles?: Array<string>;
 
-  thread_participants?: UserResponse[];
+  thread_participants?: Array<UserResponse>;
 
   draft?: ChatDraftResponse;
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, string[]>;
+  image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
 
@@ -6963,11 +6963,11 @@ export interface ChatModerationV2Response {
 
   semantic_filter_matched?: string;
 
-  blocklists_matched?: string[];
+  blocklists_matched?: Array<string>;
 
-  image_harms?: string[];
+  image_harms?: Array<string>;
 
-  text_harms?: string[];
+  text_harms?: Array<string>;
 }
 
 export interface ChatPreferences {
@@ -7029,7 +7029,7 @@ export interface ChatReactionGroupResponse {
 
   sum_scores: number;
 
-  latest_reactions_by: ChatReactionGroupUserResponse[];
+  latest_reactions_by: Array<ChatReactionGroupUserResponse>;
 }
 
 export interface ChatReactionGroupUserResponse {
@@ -7191,7 +7191,7 @@ export interface CheckPushResponse {
   /**
    * List of general errors
    */
-  general_errors?: string[];
+  general_errors?: Array<string>;
 
   /**
    * Object with device errors
@@ -7275,7 +7275,7 @@ export interface CheckResponse {
   /**
    * All moderation rules triggered by this check (content, user, and call rules), with their resolved actions
    */
-  triggered_rules?: TriggeredRuleResponse[];
+  triggered_rules?: Array<TriggeredRuleResponse>;
 
   item?: ReviewQueueItemResponse;
 
@@ -7382,7 +7382,7 @@ export interface Classification {
 
   severity?: string;
 
-  subclassifications?: Classification[];
+  subclassifications?: Array<Classification>;
 }
 
 export interface ClientEvent {
@@ -7553,7 +7553,7 @@ export interface ClosedCaptionRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 
   llm_harm_labels?: Record<string, string>;
 }
@@ -7862,12 +7862,12 @@ export interface CommentResponse {
   /**
    * Users mentioned in the comment
    */
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
   /**
    * Current user's reactions to this activity
    */
-  own_reactions: FeedsReactionResponse[];
+  own_reactions: Array<FeedsReactionResponse>;
 
   /**
    * User response object
@@ -7902,12 +7902,12 @@ export interface CommentResponse {
   /**
    * Attachments associated with the comment
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * Recent reactions to the comment
    */
-  latest_reactions?: FeedsReactionResponse[];
+  latest_reactions?: Array<FeedsReactionResponse>;
 
   /**
    * Custom data for the comment
@@ -8057,14 +8057,14 @@ export interface ConfigOverridesRequest {
   /**
    * List of available commands
    */
-  commands?: string[];
+  commands?: Array<string>;
 
   chat_preferences?: ChatPreferences;
 
   /**
    * Permission grants modifiers
    */
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface ConfigResponse {
@@ -8093,17 +8093,17 @@ export interface ConfigResponse {
    */
   updated_at: Date;
 
-  supported_video_call_harm_types: string[];
+  supported_video_call_harm_types: Array<string>;
 
   /**
    * Configurable image moderation label definitions for dashboard rendering
    */
-  ai_image_label_definitions?: AIImageLabelDefinition[];
+  ai_image_label_definitions?: Array<AIImageLabelDefinition>;
 
   /**
    * Names of Bodyguard credential profiles registered on this app. The dashboard uses this list to render the profile picker on the AI Text section.
    */
-  available_bodyguard_profiles?: BodyguardProfileSummary[];
+  available_bodyguard_profiles?: Array<BodyguardProfileSummary>;
 
   ai_audio_config?: AIAudioConfigResponse;
 
@@ -8112,7 +8112,7 @@ export interface ConfigResponse {
   /**
    * Available L2 subclassifications per L1 image moderation label, based on the active provider
    */
-  ai_image_subclassifications?: Record<string, string[]>;
+  ai_image_subclassifications?: Record<string, Array<string>>;
 
   ai_text_config?: AITextConfig;
 
@@ -8178,7 +8178,7 @@ export interface CountByMinuteResponse {
 export interface Coverage {
   publisher_encoding_profiles: number;
 
-  absent: AbsentMetric[];
+  absent: Array<AbsentMetric>;
 
   metrics_pct: MetricsPct;
 }
@@ -8192,7 +8192,7 @@ export interface CreateBlockListRequest {
   /**
    * List of words to block
    */
-  words: string[];
+  words: Array<string>;
 
   is_confusable_folding_enabled?: boolean;
 
@@ -8247,7 +8247,7 @@ export interface CreateCallTypeRequest {
   /**
    * the permissions granted to each role
    */
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 
   notification_settings?: NotificationSettingsRequest;
 
@@ -8275,7 +8275,7 @@ export interface CreateCallTypeResponse {
   /**
    * the permissions granted to each role
    */
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   notification_settings: NotificationSettingsResponse;
 
@@ -8342,12 +8342,12 @@ export interface CreateCampaignRequest {
   /**
    * The IDs of the segments to send the campaign to. Duplicate user IDs are removed. Use either user_ids or segment_ids, not both
    */
-  segment_ids?: string[];
+  segment_ids?: Array<string>;
 
   /**
    * The userIDs to send the campaign to. Use either segment ids or user ids not both
    */
-  user_ids?: string[];
+  user_ids?: Array<string>;
 
   channel_template?: CampaignChannelTemplate;
 }
@@ -8502,24 +8502,24 @@ export interface CreateChannelTypeRequest {
   /**
    * Blocklists
    */
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * List of commands that channel supports
    */
-  commands?: string[];
+  commands?: Array<string>;
 
   /**
    * List of permissions for the channel type
    */
-  permissions?: PolicyRequest[];
+  permissions?: Array<PolicyRequest>;
 
   chat_preferences?: ChatPreferences;
 
   /**
    * List of grants for the channel type
    */
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface CreateChannelTypeResponse {
@@ -8577,11 +8577,11 @@ export interface CreateChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: string[];
+  commands: Array<string>;
 
-  permissions: PolicyRequest[];
+  permissions: Array<PolicyRequest>;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   blocklist?: string;
 
@@ -8593,9 +8593,9 @@ export interface CreateChannelTypeResponse {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -8609,7 +8609,7 @@ export interface CreateCollectionsRequest {
   /**
    * List of collections to create
    */
-  collections: CollectionRequest[];
+  collections: Array<CollectionRequest>;
 
   user_id?: string;
 
@@ -8625,7 +8625,7 @@ export interface CreateCollectionsResponse {
   /**
    * List of created collections
    */
-  collections: CollectionResponse[];
+  collections: Array<CollectionResponse>;
 }
 
 export interface CreateCommandRequest {
@@ -8755,12 +8755,12 @@ export interface CreateFeedGroupRequest {
   /**
    * Configuration for activity processors
    */
-  activity_processors?: ActivityProcessorConfig[];
+  activity_processors?: Array<ActivityProcessorConfig>;
 
   /**
    * Configuration for activity selectors
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
 
@@ -8795,7 +8795,7 @@ export interface CreateFeedViewRequest {
   /**
    * Configuration for selecting activities
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   aggregation?: AggregationConfig;
 
@@ -8812,7 +8812,7 @@ export interface CreateFeedsBatchRequest {
   /**
    * List of feeds to create
    */
-  feeds: FeedRequest[];
+  feeds: Array<FeedRequest>;
 
   /**
    * If true, enriches the created feeds with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -8826,7 +8826,7 @@ export interface CreateFeedsBatchResponse {
   /**
    * List of created feeds
    */
-  feeds: FeedResponse[];
+  feeds: Array<FeedResponse>;
 }
 
 export interface CreateGuestRequest {
@@ -8943,7 +8943,7 @@ export interface CreateMembershipLevelRequest {
   /**
    * Activity tags this membership level gives access to
    */
-  tags?: string[];
+  tags?: Array<string>;
 
   /**
    * Custom data for the membership level
@@ -8981,7 +8981,7 @@ export interface CreatePolicyTestSetRequest {
   /**
    * Messages to test; capped at 1000. Mutually exclusive with seed
    */
-  rows?: PolicyTestRow[];
+  rows?: Array<PolicyTestRow>;
 
   seed?: PolicyTestSeedSpec;
 }
@@ -9044,7 +9044,7 @@ export interface CreatePollRequest {
 
   voting_visibility?: 'anonymous' | 'public';
 
-  options?: PollOptionInput[];
+  options?: Array<PollOptionInput>;
 
   /**
    * Custom data for this object
@@ -9055,6 +9055,40 @@ export interface CreatePollRequest {
    * User request object
    */
   user?: UserRequest;
+}
+
+export interface CreatePredefinedFilterRequest {
+  /**
+   * The unique name of the predefined filter (alphanumeric, _, - only)
+   */
+  name: string;
+
+  /**
+   * The operation this filter is for (e.g., QueryChannels)
+   */
+
+  operation: 'QueryChannels';
+
+  /**
+   * Filter to apply to the query
+   */
+  filter: Record<string, any>;
+
+  /**
+   * The description of the predefined filter
+   */
+  description?: string;
+
+  sort?: Array<Record<string, any>>;
+}
+
+export interface CreatePredefinedFilterResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  predefined_filter?: PredefinedFilterResponse;
 }
 
 export interface CreateQueueRequest {
@@ -9112,7 +9146,7 @@ export interface CreateSIPTrunkRequest {
   /**
    * Phone numbers associated with this SIP trunk
    */
-  numbers: string[];
+  numbers: Array<string>;
 
   /**
    * Optional password for SIP trunk authentication
@@ -9122,7 +9156,7 @@ export interface CreateSIPTrunkRequest {
   /**
    * Optional list of allowed IPv4/IPv6 addresses or CIDR blocks
    */
-  allowed_ips?: string[];
+  allowed_ips?: Array<string>;
 }
 
 export interface CreateSIPTrunkResponse {
@@ -9205,7 +9239,7 @@ export interface CreateUserGroupRequest {
   /**
    * Optional initial list of user IDs to add as members
    */
-  member_ids?: string[];
+  member_ids?: Array<string>;
 }
 
 export interface CreateUserGroupResponse {
@@ -9240,7 +9274,7 @@ export interface CustomCheckFlag {
   /**
    * Labels from various moderation sources
    */
-  labels?: string[];
+  labels?: Array<string>;
 
   /**
    * Additional metadata for the flag
@@ -9262,7 +9296,7 @@ export interface CustomCheckRequest {
   /**
    * List of custom check flags (1-10 flags required)
    */
-  flags: CustomCheckFlag[];
+  flags: Array<CustomCheckFlag>;
 
   /**
    * ID of the user who created the entity (required for non-message entities)
@@ -9402,7 +9436,7 @@ export interface DailyMetricStatsResponse {
   /**
    * Array of daily metric values
    */
-  daily: DailyMetricResponse[];
+  daily: Array<DailyMetricResponse>;
 }
 
 export interface DailyValue {
@@ -9457,7 +9491,7 @@ export interface DeactivateUsersRequest {
   /**
    * User IDs to deactivate
    */
-  user_ids: string[];
+  user_ids: Array<string>;
 
   /**
    * ID of the user who deactivated the users
@@ -9526,7 +9560,7 @@ export interface DeleteActivitiesRequest {
   /**
    * List of activity IDs to delete
    */
-  ids: string[];
+  ids: Array<string>;
 
   /**
    * Whether to also delete any notification activities created from mentions in these activities
@@ -9552,7 +9586,7 @@ export interface DeleteActivitiesResponse {
   /**
    * List of activity IDs that were successfully deleted
    */
-  deleted_ids: string[];
+  deleted_ids: Array<string>;
 }
 
 export interface DeleteActivityReactionResponse {
@@ -9640,7 +9674,7 @@ export interface DeleteChannelsRequest {
   /**
    * All channels that should be deleted
    */
-  cids: string[];
+  cids: Array<string>;
 
   /**
    * Specify if channels and all ressources should be hard deleted
@@ -9772,7 +9806,7 @@ export interface DeleteFeedsBatchRequest {
   /**
    * List of fully qualified feed IDs (format: group_id:feed_id) to delete
    */
-  feeds: string[];
+  feeds: Array<string>;
 
   /**
    * Whether to permanently delete the feeds instead of soft delete
@@ -9932,7 +9966,7 @@ export interface DeleteSegmentTargetsRequest {
   /**
    * Target IDs
    */
-  target_ids: string[];
+  target_ids: Array<string>;
 }
 
 export interface DeleteTranscriptionResponse {
@@ -10016,7 +10050,7 @@ export interface DeleteUsersRequest {
   /**
    * IDs of users to delete
    */
-  user_ids: string[];
+  user_ids: Array<string>;
 
   /**
    * Calls delete mode.
@@ -10223,12 +10257,12 @@ export interface DraftPayloadResponse {
   /**
    * Array of message attachments
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * List of mentioned users
    */
-  mentioned_users?: UserResponse[];
+  mentioned_users?: Array<UserResponse>;
 }
 
 export interface DraftResponse {
@@ -10263,17 +10297,17 @@ export interface EMAUStatsResponse {
   /**
    * Per-day unique engaged user counts
    */
-  daily: DailyMetricResponse[];
+  daily: Array<DailyMetricResponse>;
 
   /**
    * Rolling 30-day engaged user count snapshots
    */
-  last_30_days: DailyMetricResponse[];
+  last_30_days: Array<DailyMetricResponse>;
 
   /**
    * Calendar month-to-date engaged user count snapshots
    */
-  month_to_date: DailyMetricResponse[];
+  month_to_date: Array<DailyMetricResponse>;
 }
 
 export interface EdgeResponse {
@@ -10317,7 +10351,7 @@ export interface EgressRTMPResponse {
 export interface EgressResponse {
   broadcasting: boolean;
 
-  rtmps: EgressRTMPResponse[];
+  rtmps: Array<EgressRTMPResponse>;
 
   composite_recording?: CompositeRecordingResponse;
 
@@ -10335,7 +10369,7 @@ export interface EncodingProfile {
 
   source_file: string;
 
-  svc_modes: string[];
+  svc_modes: Array<string>;
 
   quality_limitation_durations_s: Record<string, number>;
 
@@ -10396,17 +10430,17 @@ export interface EnrichedActivity {
 
   verb?: string;
 
-  to?: string[];
+  to?: Array<string>;
 
   actor?: Data;
 
-  latest_reactions?: Record<string, EnrichedReaction[]>;
+  latest_reactions?: Record<string, Array<EnrichedReaction>>;
 
   object?: Data;
 
   origin?: Data;
 
-  own_reactions?: Record<string, EnrichedReaction[]>;
+  own_reactions?: Record<string, Array<EnrichedReaction>>;
 
   reaction_counts?: Record<string, number>;
 
@@ -10462,7 +10496,7 @@ export interface EnrichedReaction {
 
   parent?: string;
 
-  target_feeds?: string[];
+  target_feeds?: Array<string>;
 
   children_counts?: Record<string, number>;
 
@@ -10470,9 +10504,9 @@ export interface EnrichedReaction {
 
   data?: Record<string, any>;
 
-  latest_children?: Record<string, EnrichedReaction[]>;
+  latest_children?: Record<string, Array<EnrichedReaction>>;
 
-  own_children?: Record<string, EnrichedReaction[]>;
+  own_children?: Record<string, Array<EnrichedReaction>>;
 
   updated_at?: Time;
 
@@ -10615,9 +10649,9 @@ export interface EntityCreatorResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
-  teams: string[];
+  teams: Array<string>;
 
   custom: Record<string, any>;
 
@@ -10639,7 +10673,7 @@ export interface EntityCreatorResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  devices?: DeviceResponse[];
+  devices?: Array<DeviceResponse>;
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -10728,7 +10762,7 @@ export interface EventHook {
 
   webhook_url?: string;
 
-  event_types?: string[];
+  event_types?: Array<string>;
 
   callback?: AsyncModerationCallbackConfig;
 
@@ -10790,7 +10824,7 @@ export interface ExportChannelsRequest {
   /**
    * Export options for channels
    */
-  channels: ChannelExport[];
+  channels: Array<ChannelExport>;
 
   /**
    * Set if deleted message text should be cleared
@@ -10823,7 +10857,7 @@ export interface ExportChannelsRequest {
   /**
    * For csv format: subset of message columns to include (defaults to a standard set)
    */
-  include_fields?: string[];
+  include_fields?: Array<string>;
 }
 
 export interface ExportChannelsResponse {
@@ -10858,12 +10892,12 @@ export interface ExportUserResponse {
   /**
    * List of exported messages
    */
-  messages?: MessageResponse[];
+  messages?: Array<MessageResponse>;
 
   /**
    * List of exported reactions
    */
-  reactions?: ReactionResponse[];
+  reactions?: Array<ReactionResponse>;
 
   /**
    * User response object
@@ -10872,7 +10906,7 @@ export interface ExportUserResponse {
 }
 
 export interface ExportUsersRequest {
-  user_ids: string[];
+  user_ids: Array<string>;
 }
 
 export interface ExportUsersResponse {
@@ -10905,7 +10939,7 @@ export interface FCMPayload {
 export interface FailedChannelUpdates {
   reason: string;
 
-  cids: string[];
+  cids: Array<string>;
 }
 
 export interface FeedCreatedEvent {
@@ -10916,7 +10950,7 @@ export interface FeedCreatedEvent {
 
   fid: string;
 
-  members: FeedMemberResponse[];
+  members: Array<FeedMemberResponse>;
 
   custom: Record<string, any>;
 
@@ -10969,9 +11003,9 @@ export interface FeedGroup {
 
   updated_at: Date;
 
-  activity_processors: ActivityProcessorConfig[];
+  activity_processors: Array<ActivityProcessorConfig>;
 
-  activity_selectors: ActivitySelectorConfig[];
+  activity_selectors: Array<ActivitySelectorConfig>;
 
   custom: Record<string, any>;
 
@@ -11069,12 +11103,12 @@ export interface FeedGroupResponse {
   /**
    * Configuration for activity processors
    */
-  activity_processors?: ActivityProcessorConfig[];
+  activity_processors?: Array<ActivityProcessorConfig>;
 
   /**
    * Configuration for activity selectors
    */
-  activity_selectors?: ActivitySelectorConfigResponse[];
+  activity_selectors?: Array<ActivitySelectorConfigResponse>;
 
   activity_filter?: ActivityFilterConfig;
 
@@ -11126,9 +11160,9 @@ export interface FeedInput {
 
   visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
 
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
-  members?: FeedMemberRequest[];
+  members?: Array<FeedMemberRequest>;
 
   custom?: Record<string, any>;
 
@@ -11318,17 +11352,17 @@ export interface FeedOwnData {
   /**
    * Capabilities the current user has for this feed
    */
-  own_capabilities?: FeedOwnCapability[];
+  own_capabilities?: Array<FeedOwnCapability>;
 
   /**
    * Follow relationships where the feed owner's feeds are following the current user's feeds (up to 5 total)
    */
-  own_followings?: FollowResponse[];
+  own_followings?: Array<FollowResponse>;
 
   /**
    * Follow relationships where the current user's feeds are following this feed
    */
-  own_follows?: FollowResponse[];
+  own_follows?: Array<FollowResponse>;
 
   own_membership?: FeedMemberResponse;
 }
@@ -11368,12 +11402,12 @@ export interface FeedRequest {
   /**
    * Tags used for filtering feeds
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Initial members for the feed
    */
-  members?: FeedMemberRequest[];
+  members?: Array<FeedMemberRequest>;
 
   /**
    * Custom data for the feed
@@ -11460,22 +11494,22 @@ export interface FeedResponse {
   /**
    * Tags used for filtering feeds
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Capabilities the current user has for this feed
    */
-  own_capabilities?: FeedOwnCapability[];
+  own_capabilities?: Array<FeedOwnCapability>;
 
   /**
    * Follow relationships where the feed owner’s feeds are following the current user's feeds
    */
-  own_followings?: FollowResponse[];
+  own_followings?: Array<FollowResponse>;
 
   /**
    * Follow relationships where the current user's feeds are following this feed
    */
-  own_follows?: FollowResponse[];
+  own_follows?: Array<FollowResponse>;
 
   /**
    * Custom data for the feed
@@ -11568,22 +11602,22 @@ export interface FeedSuggestionResponse {
   /**
    * Tags used for filtering feeds
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Capabilities the current user has for this feed
    */
-  own_capabilities?: FeedOwnCapability[];
+  own_capabilities?: Array<FeedOwnCapability>;
 
   /**
    * Follow relationships where the feed owner’s feeds are following the current user's feeds
    */
-  own_followings?: FollowResponse[];
+  own_followings?: Array<FollowResponse>;
 
   /**
    * Follow relationships where the current user's feeds are following this feed
    */
-  own_follows?: FollowResponse[];
+  own_follows?: Array<FollowResponse>;
 
   algorithm_scores?: Record<string, number>;
 
@@ -11632,7 +11666,7 @@ export interface FeedViewResponse {
   /**
    * Configured activity selectors
    */
-  activity_selectors?: ActivitySelectorConfigResponse[];
+  activity_selectors?: Array<ActivitySelectorConfigResponse>;
 
   aggregation?: AggregationConfig;
 
@@ -11648,12 +11682,12 @@ export interface FeedVisibilityResponse {
   /**
    * List of permission policies
    */
-  permissions: Permission[];
+  permissions: Array<Permission>;
 
   /**
    * Permission grants for each role
    */
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 }
 
 export interface FeedsActivityLocation {
@@ -11731,7 +11765,7 @@ export interface FeedsFeedResponse {
 
   visibility?: string;
 
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   custom?: Record<string, any>;
 
@@ -11757,7 +11791,7 @@ export interface FeedsNotificationComment {
 
   user_id: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 }
 
 export interface FeedsNotificationContext {
@@ -11775,7 +11809,7 @@ export interface FeedsNotificationParentActivity {
 
   user_id?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 }
 
 export interface FeedsNotificationTarget {
@@ -11789,7 +11823,7 @@ export interface FeedsNotificationTarget {
 
   user_id?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   comment?: FeedsNotificationComment;
 
@@ -11942,23 +11976,23 @@ export interface FeedsV3ActivityResponse {
 
   visibility: string;
 
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
-  comments: FeedsV3CommentResponse[];
+  comments: Array<FeedsV3CommentResponse>;
 
-  feeds: string[];
+  feeds: Array<string>;
 
-  filter_tags: string[];
+  filter_tags: Array<string>;
 
-  interest_tags: string[];
+  interest_tags: Array<string>;
 
-  latest_reactions: FeedsReactionResponse[];
+  latest_reactions: Array<FeedsReactionResponse>;
 
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
-  own_bookmarks: FeedsBookmarkResponse[];
+  own_bookmarks: Array<FeedsBookmarkResponse>;
 
-  own_reactions: FeedsReactionResponse[];
+  own_reactions: Array<FeedsReactionResponse>;
 
   collections: Record<string, FeedsEnrichedCollectionResponse>;
 
@@ -11995,9 +12029,9 @@ export interface FeedsV3ActivityResponse {
 
   visibility_tag?: string;
 
-  friend_reactions?: FeedsReactionResponse[];
+  friend_reactions?: Array<FeedsReactionResponse>;
 
-  latest_shares?: FeedsShareResponse[];
+  latest_shares?: Array<FeedsShareResponse>;
 
   current_feed?: FeedsFeedResponse;
 
@@ -12045,9 +12079,9 @@ export interface FeedsV3CommentResponse {
 
   upvote_count: number;
 
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
-  own_reactions: FeedsReactionResponse[];
+  own_reactions: Array<FeedsReactionResponse>;
 
   /**
    * User response object
@@ -12064,9 +12098,9 @@ export interface FeedsV3CommentResponse {
 
   text?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
-  latest_reactions?: FeedsReactionResponse[];
+  latest_reactions?: Array<FeedsReactionResponse>;
 
   custom?: Record<string, any>;
 
@@ -12088,13 +12122,13 @@ export interface Field {
 export interface FileUploadConfig {
   size_limit: number;
 
-  allowed_file_extensions?: string[];
+  allowed_file_extensions?: Array<string>;
 
-  allowed_mime_types?: string[];
+  allowed_mime_types?: Array<string>;
 
-  blocked_file_extensions?: string[];
+  blocked_file_extensions?: Array<string>;
 
-  blocked_mime_types?: string[];
+  blocked_mime_types?: Array<string>;
 }
 
 export interface FileUploadRequest {
@@ -12127,32 +12161,32 @@ export interface FilterConfigResponse {
   /**
    * LLM moderation labels available as filter values
    */
-  llm_labels: string[];
+  llm_labels: Array<string>;
 
   /**
    * AI image moderation labels available as filter values. Reflects the app's effective image taxonomy: custom Bodyguard taxonomy when enabled, otherwise the standard L1 label set.
    */
-  ai_image_labels?: string[];
+  ai_image_labels?: Array<string>;
 
   /**
    * AI text moderation labels available as filter values
    */
-  ai_text_labels?: string[];
+  ai_text_labels?: Array<string>;
 
   /**
    * Moderation config keys present in the queue, available as filter values
    */
-  config_keys?: string[];
+  config_keys?: Array<string>;
 
   /**
    * The moderation_payload.custom keys the app has configured as review-queue filter chips (via moderation_dashboard_preferences.filterable_custom_keys). Discovery hint for the dashboard only — the filter accepts any custom key regardless of this list.
    */
-  filterable_custom_keys?: string[];
+  filterable_custom_keys?: Array<string>;
 
   /**
    * AI image moderation labels available as filter values, as a map of L1 label to its L2 sub-labels. Reflects the app's effective image taxonomy: custom Bodyguard taxonomy when enabled, otherwise the standard catalogue of the org's enabled image providers.
    */
-  ai_image_taxonomy?: Record<string, string[]>;
+  ai_image_taxonomy?: Record<string, Array<string>>;
 }
 
 export interface FirebaseConfig {
@@ -12206,7 +12240,7 @@ export interface FlagFeedbackResponse {
 
   message_id: string;
 
-  labels: LabelResponse[];
+  labels: Array<LabelResponse>;
 }
 
 export interface FlagItemResponse {
@@ -12333,7 +12367,7 @@ export interface FlagUserOptions {
 }
 
 export interface FloodConfig {
-  allowlist?: string[];
+  allowlist?: Array<string>;
 
   identical?: FloodIdenticalConfig;
 
@@ -12355,7 +12389,7 @@ export interface FloodIdenticalRuleParameters {
 
   time_window?: string;
 
-  allowlist?: string[];
+  allowlist?: Array<string>;
 }
 
 export interface FloodSimilarConfig {
@@ -12377,14 +12411,14 @@ export interface FloodSimilarRuleParameters {
 
   time_window?: string;
 
-  allowlist?: string[];
+  allowlist?: Array<string>;
 }
 
 export interface FollowBatchRequest {
   /**
    * List of follow relationships to create
    */
-  follows: FollowRequest[];
+  follows: Array<FollowRequest>;
 
   /**
    * If true, auto-creates users referenced by source/target FIDs in the batch when they don't already exist. Server-side only. Defaults to false. This top-level field is the only supported batch/upsert create_users control.
@@ -12403,12 +12437,12 @@ export interface FollowBatchResponse {
   /**
    * List of newly created follow relationships
    */
-  created: FollowResponse[];
+  created: Array<FollowResponse>;
 
   /**
    * List of current follow relationships
    */
-  follows: FollowResponse[];
+  follows: Array<FollowResponse>;
 }
 
 export interface FollowCreatedEvent {
@@ -12658,15 +12692,15 @@ export interface FullUserResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
-  channel_mutes: ChannelMute[];
+  channel_mutes: Array<ChannelMute>;
 
-  devices: DeviceResponse[];
+  devices: Array<DeviceResponse>;
 
-  mutes: UserMuteResponse[];
+  mutes: Array<UserMuteResponse>;
 
-  teams: string[];
+  teams: Array<string>;
 
   custom: Record<string, any>;
 
@@ -12688,7 +12722,7 @@ export interface FullUserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  latest_hidden_channels?: string[];
+  latest_hidden_channels?: Array<string>;
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -12722,19 +12756,19 @@ export interface GeofenceResponse {
 
   type?: string;
 
-  country_codes?: string[];
+  country_codes?: Array<string>;
 }
 
 export interface GeofenceSettings {
-  names: string[];
+  names: Array<string>;
 }
 
 export interface GeofenceSettingsRequest {
-  names?: string[];
+  names?: Array<string>;
 }
 
 export interface GeofenceSettingsResponse {
-  names: string[];
+  names: Array<string>;
 }
 
 export interface GetActionConfigResponse {
@@ -12743,7 +12777,7 @@ export interface GetActionConfigResponse {
   /**
    * Moderation action configs grouped by entity type, sorted by order ascending
    */
-  action_config: Record<string, ModerationActionConfigResponse[]>;
+  action_config: Record<string, Array<ModerationActionConfigResponse>>;
 }
 
 export interface GetActiveCallsStatusResponse {
@@ -12803,7 +12837,7 @@ export interface GetBlockedUsersResponse {
   /**
    * Array of blocked user object
    */
-  blocks: BlockedUserResponse[];
+  blocks: Array<BlockedUserResponse>;
 }
 
 export interface GetCallParticipantSessionMetricsResponse {
@@ -12824,7 +12858,7 @@ export interface GetCallParticipantSessionMetricsResponse {
 
   user_session_id?: string;
 
-  published_tracks?: PublishedTrackMetrics[];
+  published_tracks?: Array<PublishedTrackMetrics>;
 
   client?: SessionClient;
 }
@@ -12839,7 +12873,7 @@ export interface GetCallReportResponse {
 
   report: ReportResponse;
 
-  video_reactions?: VideoReactionsResponse[];
+  video_reactions?: Array<VideoReactionsResponse>;
 
   chat_activity?: ChatActivityStatsResponse;
 
@@ -12851,9 +12885,9 @@ export interface GetCallReportResponse {
 export interface GetCallResponse {
   duration: string;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * Represents a call
@@ -12895,7 +12929,7 @@ export interface GetCallTypeResponse {
 
   updated_at: Date;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   notification_settings: NotificationSettingsResponse;
 
@@ -12973,11 +13007,11 @@ export interface GetChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: Command[];
+  commands: Array<Command>;
 
-  permissions: PolicyRequest[];
+  permissions: Array<PolicyRequest>;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   blocklist?: string;
 
@@ -12989,9 +13023,9 @@ export interface GetChannelTypeResponse {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -13028,7 +13062,7 @@ export interface GetCommentRepliesResponse {
   /**
    * Threaded listing of replies to the comment
    */
-  comments: ThreadedCommentResponse[];
+  comments: Array<ThreadedCommentResponse>;
 
   next?: string;
 
@@ -13052,7 +13086,7 @@ export interface GetCommentsResponse {
   /**
    * Threaded listing for the activity
    */
-  comments: ThreadedCommentResponse[];
+  comments: Array<ThreadedCommentResponse>;
 
   next?: string;
 
@@ -13092,11 +13126,11 @@ export interface GetDailyDigestResponse {
 
   schema_version?: string;
 
-  broadcasts?: BroadcastDigest[];
+  broadcasts?: Array<BroadcastDigest>;
 
-  call_sessions?: DailyDigestCallSessionSummary[];
+  call_sessions?: Array<DailyDigestCallSessionSummary>;
 
-  digest_kinds?: string[];
+  digest_kinds?: Array<string>;
 
   broadcast_rollup?: BroadcastDailyRollup;
 }
@@ -13116,7 +13150,7 @@ export interface GetEdgesResponse {
    */
   duration: string;
 
-  edges: EdgeResponse[];
+  edges: Array<EdgeResponse>;
 }
 
 export interface GetExternalStorageAWSS3Response {
@@ -13228,7 +13262,7 @@ export interface GetFollowSuggestionsResponse {
   /**
    * List of suggested feeds to follow
    */
-  suggestions: FeedSuggestionResponse[];
+  suggestions: Array<FeedSuggestionResponse>;
 
   algorithm_used?: string;
 }
@@ -13271,7 +13305,7 @@ export interface GetManyMessagesResponse {
   /**
    * List of messages
    */
-  messages: MessageResponse[];
+  messages: Array<MessageResponse>;
 }
 
 export interface GetMessageResponse {
@@ -13368,9 +13402,9 @@ export interface GetOGResponse {
    */
   type?: string;
 
-  actions?: Action[];
+  actions?: Array<Action>;
 
-  fields?: Field[];
+  fields?: Array<Field>;
 
   giphy?: Images;
 }
@@ -13401,9 +13435,9 @@ export interface GetOrCreateCallResponse {
 
   duration: string;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * Represents a call
@@ -13422,12 +13456,12 @@ export interface GetOrCreateFeedGroupRequest {
   /**
    * Configuration for activity processors
    */
-  activity_processors?: ActivityProcessorConfig[];
+  activity_processors?: Array<ActivityProcessorConfig>;
 
   /**
    * Configuration for activity selectors
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
 
@@ -13513,17 +13547,17 @@ export interface GetOrCreateFeedResponse {
    */
   duration: string;
 
-  activities: ActivityResponse[];
+  activities: Array<ActivityResponse>;
 
-  aggregated_activities: AggregatedActivityResponse[];
+  aggregated_activities: Array<AggregatedActivityResponse>;
 
-  followers: FollowResponse[];
+  followers: Array<FollowResponse>;
 
-  following: FollowResponse[];
+  following: Array<FollowResponse>;
 
-  members: FeedMemberResponse[];
+  members: Array<FeedMemberResponse>;
 
-  pinned_activities: ActivityPinResponse[];
+  pinned_activities: Array<ActivityPinResponse>;
 
   feed: FeedResponse;
 
@@ -13544,7 +13578,7 @@ export interface GetOrCreateFeedViewRequest {
   /**
    * Configuration for selecting activities
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   aggregation?: AggregationConfig;
 
@@ -13616,13 +13650,34 @@ export interface GetOrCreateUnfollowResponse {
   follow?: FollowResponse;
 }
 
+export interface GetPinnedMessagesResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Messages
+   */
+  messages: Array<MessageResponse>;
+}
+
+export interface GetPredefinedFilterResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  predefined_filter?: PredefinedFilterResponse;
+}
+
 export interface GetPushTemplatesResponse {
   /**
    * Duration of the request in milliseconds
    */
   duration: string;
 
-  templates: PushTemplateResponse[];
+  templates: Array<PushTemplateResponse>;
 }
 
 export interface GetRateLimitsResponse {
@@ -13660,7 +13715,7 @@ export interface GetReactionsResponse {
   /**
    * List of reactions
    */
-  reactions: ReactionResponse[];
+  reactions: Array<ReactionResponse>;
 }
 
 export interface GetRepliesResponse {
@@ -13669,7 +13724,7 @@ export interface GetRepliesResponse {
    */
   duration: string;
 
-  messages: MessageResponse[];
+  messages: Array<MessageResponse>;
 }
 
 export interface GetRetentionPolicyResponse {
@@ -13678,7 +13733,7 @@ export interface GetRetentionPolicyResponse {
    */
   duration: string;
 
-  policies: RetentionPolicy[];
+  policies: Array<RetentionPolicy>;
 }
 
 export interface GetRetentionPolicyRunsRequest {
@@ -13691,7 +13746,7 @@ export interface GetRetentionPolicyRunsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -13705,7 +13760,7 @@ export interface GetRetentionPolicyRunsResponse {
    */
   duration: string;
 
-  runs: RetentionRunResponse[];
+  runs: Array<RetentionRunResponse>;
 
   next?: string;
 
@@ -13776,7 +13831,7 @@ export interface GetUserInterestsResponse {
   /**
    * Top-N interest tags sorted by descending count, then alphabetically by tag
    */
-  interests: InterestTagResponse[];
+  interests: Array<InterestTagResponse>;
 }
 
 export interface GoLiveRequest {
@@ -13819,7 +13874,7 @@ export interface GroupedChannelsBucket {
   /**
    * Channels returned for this bucket
    */
-  channels: ChannelStateResponseFields[];
+  channels: Array<ChannelStateResponseFields>;
 
   /**
    * Cursor for the next page of this group
@@ -13887,7 +13942,7 @@ export interface HLSSettings {
 
   enabled: boolean;
 
-  quality_tracks: string[];
+  quality_tracks: Array<string>;
 
   layout?: LayoutSettings;
 }
@@ -13896,7 +13951,7 @@ export interface HLSSettingsRequest {
   /**
    * Quality tracks for HLS. One of: 360p, 480p, 720p, 1080p, 1440p, portrait-360x640, portrait-480x854, portrait-720x1280, portrait-1080x1920, portrait-1440x2560
    */
-  quality_tracks: string[];
+  quality_tracks: Array<string>;
 
   /**
    * Whether HLS broadcasting should start automatically
@@ -13916,7 +13971,7 @@ export interface HLSSettingsResponse {
 
   enabled: boolean;
 
-  quality_tracks: string[];
+  quality_tracks: Array<string>;
 
   layout: LayoutSettingsResponse;
 }
@@ -13928,9 +13983,9 @@ export interface HarmConfig {
 
   threshold?: number;
 
-  action_sequences?: ActionSequence[];
+  action_sequences?: Array<ActionSequence>;
 
-  harm_types?: string[];
+  harm_types?: Array<string>;
 }
 
 export interface HideChannelRequest {
@@ -13983,7 +14038,7 @@ export interface IPFlagCountRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface ImageContentParameters {
@@ -13991,7 +14046,7 @@ export interface ImageContentParameters {
 
   min_confidence?: number;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface ImageData {
@@ -14013,7 +14068,7 @@ export interface ImageRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface ImageSize {
@@ -14044,7 +14099,7 @@ export interface ImageUploadRequest {
   /**
    * field with JSON-encoded array of image size configurations
    */
-  upload_sizes?: ImageSize[];
+  upload_sizes?: Array<ImageSize>;
 
   user?: OnlyUserID;
 }
@@ -14062,7 +14117,7 @@ export interface ImageUploadResponse {
   /**
    * Array of image size configurations
    */
-  upload_sizes?: ImageSize[];
+  upload_sizes?: Array<ImageSize>;
 }
 
 export interface Images {
@@ -14082,7 +14137,7 @@ export interface Images {
 }
 
 export interface ImportBlockListRequest {
-  items: string[];
+  items: Array<string>;
 
   chunk_size?: number;
 }
@@ -14109,7 +14164,7 @@ export interface ImportTask {
 
   updated_at: Date;
 
-  history: ImportTaskHistory[];
+  history: Array<ImportTaskHistory>;
 
   size?: number;
 }
@@ -14175,7 +14230,7 @@ export interface Incident {
 export interface IndividualRecordSettings {
   mode: 'available' | 'disabled' | 'auto-on';
 
-  output_types?: string[];
+  output_types?: Array<string>;
 }
 
 export interface IndividualRecordingResponse {
@@ -14192,13 +14247,13 @@ export interface IndividualRecordingSettingsRequest {
   /**
    * Output types to include: audio_only, video_only, audio_video, screenshare_audio_only, screenshare_video_only, screenshare_audio_video
    */
-  output_types?: string[];
+  output_types?: Array<string>;
 }
 
 export interface IndividualRecordingSettingsResponse {
   mode: 'available' | 'disabled' | 'auto-on';
 
-  output_types?: string[];
+  output_types?: Array<string>;
 }
 
 export interface IngressAudioEncodingOptions {
@@ -14367,19 +14422,19 @@ export interface IngressStoppedEvent {
 }
 
 export interface IngressVideoEncodingOptions {
-  layers: IngressVideoLayer[];
+  layers: Array<IngressVideoLayer>;
 
   source?: IngressSource;
 }
 
 export interface IngressVideoEncodingOptionsRequest {
-  layers: IngressVideoLayerRequest[];
+  layers: Array<IngressVideoLayerRequest>;
 
   source: IngressSourceRequest;
 }
 
 export interface IngressVideoEncodingResponse {
-  layers: IngressVideoLayerResponse[];
+  layers: Array<IngressVideoLayerResponse>;
 
   source: IngressSourceResponse;
 }
@@ -14503,7 +14558,7 @@ export interface KeyframeOCRRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface KeyframeRuleParameters {
@@ -14513,7 +14568,7 @@ export interface KeyframeRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface KickUserRequest {
@@ -14573,7 +14628,7 @@ export interface LLMConfig {
 
   enabled?: boolean;
 
-  rules?: LLMRule[];
+  rules?: Array<LLMRule>;
 
   severity_descriptions?: Record<string, string>;
 }
@@ -14592,15 +14647,15 @@ export interface LLMRule {
 
   description?: string;
 
-  severity_rules?: BodyguardSeverityRule[];
+  severity_rules?: Array<BodyguardSeverityRule>;
 }
 
 export interface LabelResponse {
   name: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 
-  phrase_list_ids?: number[];
+  phrase_list_ids?: Array<number>;
 }
 
 export interface LabelResultResponse {
@@ -14649,7 +14704,7 @@ export interface LabelResultResponse {
   /**
    * Moderation labels
    */
-  labels: string[];
+  labels: Array<string>;
 
   /**
    * Customer-supplied identifier for the moderated content
@@ -14775,7 +14830,7 @@ export interface LabelsResponse {
   /**
    * Moderation labels detected
    */
-  labels?: string[];
+  labels?: Array<string>;
 }
 
 export interface LayoutSettings {
@@ -14832,7 +14887,7 @@ export interface LimitInfoResponse {
 }
 
 export interface LimitsSettings {
-  max_participants_exclude_roles: string[];
+  max_participants_exclude_roles: Array<string>;
 
   max_duration_seconds?: number;
 
@@ -14848,11 +14903,11 @@ export interface LimitsSettingsRequest {
 
   max_participants_exclude_owner?: boolean;
 
-  max_participants_exclude_roles?: string[];
+  max_participants_exclude_roles?: Array<string>;
 }
 
 export interface LimitsSettingsResponse {
-  max_participants_exclude_roles: string[];
+  max_participants_exclude_roles: Array<string>;
 
   max_duration_seconds?: number;
 
@@ -14867,7 +14922,7 @@ export interface ListBlockListResponse {
    */
   duration: string;
 
-  blocklists: BlockListResponse[];
+  blocklists: Array<BlockListResponse>;
 
   next_cursor?: string;
 }
@@ -14893,7 +14948,7 @@ export interface ListCommandsResponse {
   /**
    * List of commands
    */
-  commands: Command[];
+  commands: Array<Command>;
 }
 
 export interface ListDevicesResponse {
@@ -14902,7 +14957,7 @@ export interface ListDevicesResponse {
   /**
    * List of devices
    */
-  devices: DeviceResponse[];
+  devices: Array<DeviceResponse>;
 }
 
 export interface ListExternalStorageResponse {
@@ -14947,7 +15002,7 @@ export interface ListImportV2TasksResponse {
    */
   duration: string;
 
-  import_tasks: ImportV2TaskItem[];
+  import_tasks: Array<ImportV2TaskItem>;
 
   next?: string;
 
@@ -14960,7 +15015,7 @@ export interface ListImportsResponse {
    */
   duration: string;
 
-  import_tasks: ImportTask[];
+  import_tasks: Array<ImportTask>;
 }
 
 export interface ListPermissionsResponse {
@@ -14969,7 +15024,7 @@ export interface ListPermissionsResponse {
    */
   duration: string;
 
-  permissions: Permission[];
+  permissions: Array<Permission>;
 }
 
 export interface ListPushProvidersResponse {
@@ -14978,7 +15033,7 @@ export interface ListPushProvidersResponse {
    */
   duration: string;
 
-  push_providers: PushProviderResponse[];
+  push_providers: Array<PushProviderResponse>;
 }
 
 export interface ListQueuesResponse {
@@ -14987,13 +15042,13 @@ export interface ListQueuesResponse {
    */
   duration: string;
 
-  queues: ModerationQueueResponse[];
+  queues: Array<ModerationQueueResponse>;
 }
 
 export interface ListRecordingsResponse {
   duration: string;
 
-  recordings: CallRecording[];
+  recordings: Array<CallRecording>;
 }
 
 export interface ListRolesResponse {
@@ -15002,7 +15057,7 @@ export interface ListRolesResponse {
    */
   duration: string;
 
-  roles: Role[];
+  roles: Array<Role>;
 }
 
 export interface ListSIPInboundRoutingRuleResponse {
@@ -15011,7 +15066,7 @@ export interface ListSIPInboundRoutingRuleResponse {
   /**
    * List of SIP Inbound Routing Rules for the application
    */
-  sip_inbound_routing_rules: SIPInboundRoutingRuleResponse[];
+  sip_inbound_routing_rules: Array<SIPInboundRoutingRuleResponse>;
 }
 
 export interface ListSIPTrunksResponse {
@@ -15020,7 +15075,7 @@ export interface ListSIPTrunksResponse {
   /**
    * List of SIP trunks for the application
    */
-  sip_trunks: SIPTrunkResponse[];
+  sip_trunks: Array<SIPTrunkResponse>;
 }
 
 export interface ListTranscriptionsResponse {
@@ -15029,7 +15084,7 @@ export interface ListTranscriptionsResponse {
   /**
    * List of transcriptions for the call
    */
-  transcriptions: CallTranscription[];
+  transcriptions: Array<CallTranscription>;
 }
 
 export interface ListUserGroupsResponse {
@@ -15038,7 +15093,7 @@ export interface ListUserGroupsResponse {
   /**
    * List of user groups
    */
-  user_groups: UserGroupResponse[];
+  user_groups: Array<UserGroupResponse>;
 }
 
 export interface Location {
@@ -15086,17 +15141,17 @@ export interface MarkActivityRequest {
   /**
    * List of activity IDs to mark as read
    */
-  mark_read?: string[];
+  mark_read?: Array<string>;
 
   /**
    * List of activity IDs to mark as seen
    */
-  mark_seen?: string[];
+  mark_seen?: Array<string>;
 
   /**
    * List of activity IDs to mark as watched (for stories)
    */
-  mark_watched?: string[];
+  mark_watched?: Array<string>;
 
   /**
    * User request object
@@ -15119,7 +15174,7 @@ export interface MarkChannelsReadRequest {
 }
 
 export interface MarkDeliveredRequest {
-  latest_delivered_messages?: DeliveredMessagePayload[];
+  latest_delivered_messages?: Array<DeliveredMessagePayload>;
 }
 
 export interface MarkDeliveredResponse {
@@ -15256,12 +15311,12 @@ export interface MatchedContent {
   /**
    * Image-classification entries (keyframe rule, Type=image) carry nested L1 → L2 classifications. Text entries (closed_caption rule, Type=text) carry flat label + severity. Resolved against the app's effective taxonomy on the image side.
    */
-  classifications?: Classification[];
+  classifications?: Array<Classification>;
 
   /**
    * OCR entries only (keyframe_ocr rule, Type=image). Bodyguard labels that fired against the keyframe's OCR-extracted text (e.g. `INSULT`, `HATE_SPEECH`). Distinct from `classifications` so consumers can route OCR matches separately from image-classification matches.
    */
-  ocr_classifications?: Classification[];
+  ocr_classifications?: Array<Classification>;
 }
 
 export interface MaxStreakChangedEvent {
@@ -15496,7 +15551,7 @@ export interface MembersResponse {
   /**
    * List of found members
    */
-  members: ChannelMemberResponse[];
+  members: Array<ChannelMemberResponse>;
 }
 
 export interface MembershipLevelResponse {
@@ -15528,7 +15583,7 @@ export interface MembershipLevelResponse {
   /**
    * Activity tags this membership level gives access to
    */
-  tags: string[];
+  tags: Array<string>;
 
   /**
    * Description of the membership level
@@ -15784,7 +15839,7 @@ export interface MessageHistoryEntryResponse {
 
   text: string;
 
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
   custom: Record<string, any>;
 }
@@ -15917,7 +15972,7 @@ export interface MessageNewEvent {
   /**
    * The participants of the thread
    */
-  thread_participants?: UserResponseCommonFields[];
+  thread_participants?: Array<UserResponseCommonFields>;
 
   /**
    * Represents channel in chat
@@ -15934,7 +15989,7 @@ export interface MessageNewEvent {
 export interface MessageOptions {
   include_thread_participants?: boolean;
 
-  member_custom_include?: string[];
+  member_custom_include?: Array<string>;
 }
 
 export interface MessagePaginationParams {
@@ -16129,24 +16184,24 @@ export interface MessageRequest {
   /**
    * Array of message attachments
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * List of user group IDs to mention. Group members who are also channel members will receive push notifications. Max 10 groups
    */
-  mentioned_group_ids?: string[];
+  mentioned_group_ids?: Array<string>;
 
-  mentioned_roles?: string[];
+  mentioned_roles?: Array<string>;
 
   /**
    * Array of user IDs to mention
    */
-  mentioned_users?: string[];
+  mentioned_users?: Array<string>;
 
   /**
    * A list of user ids that have restricted visibility to the message
    */
-  restricted_visibility?: string[];
+  restricted_visibility?: Array<string>;
 
   custom?: Record<string, any>;
 
@@ -16229,27 +16284,27 @@ export interface MessageResponse {
   /**
    * Array of message attachments
    */
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
   /**
    * List of 10 latest reactions to this message
    */
-  latest_reactions: ReactionResponse[];
+  latest_reactions: Array<ReactionResponse>;
 
   /**
    * List of mentioned users
    */
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
   /**
    * List of 10 latest reactions of authenticated user to this message
    */
-  own_reactions: ReactionResponse[];
+  own_reactions: Array<ReactionResponse>;
 
   /**
    * A list of user ids that have restricted visibility to the message, if the list is not empty, the message is only visible to the users in the list
    */
-  restricted_visibility: string[];
+  restricted_visibility: Array<string>;
 
   custom: Record<string, any>;
 
@@ -16317,22 +16372,22 @@ export interface MessageResponse {
   /**
    * List of user group IDs mentioned in the message. Group members who are also channel members will receive push notifications based on their push preferences. Max 10 groups
    */
-  mentioned_group_ids?: string[];
+  mentioned_group_ids?: Array<string>;
 
   /**
    * List of mentioned user group objects.
    */
-  mentioned_groups?: UserGroupResponse[];
+  mentioned_groups?: Array<UserGroupResponse>;
 
   /**
    * List of roles mentioned in the message (e.g. admin, channel_moderator, custom roles). Members with matching roles will receive push notifications based on their push preferences. Max 10 roles
    */
-  mentioned_roles?: string[];
+  mentioned_roles?: Array<string>;
 
   /**
    * List of users who participate in thread
    */
-  thread_participants?: UserResponse[];
+  thread_participants?: Array<UserResponse>;
 
   draft?: DraftResponse;
 
@@ -16344,7 +16399,7 @@ export interface MessageResponse {
   /**
    * Contains image moderation information
    */
-  image_labels?: Record<string, string[]>;
+  image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
 
@@ -16370,7 +16425,7 @@ export interface MessageResponse {
 }
 
 export interface MessageStatsResponse {
-  count_over_time?: CountByMinuteResponse[];
+  count_over_time?: Array<CountByMinuteResponse>;
 }
 
 export interface MessageUnblockedEvent {
@@ -16594,27 +16649,27 @@ export interface MessageWithChannelResponse {
   /**
    * Array of message attachments
    */
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
   /**
    * List of 10 latest reactions to this message
    */
-  latest_reactions: ReactionResponse[];
+  latest_reactions: Array<ReactionResponse>;
 
   /**
    * List of mentioned users
    */
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
   /**
    * List of 10 latest reactions of authenticated user to this message
    */
-  own_reactions: ReactionResponse[];
+  own_reactions: Array<ReactionResponse>;
 
   /**
    * A list of user ids that have restricted visibility to the message, if the list is not empty, the message is only visible to the users in the list
    */
-  restricted_visibility: string[];
+  restricted_visibility: Array<string>;
 
   /**
    * Represents channel in chat
@@ -16687,22 +16742,22 @@ export interface MessageWithChannelResponse {
   /**
    * List of user group IDs mentioned in the message. Group members who are also channel members will receive push notifications based on their push preferences. Max 10 groups
    */
-  mentioned_group_ids?: string[];
+  mentioned_group_ids?: Array<string>;
 
   /**
    * List of mentioned user group objects.
    */
-  mentioned_groups?: UserGroupResponse[];
+  mentioned_groups?: Array<UserGroupResponse>;
 
   /**
    * List of roles mentioned in the message (e.g. admin, channel_moderator, custom roles). Members with matching roles will receive push notifications based on their push preferences. Max 10 roles
    */
-  mentioned_roles?: string[];
+  mentioned_roles?: Array<string>;
 
   /**
    * List of users who participate in thread
    */
-  thread_participants?: UserResponse[];
+  thread_participants?: Array<UserResponse>;
 
   draft?: DraftResponse;
 
@@ -16714,7 +16769,7 @@ export interface MessageWithChannelResponse {
   /**
    * Contains image moderation information
    */
-  image_labels?: Record<string, string[]>;
+  image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
 
@@ -16756,7 +16811,7 @@ export interface MetricStats {
   /**
    * Per-day values (only present in daily mode)
    */
-  daily?: DailyValue[];
+  daily?: Array<DailyValue>;
 }
 
 export interface MetricThreshold {
@@ -16772,7 +16827,7 @@ export interface MetricThreshold {
 }
 
 export interface MetricTimeSeries {
-  data_points?: number[][];
+  data_points?: Array<Array<number>>;
 }
 
 export interface MetricsPct {
@@ -16891,7 +16946,7 @@ export interface ModerationCallResponse {
 
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
   custom: Record<string, any>;
 
@@ -16954,7 +17009,7 @@ export interface ModerationConfig {
 
   updated_at?: Date;
 
-  supported_video_call_harm_types?: string[];
+  supported_video_call_harm_types?: Array<string>;
 
   ai_image_config?: AIImageConfig;
 
@@ -17029,11 +17084,11 @@ export interface ModerationDashboardPreferences {
 
   media_queue_blur_enabled?: boolean;
 
-  allowed_moderation_action_reasons?: string[];
+  allowed_moderation_action_reasons?: Array<string>;
 
-  escalation_reasons?: string[];
+  escalation_reasons?: Array<string>;
 
-  filterable_custom_keys?: string[];
+  filterable_custom_keys?: Array<string>;
 
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
 
@@ -17061,7 +17116,7 @@ export interface ModerationFlagResponse {
 
   review_queue_item_id?: string;
 
-  labels?: string[];
+  labels?: Array<string>;
 
   custom?: Record<string, any>;
 
@@ -17164,17 +17219,19 @@ export interface ModerationMarkReviewedEvent {
 }
 
 export interface ModerationPayload {
-  audios?: string[];
+  audios?: Array<string>;
 
-  image_ordered_keys?: string[];
+  image_ordered_keys?: Array<string>;
 
-  images?: string[];
+  images?: Array<string>;
 
-  text_ordered_keys?: string[];
+  other_media?: Array<string>;
 
-  texts?: string[];
+  text_ordered_keys?: Array<string>;
 
-  videos?: string[];
+  texts?: Array<string>;
+
+  videos?: Array<string>;
 
   custom?: Record<string, any>;
 
@@ -17187,22 +17244,22 @@ export interface ModerationPayloadRequest {
   /**
    * Audio URLs to moderate
    */
-  audios?: string[];
+  audios?: Array<string>;
 
   /**
    * Image URLs to moderate (max 30)
    */
-  images?: string[];
+  images?: Array<string>;
 
   /**
    * Text content to moderate
    */
-  texts?: string[];
+  texts?: Array<string>;
 
   /**
    * Video URLs to moderate
    */
-  videos?: string[];
+  videos?: Array<string>;
 
   /**
    * Custom data for moderation
@@ -17214,32 +17271,37 @@ export interface ModerationPayloadResponse {
   /**
    * Audio URLs to moderate
    */
-  audios?: string[];
+  audios?: Array<string>;
 
   /**
    * Caller-supplied keys for images, index-aligned with images[]
    */
-  image_ordered_keys?: string[];
+  image_ordered_keys?: Array<string>;
 
   /**
    * Image URLs to moderate
    */
-  images?: string[];
+  images?: Array<string>;
+
+  /**
+   * Media URLs from attachments outside the typed image/video/audio lists (custom attachment types such as GIF pickers)
+   */
+  other_media?: Array<string>;
 
   /**
    * Caller-supplied keys for texts (e.g. "title", "description"), index-aligned with texts[]
    */
-  text_ordered_keys?: string[];
+  text_ordered_keys?: Array<string>;
 
   /**
    * Text content to moderate
    */
-  texts?: string[];
+  texts?: Array<string>;
 
   /**
    * Video URLs to moderate
    */
-  videos?: string[];
+  videos?: Array<string>;
 
   /**
    * Custom data for moderation
@@ -17316,17 +17378,17 @@ export interface ModerationRuleV2Response {
 
   updated_at: Date;
 
-  config_keys: string[];
+  config_keys: Array<string>;
 
   cooldown_period?: string;
 
   logic?: string;
 
-  action_sequences?: CallRuleActionSequence[];
+  action_sequences?: Array<CallRuleActionSequence>;
 
-  conditions?: RuleBuilderCondition[];
+  conditions?: Array<RuleBuilderCondition>;
 
-  groups?: RuleBuilderConditionGroup[];
+  groups?: Array<RuleBuilderConditionGroup>;
 
   action?: RuleBuilderAction;
 }
@@ -17352,7 +17414,7 @@ export interface ModerationRulesTriggeredEvent {
   /**
    * Array of action types that were triggered
    */
-  triggered_actions: string[];
+  triggered_actions: Array<string>;
 
   custom: Record<string, any>;
 
@@ -17375,7 +17437,7 @@ export interface ModerationRulesTriggeredEvent {
   /**
    * Ordered list of contents whose verdicts contributed to an aggregation rule's threshold. Populated only for aggregation rules when callers supplied `content_ids`.
    */
-  matched_contents?: MatchedContent[];
+  matched_contents?: Array<MatchedContent>;
 }
 
 export interface ModerationTextAnalysisCompleteEvent {
@@ -17432,11 +17494,11 @@ export interface ModerationV2Response {
 
   semantic_filter_matched?: string;
 
-  blocklists_matched?: string[];
+  blocklists_matched?: Array<string>;
 
-  image_harms?: string[];
+  image_harms?: Array<string>;
 
-  text_harms?: string[];
+  text_harms?: Array<string>;
 }
 
 export interface MuteChannelRequest {
@@ -17450,7 +17512,7 @@ export interface MuteChannelRequest {
   /**
    * Channel CIDs to mute (if multiple channels)
    */
-  channel_cids?: string[];
+  channel_cids?: Array<string>;
 
   /**
    * User request object
@@ -17464,7 +17526,7 @@ export interface MuteChannelResponse {
   /**
    * Object with mutes (if multiple channels were muted)
    */
-  channel_mutes?: ChannelMute[];
+  channel_mutes?: Array<ChannelMute>;
 
   channel_mute?: ChannelMute;
 
@@ -17475,7 +17537,7 @@ export interface MuteRequest {
   /**
    * User IDs to mute (if multiple users)
    */
-  target_ids: string[];
+  target_ids: Array<string>;
 
   /**
    * Duration of mute in minutes
@@ -17496,12 +17558,12 @@ export interface MuteResponse {
   /**
    * Object with mutes (if multiple users were muted)
    */
-  mutes?: UserMuteResponse[];
+  mutes?: Array<UserMuteResponse>;
 
   /**
    * A list of users that can't be found. Common cause for this is deleted users
    */
-  non_existing_users?: string[];
+  non_existing_users?: Array<string>;
 
   own_user?: OwnUserResponse;
 }
@@ -17519,7 +17581,7 @@ export interface MuteUsersRequest {
 
   video?: boolean;
 
-  user_ids?: string[];
+  user_ids?: Array<string>;
 
   /**
    * User request object
@@ -17555,7 +17617,7 @@ export interface NotificationComment {
 
   user_id: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 }
 
 export interface NotificationConfig {
@@ -17606,7 +17668,7 @@ export interface NotificationFeedUpdatedEvent {
   /**
    * Aggregated activities for notification feeds
    */
-  aggregated_activities?: AggregatedActivityResponse[];
+  aggregated_activities?: Array<AggregatedActivityResponse>;
 
   notification_status?: NotificationStatusResponse;
 
@@ -17726,7 +17788,7 @@ export interface NotificationParentActivity {
 
   user_id?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 }
 
 export interface NotificationSettings {
@@ -17795,12 +17857,12 @@ export interface NotificationStatusResponse {
   /**
    * Deprecated: use is_read on each activity/group instead. IDs of activities that have been read. Capped at ~101 entries for aggregated feeds.
    */
-  read_activities?: string[];
+  read_activities?: Array<string>;
 
   /**
    * Deprecated: use is_seen on each activity/group instead. IDs of activities that have been seen. Capped at ~101 entries for aggregated feeds.
    */
-  seen_activities?: string[];
+  seen_activities?: Array<string>;
 }
 
 export interface NotificationTarget {
@@ -17832,7 +17894,7 @@ export interface NotificationTarget {
   /**
    * Attachments on the target activity (for activity targets)
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   comment?: NotificationComment;
 
@@ -17914,7 +17976,7 @@ export interface NotificationThreadMessageNewEvent {
   /**
    * The participants of the thread
    */
-  thread_participants?: UserResponseCommonFields[];
+  thread_participants?: Array<UserResponseCommonFields>;
 
   channel_custom?: Record<string, any>;
 }
@@ -17943,7 +18005,7 @@ export interface OCRContentParameters {
 
   severity?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface OCRRule {
@@ -17960,21 +18022,21 @@ export interface OnlyUserID {
 export interface OverviewDashboardConfig {
   default_date_range_days?: number;
 
-  visible_charts?: string[];
+  visible_charts?: Array<string>;
 }
 
 export interface OwnBatchRequest {
   /**
    * List of feed IDs to get own fields for
    */
-  feeds: string[];
+  feeds: Array<string>;
 
   user_id?: string;
 
   /**
    * Optional list of specific fields to return. If not specified, all fields (own_follows, own_followings, own_capabilities, own_membership) are returned
    */
-  fields?: string[];
+  fields?: Array<string>;
 
   /**
    * User request object
@@ -18057,13 +18119,13 @@ export interface OwnUserResponse {
 
   updated_at: Date;
 
-  channel_mutes: ChannelMute[];
+  channel_mutes: Array<ChannelMute>;
 
-  devices: DeviceResponse[];
+  devices: Array<DeviceResponse>;
 
-  mutes: UserMuteResponse[];
+  mutes: Array<UserMuteResponse>;
 
-  teams: string[];
+  teams: Array<string>;
 
   custom: Record<string, any>;
 
@@ -18081,9 +18143,9 @@ export interface OwnUserResponse {
 
   revoke_tokens_issued_before?: Date;
 
-  blocked_user_ids?: string[];
+  blocked_user_ids?: Array<string>;
 
-  latest_hidden_channels?: string[];
+  latest_hidden_channels?: Array<string>;
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -18119,7 +18181,7 @@ export interface ParsedPredefinedFilterResponse {
 
   filter: Record<string, any>;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 }
 
 export interface ParticipantCountByMinuteResponse {
@@ -18135,7 +18197,7 @@ export interface ParticipantCountByMinuteResponse {
 }
 
 export interface ParticipantCountOverTimeResponse {
-  by_minute?: ParticipantCountByMinuteResponse[];
+  by_minute?: Array<ParticipantCountByMinuteResponse>;
 }
 
 export interface ParticipantReportResponse {
@@ -18145,13 +18207,13 @@ export interface ParticipantReportResponse {
 
   max_concurrent?: number;
 
-  by_browser?: GroupedStatsResponse[];
+  by_browser?: Array<GroupedStatsResponse>;
 
-  by_country?: GroupedStatsResponse[];
+  by_country?: Array<GroupedStatsResponse>;
 
-  by_device?: GroupedStatsResponse[];
+  by_device?: Array<GroupedStatsResponse>;
 
-  by_operating_system?: GroupedStatsResponse[];
+  by_operating_system?: Array<GroupedStatsResponse>;
 
   count_over_time?: ParticipantCountOverTimeResponse;
 
@@ -18161,27 +18223,27 @@ export interface ParticipantReportResponse {
 }
 
 export interface ParticipantSeriesPublisherStats {
-  global_metrics_order?: string[];
+  global_metrics_order?: Array<string>;
 
-  global?: Record<string, number[][]>;
+  global?: Record<string, Array<Array<number>>>;
 
   global_meta?: Record<string, MetricDescriptor>;
 
-  global_thresholds?: Record<string, MetricThreshold[]>;
+  global_thresholds?: Record<string, Array<MetricThreshold>>;
 
-  tracks?: Record<string, ParticipantSeriesTrackMetrics[]>;
+  tracks?: Record<string, Array<ParticipantSeriesTrackMetrics>>;
 }
 
 export interface ParticipantSeriesSubscriberStats {
-  global_metrics_order?: string[];
+  global_metrics_order?: Array<string>;
 
-  subscriptions?: ParticipantSeriesSubscriptionTrackMetrics[];
+  subscriptions?: Array<ParticipantSeriesSubscriptionTrackMetrics>;
 
-  global?: Record<string, number[][]>;
+  global?: Record<string, Array<Array<number>>>;
 
   global_meta?: Record<string, MetricDescriptor>;
 
-  global_thresholds?: Record<string, MetricThreshold[]>;
+  global_thresholds?: Record<string, Array<MetricThreshold>>;
 }
 
 export interface ParticipantSeriesSubscriptionTrackMetrics {
@@ -18191,7 +18253,7 @@ export interface ParticipantSeriesSubscriptionTrackMetrics {
 
   publisher_user_session_id?: string;
 
-  tracks?: Record<string, ParticipantSeriesTrackMetrics[]>;
+  tracks?: Record<string, Array<ParticipantSeriesTrackMetrics>>;
 }
 
 export interface ParticipantSeriesTimeframe {
@@ -18215,23 +18277,23 @@ export interface ParticipantSeriesTrackMetrics {
 
   track_type?: string;
 
-  metrics_order?: string[];
+  metrics_order?: Array<string>;
 
-  metrics?: Record<string, number[][]>;
+  metrics?: Record<string, Array<Array<number>>>;
 
   metrics_meta?: Record<string, MetricDescriptor>;
 
-  thresholds?: Record<string, MetricThreshold[]>;
+  thresholds?: Record<string, Array<MetricThreshold>>;
 }
 
 export interface ParticipantSeriesUserStats {
-  metrics_order?: string[];
+  metrics_order?: Array<string>;
 
-  metrics?: Record<string, number[][]>;
+  metrics?: Record<string, Array<Array<number>>>;
 
   metrics_meta?: Record<string, MetricDescriptor>;
 
-  thresholds?: Record<string, MetricThreshold[]>;
+  thresholds?: Record<string, Array<MetricThreshold>>;
 }
 
 export interface ParticipantSessionDetails {
@@ -18241,7 +18303,7 @@ export interface ParticipantSessionDetails {
 
   user_session_id: string;
 
-  roles: string[];
+  roles: Array<string>;
 
   duration_in_seconds?: number;
 
@@ -18322,6 +18384,26 @@ export interface Percentiles {
   p95?: number;
 }
 
+export interface PerformanceAnalysisResponse {
+  analysis_type: string;
+
+  score: string;
+
+  indexed_fields: Array<string>;
+
+  recommendations: Array<string>;
+
+  unindexed_fields: Array<string>;
+
+  unindexed_sort_fields: Array<string>;
+
+  warnings: Array<string>;
+
+  last_analyzed?: Date;
+
+  scan_type?: string;
+}
+
 export interface Permission {
   /**
    * Action name this permission is for (e.g. SendMessage)
@@ -18371,7 +18453,39 @@ export interface Permission {
   /**
    * List of tags of the permission
    */
-  tags: string[];
+  tags: Array<string>;
+
+  /**
+   * MongoDB style condition which decides whether or not the permission is granted
+   */
+  condition?: Record<string, any>;
+}
+
+export interface PermissionRequest {
+  /**
+   * Action name this permission is for (e.g. SendMessage)
+   */
+  action: string;
+
+  /**
+   * Name of the permission
+   */
+  name: string;
+
+  /**
+   * Description of the permission
+   */
+  description?: string;
+
+  /**
+   * Whether this permission applies to resource owner or not
+   */
+  owner?: boolean;
+
+  /**
+   * Whether this permission applies to teammates (multi-tenancy mode only)
+   */
+  same_team?: boolean;
 
   /**
    * MongoDB style condition which decides whether or not the permission is granted
@@ -18387,7 +18501,7 @@ export interface PermissionRequestEvent {
   /**
    * The list of permissions requested by the user
    */
-  permissions: string[];
+  permissions: Array<string>;
 
   /**
    * User response object
@@ -18475,9 +18589,9 @@ export interface Policy {
 
   updated_at: Date;
 
-  resources: string[];
+  resources: Array<string>;
 
-  roles: string[];
+  roles: Array<string>;
 }
 
 export interface PolicyConfig {
@@ -18505,12 +18619,12 @@ export interface PolicyRequest {
   /**
    * List of resources to apply policy to
    */
-  resources: string[];
+  resources: Array<string>;
 
   /**
    * List of roles to apply policy to
    */
-  roles: string[];
+  roles: Array<string>;
 }
 
 export interface PolicyTestLabelDrift {
@@ -18542,9 +18656,9 @@ export interface PolicyTestResult {
 
   severity?: string;
 
-  actual_labels?: string[];
+  actual_labels?: Array<string>;
 
-  expected_labels?: string[];
+  expected_labels?: Array<string>;
 
   raw_response?: Record<string, any>;
 }
@@ -18558,7 +18672,7 @@ export interface PolicyTestRow {
 
   text?: string;
 
-  labels?: string[];
+  labels?: Array<string>;
 }
 
 export interface PolicyTestRun {
@@ -18605,7 +18719,7 @@ export interface PolicyTestRunResponse {
   /**
    * Per-row results (only present once the run has finished)
    */
-  results?: PolicyTestResult[];
+  results?: Array<PolicyTestResult>;
 
   run?: PolicyTestRun;
 }
@@ -18619,7 +18733,7 @@ export interface PolicyTestSeedSpec {
   /**
    * Sample only records carrying any of these labels; empty samples everything
    */
-  labels?: string[];
+  labels?: Array<string>;
 }
 
 export interface PolicyTestSet {
@@ -18641,7 +18755,7 @@ export interface PolicyTestSet {
 
   team?: string;
 
-  rows?: PolicyTestRow[];
+  rows?: Array<PolicyTestRow>;
 
   last_run?: PolicyTestRun;
 }
@@ -18652,7 +18766,7 @@ export interface PolicyTestSetListResponse {
   /**
    * List of policy test sets for the app
    */
-  sets: PolicyTestSet[];
+  sets: Array<PolicyTestSet>;
 }
 
 export interface PolicyTestSetResponse {
@@ -18666,7 +18780,7 @@ export interface PolicyTestSetResponse {
   /**
    * Retained run history for this set, newest first
    */
-  recent_runs?: PolicyTestRun[];
+  recent_runs?: Array<PolicyTestRun>;
 
   set?: PolicyTestSet;
 }
@@ -18748,15 +18862,15 @@ export interface PollResponseData {
 
   voting_visibility: string;
 
-  latest_answers: PollVoteResponseData[];
+  latest_answers: Array<PollVoteResponseData>;
 
-  options: PollOptionResponseData[];
+  options: Array<PollOptionResponseData>;
 
-  own_votes: PollVoteResponseData[];
+  own_votes: Array<PollVoteResponseData>;
 
   custom: Record<string, any>;
 
-  latest_votes_by_option: Record<string, PollVoteResponseData[]>;
+  latest_votes_by_option: Record<string, Array<PollVoteResponseData>>;
 
   vote_counts_by_option: Record<string, number>;
 
@@ -18813,7 +18927,7 @@ export interface PollVotesResponse {
   /**
    * Poll votes
    */
-  votes: PollVoteResponseData[];
+  votes: Array<PollVoteResponseData>;
 
   next?: string;
 
@@ -18846,6 +18960,36 @@ export interface PoorTail {
   healthy_pct?: number;
 }
 
+export interface PredefinedFilterResponse {
+  created_at: Date;
+
+  name: string;
+
+  operation: string;
+
+  updated_at: Date;
+
+  filter: Record<string, any>;
+
+  description?: string;
+
+  query_id?: number;
+
+  sort?: Array<SortParam>;
+
+  performance?: PerformanceAnalysisResponse;
+
+  stats?: PredefinedFilterStatsResponse;
+}
+
+export interface PredefinedFilterStatsResponse {
+  calls: number;
+
+  max_latency_ms: number;
+
+  last_seen?: Date;
+}
+
 export interface PrivacySettingsResponse {
   delivery_receipts?: DeliveryReceiptsResponse;
 
@@ -18871,7 +19015,7 @@ export interface PublishedTrackMetrics {
 
   track_type?: string;
 
-  warnings?: SessionWarningResponse[];
+  warnings?: Array<SessionWarningResponse>;
 
   bitrate?: MetricTimeSeries;
 
@@ -18923,7 +19067,7 @@ export interface PublisherStatsResponse {
 
   unique: number;
 
-  by_track?: TrackStatsResponse[];
+  by_track?: Array<TrackStatsResponse>;
 }
 
 export interface PublisherVideoMetrics {
@@ -18955,9 +19099,9 @@ export interface PushNotificationConfig {
   enable_push?: boolean;
 
   /**
-   * List of notification types that should trigger push notifications (e.g., follow, comment, reaction, comment_reaction, mention)
+   * Allowlist of notification types that may trigger push (e.g. follow, comment, reaction, comment_reaction, mention, or any custom activity.type). Empty or omitted means no types. Built-in notifications match notification_context.trigger.type; manually added notification activities match activity.type.
    */
-  push_types?: string[];
+  push_types?: Array<string>;
 }
 
 export interface PushNotificationFields {
@@ -18973,7 +19117,7 @@ export interface PushNotificationFields {
 
   xiaomi: XiaomiConfigFields;
 
-  providers?: PushProvider[];
+  providers?: Array<PushProvider>;
 }
 
 export interface PushNotificationSettingsResponse {
@@ -19101,7 +19245,7 @@ export interface PushProvider {
 
   xiaomi_package_name?: string;
 
-  push_templates?: PushTemplate[];
+  push_templates?: Array<PushTemplate>;
 }
 
 export interface PushProviderRequest {
@@ -19269,7 +19413,7 @@ export interface PushTemplateResponse {
 export interface Quality {
   viewer_interruption_note: string;
 
-  interruption_incidents: Incident[];
+  interruption_incidents: Array<Incident>;
 
   connection_avg_jitter_ms: Percentiles;
 
@@ -19287,11 +19431,11 @@ export interface Quality {
 }
 
 export interface QualityScoreReport {
-  histogram: ReportByHistogramBucket[];
+  histogram: Array<ReportByHistogramBucket>;
 }
 
 export interface QualityScoreReportResponse {
-  daily: DailyAggregateQualityScoreReportResponse[];
+  daily: Array<DailyAggregateQualityScoreReportResponse>;
 }
 
 export interface QueryActivitiesRequest {
@@ -19320,7 +19464,7 @@ export interface QueryActivitiesRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query. Supports location-based queries with 'near' and 'within_bounds' operators.
@@ -19339,7 +19483,7 @@ export interface QueryActivitiesResponse {
   /**
    * List of activities matching the query
    */
-  activities: ActivityResponse[];
+  activities: Array<ActivityResponse>;
 
   /**
    * Cursor for next page
@@ -19359,7 +19503,7 @@ export interface QueryActivityReactionsRequest {
 
   prev?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -19373,7 +19517,7 @@ export interface QueryActivityReactionsResponse {
    */
   duration: string;
 
-  reactions: FeedsReactionResponse[];
+  reactions: Array<FeedsReactionResponse>;
 
   next?: string;
 
@@ -19386,7 +19530,7 @@ export interface QueryActivitySharesResponse {
    */
   duration: string;
 
-  shares: ShareResponse[];
+  shares: Array<ShareResponse>;
 
   next?: string;
 
@@ -19398,7 +19542,7 @@ export interface QueryAggregateCallStatsRequest {
 
   to?: string;
 
-  report_types?: string[];
+  report_types?: Array<string>;
 }
 
 export interface QueryAggregateCallStatsResponse {
@@ -19434,7 +19578,7 @@ export interface QueryAppealsRequest {
   /**
    * Sorting parameters for appeals
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for appeals
@@ -19453,7 +19597,7 @@ export interface QueryAppealsResponse {
   /**
    * List of Appeal Items
    */
-  items: AppealItemResponse[];
+  items: Array<AppealItemResponse>;
 
   next?: string;
 
@@ -19486,7 +19630,7 @@ export interface QueryBannedUsersPayload {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * User request object
@@ -19503,7 +19647,7 @@ export interface QueryBannedUsersResponse {
   /**
    * List of found bans
    */
-  bans: BanResponse[];
+  bans: Array<BanResponse>;
 }
 
 export interface QueryBookmarkFoldersRequest {
@@ -19516,7 +19660,7 @@ export interface QueryBookmarkFoldersRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -19530,7 +19674,7 @@ export interface QueryBookmarkFoldersResponse {
   /**
    * List of bookmark folders matching the query
    */
-  bookmark_folders: BookmarkFolderResponse[];
+  bookmark_folders: Array<BookmarkFolderResponse>;
 
   /**
    * Cursor for next page
@@ -19557,7 +19701,7 @@ export interface QueryBookmarksRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -19576,7 +19720,7 @@ export interface QueryBookmarksResponse {
   /**
    * List of bookmarks matching the query
    */
-  bookmarks: BookmarkResponse[];
+  bookmarks: Array<BookmarkResponse>;
 
   /**
    * Cursor for next page
@@ -19603,7 +19747,7 @@ export interface QueryCallMembersRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -19617,7 +19761,7 @@ export interface QueryCallMembersResponse {
    */
   duration: string;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
   next?: string;
 
@@ -19640,7 +19784,7 @@ export interface QueryCallParticipantSessionsResponse {
 
   total_participant_sessions: number;
 
-  participants_sessions: ParticipantSessionDetails[];
+  participants_sessions: Array<ParticipantSessionDetails>;
 
   next?: string;
 
@@ -19661,14 +19805,14 @@ export interface QueryCallParticipantsResponse {
 
   total_participants: number;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * List of call participants
    */
-  participants: CallParticipantResponse[];
+  participants: Array<CallParticipantResponse>;
 
   /**
    * Represents a call
@@ -19688,7 +19832,7 @@ export interface QueryCallSessionParticipantStatsResponse {
    */
   duration: string;
 
-  participants: CallStatsParticipant[];
+  participants: Array<CallStatsParticipant>;
 
   counts: CallStatsParticipantCounts;
 
@@ -19702,7 +19846,7 @@ export interface QueryCallSessionParticipantStatsResponse {
 
   tmp_data_source?: string;
 
-  call_events?: CallLevelEventPayload[];
+  call_events?: Array<CallLevelEventPayload>;
 }
 
 export interface QueryCallSessionParticipantStatsTimelineResponse {
@@ -19721,7 +19865,7 @@ export interface QueryCallSessionParticipantStatsTimelineResponse {
 
   user_session_id: string;
 
-  events: CallParticipantTimeline[];
+  events: Array<CallParticipantTimeline>;
 }
 
 export interface QueryCallSessionStatsRequest {
@@ -19734,7 +19878,7 @@ export interface QueryCallSessionStatsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -19748,7 +19892,7 @@ export interface QueryCallSessionStatsResponse {
    */
   duration: string;
 
-  call_stats: CallStatsSessionResponse[];
+  call_stats: Array<CallStatsSessionResponse>;
 
   next?: string;
 
@@ -19798,7 +19942,7 @@ export interface QueryCallStatsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -19812,7 +19956,7 @@ export interface QueryCallStatsResponse {
    */
   duration: string;
 
-  reports: CallStatsReportSummaryResponse[];
+  reports: Array<CallStatsReportSummaryResponse>;
 
   next?: string;
 
@@ -19829,7 +19973,7 @@ export interface QueryCallsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -19843,7 +19987,7 @@ export interface QueryCallsResponse {
    */
   duration: string;
 
-  calls: CallStateResponseFields[];
+  calls: Array<CallStateResponseFields>;
 
   next?: string;
 
@@ -19859,7 +20003,7 @@ export interface QueryCampaignsRequest {
 
   user_limit?: number;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -19873,7 +20017,7 @@ export interface QueryCampaignsResponse {
    */
   duration: string;
 
-  campaigns: CampaignResponse[];
+  campaigns: Array<CampaignResponse>;
 
   next?: string;
 
@@ -19916,12 +20060,12 @@ export interface QueryChannelsRequest {
   /**
    * Top-level keys of the message sender's channel-member custom data to include under member.custom (max 8 keys, 64 chars each)
    */
-  member_custom_include?: string[];
+  member_custom_include?: Array<string>;
 
   /**
    * List of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -19950,7 +20094,7 @@ export interface QueryChannelsResponse {
   /**
    * List of channels
    */
-  channels: ChannelStateResponseFields[];
+  channels: Array<ChannelStateResponseFields>;
 
   predefined_filter?: ParsedPredefinedFilterResponse;
 }
@@ -19967,7 +20111,7 @@ export interface QueryCollectionsRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -19986,7 +20130,7 @@ export interface QueryCollectionsResponse {
   /**
    * List of collections matching the query
    */
-  collections: CollectionResponse[];
+  collections: Array<CollectionResponse>;
 
   /**
    * Cursor for next page
@@ -20006,7 +20150,7 @@ export interface QueryCommentReactionsRequest {
 
   prev?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -20020,7 +20164,7 @@ export interface QueryCommentReactionsResponse {
    */
   duration: string;
 
-  reactions: FeedsReactionResponse[];
+  reactions: Array<FeedsReactionResponse>;
 
   next?: string;
 
@@ -20067,7 +20211,7 @@ export interface QueryCommentsResponse {
   /**
    * List of comments matching the query
    */
-  comments: CommentResponse[];
+  comments: Array<CommentResponse>;
 
   /**
    * Cursor for next page
@@ -20092,7 +20236,7 @@ export interface QueryDraftsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -20114,7 +20258,7 @@ export interface QueryDraftsResponse {
   /**
    * Drafts
    */
-  drafts: DraftResponse[];
+  drafts: Array<DraftResponse>;
 
   next?: string;
 
@@ -20131,7 +20275,7 @@ export interface QueryFeedMembersRequest {
   /**
    * Sort parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter parameters for the query
@@ -20145,7 +20289,7 @@ export interface QueryFeedMembersResponse {
   /**
    * List of feed members
    */
-  members: FeedMemberResponse[];
+  members: Array<FeedMemberResponse>;
 
   /**
    * Cursor for next page
@@ -20186,7 +20330,7 @@ export interface QueryFeedModerationTemplatesResponse {
   /**
    * List of moderation templates
    */
-  templates: QueryFeedModerationTemplate[];
+  templates: Array<QueryFeedModerationTemplate>;
 }
 
 export interface QueryFeedsRequest {
@@ -20206,7 +20350,7 @@ export interface QueryFeedsRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -20220,7 +20364,7 @@ export interface QueryFeedsResponse {
   /**
    * List of feeds matching the query
    */
-  feeds: FeedResponse[];
+  feeds: Array<FeedResponse>;
 
   /**
    * Cursor for next page
@@ -20269,7 +20413,7 @@ export interface QueryFollowsRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -20283,7 +20427,7 @@ export interface QueryFollowsResponse {
   /**
    * List of follow relationships matching the query
    */
-  follows: FollowResponse[];
+  follows: Array<FollowResponse>;
 
   /**
    * Cursor for next page
@@ -20339,7 +20483,7 @@ export interface QueryFutureChannelBansResponse {
   /**
    * List of found future channel bans
    */
-  bans: FutureChannelBanResponse[];
+  bans: Array<FutureChannelBanResponse>;
 
   /**
    * Total number of bans matching the query filter, computed at query time and capped at 100000. Only present when include_total is set on the request; omitted when computing the total timed out
@@ -20359,7 +20503,7 @@ export interface QueryLabelResultsRequest {
   /**
    * Sorting parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions
@@ -20378,7 +20522,7 @@ export interface QueryLabelResultsResponse {
   /**
    * List of moderation label results
    */
-  label_results: LabelResultResponse[];
+  label_results: Array<LabelResultResponse>;
 
   next?: string;
 
@@ -20401,12 +20545,12 @@ export interface QueryMembersPayload {
 
   user_id?: string;
 
-  members?: ChannelMemberRequest[];
+  members?: Array<ChannelMemberRequest>;
 
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * User request object
@@ -20424,7 +20568,7 @@ export interface QueryMembershipLevelsRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -20435,7 +20579,7 @@ export interface QueryMembershipLevelsRequest {
 export interface QueryMembershipLevelsResponse {
   duration: string;
 
-  membership_levels: MembershipLevelResponse[];
+  membership_levels: Array<MembershipLevelResponse>;
 
   /**
    * Cursor for next page
@@ -20463,7 +20607,7 @@ export interface QueryMessageFlagsPayload {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -20485,7 +20629,7 @@ export interface QueryMessageFlagsResponse {
   /**
    * The flags that match the query
    */
-  flags: MessageFlagResponse[];
+  flags: Array<MessageFlagResponse>;
 }
 
 export interface QueryMessageHistoryRequest {
@@ -20503,7 +20647,7 @@ export interface QueryMessageHistoryRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 }
 
 export interface QueryMessageHistoryResponse {
@@ -20515,7 +20659,7 @@ export interface QueryMessageHistoryResponse {
   /**
    * Message history entries
    */
-  message_history: MessageHistoryEntryResponse[];
+  message_history: Array<MessageHistoryEntryResponse>;
 
   next?: string;
 
@@ -20534,7 +20678,7 @@ export interface QueryModerationConfigsRequest {
   /**
    * Sorting parameters for the results
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for moderation configs
@@ -20553,7 +20697,7 @@ export interface QueryModerationConfigsResponse {
   /**
    * List of moderation configurations
    */
-  configs: ConfigResponse[];
+  configs: Array<ConfigResponse>;
 
   next?: string;
 
@@ -20567,7 +20711,7 @@ export interface QueryModerationFlagsRequest {
 
   prev?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for moderation flags
@@ -20581,7 +20725,7 @@ export interface QueryModerationFlagsResponse {
    */
   duration: string;
 
-  flags: ModerationFlagResponse[];
+  flags: Array<ModerationFlagResponse>;
 
   next?: string;
 
@@ -20600,7 +20744,7 @@ export interface QueryModerationLogsRequest {
   /**
    * Sorting parameters for the results
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for moderation logs
@@ -20619,7 +20763,7 @@ export interface QueryModerationLogsResponse {
   /**
    * List of moderation action logs
    */
-  logs: ActionLogResponse[];
+  logs: Array<ActionLogResponse>;
 
   next?: string;
 
@@ -20638,7 +20782,7 @@ export interface QueryModerationRulesRequest {
   /**
    * Sorting parameters for the results
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for moderation rules
@@ -20657,32 +20801,32 @@ export interface QueryModerationRulesResponse {
   /**
    * AI image label definitions with metadata for dashboard rendering
    */
-  ai_image_label_definitions: AIImageLabelDefinition[];
+  ai_image_label_definitions: Array<AIImageLabelDefinition>;
 
   /**
    * Available harm labels for closed caption rules
    */
-  closed_caption_labels: string[];
+  closed_caption_labels: Array<string>;
 
   /**
    * Deprecated: use keyframe_label_classifications instead. Available L1 harm labels for keyframe rules
    */
-  keyframe_labels: string[];
+  keyframe_labels: Array<string>;
 
   /**
    * Available harm labels for OCR-based rule conditions (keyframe_ocr_rule and ocr_content). Mirrors `closed_caption_labels` today but kept as a separate field so the pickers can diverge later.
    */
-  ocr_labels: string[];
+  ocr_labels: Array<string>;
 
   /**
    * List of moderation rules
    */
-  rules: ModerationRuleV2Response[];
+  rules: Array<ModerationRuleV2Response>;
 
   /**
    * Stream L1 to leaf-level label name mapping for AI image rules
    */
-  ai_image_subclassifications: Record<string, string[]>;
+  ai_image_subclassifications: Record<string, Array<string>>;
 
   /**
    * Default LLM label descriptions
@@ -20697,7 +20841,7 @@ export interface QueryModerationRulesResponse {
   /**
    * L1 to L2 mapping of keyframe harm label classifications
    */
-  keyframe_label_classifications: Record<string, string[]>;
+  keyframe_label_classifications: Record<string, Array<string>>;
 
   next?: string;
 
@@ -20716,7 +20860,7 @@ export interface QueryPinnedActivitiesRequest {
   /**
    * Sorting parameters for the query
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filters to apply to the query
@@ -20730,7 +20874,7 @@ export interface QueryPinnedActivitiesResponse {
   /**
    * List of pinned activities matching the query
    */
-  pinned_activities: ActivityPinResponse[];
+  pinned_activities: Array<ActivityPinResponse>;
 
   /**
    * Cursor for next page
@@ -20753,7 +20897,7 @@ export interface QueryPollVotesRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -20771,7 +20915,7 @@ export interface QueryPollsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -20788,7 +20932,23 @@ export interface QueryPollsResponse {
   /**
    * Polls data returned by the query
    */
-  polls: PollResponseData[];
+  polls: Array<PollResponseData>;
+
+  next?: string;
+
+  prev?: string;
+}
+
+export interface QueryPredefinedFiltersResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Predefined filters
+   */
+  predefined_filters: Array<PredefinedFilterResponse>;
 
   next?: string;
 
@@ -20807,7 +20967,7 @@ export interface QueryReactionsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -20826,7 +20986,7 @@ export interface QueryReactionsResponse {
    */
   duration: string;
 
-  reactions: ReactionResponse[];
+  reactions: Array<ReactionResponse>;
 
   next?: string;
 
@@ -20845,7 +21005,7 @@ export interface QueryRemindersRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -20867,7 +21027,7 @@ export interface QueryRemindersResponse {
   /**
    * MessageReminders data returned by the query
    */
-  reminders: ReminderResponseData[];
+  reminders: Array<ReminderResponseData>;
 
   next?: string;
 
@@ -20908,7 +21068,7 @@ export interface QueryReviewQueueRequest {
   /**
    * Sorting parameters for the results
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions for review queue items. Accepts built-in fields (e.g. status, channel_cid, severity, recommended_action) and customer-supplied moderation_payload.custom keys: any key that is not a built-in field is matched against the item's custom moderation data (e.g. {"location_id": "loc-42"}). Use filter_config.filterable_custom_keys to discover which custom keys the app exposes as chips.
@@ -20927,12 +21087,12 @@ export interface QueryReviewQueueResponse {
   /**
    * List of review queue items
    */
-  items: ReviewQueueItemResponse[];
+  items: Array<ReviewQueueItemResponse>;
 
   /**
    * Configuration for moderation actions
    */
-  action_config: Record<string, ModerationActionConfigResponse[]>;
+  action_config: Record<string, Array<ModerationActionConfigResponse>>;
 
   /**
    * Statistics about the review queue
@@ -20943,7 +21103,7 @@ export interface QueryReviewQueueResponse {
 
   prev?: string;
 
-  default_action_config?: Record<string, ModerationActionConfigResponse[]>;
+  default_action_config?: Record<string, Array<ModerationActionConfigResponse>>;
 
   filter_config?: FilterConfigResponse;
 }
@@ -20963,7 +21123,7 @@ export interface QueryRevisionHistoryRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 }
 
 export interface QueryRevisionHistoryResponse {
@@ -20975,7 +21135,7 @@ export interface QueryRevisionHistoryResponse {
   /**
    * Revision history entries
    */
-  revisions: RevisionHistoryResponse[];
+  revisions: Array<RevisionHistoryResponse>;
 
   next?: string;
 
@@ -20998,7 +21158,7 @@ export interface QuerySegmentTargetsRequest {
    */
   prev?: string;
 
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   filter?: Record<string, any>;
 }
@@ -21012,7 +21172,7 @@ export interface QuerySegmentTargetsResponse {
   /**
    * Targets
    */
-  targets: SegmentTargetResponse[];
+  targets: Array<SegmentTargetResponse>;
 
   next?: string;
 
@@ -21034,7 +21194,7 @@ export interface QuerySegmentsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 }
 
 export interface QuerySegmentsResponse {
@@ -21046,7 +21206,7 @@ export interface QuerySegmentsResponse {
   /**
    * Segments
    */
-  segments: SegmentResponse[];
+  segments: Array<SegmentResponse>;
 
   next?: string;
 
@@ -21078,6 +21238,11 @@ export interface QueryTeamUsageStatsRequest {
    * Start date in YYYY-MM-DD format. Used with end_date for custom date range. Returns daily breakdown.
    */
   start_date?: string;
+
+  /**
+   * Filter results to a single team ID. Empty string selects users not assigned to any team. Mutually exclusive with 'next'.
+   */
+  team?: string;
 }
 
 export interface QueryTeamUsageStatsResponse {
@@ -21089,7 +21254,7 @@ export interface QueryTeamUsageStatsResponse {
   /**
    * Array of team usage statistics
    */
-  teams: TeamUsageStats[];
+  teams: Array<TeamUsageStats>;
 
   /**
    * Cursor for pagination to fetch next page
@@ -21121,7 +21286,7 @@ export interface QueryThreadsRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter to apply to the query
@@ -21143,7 +21308,7 @@ export interface QueryThreadsResponse {
   /**
    * List of enriched thread states
    */
-  threads: ThreadStateResponse[];
+  threads: Array<ThreadStateResponse>;
 
   next?: string;
 
@@ -21160,7 +21325,7 @@ export interface QueryUserFeedbackRequest {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Filter conditions to apply to the query
@@ -21174,7 +21339,7 @@ export interface QueryUserFeedbackResponse {
    */
   duration: string;
 
-  user_feedback: UserFeedbackResponse[];
+  user_feedback: Array<UserFeedbackResponse>;
 
   next?: string;
 
@@ -21200,7 +21365,7 @@ export interface QueryUsersPayload {
   /**
    * Array of sort parameters
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * User request object
@@ -21217,7 +21382,7 @@ export interface QueryUsersResponse {
   /**
    * Array of users as result of filters applied.
    */
-  users: FullUserResponse[];
+  users: Array<FullUserResponse>;
 }
 
 export interface QueueResponse {
@@ -21390,17 +21555,17 @@ export interface Reaction {
 
   score?: number;
 
-  target_feeds?: string[];
+  target_feeds?: Array<string>;
 
   children_counts?: Record<string, any>;
 
   data?: Record<string, any>;
 
-  latest_children?: Record<string, Reaction[]>;
+  latest_children?: Record<string, Array<Reaction>>;
 
   moderation?: Record<string, any>;
 
-  own_children?: Record<string, Reaction[]>;
+  own_children?: Record<string, Array<Reaction>>;
 
   target_feeds_extra_data?: Record<string, any>;
 
@@ -21462,7 +21627,7 @@ export interface ReactionDeletedEvent {
   /**
    * The participants of the thread
    */
-  thread_participants?: UserResponseCommonFields[];
+  thread_participants?: Array<UserResponseCommonFields>;
 
   channel_custom?: Record<string, any>;
 
@@ -21500,7 +21665,7 @@ export interface ReactionGroupResponse {
   /**
    * The most recent users who reacted with this type, ordered by most recent first.
    */
-  latest_reactions_by: ReactionGroupUserResponse[];
+  latest_reactions_by: Array<ReactionGroupUserResponse>;
 }
 
 export interface ReactionGroupUserResponse {
@@ -21575,7 +21740,7 @@ export interface ReactionNewEvent {
   /**
    * The participants of the thread
    */
-  thread_participants?: UserResponseCommonFields[];
+  thread_participants?: Array<UserResponseCommonFields>;
 
   channel_custom?: Record<string, any>;
 
@@ -21759,7 +21924,7 @@ export interface ReactivateUsersRequest {
   /**
    * User IDs to reactivate
    */
-  user_ids: string[];
+  user_ids: Array<string>;
 
   /**
    * ID of the user who's reactivating the users
@@ -21789,7 +21954,7 @@ export interface ReadCollectionsResponse {
   /**
    * List of collections matching the references
    */
-  collections: CollectionResponse[];
+  collections: Array<CollectionResponse>;
 }
 
 export interface ReadReceiptsResponse {
@@ -22086,7 +22251,7 @@ export interface RemoveUserGroupMembersRequest {
   /**
    * List of user IDs to remove
    */
-  member_ids: string[];
+  member_ids: Array<string>;
 
   team_id?: string;
 }
@@ -22135,7 +22300,7 @@ export interface ReportClientEventRequest {
   /**
    * Client-side events to report (1-100 per request)
    */
-  events: ClientEvent[];
+  events: Array<ClientEvent>;
 }
 
 export interface ReportClientEventResponse {
@@ -22311,7 +22476,7 @@ export interface RestoreFeedGroupResponse {
 }
 
 export interface RestoreUsersRequest {
-  user_ids: string[];
+  user_ids: Array<string>;
 }
 
 export interface RetentionPolicy {
@@ -22346,7 +22511,7 @@ export interface ReviewQueueItemNewEvent {
   /**
    * The flags associated with this review queue item
    */
-  flags?: ModerationFlagResponse[];
+  flags?: Array<ModerationFlagResponse>;
 
   action?: ActionLogResponse;
 
@@ -22416,22 +22581,22 @@ export interface ReviewQueueItemResponse {
   /**
    * Moderation actions taken
    */
-  actions: ActionLogResponse[];
+  actions: Array<ActionLogResponse>;
 
   /**
    * Associated ban records
    */
-  bans: BanInfoResponse[];
+  bans: Array<BanInfoResponse>;
 
   /**
    * Associated flag records
    */
-  flags: ModerationFlagResponse[];
+  flags: Array<ModerationFlagResponse>;
 
   /**
    * Detected languages in the content
    */
-  languages: string[];
+  languages: Array<string>;
 
   /**
    * When the review was completed
@@ -22463,7 +22628,7 @@ export interface ReviewQueueItemResponse {
   /**
    * Teams associated with this item
    */
-  teams?: string[];
+  teams?: Array<string>;
 
   activity?: EnrichedActivity;
 
@@ -22510,7 +22675,7 @@ export interface ReviewQueueItemUpdatedEvent {
   /**
    * The flags associated with this review queue item
    */
-  flags?: ModerationFlagResponse[];
+  flags?: Array<ModerationFlagResponse>;
 
   action?: ActionLogResponse;
 
@@ -22530,7 +22695,7 @@ export interface RevisionHistoryResponse {
 
   user_id: string;
 
-  changed_fields?: string[];
+  changed_fields?: Array<string>;
 
   previous_obj_serialized?: Record<string, any>;
 }
@@ -22544,7 +22709,7 @@ export interface RingCallRequest {
   /**
    * Members that should receive the ring. If no ids are provided, all call members who are not already in the call will receive ring notifications.
    */
-  members_ids?: string[];
+  members_ids?: Array<string>;
 }
 
 export interface RingCallResponse {
@@ -22553,7 +22718,7 @@ export interface RingCallResponse {
   /**
    * List of members ringing notification was sent to
    */
-  members_ids: string[];
+  members_ids: Array<string>;
 }
 
 export interface RingSettings {
@@ -22613,7 +22778,7 @@ export interface Role {
   /**
    * List of scopes where this role is currently present. `.app` means that role is present in app-level grants
    */
-  scopes: string[];
+  scopes: Array<string>;
 }
 
 export interface RuleBuilderAction {
@@ -22712,13 +22877,13 @@ export interface RuleBuilderCondition {
 export interface RuleBuilderConditionGroup {
   logic?: string;
 
-  conditions?: RuleBuilderCondition[];
+  conditions?: Array<RuleBuilderCondition>;
 }
 
 export interface RuleBuilderConfig {
   async?: boolean;
 
-  rules?: RuleBuilderRule[];
+  rules?: Array<RuleBuilderRule>;
 }
 
 export interface RuleBuilderRule {
@@ -22730,11 +22895,11 @@ export interface RuleBuilderRule {
 
   logic?: string;
 
-  action_sequences?: CallRuleActionSequence[];
+  action_sequences?: Array<CallRuleActionSequence>;
 
-  conditions?: RuleBuilderCondition[];
+  conditions?: Array<RuleBuilderCondition>;
 
-  groups?: RuleBuilderConditionGroup[];
+  groups?: Array<RuleBuilderConditionGroup>;
 
   action?: RuleBuilderAction;
 }
@@ -22772,7 +22937,7 @@ export interface SDKUsageReport {
 }
 
 export interface SDKUsageReportResponse {
-  daily: DailyAggregateSDKUsageReportResponse[];
+  daily: Array<DailyAggregateSDKUsageReportResponse>;
 }
 
 export interface SFULocationResponse {
@@ -22905,12 +23070,12 @@ export interface SIPChallengeRequest {
   /**
    * Domain list
    */
-  domain?: string[];
+  domain?: Array<string>;
 
   /**
    * Quality of protection options
    */
-  qop?: string[];
+  qop?: Array<string>;
 }
 
 export interface SIPDirectRoutingRuleCallConfigsRequest {
@@ -23000,7 +23165,7 @@ export interface SIPInboundRoutingRuleRequest {
   /**
    * List of SIP trunk IDs
    */
-  trunk_ids: string[];
+  trunk_ids: Array<string>;
 
   /**
    * Configuration for SIP caller settings
@@ -23010,12 +23175,12 @@ export interface SIPInboundRoutingRuleRequest {
   /**
    * List of called numbers
    */
-  called_numbers?: string[];
+  called_numbers?: Array<string>;
 
   /**
    * List of caller numbers (optional)
    */
-  caller_numbers?: string[];
+  caller_numbers?: Array<string>;
 
   /**
    * Configuration for SIP call settings
@@ -23064,17 +23229,17 @@ export interface SIPInboundRoutingRuleResponse {
   /**
    * List of called numbers
    */
-  called_numbers: string[];
+  called_numbers: Array<string>;
 
   /**
    * List of SIP trunk IDs
    */
-  trunk_ids: string[];
+  trunk_ids: Array<string>;
 
   /**
    * List of caller numbers
    */
-  caller_numbers?: string[];
+  caller_numbers?: Array<string>;
 
   /**
    * SIP call configuration response
@@ -23185,12 +23350,12 @@ export interface SIPTrunkResponse {
   /**
    * Allowed IPv4/IPv6 addresses or CIDR blocks
    */
-  allowed_ips: string[];
+  allowed_ips: Array<string>;
 
   /**
    * Phone numbers associated with this SIP trunk
    */
-  numbers: string[];
+  numbers: Array<string>;
 }
 
 export interface SRTIngress {
@@ -23262,7 +23427,7 @@ export interface SearchPayload {
   /**
    * Sort parameters. Cannot be used with non-zero offset
    */
-  sort?: SortParamRequest[];
+  sort?: Array<SortParamRequest>;
 
   /**
    * Message filter conditions
@@ -23281,7 +23446,7 @@ export interface SearchResponse {
   /**
    * Search results
    */
-  results: SearchResult[];
+  results: Array<SearchResult>;
 
   /**
    * Value to pass to the next search query in order to paginate
@@ -23329,15 +23494,15 @@ export interface SearchResultMessage {
 
   updated_at: Date;
 
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
 
-  latest_reactions: ReactionResponse[];
+  latest_reactions: Array<ReactionResponse>;
 
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
-  own_reactions: ReactionResponse[];
+  own_reactions: Array<ReactionResponse>;
 
-  restricted_visibility: string[];
+  restricted_visibility: Array<string>;
 
   custom: Record<string, any>;
 
@@ -23372,13 +23537,13 @@ export interface SearchResultMessage {
 
   show_in_channel?: boolean;
 
-  mentioned_group_ids?: string[];
+  mentioned_group_ids?: Array<string>;
 
-  mentioned_groups?: UserGroupResponse[];
+  mentioned_groups?: Array<UserGroupResponse>;
 
-  mentioned_roles?: string[];
+  mentioned_roles?: Array<string>;
 
-  thread_participants?: UserResponse[];
+  thread_participants?: Array<UserResponse>;
 
   /**
    * Represents channel in chat
@@ -23389,7 +23554,7 @@ export interface SearchResultMessage {
 
   i18n?: Record<string, string>;
 
-  image_labels?: Record<string, string[]>;
+  image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
 
@@ -23420,7 +23585,7 @@ export interface SearchRolesResponse {
   /**
    * Matching roles, sorted ascending by name
    */
-  roles: Role[];
+  roles: Array<Role>;
 }
 
 export interface SearchUserGroupsResponse {
@@ -23429,7 +23594,7 @@ export interface SearchUserGroupsResponse {
   /**
    * List of matching user groups
    */
-  user_groups: UserGroupResponse[];
+  user_groups: Array<UserGroupResponse>;
 }
 
 export interface SearchWarning {
@@ -23451,7 +23616,7 @@ export interface SearchWarning {
   /**
    * Channel CIDs for the searched channels
    */
-  channel_search_cids?: string[];
+  channel_search_cids?: Array<string>;
 }
 
 export interface Segment {
@@ -23517,15 +23682,15 @@ export interface SegmentTargetResponse {
 export interface Segments {
   by_country_reason: string;
 
-  by_browser: BroadcastSegment[];
+  by_browser: Array<BroadcastSegment>;
 
-  by_country: BroadcastSegment[];
+  by_country: Array<BroadcastSegment>;
 
-  by_delivery_zone: DeliveryZoneSegment[];
+  by_delivery_zone: Array<DeliveryZoneSegment>;
 
-  by_os: BroadcastSegment[];
+  by_os: Array<BroadcastSegment>;
 
-  by_sdk: BroadcastSegment[];
+  by_sdk: Array<BroadcastSegment>;
 }
 
 export interface SendCallEventRequest {
@@ -23855,7 +24020,7 @@ export interface SharedLocationResponseData {
 export interface SharedLocationsResponse {
   duration: string;
 
-  active_live_locations: SharedLocationResponseData[];
+  active_live_locations: Array<SharedLocationResponseData>;
 }
 
 export interface ShowChannelRequest {
@@ -23922,6 +24087,14 @@ export interface SipInboundCredentials {
   user_custom_data: Record<string, any>;
 }
 
+export interface SortParam {
+  direction: number;
+
+  field: string;
+
+  type: string;
+}
+
 export interface SortParamRequest {
   /**
    * Direction of sorting, 1 for Ascending, -1 for Descending, default is 1. One of: -1, 1
@@ -23944,9 +24117,9 @@ export interface SourceHealth {
 
   dead_air_s: number;
 
-  interruptions: SourceInterruption[];
+  interruptions: Array<SourceInterruption>;
 
-  publisher_sessions: PublisherSession[];
+  publisher_sessions: Array<PublisherSession>;
 }
 
 export interface SourceInterruption {
@@ -24071,7 +24244,7 @@ export interface StartRTMPBroadcastsRequest {
   /**
    * List of broadcasts to start
    */
-  broadcasts: RTMPBroadcastRequest[];
+  broadcasts: Array<RTMPBroadcastRequest>;
 }
 
 export interface StartRTMPBroadcastsResponse {
@@ -24287,12 +24460,12 @@ export interface StoriesFeedUpdatedEvent {
   /**
    * Individual activities for stories feeds
    */
-  activities?: ActivityResponse[];
+  activities?: Array<ActivityResponse>;
 
   /**
    * Aggregated activities for stories feeds
    */
-  aggregated_activities?: AggregatedActivityResponse[];
+  aggregated_activities?: Array<AggregatedActivityResponse>;
 
   user?: UserResponseCommonFields;
 }
@@ -24403,7 +24576,7 @@ export interface SubmitActionRequest {
   reject_appeal?: RejectAppealRequestPayload;
 
   /**
-   * Configuration for restore action
+   * Configuration for restore action. State-aware: reverses whichever of a delete, a block, or a shadow block currently applies to the content (including both a delete and a block/shadow block at once).
    */
   restore?: RestoreActionRequestPayload;
 
@@ -24418,7 +24591,7 @@ export interface SubmitActionRequest {
   unban?: UnbanActionRequestPayload;
 
   /**
-   * Configuration for unblock action
+   * Deprecated: use restore instead — it now also reverses a block or shadow block. Configuration for unblock action.
    */
   unblock?: UnblockActionRequestPayload;
 
@@ -24480,12 +24653,12 @@ export interface SubmitModerationFeedbackRequest {
   /**
    * Classifications originally produced by the moderation system
    */
-  current_labels?: string[];
+  current_labels?: Array<string>;
 
   /**
    * Optional moderator-supplied classifications (up to 16 entries)
    */
-  expected_labels?: string[];
+  expected_labels?: Array<string>;
 }
 
 export interface SubmitModerationFeedbackResponse {
@@ -24529,11 +24702,11 @@ export interface SubscribersMetrics {
 }
 
 export interface Supporting {
-  delivery_incident_windows: Incident[];
+  delivery_incident_windows: Array<Incident>;
 
-  edge_outlier_zones: string[];
+  edge_outlier_zones: Array<string>;
 
-  source_drop_windows: TimeWindow[];
+  source_drop_windows: Array<TimeWindow>;
 }
 
 export interface TargetResolution {
@@ -24642,9 +24815,9 @@ export interface TextContentParameters {
 
   text_length_operator?: string;
 
-  blocklist_match?: string[];
+  blocklist_match?: Array<string>;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 
   llm_harm_labels?: Record<string, string>;
 }
@@ -24660,11 +24833,11 @@ export interface TextRuleParameters {
 
   time_window?: string;
 
-  blocklist_match?: string[];
+  blocklist_match?: Array<string>;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 
-  semantic_filter_names?: string[];
+  semantic_filter_names?: Array<string>;
 
   llm_harm_labels?: Record<string, string>;
 }
@@ -24768,7 +24941,7 @@ export interface ThreadResponse {
   /**
    * Thread Participants
    */
-  thread_participants?: ThreadParticipant[];
+  thread_participants?: Array<ThreadParticipant>;
 
   /**
    * Represents channel in chat
@@ -24832,7 +25005,7 @@ export interface ThreadStateResponse {
    */
   updated_at: Date;
 
-  latest_replies: MessageResponse[];
+  latest_replies: Array<MessageResponse>;
 
   /**
    * Custom data for this object
@@ -24849,12 +25022,12 @@ export interface ThreadStateResponse {
    */
   last_message_at?: Date;
 
-  read?: ReadStateResponse[];
+  read?: Array<ReadStateResponse>;
 
   /**
    * Thread Participants
    */
-  thread_participants?: ThreadParticipant[];
+  thread_participants?: Array<ThreadParticipant>;
 
   /**
    * Represents channel in chat
@@ -24923,9 +25096,9 @@ export interface ThreadedCommentResponse {
 
   upvote_count: number;
 
-  mentioned_users: UserResponse[];
+  mentioned_users: Array<UserResponse>;
 
-  own_reactions: FeedsReactionResponse[];
+  own_reactions: Array<FeedsReactionResponse>;
 
   /**
    * User response object
@@ -24942,14 +25115,14 @@ export interface ThreadedCommentResponse {
 
   text?: string;
 
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
-  latest_reactions?: FeedsReactionResponse[];
+  latest_reactions?: Array<FeedsReactionResponse>;
 
   /**
    * Slice of nested comments (may be empty).
    */
-  replies?: ThreadedCommentResponse[];
+  replies?: Array<ThreadedCommentResponse>;
 
   custom?: Record<string, any>;
 
@@ -25050,7 +25223,7 @@ export interface TrackActivityMetricsRequest {
   /**
    * List of metric events to track (max 100 per request)
    */
-  events: TrackActivityMetricsEvent[];
+  events: Array<TrackActivityMetricsEvent>;
 
   user_id?: string;
 
@@ -25066,7 +25239,7 @@ export interface TrackActivityMetricsResponse {
   /**
    * Results for each event in the request, in the same order
    */
-  results: TrackActivityMetricsEventResult[];
+  results: Array<TrackActivityMetricsEventResult>;
 }
 
 export interface TrackStatsResponse {
@@ -25330,7 +25503,7 @@ export interface TranslateMessageRequest {
 export interface TranslationSettings {
   enabled?: boolean;
 
-  languages?: string[];
+  languages?: Array<string>;
 }
 
 export interface TriggeredRuleResponse {
@@ -25342,7 +25515,7 @@ export interface TriggeredRuleResponse {
   /**
    * Action types resolved from the rule's action sequence
    */
-  actions: string[];
+  actions: Array<string>;
 
   /**
    * Name of the moderation rule that triggered
@@ -25383,7 +25556,7 @@ export interface TruncateChannelRequest {
   /**
    * List of member IDs to hide message history for. If empty, truncates the channel for all members
    */
-  member_ids?: string[];
+  member_ids?: Array<string>;
 
   /**
    * Message data for creating or updating a message
@@ -25533,7 +25706,7 @@ export interface UnfollowBatchRequest {
   /**
    * List of follow relationships to remove, each with optional keep_history
    */
-  follows: UnfollowPair[];
+  follows: Array<UnfollowPair>;
 
   /**
    * Whether to delete the corresponding notification activity (default: false)
@@ -25552,7 +25725,7 @@ export interface UnfollowBatchResponse {
   /**
    * List of follow relationships that were removed
    */
-  follows: FollowResponse[];
+  follows: Array<FollowResponse>;
 }
 
 export interface UnfollowPair {
@@ -25589,7 +25762,7 @@ export interface UnmuteChannelRequest {
   /**
    * Channel CIDs to mute (if multiple channels)
    */
-  channel_cids?: string[];
+  channel_cids?: Array<string>;
 
   /**
    * User request object
@@ -25601,7 +25774,7 @@ export interface UnmuteRequest {
   /**
    * User IDs to unmute
    */
-  target_ids: string[];
+  target_ids: Array<string>;
 
   user_id?: string;
 
@@ -25617,7 +25790,7 @@ export interface UnmuteResponse {
   /**
    * A list of users that can't be found. Common cause for this is deleted users
    */
-  non_existing_users?: string[];
+  non_existing_users?: Array<string>;
 }
 
 export interface UnpinActivityResponse {
@@ -25656,7 +25829,7 @@ export interface UnpinResponse {
 }
 
 export interface UnreadCountsBatchRequest {
-  user_ids: string[];
+  user_ids: Array<string>;
 }
 
 export interface UnreadCountsBatchResponse {
@@ -25689,11 +25862,11 @@ export interface UnreadCountsResponse {
 
   total_unread_threads_count: number;
 
-  channel_type: UnreadCountsChannelType[];
+  channel_type: Array<UnreadCountsChannelType>;
 
-  channels: UnreadCountsChannel[];
+  channels: Array<UnreadCountsChannel>;
 
-  threads: UnreadCountsThread[];
+  threads: Array<UnreadCountsThread>;
 
   total_unread_count_by_team?: Record<string, number>;
 }
@@ -25712,7 +25885,7 @@ export interface UpdateActivitiesPartialBatchRequest {
   /**
    * List of activity changes to apply. Each change specifies an activity ID and the fields to set/unset
    */
-  changes: UpdateActivityPartialChangeRequest[];
+  changes: Array<UpdateActivityPartialChangeRequest>;
 
   /**
    * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
@@ -25726,7 +25899,7 @@ export interface UpdateActivitiesPartialBatchResponse {
   /**
    * List of successfully updated activities
    */
-  activities: ActivityResponse[];
+  activities: Array<ActivityResponse>;
 }
 
 export interface UpdateActivityPartialChangeRequest {
@@ -25749,7 +25922,7 @@ export interface UpdateActivityPartialChangeRequest {
   /**
    * List of field names to remove. Supported fields: 'custom', 'location', 'expires_at', 'filter_tags', 'interest_tags', 'attachments', 'poll_id', 'mentioned_user_ids'. Use dot-notation for nested custom fields (e.g., 'custom.field_name')
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Map of field names to new values. Supported fields: 'text', 'attachments', 'custom', 'visibility', 'visibility_tag', 'restrict_replies' (values: 'everyone', 'people_i_follow', 'nobody'), 'location', 'expires_at', 'filter_tags', 'interest_tags', 'poll_id', 'feeds', 'mentioned_user_ids'. For custom fields, use dot-notation (e.g., 'custom.field_name')
@@ -25789,7 +25962,7 @@ export interface UpdateActivityPartialRequest {
   /**
    * List of field names to remove. Supported fields: 'custom', 'visibility_tag', 'location', 'expires_at', 'filter_tags', 'interest_tags', 'attachments', 'poll_id', 'mentioned_user_ids', 'search_data'. Use dot-notation for nested custom fields (e.g., 'custom.field_name')
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Map of field names to new values. Supported fields: 'text', 'attachments', 'custom', 'visibility', 'visibility_tag', 'restrict_replies' (values: 'everyone', 'people_i_follow', 'nobody'), 'location', 'expires_at', 'filter_tags', 'interest_tags', 'poll_id', 'feeds', 'mentioned_user_ids', 'search_data'. For custom fields, use dot-notation (e.g., 'custom.field_name')
@@ -25877,32 +26050,32 @@ export interface UpdateActivityRequest {
   /**
    * List of attachments for the activity
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * Collections that this activity references
    */
-  collection_refs?: string[];
+  collection_refs?: Array<string>;
 
   /**
    * List of feeds the activity is present in
    */
-  feeds?: string[];
+  feeds?: Array<string>;
 
   /**
    * Tags used for filtering the activity
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Tags indicating interest categories
    */
-  interest_tags?: string[];
+  interest_tags?: Array<string>;
 
   /**
    * List of user IDs mentioned in the activity
    */
-  mentioned_user_ids?: string[];
+  mentioned_user_ids?: Array<string>;
 
   /**
    * Custom data for the activity
@@ -26029,17 +26202,17 @@ export interface UpdateAppRequest {
 
   webhook_url?: string;
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  event_hooks?: EventHook[];
+  event_hooks?: Array<EventHook>;
 
-  image_moderation_block_labels?: string[];
+  image_moderation_block_labels?: Array<string>;
 
-  image_moderation_labels?: string[];
+  image_moderation_labels?: Array<string>;
 
-  user_search_disallowed_roles?: string[];
+  user_search_disallowed_roles?: Array<string>;
 
-  webhook_events?: string[];
+  webhook_events?: Array<string>;
 
   activity_metrics_config?: Record<string, number>;
 
@@ -26053,7 +26226,7 @@ export interface UpdateAppRequest {
 
   firebase_config?: FirebaseConfig;
 
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 
   huawei_config?: HuaweiConfig;
 
@@ -26082,7 +26255,7 @@ export interface UpdateBlockListRequest {
   /**
    * List of words to block
    */
-  words?: string[];
+  words?: Array<string>;
 
   /**
    * User request object
@@ -26163,12 +26336,12 @@ export interface UpdateCallMembersRequest {
   /**
    * List of userID to remove
    */
-  remove_members?: string[];
+  remove_members?: Array<string>;
 
   /**
    * List of members to update or insert
    */
-  update_members?: MemberRequest[];
+  update_members?: Array<MemberRequest>;
 }
 
 export interface UpdateCallMembersResponse {
@@ -26177,7 +26350,7 @@ export interface UpdateCallMembersResponse {
    */
   duration: string;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 }
 
 export interface UpdateCallRequest {
@@ -26197,9 +26370,9 @@ export interface UpdateCallRequest {
 export interface UpdateCallResponse {
   duration: string;
 
-  members: MemberResponse[];
+  members: Array<MemberResponse>;
 
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * Represents a call
@@ -26210,7 +26383,7 @@ export interface UpdateCallResponse {
 export interface UpdateCallTypeRequest {
   external_storage?: string;
 
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 
   notification_settings?: NotificationSettingsRequest;
 
@@ -26238,7 +26411,7 @@ export interface UpdateCallTypeResponse {
   /**
    * the permissions granted to each role
    */
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   notification_settings: NotificationSettingsResponse;
 
@@ -26273,9 +26446,9 @@ export interface UpdateCampaignRequest {
 
   skip_webhook?: boolean;
 
-  segment_ids?: string[];
+  segment_ids?: Array<string>;
 
-  user_ids?: string[];
+  user_ids?: Array<string>;
 
   channel_template?: CampaignChannelTemplate;
 }
@@ -26283,7 +26456,7 @@ export interface UpdateCampaignRequest {
 export interface UpdateChannelPartialRequest {
   user_id?: string;
 
-  unset?: string[];
+  unset?: Array<string>;
 
   set?: Record<string, any>;
 
@@ -26302,7 +26475,7 @@ export interface UpdateChannelPartialResponse {
   /**
    * List of updated members
    */
-  members: ChannelMemberResponse[];
+  members: Array<ChannelMemberResponse>;
 
   /**
    * Represents channel in chat
@@ -26346,42 +26519,42 @@ export interface UpdateChannelRequest {
   /**
    * List of filter tags to add to the channel
    */
-  add_filter_tags?: string[];
+  add_filter_tags?: Array<string>;
 
   /**
    * List of user IDs to add to the channel
    */
-  add_members?: ChannelMemberRequest[];
+  add_members?: Array<ChannelMemberRequest>;
 
   /**
    * List of user IDs to make channel moderators
    */
-  add_moderators?: string[];
+  add_moderators?: Array<string>;
 
   /**
    * List of channel member role assignments. If any specified user is not part of the channel, the request will fail
    */
-  assign_roles?: ChannelMemberRequest[];
+  assign_roles?: Array<ChannelMemberRequest>;
 
   /**
    * List of user IDs to take away moderators status from
    */
-  demote_moderators?: string[];
+  demote_moderators?: Array<string>;
 
   /**
    * List of user IDs to invite to the channel
    */
-  invites?: ChannelMemberRequest[];
+  invites?: Array<ChannelMemberRequest>;
 
   /**
    * List of filter tags to remove from the channel
    */
-  remove_filter_tags?: string[];
+  remove_filter_tags?: Array<string>;
 
   /**
    * List of user IDs to remove from the channel
    */
-  remove_members?: string[];
+  remove_members?: Array<string>;
 
   data?: ChannelInputRequest;
 
@@ -26405,7 +26578,7 @@ export interface UpdateChannelResponse {
   /**
    * List of channel members
    */
-  members: ChannelMemberResponse[];
+  members: Array<ChannelMemberResponse>;
 
   /**
    * Represents channel in chat
@@ -26475,16 +26648,16 @@ export interface UpdateChannelTypeRequest {
 
   user_message_reminders?: boolean;
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * List of commands that channel supports
    */
-  commands?: string[];
+  commands?: Array<string>;
 
-  permissions?: PolicyRequest[];
+  permissions?: Array<PolicyRequest>;
 
   /**
    * Sets thresholds for AI moderation
@@ -26493,7 +26666,7 @@ export interface UpdateChannelTypeRequest {
 
   chat_preferences?: ChatPreferences;
 
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface UpdateChannelTypeResponse {
@@ -26551,11 +26724,11 @@ export interface UpdateChannelTypeResponse {
 
   user_message_reminders: boolean;
 
-  commands: string[];
+  commands: Array<string>;
 
-  permissions: PolicyRequest[];
+  permissions: Array<PolicyRequest>;
 
-  grants: Record<string, string[]>;
+  grants: Record<string, Array<string>>;
 
   blocklist?: string;
 
@@ -26567,9 +26740,9 @@ export interface UpdateChannelTypeResponse {
 
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
 
-  allowed_flag_reasons?: string[];
+  allowed_flag_reasons?: Array<string>;
 
-  blocklists?: BlockListOptions[];
+  blocklists?: Array<BlockListOptions>;
 
   /**
    * Sets thresholds for AI moderation
@@ -26600,7 +26773,7 @@ export interface UpdateCollectionsRequest {
   /**
    * List of collections to update (only custom data is updatable)
    */
-  collections: UpdateCollectionRequest[];
+  collections: Array<UpdateCollectionRequest>;
 
   user_id?: string;
 
@@ -26616,7 +26789,7 @@ export interface UpdateCollectionsResponse {
   /**
    * List of updated collections
    */
-  collections: CollectionResponse[];
+  collections: Array<CollectionResponse>;
 }
 
 export interface UpdateCommandRequest {
@@ -26709,7 +26882,7 @@ export interface UpdateCommentPartialRequest {
   /**
    * List of field names to remove. Supported fields: 'custom', 'attachments', 'mentioned_user_ids', 'status'. Use dot-notation for nested custom fields (e.g., 'custom.field_name')
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Map of field names to new values. Supported fields: 'text', 'attachments', 'custom', 'mentioned_user_ids', 'status'. Use dot-notation for nested custom fields (e.g., 'custom.field_name')
@@ -26762,12 +26935,12 @@ export interface UpdateCommentRequest {
   /**
    * Updated media attachments for the comment. Providing this field will replace all existing attachments.
    */
-  attachments?: Attachment[];
+  attachments?: Array<Attachment>;
 
   /**
    * List of user IDs mentioned in the comment
    */
-  mentioned_user_ids?: string[];
+  mentioned_user_ids?: Array<string>;
 
   /**
    * Updated custom data for the comment
@@ -26838,12 +27011,12 @@ export interface UpdateFeedGroupRequest {
   /**
    * Configuration for activity processors
    */
-  activity_processors?: ActivityProcessorConfig[];
+  activity_processors?: Array<ActivityProcessorConfig>;
 
   /**
    * Configuration for activity selectors
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
 
@@ -26885,7 +27058,7 @@ export interface UpdateFeedMembersRequest {
   /**
    * List of members to upsert, remove, or set
    */
-  members?: FeedMemberRequest[];
+  members?: Array<FeedMemberRequest>;
 }
 
 export interface UpdateFeedMembersResponse {
@@ -26894,11 +27067,11 @@ export interface UpdateFeedMembersResponse {
    */
   duration: string;
 
-  added: FeedMemberResponse[];
+  added: Array<FeedMemberResponse>;
 
-  removed_ids: string[];
+  removed_ids: Array<string>;
 
-  updated: FeedMemberResponse[];
+  updated: Array<FeedMemberResponse>;
 }
 
 export interface UpdateFeedRequest {
@@ -26930,7 +27103,7 @@ export interface UpdateFeedRequest {
   /**
    * Tags used for filtering feeds
    */
-  filter_tags?: string[];
+  filter_tags?: Array<string>;
 
   /**
    * Custom data for the feed
@@ -26950,7 +27123,7 @@ export interface UpdateFeedViewRequest {
   /**
    * Updated configuration for selecting activities
    */
-  activity_selectors?: ActivitySelectorConfig[];
+  activity_selectors?: Array<ActivitySelectorConfig>;
 
   aggregation?: AggregationConfig;
 
@@ -26967,7 +27140,7 @@ export interface UpdateFeedVisibilityRequest {
   /**
    * Updated permission grants for each role
    */
-  grants?: Record<string, string[]>;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface UpdateFeedVisibilityResponse {
@@ -27067,7 +27240,7 @@ export interface UpdateLiveLocationRequest {
 }
 
 export interface UpdateMemberPartialRequest {
-  unset?: string[];
+  unset?: Array<string>;
 
   set?: Record<string, any>;
 }
@@ -27100,7 +27273,7 @@ export interface UpdateMembershipLevelRequest {
   /**
    * Activity tags this membership level gives access to
    */
-  tags?: string[];
+  tags?: Array<string>;
 
   /**
    * Custom data for the membership level
@@ -27127,7 +27300,7 @@ export interface UpdateMessagePartialRequest {
   /**
    * Array of field names to unset
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Sets new field values
@@ -27215,7 +27388,7 @@ export interface UpdatePollPartialRequest {
   /**
    * Array of field names to unset
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Sets new field values
@@ -27280,7 +27453,7 @@ export interface UpdatePollRequest {
   /**
    * Poll options
    */
-  options?: PollOptionRequest[];
+  options?: Array<PollOptionRequest>;
 
   /**
    * Custom data for this object
@@ -27291,6 +27464,35 @@ export interface UpdatePollRequest {
    * User request object
    */
   user?: UserRequest;
+}
+
+export interface UpdatePredefinedFilterRequest {
+  /**
+   * The operation this filter is for (e.g., QueryChannels)
+   */
+
+  operation: 'QueryChannels';
+
+  /**
+   * Filter to apply to the query
+   */
+  filter: Record<string, any>;
+
+  /**
+   * The description of the predefined filter
+   */
+  description?: string;
+
+  sort?: Array<Record<string, any>>;
+}
+
+export interface UpdatePredefinedFilterResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  predefined_filter?: PredefinedFilterResponse;
 }
 
 export interface UpdateQueueRequest {
@@ -27339,7 +27541,7 @@ export interface UpdateSIPInboundRoutingRuleRequest {
   /**
    * List of SIP trunk IDs
    */
-  trunk_ids: string[];
+  trunk_ids: Array<string>;
 
   /**
    * Configuration for SIP caller settings
@@ -27349,12 +27551,12 @@ export interface UpdateSIPInboundRoutingRuleRequest {
   /**
    * List of called numbers
    */
-  called_numbers?: string[];
+  called_numbers?: Array<string>;
 
   /**
    * List of caller numbers (optional)
    */
-  caller_numbers?: string[];
+  caller_numbers?: Array<string>;
 
   /**
    * Configuration for SIP call settings
@@ -27395,7 +27597,7 @@ export interface UpdateSIPTrunkRequest {
   /**
    * Phone numbers associated with this SIP trunk
    */
-  numbers: string[];
+  numbers: Array<string>;
 
   /**
    * Optional password for SIP trunk authentication
@@ -27405,7 +27607,7 @@ export interface UpdateSIPTrunkRequest {
   /**
    * Optional list of allowed IPv4/IPv6 addresses or CIDR blocks
    */
-  allowed_ips?: string[];
+  allowed_ips?: Array<string>;
 }
 
 export interface UpdateSIPTrunkResponse {
@@ -27449,7 +27651,7 @@ export interface UpdateThreadPartialRequest {
   /**
    * Array of field names to unset
    */
-  unset?: string[];
+  unset?: Array<string>;
 
   /**
    * Sets new field values
@@ -27497,7 +27699,7 @@ export interface UpdateUserPartialRequest {
    */
   id: string;
 
-  unset?: string[];
+  unset?: Array<string>;
 
   set?: Record<string, any>;
 }
@@ -27505,9 +27707,9 @@ export interface UpdateUserPartialRequest {
 export interface UpdateUserPermissionsRequest {
   user_id: string;
 
-  grant_permissions?: string[];
+  grant_permissions?: Array<string>;
 
-  revoke_permissions?: string[];
+  revoke_permissions?: Array<string>;
 }
 
 export interface UpdateUserPermissionsResponse {
@@ -27518,7 +27720,7 @@ export interface UpdateUserPermissionsResponse {
 }
 
 export interface UpdateUsersPartialRequest {
-  users: UpdateUserPartialRequest[];
+  users: Array<UpdateUserPartialRequest>;
 }
 
 export interface UpdateUsersRequest {
@@ -27550,7 +27752,7 @@ export interface UpdatedCallPermissionsEvent {
   /**
    * The capabilities of the current user
    */
-  own_capabilities: OwnCapability[];
+  own_capabilities: Array<OwnCapability>;
 
   /**
    * User response object
@@ -27597,7 +27799,7 @@ export interface UploadChannelRequest {
   /**
    * field with JSON-encoded array of image size configurations
    */
-  upload_sizes?: ImageSize[];
+  upload_sizes?: Array<ImageSize>;
 
   user?: OnlyUserID;
 }
@@ -27617,7 +27819,7 @@ export interface UploadChannelResponse {
   /**
    * Array of image size configurations
    */
-  upload_sizes?: ImageSize[];
+  upload_sizes?: Array<ImageSize>;
 }
 
 export interface UpsertActionConfigItem {
@@ -27703,7 +27905,7 @@ export interface UpsertActivitiesRequest {
   /**
    * List of activities to create or update
    */
-  activities: ActivityRequest[];
+  activities: Array<ActivityRequest>;
 
   /**
    * Server-side only. If true, auto-creates users referenced by activity user_id values that don't already exist. Default: false.
@@ -27727,7 +27929,7 @@ export interface UpsertActivitiesResponse {
   /**
    * List of created or updated activities
    */
-  activities: ActivityResponse[];
+  activities: Array<ActivityResponse>;
 
   /**
    * Total number of mention notification activities created for mentioned users across all activities
@@ -27739,7 +27941,7 @@ export interface UpsertCollectionsRequest {
   /**
    * List of collections to upsert (insert if new, update if existing)
    */
-  collections: CollectionRequest[];
+  collections: Array<CollectionRequest>;
 }
 
 export interface UpsertCollectionsResponse {
@@ -27748,7 +27950,7 @@ export interface UpsertCollectionsResponse {
   /**
    * List of upserted collections
    */
-  collections: CollectionResponse[];
+  collections: Array<CollectionResponse>;
 }
 
 export interface UpsertConfigRequest {
@@ -27893,22 +28095,22 @@ export interface UpsertModerationRuleRequest {
   /**
    * Escalation sequences for call rules
    */
-  action_sequences?: CallRuleActionSequence[];
+  action_sequences?: Array<CallRuleActionSequence>;
 
   /**
    * Flat list of conditions (legacy)
    */
-  conditions?: RuleBuilderCondition[];
+  conditions?: Array<RuleBuilderCondition>;
 
   /**
    * List of config keys this rule applies to
    */
-  config_keys?: string[];
+  config_keys?: Array<string>;
 
   /**
    * Nested condition groups
    */
-  groups?: RuleBuilderConditionGroup[];
+  groups?: Array<RuleBuilderConditionGroup>;
 
   action?: RuleBuilderAction;
 
@@ -27967,7 +28169,7 @@ export interface UpsertPushPreferencesRequest {
   /**
    * A list of push preferences for channels, calls, or the user.
    */
-  preferences: PushPreferenceInput[];
+  preferences: Array<PushPreferenceInput>;
 }
 
 export interface UpsertPushPreferencesResponse {
@@ -28241,7 +28443,7 @@ export interface UserFeedbackReport {
 }
 
 export interface UserFeedbackReportResponse {
-  daily: DailyAggregateUserFeedbackReportResponse[];
+  daily: Array<DailyAggregateUserFeedbackReportResponse>;
 }
 
 export interface UserFeedbackResponse {
@@ -28314,7 +28516,7 @@ export interface UserGroup {
 
   team_id?: string;
 
-  members?: UserGroupMember[];
+  members?: Array<UserGroupMember>;
 }
 
 export interface UserGroupCreatedEvent {
@@ -28378,7 +28580,7 @@ export interface UserGroupMemberAddedEvent {
   /**
    * The user IDs that were added
    */
-  members: string[];
+  members: Array<string>;
 
   custom: Record<string, any>;
 
@@ -28403,7 +28605,7 @@ export interface UserGroupMemberRemovedEvent {
   /**
    * The user IDs that were removed
    */
-  members: string[];
+  members: Array<string>;
 
   custom: Record<string, any>;
 
@@ -28434,7 +28636,7 @@ export interface UserGroupResponse {
 
   team_id?: string;
 
-  members?: UserGroupMember[];
+  members?: Array<UserGroupMember>;
 }
 
 export interface UserGroupUpdatedEvent {
@@ -28550,7 +28752,7 @@ export interface UserMutedEvent {
   /**
    * The target users that were muted
    */
-  target_users?: UserResponseCommonFields[];
+  target_users?: Array<UserResponseCommonFields>;
 
   target_user?: UserResponseCommonFields;
 }
@@ -28609,7 +28811,7 @@ export interface UserRequest {
   /**
    * List of teams the user belongs to
    */
-  teams?: string[];
+  teams?: Array<string>;
 
   /**
    * Custom user data
@@ -28667,12 +28869,12 @@ export interface UserResponse {
    */
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
   /**
    * List of teams user is a part of
    */
-  teams: string[];
+  teams: Array<string>;
 
   /**
    * Custom data for this object
@@ -28718,7 +28920,7 @@ export interface UserResponse {
   /**
    * List of devices user is using
    */
-  devices?: DeviceResponse[];
+  devices?: Array<DeviceResponse>;
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -28742,9 +28944,9 @@ export interface UserResponseCommonFields {
 
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
-  teams: string[];
+  teams: Array<string>;
 
   custom: Record<string, any>;
 
@@ -28780,9 +28982,9 @@ export interface UserResponsePrivacyFields {
 
   updated_at: Date;
 
-  blocked_user_ids: string[];
+  blocked_user_ids: Array<string>;
 
-  teams: string[];
+  teams: Array<string>;
 
   custom: Record<string, any>;
 
@@ -28888,7 +29090,7 @@ export interface UserUnmutedEvent {
   /**
    * The target users that were unmuted
    */
-  target_users?: UserResponseCommonFields[];
+  target_users?: Array<UserResponseCommonFields>;
 
   target_user?: UserResponseCommonFields;
 }
@@ -28954,7 +29156,7 @@ export interface VelocityFilterConfig {
 
   first_message_only?: boolean;
 
-  rules?: VelocityFilterConfigRule[];
+  rules?: Array<VelocityFilterConfigRule>;
 }
 
 export interface VelocityFilterConfigRule {
@@ -28990,15 +29192,15 @@ export interface VelocityFilterConfigRule {
 export interface VideoCallRuleConfig {
   flag_all_labels?: boolean;
 
-  flagged_labels?: string[];
+  flagged_labels?: Array<string>;
 
-  rules?: HarmConfig[];
+  rules?: Array<HarmConfig>;
 }
 
 export interface VideoContentParameters {
   label_operator?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface VideoEndCallRequestPayload {}
@@ -29006,7 +29208,7 @@ export interface VideoEndCallRequestPayload {}
 export interface VideoKickUserRequestPayload {}
 
 export interface VideoReactionOverTimeResponse {
-  by_minute?: CountByMinuteResponse[];
+  by_minute?: Array<CountByMinuteResponse>;
 }
 
 export interface VideoReactionResponse {
@@ -29033,7 +29235,7 @@ export interface VideoRuleParameters {
 
   time_window?: string;
 
-  harm_labels?: string[];
+  harm_labels?: Array<string>;
 }
 
 export interface VideoSettings {
@@ -29389,11 +29591,11 @@ export interface WrappedUnreadCountsResponse {
 
   total_unread_threads_count: number;
 
-  channel_type: UnreadCountsChannelType[];
+  channel_type: Array<UnreadCountsChannelType>;
 
-  channels: UnreadCountsChannel[];
+  channels: Array<UnreadCountsChannel>;
 
-  threads: UnreadCountsThread[];
+  threads: Array<UnreadCountsThread>;
 
   total_unread_count_by_team?: Record<string, number>;
 }
