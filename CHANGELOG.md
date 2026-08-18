@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.0](https://github.com/GetStream/stream-node/compare/v0.7.64...v0.8.0) (2026-08-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* minimum supported Node.js is now 22.12.0. Node 18 went EOL in April 2025, Node 20 in April 2026.
+
+### Features
+
+* modernize the toolchain and drop EOL Node versions ([#331](https://github.com/GetStream/stream-node/issues/331)) ([dbabec0](https://github.com/GetStream/stream-node/commit/dbabec0f003e086a2d19b1a1bf4ff635c4f214cd))
+
 ## [0.7.64](https://github.com/GetStream/stream-node/compare/v0.7.63...v0.7.64) (2026-08-18)
 
 
