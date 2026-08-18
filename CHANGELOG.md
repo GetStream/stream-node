@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.64](https://github.com/GetStream/stream-node/compare/v0.7.63...v0.7.64) (2026-08-18)
+
+
+### Features
+
+* update to open api version 233.25.1 ([#326](https://github.com/GetStream/stream-node/issues/326)) ([618728a](https://github.com/GetStream/stream-node/commit/618728a0d57e9667d470a7f18a128471c6b7ce8c))
+* update to open api version 235.16.3 ([#328](https://github.com/GetStream/stream-node/issues/328)) ([d4f0c22](https://github.com/GetStream/stream-node/commit/d4f0c22a3bbe780a3ffa15cdcf98747cb195e596))
+
+
+### Bug Fixes
+
+* correct query param serialization for arrays, dates and null ([#329](https://github.com/GetStream/stream-node/issues/329)) ([7f228fc](https://github.com/GetStream/stream-node/commit/7f228fc6489a38a02a6b8e0d40072dd66d404030))
+* order "types" first in package.json exports ([#330](https://github.com/GetStream/stream-node/issues/330)) ([747e0c6](https://github.com/GetStream/stream-node/commit/747e0c6dc279ba8bd852e0db0d702fccfd436151))
+
 ## [0.7.63](https://github.com/GetStream/stream-node/compare/v0.7.62...v0.7.63) (2026-07-23)
 
 
