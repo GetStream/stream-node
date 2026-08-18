@@ -125,7 +125,7 @@ export class VideoApi {
       StreamResponse<GetActiveCallsStatusResponse>
     >('GET', '/api/v2/video/active_calls_status', undefined, undefined);
 
-    decoders.GetActiveCallsStatusResponse?.(response.body);
+    decoders['GetActiveCallsStatusResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -155,7 +155,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryUserFeedbackResponse?.(response.body);
+    decoders['QueryUserFeedbackResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -184,7 +184,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryCallMembersResponse?.(response.body);
+    decoders['QueryCallMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -211,7 +211,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryCallStatsResponse?.(response.body);
+    decoders['QueryCallStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -239,7 +239,7 @@ export class VideoApi {
       StreamResponse<GetCallResponse>
     >('GET', '/api/v2/video/call/{type}/{id}', pathParams, queryParams);
 
-    decoders.GetCallResponse?.(response.body);
+    decoders['GetCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -268,7 +268,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateCallResponse?.(response.body);
+    decoders['UpdateCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -299,7 +299,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.GetOrCreateCallResponse?.(response.body);
+    decoders['GetOrCreateCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -326,7 +326,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.BlockUserResponse?.(response.body);
+    decoders['BlockUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -361,7 +361,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.SendClosedCaptionResponse?.(response.body);
+    decoders['SendClosedCaptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -388,7 +388,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.DeleteCallResponse?.(response.body);
+    decoders['DeleteCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -417,7 +417,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.SendCallEventResponse?.(response.body);
+    decoders['SendCallEventResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -449,7 +449,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.CollectUserFeedbackResponse?.(response.body);
+    decoders['CollectUserFeedbackResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -484,7 +484,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.GoLiveResponse?.(response.body);
+    decoders['GoLiveResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -514,7 +514,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.KickUserResponse?.(response.body);
+    decoders['KickUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -537,7 +537,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.EndCallResponse?.(response.body);
+    decoders['EndCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -565,7 +565,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateCallMembersResponse?.(response.body);
+    decoders['UpdateCallMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -599,7 +599,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.MuteUsersResponse?.(response.body);
+    decoders['MuteUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -633,7 +633,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryCallParticipantsResponse?.(response.body);
+    decoders['QueryCallParticipantsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -661,7 +661,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.PinResponse?.(response.body);
+    decoders['PinResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -684,7 +684,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.ListRecordingsResponse?.(response.body);
+    decoders['ListRecordingsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -716,7 +716,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StartRecordingResponse?.(response.body);
+    decoders['StartRecordingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -746,7 +746,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StopRecordingResponse?.(response.body);
+    decoders['StopRecordingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -768,7 +768,7 @@ export class VideoApi {
       StreamResponse<GetCallReportResponse>
     >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
 
-    decoders.GetCallReportResponse?.(response.body);
+    decoders['GetCallReportResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -796,7 +796,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.RingCallResponse?.(response.body);
+    decoders['RingCallResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -823,7 +823,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StartRTMPBroadcastsResponse?.(response.body);
+    decoders['StartRTMPBroadcastsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -846,7 +846,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.StopAllRTMPBroadcastsResponse?.(response.body);
+    decoders['StopAllRTMPBroadcastsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -876,7 +876,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StopRTMPBroadcastsResponse?.(response.body);
+    decoders['StopRTMPBroadcastsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -911,7 +911,7 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.GetCallParticipantSessionMetricsResponse?.(response.body);
+    decoders['GetCallParticipantSessionMetricsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -946,7 +946,7 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.QueryCallParticipantSessionsResponse?.(response.body);
+    decoders['QueryCallParticipantSessionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -969,7 +969,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.StartHLSBroadcastingResponse?.(response.body);
+    decoders['StartHLSBroadcastingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -999,7 +999,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StartClosedCaptionsResponse?.(response.body);
+    decoders['StartClosedCaptionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1026,7 +1026,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StartFrameRecordingResponse?.(response.body);
+    decoders['StartFrameRecordingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1055,7 +1055,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StartTranscriptionResponse?.(response.body);
+    decoders['StartTranscriptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1078,7 +1078,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.StopHLSBroadcastingResponse?.(response.body);
+    decoders['StopHLSBroadcastingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1105,7 +1105,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StopClosedCaptionsResponse?.(response.body);
+    decoders['StopClosedCaptionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1128,7 +1128,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.StopFrameRecordingResponse?.(response.body);
+    decoders['StopFrameRecordingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1162,7 +1162,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StopLiveResponse?.(response.body);
+    decoders['StopLiveResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1189,7 +1189,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.StopTranscriptionResponse?.(response.body);
+    decoders['StopTranscriptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1212,7 +1212,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.ListTranscriptionsResponse?.(response.body);
+    decoders['ListTranscriptionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1239,7 +1239,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UnblockUserResponse?.(response.body);
+    decoders['UnblockUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1267,7 +1267,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UnpinResponse?.(response.body);
+    decoders['UnpinResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1296,7 +1296,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateUserPermissionsResponse?.(response.body);
+    decoders['UpdateUserPermissionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1323,7 +1323,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.DeleteRecordingResponse?.(response.body);
+    decoders['DeleteRecordingResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1350,7 +1350,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.DeleteTranscriptionResponse?.(response.body);
+    decoders['DeleteTranscriptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1373,7 +1373,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.ReportClientEventResponse?.(response.body);
+    decoders['ReportClientEventResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1400,7 +1400,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryCallSessionStatsResponse?.(response.body);
+    decoders['QueryCallSessionStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1437,7 +1437,7 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.QueryCallStatsMapResponse?.(response.body);
+    decoders['QueryCallStatsMapResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1474,7 +1474,7 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.GetCallSessionParticipantStatsDetailsResponse?.(response.body);
+    decoders['GetCallSessionParticipantStatsDetailsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1486,7 +1486,7 @@ export class VideoApi {
     limit?: number;
     prev?: string;
     next?: string;
-    sort?: SortParamRequest[];
+    sort?: Array<SortParamRequest>;
     filter_conditions?: Record<string, any>;
   }): Promise<StreamResponse<QueryCallSessionParticipantStatsResponse>> {
     const queryParams = {
@@ -1511,7 +1511,7 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.QueryCallSessionParticipantStatsResponse?.(response.body);
+    decoders['QueryCallSessionParticipantStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1524,7 +1524,7 @@ export class VideoApi {
     user_session: string;
     start_time?: string;
     end_time?: string;
-    severity?: string[];
+    severity?: Array<string>;
   }): Promise<
     StreamResponse<QueryCallSessionParticipantStatsTimelineResponse>
   > {
@@ -1550,7 +1550,9 @@ export class VideoApi {
       queryParams,
     );
 
-    decoders.QueryCallSessionParticipantStatsTimelineResponse?.(response.body);
+    decoders['QueryCallSessionParticipantStatsTimelineResponse']?.(
+      response.body,
+    );
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1577,7 +1579,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryCallsResponse?.(response.body);
+    decoders['QueryCallsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1587,7 +1589,7 @@ export class VideoApi {
       StreamResponse<ListCallTypeResponse>
     >('GET', '/api/v2/video/calltypes', undefined, undefined);
 
-    decoders.ListCallTypeResponse?.(response.body);
+    decoders['ListCallTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1614,7 +1616,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.CreateCallTypeResponse?.(response.body);
+    decoders['CreateCallTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1633,7 +1635,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1649,7 +1651,7 @@ export class VideoApi {
       StreamResponse<GetCallTypeResponse>
     >('GET', '/api/v2/video/calltypes/{name}', pathParams, undefined);
 
-    decoders.GetCallTypeResponse?.(response.body);
+    decoders['GetCallTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1678,7 +1680,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateCallTypeResponse?.(response.body);
+    decoders['UpdateCallTypeResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1688,7 +1690,7 @@ export class VideoApi {
       StreamResponse<GetEdgesResponse>
     >('GET', '/api/v2/video/edges', undefined, undefined);
 
-    decoders.GetEdgesResponse?.(response.body);
+    decoders['GetEdgesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1714,7 +1716,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.ResolveSipAuthResponse?.(response.body);
+    decoders['ResolveSipAuthResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1726,7 +1728,7 @@ export class VideoApi {
       StreamResponse<ListSIPInboundRoutingRuleResponse>
     >('GET', '/api/v2/video/sip/inbound_routing_rules', undefined, undefined);
 
-    decoders.ListSIPInboundRoutingRuleResponse?.(response.body);
+    decoders['ListSIPInboundRoutingRuleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1757,7 +1759,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.SIPInboundRoutingRuleResponse?.(response.body);
+    decoders['SIPInboundRoutingRuleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1778,7 +1780,7 @@ export class VideoApi {
       undefined,
     );
 
-    decoders.DeleteSIPInboundRoutingRuleResponse?.(response.body);
+    decoders['DeleteSIPInboundRoutingRuleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1812,7 +1814,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateSIPInboundRoutingRuleResponse?.(response.body);
+    decoders['UpdateSIPInboundRoutingRuleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1822,7 +1824,7 @@ export class VideoApi {
       StreamResponse<ListSIPTrunksResponse>
     >('GET', '/api/v2/video/sip/inbound_trunks', undefined, undefined);
 
-    decoders.ListSIPTrunksResponse?.(response.body);
+    decoders['ListSIPTrunksResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1848,7 +1850,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.CreateSIPTrunkResponse?.(response.body);
+    decoders['CreateSIPTrunkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1864,7 +1866,7 @@ export class VideoApi {
       StreamResponse<DeleteSIPTrunkResponse>
     >('DELETE', '/api/v2/video/sip/inbound_trunks/{id}', pathParams, undefined);
 
-    decoders.DeleteSIPTrunkResponse?.(response.body);
+    decoders['DeleteSIPTrunkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1893,7 +1895,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.UpdateSIPTrunkResponse?.(response.body);
+    decoders['UpdateSIPTrunkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1921,7 +1923,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.ResolveSipInboundResponse?.(response.body);
+    decoders['ResolveSipInboundResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1946,7 +1948,7 @@ export class VideoApi {
       'application/json',
     );
 
-    decoders.QueryAggregateCallStatsResponse?.(response.body);
+    decoders['QueryAggregateCallStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1964,7 +1966,7 @@ export class VideoApi {
       StreamResponse<GetDailyDigestResponse>
     >('GET', '/api/v2/video/stats/daily_digest', undefined, queryParams);
 
-    decoders.GetDailyDigestResponse?.(response.body);
+    decoders['GetDailyDigestResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

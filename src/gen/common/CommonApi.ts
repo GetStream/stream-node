@@ -69,6 +69,7 @@ import {
   ListPushProvidersResponse,
   ListRolesResponse,
   ListUserGroupsResponse,
+  PermissionRequest,
   PollOptionResponse,
   PollResponse,
   PollVotesResponse,
@@ -125,7 +126,7 @@ export class CommonApi {
       StreamResponse<GetApplicationResponse>
     >('GET', '/api/v2/app', undefined, undefined);
 
-    decoders.GetApplicationResponse?.(response.body);
+    decoders['GetApplicationResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -208,7 +209,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -228,7 +229,7 @@ export class CommonApi {
       StreamResponse<ListBlockListResponse>
     >('GET', '/api/v2/blocklists', undefined, queryParams);
 
-    decoders.ListBlockListResponse?.(response.body);
+    decoders['ListBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -260,7 +261,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateBlockListResponse?.(response.body);
+    decoders['CreateBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -287,7 +288,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ImportBlockListResponse?.(response.body);
+    decoders['ImportBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -312,7 +313,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -332,7 +333,7 @@ export class CommonApi {
       StreamResponse<GetBlockListResponse>
     >('GET', '/api/v2/blocklists/{name}', pathParams, queryParams);
 
-    decoders.GetBlockListResponse?.(response.body);
+    decoders['GetBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -365,7 +366,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpdateBlockListResponse?.(response.body);
+    decoders['UpdateBlockListResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -397,7 +398,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckPushResponse?.(response.body);
+    decoders['CheckPushResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -422,7 +423,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckSNSResponse?.(response.body);
+    decoders['CheckSNSResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -447,7 +448,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CheckSQSResponse?.(response.body);
+    decoders['CheckSQSResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -468,7 +469,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -484,7 +485,7 @@ export class CommonApi {
       StreamResponse<ListDevicesResponse>
     >('GET', '/api/v2/devices', undefined, queryParams);
 
-    decoders.ListDevicesResponse?.(response.body);
+    decoders['ListDevicesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -511,7 +512,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -534,7 +535,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ExportUsersResponse?.(response.body);
+    decoders['ExportUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -546,7 +547,7 @@ export class CommonApi {
       StreamResponse<ListExternalStorageResponse>
     >('GET', '/api/v2/external_storage', undefined, undefined);
 
-    decoders.ListExternalStorageResponse?.(response.body);
+    decoders['ListExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -575,7 +576,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateExternalStorageResponse?.(response.body);
+    decoders['CreateExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -591,7 +592,7 @@ export class CommonApi {
       StreamResponse<DeleteExternalStorageResponse>
     >('DELETE', '/api/v2/external_storage/{name}', pathParams, undefined);
 
-    decoders.DeleteExternalStorageResponse?.(response.body);
+    decoders['DeleteExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -622,7 +623,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpdateExternalStorageResponse?.(response.body);
+    decoders['UpdateExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -638,7 +639,7 @@ export class CommonApi {
       StreamResponse<CheckExternalStorageResponse>
     >('GET', '/api/v2/external_storage/{name}/check', pathParams, undefined);
 
-    decoders.CheckExternalStorageResponse?.(response.body);
+    decoders['CheckExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -654,7 +655,7 @@ export class CommonApi {
       StreamResponse<CreateGuestResponse>
     >('POST', '/api/v2/guest', undefined, undefined, body, 'application/json');
 
-    decoders.CreateGuestResponse?.(response.body);
+    decoders['CreateGuestResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -677,7 +678,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateImportURLResponse?.(response.body);
+    decoders['CreateImportURLResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -687,7 +688,7 @@ export class CommonApi {
       StreamResponse<ListImportsResponse>
     >('GET', '/api/v2/imports', undefined, undefined);
 
-    decoders.ListImportsResponse?.(response.body);
+    decoders['ListImportsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -712,7 +713,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateImportResponse?.(response.body);
+    decoders['CreateImportResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -728,7 +729,7 @@ export class CommonApi {
       StreamResponse<ListImportV2TasksResponse>
     >('GET', '/api/v2/imports/v2', undefined, queryParams);
 
-    decoders.ListImportV2TasksResponse?.(response.body);
+    decoders['ListImportV2TasksResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -754,7 +755,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateImportV2TaskResponse?.(response.body);
+    decoders['CreateImportV2TaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -766,7 +767,7 @@ export class CommonApi {
       StreamResponse<DeleteExternalStorageResponse>
     >('DELETE', '/api/v2/imports/v2/external-storage', undefined, undefined);
 
-    decoders.DeleteExternalStorageResponse?.(response.body);
+    decoders['DeleteExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -778,7 +779,7 @@ export class CommonApi {
       StreamResponse<GetExternalStorageResponse>
     >('GET', '/api/v2/imports/v2/external-storage', undefined, undefined);
 
-    decoders.GetExternalStorageResponse?.(response.body);
+    decoders['GetExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -803,7 +804,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertExternalStorageResponse?.(response.body);
+    decoders['UpsertExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -820,7 +821,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.ValidateExternalStorageResponse?.(response.body);
+    decoders['ValidateExternalStorageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -836,7 +837,7 @@ export class CommonApi {
       StreamResponse<DeleteImportV2TaskResponse>
     >('DELETE', '/api/v2/imports/v2/{id}', pathParams, undefined);
 
-    decoders.DeleteImportV2TaskResponse?.(response.body);
+    decoders['DeleteImportV2TaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -852,7 +853,7 @@ export class CommonApi {
       StreamResponse<GetImportV2TaskResponse>
     >('GET', '/api/v2/imports/v2/{id}', pathParams, undefined);
 
-    decoders.GetImportV2TaskResponse?.(response.body);
+    decoders['GetImportV2TaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -868,7 +869,7 @@ export class CommonApi {
       StreamResponse<CancelImportV2TaskResponse>
     >('POST', '/api/v2/imports/v2/{id}/cancel', pathParams, undefined);
 
-    decoders.CancelImportV2TaskResponse?.(response.body);
+    decoders['CancelImportV2TaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -884,7 +885,7 @@ export class CommonApi {
       StreamResponse<GetImportResponse>
     >('GET', '/api/v2/imports/{id}', pathParams, undefined);
 
-    decoders.GetImportResponse?.(response.body);
+    decoders['GetImportResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -900,7 +901,7 @@ export class CommonApi {
       StreamResponse<GetOGResponse>
     >('GET', '/api/v2/og', undefined, queryParams);
 
-    decoders.GetOGResponse?.(response.body);
+    decoders['GetOGResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -910,7 +911,52 @@ export class CommonApi {
       StreamResponse<ListPermissionsResponse>
     >('GET', '/api/v2/permissions', undefined, undefined);
 
-    decoders.ListPermissionsResponse?.(response.body);
+    decoders['ListPermissionsResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async createPermission(
+    request: PermissionRequest,
+  ): Promise<StreamResponse<Response>> {
+    const body = {
+      action: request?.action,
+      name: request?.name,
+      description: request?.description,
+      owner: request?.owner,
+      same_team: request?.same_team,
+      condition: request?.condition,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'POST',
+      '/api/v2/permissions',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['Response']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async deletePermission(request: {
+    id: string;
+  }): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'DELETE',
+      '/api/v2/permissions/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -926,7 +972,36 @@ export class CommonApi {
       StreamResponse<GetCustomPermissionResponse>
     >('GET', '/api/v2/permissions/{id}', pathParams, undefined);
 
-    decoders.GetCustomPermissionResponse?.(response.body);
+    decoders['GetCustomPermissionResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async updatePermission(
+    request: PermissionRequest & { id: string },
+  ): Promise<StreamResponse<Response>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      action: request?.action,
+      name: request?.name,
+      description: request?.description,
+      owner: request?.owner,
+      same_team: request?.same_team,
+      condition: request?.condition,
+    };
+
+    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+      'PUT',
+      '/api/v2/permissions/{id}',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -954,7 +1029,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('POST', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -982,7 +1057,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('PUT', '/api/v2/polls', undefined, undefined, body, 'application/json');
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1012,7 +1087,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.QueryPollsResponse?.(response.body);
+    decoders['QueryPollsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1035,7 +1110,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1055,7 +1130,7 @@ export class CommonApi {
       StreamResponse<PollResponse>
     >('GET', '/api/v2/polls/{poll_id}', pathParams, queryParams);
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1084,7 +1159,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollResponse?.(response.body);
+    decoders['PollResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1113,7 +1188,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1143,7 +1218,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1168,7 +1243,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1191,7 +1266,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.PollOptionResponse?.(response.body);
+    decoders['PollOptionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1224,7 +1299,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.PollVotesResponse?.(response.body);
+    decoders['PollVotesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1247,7 +1322,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushPreferencesResponse?.(response.body);
+    decoders['UpsertPushPreferencesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1259,7 +1334,7 @@ export class CommonApi {
       StreamResponse<ListPushProvidersResponse>
     >('GET', '/api/v2/push_providers', undefined, undefined);
 
-    decoders.ListPushProvidersResponse?.(response.body);
+    decoders['ListPushProvidersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1282,7 +1357,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushProviderResponse?.(response.body);
+    decoders['UpsertPushProviderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1303,7 +1378,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1321,7 +1396,7 @@ export class CommonApi {
       StreamResponse<GetPushTemplatesResponse>
     >('GET', '/api/v2/push_templates', undefined, queryParams);
 
-    decoders.GetPushTemplatesResponse?.(response.body);
+    decoders['GetPushTemplatesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1348,7 +1423,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpsertPushTemplateResponse?.(response.body);
+    decoders['UpsertPushTemplateResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1374,7 +1449,7 @@ export class CommonApi {
       StreamResponse<GetRateLimitsResponse>
     >('GET', '/api/v2/rate_limits', undefined, queryParams);
 
-    decoders.GetRateLimitsResponse?.(response.body);
+    decoders['GetRateLimitsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1384,7 +1459,7 @@ export class CommonApi {
       StreamResponse<ListRolesResponse>
     >('GET', '/api/v2/roles', undefined, undefined);
 
-    decoders.ListRolesResponse?.(response.body);
+    decoders['ListRolesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1400,7 +1475,7 @@ export class CommonApi {
       StreamResponse<CreateRoleResponse>
     >('POST', '/api/v2/roles', undefined, undefined, body, 'application/json');
 
-    decoders.CreateRoleResponse?.(response.body);
+    decoders['CreateRoleResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1424,7 +1499,7 @@ export class CommonApi {
       StreamResponse<SearchRolesResponse>
     >('GET', '/api/v2/roles/search', undefined, queryParams);
 
-    decoders.SearchRolesResponse?.(response.body);
+    decoders['SearchRolesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1443,7 +1518,7 @@ export class CommonApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1459,7 +1534,7 @@ export class CommonApi {
       StreamResponse<GetTaskResponse>
     >('GET', '/api/v2/tasks/{id}', pathParams, undefined);
 
-    decoders.GetTaskResponse?.(response.body);
+    decoders['GetTaskResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1478,7 +1553,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1502,7 +1577,7 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders.FileUploadResponse?.(response.body);
+    decoders['FileUploadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1521,7 +1596,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1546,7 +1621,7 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders.ImageUploadResponse?.(response.body);
+    decoders['ImageUploadResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1568,7 +1643,7 @@ export class CommonApi {
       StreamResponse<ListUserGroupsResponse>
     >('GET', '/api/v2/usergroups', undefined, queryParams);
 
-    decoders.ListUserGroupsResponse?.(response.body);
+    decoders['ListUserGroupsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1595,7 +1670,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.CreateUserGroupResponse?.(response.body);
+    decoders['CreateUserGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1619,7 +1694,7 @@ export class CommonApi {
       StreamResponse<SearchUserGroupsResponse>
     >('GET', '/api/v2/usergroups/search', undefined, queryParams);
 
-    decoders.SearchUserGroupsResponse?.(response.body);
+    decoders['SearchUserGroupsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1642,7 +1717,7 @@ export class CommonApi {
       queryParams,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1662,7 +1737,7 @@ export class CommonApi {
       StreamResponse<GetUserGroupResponse>
     >('GET', '/api/v2/usergroups/{id}', pathParams, queryParams);
 
-    decoders.GetUserGroupResponse?.(response.body);
+    decoders['GetUserGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1690,7 +1765,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UpdateUserGroupResponse?.(response.body);
+    decoders['UpdateUserGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1718,7 +1793,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.AddUserGroupMembersResponse?.(response.body);
+    decoders['AddUserGroupMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1745,7 +1820,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.RemoveUserGroupMembersResponse?.(response.body);
+    decoders['RemoveUserGroupMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1761,7 +1836,7 @@ export class CommonApi {
       StreamResponse<QueryUsersResponse>
     >('GET', '/api/v2/users', undefined, queryParams);
 
-    decoders.QueryUsersResponse?.(response.body);
+    decoders['QueryUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1777,7 +1852,7 @@ export class CommonApi {
       StreamResponse<UpdateUsersResponse>
     >('PATCH', '/api/v2/users', undefined, undefined, body, 'application/json');
 
-    decoders.UpdateUsersResponse?.(response.body);
+    decoders['UpdateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1793,7 +1868,7 @@ export class CommonApi {
       StreamResponse<UpdateUsersResponse>
     >('POST', '/api/v2/users', undefined, undefined, body, 'application/json');
 
-    decoders.UpdateUsersResponse?.(response.body);
+    decoders['UpdateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1809,7 +1884,7 @@ export class CommonApi {
       StreamResponse<GetBlockedUsersResponse>
     >('GET', '/api/v2/users/block', undefined, queryParams);
 
-    decoders.GetBlockedUsersResponse?.(response.body);
+    decoders['GetBlockedUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1834,7 +1909,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.BlockUsersResponse?.(response.body);
+    decoders['BlockUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1860,7 +1935,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeactivateUsersResponse?.(response.body);
+    decoders['DeactivateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1890,7 +1965,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeleteUsersResponse?.(response.body);
+    decoders['DeleteUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1906,7 +1981,7 @@ export class CommonApi {
       StreamResponse<SharedLocationsResponse>
     >('GET', '/api/v2/users/live_locations', undefined, queryParams);
 
-    decoders.SharedLocationsResponse?.(response.body);
+    decoders['SharedLocationsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1935,7 +2010,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.SharedLocationResponse?.(response.body);
+    decoders['SharedLocationResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1961,7 +2036,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ReactivateUsersResponse?.(response.body);
+    decoders['ReactivateUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1982,7 +2057,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2007,7 +2082,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.UnblockUsersResponse?.(response.body);
+    decoders['UnblockUsersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2034,7 +2109,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.DeactivateUserResponse?.(response.body);
+    decoders['DeactivateUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2050,7 +2125,7 @@ export class CommonApi {
       StreamResponse<ExportUserResponse>
     >('GET', '/api/v2/users/{user_id}/export', pathParams, undefined);
 
-    decoders.ExportUserResponse?.(response.body);
+    decoders['ExportUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2078,7 +2153,7 @@ export class CommonApi {
       'application/json',
     );
 
-    decoders.ReactivateUserResponse?.(response.body);
+    decoders['ReactivateUserResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

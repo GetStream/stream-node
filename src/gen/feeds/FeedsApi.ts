@@ -223,7 +223,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddActivityResponse?.(response.body);
+    decoders['AddActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -249,7 +249,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpsertActivitiesResponse?.(response.body);
+    decoders['UpsertActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -273,7 +273,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateActivitiesPartialBatchResponse?.(response.body);
+    decoders['UpdateActivitiesPartialBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -300,7 +300,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.DeleteActivitiesResponse?.(response.body);
+    decoders['DeleteActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -325,7 +325,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.TrackActivityMetricsResponse?.(response.body);
+    decoders['TrackActivityMetricsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -365,7 +365,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryActivitiesResponse?.(response.body);
+    decoders['QueryActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -395,7 +395,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.BatchQueryActivityReactionsResponse?.(response.body);
+    decoders['BatchQueryActivityReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -422,7 +422,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.DeleteBookmarkResponse?.(response.body);
+    decoders['DeleteBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -453,7 +453,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateBookmarkResponse?.(response.body);
+    decoders['UpdateBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -483,7 +483,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddBookmarkResponse?.(response.body);
+    decoders['AddBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -513,7 +513,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.ActivityFeedbackResponse?.(response.body);
+    decoders['ActivityFeedbackResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -542,7 +542,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -571,7 +571,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.PollVoteResponse?.(response.body);
+    decoders['PollVoteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -606,7 +606,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddReactionResponse?.(response.body);
+    decoders['AddReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -636,7 +636,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryActivityReactionsResponse?.(response.body);
+    decoders['QueryActivityReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -665,7 +665,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.DeleteActivityReactionResponse?.(response.body);
+    decoders['DeleteActivityReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -694,7 +694,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.QueryActivitySharesResponse?.(response.body);
+    decoders['QueryActivitySharesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -716,7 +716,7 @@ export class FeedsApi {
       StreamResponse<DeleteActivityResponse>
     >('DELETE', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
 
-    decoders.DeleteActivityResponse?.(response.body);
+    decoders['DeleteActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -744,7 +744,7 @@ export class FeedsApi {
       StreamResponse<GetActivityResponse>
     >('GET', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
 
-    decoders.GetActivityResponse?.(response.body);
+    decoders['GetActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -778,7 +778,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateActivityPartialResponse?.(response.body);
+    decoders['UpdateActivityPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -826,7 +826,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateActivityResponse?.(response.body);
+    decoders['UpdateActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -859,7 +859,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.RestoreActivityResponse?.(response.body);
+    decoders['RestoreActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -885,7 +885,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.TranslateActivityResponse?.(response.body);
+    decoders['TranslateActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -912,7 +912,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryBookmarkFoldersResponse?.(response.body);
+    decoders['QueryBookmarkFoldersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -933,7 +933,7 @@ export class FeedsApi {
       undefined,
     );
 
-    decoders.DeleteBookmarkFolderResponse?.(response.body);
+    decoders['DeleteBookmarkFolderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -962,7 +962,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateBookmarkFolderResponse?.(response.body);
+    decoders['UpdateBookmarkFolderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -999,13 +999,13 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryBookmarksResponse?.(response.body);
+    decoders['QueryBookmarksResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
   async deleteCollections(request: {
-    collection_refs: string[];
+    collection_refs: Array<string>;
   }): Promise<StreamResponse<DeleteCollectionsResponse>> {
     const queryParams = {
       collection_refs: request?.collection_refs,
@@ -1015,14 +1015,14 @@ export class FeedsApi {
       StreamResponse<DeleteCollectionsResponse>
     >('DELETE', '/api/v2/feeds/collections', undefined, queryParams);
 
-    decoders.DeleteCollectionsResponse?.(response.body);
+    decoders['DeleteCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
 
   async readCollections(request?: {
     user_id?: string;
-    collection_refs?: string[];
+    collection_refs?: Array<string>;
   }): Promise<StreamResponse<ReadCollectionsResponse>> {
     const queryParams = {
       user_id: request?.user_id,
@@ -1033,7 +1033,7 @@ export class FeedsApi {
       StreamResponse<ReadCollectionsResponse>
     >('GET', '/api/v2/feeds/collections', undefined, queryParams);
 
-    decoders.ReadCollectionsResponse?.(response.body);
+    decoders['ReadCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1058,7 +1058,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateCollectionsResponse?.(response.body);
+    decoders['UpdateCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1083,7 +1083,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.CreateCollectionsResponse?.(response.body);
+    decoders['CreateCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1106,7 +1106,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpsertCollectionsResponse?.(response.body);
+    decoders['UpsertCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1135,7 +1135,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryCollectionsResponse?.(response.body);
+    decoders['QueryCollectionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1173,7 +1173,7 @@ export class FeedsApi {
       StreamResponse<GetCommentsResponse>
     >('GET', '/api/v2/feeds/comments', undefined, queryParams);
 
-    decoders.GetCommentsResponse?.(response.body);
+    decoders['GetCommentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1210,7 +1210,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddCommentResponse?.(response.body);
+    decoders['AddCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1233,7 +1233,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddCommentsBatchResponse?.(response.body);
+    decoders['AddCommentsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1270,7 +1270,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryCommentsResponse?.(response.body);
+    decoders['QueryCommentsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1300,7 +1300,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.BatchQueryCommentReactionsResponse?.(response.body);
+    decoders['BatchQueryCommentReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1327,7 +1327,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.DeleteCommentBookmarkResponse?.(response.body);
+    decoders['DeleteCommentBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1358,7 +1358,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateCommentBookmarkResponse?.(response.body);
+    decoders['UpdateCommentBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1388,7 +1388,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddCommentBookmarkResponse?.(response.body);
+    decoders['AddCommentBookmarkResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1410,7 +1410,7 @@ export class FeedsApi {
       StreamResponse<DeleteCommentResponse>
     >('DELETE', '/api/v2/feeds/comments/{id}', pathParams, queryParams);
 
-    decoders.DeleteCommentResponse?.(response.body);
+    decoders['DeleteCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1434,7 +1434,7 @@ export class FeedsApi {
       StreamResponse<GetCommentResponse>
     >('GET', '/api/v2/feeds/comments/{id}', pathParams, queryParams);
 
-    decoders.GetCommentResponse?.(response.body);
+    decoders['GetCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1470,7 +1470,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateCommentResponse?.(response.body);
+    decoders['UpdateCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1504,7 +1504,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateCommentPartialResponse?.(response.body);
+    decoders['UpdateCommentPartialResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1538,7 +1538,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AddCommentReactionResponse?.(response.body);
+    decoders['AddCommentReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1568,7 +1568,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryCommentReactionsResponse?.(response.body);
+    decoders['QueryCommentReactionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1597,7 +1597,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.DeleteCommentReactionResponse?.(response.body);
+    decoders['DeleteCommentReactionResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1635,7 +1635,7 @@ export class FeedsApi {
       StreamResponse<GetCommentRepliesResponse>
     >('GET', '/api/v2/feeds/comments/{id}/replies', pathParams, queryParams);
 
-    decoders.GetCommentRepliesResponse?.(response.body);
+    decoders['GetCommentRepliesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1662,7 +1662,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.RestoreCommentResponse?.(response.body);
+    decoders['RestoreCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1688,7 +1688,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.TranslateCommentResponse?.(response.body);
+    decoders['TranslateCommentResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1704,7 +1704,7 @@ export class FeedsApi {
       StreamResponse<ListFeedGroupsResponse>
     >('GET', '/api/v2/feeds/feed_groups', undefined, queryParams);
 
-    decoders.ListFeedGroupsResponse?.(response.body);
+    decoders['ListFeedGroupsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1737,7 +1737,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.CreateFeedGroupResponse?.(response.body);
+    decoders['CreateFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1766,7 +1766,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.DeleteFeedResponse?.(response.body);
+    decoders['DeleteFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1819,7 +1819,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.GetOrCreateFeedResponse?.(response.body);
+    decoders['GetOrCreateFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1853,7 +1853,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFeedResponse?.(response.body);
+    decoders['UpdateFeedResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1884,7 +1884,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1915,7 +1915,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.UnpinActivityResponse?.(response.body);
+    decoders['UnpinActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1949,7 +1949,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.PinActivityResponse?.(response.body);
+    decoders['PinActivityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -1980,7 +1980,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.ChangeFeedVisibilityResponse?.(response.body);
+    decoders['ChangeFeedVisibilityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2014,7 +2014,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFeedMembersResponse?.(response.body);
+    decoders['UpdateFeedMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2045,7 +2045,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AcceptFeedMemberInviteResponse?.(response.body);
+    decoders['AcceptFeedMemberInviteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2079,7 +2079,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryFeedMembersResponse?.(response.body);
+    decoders['QueryFeedMembersResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2110,7 +2110,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.RejectFeedMemberInviteResponse?.(response.body);
+    decoders['RejectFeedMemberInviteResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2151,7 +2151,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryPinnedActivitiesResponse?.(response.body);
+    decoders['QueryPinnedActivitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2178,7 +2178,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.GetFollowSuggestionsResponse?.(response.body);
+    decoders['GetFollowSuggestionsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2199,7 +2199,7 @@ export class FeedsApi {
       undefined,
     );
 
-    decoders.RestoreFeedGroupResponse?.(response.body);
+    decoders['RestoreFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2219,7 +2219,7 @@ export class FeedsApi {
       StreamResponse<DeleteFeedGroupResponse>
     >('DELETE', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
 
-    decoders.DeleteFeedGroupResponse?.(response.body);
+    decoders['DeleteFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2239,7 +2239,7 @@ export class FeedsApi {
       StreamResponse<GetFeedGroupResponse>
     >('GET', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
 
-    decoders.GetFeedGroupResponse?.(response.body);
+    decoders['GetFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2274,7 +2274,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.GetOrCreateFeedGroupResponse?.(response.body);
+    decoders['GetOrCreateFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2309,7 +2309,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFeedGroupResponse?.(response.body);
+    decoders['UpdateFeedGroupResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2319,7 +2319,7 @@ export class FeedsApi {
       StreamResponse<ListFeedViewsResponse>
     >('GET', '/api/v2/feeds/feed_views', undefined, undefined);
 
-    decoders.ListFeedViewsResponse?.(response.body);
+    decoders['ListFeedViewsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2345,7 +2345,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.CreateFeedViewResponse?.(response.body);
+    decoders['CreateFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2361,7 +2361,7 @@ export class FeedsApi {
       StreamResponse<DeleteFeedViewResponse>
     >('DELETE', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
 
-    decoders.DeleteFeedViewResponse?.(response.body);
+    decoders['DeleteFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2377,7 +2377,7 @@ export class FeedsApi {
       StreamResponse<GetFeedViewResponse>
     >('GET', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
 
-    decoders.GetFeedViewResponse?.(response.body);
+    decoders['GetFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2405,7 +2405,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.GetOrCreateFeedViewResponse?.(response.body);
+    decoders['GetOrCreateFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2433,7 +2433,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFeedViewResponse?.(response.body);
+    decoders['UpdateFeedViewResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2445,7 +2445,7 @@ export class FeedsApi {
       StreamResponse<ListFeedVisibilitiesResponse>
     >('GET', '/api/v2/feeds/feed_visibilities', undefined, undefined);
 
-    decoders.ListFeedVisibilitiesResponse?.(response.body);
+    decoders['ListFeedVisibilitiesResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2461,7 +2461,7 @@ export class FeedsApi {
       StreamResponse<GetFeedVisibilityResponse>
     >('GET', '/api/v2/feeds/feed_visibilities/{name}', pathParams, undefined);
 
-    decoders.GetFeedVisibilityResponse?.(response.body);
+    decoders['GetFeedVisibilityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2487,7 +2487,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFeedVisibilityResponse?.(response.body);
+    decoders['UpdateFeedVisibilityResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2511,7 +2511,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.CreateFeedsBatchResponse?.(response.body);
+    decoders['CreateFeedsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2536,7 +2536,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.DeleteFeedsBatchResponse?.(response.body);
+    decoders['DeleteFeedsBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2562,7 +2562,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.OwnBatchResponse?.(response.body);
+    decoders['OwnBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2591,7 +2591,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryFeedsResponse?.(response.body);
+    decoders['QueryFeedsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2617,7 +2617,7 @@ export class FeedsApi {
       StreamResponse<GetFeedsRateLimitsResponse>
     >('GET', '/api/v2/feeds/feeds/rate_limits', undefined, queryParams);
 
-    decoders.GetFeedsRateLimitsResponse?.(response.body);
+    decoders['GetFeedsRateLimitsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2651,7 +2651,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateFollowResponse?.(response.body);
+    decoders['UpdateFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2684,7 +2684,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.SingleFollowResponse?.(response.body);
+    decoders['SingleFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2709,7 +2709,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.AcceptFollowResponse?.(response.body);
+    decoders['AcceptFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2734,7 +2734,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.FollowBatchResponse?.(response.body);
+    decoders['FollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2759,7 +2759,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.FollowBatchResponse?.(response.body);
+    decoders['FollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2786,7 +2786,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryFollowsResponse?.(response.body);
+    decoders['QueryFollowsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2810,7 +2810,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.RejectFollowResponse?.(response.body);
+    decoders['RejectFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2843,7 +2843,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.GetOrCreateFollowResponse?.(response.body);
+    decoders['GetOrCreateFollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2874,7 +2874,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.UnfollowResponse?.(response.body);
+    decoders['UnfollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2902,7 +2902,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.CreateMembershipLevelResponse?.(response.body);
+    decoders['CreateMembershipLevelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2929,7 +2929,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryMembershipLevelsResponse?.(response.body);
+    decoders['QueryMembershipLevelsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2948,7 +2948,7 @@ export class FeedsApi {
       undefined,
     );
 
-    decoders.Response?.(response.body);
+    decoders['Response']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -2978,7 +2978,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UpdateMembershipLevelResponse?.(response.body);
+    decoders['UpdateMembershipLevelResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3005,7 +3005,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryRevisionHistoryResponse?.(response.body);
+    decoders['QueryRevisionHistoryResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3029,7 +3029,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.QueryFeedsUsageStatsResponse?.(response.body);
+    decoders['QueryFeedsUsageStatsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3054,7 +3054,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UnfollowBatchResponse?.(response.body);
+    decoders['UnfollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3079,7 +3079,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.UnfollowBatchResponse?.(response.body);
+    decoders['UnfollowBatchResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3106,7 +3106,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.GetOrCreateUnfollowResponse?.(response.body);
+    decoders['GetOrCreateUnfollowResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3132,7 +3132,7 @@ export class FeedsApi {
       'application/json',
     );
 
-    decoders.DeleteFeedUserDataResponse?.(response.body);
+    decoders['DeleteFeedUserDataResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3148,7 +3148,7 @@ export class FeedsApi {
       StreamResponse<ExportFeedUserDataResponse>
     >('POST', '/api/v2/feeds/users/{user_id}/export', pathParams, undefined);
 
-    decoders.ExportFeedUserDataResponse?.(response.body);
+    decoders['ExportFeedUserDataResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
@@ -3173,7 +3173,7 @@ export class FeedsApi {
       queryParams,
     );
 
-    decoders.GetUserInterestsResponse?.(response.body);
+    decoders['GetUserInterestsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
