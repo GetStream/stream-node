@@ -2,7 +2,7 @@ import { ApiClient } from './ApiClient';
 import { VideoApi } from './gen/video/VideoApi';
 import { StreamCall } from './StreamCall';
 import type { StreamClient } from './StreamClient';
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+
 /** @ts-ignore Optional dependency */
 import type {
   createRealtimeClient,

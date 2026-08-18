@@ -82,7 +82,7 @@ export class ApiClient {
         let error: APIError;
         try {
           error = (await response.json()) as APIError;
-        } catch (_) {
+        } catch {
           throw new StreamError(
             `Stream error: ${response.status} - ${response.statusText}`,
             metadata,

@@ -19,17 +19,17 @@
     "url": "https://github.com/GetStream/stream-node.git"
   },
   "scripts": {
-    "prepare": "husky install",
-    "prepublish": "yarn build",
+    "postinstall": "node -e \"try{require.resolve('husky')}catch{process.exit(0)};require('child_process').execSync('husky',{stdio:'inherit'})\"",
+    "prepack": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
-    "start": "rollup -w -c",
-    "build": "rm -rf dist && rollup -c",
+    "start": "vite build --watch",
+    "build": "rm -rf dist && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
     "generate:open-api": "./generate-openapi.sh",
-    "lint": "eslint **/*.ts",
-    "lint:fix": "eslint --fix **/*.ts",
+    "lint": "eslint src __tests__ index.ts",
+    "lint:fix": "eslint --fix src __tests__ index.ts",
     "prettier:fix": "prettier . --write",
-    "lint:gen": "eslint --fix src/gen/**/*ts && prettier src/gen/**/*.ts --write"
+    "lint:gen": "eslint --fix \"src/gen/**/*.ts\" && prettier \"src/gen/**/*.ts\" --write"
   },
   "lint-staged": {
     "**/*": [
@@ -45,33 +45,27 @@
     "LICENSE",
     ".readme-assets"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
-    "@rollup/plugin-replace": "^6.0.3",
-    "@rollup/plugin-typescript": "^12.3.0",
+    "@eslint/js": "^10.0.1",
     "@stream-io/openai-realtime-api": "~0.3.3",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "dotenv": "^17.3.1",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard-with-typescript": "^43.0.1",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.6.0",
+    "@types/node": "^22.20.1",
+    "dotenv": "^17.4.2",
+    "eslint": "^10.8.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
-    "lint-staged": "^16.3.3",
-    "prettier": "^3.8.1",
-    "rollup": "^4.59.0",
-    "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
-    "vite": "^6.4.1",
-    "vitest": "~3.1.4",
-    "vitest-mock-extended": "^3.1.0"
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.67.0",
+    "vite": "^8.2.1",
+    "vitest": "~4.1.10"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^18.3.0",
     "jsonwebtoken": "^9.0.3"
   },
   "peerDependencies": {
@@ -83,7 +77,7 @@
     }
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  "packageManager": "yarn@4.18.0"
 }

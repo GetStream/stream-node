@@ -12,36 +12,40 @@ Agents should prioritize backwards compatibility, API stability, and high test c
 ### Tech & toolchain
 
 • Language: TypeScript (Node.js)
-• Package managers: Yarn (primary)
-• Minimum Node.js: 18.0.0 or newer (see package.json engines)
-• Runtime targets: Node.js 18+, Node.js 20+, Node.js 22+, Bun 1+
+• Package manager: Yarn 4, pinned via packageManager and .yarn/releases (no install step needed)
+• Minimum Node.js: 22.12.0 or newer (see package.json engines)
+• Runtime targets: Node.js 22, 24 and 26, plus Bun
+• Build: Vite library mode emits the CJS and ESM bundles; tsc emits the declarations
+• Tests: Vitest
 • CI: GitHub Actions (assume PR validation on build + tests + lint)
-• Linters & docs: ESLint + Prettier
+• Linters & docs: ESLint (flat config, eslint.config.mjs) + Prettier
 
 ### Project layout (high level)
 
+```
 src/
-gen/ # Generated API clients and models
-chat/ # Chat API client and models
-video/ # Video API client and models
-feeds/ # Feeds API client and models
-moderation/ # Moderation API client and models
-common/ # Common API utilities
-models/ # API request and response models for all supported products
-utils/ # Utility functions (token creation, rate limiting)
-StreamClient.ts # Main client class
-StreamChatClient.ts # Chat-specific client
-StreamVideoClient.ts # Video-specific client
-StreamFeedsClient.ts # Feeds-specific client
-StreamModerationClient.ts # Moderation-specific client
-**tests**/ # Test files
-\*.test.ts # Test files for each module
+  gen/                        # Generated API clients and models
+    chat/                     # Chat API client and models
+    video/                    # Video API client and models
+    feeds/                    # Feeds API client and models
+    moderation/               # Moderation API client and models
+    common/                   # Common API utilities
+    models/                   # API request and response models for all supported products
+  utils/                      # Utility functions (token creation, rate limiting)
+  StreamClient.ts             # Main client class
+  StreamChatClient.ts         # Chat-specific client
+  StreamVideoClient.ts        # Video-specific client
+  StreamFeedsClient.ts        # Feeds-specific client
+  StreamModerationClient.ts   # Moderation-specific client
+__tests__/                    # Test files
+  *.test.ts                   # Test files for each module
+```
 
 Use the closest folder's patterns and conventions when editing.
 
 ### Local setup (Node.js)
 
-1.  Ensure Node.js 18+ is installed
+1.  Ensure Node.js is installed (see .nvmrc)
 2.  Install dependencies: `yarn install`
 3.  Build the project: `yarn build`
 4.  Run tests: `yarn test`
@@ -56,7 +60,7 @@ If you need to validate as a package consumer:
 ```json
 {
   "dependencies": {
-    "@stream-io/node-sdk": "^0.6.5"
+    "@stream-io/node-sdk": "^0.7.63"
   }
 }
 ```
@@ -66,7 +70,7 @@ If you need to validate as a package consumer:
 ### Available Scripts
 
 Common npm/yarn scripts in this repo include:
-• `build` - Build the TypeScript project to dist/
+• `build` - Bundle to dist/ with Vite library mode, then emit declarations with tsc
 • `test` - Run tests with Vitest
 • `test:bun` - Run tests with Bun
 • `lint` - Run ESLint
@@ -118,7 +122,7 @@ yarn lint
 yarn prettier:fix
 ```
 
-• Respect .eslintrc and .prettierrc configurations. Do not suppress rules broadly; justify and scope exceptions.
+• Respect the eslint.config.mjs and .editorconfig configurations. Do not suppress rules broadly; justify and scope exceptions.
 • The project uses lint-staged with Husky for pre-commit hooks.
 
 Commit / PR conventions
@@ -128,7 +132,7 @@ Commit / PR conventions
 • Ensure public API changes include docs and migration notes.
 
 Testing policy
-• Add/extend tests in the **tests**/ folder with .test.ts suffix.
+• Add/extend tests in the `__tests__/` folder with .test.ts suffix.
 • Cover:
 • Core API clients and models (StreamClient, StreamChatClient, etc.)
 • Utility functions (token creation, rate limiting)
@@ -140,7 +144,7 @@ Security & credentials
 • If you add scripts, ensure they fail closed on missing env vars.
 
 Compatibility & distribution
-• Maintain compatibility with supported Node.js versions listed in package.json engines (Node.js 18+).
+• Maintain compatibility with supported Node.js versions listed in package.json engines (Node.js 22.12+).
 • Don't introduce third-party deps without discussion.
 • Validate yarn integration and ensure the package works in both CommonJS and ES modules.
 • Test compatibility with Bun runtime when making changes.

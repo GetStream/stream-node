@@ -5,7 +5,7 @@ import { StreamClient } from '../src/StreamClient';
 describe('rate limit', () => {
   let client: StreamClient;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     client = createTestClient();
   });
 

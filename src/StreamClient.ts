@@ -255,7 +255,7 @@ export class StreamClient extends CommonApi {
 
     try {
       return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(xSignature));
-    } catch (err) {
+    } catch {
       return false;
     }
   };

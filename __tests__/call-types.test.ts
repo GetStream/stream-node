@@ -171,7 +171,7 @@ describe('call types CRUD API', () => {
   it('delete', async () => {
     try {
       await client.video.deleteCallType({ name: callTypeName });
-    } catch (e) {
+    } catch {
       // the first request fails on backend sometimes
       // retry it
       await new Promise<void>((resolve) => {
