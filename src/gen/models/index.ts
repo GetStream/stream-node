@@ -5419,6 +5419,8 @@ export interface ChannelConfig {
 
   max_message_length: number;
 
+  message_retention: string;
+
   mutes: boolean;
 
   name: string;
@@ -5569,6 +5571,8 @@ export interface ChannelConfigWithInfo {
   mark_messages_pending: boolean;
 
   max_message_length: number;
+
+  message_retention: string;
 
   mutes: boolean;
 
@@ -6571,6 +6575,8 @@ export interface ChannelTypeConfig {
 
   max_message_length: number;
 
+  message_retention: string;
+
   mutes: boolean;
 
   name: string;
@@ -7381,6 +7387,8 @@ export interface Classification {
   confidence?: number;
 
   severity?: string;
+
+  matched_contributors?: Array<string>;
 
   subclassifications?: Array<Classification>;
 }
@@ -8543,6 +8551,8 @@ export interface CreateChannelTypeResponse {
 
   max_message_length: number;
 
+  message_retention: string;
+
   mutes: boolean;
 
   name: string;
@@ -8955,6 +8965,43 @@ export interface CreateMembershipLevelResponse {
   duration: string;
 
   membership_level: MembershipLevelResponse;
+}
+
+export interface CreatePermissionRequest {
+  /**
+   * Action name this permission is for (e.g. SendMessage)
+   */
+  action: string;
+
+  /**
+   * Unique permission ID
+   */
+  id: string;
+
+  /**
+   * Name of the permission
+   */
+  name: string;
+
+  /**
+   * MongoDB style condition which decides whether or not the permission is granted
+   */
+  condition: Record<string, any>;
+
+  /**
+   * Description of the permission
+   */
+  description?: string;
+
+  /**
+   * Whether this permission applies to resource owner or not
+   */
+  owner?: boolean;
+
+  /**
+   * Whether this permission applies to teammates (multi-tenancy mode only)
+   */
+  same_team?: boolean;
 }
 
 export interface CreatePolicyTestSetRequest {
@@ -12973,6 +13020,8 @@ export interface GetChannelTypeResponse {
 
   max_message_length: number;
 
+  message_retention: string;
+
   mutes: boolean;
 
   name: string;
@@ -13186,6 +13235,25 @@ export interface GetExternalStorageResponse {
   aws_s3?: GetExternalStorageAWSS3Response;
 
   gcs?: GetExternalStorageGCSResponse;
+}
+
+export interface GetFeedCountsResponse {
+  /**
+   * Number of activities in the feed
+   */
+  activity_count: number;
+
+  /**
+   * Total number of comments on those activities, including nested replies
+   */
+  comment_count: number;
+
+  duration: string;
+
+  /**
+   * Sum of activity_count and comment_count
+   */
+  total_count: number;
 }
 
 export interface GetFeedGroupResponse {
@@ -18473,6 +18541,11 @@ export interface PermissionRequest {
   name: string;
 
   /**
+   * MongoDB style condition which decides whether or not the permission is granted
+   */
+  condition: Record<string, any>;
+
+  /**
    * Description of the permission
    */
   description?: string;
@@ -18486,11 +18559,6 @@ export interface PermissionRequest {
    * Whether this permission applies to teammates (multi-tenancy mode only)
    */
   same_team?: boolean;
-
-  /**
-   * MongoDB style condition which decides whether or not the permission is granted
-   */
-  condition?: Record<string, any>;
 }
 
 export interface PermissionRequestEvent {
@@ -26612,6 +26680,8 @@ export interface UpdateChannelTypeRequest {
 
   mark_messages_pending?: boolean;
 
+  message_retention?: string;
+
   mutes?: boolean;
 
   partition_size?: number;
@@ -26689,6 +26759,8 @@ export interface UpdateChannelTypeResponse {
   mark_messages_pending: boolean;
 
   max_message_length: number;
+
+  message_retention: string;
 
   mutes: boolean;
 

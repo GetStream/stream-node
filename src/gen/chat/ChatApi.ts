@@ -1325,6 +1325,7 @@ export class ChatApi {
       custom_events: request?.custom_events,
       delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
+      message_retention: request?.message_retention,
       mutes: request?.mutes,
       partition_size: request?.partition_size,
       partition_ttl: request?.partition_ttl,
