@@ -51,13 +51,8 @@ export class ApiClient {
 
     const encodedBody =
       requestContentType === 'multipart/form-data'
-        ? new FormData()
+        ? this.multipartBodyStringify(body as Record<string, any>)
         : JSON.stringify(body);
-    if (requestContentType === 'multipart/form-data') {
-      Object.keys(body as Record<string, any>).forEach((key) => {
-        (encodedBody as FormData).append(key, body[key]);
-      });
-    }
 
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
@@ -123,6 +118,23 @@ export class ApiClient {
         );
       }
     }
+  };
+
+  protected multipartBodyStringify = (body: Record<string, any>): FormData => {
+    const formData = new FormData();
+    for (const key in body) {
+      const value = body[key];
+      if (value === null || value === undefined) continue;
+      if (value instanceof Blob) {
+        formData.append(key, value);
+      } else if (isScalar(value)) {
+        formData.append(key, String(value));
+      } else {
+        formData.append(key, JSON.stringify(value));
+      }
+    }
+
+    return formData;
   };
 
   protected queryParamsStringify = (params: Record<string, any>) => {
