@@ -25,6 +25,7 @@ import {
   CreateImportURLResponse,
   CreateImportV2TaskRequest,
   CreateImportV2TaskResponse,
+  CreatePermissionRequest,
   CreatePollOptionRequest,
   CreatePollRequest,
   CreateRoleRequest,
@@ -917,15 +918,16 @@ export class CommonApi {
   }
 
   async createPermission(
-    request: PermissionRequest,
+    request: CreatePermissionRequest,
   ): Promise<StreamResponse<Response>> {
     const body = {
       action: request?.action,
+      id: request?.id,
       name: request?.name,
+      condition: request?.condition,
       description: request?.description,
       owner: request?.owner,
       same_team: request?.same_team,
-      condition: request?.condition,
     };
 
     const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
@@ -986,10 +988,10 @@ export class CommonApi {
     const body = {
       action: request?.action,
       name: request?.name,
+      condition: request?.condition,
       description: request?.description,
       owner: request?.owner,
       same_team: request?.same_team,
-      condition: request?.condition,
     };
 
     const response = await this.apiClient.sendRequest<StreamResponse<Response>>(

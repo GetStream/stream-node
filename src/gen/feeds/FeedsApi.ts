@@ -62,6 +62,7 @@ import {
   GetCommentRepliesResponse,
   GetCommentResponse,
   GetCommentsResponse,
+  GetFeedCountsResponse,
   GetFeedGroupResponse,
   GetFeedViewResponse,
   GetFeedVisibilityResponse,
@@ -1981,6 +1982,29 @@ export class FeedsApi {
     );
 
     decoders['ChangeFeedVisibilityResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async getFeedCounts(request: {
+    feed_group_id: string;
+    feed_id: string;
+  }): Promise<StreamResponse<GetFeedCountsResponse>> {
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+      feed_id: request?.feed_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedCountsResponse>
+    >(
+      'GET',
+      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/counts',
+      pathParams,
+      undefined,
+    );
+
+    decoders['GetFeedCountsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
