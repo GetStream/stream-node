@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.2](https://github.com/GetStream/stream-node/compare/v0.8.1...v0.8.2) (2026-08-21)
+
+
+### Features
+
+* feed counts endpoint ([#335](https://github.com/GetStream/stream-node/issues/335)) ([cd55e36](https://github.com/GetStream/stream-node/commit/cd55e36bb548ca928eccc0a8f2bca30f985062d7))
+
+
+### Bug Fixes
+
+* JSON-encode object fields in multipart request bodies ([#337](https://github.com/GetStream/stream-node/issues/337)) ([5ed3f5b](https://github.com/GetStream/stream-node/commit/5ed3f5b6ef627fdb1497bb6fbf669db213c31b0e))
+
 ## [0.8.1](https://github.com/GetStream/stream-node/compare/v0.8.0...v0.8.1) (2026-08-18)
 
 
