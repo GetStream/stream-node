@@ -595,6 +595,16 @@ export interface ActivityProcessorConfig {
    * Type of activity processor (required)
    */
   type: string;
+
+  /**
+   * Minimum number of characters the activity text must have before this processor runs. 0 (the default) disables the check. Only applies to text_interest_tags.
+   */
+  min_text_length?: number;
+
+  /**
+   * Minimum number of words the activity text must have before this processor runs. 0 (the default) disables the check. Only applies to text_interest_tags.
+   */
+  min_word_count?: number;
 }
 
 export interface ActivityReactionAddedEvent {
