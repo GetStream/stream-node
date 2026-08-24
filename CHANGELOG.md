@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/GetStream/stream-node/compare/v0.8.2...v0.8.3) (2026-08-24)
+
+
+### Features
+
+* add activity processor tag extraction thresholds ([#339](https://github.com/GetStream/stream-node/issues/339)) ([740fda1](https://github.com/GetStream/stream-node/commit/740fda1c5ac263da4fdbdcb76e55731dfd0aa48b))
+
 ## [0.8.2](https://github.com/GetStream/stream-node/compare/v0.8.1...v0.8.2) (2026-08-21)
 
 
