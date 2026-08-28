@@ -5,13 +5,13 @@ joins a Stream call as a real participant, receives and manipulates remote
 media, and publishes media back.
 
 **Nothing here is published.** The native addon is built locally from the
-`feat/python-rtc-bindings` branch of `stream-video-rust` and loaded through an
+`feat/rtc-bindings` branch of `stream-video-rust` and loaded through an
 environment variable. There is no npm dependency, no release, and no change to
 either repository's `main`.
 
 ## 1. Build the Rust addon
 
-From your `stream-video-rust` checkout, on `feat/python-rtc-bindings`:
+From your `stream-video-rust` checkout, on `feat/rtc-bindings`:
 
 ```bash
 node bindings/node/scripts/build-local.mjs
@@ -28,7 +28,18 @@ node bindings/node/scripts/smoke.mjs
 
 The media stack is statically linked — no system `libvpx` is required.
 
-## 2. Point the Node SDK at it
+## 2. Build and configure the Node SDK
+
+From your `stream-node` checkout, install dependencies and build the package.
+The examples import `@stream-io/node-sdk`, which resolves to files in `dist`;
+a fresh checkout does not contain those generated files.
+
+```bash
+yarn install --immutable
+yarn build
+```
+
+Then point the Node SDK at the addon:
 
 ```bash
 export STREAM_NODE_RTC_NATIVE_PATH=/absolute/path/to/stream-node-rtc.node
@@ -48,7 +59,7 @@ Three failures are reported distinctly, so you can tell them apart:
 ## 3. Run the tests
 
 ```bash
-yarn vitest run __tests__/rtc
+yarn test:rtc
 ```
 
 The RTC path spans JavaScript, a native addon, and Stream's SFU. Too much of it
@@ -107,13 +118,27 @@ STREAM_NODE_RTC_NATIVE_PATH=/abs/path/to/stream-node-rtc.node \
 
 Join the same call from any Stream client and publish camera and microphone.
 The agent appears as a second participant carrying the processed tracks.
+Its output is receive-driven: it publishes an empty video track when it joins,
+then writes transformed frames only after it receives camera video. A blank
+agent tile is therefore expected while the other participant's camera is off.
+The viewing client must also subscribe to the agent's video.
+
+When video is flowing, the agent logs `neon time-slice processing: <user-id>`.
+If that message does not appear after the camera is enabled, verify that both
+participants joined the same call and that the agent's video subscription
+completed.
+
 `EXAMPLE_USER_ID`, `EXAMPLE_CALL_TYPE`, and `EXAMPLE_CALL_ID` override the
 defaults.
 
 [`examples/rtc-echo-agent.mjs`](../examples/rtc-echo-agent.mjs) remains the
 smallest audio-only example when visual processing is not needed.
 
-## The happy path
+## Minimal audio-only happy path
+
+This example intentionally processes audio only. Use the Neon example above
+for decoded video, `updateSubscriptions({ audio: true, video: true })`, and
+video republishing.
 
 ```ts
 import { LocalAudioTrack, StreamClient } from "@stream-io/node-sdk";
@@ -206,8 +231,12 @@ after a revoke it can still list the capability. Check `currentGrants` when you
 need to know whether publishing will be allowed:
 
 ```ts
-if (call.state.currentGrants?.canPublishAudio) {
+const grants = call.state.currentGrants;
+if (grants?.canPublishAudio) {
   await call.publishAudio(track);
+}
+if (grants?.canPublishVideo) {
+  await call.publishVideo(videoTrack);
 }
 ```
 
@@ -249,6 +278,11 @@ call.updatePublishOptions({ preferredVideoCodec: "vp9" });
 await call.join({ userId: agentUserId });
 await call.publishVideo(LocalVideoTrack.vp9({ targetBitrateBps: 600_000 }));
 ```
+
+When publishing H264 from I420 frames, each `durationMs` must be at least one
+thirtieth of a second. Use `durationMs: 34` when expressing the duration as an
+integer; `33` is too short and is rejected. The Neon example publishes VP9, so
+its `durationMs: 33` does not have this H264 constraint.
 
 ## Pacing your writes
 
