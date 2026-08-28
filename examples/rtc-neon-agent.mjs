@@ -110,7 +110,7 @@ await call.updateSubscriptions({ audio: true, video: true });
 await call.publishAudio(audioOutput);
 await call.publishVideo(videoOutput);
 
-console.log(`joined ${callType}:${callId} as ${userId}`);
+console.log("joined call");
 console.log(`session: ${call.state.sessionId}`);
 console.log("publishing robot audio + Neon Time-Slice video — Ctrl+C to leave");
 
