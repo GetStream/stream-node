@@ -92,7 +92,7 @@ process.on("SIGTERM", () => void shutdown());
 await call.join({ userId });
 await call.publishAudio(output);
 
-console.log(`joined ${callType}:${callId} as ${userId}`);
+console.log("joined call as agent");
 console.log(`session: ${call.state.sessionId}`);
 console.log("waiting for participants — Ctrl+C to leave");
 
