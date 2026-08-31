@@ -156,6 +156,8 @@ export class CommonApi {
       image_moderation_enabled: request?.image_moderation_enabled,
       max_aggregated_activities_length:
         request?.max_aggregated_activities_length,
+      member_custom_on_mentioned_users_enabled:
+        request?.member_custom_on_mentioned_users_enabled,
       member_custom_on_messages_enabled:
         request?.member_custom_on_messages_enabled,
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,

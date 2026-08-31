@@ -2150,6 +2150,13 @@ decoders['CreatePredefinedFilterResponse'] = (input?: {
   return decode(typeMappings, input);
 };
 
+decoders['CreateReminderResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    reminder: { type: 'ReminderResponseData', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['CreateRoleResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     role: { type: 'Role', isSingle: true },
@@ -4844,9 +4851,9 @@ decoders['ReminderCreatedEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
-    received_at: { type: 'DatetimeType', isSingle: true },
-
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4855,9 +4862,9 @@ decoders['ReminderDeletedEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
-    received_at: { type: 'DatetimeType', isSingle: true },
-
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4866,9 +4873,9 @@ decoders['ReminderNotificationEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
-    received_at: { type: 'DatetimeType', isSingle: true },
-
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4894,9 +4901,9 @@ decoders['ReminderUpdatedEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
 
-    received_at: { type: 'DatetimeType', isSingle: true },
-
     reminder: { type: 'ReminderResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };

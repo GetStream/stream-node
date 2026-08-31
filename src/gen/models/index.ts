@@ -210,7 +210,7 @@ export interface AcceptFollowRequest {
   target: string;
 
   /**
-   * Optional role for the follower in the follow relationship
+   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
    */
   follower_role?: string;
 }
@@ -602,7 +602,7 @@ export interface ActivityProcessorConfig {
   min_text_length?: number;
 
   /**
-   * Minimum number of words the activity text must have before this processor runs. 0 (the default) disables the check. Only applies to text_interest_tags.
+   * Minimum number of words the activity text must have before this processor runs. 0 (the default) disables the check. Only applies to text_interest_tags. Words are whitespace-separated, so scripts written without word spacing (Chinese, Japanese, Thai) always count as 1 word regardless of length — use min_text_length for those.
    */
   min_word_count?: number;
 }
@@ -1935,6 +1935,8 @@ export interface AppResponseFields {
   image_moderation_enabled: boolean;
 
   max_aggregated_activities_length: number;
+
+  member_custom_on_mentioned_users_enabled: boolean;
 
   member_custom_on_messages_enabled: boolean;
 
@@ -6020,19 +6022,16 @@ export interface ChannelMemberPartialResponse {
 }
 
 export interface ChannelMemberRequest {
-  user_id: string;
-
   /**
    * Role of the member in the channel
    */
   channel_role?: string;
 
+  user_id?: string;
+
   custom?: Record<string, any>;
 
-  /**
-   * User response object
-   */
-  user?: UserResponse;
+  user?: MemberUserRequest;
 }
 
 export interface ChannelMemberResponse {
@@ -8765,6 +8764,8 @@ export interface CreateFeedGroupRequest {
    */
   id: string;
 
+  default_follower_role?: string;
+
   /**
    * Default visibility for the feed group, can be 'public', 'visible', 'followers', 'members', or 'private'. Defaults to 'visible' if not provided.
    */
@@ -8833,6 +8834,11 @@ export interface CreateFeedsBatchRequest {
    * List of feeds to create
    */
   feeds: Array<FeedRequest>;
+
+  /**
+   * Server-side only. If true, auto-creates users referenced by feeds[].created_by_id that don't already exist. Default: false.
+   */
+  create_users?: boolean;
 
   /**
    * If true, enriches the created feeds with own_* fields (own_follows, own_followings, own_capabilities, own_membership). Defaults to false for performance.
@@ -9176,6 +9182,15 @@ export interface CreateReminderRequest {
    * User request object
    */
   user?: UserRequest;
+}
+
+export interface CreateReminderResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  reminder: ReminderResponseData;
 }
 
 export interface CreateRoleRequest {
@@ -11054,6 +11069,8 @@ export interface FeedGroup {
 
   created_at: Date;
 
+  default_follower_role: string;
+
   default_visibility: string;
 
   group_id: string;
@@ -11147,6 +11164,11 @@ export interface FeedGroupResponse {
    * When the feed group was last updated
    */
   updated_at: Date;
+
+  /**
+   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
+  default_follower_role?: string;
 
   /**
    * Default visibility for activities. One of: public, visible, followers, members, private
@@ -12613,7 +12635,7 @@ export interface FollowResponse {
   created_at: Date;
 
   /**
-   * Role of the follower (source user) in the follow relationship
+   * Role of the follower (source user) in the follow relationship, as stored. A value outside the allowed set is reported as stored but evaluated as 'feed_follower'.
    */
   follower_role: string;
 
@@ -13524,6 +13546,8 @@ export interface GetOrCreateCallResponse {
 }
 
 export interface GetOrCreateFeedGroupRequest {
+  default_follower_role?: string;
+
   /**
    * Default visibility for the feed group, can be 'public', 'visible', 'followers', 'members', or 'private'. Defaults to 'visible' if not provided.
    */
@@ -15620,6 +15644,28 @@ export interface MemberUpdatedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface MemberUserRequest {
+  id: string;
+
+  image?: string;
+
+  invisible?: boolean;
+
+  language?: string;
+
+  name?: string;
+
+  role?: string;
+
+  teams?: Array<string>;
+
+  custom?: Record<string, any>;
+
+  privacy_settings?: PrivacySettingsResponse;
+
+  teams_role?: Record<string, string>;
+}
+
 export interface MembersResponse {
   /**
    * Duration of the request in milliseconds
@@ -16481,6 +16527,11 @@ export interface MessageResponse {
 
   member?: ChannelMemberPartialResponse;
 
+  /**
+   * Channel member data for the users mentioned in the message, keyed by user id. Only present when the app has member custom on mentioned users enabled, and only for the first two mentioned users of each message
+   */
+  mentioned_channel_members?: Record<string, ChannelMemberPartialResponse>;
+
   moderation?: ModerationV2Response;
 
   /**
@@ -16850,6 +16901,11 @@ export interface MessageWithChannelResponse {
   image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
+
+  /**
+   * Channel member data for the users mentioned in the message, keyed by user id. Only present when the app has member custom on mentioned users enabled, and only for the first two mentioned users of each message
+   */
+  mentioned_channel_members?: Record<string, ChannelMemberPartialResponse>;
 
   moderation?: ModerationV2Response;
 
@@ -18938,7 +18994,11 @@ export interface PollResponseData {
 
   vote_count: number;
 
-  voting_visibility: string;
+  /**
+   * Voting visibility of the poll
+   */
+
+  voting_visibility: 'anonymous' | 'public';
 
   latest_answers: Array<PollVoteResponseData>;
 
@@ -20610,11 +20670,6 @@ export interface QueryLabelResultsResponse {
 export interface QueryMembersPayload {
   type: string;
 
-  /**
-   * Filter conditions to apply to the query
-   */
-  filter_conditions: Record<string, any>;
-
   id?: string;
 
   limit?: number;
@@ -20629,6 +20684,11 @@ export interface QueryMembersPayload {
    * Array of sort parameters
    */
   sort?: Array<SortParamRequest>;
+
+  /**
+   * Filter conditions to apply to the query
+   */
+  filter_conditions?: Record<string, any>;
 
   /**
    * User request object
@@ -22170,6 +22230,8 @@ export interface ReminderCreatedEvent {
 
   custom: Record<string, any>;
 
+  reminder: ReminderResponseData;
+
   /**
    * The type of event: "reminder.created" in this case
    */
@@ -22181,8 +22243,6 @@ export interface ReminderCreatedEvent {
   parent_id?: string;
 
   received_at?: Date;
-
-  reminder?: ReminderResponseData;
 }
 
 export interface ReminderDeletedEvent {
@@ -22208,6 +22268,8 @@ export interface ReminderDeletedEvent {
 
   custom: Record<string, any>;
 
+  reminder: ReminderResponseData;
+
   /**
    * The type of event: "reminder.deleted" in this case
    */
@@ -22219,8 +22281,6 @@ export interface ReminderDeletedEvent {
   parent_id?: string;
 
   received_at?: Date;
-
-  reminder?: ReminderResponseData;
 }
 
 export interface ReminderNotificationEvent {
@@ -22246,6 +22306,8 @@ export interface ReminderNotificationEvent {
 
   custom: Record<string, any>;
 
+  reminder: ReminderResponseData;
+
   /**
    * The type of event: "notification.reminder_due" in this case
    */
@@ -22254,8 +22316,6 @@ export interface ReminderNotificationEvent {
   parent_id?: string;
 
   received_at?: Date;
-
-  reminder?: ReminderResponseData;
 }
 
 export interface ReminderResponseData {
@@ -22310,6 +22370,8 @@ export interface ReminderUpdatedEvent {
 
   custom: Record<string, any>;
 
+  reminder: ReminderResponseData;
+
   /**
    * The type of event: "reminder.updated" in this case
    */
@@ -22321,8 +22383,6 @@ export interface ReminderUpdatedEvent {
   parent_id?: string;
 
   received_at?: Date;
-
-  reminder?: ReminderResponseData;
 }
 
 export interface RemoveUserGroupMembersRequest {
@@ -23635,6 +23695,8 @@ export interface SearchResultMessage {
   image_labels?: Record<string, Array<string>>;
 
   member?: ChannelMemberPartialResponse;
+
+  mentioned_channel_members?: Record<string, ChannelMemberPartialResponse>;
 
   moderation?: ModerationV2Response;
 
@@ -25692,7 +25754,8 @@ export interface UnbanActionRequestPayload {
 
 export interface UnbanRequest {
   /**
-   * ID of the user performing the unban
+   * @deprecated
+   * ID of the user performing the unban Deprecated: not used by the unban flow
    */
   unbanned_by_id?: string;
 
@@ -26228,6 +26291,8 @@ export interface UpdateAppRequest {
   image_moderation_enabled?: boolean;
 
   max_aggregated_activities_length?: number;
+
+  member_custom_on_mentioned_users_enabled?: boolean;
 
   member_custom_on_messages_enabled?: boolean;
 
@@ -27087,6 +27152,8 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
+  default_follower_role?: string;
+
   default_visibility?:
     'public' | 'visible' | 'followers' | 'members' | 'private';
 
@@ -27268,6 +27335,9 @@ export interface UpdateFollowRequest {
    */
   enrich_own_fields?: boolean;
 
+  /**
+   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
+   */
   follower_role?: string;
 
   /**

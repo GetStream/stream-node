@@ -17,6 +17,7 @@ import {
   CreatePredefinedFilterRequest,
   CreatePredefinedFilterResponse,
   CreateReminderRequest,
+  CreateReminderResponse,
   CreateSegmentRequest,
   CreateSegmentResponse,
   DeleteCampaignResponse,
@@ -94,7 +95,6 @@ import {
   QueryTeamUsageStatsResponse,
   QueryThreadsRequest,
   QueryThreadsResponse,
-  ReminderResponseData,
   Response,
   SearchPayload,
   SearchResponse,
@@ -2028,7 +2028,7 @@ export class ChatApi {
 
   async createReminder(
     request: CreateReminderRequest & { message_id: string },
-  ): Promise<StreamResponse<ReminderResponseData>> {
+  ): Promise<StreamResponse<CreateReminderResponse>> {
     const pathParams = {
       message_id: request?.message_id,
     };
@@ -2039,7 +2039,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<ReminderResponseData>
+      StreamResponse<CreateReminderResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{message_id}/reminders',
@@ -2049,7 +2049,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders['ReminderResponseData']?.(response.body);
+    decoders['CreateReminderResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
