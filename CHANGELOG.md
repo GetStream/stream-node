@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.4](https://github.com/GetStream/stream-node/compare/v0.8.3...v0.8.4) (2026-09-01)
+
+
+### Features
+
+* add default_follower_role to feed group API ([#342](https://github.com/GetStream/stream-node/issues/342)) ([c43a480](https://github.com/GetStream/stream-node/commit/c43a4803f2795fc884eeb7e614ebbfd9e355db6f))
+
 ## [0.8.3](https://github.com/GetStream/stream-node/compare/v0.8.2...v0.8.3) (2026-08-24)
 
 
