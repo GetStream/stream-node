@@ -1955,11 +1955,11 @@ export class VideoApi {
 
   async getDailyDigest(request?: {
     date?: string;
-    app_id?: string;
+    target_app_id?: string;
   }): Promise<StreamResponse<GetDailyDigestResponse>> {
     const queryParams = {
       date: request?.date,
-      app_id: request?.app_id,
+      target_app_id: request?.target_app_id,
     };
 
     const response = await this.apiClient.sendRequest<

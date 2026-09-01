@@ -1715,6 +1715,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedGroupResponse>> {
     const body = {
       id: request?.id,
+      default_follower_role: request?.default_follower_role,
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
@@ -2275,6 +2276,7 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
+      default_follower_role: request?.default_follower_role,
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
@@ -2310,6 +2312,7 @@ export class FeedsApi {
       id: request?.id,
     };
     const body = {
+      default_follower_role: request?.default_follower_role,
       default_visibility: request?.default_visibility,
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
@@ -2521,6 +2524,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<CreateFeedsBatchResponse>> {
     const body = {
       feeds: request?.feeds,
+      create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
 
