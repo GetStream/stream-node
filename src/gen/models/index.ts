@@ -49,7 +49,25 @@ export interface AIVideoConfig {
 
   enabled?: boolean;
 
+  provider?: string;
+
   rules?: Array<AWSRekognitionRule>;
+}
+
+export interface AIVideoConfigRequest {
+  async?: boolean;
+
+  enabled?: boolean;
+
+  rules?: Array<AWSRekognitionRule>;
+}
+
+export interface AIVideoConfigResponse {
+  enabled: boolean;
+
+  rules: Array<AWSRekognitionRule>;
+
+  async?: boolean;
 }
 
 export interface APIError {
@@ -1113,6 +1131,8 @@ export interface ActivitySelectorConfig {
    */
   sort?: Array<SortParamRequest>;
 
+  feed_groups?: FeedGroupScope;
+
   /**
    * Filter for activity selection
    */
@@ -1154,6 +1174,8 @@ export interface ActivitySelectorConfigResponse {
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
+
+  feed_groups?: FeedGroupScope;
 
   /**
    * Filter for activity selection
@@ -1860,7 +1882,7 @@ export interface AnalyzeResponse {
   duration: string;
 
   /**
-   * Always `complete` — /analyze is sync-only and the full verdict is in the response.
+   * `complete` (all fields screened), `partial` (mix of verdicts and per-field errors), or `pending` (async).
    */
   status: string;
 
@@ -1940,9 +1962,13 @@ export interface AppResponseFields {
 
   member_custom_on_messages_enabled: boolean;
 
+  member_custom_on_typing_events_enabled: boolean;
+
   moderation_audio_call_moderation_enabled: boolean;
 
   moderation_enabled: boolean;
+
+  moderation_keyframe_video_enabled: boolean;
 
   moderation_llm_configurability_enabled: boolean;
 
@@ -5398,7 +5424,17 @@ export interface ChannelBatchUpdateRequest {
    */
   filter: Record<string, any>;
 
+  /**
+   * `updateData` only. Deletes these keys from each channel's existing custom object, leaving every other custom key untouched. Keys are dot-paths; deleting a key that does not exist is a no-op. Cannot be combined with `data.custom`
+   */
+  custom_unset?: Array<string>;
+
   members?: Array<ChannelBatchMemberRequest>;
+
+  /**
+   * `updateData` only. Merges these keys into each channel's existing custom object, leaving every other custom key untouched. Keys are dot-paths, so `a.b` sets key `b` inside object `a` (the parent object must already exist). Cannot be combined with `data.custom`
+   */
+  custom_set?: Record<string, any>;
 
   data?: ChannelDataUpdate;
 }
@@ -8133,7 +8169,7 @@ export interface ConfigResponse {
 
   ai_text_config?: AITextConfig;
 
-  ai_video_config?: AIVideoConfig;
+  ai_video_config?: AIVideoConfigResponse;
 
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
 
@@ -8764,6 +8800,9 @@ export interface CreateFeedGroupRequest {
    */
   id: string;
 
+  /**
+   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
 
   /**
@@ -11232,6 +11271,18 @@ export interface FeedGroupRestoredEvent {
   received_at?: Date;
 }
 
+export interface FeedGroupScope {
+  /**
+   * Select activities from every feed group except these. An activity cross-posted to an excluded and a non-excluded group is still selected. Mutually exclusive with include
+   */
+  exclude?: Array<string>;
+
+  /**
+   * Select only activities that live in a feed belonging to one of these feed groups. Mutually exclusive with exclude
+   */
+  include?: Array<string>;
+}
+
 export interface FeedInput {
   description?: string;
 
@@ -13546,6 +13597,9 @@ export interface GetOrCreateCallResponse {
 }
 
 export interface GetOrCreateFeedGroupRequest {
+  /**
+   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
 
   /**
@@ -17243,6 +17297,8 @@ export interface ModerationFlagResponse {
   user_id: string;
 
   result: Array<Record<string, any>>;
+
+  content_published_at?: Date;
 
   entity_creator_id?: string;
 
@@ -25640,6 +25696,18 @@ export interface TranslateMessageRequest {
     | 'ht';
 }
 
+export interface TranslateMessageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Represents any chat message
+   */
+  message: MessageResponse;
+}
+
 export interface TranslationSettings {
   enabled?: boolean;
 
@@ -26295,6 +26363,8 @@ export interface UpdateAppRequest {
   member_custom_on_mentioned_users_enabled?: boolean;
 
   member_custom_on_messages_enabled?: boolean;
+
+  member_custom_on_typing_events_enabled?: boolean;
 
   migrate_permissions_to_v2?: boolean;
 
@@ -27152,7 +27222,14 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
+  /**
+   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
+
+  /**
+   * Default visibility for the feed group. One of: public, visible, followers, members, private
+   */
 
   default_visibility?:
     'public' | 'visible' | 'followers' | 'members' | 'private';
@@ -28132,7 +28209,7 @@ export interface UpsertConfigRequest {
 
   ai_text_config?: AITextConfig;
 
-  ai_video_config?: AIVideoConfig;
+  ai_video_config?: AIVideoConfigRequest;
 
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
 
