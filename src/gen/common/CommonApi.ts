@@ -160,6 +160,8 @@ export class CommonApi {
         request?.member_custom_on_mentioned_users_enabled,
       member_custom_on_messages_enabled:
         request?.member_custom_on_messages_enabled,
+      member_custom_on_typing_events_enabled:
+        request?.member_custom_on_typing_events_enabled,
       migrate_permissions_to_v2: request?.migrate_permissions_to_v2,
       moderation_analytics_enabled: request?.moderation_analytics_enabled,
       moderation_enabled: request?.moderation_enabled,
