@@ -113,6 +113,7 @@ import {
   StartCampaignResponse,
   StopCampaignRequest,
   TranslateMessageRequest,
+  TranslateMessageResponse,
   TruncateChannelRequest,
   TruncateChannelResponse,
   UndeleteMessageRequest,
@@ -390,7 +391,9 @@ export class ChatApi {
     const body = {
       operation: request?.operation,
       filter: request?.filter,
+      custom_unset: request?.custom_unset,
       members: request?.members,
+      custom_set: request?.custom_set,
       data: request?.data,
     };
 
@@ -1865,7 +1868,7 @@ export class ChatApi {
 
   async translateMessage(
     request: TranslateMessageRequest & { id: string },
-  ): Promise<StreamResponse<MessageActionResponse>> {
+  ): Promise<StreamResponse<TranslateMessageResponse>> {
     const pathParams = {
       id: request?.id,
     };
@@ -1874,7 +1877,7 @@ export class ChatApi {
     };
 
     const response = await this.apiClient.sendRequest<
-      StreamResponse<MessageActionResponse>
+      StreamResponse<TranslateMessageResponse>
     >(
       'POST',
       '/api/v2/chat/messages/{id}/translate',
@@ -1884,7 +1887,7 @@ export class ChatApi {
       'application/json',
     );
 
-    decoders['MessageActionResponse']?.(response.body);
+    decoders['TranslateMessageResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

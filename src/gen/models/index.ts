@@ -49,7 +49,25 @@ export interface AIVideoConfig {
 
   enabled?: boolean;
 
+  provider?: string;
+
   rules?: Array<AWSRekognitionRule>;
+}
+
+export interface AIVideoConfigRequest {
+  async?: boolean;
+
+  enabled?: boolean;
+
+  rules?: Array<AWSRekognitionRule>;
+}
+
+export interface AIVideoConfigResponse {
+  enabled: boolean;
+
+  rules: Array<AWSRekognitionRule>;
+
+  async?: boolean;
 }
 
 export interface APIError {
@@ -210,7 +228,7 @@ export interface AcceptFollowRequest {
   target: string;
 
   /**
-   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
+   * Optional role for the follower in the follow relationship. Server-side only. Either a built-in ('feed_follower' (the default) or 'feed_member_viewer') or any role your app has defined; grants are not inspected.
    */
   follower_role?: string;
 }
@@ -588,6 +606,23 @@ export interface ActivityPinnedEvent {
   received_at?: Date;
 
   user?: UserResponseCommonFields;
+}
+
+export interface ActivityProcessingConfig {
+  /**
+   * When true, this feed group's allowed_tags is given to the model as a constrained vocabulary so it maps its own wording onto a configured tag instead of that output being discarded. Improves how often a tag is produced, at the cost of sending the list on every request. Scoped to this group's own list: leaving it false keeps this group's tags out of the request even when another feed group on the same activity sets it true. Requires allowed_tags. Off by default.
+   */
+  send_allowed_tags_to_ai?: boolean;
+
+  /**
+   * When set, the LLM activity processors may only write interest tags from this list. By default the model is not told about the list, so a tag is only written when the model happens to produce that exact word after lower-casing and trimming, which for any vocabulary is often not the case; set send_allowed_tags_to_ai to have the model choose from the list instead. Mutually exclusive with blocked_tags.
+   */
+  allowed_tags?: Array<string>;
+
+  /**
+   * Interest tags the LLM activity processors are never allowed to write. Mutually exclusive with allowed_tags.
+   */
+  blocked_tags?: Array<string>;
 }
 
 export interface ActivityProcessorConfig {
@@ -1860,7 +1895,7 @@ export interface AnalyzeResponse {
   duration: string;
 
   /**
-   * Always `complete` — /analyze is sync-only and the full verdict is in the response.
+   * `complete` (all fields screened), `partial` (mix of verdicts and per-field errors), or `pending` (async).
    */
   status: string;
 
@@ -1940,9 +1975,13 @@ export interface AppResponseFields {
 
   member_custom_on_messages_enabled: boolean;
 
+  member_custom_on_typing_events_enabled: boolean;
+
   moderation_audio_call_moderation_enabled: boolean;
 
   moderation_enabled: boolean;
+
+  moderation_keyframe_video_enabled: boolean;
 
   moderation_llm_configurability_enabled: boolean;
 
@@ -5398,7 +5437,17 @@ export interface ChannelBatchUpdateRequest {
    */
   filter: Record<string, any>;
 
+  /**
+   * `updateData` only. Deletes these keys from each channel's existing custom object, leaving every other custom key untouched. Keys are dot-paths; deleting a key that does not exist is a no-op. Cannot be combined with `data.custom`
+   */
+  custom_unset?: Array<string>;
+
   members?: Array<ChannelBatchMemberRequest>;
+
+  /**
+   * `updateData` only. Merges these keys into each channel's existing custom object, leaving every other custom key untouched. Keys are dot-paths, so `a.b` sets key `b` inside object `a` (the parent object must already exist). Cannot be combined with `data.custom`
+   */
+  custom_set?: Record<string, any>;
 
   data?: ChannelDataUpdate;
 }
@@ -8133,7 +8182,7 @@ export interface ConfigResponse {
 
   ai_text_config?: AITextConfig;
 
-  ai_video_config?: AIVideoConfig;
+  ai_video_config?: AIVideoConfigResponse;
 
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
 
@@ -8764,6 +8813,9 @@ export interface CreateFeedGroupRequest {
    */
   id: string;
 
+  /**
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
 
   /**
@@ -8784,6 +8836,8 @@ export interface CreateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -11166,7 +11220,7 @@ export interface FeedGroupResponse {
   updated_at: Date;
 
   /**
-   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
    */
   default_follower_role?: string;
 
@@ -11190,6 +11244,8 @@ export interface FeedGroupResponse {
   activity_selectors?: Array<ActivitySelectorConfigResponse>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -12635,7 +12691,7 @@ export interface FollowResponse {
   created_at: Date;
 
   /**
-   * Role of the follower (source user) in the follow relationship, as stored. A value outside the allowed set is reported as stored but evaluated as 'feed_follower'.
+   * Role of the follower (source user) in the follow relationship, as stored. A reserved name, or a role your app no longer defines, is reported as stored but evaluated as 'feed_follower'.
    */
   follower_role: string;
 
@@ -13546,6 +13602,9 @@ export interface GetOrCreateCallResponse {
 }
 
 export interface GetOrCreateFeedGroupRequest {
+  /**
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
 
   /**
@@ -13566,6 +13625,8 @@ export interface GetOrCreateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -17210,6 +17271,8 @@ export interface ModerationDashboardPreferences {
 
   disable_flagging_reviewed_entity?: boolean;
 
+  enforce_shadow_server_side?: boolean;
+
   escalation_queue_enabled?: boolean;
 
   flag_user_on_flagged_content?: boolean;
@@ -17243,6 +17306,8 @@ export interface ModerationFlagResponse {
   user_id: string;
 
   result: Array<Record<string, any>>;
+
+  content_published_at?: Date;
 
   entity_creator_id?: string;
 
@@ -25640,6 +25705,18 @@ export interface TranslateMessageRequest {
     | 'ht';
 }
 
+export interface TranslateMessageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+
+  /**
+   * Represents any chat message
+   */
+  message: MessageResponse;
+}
+
 export interface TranslationSettings {
   enabled?: boolean;
 
@@ -26295,6 +26372,8 @@ export interface UpdateAppRequest {
   member_custom_on_mentioned_users_enabled?: boolean;
 
   member_custom_on_messages_enabled?: boolean;
+
+  member_custom_on_typing_events_enabled?: boolean;
 
   migrate_permissions_to_v2?: boolean;
 
@@ -27152,7 +27231,14 @@ export interface UpdateExternalStorageResponse {
 }
 
 export interface UpdateFeedGroupRequest {
+  /**
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   */
   default_follower_role?: string;
+
+  /**
+   * Default visibility for the feed group. One of: public, visible, followers, members, private
+   */
 
   default_visibility?:
     'public' | 'visible' | 'followers' | 'members' | 'private';
@@ -27168,6 +27254,8 @@ export interface UpdateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -27336,7 +27424,7 @@ export interface UpdateFollowRequest {
   enrich_own_fields?: boolean;
 
   /**
-   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
+   * Optional role for the follower in the follow relationship. Server-side only. Either a built-in ('feed_follower' (the default) or 'feed_member_viewer') or any role your app has defined; grants are not inspected.
    */
   follower_role?: string;
 
@@ -27888,6 +27976,10 @@ export interface UpdateUsersResponse {
    */
   duration: string;
 
+  /**
+   * @deprecated
+   * Deprecated: always empty. Removing a user from a team no longer deletes their memberships in that team's channels, so there is no task to poll
+   */
   membership_deletion_task_id: string;
 
   /**
@@ -28132,7 +28224,7 @@ export interface UpsertConfigRequest {
 
   ai_text_config?: AITextConfig;
 
-  ai_video_config?: AIVideoConfig;
+  ai_video_config?: AIVideoConfigRequest;
 
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
 
