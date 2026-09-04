@@ -3837,6 +3837,8 @@ decoders['ModerationFlagResponse'] = (input?: { [key: string]: any }) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
+    content_published_at: { type: 'DatetimeType', isSingle: true },
+
     review_queue_item: { type: 'ReviewQueueItemResponse', isSingle: true },
 
     user: { type: 'UserResponse', isSingle: true },
@@ -5421,6 +5423,13 @@ decoders['TranslateActivityResponse'] = (input?: { [key: string]: any }) => {
 decoders['TranslateCommentResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     comment: { type: 'CommentResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['TranslateMessageResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    message: { type: 'MessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
