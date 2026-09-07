@@ -23,3 +23,7 @@ dist
 .eslintcache
 coverage
 
+# Server-side RTC benchmark outputs and recovery coordination.
+/benchmarks/rtc/results/
+/benchmarks/rtc/control/
+

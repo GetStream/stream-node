@@ -20,6 +20,7 @@ import { StreamModerationClient } from './StreamModerationClient';
 import { ApiClient } from './ApiClient';
 import { StreamFeedsClient } from './StreamFeedsClient';
 import { File } from 'buffer';
+import { registerRtcClientCredentials } from './rtc/clientCredentials';
 
 export interface StreamClientOptions {
   timeout?: number;
@@ -83,6 +84,11 @@ export class StreamClient extends CommonApi {
     this.video = new StreamVideoClient({
       streamClient: this,
       apiClient: videoApiClient,
+    });
+    registerRtcClientCredentials(this, {
+      apiKey,
+      apiSecret: secret,
+      baseUrl: videoBaseUrl,
     });
     this.chat = new StreamChatClient(this.apiClient);
     this.moderation = new StreamModerationClient(chatApiClient);
