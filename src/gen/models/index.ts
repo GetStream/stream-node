@@ -228,7 +228,7 @@ export interface AcceptFollowRequest {
   target: string;
 
   /**
-   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
+   * Optional role for the follower in the follow relationship. Server-side only. Either a built-in ('feed_follower' (the default) or 'feed_member_viewer') or any role your app has defined; grants are not inspected.
    */
   follower_role?: string;
 }
@@ -606,6 +606,23 @@ export interface ActivityPinnedEvent {
   received_at?: Date;
 
   user?: UserResponseCommonFields;
+}
+
+export interface ActivityProcessingConfig {
+  /**
+   * When true, this feed group's allowed_tags is given to the model as a constrained vocabulary so it maps its own wording onto a configured tag instead of that output being discarded. Improves how often a tag is produced, at the cost of sending the list on every request. Scoped to this group's own list: leaving it false keeps this group's tags out of the request even when another feed group on the same activity sets it true. Requires allowed_tags. Off by default.
+   */
+  send_allowed_tags_to_ai?: boolean;
+
+  /**
+   * When set, the LLM activity processors may only write interest tags from this list. By default the model is not told about the list, so a tag is only written when the model happens to produce that exact word after lower-casing and trimming, which for any vocabulary is often not the case; set send_allowed_tags_to_ai to have the model choose from the list instead. Mutually exclusive with blocked_tags.
+   */
+  allowed_tags?: Array<string>;
+
+  /**
+   * Interest tags the LLM activity processors are never allowed to write. Mutually exclusive with allowed_tags.
+   */
+  blocked_tags?: Array<string>;
 }
 
 export interface ActivityProcessorConfig {
@@ -8801,7 +8818,7 @@ export interface CreateFeedGroupRequest {
   id: string;
 
   /**
-   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
    */
   default_follower_role?: string;
 
@@ -8823,6 +8840,8 @@ export interface CreateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -11205,7 +11224,7 @@ export interface FeedGroupResponse {
   updated_at: Date;
 
   /**
-   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
    */
   default_follower_role?: string;
 
@@ -11229,6 +11248,8 @@ export interface FeedGroupResponse {
   activity_selectors?: Array<ActivitySelectorConfigResponse>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -12686,7 +12707,7 @@ export interface FollowResponse {
   created_at: Date;
 
   /**
-   * Role of the follower (source user) in the follow relationship, as stored. A value outside the allowed set is reported as stored but evaluated as 'feed_follower'.
+   * Role of the follower (source user) in the follow relationship, as stored. A reserved name, or a role your app no longer defines, is reported as stored but evaluated as 'feed_follower'.
    */
   follower_role: string;
 
@@ -13598,7 +13619,7 @@ export interface GetOrCreateCallResponse {
 
 export interface GetOrCreateFeedGroupRequest {
   /**
-   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
    */
   default_follower_role?: string;
 
@@ -13620,6 +13641,8 @@ export interface GetOrCreateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -17263,6 +17286,8 @@ export interface ModerationDashboardPreferences {
   disable_audit_logs?: boolean;
 
   disable_flagging_reviewed_entity?: boolean;
+
+  enforce_shadow_server_side?: boolean;
 
   escalation_queue_enabled?: boolean;
 
@@ -27223,7 +27248,7 @@ export interface UpdateExternalStorageResponse {
 
 export interface UpdateFeedGroupRequest {
   /**
-   * Role new followers of feeds in this group are given. One of: feed_follower, feed_member_viewer. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
+   * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
    */
   default_follower_role?: string;
 
@@ -27245,6 +27270,8 @@ export interface UpdateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
 
@@ -27413,7 +27440,7 @@ export interface UpdateFollowRequest {
   enrich_own_fields?: boolean;
 
   /**
-   * Optional role for the follower in the follow relationship. Server-side only, and one of 'feed_follower' (the default) or 'feed_member_viewer'.
+   * Optional role for the follower in the follow relationship. Server-side only. Either a built-in ('feed_follower' (the default) or 'feed_member_viewer') or any role your app has defined; grants are not inspected.
    */
   follower_role?: string;
 
@@ -27965,6 +27992,10 @@ export interface UpdateUsersResponse {
    */
   duration: string;
 
+  /**
+   * @deprecated
+   * Deprecated: always empty. Removing a user from a team no longer deletes their memberships in that team's channels, so there is no task to poll
+   */
   membership_deletion_task_id: string;
 
   /**

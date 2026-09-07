@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.5](https://github.com/GetStream/stream-node/compare/v0.8.4...v0.8.5) (2026-09-04)
+
+
+### Features
+
+* Bounded tag vocabulary for activity processors (constrain LLM auto-ta… ([#345](https://github.com/GetStream/stream-node/issues/345)) ([4205d5a](https://github.com/GetStream/stream-node/commit/4205d5a3dbd3ab4c1dc7220ae9eacdf3c2695315))
+
 ## [0.8.4](https://github.com/GetStream/stream-node/compare/v0.8.3...v0.8.4) (2026-09-01)
 
 
