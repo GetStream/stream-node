@@ -1148,6 +1148,8 @@ export interface ActivitySelectorConfig {
    */
   sort?: Array<SortParamRequest>;
 
+  feed_groups?: FeedGroupScope;
+
   /**
    * Filter for activity selection
    */
@@ -1189,6 +1191,8 @@ export interface ActivitySelectorConfigResponse {
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
+
+  feed_groups?: FeedGroupScope;
 
   /**
    * Filter for activity selection
@@ -11286,6 +11290,18 @@ export interface FeedGroupRestoredEvent {
   feed_visibility?: string;
 
   received_at?: Date;
+}
+
+export interface FeedGroupScope {
+  /**
+   * Select activities from every feed group except these. An activity cross-posted to an excluded and a non-excluded group is still selected. Mutually exclusive with include
+   */
+  exclude?: Array<string>;
+
+  /**
+   * Select only activities that live in a feed belonging to one of these feed groups. Mutually exclusive with exclude
+   */
+  include?: Array<string>;
 }
 
 export interface FeedInput {
