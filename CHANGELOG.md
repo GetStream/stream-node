@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.6](https://github.com/GetStream/stream-node/compare/v0.8.5...v0.8.6) (2026-09-07)
+
+
+### Features
+
+* **feeds:** regenerate for the activity selector feed_groups scope ([#344](https://github.com/GetStream/stream-node/issues/344)) ([02fbab6](https://github.com/GetStream/stream-node/commit/02fbab614872d8109e4f85fbe98fdc60474077c0))
+
 ## [0.8.5](https://github.com/GetStream/stream-node/compare/v0.8.4...v0.8.5) (2026-09-04)
 
 
