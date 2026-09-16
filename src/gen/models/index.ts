@@ -49,8 +49,6 @@ export interface AIVideoConfig {
 
   enabled?: boolean;
 
-  provider?: string;
-
   rules?: Array<AWSRekognitionRule>;
 }
 
@@ -555,6 +553,18 @@ export interface ActivityMarkEvent {
   mark_watched?: Array<string>;
 
   user?: UserResponseCommonFields;
+}
+
+export interface ActivityMarksConfig {
+  /**
+   * Whether to return per-activity read status on content feeds
+   */
+  track_read?: boolean;
+
+  /**
+   * Whether to return per-activity seen status on content feeds
+   */
+  track_seen?: boolean;
 }
 
 export interface ActivityPinResponse {
@@ -1953,6 +1963,8 @@ export interface AppResponseFields {
 
   auto_translation_enabled: boolean;
 
+  before_message_send_hook_system_messages: boolean;
+
   campaign_enabled: boolean;
 
   cdn_expiration_seconds: number;
@@ -2139,7 +2151,7 @@ export interface AppealItemResponse {
   ai_text_severity?: string;
 
   /**
-   * CID of the channel the entity belongs to, if applicable
+   * CID of the channel the entity belongs to (content appeals), or of the channel ban being appealed (stream:user appeals). Empty for a global ban appeal.
    */
   channel_cid?: string;
 
@@ -2232,6 +2244,11 @@ export interface AppealRequest {
    * Type of entity being appealed (e.g., message, user)
    */
   entity_type: string;
+
+  /**
+   * CID of the channel ban being appealed. Only used when entity_type is stream:user; omit to appeal the global ban.
+   */
+  channel_cid?: string;
 
   /**
    * ID of the review queue item (flagged message) that triggered the ban. Applicable only for user ban appeals.
@@ -5424,6 +5441,7 @@ export interface ChannelBatchStartedEvent {
 export interface ChannelBatchUpdateRequest {
   operation:
     | 'addMembers'
+    | 'addMembersHideHistory'
     | 'removeMembers'
     | 'inviteMembers'
     | 'invites'
@@ -5442,6 +5460,16 @@ export interface ChannelBatchUpdateRequest {
   filter: Record<string, any>;
 
   /**
+   * Required with the `addMembersHideHistory` operation, and rejected with every other operation including `addMembers`. Hides each matched channel's history before this time from the members the operation adds. Members that already belong to a matched channel are never affected. Must be in RFC3339 format (e.g., "2024-01-01T10:00:00Z") and in the past.
+   */
+  hide_history_before?: Date;
+
+  /**
+   * For updateData only. Requires a root cids $eq or $in filter with at most 100 CIDs and no root $or/$and. Split larger selections into requests of at most 100 CIDs. A success_channels_count response means the database update completed; a task_id response means it was queued and must be polled, including on older API nodes.
+   */
+  synchronous?: boolean;
+
+  /**
    * `updateData` only. Deletes these keys from each channel's existing custom object, leaving every other custom key untouched. Keys are dot-paths; deleting a key that does not exist is a no-op. Cannot be combined with `data.custom`
    */
   custom_unset?: Array<string>;
@@ -5457,11 +5485,16 @@ export interface ChannelBatchUpdateRequest {
 }
 
 export interface ChannelBatchUpdateResponse {
-  /**
-   * Duration of the request in milliseconds
-   */
   duration: string;
 
+  /**
+   * Positive count of channels selected for a completed synchronous database update, not an affected-row count. Concurrent deletion may reduce the rows written. task_id is absent.
+   */
+  success_channels_count?: number;
+
+  /**
+   * Present for asynchronous updates. Poll this task even if synchronous was requested: an older API node may have queued the update.
+   */
   task_id?: string;
 }
 
@@ -7552,6 +7585,11 @@ export interface ClientEvent {
   sfu_id?: string;
 
   /**
+   * Source of the coordinator join. Optional on CoordinatorJoin events; omitted when not provided.
+   */
+  source?: string;
+
+  /**
    * Discriminator identifying the event kind. JoinInitiated marks the start of a join attempt; join-lifecycle events use CoordinatorJoin, CoordinatorWS, WSJoin, or PeerConnectionConnect; media-readiness events use FirstAudioFrame or FirstVideoFrame; MediaDevicePermission reports device permission results; other values denote generic client events.
    */
   stage?: string;
@@ -8841,6 +8879,8 @@ export interface CreateFeedGroupRequest {
 
   activity_filter?: ActivityFilterConfig;
 
+  activity_marks?: ActivityMarksConfig;
+
   activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
@@ -9807,9 +9847,14 @@ export interface DeleteChannelsRequest {
   cids: Array<string>;
 
   /**
-   * Specify if channels and all ressources should be hard deleted
+   * Server-side only. When true, the channels and all their resources are permanently deleted instead of soft-deleted.
    */
   hard_delete?: boolean;
+
+  /**
+   * Server-side only. When true, the soft delete preserves message history instead of hiding it, so a later recreation of any of these channel IDs restores the full history. Only supported for distinct channels. Cannot be combined with hard_delete.
+   */
+  skip_truncate?: boolean;
 }
 
 export interface DeleteChannelsResponse {
@@ -10104,6 +10149,15 @@ export interface DeleteTranscriptionResponse {
    * Duration of the request in milliseconds
    */
   duration: string;
+}
+
+export interface DeleteUserInterestsResponse {
+  duration: string;
+
+  /**
+   * Interest tags still set on the user
+   */
+  interests: Array<InterestTagResponse>;
 }
 
 export interface DeleteUserMessagesRequestPayload {
@@ -11248,6 +11302,8 @@ export interface FeedGroupResponse {
   activity_selectors?: Array<ActivitySelectorConfigResponse>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_marks?: ActivityMarksConfig;
 
   activity_processing?: ActivityProcessingConfig;
 
@@ -12536,9 +12592,13 @@ export interface FloodIdenticalConfig {
 }
 
 export interface FloodIdenticalRuleParameters {
+  min_text_length?: number;
+
   threshold?: number;
 
   time_window?: string;
+
+  track_across_users?: boolean;
 
   allowlist?: Array<string>;
 }
@@ -13402,6 +13462,16 @@ export interface GetFeedsRateLimitsResponse {
   unity?: Record<string, LimitInfoResponse>;
 
   /**
+   * Rate limits for Unity console platform (endpoint name -> limit info)
+   */
+  unity_console?: Record<string, LimitInfoResponse>;
+
+  /**
+   * Rate limits for Unity desktop platform (endpoint name -> limit info)
+   */
+  unity_desktop?: Record<string, LimitInfoResponse>;
+
+  /**
    * Rate limits for Web platform (endpoint name -> limit info)
    */
   web?: Record<string, LimitInfoResponse>;
@@ -13641,6 +13711,8 @@ export interface GetOrCreateFeedGroupRequest {
   activity_selectors?: Array<ActivitySelectorConfig>;
 
   activity_filter?: ActivityFilterConfig;
+
+  activity_marks?: ActivityMarksConfig;
 
   activity_processing?: ActivityProcessingConfig;
 
@@ -13883,6 +13955,16 @@ export interface GetRateLimitsResponse {
   unity?: Record<string, LimitInfoResponse>;
 
   /**
+   * Map of endpoint rate limits for the Unity console platform
+   */
+  unity_console?: Record<string, LimitInfoResponse>;
+
+  /**
+   * Map of endpoint rate limits for the Unity desktop platform
+   */
+  unity_desktop?: Record<string, LimitInfoResponse>;
+
+  /**
    * Map of endpoint rate limits for the web platform
    */
   web?: Record<string, LimitInfoResponse>;
@@ -14008,7 +14090,7 @@ export interface GetUserInterestsResponse {
   duration: string;
 
   /**
-   * Top-N interest tags sorted by descending count, then alphabetically by tag
+   * Interest tags sorted by descending weight, then manually set tags before computed ones, then descending count, then alphabetically by tag
    */
   interests: Array<InterestTagResponse>;
 }
@@ -14702,14 +14784,24 @@ export interface InsertActionLogResponse {
 
 export interface InterestTagResponse {
   /**
-   * Number of distinct reacted-to activities tagged with this value
+   * Lifetime number of distinct reacted-to activities tagged with this value, without decay; 0 for manually set tags
    */
   count: number;
+
+  /**
+   * How the tag was set: computed (from the user's reactions) or manual (through the API)
+   */
+  source: string;
 
   /**
    * The interest tag value
    */
   tag: string;
+
+  /**
+   * Ranking weight between -1.0 and 1.0. Computed tags carry a recency-decayed weight in (0, 1.0]: the user's strongest tag is 1.0 and every other a proportional share
+   */
+  weight: number;
 }
 
 export interface JoinCallAPIMetrics {
@@ -14953,7 +15045,7 @@ export interface LabelsRequest {
   dry_run?: boolean;
 
   /**
-   * Optional moderation policy key (max 128 chars). For username moderation, set this to a policy whose key starts with 'username:' (e.g. 'username:default') to opt into the low-latency fast-path: blocklists (customer + Stream-managed defaults) short-circuit the LLM, and the LLM fallback uses gpt-4.1-nano with a 24h Valkey verdict cache. Without a 'username:' prefix the request falls through to the standard Bodyguard Analyze v1 username path.
+   * Optional moderation policy key (max 128 chars). For username moderation, set this to a policy whose key starts with 'username:' (e.g. 'username:default') to opt into the low-latency fast-path: blocklists (customer + Stream-managed defaults) short-circuit the LLM, and the LLM fallback uses gpt-4o-mini (overridable via moderation_settings.llm_username_model) with a 24h Valkey verdict cache. Without a 'username:' prefix the request falls through to the standard Bodyguard Analyze v1 username path.
    */
   policy?: string;
 
@@ -17283,6 +17375,8 @@ export interface ModerationDashboardPreferences {
 
   custom_views_enabled?: boolean;
 
+  disable_action_logs?: boolean;
+
   disable_audit_logs?: boolean;
 
   disable_flagging_reviewed_entity?: boolean;
@@ -18386,6 +18480,14 @@ export interface PagerResponse {
 }
 
 export interface PaginationParams {
+  id_gt?: number;
+
+  id_gte?: number;
+
+  id_lt?: number;
+
+  id_lte?: number;
+
   limit?: number;
 
   offset?: number;
@@ -19829,6 +19931,14 @@ export interface QueryBannedUsersPayload {
    */
   filter_conditions: Record<string, any>;
 
+  created_at_after?: Date;
+
+  created_at_after_or_equal?: Date;
+
+  created_at_before?: Date;
+
+  created_at_before_or_equal?: Date;
+
   /**
    * Whether to exclude expired bans or not
    */
@@ -20660,6 +20770,14 @@ export interface QueryFollowsResponse {
 }
 
 export interface QueryFutureChannelBansPayload {
+  created_at_after?: Date;
+
+  created_at_after_or_equal?: Date;
+
+  created_at_before?: Date;
+
+  created_at_before_or_equal?: Date;
+
   /**
    * Whether to exclude expired bans or not
    */
@@ -20751,6 +20869,14 @@ export interface QueryLabelResultsResponse {
 export interface QueryMembersPayload {
   type: string;
 
+  created_at_after?: Date;
+
+  created_at_after_or_equal?: Date;
+
+  created_at_before?: Date;
+
+  created_at_before_or_equal?: Date;
+
   id?: string;
 
   limit?: number;
@@ -20758,6 +20884,14 @@ export interface QueryMembersPayload {
   offset?: number;
 
   user_id?: string;
+
+  user_id_gt?: string;
+
+  user_id_gte?: string;
+
+  user_id_lt?: string;
+
+  user_id_lte?: string;
 
   members?: Array<ChannelMemberRequest>;
 
@@ -21570,6 +21704,14 @@ export interface QueryUsersPayload {
    * Filter conditions to apply to the query
    */
   filter_conditions: Record<string, any>;
+
+  id_gt?: string;
+
+  id_gte?: string;
+
+  id_lt?: string;
+
+  id_lte?: string;
 
   include_deactivated_users?: boolean;
 
@@ -22822,6 +22964,11 @@ export interface ReviewQueueItemResponse {
    */
   completed_at?: Date;
 
+  /**
+   * Highest per-label confidence (0-1) any provider reported across the item's flags; absent when no flag carried one
+   */
+  confidence_score?: number;
+
   config_key?: string;
 
   /**
@@ -23084,6 +23231,10 @@ export interface RuleBuilderCondition {
 
   user_identical_content_count_params?: UserIdenticalContentCountParameters;
 
+  user_identical_image_count_params?: UserIdenticalImageCountParameters;
+
+  user_reaction_count_params?: UserReactionCountRuleParameters;
+
   user_role_params?: UserRoleParameters;
 
   user_rule_params?: UserRuleParameters;
@@ -23124,6 +23275,8 @@ export interface RuleBuilderRule {
 }
 
 export interface RunStats {
+  activities_deleted?: number;
+
   channels_deleted?: number;
 
   messages_deleted?: number;
@@ -27271,6 +27424,8 @@ export interface UpdateFeedGroupRequest {
 
   activity_filter?: ActivityFilterConfig;
 
+  activity_marks?: ActivityMarksConfig;
+
   activity_processing?: ActivityProcessingConfig;
 
   aggregation?: AggregationConfig;
@@ -28538,6 +28693,22 @@ export interface UpsertSetupSessionResponse {
   setup_session?: SetupSession;
 }
 
+export interface UpsertUserInterestsRequest {
+  /**
+   * Interest tags to add or update (1-50)
+   */
+  interests: Array<UserInterestRequest>;
+}
+
+export interface UpsertUserInterestsResponse {
+  duration: string;
+
+  /**
+   * All interest tags of the user after the write
+   */
+  interests: Array<InterestTagResponse>;
+}
+
 export interface User {
   id: string;
 
@@ -28925,6 +29096,28 @@ export interface UserIdenticalContentCountParameters {
   time_window?: string;
 }
 
+export interface UserIdenticalImageCountParameters {
+  match?: string;
+
+  similarity_distance?: number;
+
+  threshold?: number;
+
+  time_window?: string;
+}
+
+export interface UserInterestRequest {
+  /**
+   * The interest tag; trimmed and lower-cased like activity interest_tags
+   */
+  tag: string;
+
+  /**
+   * Ranking weight between -1.0 (dislike) and 1.0 (like). Defaults to 1.0
+   */
+  weight?: number;
+}
+
 export interface UserMessagesDeletedEvent {
   /**
    * Date/time of creation
@@ -29021,6 +29214,14 @@ export interface UserRatingReportResponse {
   average: number;
 
   count: number;
+}
+
+export interface UserReactionCountRuleParameters {
+  count?: string;
+
+  threshold?: number;
+
+  time_window?: string;
 }
 
 export interface UserReactivatedEvent {
@@ -29837,6 +30038,18 @@ export interface WebhookFailoverConfig {
   gcs_credentials?: string;
 
   gcs_path?: string;
+
+  s3_api_key?: string;
+
+  s3_bucket?: string;
+
+  s3_path?: string;
+
+  s3_region?: string;
+
+  s3_role_arn?: string;
+
+  s3_secret?: string;
 
   type?: string;
 }

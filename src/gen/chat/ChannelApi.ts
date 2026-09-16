@@ -42,6 +42,7 @@ export class ChannelApi {
 
   delete(request?: {
     hard_delete?: boolean;
+    skip_truncate?: boolean;
   }): Promise<StreamResponse<DeleteChannelResponse>> {
     if (!this.id) {
       throw new Error(
