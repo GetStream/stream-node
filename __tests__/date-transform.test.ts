@@ -3,11 +3,7 @@ import { randomUUID } from 'crypto';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { UserRequest } from '../src/gen/models';
-
-// The generator is run with response_dates_as_number=true, so every date the
-// server sends arrives as the unix-nanosecond number the API puts on the wire.
-// Convert to milliseconds to compare against a JS Date.
-const toMillis = (nanos: number) => Math.floor(nanos / 1_000_000);
+import { nsToDate, nsToMs } from '../src/utils/time';
 
 describe('dates on responses', () => {
   let client: StreamClient;
@@ -42,10 +38,10 @@ describe('dates on responses', () => {
     const createdAt = response.call.created_at;
 
     expect(typeof createdAt).toBe('number');
-    expect(now - toMillis(createdAt)).toBeLessThan(oneMin);
+    expect(now - nsToMs(createdAt)).toBeLessThan(oneMin);
 
     expect(typeof response.call.starts_at).toBe('number');
-    expect(startsAt.getTime()).toEqual(toMillis(response.call.starts_at!));
+    expect(startsAt.getTime()).toEqual(nsToMs(response.call.starts_at!));
 
     expect(response.call.ended_at).toBeNull();
 
@@ -81,7 +77,7 @@ describe('dates on responses', () => {
     const createdAt = response.channel!.created_at;
 
     expect(typeof createdAt).toBe('number');
-    expect(now - toMillis(createdAt)).toBeLessThan(oneMin);
+    expect(now - nsToMs(createdAt)).toBeLessThan(oneMin);
 
     expect(response.channel!.deleted_at).toBeUndefined();
 
@@ -93,7 +89,7 @@ describe('dates on responses', () => {
 
     const queryResult = await client.chat.queryChannels({
       filter_conditions: {
-        created_at: { $lte: new Date(toMillis(createdAt)).toISOString() },
+        created_at: { $lte: nsToDate(createdAt).toISOString() },
       },
       limit: 10,
     });
