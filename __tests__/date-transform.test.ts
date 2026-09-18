@@ -4,7 +4,12 @@ import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
 import { UserRequest } from '../src/gen/models';
 
-describe('Date conversion', () => {
+// The generator is run with response_dates_as_number=true, so every date the
+// server sends arrives as the unix-nanosecond number the API puts on the wire.
+// Convert to milliseconds to compare against a JS Date.
+const toMillis = (nanos: number) => Math.floor(nanos / 1_000_000);
+
+describe('dates on responses', () => {
   let client: StreamClient;
   const user = {
     id: 'stream-node-test-user',
@@ -36,18 +41,18 @@ describe('Date conversion', () => {
 
     const createdAt = response.call.created_at;
 
-    expect(createdAt instanceof Date).toBe(true);
-    expect(now - createdAt.getTime()).toBeLessThan(oneMin);
+    expect(typeof createdAt).toBe('number');
+    expect(now - toMillis(createdAt)).toBeLessThan(oneMin);
 
-    expect(response.call.starts_at instanceof Date).toBe(true);
-    expect(startsAt.getTime()).toEqual(response.call.starts_at?.getTime());
+    expect(typeof response.call.starts_at).toBe('number');
+    expect(startsAt.getTime()).toEqual(toMillis(response.call.starts_at!));
 
     expect(response.call.ended_at).toBeNull();
 
     expect(response.members.length).toBeGreaterThan(0);
 
     response.members.forEach((m) => {
-      expect(m.created_at instanceof Date).toBe(true);
+      expect(typeof m.created_at).toBe('number');
     });
 
     const queryResult = await client.video.queryCalls({
@@ -75,28 +80,26 @@ describe('Date conversion', () => {
 
     const createdAt = response.channel!.created_at;
 
-    expect(createdAt instanceof Date).toBe(true);
-    expect(now - createdAt.getTime()).toBeLessThan(oneMin);
+    expect(typeof createdAt).toBe('number');
+    expect(now - toMillis(createdAt)).toBeLessThan(oneMin);
 
     expect(response.channel!.deleted_at).toBeUndefined();
 
     expect(response.members.length).toBeGreaterThan(0);
 
     response.members.forEach((m) => {
-      expect(m.created_at instanceof Date).toBe(true);
+      expect(typeof m.created_at).toBe('number');
     });
 
     const queryResult = await client.chat.queryChannels({
       filter_conditions: {
-        created_at: { $lte: createdAt.toISOString() },
+        created_at: { $lte: new Date(toMillis(createdAt)).toISOString() },
       },
       limit: 10,
     });
 
     queryResult.channels.forEach((c) => {
-      expect(c.channel!.created_at.getTime()).toBeLessThanOrEqual(
-        createdAt.getTime(),
-      );
+      expect(c.channel!.created_at).toBeLessThanOrEqual(createdAt);
     });
 
     await channel.delete();
@@ -113,7 +116,7 @@ describe('Date conversion', () => {
 
     const response = await client.upsertUsers([newUser]);
 
-    expect(response.users[newUser.id].created_at instanceof Date).toBe(true);
+    expect(typeof response.users[newUser.id].created_at).toBe('number');
 
     expect(
       typeof response.users[newUser.id].custom.created_at === 'string',
