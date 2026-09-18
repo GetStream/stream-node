@@ -253,7 +253,7 @@ export interface ActionLogResponse {
   /**
    * Timestamp when the action was taken
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier of the action log
@@ -371,7 +371,7 @@ export interface ActivityAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -386,7 +386,7 @@ export interface ActivityAddedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -395,7 +395,7 @@ export interface ActivityDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -410,7 +410,7 @@ export interface ActivityDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -419,7 +419,7 @@ export interface ActivityFeedbackEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   activity_feedback: ActivityFeedbackEventPayload;
 
@@ -430,7 +430,7 @@ export interface ActivityFeedbackEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -450,12 +450,12 @@ export interface ActivityFeedbackEventPayload {
   /**
    * When the feedback was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * When the feedback was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * The feedback value (true/false)
@@ -512,7 +512,7 @@ export interface ActivityMarkEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -535,7 +535,7 @@ export interface ActivityMarkEvent {
    */
   mark_all_seen?: boolean;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The IDs of activities marked as read
@@ -571,7 +571,7 @@ export interface ActivityPinResponse {
   /**
    * When the pin was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the feed where activity is pinned
@@ -581,7 +581,7 @@ export interface ActivityPinResponse {
   /**
    * When the pin was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   activity: ActivityResponse;
 
@@ -595,7 +595,7 @@ export interface ActivityPinnedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the feed
@@ -613,7 +613,7 @@ export interface ActivityPinnedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -656,7 +656,7 @@ export interface ActivityReactionAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -673,7 +673,7 @@ export interface ActivityReactionAddedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -682,7 +682,7 @@ export interface ActivityReactionDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -699,7 +699,7 @@ export interface ActivityReactionDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -708,7 +708,7 @@ export interface ActivityReactionUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -725,7 +725,7 @@ export interface ActivityReactionUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -734,7 +734,7 @@ export interface ActivityRemovedFromFeedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -749,7 +749,7 @@ export interface ActivityRemovedFromFeedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -890,7 +890,7 @@ export interface ActivityResponse {
   /**
    * When the activity was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * If this activity is hidden by this user (using activity feedback)
@@ -941,7 +941,7 @@ export interface ActivityResponse {
   /**
    * When the activity was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Visibility setting for the activity. One of: public, private, tag
@@ -1022,17 +1022,17 @@ export interface ActivityResponse {
   /**
    * When the activity was deleted
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * When the activity was last edited
    */
-  edited_at?: Date;
+  edited_at?: number;
 
   /**
    * When the activity will expire
    */
-  expires_at?: Date;
+  expires_at?: number;
 
   /**
    * Total count of reactions from friends on this activity
@@ -1104,7 +1104,7 @@ export interface ActivityRestoredEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -1119,7 +1119,7 @@ export interface ActivityRestoredEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -1185,7 +1185,7 @@ export interface ActivitySelectorConfigResponse {
   /**
    * Time threshold for activity selection (timestamp)
    */
-  cutoff_time?: Date;
+  cutoff_time?: number;
 
   /**
    * Flexible relative time window for activity selection (e.g., '1h', '3d', '1y')
@@ -1219,7 +1219,7 @@ export interface ActivityUnpinnedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the feed
@@ -1237,7 +1237,7 @@ export interface ActivityUnpinnedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -1246,7 +1246,7 @@ export interface ActivityUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -1261,7 +1261,7 @@ export interface ActivityUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -1755,7 +1755,7 @@ export interface AggregatedActivityResponse {
   /**
    * When the aggregation was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Grouping identifier
@@ -1770,7 +1770,7 @@ export interface AggregatedActivityResponse {
   /**
    * When the aggregation was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Number of unique users in this aggregation
@@ -2071,7 +2071,7 @@ export interface AppResponseFields {
 
   moderation_s3_image_access_role_arn?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   video_primary_use_case?: string;
 
@@ -2089,25 +2089,25 @@ export interface AppResponseFields {
 }
 
 export interface AppealAcceptedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   appeal?: AppealItemResponse;
 }
 
 export interface AppealCreatedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   appeal?: AppealItemResponse;
 }
@@ -2121,7 +2121,7 @@ export interface AppealItemResponse {
   /**
    * When the flag was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the entity
@@ -2143,7 +2143,7 @@ export interface AppealItemResponse {
   /**
    * When the flag was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Text severity level assigned by the AI provider
@@ -2218,13 +2218,13 @@ export interface AppealItemResponse {
 }
 
 export interface AppealRejectedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   appeal?: AppealItemResponse;
 }
@@ -2278,11 +2278,11 @@ export interface AppealResponse {
 }
 
 export interface AsyncBulkImageModerationEvent {
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2292,15 +2292,15 @@ export interface AsyncBulkImageModerationEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncExportChannelsEvent {
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2310,17 +2310,17 @@ export interface AsyncExportChannelsEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncExportErrorEvent {
-  created_at: Date;
+  created_at: number;
 
   error: string;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2328,15 +2328,15 @@ export interface AsyncExportErrorEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncExportModerationLogsEvent {
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2346,15 +2346,15 @@ export interface AsyncExportModerationLogsEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncExportReviewQueueEvent {
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2364,15 +2364,15 @@ export interface AsyncExportReviewQueueEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncExportUsersEvent {
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
-  started_at: Date;
+  started_at: number;
 
   task_id: string;
 
@@ -2382,7 +2382,7 @@ export interface AsyncExportUsersEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface AsyncModerationCallbackConfig {
@@ -2670,7 +2670,7 @@ export interface BanInfoResponse {
   /**
    * When the ban was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The channel this ban applies to. Empty if this is an app-wide (global) ban rather than a per-channel ban.
@@ -2680,7 +2680,7 @@ export interface BanInfoResponse {
   /**
    * When the ban expires
    */
-  expires?: Date;
+  expires?: number;
 
   /**
    * Reason for the ban
@@ -2762,9 +2762,9 @@ export interface BanRequest {
 }
 
 export interface BanResponse {
-  created_at: Date;
+  created_at: number;
 
-  expires?: Date;
+  expires?: number;
 
   reason?: string;
 
@@ -2929,7 +2929,7 @@ export interface BlockListResponse {
   /**
    * Date/time of creation
    */
-  created_at?: Date;
+  created_at?: number;
 
   id?: string;
 
@@ -2940,7 +2940,7 @@ export interface BlockListResponse {
   /**
    * Date/time of the last update
    */
-  updated_at?: Date;
+  updated_at?: number;
 }
 
 export interface BlockListRule {
@@ -3001,7 +3001,7 @@ export interface BlockUsersResponse {
   /**
    * Timestamp when the user was blocked
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Duration of the request in milliseconds
@@ -3012,7 +3012,7 @@ export interface BlockUsersResponse {
 export interface BlockedUserEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * User response object
@@ -3036,7 +3036,7 @@ export interface BlockedUserResponse {
    */
   blocked_user_id: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the user who blocked another user
@@ -3101,7 +3101,7 @@ export interface BookmarkAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   bookmark: BookmarkResponse;
 
@@ -3112,7 +3112,7 @@ export interface BookmarkAddedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -3121,7 +3121,7 @@ export interface BookmarkDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   bookmark: BookmarkResponse;
 
@@ -3132,7 +3132,7 @@ export interface BookmarkDeletedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -3141,7 +3141,7 @@ export interface BookmarkFolderDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   bookmark_folder: BookmarkFolderResponse;
 
@@ -3152,7 +3152,7 @@ export interface BookmarkFolderDeletedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -3161,7 +3161,7 @@ export interface BookmarkFolderResponse {
   /**
    * When the folder was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for the folder
@@ -3176,7 +3176,7 @@ export interface BookmarkFolderResponse {
   /**
    * When the folder was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -3193,7 +3193,7 @@ export interface BookmarkFolderUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   bookmark_folder: BookmarkFolderResponse;
 
@@ -3204,7 +3204,7 @@ export interface BookmarkFolderUpdatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -3213,7 +3213,7 @@ export interface BookmarkResponse {
   /**
    * When the bookmark was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the bookmarked object
@@ -3228,7 +3228,7 @@ export interface BookmarkResponse {
   /**
    * When the bookmark was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   activity: ActivityResponse;
 
@@ -3253,7 +3253,7 @@ export interface BookmarkUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   bookmark: BookmarkResponse;
 
@@ -3264,7 +3264,7 @@ export interface BookmarkUpdatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -3552,7 +3552,7 @@ export interface BypassResponse {
 export interface CallAcceptedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -3587,7 +3587,7 @@ export interface CallActionOptions {
 }
 
 export interface CallClosedCaption {
-  end_time: Date;
+  end_time: number;
 
   id: string;
 
@@ -3595,7 +3595,7 @@ export interface CallClosedCaption {
 
   speaker_id: string;
 
-  start_time: Date;
+  start_time: number;
 
   text: string;
 
@@ -3612,7 +3612,7 @@ export interface CallClosedCaption {
 export interface CallClosedCaptionsFailedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of event: "call.closed_captions_failed" in this case
@@ -3623,7 +3623,7 @@ export interface CallClosedCaptionsFailedEvent {
 export interface CallClosedCaptionsStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of event: "call.closed_captions_started" in this case
@@ -3634,7 +3634,7 @@ export interface CallClosedCaptionsStartedEvent {
 export interface CallClosedCaptionsStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of event: "call.transcription_stopped" in this case
@@ -3645,7 +3645,7 @@ export interface CallClosedCaptionsStoppedEvent {
 export interface CallCreatedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * the members added to this call
@@ -3672,7 +3672,7 @@ export interface CallCustomPropertyParameters {
 export interface CallDTMFEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The DTMF digit (0-9, *, #, A-D)
@@ -3692,7 +3692,7 @@ export interface CallDTMFEvent {
   /**
    * When the digit press ended and was detected
    */
-  timestamp: Date;
+  timestamp: number;
 
   /**
    * User response object
@@ -3708,7 +3708,7 @@ export interface CallDTMFEvent {
 export interface CallDeletedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -3732,7 +3732,7 @@ export interface CallDurationReportResponse {
 export interface CallEndedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -3763,7 +3763,7 @@ export interface CallEndedEvent {
 export interface CallFrameRecordingFailedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -3784,9 +3784,9 @@ export interface CallFrameRecordingFrameReadyEvent {
   /**
    * The time the frame was captured
    */
-  captured_at: Date;
+  captured_at: number;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -3819,7 +3819,7 @@ export interface CallFrameRecordingFrameReadyEvent {
 export interface CallFrameRecordingStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -3837,7 +3837,7 @@ export interface CallFrameRecordingStartedEvent {
 export interface CallFrameRecordingStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -3855,7 +3855,7 @@ export interface CallFrameRecordingStoppedEvent {
 export interface CallHLSBroadcastingFailedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of event: "call.hls_broadcasting_failed" in this case
@@ -3866,7 +3866,7 @@ export interface CallHLSBroadcastingFailedEvent {
 export interface CallHLSBroadcastingStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   hls_playlist_url: string;
 
@@ -3884,7 +3884,7 @@ export interface CallHLSBroadcastingStartedEvent {
 export interface CallHLSBroadcastingStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of event: "call.hls_broadcasting_stopped" in this case
@@ -3916,7 +3916,7 @@ export interface CallLevelEventPayload {
 export interface CallLiveStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -3932,7 +3932,7 @@ export interface CallLiveStartedEvent {
 export interface CallMemberAddedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * the members added to this call
@@ -3953,7 +3953,7 @@ export interface CallMemberAddedEvent {
 export interface CallMemberRemovedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * the list of member IDs removed from the call
@@ -3974,7 +3974,7 @@ export interface CallMemberRemovedEvent {
 export interface CallMemberUpdatedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The list of members that were updated
@@ -3995,7 +3995,7 @@ export interface CallMemberUpdatedEvent {
 export interface CallMemberUpdatedPermissionEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The list of members that were updated
@@ -4021,7 +4021,7 @@ export interface CallMemberUpdatedPermissionEvent {
 export interface CallMissedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   notify_user: boolean;
 
@@ -4054,7 +4054,7 @@ export interface CallMissedEvent {
 export interface CallModerationBlurEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The user ID whose video stream is being blurred
@@ -4075,7 +4075,7 @@ export interface CallModerationBlurEvent {
 export interface CallModerationWarningEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The warning message
@@ -4101,7 +4101,7 @@ export interface CallModerationWarningEvent {
 export interface CallNotificationEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4138,7 +4138,7 @@ export interface CallParticipantCountReportResponse {
 }
 
 export interface CallParticipantResponse {
-  joined_at: Date;
+  joined_at: number;
 
   role: string;
 
@@ -4153,7 +4153,7 @@ export interface CallParticipantResponse {
 export interface CallParticipantTimeline {
   severity: string;
 
-  timestamp: Date;
+  timestamp: number;
 
   type: string;
 
@@ -4163,7 +4163,7 @@ export interface CallParticipantTimeline {
 export interface CallReactionEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   reaction: VideoReactionResponse;
 
@@ -4174,7 +4174,7 @@ export interface CallReactionEvent {
 }
 
 export interface CallRecording {
-  end_time: Date;
+  end_time: number;
 
   filename: string;
 
@@ -4182,7 +4182,7 @@ export interface CallRecording {
 
   session_id: string;
 
-  start_time: Date;
+  start_time: number;
 
   url: string;
 }
@@ -4190,7 +4190,7 @@ export interface CallRecording {
 export interface CallRecordingFailedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -4209,7 +4209,7 @@ export interface CallRecordingFailedEvent {
 export interface CallRecordingReadyEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -4233,7 +4233,7 @@ export interface CallRecordingReadyEvent {
 export interface CallRecordingStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -4252,7 +4252,7 @@ export interface CallRecordingStartedEvent {
 export interface CallRecordingStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -4271,7 +4271,7 @@ export interface CallRecordingStoppedEvent {
 export interface CallRejectedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -4297,9 +4297,9 @@ export interface CallRejectedEvent {
 export interface CallReportResponse {
   score: number;
 
-  ended_at?: Date;
+  ended_at?: number;
 
-  started_at?: Date;
+  started_at?: number;
 }
 
 export interface CallRequest {
@@ -4338,7 +4338,7 @@ export interface CallResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   current_session_id: string;
 
@@ -4361,7 +4361,7 @@ export interface CallResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -4389,7 +4389,7 @@ export interface CallResponse {
   /**
    * Date/time when the call ended
    */
-  ended_at?: Date;
+  ended_at?: number;
 
   join_ahead_time_seconds?: number;
 
@@ -4401,7 +4401,7 @@ export interface CallResponse {
   /**
    * Date/time when the call will start
    */
-  starts_at?: Date;
+  starts_at?: number;
 
   team?: string;
 
@@ -4413,7 +4413,7 @@ export interface CallResponse {
 export interface CallRingEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4452,7 +4452,7 @@ export interface CallRtmpBroadcastFailedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Name of the given RTMP broadcast
@@ -4474,7 +4474,7 @@ export interface CallRtmpBroadcastStartedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Name of the given RTMP broadcast
@@ -4496,7 +4496,7 @@ export interface CallRtmpBroadcastStoppedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Name of the given RTMP broadcast
@@ -4520,7 +4520,7 @@ export interface CallRuleActionSequence {
 export interface CallSessionEndedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4543,7 +4543,7 @@ export interface CallSessionParticipantCountsUpdatedEvent {
 
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4561,7 +4561,7 @@ export interface CallSessionParticipantCountsUpdatedEvent {
 export interface CallSessionParticipantJoinedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4579,7 +4579,7 @@ export interface CallSessionParticipantJoinedEvent {
 export interface CallSessionParticipantLeftEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The duration participant was in the session in seconds
@@ -4611,29 +4611,29 @@ export interface CallSessionResponse {
 
   participants: Array<CallParticipantResponse>;
 
-  accepted_by: Record<string, Date>;
+  accepted_by: Record<string, number>;
 
-  missed_by: Record<string, Date>;
+  missed_by: Record<string, number>;
 
   participants_count_by_role: Record<string, number>;
 
-  rejected_by: Record<string, Date>;
+  rejected_by: Record<string, number>;
 
-  ended_at?: Date;
+  ended_at?: number;
 
-  live_ended_at?: Date;
+  live_ended_at?: number;
 
-  live_started_at?: Date;
+  live_started_at?: number;
 
-  started_at?: Date;
+  started_at?: number;
 
-  timer_ends_at?: Date;
+  timer_ends_at?: number;
 }
 
 export interface CallSessionStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4853,7 +4853,7 @@ export interface CallStatsParticipant {
 
   sessions: Array<CallStatsParticipantSession>;
 
-  latest_activity_at?: Date;
+  latest_activity_at?: number;
 
   name?: string;
 
@@ -4911,7 +4911,7 @@ export interface CallStatsParticipantSession {
 
   distance_to_sfu_kilometers?: number;
 
-  ended_at?: Date;
+  ended_at?: number;
 
   freezes_duration_ms?: number;
 
@@ -4929,7 +4929,7 @@ export interface CallStatsParticipantSession {
 
   sdk_version?: string;
 
-  started_at?: Date;
+  started_at?: number;
 
   unified_session_id?: string;
 
@@ -4941,7 +4941,7 @@ export interface CallStatsParticipantSession {
 export interface CallStatsReportReadyEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Call session ID
@@ -4975,9 +4975,9 @@ export interface CallStatsReportSummaryResponse {
 
   call_status: string;
 
-  first_stats_time: Date;
+  first_stats_time: number;
 
-  created_at?: Date;
+  created_at?: number;
 
   min_user_rating?: number;
 
@@ -4991,23 +4991,23 @@ export interface CallStatsSessionResponse {
 
   call_type: string;
 
-  generated_at: Date;
+  generated_at: number;
 
   counts: CallStatsParticipantCounts;
 
-  call_ended_at?: Date;
+  call_ended_at?: number;
 
-  call_started_at?: Date;
+  call_started_at?: number;
 }
 
 export interface CallTranscription {
-  end_time: Date;
+  end_time: number;
 
   filename: string;
 
   session_id: string;
 
-  start_time: Date;
+  start_time: number;
 
   url: string;
 }
@@ -5015,7 +5015,7 @@ export interface CallTranscription {
 export interface CallTranscriptionFailedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -5033,7 +5033,7 @@ export interface CallTranscriptionFailedEvent {
 export interface CallTranscriptionReadyEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -5051,7 +5051,7 @@ export interface CallTranscriptionReadyEvent {
 export interface CallTranscriptionStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -5064,7 +5064,7 @@ export interface CallTranscriptionStartedEvent {
 export interface CallTranscriptionStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   egress_id: string;
 
@@ -5077,7 +5077,7 @@ export interface CallTranscriptionStoppedEvent {
 export interface CallType {
   app: number;
 
-  created_at: Date;
+  created_at: number;
 
   id: number;
 
@@ -5085,7 +5085,7 @@ export interface CallType {
 
   recording_external_storage: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   notification_settings?: NotificationSettings;
 
@@ -5096,7 +5096,7 @@ export interface CallTypeResponse {
   /**
    * the time the call type was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * the name of the call type
@@ -5106,7 +5106,7 @@ export interface CallTypeResponse {
   /**
    * the time the call type was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * the permissions granted to each role
@@ -5130,7 +5130,7 @@ export interface CallTypeRuleParameters {
 export interface CallUpdatedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents a call
@@ -5151,7 +5151,7 @@ export interface CallUpdatedEvent {
 export interface CallUserFeedbackSubmittedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The rating given by the user (1-5)
@@ -5191,7 +5191,7 @@ export interface CallUserFeedbackSubmittedEvent {
 export interface CallUserMutedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   from_user_id: string;
 
@@ -5242,13 +5242,13 @@ export interface CampaignChannelTemplate {
 }
 
 export interface CampaignCompletedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   campaign?: CampaignResponse;
 }
@@ -5268,7 +5268,7 @@ export interface CampaignMessageTemplate {
 export interface CampaignResponse {
   create_channels: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   description: string;
 
@@ -5290,7 +5290,7 @@ export interface CampaignResponse {
 
   status: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   segment_ids: Array<string>;
 
@@ -5302,9 +5302,9 @@ export interface CampaignResponse {
 
   stats: CampaignStatsResponse;
 
-  scheduled_for?: Date;
+  scheduled_for?: number;
 
-  stop_at?: Date;
+  stop_at?: number;
 
   channel_template?: CampaignChannelTemplate;
 
@@ -5317,13 +5317,13 @@ export interface CampaignResponse {
 }
 
 export interface CampaignStartedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   campaign?: CampaignResponse;
 }
@@ -5333,11 +5333,11 @@ export interface CampaignStatsResponse {
 
   stats_channels_created: number;
 
-  stats_completed_at: Date;
+  stats_completed_at: number;
 
   stats_messages_sent: number;
 
-  stats_started_at: Date;
+  stats_started_at: number;
 
   stats_users_read: number;
 
@@ -5385,11 +5385,11 @@ export interface ChangeFeedVisibilityResponse {
 }
 
 export interface ChannelBatchCompletedEvent {
-  batch_created_at: Date;
+  batch_created_at: number;
 
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
   operation: string;
 
@@ -5405,7 +5405,7 @@ export interface ChannelBatchCompletedEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ChannelBatchMemberRequest {
@@ -5415,11 +5415,11 @@ export interface ChannelBatchMemberRequest {
 }
 
 export interface ChannelBatchStartedEvent {
-  batch_created_at: Date;
+  batch_created_at: number;
 
-  created_at: Date;
+  created_at: number;
 
-  finished_at: Date;
+  finished_at: number;
 
   operation: string;
 
@@ -5435,7 +5435,7 @@ export interface ChannelBatchStartedEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ChannelBatchUpdateRequest {
@@ -5507,7 +5507,7 @@ export interface ChannelConfig {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -5545,7 +5545,7 @@ export interface ChannelConfig {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -5660,7 +5660,7 @@ export interface ChannelConfigWithInfo {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -5698,7 +5698,7 @@ export interface ChannelConfigWithInfo {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -5758,7 +5758,7 @@ export interface ChannelCreatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -5794,7 +5794,7 @@ export interface ChannelCreatedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -5829,7 +5829,7 @@ export interface ChannelDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -5865,7 +5865,7 @@ export interface ChannelDeletedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -5905,7 +5905,7 @@ export interface ChannelFrozenEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -5929,7 +5929,7 @@ export interface ChannelFrozenEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ChannelGetOrCreateRequest {
@@ -5968,7 +5968,7 @@ export interface ChannelHiddenEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -6004,7 +6004,7 @@ export interface ChannelHiddenEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -6134,7 +6134,7 @@ export interface ChannelMemberResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   notifications_muted: boolean;
 
@@ -6146,38 +6146,38 @@ export interface ChannelMemberResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   custom: Record<string, any>;
 
-  archived_at?: Date;
+  archived_at?: number;
 
   /**
    * Expiration date of the ban
    */
-  ban_expires?: Date;
+  ban_expires?: number;
 
   /**
    * Whether the member's ban also applies to channels the channel's creator will create in the future (an active future channel ban by the creator targets this member)
    */
   ban_from_future_channels?: boolean;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Expiration date of the future channel ban; absent when the future channel ban is permanent
    */
-  future_channel_ban_expires?: Date;
+  future_channel_ban_expires?: number;
 
   /**
    * Date when invite was accepted
    */
-  invite_accepted_at?: Date;
+  invite_accepted_at?: number;
 
   /**
    * Date when invite was rejected
    */
-  invite_rejected_at?: Date;
+  invite_rejected_at?: number;
 
   /**
    * Whether member was invited or not
@@ -6189,7 +6189,7 @@ export interface ChannelMemberResponse {
    */
   is_moderator?: boolean;
 
-  pinned_at?: Date;
+  pinned_at?: number;
 
   /**
    * Permission level of the member in the channel (DEPRECATED: use channel_role instead). One of: member, moderator, admin, owner
@@ -6235,7 +6235,7 @@ export interface ChannelMetadata {
 
   custom: Record<string, any>;
 
-  last_message_at?: Date;
+  last_message_at?: number;
 
   member_count?: number;
 
@@ -6250,17 +6250,17 @@ export interface ChannelMute {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Date/time of mute expiration
    */
-  expires?: Date;
+  expires?: number;
 
   /**
    * Represents channel in chat
@@ -6277,7 +6277,7 @@ export interface ChannelMutedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -6286,7 +6286,7 @@ export interface ChannelMutedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The mute objects
@@ -6349,7 +6349,7 @@ export type ChannelOwnCapability =
 export interface ChannelPushPreferencesResponse {
   chat_level?: string;
 
-  disabled_until?: Date;
+  disabled_until?: number;
 
   chat_preferences?: ChatPreferencesResponse;
 }
@@ -6363,7 +6363,7 @@ export interface ChannelResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   disabled: boolean;
 
@@ -6385,7 +6385,7 @@ export interface ChannelResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Custom data for this object
@@ -6415,7 +6415,7 @@ export interface ChannelResponse {
   /**
    * Date/time of deletion
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Whether this channel is hidden by current user or not
@@ -6425,12 +6425,12 @@ export interface ChannelResponse {
   /**
    * Date since when the message history is accessible
    */
-  hide_messages_before?: Date;
+  hide_messages_before?: number;
 
   /**
    * Date of the last message sent
    */
-  last_message_at?: Date;
+  last_message_at?: number;
 
   /**
    * Number of members in the channel
@@ -6445,7 +6445,7 @@ export interface ChannelResponse {
   /**
    * Date of mute expiration
    */
-  mute_expires_at?: Date;
+  mute_expires_at?: number;
 
   /**
    * Whether this channel is muted or not
@@ -6460,7 +6460,7 @@ export interface ChannelResponse {
   /**
    * Date of the latest truncation of the channel
    */
-  truncated_at?: Date;
+  truncated_at?: number;
 
   /**
    * List of filter tags associated with the channel
@@ -6503,7 +6503,7 @@ export interface ChannelStateResponse {
 
   hidden?: boolean;
 
-  hide_messages_before?: Date;
+  hide_messages_before?: number;
 
   watcher_count?: number;
 
@@ -6553,7 +6553,7 @@ export interface ChannelStateResponseFields {
   /**
    * Messages before this date are hidden from the user
    */
-  hide_messages_before?: Date;
+  hide_messages_before?: number;
 
   /**
    * Number of channel watchers
@@ -6596,7 +6596,7 @@ export interface ChannelTruncatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -6634,7 +6634,7 @@ export interface ChannelTruncatedEvent {
 
   message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -6660,7 +6660,7 @@ export interface ChannelTypeConfig {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -6698,7 +6698,7 @@ export interface ChannelTypeConfig {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -6738,7 +6738,7 @@ export interface ChannelUnFrozenEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -6762,14 +6762,14 @@ export interface ChannelUnFrozenEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ChannelUnmutedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -6778,7 +6778,7 @@ export interface ChannelUnmutedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The mute objects
@@ -6794,7 +6794,7 @@ export interface ChannelUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -6832,7 +6832,7 @@ export interface ChannelUpdatedEvent {
 
   message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -6853,7 +6853,7 @@ export interface ChannelVisibleEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -6889,7 +6889,7 @@ export interface ChannelVisibleEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -6936,7 +6936,7 @@ export interface ChatDraftPayloadResponse {
 export interface ChatDraftResponse {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   message: ChatDraftPayloadResponse;
 
@@ -6950,7 +6950,7 @@ export interface ChatDraftResponse {
 export interface ChatMessageResponse {
   cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   deleted_reply_count: number;
 
@@ -6974,7 +6974,7 @@ export interface ChatMessageResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   attachments: Array<Attachment>;
 
@@ -6999,19 +6999,19 @@ export interface ChatMessageResponse {
 
   command?: string;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   deleted_for_me?: boolean;
 
-  message_text_updated_at?: Date;
+  message_text_updated_at?: number;
 
   mml?: string;
 
   parent_id?: string;
 
-  pin_expires?: Date;
+  pin_expires?: number;
 
-  pinned_at?: Date;
+  pinned_at?: number;
 
   poll_id?: string;
 
@@ -7124,9 +7124,9 @@ export interface ChatPreferencesResponse {
 export interface ChatReactionGroupResponse {
   count: number;
 
-  first_reaction_at: Date;
+  first_reaction_at: number;
 
-  last_reaction_at: Date;
+  last_reaction_at: number;
 
   sum_scores: number;
 
@@ -7134,7 +7134,7 @@ export interface ChatReactionGroupResponse {
 }
 
 export interface ChatReactionGroupUserResponse {
-  created_at: Date;
+  created_at: number;
 
   user_id: string;
 
@@ -7145,7 +7145,7 @@ export interface ChatReactionGroupUserResponse {
 }
 
 export interface ChatReactionResponse {
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -7153,7 +7153,7 @@ export interface ChatReactionResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
@@ -7168,15 +7168,15 @@ export interface ChatReactionResponse {
 export interface ChatReminderResponseData {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
-  remind_at?: Date;
+  remind_at?: number;
 
   message?: ChatMessageResponse;
 
@@ -7189,7 +7189,7 @@ export interface ChatReminderResponseData {
 export interface ChatSharedLocationResponseData {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   created_by_device_id: string;
 
@@ -7199,11 +7199,11 @@ export interface ChatSharedLocationResponseData {
 
   message_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
-  end_at?: Date;
+  end_at?: number;
 
   message?: ChatMessageResponse;
 }
@@ -7641,7 +7641,7 @@ export interface ClientOSDataResponse {
 export interface ClosedCaptionEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * CallClosedCaption represents a closed caption of a call.
@@ -7723,12 +7723,12 @@ export interface CollectionResponse {
   /**
    * When the collection was created
    */
-  created_at?: Date;
+  created_at?: number;
 
   /**
    * When the collection was last updated
    */
-  updated_at?: Date;
+  updated_at?: number;
 
   /**
    * ID of the user who owns this collection
@@ -7765,19 +7765,19 @@ export interface Command {
   /**
    * Date/time of creation
    */
-  created_at?: Date;
+  created_at?: number;
 
   /**
    * Date/time of the last update
    */
-  updated_at?: Date;
+  updated_at?: number;
 }
 
 export interface CommentAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -7794,7 +7794,7 @@ export interface CommentAddedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -7803,7 +7803,7 @@ export interface CommentDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -7818,7 +7818,7 @@ export interface CommentDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -7827,7 +7827,7 @@ export interface CommentReactionAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -7846,7 +7846,7 @@ export interface CommentReactionAddedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -7855,7 +7855,7 @@ export interface CommentReactionDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -7872,14 +7872,14 @@ export interface CommentReactionDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface CommentReactionUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -7898,7 +7898,7 @@ export interface CommentReactionUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -7914,7 +7914,7 @@ export interface CommentResponse {
   /**
    * When the comment was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Number of downvotes for this comment
@@ -7960,7 +7960,7 @@ export interface CommentResponse {
   /**
    * When the comment was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Number of upvotes for this comment
@@ -7990,12 +7990,12 @@ export interface CommentResponse {
   /**
    * When the comment was deleted
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * When the comment was last edited
    */
-  edited_at?: Date;
+  edited_at?: number;
 
   /**
    * ID of parent comment for nested replies
@@ -8036,7 +8036,7 @@ export interface CommentRestoredEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -8051,7 +8051,7 @@ export interface CommentRestoredEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -8060,7 +8060,7 @@ export interface CommentUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -8075,7 +8075,7 @@ export interface CommentUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -8184,7 +8184,7 @@ export interface ConfigResponse {
   /**
    * When the configuration was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for the moderation configuration
@@ -8199,7 +8199,7 @@ export interface ConfigResponse {
   /**
    * When the configuration was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   supported_video_call_harm_types: Array<string>;
 
@@ -8280,7 +8280,7 @@ export interface CoordinatesResponse {
 export interface CountByMinuteResponse {
   count: number;
 
-  start_ts: Date;
+  start_ts: number;
 }
 
 export interface Coverage {
@@ -8366,7 +8366,7 @@ export interface CreateCallTypeResponse {
   /**
    * the time the call type was created
    */
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -8378,7 +8378,7 @@ export interface CreateCallTypeResponse {
   /**
    * the time the call type was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * the permissions granted to each role
@@ -8639,7 +8639,7 @@ export interface CreateChannelTypeResponse {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -8679,7 +8679,7 @@ export interface CreateChannelTypeResponse {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -9025,7 +9025,7 @@ export interface CreateImportV2TaskRequest {
 export interface CreateImportV2TaskResponse {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Duration of the request in milliseconds
@@ -9038,7 +9038,7 @@ export interface CreateImportV2TaskResponse {
 
   state: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   settings: ImportV2TaskSettings;
 }
@@ -9503,19 +9503,19 @@ export interface CustomCheckResponse {
 }
 
 export interface CustomEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface CustomVideoEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Custom data for this object
@@ -10345,7 +10345,7 @@ export interface DeviceResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Device ID
@@ -10452,7 +10452,7 @@ export interface DraftPayloadResponse {
 export interface DraftResponse {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Contains the draft message content
@@ -10525,7 +10525,7 @@ export interface EgressHLSResponse {
 export interface EgressRTMPResponse {
   name: string;
 
-  started_at: Date;
+  started_at: number;
 
   stream_key?: string;
 
@@ -10651,12 +10651,12 @@ export interface EnrichedCollectionResponse {
   /**
    * When the collection was created
    */
-  created_at?: Date;
+  created_at?: number;
 
   /**
    * When the collection was last updated
    */
-  updated_at?: Date;
+  updated_at?: number;
 
   /**
    * ID of the user who owns this collection
@@ -10807,7 +10807,7 @@ export interface EntityCreatorResponse {
 
   banned: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Number of major actions performed on the user
@@ -10831,7 +10831,7 @@ export interface EntityCreatorResponse {
 
   shadow_banned: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -10841,21 +10841,21 @@ export interface EntityCreatorResponse {
 
   avg_response_time?: number;
 
-  ban_expires?: Date;
+  ban_expires?: number;
 
   bypass_moderation?: boolean;
 
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
-  last_active?: Date;
+  last_active?: number;
 
   name?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   devices?: Array<DeviceResponse>;
 
@@ -11130,7 +11130,7 @@ export interface FeedCreatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11149,14 +11149,14 @@ export interface FeedCreatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FeedDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11169,7 +11169,7 @@ export interface FeedDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -11179,7 +11179,7 @@ export interface FeedGroup {
 
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   default_follower_role: string;
 
@@ -11187,7 +11187,7 @@ export interface FeedGroup {
 
   group_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   activity_processors: Array<ActivityProcessorConfig>;
 
@@ -11195,9 +11195,9 @@ export interface FeedGroup {
 
   custom: Record<string, any>;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
-  last_feed_get_at?: Date;
+  last_feed_get_at?: number;
 
   activity_filter?: ActivityFilterConfig;
 
@@ -11216,7 +11216,7 @@ export interface FeedGroupChangedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11229,7 +11229,7 @@ export interface FeedGroupChangedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   feed_group?: FeedGroup;
 
@@ -11240,7 +11240,7 @@ export interface FeedGroupDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11258,14 +11258,14 @@ export interface FeedGroupDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FeedGroupResponse {
   /**
    * When the feed group was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Identifier within the group
@@ -11275,7 +11275,7 @@ export interface FeedGroupResponse {
   /**
    * When the feed group was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Role new followers of feeds in this group are given. Either a built-in (feed_follower, feed_member_viewer) or any role your app has defined. Empty means feed_follower. Applied when the follow is accepted, so a follow that starts pending picks it up on approval
@@ -11289,7 +11289,7 @@ export interface FeedGroupResponse {
   default_visibility?:
     'public' | 'visible' | 'followers' | 'members' | 'private';
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Configuration for activity processors
@@ -11327,7 +11327,7 @@ export interface FeedGroupRestoredEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11345,7 +11345,7 @@ export interface FeedGroupRestoredEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FeedGroupScope {
@@ -11380,7 +11380,7 @@ export interface FeedMemberAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11395,7 +11395,7 @@ export interface FeedMemberAddedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -11404,7 +11404,7 @@ export interface FeedMemberRemovedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11419,7 +11419,7 @@ export interface FeedMemberRemovedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -11455,7 +11455,7 @@ export interface FeedMemberResponse {
   /**
    * When the membership was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Role of the member in the feed
@@ -11471,7 +11471,7 @@ export interface FeedMemberResponse {
   /**
    * When the membership was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -11481,12 +11481,12 @@ export interface FeedMemberResponse {
   /**
    * When the invite was accepted
    */
-  invite_accepted_at?: Date;
+  invite_accepted_at?: number;
 
   /**
    * When the invite was rejected
    */
-  invite_rejected_at?: Date;
+  invite_rejected_at?: number;
 
   /**
    * Custom data for the membership
@@ -11500,7 +11500,7 @@ export interface FeedMemberUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11515,7 +11515,7 @@ export interface FeedMemberUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -11630,7 +11630,7 @@ export interface FeedResponse {
   /**
    * When the feed was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Description of the feed
@@ -11680,7 +11680,7 @@ export interface FeedResponse {
   /**
    * When the feed was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -11690,7 +11690,7 @@ export interface FeedResponse {
   /**
    * When the feed was deleted
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Visibility setting for the feed
@@ -11734,7 +11734,7 @@ export interface FeedSuggestionResponse {
   /**
    * When the feed was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Description of the feed
@@ -11784,7 +11784,7 @@ export interface FeedSuggestionResponse {
   /**
    * When the feed was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -11794,7 +11794,7 @@ export interface FeedSuggestionResponse {
   /**
    * When the feed was deleted
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   reason?: string;
 
@@ -11839,7 +11839,7 @@ export interface FeedSuggestionResponse {
 }
 
 export interface FeedUpdatedEvent {
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -11854,7 +11854,7 @@ export interface FeedUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -11868,7 +11868,7 @@ export interface FeedViewResponse {
   /**
    * When the feed view was last used
    */
-  last_used_at?: Date;
+  last_used_at?: number;
 
   /**
    * Configured activity selectors
@@ -11904,13 +11904,13 @@ export interface FeedsActivityLocation {
 }
 
 export interface FeedsBookmarkResponse {
-  created_at: Date;
+  created_at: number;
 
   object_id: string;
 
   object_type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -11923,7 +11923,7 @@ export interface FeedsBookmarkResponse {
 }
 
 export interface FeedsEnrichedCollectionResponse {
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -11931,7 +11931,7 @@ export interface FeedsEnrichedCollectionResponse {
 
   status: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
@@ -11941,7 +11941,7 @@ export interface FeedsEnrichedCollectionResponse {
 export interface FeedsFeedResponse {
   activity_count: number;
 
-  created_at: Date;
+  created_at: number;
 
   description: string;
 
@@ -11961,14 +11961,14 @@ export interface FeedsFeedResponse {
 
   pin_count: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
    */
   created_by: UserResponse;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   visibility?: string;
 
@@ -12119,19 +12119,19 @@ export interface FeedsPreferencesResponse {
 export interface FeedsReactionGroupResponse {
   count: number;
 
-  first_reaction_at: Date;
+  first_reaction_at: number;
 
-  last_reaction_at: Date;
+  last_reaction_at: number;
 }
 
 export interface FeedsReactionResponse {
   activity_id: string;
 
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User response object
@@ -12146,7 +12146,7 @@ export interface FeedsReactionResponse {
 export interface FeedsShareResponse {
   activity_id: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * User response object
@@ -12159,7 +12159,7 @@ export interface FeedsV3ActivityResponse {
 
   comment_count: number;
 
-  created_at: Date;
+  created_at: number;
 
   hidden: boolean;
 
@@ -12179,7 +12179,7 @@ export interface FeedsV3ActivityResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   visibility: string;
 
@@ -12214,11 +12214,11 @@ export interface FeedsV3ActivityResponse {
    */
   user: UserResponse;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
-  edited_at?: Date;
+  edited_at?: number;
 
-  expires_at?: Date;
+  expires_at?: number;
 
   friend_reaction_count?: number;
 
@@ -12264,7 +12264,7 @@ export interface FeedsV3CommentResponse {
 
   confidence_score: number;
 
-  created_at: Date;
+  created_at: number;
 
   downvote_count: number;
 
@@ -12282,7 +12282,7 @@ export interface FeedsV3CommentResponse {
 
   status: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   upvote_count: number;
 
@@ -12297,9 +12297,9 @@ export interface FeedsV3CommentResponse {
 
   controversy_score?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
-  edited_at?: Date;
+  edited_at?: number;
 
   parent_id?: string;
 
@@ -12443,7 +12443,7 @@ export interface FlagDetailsResponse {
 }
 
 export interface FlagFeedbackResponse {
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -12506,19 +12506,19 @@ export interface FlagRequest {
 }
 
 export interface FlagResponse {
-  created_at: Date;
+  created_at: number;
 
   created_by_automod: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
-  approved_at?: Date;
+  approved_at?: number;
 
   reason?: string;
 
-  rejected_at?: Date;
+  rejected_at?: number;
 
-  reviewed_at?: Date;
+  reviewed_at?: number;
 
   reviewed_by?: string;
 
@@ -12545,13 +12545,13 @@ export interface FlagResponse {
 }
 
 export interface FlagUpdatedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * User response object
@@ -12660,7 +12660,7 @@ export interface FollowCreatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -12675,14 +12675,14 @@ export interface FollowCreatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FollowDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -12697,7 +12697,7 @@ export interface FollowDeletedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FollowRequest {
@@ -12764,7 +12764,7 @@ export interface FollowResponse {
   /**
    * When the follow relationship was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Role of the follower (source user) in the follow relationship, as stored. A reserved name, or a role your app no longer defines, is reported as stored but evaluated as 'feed_follower'.
@@ -12786,7 +12786,7 @@ export interface FollowResponse {
   /**
    * When the follow relationship was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   source_feed: FeedResponse;
 
@@ -12795,12 +12795,12 @@ export interface FollowResponse {
   /**
    * When the follow request was accepted
    */
-  request_accepted_at?: Date;
+  request_accepted_at?: number;
 
   /**
    * When the follow request was rejected
    */
-  request_rejected_at?: Date;
+  request_rejected_at?: number;
 
   /**
    * Custom data for the follow relationship
@@ -12812,7 +12812,7 @@ export interface FollowUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   fid: string;
 
@@ -12827,7 +12827,7 @@ export interface FollowUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface FrameRecordSettings {
@@ -12879,7 +12879,7 @@ export interface FriendReactionsOptions {
 export interface FullUserResponse {
   banned: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -12901,7 +12901,7 @@ export interface FullUserResponse {
 
   unread_threads: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -12917,21 +12917,21 @@ export interface FullUserResponse {
 
   avg_response_time?: number;
 
-  ban_expires?: Date;
+  ban_expires?: number;
 
   bypass_moderation?: boolean;
 
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
-  last_active?: Date;
+  last_active?: number;
 
   name?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   latest_hidden_channels?: Array<string>;
 
@@ -12941,9 +12941,9 @@ export interface FullUserResponse {
 }
 
 export interface FutureChannelBanResponse {
-  created_at: Date;
+  created_at: number;
 
-  expires?: Date;
+  expires?: number;
 
   reason?: string;
 
@@ -12997,12 +12997,12 @@ export interface GetActiveCallsStatusResponse {
   /**
    * End time of the status period
    */
-  end_time: Date;
+  end_time: number;
 
   /**
    * Start time of the status period
    */
-  start_time: Date;
+  start_time: number;
 
   metrics?: ActiveCallsMetrics;
 
@@ -13061,7 +13061,7 @@ export interface GetCallParticipantSessionMetricsResponse {
 
   is_subscriber?: boolean;
 
-  joined_at?: Date;
+  joined_at?: number;
 
   publisher_type?: string;
 
@@ -13132,13 +13132,13 @@ export interface GetCallSessionParticipantStatsDetailsResponse {
 }
 
 export interface GetCallTypeResponse {
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
   name: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   grants: Record<string, Array<string>>;
 
@@ -13169,7 +13169,7 @@ export interface GetChannelTypeResponse {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -13212,7 +13212,7 @@ export interface GetChannelTypeResponse {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -13259,9 +13259,9 @@ export interface GetCommandResponse {
 
   set: string;
 
-  created_at?: Date;
+  created_at?: number;
 
-  updated_at?: Date;
+  updated_at?: number;
 }
 
 export interface GetCommentRepliesResponse {
@@ -13385,7 +13385,7 @@ export interface GetExternalStorageGCSResponse {
 }
 
 export interface GetExternalStorageResponse {
-  created_at: Date;
+  created_at: number;
 
   /**
    * Duration of the request in milliseconds
@@ -13394,7 +13394,7 @@ export interface GetExternalStorageResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   aws_s3?: GetExternalStorageAWSS3Response;
 
@@ -13521,7 +13521,7 @@ export interface GetImportResponse {
 export interface GetImportV2TaskResponse {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Duration of the request in milliseconds
@@ -13534,7 +13534,7 @@ export interface GetImportV2TaskResponse {
 
   state: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   settings: ImportV2TaskSettings;
 
@@ -14050,7 +14050,7 @@ export interface GetSetupSessionResponse {
 }
 
 export interface GetTaskResponse {
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -14064,7 +14064,7 @@ export interface GetTaskResponse {
    */
   task_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   error?: ErrorResult;
 
@@ -14413,7 +14413,7 @@ export interface ImportBlockListResponse {
 }
 
 export interface ImportTask {
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -14423,7 +14423,7 @@ export interface ImportTask {
 
   state: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   history: Array<ImportTaskHistory>;
 
@@ -14431,7 +14431,7 @@ export interface ImportTask {
 }
 
 export interface ImportTaskHistory {
-  created_at: Date;
+  created_at: number;
 
   next_state: string;
 
@@ -14441,7 +14441,7 @@ export interface ImportTaskHistory {
 export interface ImportV2TaskItem {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -14449,7 +14449,7 @@ export interface ImportV2TaskItem {
 
   state: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   settings: ImportV2TaskSettings;
 
@@ -14544,7 +14544,7 @@ export interface IngressAudioEncodingResponse {
 export interface IngressErrorEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Human-readable error message
@@ -14623,7 +14623,7 @@ export interface IngressSourceResponse {
 export interface IngressStartedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for this stream
@@ -14664,7 +14664,7 @@ export interface IngressStartedEvent {
 export interface IngressStoppedEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for the stream
@@ -14874,7 +14874,7 @@ export interface KickUserResponse {
 export interface KickedUserEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * User response object
@@ -14945,7 +14945,7 @@ export interface LabelResultResponse {
   /**
    * Timestamp
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * High-level harm category
@@ -15490,11 +15490,11 @@ export interface MarkReadResponseEvent {
 
   cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
-  channel_last_message_at?: Date;
+  channel_last_message_at?: number;
 
   last_read_message_id?: string;
 
@@ -15560,7 +15560,7 @@ export interface MatchedContent {
   /**
    * `content_published_at` from the contributing `/analyze` request, or server receive time when that field was omitted.
    */
-  published_at: Date;
+  published_at: number;
 
   /**
    * Content type that contributed this entry: `image` or `text`.
@@ -15591,20 +15591,20 @@ export interface MatchedContent {
 }
 
 export interface MaxStreakChangedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface MemberAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -15645,7 +15645,7 @@ export interface MemberAddedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -15661,7 +15661,7 @@ export interface MemberRemovedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -15702,7 +15702,7 @@ export interface MemberRemovedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -15729,12 +15729,12 @@ export interface MemberResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
@@ -15751,7 +15751,7 @@ export interface MemberResponse {
   /**
    * Date/time of deletion
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   role?: string;
 }
@@ -15760,7 +15760,7 @@ export interface MemberUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -15801,7 +15801,7 @@ export interface MemberUpdatedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -15851,7 +15851,7 @@ export interface MembershipLevelResponse {
   /**
    * When the membership level was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for the membership level
@@ -15871,7 +15871,7 @@ export interface MembershipLevelResponse {
   /**
    * When the membership level was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Activity tags this membership level gives access to
@@ -15939,7 +15939,7 @@ export interface MessageDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Whether the message was hard deleted
@@ -15990,7 +15990,7 @@ export interface MessageDeletedEvent {
    */
   deleted_for_me?: boolean;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16003,19 +16003,19 @@ export interface MessageDeletedEvent {
 }
 
 export interface MessageFlagResponse {
-  created_at: Date;
+  created_at: number;
 
   created_by_automod: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
-  approved_at?: Date;
+  approved_at?: number;
 
   reason?: string;
 
-  rejected_at?: Date;
+  rejected_at?: number;
 
-  reviewed_at?: Date;
+  reviewed_at?: number;
 
   custom?: Record<string, any>;
 
@@ -16048,7 +16048,7 @@ export interface MessageFlaggedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -16092,7 +16092,7 @@ export interface MessageFlaggedEvent {
    */
   reason?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16126,7 +16126,7 @@ export interface MessageHistoryEntryResponse {
 
   message_id: string;
 
-  message_updated_at: Date;
+  message_updated_at: number;
 
   message_updated_by_id: string;
 
@@ -16146,7 +16146,7 @@ export interface MessageModerationResult {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the message
@@ -16156,7 +16156,7 @@ export interface MessageModerationResult {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Whether user has bad karma
@@ -16195,7 +16195,7 @@ export interface MessageNewEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -16246,7 +16246,7 @@ export interface MessageNewEvent {
    */
   parent_author?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16346,7 +16346,7 @@ export interface MessageReadEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -16385,7 +16385,7 @@ export interface MessageReadEvent {
    */
   last_read_message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16515,7 +16515,7 @@ export interface MessageResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   deleted_reply_count: number;
 
@@ -16572,7 +16572,7 @@ export interface MessageResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Array of message attachments
@@ -16624,11 +16624,11 @@ export interface MessageResponse {
   /**
    * Date/time of deletion
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   deleted_for_me?: boolean;
 
-  message_text_updated_at?: Date;
+  message_text_updated_at?: number;
 
   /**
    * Should be empty if `text` is provided. Can only be set when using server-side API
@@ -16643,12 +16643,12 @@ export interface MessageResponse {
   /**
    * Date when pinned message expires
    */
-  pin_expires?: Date;
+  pin_expires?: number;
 
   /**
    * Date when message got pinned
    */
-  pinned_at?: Date;
+  pinned_at?: number;
 
   /**
    * Identifier of the poll to include in the message
@@ -16730,7 +16730,7 @@ export interface MessageUnblockedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -16751,7 +16751,7 @@ export interface MessageUnblockedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 }
@@ -16760,7 +16760,7 @@ export interface MessageUndeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -16801,7 +16801,7 @@ export interface MessageUndeletedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16821,7 +16821,7 @@ export interface MessageUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -16862,7 +16862,7 @@ export interface MessageUpdatedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -16885,7 +16885,7 @@ export interface MessageWithChannelResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   deleted_reply_count: number;
 
@@ -16942,7 +16942,7 @@ export interface MessageWithChannelResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Array of message attachments
@@ -16999,11 +16999,11 @@ export interface MessageWithChannelResponse {
   /**
    * Date/time of deletion
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   deleted_for_me?: boolean;
 
-  message_text_updated_at?: Date;
+  message_text_updated_at?: number;
 
   /**
    * Should be empty if `text` is provided. Can only be set when using server-side API
@@ -17018,12 +17018,12 @@ export interface MessageWithChannelResponse {
   /**
    * Date when pinned message expires
    */
-  pin_expires?: Date;
+  pin_expires?: number;
 
   /**
    * Date when message got pinned
    */
-  pinned_at?: Date;
+  pinned_at?: number;
 
   /**
    * Identifier of the poll to include in the message
@@ -17185,7 +17185,7 @@ export interface ModerationActionConfigResponse {
 }
 
 export interface ModerationAnalysisFailedEvent {
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
@@ -17209,7 +17209,7 @@ export interface ModerationAnalysisFailedEvent {
    */
   entity_type?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Echo of the request's `content_ids`, keyed by text/image label. On keyframe and caption streams every request repeats the same entity_type/entity_id/entity_creator_id, so this is what identifies the specific submission that went unscreened.
@@ -17233,7 +17233,7 @@ export interface ModerationCallResponse {
 
   cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   current_session_id: string;
 
@@ -17247,7 +17247,7 @@ export interface ModerationCallResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -17255,13 +17255,13 @@ export interface ModerationCallResponse {
 
   channel_cid?: string;
 
-  ended_at?: Date;
+  ended_at?: number;
 
   join_ahead_time_seconds?: number;
 
   routing_number?: string;
 
-  starts_at?: Date;
+  starts_at?: number;
 
   team?: string;
 
@@ -17272,7 +17272,7 @@ export interface ModerationCallResponse {
 }
 
 export interface ModerationCheckCompletedEvent {
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of entity which was moderated
@@ -17298,7 +17298,7 @@ export interface ModerationCheckCompletedEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ModerationConfig {
@@ -17347,7 +17347,7 @@ export interface ModerationCustomActionEvent {
    */
   action_id: string;
 
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -17355,7 +17355,7 @@ export interface ModerationCustomActionEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Additional options passed to the custom action
@@ -17403,7 +17403,7 @@ export interface ModerationDashboardPreferences {
 }
 
 export interface ModerationFlagResponse {
-  created_at: Date;
+  created_at: number;
 
   entity_id: string;
 
@@ -17411,13 +17411,13 @@ export interface ModerationFlagResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
   result: Array<Record<string, any>>;
 
-  content_published_at?: Date;
+  content_published_at?: number;
 
   entity_creator_id?: string;
 
@@ -17448,7 +17448,7 @@ export interface ModerationFlaggedEvent {
    */
   content_type: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the flagged content
@@ -17459,11 +17459,11 @@ export interface ModerationFlaggedEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ModerationImageAnalysisCompleteEvent {
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
@@ -17487,7 +17487,7 @@ export interface ModerationImageAnalysisCompleteEvent {
    */
   entity_type?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Review queue row ID for deep-linking into the dashboard.
@@ -17511,7 +17511,7 @@ export interface ModerationImageAnalysisCompleteEvent {
 }
 
 export interface ModerationMarkReviewedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -17519,7 +17519,7 @@ export interface ModerationMarkReviewedEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Represents any chat message
@@ -17629,7 +17629,7 @@ export interface ModerationPayloadResponse {
 }
 
 export interface ModerationQueueResponse {
-  created_at: Date;
+  created_at: number;
 
   created_by: string;
 
@@ -17643,7 +17643,7 @@ export interface ModerationQueueResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   sort: Array<Record<string, any>>;
 
@@ -17671,7 +17671,7 @@ export interface ModerationRuleInfo {
 }
 
 export interface ModerationRuleV2Response {
-  created_at: Date;
+  created_at: number;
 
   description: string;
 
@@ -17685,7 +17685,7 @@ export interface ModerationRuleV2Response {
 
   team: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   config_keys: Array<string>;
 
@@ -17703,7 +17703,7 @@ export interface ModerationRuleV2Response {
 }
 
 export interface ModerationRulesTriggeredEvent {
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the entity that triggered the rule
@@ -17731,7 +17731,7 @@ export interface ModerationRulesTriggeredEvent {
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The review queue item ID if applicable
@@ -17750,7 +17750,7 @@ export interface ModerationRulesTriggeredEvent {
 }
 
 export interface ModerationTextAnalysisCompleteEvent {
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
@@ -17774,7 +17774,7 @@ export interface ModerationTextAnalysisCompleteEvent {
    */
   entity_type?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Review queue row ID for deep-linking into the dashboard.
@@ -17956,7 +17956,7 @@ export interface NotificationFeedUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the feed
@@ -17972,7 +17972,7 @@ export interface NotificationFeedUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Aggregated activities for notification feeds
@@ -17988,7 +17988,7 @@ export interface NotificationMarkUnreadEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -18027,14 +18027,14 @@ export interface NotificationMarkUnreadEvent {
   /**
    * The time when the channel/thread was marked as unread
    */
-  last_read_at?: Date;
+  last_read_at?: number;
 
   /**
    * The ID of the last read message
    */
   last_read_message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -18156,12 +18156,12 @@ export interface NotificationStatusResponse {
   /**
    * When notifications were last read
    */
-  last_read_at?: Date;
+  last_read_at?: number;
 
   /**
    * When notifications were last seen
    */
-  last_seen_at?: Date;
+  last_seen_at?: number;
 
   /**
    * Deprecated: use is_read on each activity/group instead. IDs of activities that have been read. Capped at ~101 entries for aggregated feeds.
@@ -18219,7 +18219,7 @@ export interface NotificationThreadMessageNewEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -18271,7 +18271,7 @@ export interface NotificationThreadMessageNewEvent {
 
   parent_author?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -18406,7 +18406,7 @@ export type OwnCapability = (typeof OwnCapability)[keyof typeof OwnCapability];
 export interface OwnUserResponse {
   banned: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -18426,7 +18426,7 @@ export interface OwnUserResponse {
 
   unread_threads: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   channel_mutes: Array<ChannelMute>;
 
@@ -18440,17 +18440,17 @@ export interface OwnUserResponse {
 
   avg_response_time?: number;
 
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
-  last_active?: Date;
+  last_active?: number;
 
   name?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   blocked_user_ids?: Array<string>;
 
@@ -18510,7 +18510,7 @@ export interface ParticipantCountByMinuteResponse {
 
   min: number;
 
-  start_ts: Date;
+  start_ts: number;
 }
 
 export interface ParticipantCountOverTimeResponse {
@@ -18576,11 +18576,11 @@ export interface ParticipantSeriesSubscriptionTrackMetrics {
 export interface ParticipantSeriesTimeframe {
   max_points: number;
 
-  since: Date;
+  since: number;
 
   step_seconds: number;
 
-  until: Date;
+  until: number;
 }
 
 export interface ParticipantSeriesTrackMetrics {
@@ -18624,16 +18624,16 @@ export interface ParticipantSessionDetails {
 
   duration_in_seconds?: number;
 
-  joined_at?: Date;
+  joined_at?: number;
 
-  left_at?: Date;
+  left_at?: number;
 }
 
 export interface PendingMessageEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The method used for the pending message
@@ -18647,7 +18647,7 @@ export interface PendingMessageEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Represents channel in chat
@@ -18716,7 +18716,7 @@ export interface PerformanceAnalysisResponse {
 
   warnings: Array<string>;
 
-  last_analyzed?: Date;
+  last_analyzed?: number;
 
   scan_type?: string;
 }
@@ -18813,7 +18813,7 @@ export interface PermissionRequest {
 export interface PermissionRequestEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The list of permissions requested by the user
@@ -18849,7 +18849,7 @@ export interface PinActivityResponse {
   /**
    * When the activity was pinned
    */
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -18896,7 +18896,7 @@ export interface PlatformDataResponse {
 export interface Policy {
   action: number;
 
-  created_at: Date;
+  created_at: number;
 
   name: string;
 
@@ -18904,7 +18904,7 @@ export interface Policy {
 
   priority: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   resources: Array<string>;
 
@@ -18951,7 +18951,7 @@ export interface PolicyTestLabelDrift {
 }
 
 export interface PolicyTestResult {
-  created_at: Date;
+  created_at: number;
 
   id: number;
 
@@ -18995,7 +18995,7 @@ export interface PolicyTestRow {
 export interface PolicyTestRun {
   config_key: string;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -19011,13 +19011,13 @@ export interface PolicyTestRun {
 
   triggered_by: string;
 
-  completed_at?: Date;
+  completed_at?: number;
 
-  config_updated_at?: Date;
+  config_updated_at?: number;
 
   error_message?: string;
 
-  started_at?: Date;
+  started_at?: number;
 
   metrics?: PolicyTestRunMetrics;
 }
@@ -19056,7 +19056,7 @@ export interface PolicyTestSeedSpec {
 export interface PolicyTestSet {
   config_key: string;
 
-  created_at: Date;
+  created_at: number;
 
   created_by: string;
 
@@ -19068,7 +19068,7 @@ export interface PolicyTestSet {
 
   row_count: number;
 
-  updated_at: Date;
+  updated_at: number;
 
   team?: string;
 
@@ -19161,7 +19161,7 @@ export interface PollResponseData {
 
   answers_count: number;
 
-  created_at: Date;
+  created_at: number;
 
   created_by_id: string;
 
@@ -19173,7 +19173,7 @@ export interface PollResponseData {
 
   name: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   vote_count: number;
 
@@ -19217,7 +19217,7 @@ export interface PollVoteResponse {
 }
 
 export interface PollVoteResponseData {
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -19225,7 +19225,7 @@ export interface PollVoteResponseData {
 
   poll_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   answer_text?: string;
 
@@ -19282,13 +19282,13 @@ export interface PoorTail {
 }
 
 export interface PredefinedFilterResponse {
-  created_at: Date;
+  created_at: number;
 
   name: string;
 
   operation: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   filter: Record<string, any>;
 
@@ -19308,7 +19308,7 @@ export interface PredefinedFilterStatsResponse {
 
   max_latency_ms: number;
 
-  last_seen?: Date;
+  last_seen?: number;
 }
 
 export interface PrivacySettingsResponse {
@@ -19444,7 +19444,7 @@ export interface PushNotificationFields {
 export interface PushNotificationSettingsResponse {
   disabled?: boolean;
 
-  disabled_until?: Date;
+  disabled_until?: number;
 }
 
 export interface PushPreferenceInput {
@@ -19502,7 +19502,7 @@ export interface PushPreferencesResponse {
 
   chat_level?: string;
 
-  disabled_until?: Date;
+  disabled_until?: number;
 
   feeds_level?: string;
 
@@ -19512,13 +19512,13 @@ export interface PushPreferencesResponse {
 }
 
 export interface PushProvider {
-  created_at: Date;
+  created_at: number;
 
   name: string;
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   apn_auth_key?: string;
 
@@ -19540,7 +19540,7 @@ export interface PushProvider {
 
   description?: string;
 
-  disabled_at?: Date;
+  disabled_at?: number;
 
   disabled_reason?: string;
 
@@ -19620,13 +19620,13 @@ export interface PushProviderRequest {
 }
 
 export interface PushProviderResponse {
-  created_at: Date;
+  created_at: number;
 
   name: string;
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   apn_auth_key?: string;
 
@@ -19652,7 +19652,7 @@ export interface PushProviderResponse {
 
   description?: string;
 
-  disabled_at?: Date;
+  disabled_at?: number;
 
   disabled_reason?: string;
 
@@ -19678,7 +19678,7 @@ export interface PushProviderResponse {
 }
 
 export interface PushTemplate {
-  created_at: Date;
+  created_at: number;
 
   enable_push: boolean;
 
@@ -19694,7 +19694,7 @@ export interface PushTemplate {
     | 'feeds.follow.created'
     | 'feeds.notification_feed.updated';
 
-  updated_at: Date;
+  updated_at: number;
 
   template?: string;
 }
@@ -19703,7 +19703,7 @@ export interface PushTemplateResponse {
   /**
    * Time when the template was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Whether push notification is enabled for this event
@@ -19723,7 +19723,7 @@ export interface PushTemplateResponse {
   /**
    * Time when the template was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * The push notification template
@@ -19931,13 +19931,13 @@ export interface QueryBannedUsersPayload {
    */
   filter_conditions: Record<string, any>;
 
-  created_at_after?: Date;
+  created_at_after?: number;
 
-  created_at_after_or_equal?: Date;
+  created_at_after_or_equal?: number;
 
-  created_at_before?: Date;
+  created_at_before?: number;
 
-  created_at_before_or_equal?: Date;
+  created_at_before_or_equal?: number;
 
   /**
    * Whether to exclude expired bans or not
@@ -20165,9 +20165,9 @@ export interface QueryCallSessionParticipantStatsResponse {
 
   counts: CallStatsParticipantCounts;
 
-  call_ended_at?: Date;
+  call_ended_at?: number;
 
-  call_started_at?: Date;
+  call_started_at?: number;
 
   next?: string;
 
@@ -20242,17 +20242,17 @@ export interface QueryCallStatsMapResponse {
 
   counts: CallStatsParticipantCounts;
 
-  call_ended_at?: Date;
+  call_ended_at?: number;
 
-  call_started_at?: Date;
+  call_started_at?: number;
 
   data_source?: string;
 
-  end_time?: Date;
+  end_time?: number;
 
-  generated_at?: Date;
+  generated_at?: number;
 
-  start_time?: Date;
+  start_time?: number;
 
   publishers?: CallStatsMapPublishers;
 
@@ -20635,7 +20635,7 @@ export interface QueryFeedModerationTemplate {
   /**
    * When the template was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Name of the moderation template
@@ -20645,7 +20645,7 @@ export interface QueryFeedModerationTemplate {
   /**
    * When the template was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Configuration for a feeds moderation template
@@ -20770,13 +20770,13 @@ export interface QueryFollowsResponse {
 }
 
 export interface QueryFutureChannelBansPayload {
-  created_at_after?: Date;
+  created_at_after?: number;
 
-  created_at_after_or_equal?: Date;
+  created_at_after_or_equal?: number;
 
-  created_at_before?: Date;
+  created_at_before?: number;
 
-  created_at_before_or_equal?: Date;
+  created_at_before_or_equal?: number;
 
   /**
    * Whether to exclude expired bans or not
@@ -20869,13 +20869,13 @@ export interface QueryLabelResultsResponse {
 export interface QueryMembersPayload {
   type: string;
 
-  created_at_after?: Date;
+  created_at_after?: number;
 
-  created_at_after_or_equal?: Date;
+  created_at_after_or_equal?: number;
 
-  created_at_before?: Date;
+  created_at_before?: number;
 
-  created_at_before_or_equal?: Date;
+  created_at_before_or_equal?: number;
 
   id?: string;
 
@@ -21900,15 +21900,15 @@ export interface RawRecordingSettingsResponse {
 export interface Reaction {
   activity_id: string;
 
-  created_at: Date;
+  created_at: number;
 
   kind: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   id?: string;
 
@@ -21937,7 +21937,7 @@ export interface ReactionDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -21978,7 +21978,7 @@ export interface ReactionDeletedEvent {
 
   message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -22011,12 +22011,12 @@ export interface ReactionGroupResponse {
   /**
    * FirstReactionAt is the time of the first reaction of this type. This is the same also if all reaction of this type are deleted, because if someone will react again with the same type, will be preserved the sorting.
    */
-  first_reaction_at: Date;
+  first_reaction_at: number;
 
   /**
    * LastReactionAt is the time of the last reaction of this type.
    */
-  last_reaction_at: Date;
+  last_reaction_at: number;
 
   /**
    * SumScores is the sum of all scores of reactions of this type. Medium allows you to clap articles more than once and shows the sum of all claps from all users. For example, you can send `clap` x5 using `score: 5`.
@@ -22033,7 +22033,7 @@ export interface ReactionGroupUserResponse {
   /**
    * The time when the user reacted.
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the user who reacted.
@@ -22050,7 +22050,7 @@ export interface ReactionNewEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Represents channel in chat
@@ -22091,7 +22091,7 @@ export interface ReactionNewEvent {
 
   message_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -22150,7 +22150,7 @@ export interface ReactionResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Message ID
@@ -22170,7 +22170,7 @@ export interface ReactionResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User ID
@@ -22192,7 +22192,7 @@ export interface ReactionUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
@@ -22238,7 +22238,7 @@ export interface ReactionUpdatedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team ID
@@ -22323,7 +22323,7 @@ export interface ReadReceiptsResponse {
 }
 
 export interface ReadStateResponse {
-  last_read: Date;
+  last_read: number;
 
   unread_messages: number;
 
@@ -22332,7 +22332,7 @@ export interface ReadStateResponse {
    */
   user: UserResponse;
 
-  last_delivered_at?: Date;
+  last_delivered_at?: number;
 
   last_delivered_message_id?: string;
 
@@ -22439,7 +22439,7 @@ export interface ReminderCreatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the message for which the reminder was created
@@ -22465,7 +22465,7 @@ export interface ReminderCreatedEvent {
    */
   parent_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ReminderDeletedEvent {
@@ -22477,7 +22477,7 @@ export interface ReminderDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the message for which the reminder was created
@@ -22503,7 +22503,7 @@ export interface ReminderDeletedEvent {
    */
   parent_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ReminderNotificationEvent {
@@ -22515,7 +22515,7 @@ export interface ReminderNotificationEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the message for which the reminder was created
@@ -22538,21 +22538,21 @@ export interface ReminderNotificationEvent {
 
   parent_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ReminderResponseData {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   message_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
-  remind_at?: Date;
+  remind_at?: number;
 
   /**
    * Represents channel in chat
@@ -22579,7 +22579,7 @@ export interface ReminderUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the message for which the reminder was created
@@ -22605,7 +22605,7 @@ export interface ReminderUpdatedEvent {
    */
   parent_id?: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface RemoveUserGroupMembersRequest {
@@ -22843,7 +22843,7 @@ export interface RestoreUsersRequest {
 export interface RetentionPolicy {
   app_pk: number;
 
-  enabled_at: Date;
+  enabled_at: number;
 
   policy: string;
 
@@ -22861,13 +22861,13 @@ export interface RetentionRunResponse {
 }
 
 export interface ReviewQueueItemNewEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The flags associated with this review queue item
@@ -22888,7 +22888,7 @@ export interface ReviewQueueItemResponse {
   /**
    * When the item was created
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * ID of the entity being reviewed
@@ -22937,7 +22937,7 @@ export interface ReviewQueueItemResponse {
   /**
    * When the item was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Moderation actions taken
@@ -22962,7 +22962,7 @@ export interface ReviewQueueItemResponse {
   /**
    * When the review was completed
    */
-  completed_at?: Date;
+  completed_at?: number;
 
   /**
    * Highest per-label confidence (0-1) any provider reported across the item's flags; absent when no flag carried one
@@ -22979,7 +22979,7 @@ export interface ReviewQueueItemResponse {
   /**
    * When the item was escalated
    */
-  escalated_at?: Date;
+  escalated_at?: number;
 
   /**
    * ID of the moderator who escalated the item
@@ -22989,7 +22989,7 @@ export interface ReviewQueueItemResponse {
   /**
    * When the item was reviewed
    */
-  reviewed_at?: Date;
+  reviewed_at?: number;
 
   /**
    * Teams associated with this item
@@ -23030,13 +23030,13 @@ export interface ReviewQueueItemResponse {
 }
 
 export interface ReviewQueueItemUpdatedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The flags associated with this review queue item
@@ -23053,7 +23053,7 @@ export interface RevisionHistoryResponse {
 
   actor_type: string;
 
-  created_at: Date;
+  created_at: number;
 
   object_id: string;
 
@@ -23124,7 +23124,7 @@ export interface Role {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Whether this is a custom role or built-in
@@ -23139,7 +23139,7 @@ export interface Role {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * List of scopes where this role is currently present. `.app` means that role is present in app-level grants
@@ -23579,7 +23579,7 @@ export interface SIPInboundRoutingRuleResponse {
   /**
    * Creation timestamp
    */
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -23596,7 +23596,7 @@ export interface SIPInboundRoutingRuleResponse {
   /**
    * Last update timestamp
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * List of called numbers
@@ -23687,7 +23687,7 @@ export interface SIPTrunkResponse {
   /**
    * Creation timestamp
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique identifier for the SIP trunk
@@ -23707,7 +23707,7 @@ export interface SIPTrunkResponse {
   /**
    * Last update timestamp
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * The URI for the SIP trunk
@@ -23840,7 +23840,7 @@ export interface SearchResult {
 export interface SearchResultMessage {
   cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   deleted_reply_count: number;
 
@@ -23864,7 +23864,7 @@ export interface SearchResultMessage {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   attachments: Array<Attachment>;
 
@@ -23889,19 +23889,19 @@ export interface SearchResultMessage {
 
   command?: string;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   deleted_for_me?: boolean;
 
-  message_text_updated_at?: Date;
+  message_text_updated_at?: number;
 
   mml?: string;
 
   parent_id?: string;
 
-  pin_expires?: Date;
+  pin_expires?: number;
 
-  pinned_at?: Date;
+  pinned_at?: number;
 
   poll_id?: string;
 
@@ -23998,7 +23998,7 @@ export interface Segment {
 
   all_users: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -24008,9 +24008,9 @@ export interface Segment {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   description?: string;
 
@@ -24024,9 +24024,9 @@ export interface SegmentResponse {
 
   all_users: boolean;
 
-  created_at: Date;
+  created_at: number;
 
-  deleted_at: Date;
+  deleted_at: number;
 
   description: string;
 
@@ -24038,7 +24038,7 @@ export interface SegmentResponse {
 
   type: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   filter: Record<string, any>;
 }
@@ -24046,7 +24046,7 @@ export interface SegmentResponse {
 export interface SegmentTargetResponse {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   segment_id: string;
 
@@ -24236,7 +24236,7 @@ export interface SessionWarningResponse {
 
   warning: string;
 
-  time?: Date;
+  time?: number;
 }
 
 export interface SetRetentionPolicyRequest {
@@ -24255,17 +24255,17 @@ export interface SetRetentionPolicyResponse {
 }
 
 export interface SetupSession {
-  created_at: Date;
+  created_at: number;
 
   current_step: string;
 
   status: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   setup_data: Record<string, any>;
 
-  completed_at?: Date;
+  completed_at?: number;
 }
 
 export interface ShadowBlockActionRequestPayload {
@@ -24284,7 +24284,7 @@ export interface ShareResponse {
   /**
    * When the share occurred
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * User response object
@@ -24311,7 +24311,7 @@ export interface SharedLocationResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Device ID that created the live location
@@ -24338,7 +24338,7 @@ export interface SharedLocationResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * User ID
@@ -24348,7 +24348,7 @@ export interface SharedLocationResponse {
   /**
    * Time when the live location expires
    */
-  end_at?: Date;
+  end_at?: number;
 
   /**
    * Represents channel in chat
@@ -24364,7 +24364,7 @@ export interface SharedLocationResponse {
 export interface SharedLocationResponseData {
   channel_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   created_by_device_id: string;
 
@@ -24374,11 +24374,11 @@ export interface SharedLocationResponseData {
 
   message_id: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   user_id: string;
 
-  end_at?: Date;
+  end_at?: number;
 
   /**
    * Represents channel in chat
@@ -24813,7 +24813,7 @@ export interface StoriesFeedUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The ID of the feed
@@ -24829,7 +24829,7 @@ export interface StoriesFeedUpdatedEvent {
 
   feed_visibility?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Individual activities for stories feeds
@@ -25222,18 +25222,18 @@ export interface ThreadParticipant {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
-  last_read_at: Date;
+  last_read_at: number;
 
   custom: Record<string, any>;
 
-  last_thread_message_at?: Date;
+  last_thread_message_at?: number;
 
   /**
    * Left Thread At is the time when the user left the thread
    */
-  left_thread_at?: Date;
+  left_thread_at?: number;
 
   /**
    * Thead ID is unique string identifier of the thread
@@ -25265,7 +25265,7 @@ export interface ThreadResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Created By User ID
@@ -25295,7 +25295,7 @@ export interface ThreadResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Custom data for this object
@@ -25305,12 +25305,12 @@ export interface ThreadResponse {
   /**
    * Deleted At
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Last Message At
    */
-  last_message_at?: Date;
+  last_message_at?: number;
 
   /**
    * Thread Participants
@@ -25347,7 +25347,7 @@ export interface ThreadStateResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Created By User ID
@@ -25377,7 +25377,7 @@ export interface ThreadStateResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   latest_replies: Array<MessageResponse>;
 
@@ -25389,12 +25389,12 @@ export interface ThreadStateResponse {
   /**
    * Deleted At
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   /**
    * Last Message At
    */
-  last_message_at?: Date;
+  last_message_at?: number;
 
   read?: Array<ReadStateResponse>;
 
@@ -25422,7 +25422,7 @@ export interface ThreadStateResponse {
 }
 
 export interface ThreadUpdatedEvent {
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -25434,7 +25434,7 @@ export interface ThreadUpdatedEvent {
 
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   thread?: ThreadResponse;
 }
@@ -25444,7 +25444,7 @@ export interface ThreadedCommentResponse {
 
   confidence_score: number;
 
-  created_at: Date;
+  created_at: number;
 
   downvote_count: number;
 
@@ -25466,7 +25466,7 @@ export interface ThreadedCommentResponse {
 
   status: 'active' | 'deleted' | 'removed' | 'hidden' | 'shadow_blocked';
 
-  updated_at: Date;
+  updated_at: number;
 
   upvote_count: number;
 
@@ -25481,9 +25481,9 @@ export interface ThreadedCommentResponse {
 
   controversy_score?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
-  edited_at?: Date;
+  edited_at?: number;
 
   parent_id?: string;
 
@@ -26057,7 +26057,7 @@ export interface UnblockUsersResponse {
 export interface UnblockedUserEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * User response object
@@ -26231,7 +26231,7 @@ export interface UnreadCountsBatchResponse {
 export interface UnreadCountsChannel {
   channel_id: string;
 
-  last_read: Date;
+  last_read: number;
 
   unread_count: number;
 }
@@ -26259,7 +26259,7 @@ export interface UnreadCountsResponse {
 }
 
 export interface UnreadCountsThread {
-  last_read: Date;
+  last_read: number;
 
   last_read_message_id: string;
 
@@ -26785,7 +26785,7 @@ export interface UpdateCallTypeResponse {
   /**
    * the time the call type was created
    */
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -26797,7 +26797,7 @@ export interface UpdateCallTypeResponse {
   /**
    * the time the call type was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * the permissions granted to each role
@@ -27071,7 +27071,7 @@ export interface UpdateChannelTypeResponse {
 
   count_messages: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   custom_events: boolean;
 
@@ -27111,7 +27111,7 @@ export interface UpdateChannelTypeResponse {
 
   typing_events: boolean;
 
-  updated_at: Date;
+  updated_at: number;
 
   uploads: boolean;
 
@@ -28162,7 +28162,7 @@ export interface UpdateUsersResponse {
 export interface UpdatedCallPermissionsEvent {
   call_cid: string;
 
-  created_at: Date;
+  created_at: number;
 
   /**
    * The capabilities of the current user
@@ -28560,7 +28560,7 @@ export interface UpsertModerationTemplateResponse {
   /**
    * When the template was created
    */
-  created_at: Date;
+  created_at: number;
 
   duration: string;
 
@@ -28572,7 +28572,7 @@ export interface UpsertModerationTemplateResponse {
   /**
    * When the template was last updated
    */
-  updated_at: Date;
+  updated_at: number;
 
   /**
    * Configuration for a feeds moderation template
@@ -28719,7 +28719,7 @@ export interface UserBannedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -28752,14 +28752,14 @@ export interface UserBannedEvent {
   /**
    * The expiration date of the ban
    */
-  expiration?: Date;
+  expiration?: number;
 
   /**
    * The reason for the ban
    */
   reason?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * ID of the review queue item (flagged message) that triggered the ban, if the ban was applied from the moderation review queue
@@ -28803,7 +28803,7 @@ export interface UserDeactivatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -28814,7 +28814,7 @@ export interface UserDeactivatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   created_by?: UserResponseCommonFields;
 }
@@ -28823,7 +28823,7 @@ export interface UserDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The type of deletion that was used for the user's conversations. One of: hard, soft, pruning, (empty string)
@@ -28864,7 +28864,7 @@ export interface UserDeletedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface UserFeedbackReport {
@@ -28901,7 +28901,7 @@ export interface UserFlaggedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The reason for the flag
@@ -28920,7 +28920,7 @@ export interface UserFlaggedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Custom data
@@ -28933,13 +28933,13 @@ export interface UserFlaggedEvent {
 export interface UserGroup {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
   name: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   created_by?: string;
 
@@ -28954,7 +28954,7 @@ export interface UserGroupCreatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -28963,7 +28963,7 @@ export interface UserGroupCreatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 
@@ -28974,7 +28974,7 @@ export interface UserGroupDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -28983,7 +28983,7 @@ export interface UserGroupDeletedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 
@@ -28993,7 +28993,7 @@ export interface UserGroupDeletedEvent {
 export interface UserGroupMember {
   app_pk: number;
 
-  created_at: Date;
+  created_at: number;
 
   group_id: string;
 
@@ -29006,7 +29006,7 @@ export interface UserGroupMemberAddedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The user IDs that were added
@@ -29020,7 +29020,7 @@ export interface UserGroupMemberAddedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 
@@ -29031,7 +29031,7 @@ export interface UserGroupMemberRemovedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The user IDs that were removed
@@ -29045,7 +29045,7 @@ export interface UserGroupMemberRemovedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 
@@ -29053,13 +29053,13 @@ export interface UserGroupMemberRemovedEvent {
 }
 
 export interface UserGroupResponse {
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
   name: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   created_by?: string;
 
@@ -29074,7 +29074,7 @@ export interface UserGroupUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29083,7 +29083,7 @@ export interface UserGroupUpdatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   user?: UserResponseCommonFields;
 
@@ -29122,7 +29122,7 @@ export interface UserMessagesDeletedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29157,7 +29157,7 @@ export interface UserMessagesDeletedEvent {
    */
   hard_delete?: boolean;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The team of the channel where the target user's messages were deleted
@@ -29168,11 +29168,11 @@ export interface UserMessagesDeletedEvent {
 }
 
 export interface UserMuteResponse {
-  created_at: Date;
+  created_at: number;
 
-  updated_at: Date;
+  updated_at: number;
 
-  expires?: Date;
+  expires?: number;
 
   /**
    * User response object
@@ -29189,7 +29189,7 @@ export interface UserMutedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29200,7 +29200,7 @@ export interface UserMutedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The target users that were muted
@@ -29228,7 +29228,7 @@ export interface UserReactivatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29239,7 +29239,7 @@ export interface UserReactivatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   created_by?: UserResponseCommonFields;
 }
@@ -29296,7 +29296,7 @@ export interface UserResponse {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * Unique user identifier
@@ -29328,7 +29328,7 @@ export interface UserResponse {
   /**
    * Date/time of the last update
    */
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -29347,26 +29347,26 @@ export interface UserResponse {
   /**
    * Date when ban expires
    */
-  ban_expires?: Date;
+  ban_expires?: number;
 
   bypass_moderation?: boolean;
 
   /**
    * Date of deactivation
    */
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
   /**
    * Date/time of deletion
    */
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
   /**
    * Date of last activity
    */
-  last_active?: Date;
+  last_active?: number;
 
   /**
    * Optional name of user
@@ -29376,7 +29376,7 @@ export interface UserResponse {
   /**
    * Revocation date for tokens
    */
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   /**
    * List of devices user is using
@@ -29393,7 +29393,7 @@ export interface UserResponse {
 export interface UserResponseCommonFields {
   banned: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -29403,7 +29403,7 @@ export interface UserResponseCommonFields {
 
   role: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -29413,17 +29413,17 @@ export interface UserResponseCommonFields {
 
   avg_response_time?: number;
 
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
-  last_active?: Date;
+  last_active?: number;
 
   name?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   teams_role?: Record<string, string>;
 }
@@ -29431,7 +29431,7 @@ export interface UserResponseCommonFields {
 export interface UserResponsePrivacyFields {
   banned: boolean;
 
-  created_at: Date;
+  created_at: number;
 
   id: string;
 
@@ -29441,7 +29441,7 @@ export interface UserResponsePrivacyFields {
 
   role: string;
 
-  updated_at: Date;
+  updated_at: number;
 
   blocked_user_ids: Array<string>;
 
@@ -29451,19 +29451,19 @@ export interface UserResponsePrivacyFields {
 
   avg_response_time?: number;
 
-  deactivated_at?: Date;
+  deactivated_at?: number;
 
-  deleted_at?: Date;
+  deleted_at?: number;
 
   image?: string;
 
   invisible?: boolean;
 
-  last_active?: Date;
+  last_active?: number;
 
   name?: string;
 
-  revoke_tokens_issued_before?: Date;
+  revoke_tokens_issued_before?: number;
 
   privacy_settings?: PrivacySettingsResponse;
 
@@ -29484,7 +29484,7 @@ export interface UserUnbannedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29514,7 +29514,7 @@ export interface UserUnbannedEvent {
    */
   cid?: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * Whether the target user was shadow unbanned
@@ -29535,7 +29535,7 @@ export interface UserUnmutedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29546,7 +29546,7 @@ export interface UserUnmutedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 
   /**
    * The target users that were unmuted
@@ -29560,7 +29560,7 @@ export interface UserUnreadReminderEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   /**
    * The channels with unread messages
@@ -29576,14 +29576,14 @@ export interface UserUnreadReminderEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface UserUpdatedEvent {
   /**
    * Date/time of creation
    */
-  created_at: Date;
+  created_at: number;
 
   custom: Record<string, any>;
 
@@ -29594,7 +29594,7 @@ export interface UserUpdatedEvent {
    */
   type: string;
 
-  received_at?: Date;
+  received_at?: number;
 }
 
 export interface ValidateExternalStorageResponse {
@@ -29965,7 +29965,7 @@ export interface WHIPIngress {
 }
 
 export interface WSEvent {
-  created_at: Date;
+  created_at: number;
 
   type: string;
 
@@ -29975,7 +29975,7 @@ export interface WSEvent {
 
   channel_id?: string;
 
-  channel_last_message_at?: Date;
+  channel_last_message_at?: number;
 
   channel_type?: string;
 
