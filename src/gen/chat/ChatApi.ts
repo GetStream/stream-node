@@ -391,6 +391,8 @@ export class ChatApi {
     const body = {
       operation: request?.operation,
       filter: request?.filter,
+      hide_history_before: request?.hide_history_before,
+      synchronous: request?.synchronous,
       custom_unset: request?.custom_unset,
       members: request?.members,
       custom_set: request?.custom_set,
@@ -419,6 +421,7 @@ export class ChatApi {
     const body = {
       cids: request?.cids,
       hard_delete: request?.hard_delete,
+      skip_truncate: request?.skip_truncate,
     };
 
     const response = await this.apiClient.sendRequest<
@@ -551,9 +554,11 @@ export class ChatApi {
     type: string;
     id: string;
     hard_delete?: boolean;
+    skip_truncate?: boolean;
   }): Promise<StreamResponse<DeleteChannelResponse>> {
     const queryParams = {
       hard_delete: request?.hard_delete,
+      skip_truncate: request?.skip_truncate,
     };
     const pathParams = {
       type: request?.type,

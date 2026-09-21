@@ -54,6 +54,7 @@ import {
   DeleteFeedViewResponse,
   DeleteFeedsBatchRequest,
   DeleteFeedsBatchResponse,
+  DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
   FollowBatchRequest,
   FollowBatchResponse,
@@ -174,6 +175,8 @@ import {
   UpsertActivitiesResponse,
   UpsertCollectionsRequest,
   UpsertCollectionsResponse,
+  UpsertUserInterestsRequest,
+  UpsertUserInterestsResponse,
 } from '../models';
 import { decoders } from '../model-decoders/decoders';
 
@@ -726,6 +729,7 @@ export class FeedsApi {
     id: string;
     comment_sort?: string;
     comment_limit?: number;
+    skip_own_followings?: boolean;
     user_id?: string;
     language?: string;
     translate_text?: boolean;
@@ -733,6 +737,7 @@ export class FeedsApi {
     const queryParams = {
       comment_sort: request?.comment_sort,
       comment_limit: request?.comment_limit,
+      skip_own_followings: request?.skip_own_followings,
       user_id: request?.user_id,
       language: request?.language,
       translate_text: request?.translate_text,
@@ -1720,6 +1725,7 @@ export class FeedsApi {
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       activity_filter: request?.activity_filter,
+      activity_marks: request?.activity_marks,
       activity_processing: request?.activity_processing,
       aggregation: request?.aggregation,
       custom: request?.custom,
@@ -2282,6 +2288,7 @@ export class FeedsApi {
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       activity_filter: request?.activity_filter,
+      activity_marks: request?.activity_marks,
       activity_processing: request?.activity_processing,
       aggregation: request?.aggregation,
       custom: request?.custom,
@@ -2319,6 +2326,7 @@ export class FeedsApi {
       activity_processors: request?.activity_processors,
       activity_selectors: request?.activity_selectors,
       activity_filter: request?.activity_filter,
+      activity_marks: request?.activity_marks,
       activity_processing: request?.activity_processing,
       aggregation: request?.aggregation,
       custom: request?.custom,
@@ -2633,6 +2641,8 @@ export class FeedsApi {
     ios?: boolean;
     web?: boolean;
     unity?: boolean;
+    unity_desktop?: boolean;
+    unity_console?: boolean;
     server_side?: boolean;
   }): Promise<StreamResponse<GetFeedsRateLimitsResponse>> {
     const queryParams = {
@@ -2641,6 +2651,8 @@ export class FeedsApi {
       ios: request?.ios,
       web: request?.web,
       unity: request?.unity,
+      unity_desktop: request?.unity_desktop,
+      unity_console: request?.unity_console,
       server_side: request?.server_side,
     };
 
@@ -3184,6 +3196,31 @@ export class FeedsApi {
     return { ...response.body, metadata: response.metadata };
   }
 
+  async deleteUserInterests(request: {
+    user_id: string;
+    tags: Array<string>;
+  }): Promise<StreamResponse<DeleteUserInterestsResponse>> {
+    const queryParams = {
+      tags: request?.tags,
+    };
+    const pathParams = {
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteUserInterestsResponse>
+    >(
+      'DELETE',
+      '/api/v2/feeds/users/{user_id}/interests',
+      pathParams,
+      queryParams,
+    );
+
+    decoders['DeleteUserInterestsResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
   async getUserInterests(request: {
     user_id: string;
     limit?: number;
@@ -3205,6 +3242,32 @@ export class FeedsApi {
     );
 
     decoders['GetUserInterestsResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async upsertUserInterests(
+    request: UpsertUserInterestsRequest & { user_id: string },
+  ): Promise<StreamResponse<UpsertUserInterestsResponse>> {
+    const pathParams = {
+      user_id: request?.user_id,
+    };
+    const body = {
+      interests: request?.interests,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<UpsertUserInterestsResponse>
+    >(
+      'PUT',
+      '/api/v2/feeds/users/{user_id}/interests',
+      pathParams,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['UpsertUserInterestsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }
