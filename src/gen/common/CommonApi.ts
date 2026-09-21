@@ -1257,7 +1257,11 @@ export class CommonApi {
   async getPollOption(request: {
     poll_id: string;
     option_id: string;
+    user_id?: string;
   }): Promise<StreamResponse<PollOptionResponse>> {
+    const queryParams = {
+      user_id: request?.user_id,
+    };
     const pathParams = {
       poll_id: request?.poll_id,
       option_id: request?.option_id,
@@ -1269,7 +1273,7 @@ export class CommonApi {
       'GET',
       '/api/v2/polls/{poll_id}/options/{option_id}',
       pathParams,
-      undefined,
+      queryParams,
     );
 
     decoders['PollOptionResponse']?.(response.body);
@@ -1440,6 +1444,8 @@ export class CommonApi {
     ios?: boolean;
     web?: boolean;
     unity?: boolean;
+    unity_desktop?: boolean;
+    unity_console?: boolean;
     endpoints?: string;
   }): Promise<StreamResponse<GetRateLimitsResponse>> {
     const queryParams = {
@@ -1448,6 +1454,8 @@ export class CommonApi {
       ios: request?.ios,
       web: request?.web,
       unity: request?.unity,
+      unity_desktop: request?.unity_desktop,
+      unity_console: request?.unity_console,
       endpoints: request?.endpoints,
     };
 
