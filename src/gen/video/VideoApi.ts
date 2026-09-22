@@ -783,6 +783,7 @@ export class VideoApi {
     const body = {
       video: request?.video,
       members_ids: request?.members_ids,
+      custom: request?.custom,
     };
 
     const response = await this.apiClient.sendRequest<
