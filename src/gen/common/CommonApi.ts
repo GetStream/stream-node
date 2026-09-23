@@ -1024,6 +1024,7 @@ export class CommonApi {
       id: request?.id,
       is_closed: request?.is_closed,
       max_votes_allowed: request?.max_votes_allowed,
+      team: request?.team,
       user_id: request?.user_id,
       voting_visibility: request?.voting_visibility,
       options: request?.options,

@@ -1868,15 +1868,6 @@ decoders['CheckResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
-decoders['ClientEvent'] = (input?: { [key: string]: any }) => {
-  const typeMappings: TypeMapping = {
-    previously_connected_timestamp: { type: 'DatetimeType', isSingle: true },
-
-    timestamp: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders['ClosedCaptionEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
