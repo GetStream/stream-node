@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.7](https://github.com/GetStream/stream-node/compare/v0.8.6...v0.8.7) (2026-09-21)
+
+
+### Features
+
+* **feeds:** add reaction write outcome fields ([#350](https://github.com/GetStream/stream-node/issues/350)) ([70d6cbb](https://github.com/GetStream/stream-node/commit/70d6cbb6428c1b6e48cd5571b03c244f4250e0ec))
+* update to API spec v238.16.2 ([#348](https://github.com/GetStream/stream-node/issues/348)) ([11ceeda](https://github.com/GetStream/stream-node/commit/11ceedad5fcfb7564436a3efd9a39425c1d91697))
+
 ## [0.8.6](https://github.com/GetStream/stream-node/compare/v0.8.5...v0.8.6) (2026-09-07)
 
 
