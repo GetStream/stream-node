@@ -1257,6 +1257,7 @@ export class FeedsApi {
     const body = {
       filter: request?.filter,
       id_around: request?.id_around,
+      include_soft_deleted_comments: request?.include_soft_deleted_comments,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
