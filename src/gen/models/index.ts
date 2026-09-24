@@ -15601,6 +15601,10 @@ export interface QueryCommentsRequest {
    */
   id_around?: string;
   /**
+   * When true, include soft-deleted comments in the result. Server-side only, and requires an object_id filter. Returns comments deleted by any path, including user-data deletion. Moderation-actioned comments (removed, hidden) remain excluded, and comments whose parent activity is itself deleted are not returned.
+   */
+  include_soft_deleted_comments?: boolean;
+  /**
    * Maximum number of comments to return
    */
   limit?: number;
