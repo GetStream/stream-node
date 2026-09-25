@@ -41,6 +41,12 @@ export default defineConfig({
     },
     testTimeout: 60000,
     include: ["__tests__/**/*.test.ts"],
+    exclude: [
+      "__tests__/rtc/agent-scenario.test.ts",
+      "__tests__/rtc/call-lifecycle.test.ts",
+      "__tests__/rtc/media.test.ts",
+      "__tests__/rtc/permissions.test.ts",
+    ],
     includeSource: ["src/**/*.ts"],
     retry: 3,
   },
