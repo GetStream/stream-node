@@ -3023,6 +3023,15 @@ decoders['GetFeedViewResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['GetFeedsRetentionPolicyResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    policies: { type: 'RetentionPolicy', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['GetFollowSuggestionsResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     suggestions: { type: 'FeedSuggestionResponse', isSingle: false },
@@ -4879,6 +4888,8 @@ decoders['ReminderResponseData'] = (input?: { [key: string]: any }) => {
 
     updated_at: { type: 'DatetimeType', isSingle: true },
 
+    expires_at: { type: 'DatetimeType', isSingle: true },
+
     remind_at: { type: 'DatetimeType', isSingle: true },
 
     channel: { type: 'ChannelResponse', isSingle: true },
@@ -5186,6 +5197,15 @@ decoders['SendReactionResponse'] = (input?: { [key: string]: any }) => {
 decoders['SessionWarningResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     time: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['SetFeedsRetentionPolicyResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    policy: { type: 'RetentionPolicy', isSingle: true },
   };
   return decode(typeMappings, input);
 };
