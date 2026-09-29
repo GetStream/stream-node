@@ -816,6 +816,10 @@ export interface ActivityResponse {
    */
   text?: string;
   /**
+   * Number of top-level comments (comments directly on the activity, excluding replies). Only returned by GetActivity when include_top_level_comment_count=true; never set on feed reads or events. Same status/deletion rules as comment_count; not adjusted per viewer.
+   */
+  top_level_comment_count?: number;
+  /**
    * If visibility is 'tag', this is the tag name
    */
   visibility_tag?: string;
@@ -10186,6 +10190,10 @@ export interface GetCommentResponse {
 }
 
 export interface GetCommentsResponse {
+  /**
+   * Total number of comments on the object, including replies at every depth
+   */
+  comment_count: number;
   duration: string;
   /**
    * Sort order used for the comments (first, last, top, best, controversial)
@@ -10197,6 +10205,10 @@ export interface GetCommentsResponse {
   comments: Array<ThreadedCommentResponse>;
   next?: string;
   prev?: string;
+  /**
+   * Number of comments directly on the object, excluding replies. Independent of depth, replies_limit and id_around, and not adjusted per viewer. Only present when include_top_level_comment_count is set
+   */
+  top_level_comment_count?: number;
 }
 
 export interface GetConfigResponse {
