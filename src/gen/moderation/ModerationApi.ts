@@ -547,6 +547,7 @@ export class ModerationApi {
       bodyguard_config: request?.bodyguard_config,
       flood_config: request?.flood_config,
       google_vision_config: request?.google_vision_config,
+      intent_config: request?.intent_config,
       llm_config: request?.llm_config,
       rule_builder_config: request?.rule_builder_config,
       user: request?.user,

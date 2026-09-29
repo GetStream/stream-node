@@ -54,6 +54,8 @@ import {
   DeleteFeedViewResponse,
   DeleteFeedsBatchRequest,
   DeleteFeedsBatchResponse,
+  DeleteFeedsRetentionPolicyRequest,
+  DeleteFeedsRetentionPolicyResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
   FollowBatchRequest,
@@ -68,6 +70,9 @@ import {
   GetFeedViewResponse,
   GetFeedVisibilityResponse,
   GetFeedsRateLimitsResponse,
+  GetFeedsRetentionPolicyResponse,
+  GetFeedsRetentionPolicyRunsRequest,
+  GetFeedsRetentionPolicyRunsResponse,
   GetFollowSuggestionsResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
@@ -128,6 +133,8 @@ import {
   RestoreCommentRequest,
   RestoreCommentResponse,
   RestoreFeedGroupResponse,
+  SetFeedsRetentionPolicyRequest,
+  SetFeedsRetentionPolicyResponse,
   SingleFollowResponse,
   TrackActivityMetricsRequest,
   TrackActivityMetricsResponse,
@@ -1257,7 +1264,6 @@ export class FeedsApi {
     const body = {
       filter: request?.filter,
       id_around: request?.id_around,
-      include_soft_deleted_comments: request?.include_soft_deleted_comments,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -3023,6 +3029,93 @@ export class FeedsApi {
     );
 
     decoders['UpdateMembershipLevelResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async feedsGetRetentionPolicy(): Promise<
+    StreamResponse<GetFeedsRetentionPolicyResponse>
+  > {
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedsRetentionPolicyResponse>
+    >('GET', '/api/v2/feeds/retention_policy', undefined, undefined);
+
+    decoders['GetFeedsRetentionPolicyResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async feedsSetRetentionPolicy(
+    request: SetFeedsRetentionPolicyRequest,
+  ): Promise<StreamResponse<SetFeedsRetentionPolicyResponse>> {
+    const body = {
+      max_age_hours: request?.max_age_hours,
+      policy: request?.policy,
+      enabled: request?.enabled,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<SetFeedsRetentionPolicyResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/retention_policy',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['SetFeedsRetentionPolicyResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async feedsDeleteRetentionPolicy(
+    request: DeleteFeedsRetentionPolicyRequest,
+  ): Promise<StreamResponse<DeleteFeedsRetentionPolicyResponse>> {
+    const body = {
+      policy: request?.policy,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<DeleteFeedsRetentionPolicyResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/retention_policy/delete',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['DeleteFeedsRetentionPolicyResponse']?.(response.body);
+
+    return { ...response.body, metadata: response.metadata };
+  }
+
+  async feedsGetRetentionPolicyRuns(
+    request?: GetFeedsRetentionPolicyRunsRequest,
+  ): Promise<StreamResponse<GetFeedsRetentionPolicyRunsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response = await this.apiClient.sendRequest<
+      StreamResponse<GetFeedsRetentionPolicyRunsResponse>
+    >(
+      'POST',
+      '/api/v2/feeds/retention_policy/runs',
+      undefined,
+      undefined,
+      body,
+      'application/json',
+    );
+
+    decoders['GetFeedsRetentionPolicyRunsResponse']?.(response.body);
 
     return { ...response.body, metadata: response.metadata };
   }

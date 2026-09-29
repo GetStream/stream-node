@@ -2013,6 +2013,7 @@ export class ChatApi {
       message_id: request?.message_id,
     };
     const body = {
+      expires_at: request?.expires_at,
       remind_at: request?.remind_at,
       user_id: request?.user_id,
       user: request?.user,
@@ -2041,6 +2042,7 @@ export class ChatApi {
       message_id: request?.message_id,
     };
     const body = {
+      expires_at: request?.expires_at,
       remind_at: request?.remind_at,
       user_id: request?.user_id,
       user: request?.user,
