@@ -816,6 +816,10 @@ export interface ActivityResponse {
    */
   text?: string;
   /**
+   * Number of top-level comments (comments directly on the activity, excluding replies). Only returned by GetActivity when include_top_level_comment_count=true; never set on feed reads or events. Same status/deletion rules as comment_count; not adjusted per viewer.
+   */
+  top_level_comment_count?: number;
+  /**
    * If visibility is 'tag', this is the tag name
    */
   visibility_tag?: string;
@@ -883,6 +887,10 @@ export interface ActivitySelectorConfig {
    */
   min_popularity?: number;
   /**
+   * Maximum number of candidate activities this selector contributes to a ranked feed (1-1000). Omit to use the default ranking buffer. Only supported on the popular, proximity, interest and query selectors, and ignored on feeds without ranking
+   */
+  ranking_candidate_limit?: number;
+  /**
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
@@ -918,6 +926,10 @@ export interface ActivitySelectorConfigResponse {
    * Minimum popularity threshold. For the 'popular' selector, values below 1 are normalized to the default (5) at read time.
    */
   min_popularity?: number;
+  /**
+   * Maximum number of candidate activities this selector contributes to a ranked feed
+   */
+  ranking_candidate_limit?: number;
   /**
    * Sort parameters for activity selection
    */
@@ -5564,6 +5576,22 @@ export interface CheckResponse {
    */
   status: string;
   /**
+   * Intent topic label matched by this request's text (test mode only; omitted when no topic matched)
+   */
+  intent_matched_topic?: string;
+  /**
+   * Stage 2 conversation score (0-100) computed synchronously against this request's texts (test mode only). Omitted -- not zero -- when intent_matched_topic is set but scoring could not be completed (matched topic disabled/removed, or the scoring call itself failed); only present when a real score was computed
+   */
+  intent_score?: number;
+  /**
+   * The matched topic's configured score_threshold, for comparison against intent_score (test mode only). Same omitted-not-zero rule as intent_score
+   */
+  intent_score_threshold?: number;
+  /**
+   * Whether intent_score clears intent_score_threshold, i.e. whether this would fire moderation.intent_detected in production (test mode only). Same omitted-not-zero rule as intent_score
+   */
+  intent_would_fire?: boolean;
+  /**
    * ID of the running moderation task
    */
   task_id?: string;
@@ -6245,6 +6273,7 @@ export interface ConfigResponse {
   automod_toxicity_config?: AutomodToxicityConfig;
   block_list_config?: BlockListConfig;
   flood_config?: FloodConfig;
+  intent_config?: IntentConfigResponse;
   llm_config?: LLMConfig;
   velocity_filter_config?: VelocityFilterConfig;
   video_call_rule_config?: VideoCallRuleConfig;
@@ -10161,6 +10190,10 @@ export interface GetCommentResponse {
 }
 
 export interface GetCommentsResponse {
+  /**
+   * Total number of comments on the object, including replies at every depth
+   */
+  comment_count: number;
   duration: string;
   /**
    * Sort order used for the comments (first, last, top, best, controversial)
@@ -10172,6 +10205,10 @@ export interface GetCommentsResponse {
   comments: Array<ThreadedCommentResponse>;
   next?: string;
   prev?: string;
+  /**
+   * Number of comments directly on the object, excluding replies. Independent of depth, replies_limit and id_around, and not adjusted per viewer. Only present when include_top_level_comment_count is set
+   */
+  top_level_comment_count?: number;
 }
 
 export interface GetConfigResponse {
@@ -11351,6 +11388,136 @@ export interface InsertActionLogRequest {
 
 export interface InsertActionLogResponse {
   duration: string;
+}
+
+export interface IntentBufferedItem {
+  /**
+   * The ID of the user who authored the buffered message or comment
+   */
+  author_user_id: string;
+  /**
+   * When the buffered message or comment was created
+   */
+  created_at: Date;
+  /**
+   * The ID of the buffered message or comment
+   */
+  id: string;
+  /**
+   * The text of the buffered message or comment
+   */
+  text: string;
+}
+
+export interface IntentConfigRequest {
+  /**
+   * Topics to classify conversation text against (max 20, labels must be unique)
+   */
+  topics?: Array<IntentTopicRequest>;
+}
+
+export interface IntentConfigResponse {
+  /**
+   * Topics conversation text is classified against
+   */
+  topics: Array<IntentTopicResponse>;
+}
+
+export interface IntentDetectedEvent {
+  /**
+   * The channel CID (chat) or feed ID (feeds) the buffered conversation belongs to
+   */
+  conversation_id: string;
+  created_at: Date;
+  /**
+   * The ID of the most recently buffered entity
+   */
+  entity_id: string;
+  /**
+   * The type of the most recently buffered entity (chat message or feed comment)
+   */
+  entity_type: string;
+  /**
+   * The configured intent topic label that started the buffer
+   */
+  matched_topic: string;
+  /**
+   * The Stage 2 conversation score (0-100) that cleared score_threshold
+   */
+  score: number;
+  /**
+   * The ID of the user whose conversation was scored
+   */
+  user_id: string;
+  /**
+   * The buffered items that were scored, in the order they were captured
+   */
+  items: Array<IntentBufferedItem>;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: Date;
+}
+
+export interface IntentTopicRequest {
+  /**
+   * Unique topic label (e.g. purchase_intent)
+   */
+  label: string;
+  /**
+   * How long the buffer collects items before scoring runs
+   */
+  analysis_cooldown_seconds?: number;
+  /**
+   * Optional description used in the classification prompt; the label alone is used when empty
+   */
+  description?: string;
+  /**
+   * Whether this topic is evaluated
+   */
+  enabled?: boolean;
+  /**
+   * Items buffered per conversation before scoring runs early
+   */
+  max_captured_items?: number;
+  /**
+   * Suppresses this topic for a user and conversation after it fires; 0 uses the default
+   */
+  refire_cooldown_seconds?: number;
+  /**
+   * Conversation score (0-100) required to fire moderation.intent_detected
+   */
+  score_threshold?: number;
+}
+
+export interface IntentTopicResponse {
+  /**
+   * How long the buffer collects items before scoring runs
+   */
+  analysis_cooldown_seconds: number;
+  /**
+   * Whether this topic is evaluated
+   */
+  enabled: boolean;
+  /**
+   * Unique topic label (e.g. purchase_intent)
+   */
+  label: string;
+  /**
+   * Items buffered per conversation before scoring runs early
+   */
+  max_captured_items: number;
+  /**
+   * Conversation score (0-100) required to fire moderation.intent_detected
+   */
+  score_threshold: number;
+  /**
+   * Optional description used in the classification prompt; the label alone is used when empty
+   */
+  description?: string;
+  /**
+   * Suppresses this topic for a user and conversation after it fires; 0 uses the default
+   */
+  refire_cooldown_seconds?: number;
 }
 
 export interface InterestTagResponse {
@@ -22028,6 +22195,7 @@ export interface UpsertConfigRequest {
   bodyguard_config?: AITextConfig;
   flood_config?: FloodConfig;
   google_vision_config?: GoogleVisionConfig;
+  intent_config?: IntentConfigRequest;
   llm_config?: LLMConfig;
   rule_builder_config?: RuleBuilderConfig;
   /**
@@ -23215,6 +23383,7 @@ export type WHEvent =
   | ({
       type: 'moderation.image_analysis.complete';
     } & ModerationImageAnalysisCompleteEvent)
+  | ({ type: 'moderation.intent_detected' } & IntentDetectedEvent)
   | ({ type: 'moderation.mark_reviewed' } & ModerationMarkReviewedEvent)
   | ({
       type: 'moderation.text_analysis.complete';

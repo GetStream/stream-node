@@ -3292,6 +3292,15 @@ decoders['IngressStoppedEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['IntentDetectedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['KickedUserEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
