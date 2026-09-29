@@ -121,13 +121,17 @@ export class VideoApi {
   async getActiveCallsStatus(): Promise<
     StreamResponse<GetActiveCallsStatusResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetActiveCallsStatusResponse>
-    >('GET', '/api/v2/video/active_calls_status', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<GetActiveCallsStatusResponse>(
+        'GET',
+        '/api/v2/video/active_calls_status',
+        undefined,
+        undefined,
+      );
 
-    decoders['GetActiveCallsStatusResponse']?.(response.body);
+    decoders['GetActiveCallsStatusResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryUserFeedback(
@@ -144,20 +148,18 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryUserFeedbackResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/feedback',
-      undefined,
-      queryParams,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryUserFeedbackResponse>(
+        'POST',
+        '/api/v2/video/call/feedback',
+        undefined,
+        queryParams,
+        body,
+      );
 
-    decoders['QueryUserFeedbackResponse']?.(response.body);
+    decoders['QueryUserFeedbackResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallMembers(
@@ -173,20 +175,17 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallMembersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryCallMembersResponse>(
       'POST',
       '/api/v2/video/call/members',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryCallMembersResponse']?.(response.body);
+    decoders['QueryCallMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallStats(
@@ -200,20 +199,17 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallStatsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryCallStatsResponse>(
       'POST',
       '/api/v2/video/call/stats',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryCallStatsResponse']?.(response.body);
+    decoders['QueryCallStatsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCall(request: {
@@ -235,13 +231,16 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCallResponse>
-    >('GET', '/api/v2/video/call/{type}/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetCallResponse>(
+      'GET',
+      '/api/v2/video/call/{type}/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetCallResponse']?.(response.body);
+    decoders['GetCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCall(
@@ -257,20 +256,17 @@ export class VideoApi {
       settings_override: request?.settings_override,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCallResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateCallResponse>(
       'PATCH',
       '/api/v2/video/call/{type}/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateCallResponse']?.(response.body);
+    decoders['UpdateCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateCall(
@@ -288,20 +284,17 @@ export class VideoApi {
       data: request?.data,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateCallResponse>
-    >(
+    const response = await this.apiClient.sendRequest<GetOrCreateCallResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['GetOrCreateCallResponse']?.(response.body);
+    decoders['GetOrCreateCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async blockUser(
@@ -315,20 +308,17 @@ export class VideoApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<BlockUserResponse>
-    >(
+    const response = await this.apiClient.sendRequest<BlockUserResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/block',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['BlockUserResponse']?.(response.body);
+    decoders['BlockUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async sendClosedCaption(
@@ -350,20 +340,18 @@ export class VideoApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SendClosedCaptionResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/closed_captions',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<SendClosedCaptionResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/closed_captions',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['SendClosedCaptionResponse']?.(response.body);
+    decoders['SendClosedCaptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteCall(
@@ -377,20 +365,17 @@ export class VideoApi {
       hard: request?.hard,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteCallResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteCallResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/delete',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeleteCallResponse']?.(response.body);
+    decoders['DeleteCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async sendCallEvent(
@@ -406,20 +391,17 @@ export class VideoApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SendCallEventResponse>
-    >(
+    const response = await this.apiClient.sendRequest<SendCallEventResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/event',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['SendCallEventResponse']?.(response.body);
+    decoders['SendCallEventResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async collectUserFeedback(
@@ -438,20 +420,18 @@ export class VideoApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CollectUserFeedbackResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/feedback',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<CollectUserFeedbackResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/feedback',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['CollectUserFeedbackResponse']?.(response.body);
+    decoders['CollectUserFeedbackResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async goLive(
@@ -473,20 +453,17 @@ export class VideoApi {
       transcription_storage_name: request?.transcription_storage_name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GoLiveResponse>
-    >(
+    const response = await this.apiClient.sendRequest<GoLiveResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/go_live',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['GoLiveResponse']?.(response.body);
+    decoders['GoLiveResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async kickUser(
@@ -503,20 +480,17 @@ export class VideoApi {
       kicked_by: request?.kicked_by,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<KickUserResponse>
-    >(
+    const response = await this.apiClient.sendRequest<KickUserResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/kick',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['KickUserResponse']?.(response.body);
+    decoders['KickUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async endCall(request: {
@@ -528,18 +502,16 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<EndCallResponse>
-    >(
+    const response = await this.apiClient.sendRequest<EndCallResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/mark_ended',
       pathParams,
       undefined,
     );
 
-    decoders['EndCallResponse']?.(response.body);
+    decoders['EndCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCallMembers(
@@ -554,20 +526,18 @@ export class VideoApi {
       update_members: request?.update_members,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCallMembersResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/members',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateCallMembersResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/members',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateCallMembersResponse']?.(response.body);
+    decoders['UpdateCallMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async muteUsers(
@@ -588,20 +558,17 @@ export class VideoApi {
       muted_by: request?.muted_by,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<MuteUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<MuteUsersResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/mute_users',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['MuteUsersResponse']?.(response.body);
+    decoders['MuteUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallParticipants(
@@ -622,20 +589,18 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallParticipantsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/participants',
-      pathParams,
-      queryParams,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallParticipantsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/participants',
+        pathParams,
+        queryParams,
+        body,
+      );
 
-    decoders['QueryCallParticipantsResponse']?.(response.body);
+    decoders['QueryCallParticipantsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async videoPin(
@@ -650,20 +615,17 @@ export class VideoApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PinResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PinResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/pin',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PinResponse']?.(response.body);
+    decoders['PinResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listRecordings(request: {
@@ -675,18 +637,16 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListRecordingsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ListRecordingsResponse>(
       'GET',
       '/api/v2/video/call/{type}/{id}/recordings',
       pathParams,
       undefined,
     );
 
-    decoders['ListRecordingsResponse']?.(response.body);
+    decoders['ListRecordingsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startRecording(
@@ -705,20 +665,17 @@ export class VideoApi {
       recording_external_storage: request?.recording_external_storage,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartRecordingResponse>
-    >(
+    const response = await this.apiClient.sendRequest<StartRecordingResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/recordings/{recording_type}/start',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['StartRecordingResponse']?.(response.body);
+    decoders['StartRecordingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopRecording(
@@ -735,20 +692,17 @@ export class VideoApi {
     };
     const body = {};
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopRecordingResponse>
-    >(
+    const response = await this.apiClient.sendRequest<StopRecordingResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/recordings/{recording_type}/stop',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['StopRecordingResponse']?.(response.body);
+    decoders['StopRecordingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallReport(request: {
@@ -764,13 +718,16 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCallReportResponse>
-    >('GET', '/api/v2/video/call/{type}/{id}/report', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetCallReportResponse>(
+      'GET',
+      '/api/v2/video/call/{type}/{id}/report',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetCallReportResponse']?.(response.body);
+    decoders['GetCallReportResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async ringCall(
@@ -786,20 +743,17 @@ export class VideoApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RingCallResponse>
-    >(
+    const response = await this.apiClient.sendRequest<RingCallResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/ring',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['RingCallResponse']?.(response.body);
+    decoders['RingCallResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startRTMPBroadcasts(
@@ -813,20 +767,18 @@ export class VideoApi {
       broadcasts: request?.broadcasts,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartRTMPBroadcastsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StartRTMPBroadcastsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/rtmp_broadcasts',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StartRTMPBroadcastsResponse']?.(response.body);
+    decoders['StartRTMPBroadcastsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopAllRTMPBroadcasts(request: {
@@ -838,18 +790,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopAllRTMPBroadcastsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/stop',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<StopAllRTMPBroadcastsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/stop',
+        pathParams,
+        undefined,
+      );
 
-    decoders['StopAllRTMPBroadcastsResponse']?.(response.body);
+    decoders['StopAllRTMPBroadcastsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopRTMPBroadcast(
@@ -866,20 +817,18 @@ export class VideoApi {
     };
     const body = {};
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopRTMPBroadcastsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/{name}/stop',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StopRTMPBroadcastsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/rtmp_broadcasts/{name}/stop',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StopRTMPBroadcastsResponse']?.(response.body);
+    decoders['StopRTMPBroadcastsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallParticipantSessionMetrics(request: {
@@ -903,18 +852,17 @@ export class VideoApi {
       user_session: request?.user_session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCallParticipantSessionMetricsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call/{type}/{id}/session/{session}/participant/{user}/{user_session}/details/track',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<GetCallParticipantSessionMetricsResponse>(
+        'GET',
+        '/api/v2/video/call/{type}/{id}/session/{session}/participant/{user}/{user_session}/details/track',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['GetCallParticipantSessionMetricsResponse']?.(response.body);
+    decoders['GetCallParticipantSessionMetricsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallParticipantSessions(request: {
@@ -938,18 +886,17 @@ export class VideoApi {
       session: request?.session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallParticipantSessionsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call/{type}/{id}/session/{session}/participant_sessions',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallParticipantSessionsResponse>(
+        'GET',
+        '/api/v2/video/call/{type}/{id}/session/{session}/participant_sessions',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['QueryCallParticipantSessionsResponse']?.(response.body);
+    decoders['QueryCallParticipantSessionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startHLSBroadcasting(request: {
@@ -961,18 +908,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartHLSBroadcastingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/start_broadcasting',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<StartHLSBroadcastingResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/start_broadcasting',
+        pathParams,
+        undefined,
+      );
 
-    decoders['StartHLSBroadcastingResponse']?.(response.body);
+    decoders['StartHLSBroadcastingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startClosedCaptions(
@@ -989,20 +935,18 @@ export class VideoApi {
       speech_segment_config: request?.speech_segment_config,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartClosedCaptionsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/start_closed_captions',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StartClosedCaptionsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/start_closed_captions',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StartClosedCaptionsResponse']?.(response.body);
+    decoders['StartClosedCaptionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startFrameRecording(
@@ -1016,20 +960,18 @@ export class VideoApi {
       recording_external_storage: request?.recording_external_storage,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartFrameRecordingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/start_frame_recording',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StartFrameRecordingResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/start_frame_recording',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StartFrameRecordingResponse']?.(response.body);
+    decoders['StartFrameRecordingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async startTranscription(
@@ -1045,20 +987,18 @@ export class VideoApi {
       transcription_external_storage: request?.transcription_external_storage,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StartTranscriptionResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/start_transcription',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StartTranscriptionResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/start_transcription',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StartTranscriptionResponse']?.(response.body);
+    decoders['StartTranscriptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopHLSBroadcasting(request: {
@@ -1070,18 +1010,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopHLSBroadcastingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/stop_broadcasting',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<StopHLSBroadcastingResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/stop_broadcasting',
+        pathParams,
+        undefined,
+      );
 
-    decoders['StopHLSBroadcastingResponse']?.(response.body);
+    decoders['StopHLSBroadcastingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopClosedCaptions(
@@ -1095,20 +1034,18 @@ export class VideoApi {
       stop_transcription: request?.stop_transcription,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopClosedCaptionsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/stop_closed_captions',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StopClosedCaptionsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/stop_closed_captions',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StopClosedCaptionsResponse']?.(response.body);
+    decoders['StopClosedCaptionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopFrameRecording(request: {
@@ -1120,18 +1057,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopFrameRecordingResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/stop_frame_recording',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<StopFrameRecordingResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/stop_frame_recording',
+        pathParams,
+        undefined,
+      );
 
-    decoders['StopFrameRecordingResponse']?.(response.body);
+    decoders['StopFrameRecordingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopLive(
@@ -1152,20 +1088,17 @@ export class VideoApi {
       continue_transcription: request?.continue_transcription,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopLiveResponse>
-    >(
+    const response = await this.apiClient.sendRequest<StopLiveResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/stop_live',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['StopLiveResponse']?.(response.body);
+    decoders['StopLiveResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async stopTranscription(
@@ -1179,20 +1112,18 @@ export class VideoApi {
       stop_closed_captions: request?.stop_closed_captions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<StopTranscriptionResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/stop_transcription',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<StopTranscriptionResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/stop_transcription',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['StopTranscriptionResponse']?.(response.body);
+    decoders['StopTranscriptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listTranscriptions(request: {
@@ -1204,18 +1135,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListTranscriptionsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call/{type}/{id}/transcriptions',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<ListTranscriptionsResponse>(
+        'GET',
+        '/api/v2/video/call/{type}/{id}/transcriptions',
+        pathParams,
+        undefined,
+      );
 
-    decoders['ListTranscriptionsResponse']?.(response.body);
+    decoders['ListTranscriptionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async unblockUser(
@@ -1229,20 +1159,17 @@ export class VideoApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnblockUserResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnblockUserResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/unblock',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UnblockUserResponse']?.(response.body);
+    decoders['UnblockUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async videoUnpin(
@@ -1257,20 +1184,17 @@ export class VideoApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnpinResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnpinResponse>(
       'POST',
       '/api/v2/video/call/{type}/{id}/unpin',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UnpinResponse']?.(response.body);
+    decoders['UnpinResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateUserPermissions(
@@ -1286,20 +1210,18 @@ export class VideoApi {
       revoke_permissions: request?.revoke_permissions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateUserPermissionsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call/{type}/{id}/user_permissions',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateUserPermissionsResponse>(
+        'POST',
+        '/api/v2/video/call/{type}/{id}/user_permissions',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateUserPermissionsResponse']?.(response.body);
+    decoders['UpdateUserPermissionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteRecording(request: {
@@ -1315,18 +1237,16 @@ export class VideoApi {
       filename: request?.filename,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteRecordingResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteRecordingResponse>(
       'DELETE',
       '/api/v2/video/call/{type}/{id}/{session}/recordings/{filename}',
       pathParams,
       undefined,
     );
 
-    decoders['DeleteRecordingResponse']?.(response.body);
+    decoders['DeleteRecordingResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteTranscription(request: {
@@ -1342,18 +1262,17 @@ export class VideoApi {
       filename: request?.filename,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteTranscriptionResponse>
-    >(
-      'DELETE',
-      '/api/v2/video/call/{type}/{id}/{session}/transcriptions/{filename}',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteTranscriptionResponse>(
+        'DELETE',
+        '/api/v2/video/call/{type}/{id}/{session}/transcriptions/{filename}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['DeleteTranscriptionResponse']?.(response.body);
+    decoders['DeleteTranscriptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async reportClientCallEvent(
@@ -1363,20 +1282,18 @@ export class VideoApi {
       events: request?.events,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ReportClientEventResponse>
-    >(
-      'POST',
-      '/api/v2/video/call_client_event',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<ReportClientEventResponse>(
+        'POST',
+        '/api/v2/video/call_client_event',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['ReportClientEventResponse']?.(response.body);
+    decoders['ReportClientEventResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallSessionStats(
@@ -1390,20 +1307,18 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallSessionStatsResponse>
-    >(
-      'POST',
-      '/api/v2/video/call_stats',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallSessionStatsResponse>(
+        'POST',
+        '/api/v2/video/call_stats',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryCallSessionStatsResponse']?.(response.body);
+    decoders['QueryCallSessionStatsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallStatsMap(request: {
@@ -1429,18 +1344,17 @@ export class VideoApi {
       session: request?.session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallStatsMapResponse>
-    >(
-      'GET',
-      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/map',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallStatsMapResponse>(
+        'GET',
+        '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/map',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['QueryCallStatsMapResponse']?.(response.body);
+    decoders['QueryCallStatsMapResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallSessionParticipantStatsDetails(request: {
@@ -1466,18 +1380,17 @@ export class VideoApi {
       user_session: request?.user_session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCallSessionParticipantStatsDetailsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participant/{user}/{user_session}/details',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<GetCallSessionParticipantStatsDetailsResponse>(
+        'GET',
+        '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participant/{user}/{user_session}/details',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['GetCallSessionParticipantStatsDetailsResponse']?.(response.body);
+    decoders['GetCallSessionParticipantStatsDetailsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCallSessionParticipantStats(request: {
@@ -1503,18 +1416,17 @@ export class VideoApi {
       session: request?.session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallSessionParticipantStatsResponse>
-    >(
-      'GET',
-      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallSessionParticipantStatsResponse>(
+        'GET',
+        '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['QueryCallSessionParticipantStatsResponse']?.(response.body);
+    decoders['QueryCallSessionParticipantStatsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallSessionParticipantStatsTimeline(request: {
@@ -1542,20 +1454,17 @@ export class VideoApi {
       user_session: request?.user_session,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallSessionParticipantStatsTimelineResponse>
-    >(
-      'GET',
-      '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants/{user}/{user_session}/timeline',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCallSessionParticipantStatsTimelineResponse>(
+        'GET',
+        '/api/v2/video/call_stats/{call_type}/{call_id}/{session}/participants/{user}/{user_session}/timeline',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['QueryCallSessionParticipantStatsTimelineResponse']?.(
-      response.body,
-    );
+    decoders['QueryCallSessionParticipantStatsTimelineResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCalls(
@@ -1569,30 +1478,30 @@ export class VideoApi {
       filter_conditions: request?.filter_conditions,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCallsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryCallsResponse>(
       'POST',
       '/api/v2/video/calls',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryCallsResponse']?.(response.body);
+    decoders['QueryCallsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listCallTypes(): Promise<StreamResponse<ListCallTypeResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListCallTypeResponse>
-    >('GET', '/api/v2/video/calltypes', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListCallTypeResponse>(
+      'GET',
+      '/api/v2/video/calltypes',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListCallTypeResponse']?.(response.body);
+    decoders['ListCallTypeResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createCallType(
@@ -1606,20 +1515,17 @@ export class VideoApi {
       settings: request?.settings,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateCallTypeResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateCallTypeResponse>(
       'POST',
       '/api/v2/video/calltypes',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateCallTypeResponse']?.(response.body);
+    decoders['CreateCallTypeResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteCallType(request: {
@@ -1629,16 +1535,16 @@ export class VideoApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/video/calltypes/{name}',
       pathParams,
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCallType(request: {
@@ -1648,13 +1554,16 @@ export class VideoApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCallTypeResponse>
-    >('GET', '/api/v2/video/calltypes/{name}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<GetCallTypeResponse>(
+      'GET',
+      '/api/v2/video/calltypes/{name}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['GetCallTypeResponse']?.(response.body);
+    decoders['GetCallTypeResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCallType(
@@ -1670,30 +1579,30 @@ export class VideoApi {
       settings: request?.settings,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCallTypeResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateCallTypeResponse>(
       'PUT',
       '/api/v2/video/calltypes/{name}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateCallTypeResponse']?.(response.body);
+    decoders['UpdateCallTypeResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getEdges(): Promise<StreamResponse<GetEdgesResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetEdgesResponse>
-    >('GET', '/api/v2/video/edges', undefined, undefined);
+    const response = await this.apiClient.sendRequest<GetEdgesResponse>(
+      'GET',
+      '/api/v2/video/edges',
+      undefined,
+      undefined,
+    );
 
-    decoders['GetEdgesResponse']?.(response.body);
+    decoders['GetEdgesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async resolveSipAuth(
@@ -1706,32 +1615,33 @@ export class VideoApi {
       source_ip: request?.source_ip,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ResolveSipAuthResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ResolveSipAuthResponse>(
       'POST',
       '/api/v2/video/sip/auth',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ResolveSipAuthResponse']?.(response.body);
+    decoders['ResolveSipAuthResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listSIPInboundRoutingRule(): Promise<
     StreamResponse<ListSIPInboundRoutingRuleResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListSIPInboundRoutingRuleResponse>
-    >('GET', '/api/v2/video/sip/inbound_routing_rules', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<ListSIPInboundRoutingRuleResponse>(
+        'GET',
+        '/api/v2/video/sip/inbound_routing_rules',
+        undefined,
+        undefined,
+      );
 
-    decoders['ListSIPInboundRoutingRuleResponse']?.(response.body);
+    decoders['ListSIPInboundRoutingRuleResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createSIPInboundRoutingRule(
@@ -1749,20 +1659,18 @@ export class VideoApi {
       pin_routing_configs: request?.pin_routing_configs,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SIPInboundRoutingRuleResponse>
-    >(
-      'POST',
-      '/api/v2/video/sip/inbound_routing_rules',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<SIPInboundRoutingRuleResponse>(
+        'POST',
+        '/api/v2/video/sip/inbound_routing_rules',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['SIPInboundRoutingRuleResponse']?.(response.body);
+    decoders['SIPInboundRoutingRuleResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteSIPInboundRoutingRule(request: {
@@ -1772,18 +1680,17 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteSIPInboundRoutingRuleResponse>
-    >(
-      'DELETE',
-      '/api/v2/video/sip/inbound_routing_rules/{id}',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteSIPInboundRoutingRuleResponse>(
+        'DELETE',
+        '/api/v2/video/sip/inbound_routing_rules/{id}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['DeleteSIPInboundRoutingRuleResponse']?.(response.body);
+    decoders['DeleteSIPInboundRoutingRuleResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateSIPInboundRoutingRule(
@@ -1804,30 +1711,31 @@ export class VideoApi {
       pin_routing_configs: request?.pin_routing_configs,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateSIPInboundRoutingRuleResponse>
-    >(
-      'PUT',
-      '/api/v2/video/sip/inbound_routing_rules/{id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateSIPInboundRoutingRuleResponse>(
+        'PUT',
+        '/api/v2/video/sip/inbound_routing_rules/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateSIPInboundRoutingRuleResponse']?.(response.body);
+    decoders['UpdateSIPInboundRoutingRuleResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listSIPTrunks(): Promise<StreamResponse<ListSIPTrunksResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListSIPTrunksResponse>
-    >('GET', '/api/v2/video/sip/inbound_trunks', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListSIPTrunksResponse>(
+      'GET',
+      '/api/v2/video/sip/inbound_trunks',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListSIPTrunksResponse']?.(response.body);
+    decoders['ListSIPTrunksResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createSIPTrunk(
@@ -1840,20 +1748,17 @@ export class VideoApi {
       allowed_ips: request?.allowed_ips,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateSIPTrunkResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateSIPTrunkResponse>(
       'POST',
       '/api/v2/video/sip/inbound_trunks',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateSIPTrunkResponse']?.(response.body);
+    decoders['CreateSIPTrunkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteSIPTrunk(request: {
@@ -1863,13 +1768,16 @@ export class VideoApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteSIPTrunkResponse>
-    >('DELETE', '/api/v2/video/sip/inbound_trunks/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<DeleteSIPTrunkResponse>(
+      'DELETE',
+      '/api/v2/video/sip/inbound_trunks/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['DeleteSIPTrunkResponse']?.(response.body);
+    decoders['DeleteSIPTrunkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateSIPTrunk(
@@ -1885,20 +1793,17 @@ export class VideoApi {
       allowed_ips: request?.allowed_ips,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateSIPTrunkResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateSIPTrunkResponse>(
       'PUT',
       '/api/v2/video/sip/inbound_trunks/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateSIPTrunkResponse']?.(response.body);
+    decoders['UpdateSIPTrunkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async resolveSipInbound(
@@ -1913,20 +1818,18 @@ export class VideoApi {
       sip_headers: request?.sip_headers,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ResolveSipInboundResponse>
-    >(
-      'POST',
-      '/api/v2/video/sip/resolve',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<ResolveSipInboundResponse>(
+        'POST',
+        '/api/v2/video/sip/resolve',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['ResolveSipInboundResponse']?.(response.body);
+    decoders['ResolveSipInboundResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryAggregateCallStats(
@@ -1938,20 +1841,18 @@ export class VideoApi {
       report_types: request?.report_types,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryAggregateCallStatsResponse>
-    >(
-      'POST',
-      '/api/v2/video/stats',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryAggregateCallStatsResponse>(
+        'POST',
+        '/api/v2/video/stats',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryAggregateCallStatsResponse']?.(response.body);
+    decoders['QueryAggregateCallStatsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getDailyDigest(request?: {
@@ -1963,12 +1864,15 @@ export class VideoApi {
       target_app_id: request?.target_app_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetDailyDigestResponse>
-    >('GET', '/api/v2/video/stats/daily_digest', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetDailyDigestResponse>(
+      'GET',
+      '/api/v2/video/stats/daily_digest',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetDailyDigestResponse']?.(response.body);
+    decoders['GetDailyDigestResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 }

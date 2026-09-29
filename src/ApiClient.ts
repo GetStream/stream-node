@@ -94,7 +94,7 @@ export class ApiClient {
 
       const responseBody = (await response.json()) as T;
 
-      return { body: responseBody, metadata };
+      return { ...responseBody, metadata };
     } catch (error: any) {
       if (error instanceof StreamError) {
         throw error;

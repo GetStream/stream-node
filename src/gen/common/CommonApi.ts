@@ -123,13 +123,16 @@ export class CommonApi {
   constructor(public readonly apiClient: ApiClient) {}
 
   async getApp(): Promise<StreamResponse<GetApplicationResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetApplicationResponse>
-    >('GET', '/api/v2/app', undefined, undefined);
+    const response = await this.apiClient.sendRequest<GetApplicationResponse>(
+      'GET',
+      '/api/v2/app',
+      undefined,
+      undefined,
+    );
 
-    decoders['GetApplicationResponse']?.(response.body);
+    decoders['GetApplicationResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateApp(
@@ -205,18 +208,17 @@ export class CommonApi {
       xiaomi_config: request?.xiaomi_config,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'PATCH',
       '/api/v2/app',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listBlockLists(request?: {
@@ -230,13 +232,16 @@ export class CommonApi {
       limit: request?.limit,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListBlockListResponse>
-    >('GET', '/api/v2/blocklists', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<ListBlockListResponse>(
+      'GET',
+      '/api/v2/blocklists',
+      undefined,
+      queryParams,
+    );
 
-    decoders['ListBlockListResponse']?.(response.body);
+    decoders['ListBlockListResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createBlockList(
@@ -255,20 +260,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateBlockListResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateBlockListResponse>(
       'POST',
       '/api/v2/blocklists',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateBlockListResponse']?.(response.body);
+    decoders['CreateBlockListResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async importBlockList(
@@ -282,20 +284,17 @@ export class CommonApi {
       chunk_size: request?.chunk_size,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ImportBlockListResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ImportBlockListResponse>(
       'POST',
       '/api/v2/blocklists/{id}/import',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ImportBlockListResponse']?.(response.body);
+    decoders['ImportBlockListResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteBlockList(request: {
@@ -311,16 +310,16 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/blocklists/{name}',
       pathParams,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getBlockList(request: {
@@ -334,13 +333,16 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetBlockListResponse>
-    >('GET', '/api/v2/blocklists/{name}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetBlockListResponse>(
+      'GET',
+      '/api/v2/blocklists/{name}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetBlockListResponse']?.(response.body);
+    decoders['GetBlockListResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateBlockList(
@@ -360,20 +362,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateBlockListResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateBlockListResponse>(
       'PUT',
       '/api/v2/blocklists/{name}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateBlockListResponse']?.(response.body);
+    decoders['UpdateBlockListResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async checkPush(
@@ -392,20 +391,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CheckPushResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CheckPushResponse>(
       'POST',
       '/api/v2/check_push',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CheckPushResponse']?.(response.body);
+    decoders['CheckPushResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async checkSNS(
@@ -417,20 +413,17 @@ export class CommonApi {
       sns_topic_arn: request?.sns_topic_arn,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CheckSNSResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CheckSNSResponse>(
       'POST',
       '/api/v2/check_sns',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CheckSNSResponse']?.(response.body);
+    decoders['CheckSNSResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async checkSQS(
@@ -442,20 +435,17 @@ export class CommonApi {
       sqs_url: request?.sqs_url,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CheckSQSResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CheckSQSResponse>(
       'POST',
       '/api/v2/check_sqs',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CheckSQSResponse']?.(response.body);
+    decoders['CheckSQSResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteDevice(request: {
@@ -467,16 +457,16 @@ export class CommonApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/devices',
       undefined,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listDevices(request?: {
@@ -486,13 +476,16 @@ export class CommonApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListDevicesResponse>
-    >('GET', '/api/v2/devices', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<ListDevicesResponse>(
+      'GET',
+      '/api/v2/devices',
+      undefined,
+      queryParams,
+    );
 
-    decoders['ListDevicesResponse']?.(response.body);
+    decoders['ListDevicesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createDevice(
@@ -508,18 +501,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'POST',
       '/api/v2/devices',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async exportUsers(
@@ -529,32 +521,33 @@ export class CommonApi {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ExportUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ExportUsersResponse>(
       'POST',
       '/api/v2/export/users',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ExportUsersResponse']?.(response.body);
+    decoders['ExportUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listExternalStorage(): Promise<
     StreamResponse<ListExternalStorageResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListExternalStorageResponse>
-    >('GET', '/api/v2/external_storage', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<ListExternalStorageResponse>(
+        'GET',
+        '/api/v2/external_storage',
+        undefined,
+        undefined,
+      );
 
-    decoders['ListExternalStorageResponse']?.(response.body);
+    decoders['ListExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createExternalStorage(
@@ -570,20 +563,18 @@ export class CommonApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateExternalStorageResponse>
-    >(
-      'POST',
-      '/api/v2/external_storage',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<CreateExternalStorageResponse>(
+        'POST',
+        '/api/v2/external_storage',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['CreateExternalStorageResponse']?.(response.body);
+    decoders['CreateExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteExternalStorage(request: {
@@ -593,13 +584,17 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteExternalStorageResponse>
-    >('DELETE', '/api/v2/external_storage/{name}', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<DeleteExternalStorageResponse>(
+        'DELETE',
+        '/api/v2/external_storage/{name}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['DeleteExternalStorageResponse']?.(response.body);
+    decoders['DeleteExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateExternalStorage(
@@ -617,20 +612,18 @@ export class CommonApi {
       azure_blob: request?.azure_blob,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateExternalStorageResponse>
-    >(
-      'PUT',
-      '/api/v2/external_storage/{name}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateExternalStorageResponse>(
+        'PUT',
+        '/api/v2/external_storage/{name}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateExternalStorageResponse']?.(response.body);
+    decoders['UpdateExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async checkExternalStorage(request: {
@@ -640,13 +633,17 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CheckExternalStorageResponse>
-    >('GET', '/api/v2/external_storage/{name}/check', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<CheckExternalStorageResponse>(
+        'GET',
+        '/api/v2/external_storage/{name}/check',
+        pathParams,
+        undefined,
+      );
 
-    decoders['CheckExternalStorageResponse']?.(response.body);
+    decoders['CheckExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createGuest(
@@ -656,13 +653,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateGuestResponse>
-    >('POST', '/api/v2/guest', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<CreateGuestResponse>(
+      'POST',
+      '/api/v2/guest',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['CreateGuestResponse']?.(response.body);
+    decoders['CreateGuestResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createImportURL(
@@ -672,30 +673,30 @@ export class CommonApi {
       filename: request?.filename,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateImportURLResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateImportURLResponse>(
       'POST',
       '/api/v2/import_urls',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateImportURLResponse']?.(response.body);
+    decoders['CreateImportURLResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listImports(): Promise<StreamResponse<ListImportsResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListImportsResponse>
-    >('GET', '/api/v2/imports', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListImportsResponse>(
+      'GET',
+      '/api/v2/imports',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListImportsResponse']?.(response.body);
+    decoders['ListImportsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createImport(
@@ -707,20 +708,17 @@ export class CommonApi {
       merge_custom: request?.merge_custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateImportResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateImportResponse>(
       'POST',
       '/api/v2/imports',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateImportResponse']?.(response.body);
+    decoders['CreateImportResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listImportV2Tasks(request?: {
@@ -730,13 +728,17 @@ export class CommonApi {
       state: request?.state,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListImportV2TasksResponse>
-    >('GET', '/api/v2/imports/v2', undefined, queryParams);
+    const response =
+      await this.apiClient.sendRequest<ListImportV2TasksResponse>(
+        'GET',
+        '/api/v2/imports/v2',
+        undefined,
+        queryParams,
+      );
 
-    decoders['ListImportV2TasksResponse']?.(response.body);
+    decoders['ListImportV2TasksResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createImportV2Task(
@@ -749,44 +751,50 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateImportV2TaskResponse>
-    >(
-      'POST',
-      '/api/v2/imports/v2',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<CreateImportV2TaskResponse>(
+        'POST',
+        '/api/v2/imports/v2',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['CreateImportV2TaskResponse']?.(response.body);
+    decoders['CreateImportV2TaskResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteImporterExternalStorage(): Promise<
     StreamResponse<DeleteExternalStorageResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteExternalStorageResponse>
-    >('DELETE', '/api/v2/imports/v2/external-storage', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<DeleteExternalStorageResponse>(
+        'DELETE',
+        '/api/v2/imports/v2/external-storage',
+        undefined,
+        undefined,
+      );
 
-    decoders['DeleteExternalStorageResponse']?.(response.body);
+    decoders['DeleteExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getImporterExternalStorage(): Promise<
     StreamResponse<GetExternalStorageResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetExternalStorageResponse>
-    >('GET', '/api/v2/imports/v2/external-storage', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<GetExternalStorageResponse>(
+        'GET',
+        '/api/v2/imports/v2/external-storage',
+        undefined,
+        undefined,
+      );
 
-    decoders['GetExternalStorageResponse']?.(response.body);
+    decoders['GetExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertImporterExternalStorage(
@@ -798,37 +806,34 @@ export class CommonApi {
       gcs: request?.gcs,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertExternalStorageResponse>
-    >(
-      'PUT',
-      '/api/v2/imports/v2/external-storage',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertExternalStorageResponse>(
+        'PUT',
+        '/api/v2/imports/v2/external-storage',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertExternalStorageResponse']?.(response.body);
+    decoders['UpsertExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async validateImporterExternalStorage(): Promise<
     StreamResponse<ValidateExternalStorageResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ValidateExternalStorageResponse>
-    >(
-      'POST',
-      '/api/v2/imports/v2/external-storage/validate',
-      undefined,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<ValidateExternalStorageResponse>(
+        'POST',
+        '/api/v2/imports/v2/external-storage/validate',
+        undefined,
+        undefined,
+      );
 
-    decoders['ValidateExternalStorageResponse']?.(response.body);
+    decoders['ValidateExternalStorageResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteImportV2Task(request: {
@@ -838,13 +843,17 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteImportV2TaskResponse>
-    >('DELETE', '/api/v2/imports/v2/{id}', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<DeleteImportV2TaskResponse>(
+        'DELETE',
+        '/api/v2/imports/v2/{id}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['DeleteImportV2TaskResponse']?.(response.body);
+    decoders['DeleteImportV2TaskResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getImportV2Task(request: {
@@ -854,13 +863,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetImportV2TaskResponse>
-    >('GET', '/api/v2/imports/v2/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<GetImportV2TaskResponse>(
+      'GET',
+      '/api/v2/imports/v2/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['GetImportV2TaskResponse']?.(response.body);
+    decoders['GetImportV2TaskResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async cancelImportV2Task(request: {
@@ -870,13 +882,17 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CancelImportV2TaskResponse>
-    >('POST', '/api/v2/imports/v2/{id}/cancel', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<CancelImportV2TaskResponse>(
+        'POST',
+        '/api/v2/imports/v2/{id}/cancel',
+        pathParams,
+        undefined,
+      );
 
-    decoders['CancelImportV2TaskResponse']?.(response.body);
+    decoders['CancelImportV2TaskResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getImport(request: {
@@ -886,13 +902,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetImportResponse>
-    >('GET', '/api/v2/imports/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<GetImportResponse>(
+      'GET',
+      '/api/v2/imports/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['GetImportResponse']?.(response.body);
+    decoders['GetImportResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOG(request: {
@@ -902,23 +921,29 @@ export class CommonApi {
       url: request?.url,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOGResponse>
-    >('GET', '/api/v2/og', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetOGResponse>(
+      'GET',
+      '/api/v2/og',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetOGResponse']?.(response.body);
+    decoders['GetOGResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listPermissions(): Promise<StreamResponse<ListPermissionsResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListPermissionsResponse>
-    >('GET', '/api/v2/permissions', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListPermissionsResponse>(
+      'GET',
+      '/api/v2/permissions',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListPermissionsResponse']?.(response.body);
+    decoders['ListPermissionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createPermission(
@@ -934,18 +959,17 @@ export class CommonApi {
       same_team: request?.same_team,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'POST',
       '/api/v2/permissions',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deletePermission(request: {
@@ -955,16 +979,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/permissions/{id}',
       pathParams,
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getPermission(request: {
@@ -974,13 +998,17 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCustomPermissionResponse>
-    >('GET', '/api/v2/permissions/{id}', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<GetCustomPermissionResponse>(
+        'GET',
+        '/api/v2/permissions/{id}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['GetCustomPermissionResponse']?.(response.body);
+    decoders['GetCustomPermissionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updatePermission(
@@ -998,18 +1026,17 @@ export class CommonApi {
       same_team: request?.same_team,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'PUT',
       '/api/v2/permissions/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createPoll(
@@ -1032,13 +1059,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('POST', '/api/v2/polls', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<PollResponse>(
+      'POST',
+      '/api/v2/polls',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['PollResponse']?.(response.body);
+    decoders['PollResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updatePoll(
@@ -1060,13 +1091,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('PUT', '/api/v2/polls', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<PollResponse>(
+      'PUT',
+      '/api/v2/polls',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['PollResponse']?.(response.body);
+    decoders['PollResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryPolls(
@@ -1083,20 +1118,17 @@ export class CommonApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryPollsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryPollsResponse>(
       'POST',
       '/api/v2/polls/query',
       undefined,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['QueryPollsResponse']?.(response.body);
+    decoders['QueryPollsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deletePoll(request: {
@@ -1110,16 +1142,16 @@ export class CommonApi {
       poll_id: request?.poll_id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/polls/{poll_id}',
       pathParams,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getPoll(request: {
@@ -1133,13 +1165,16 @@ export class CommonApi {
       poll_id: request?.poll_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >('GET', '/api/v2/polls/{poll_id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<PollResponse>(
+      'GET',
+      '/api/v2/polls/{poll_id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['PollResponse']?.(response.body);
+    decoders['PollResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updatePollPartial(
@@ -1155,20 +1190,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollResponse>(
       'PATCH',
       '/api/v2/polls/{poll_id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PollResponse']?.(response.body);
+    decoders['PollResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createPollOption(
@@ -1184,20 +1216,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollOptionResponse>(
       'POST',
       '/api/v2/polls/{poll_id}/options',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PollOptionResponse']?.(response.body);
+    decoders['PollOptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updatePollOption(
@@ -1214,20 +1243,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollOptionResponse>(
       'PUT',
       '/api/v2/polls/{poll_id}/options',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PollOptionResponse']?.(response.body);
+    decoders['PollOptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deletePollOption(request: {
@@ -1243,16 +1269,16 @@ export class CommonApi {
       option_id: request?.option_id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/polls/{poll_id}/options/{option_id}',
       pathParams,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getPollOption(request: {
@@ -1268,18 +1294,16 @@ export class CommonApi {
       option_id: request?.option_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollOptionResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollOptionResponse>(
       'GET',
       '/api/v2/polls/{poll_id}/options/{option_id}',
       pathParams,
       queryParams,
     );
 
-    decoders['PollOptionResponse']?.(response.body);
+    decoders['PollOptionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryPollVotes(
@@ -1299,20 +1323,17 @@ export class CommonApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollVotesResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollVotesResponse>(
       'POST',
       '/api/v2/polls/{poll_id}/votes',
       pathParams,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['PollVotesResponse']?.(response.body);
+    decoders['PollVotesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updatePushNotificationPreferences(
@@ -1322,32 +1343,34 @@ export class CommonApi {
       preferences: request?.preferences,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertPushPreferencesResponse>
-    >(
-      'POST',
-      '/api/v2/push_preferences',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertPushPreferencesResponse>(
+        'POST',
+        '/api/v2/push_preferences',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertPushPreferencesResponse']?.(response.body);
+    decoders['UpsertPushPreferencesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listPushProviders(): Promise<
     StreamResponse<ListPushProvidersResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListPushProvidersResponse>
-    >('GET', '/api/v2/push_providers', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<ListPushProvidersResponse>(
+        'GET',
+        '/api/v2/push_providers',
+        undefined,
+        undefined,
+      );
 
-    decoders['ListPushProvidersResponse']?.(response.body);
+    decoders['ListPushProvidersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertPushProvider(
@@ -1357,20 +1380,18 @@ export class CommonApi {
       push_provider: request?.push_provider,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertPushProviderResponse>
-    >(
-      'POST',
-      '/api/v2/push_providers',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertPushProviderResponse>(
+        'POST',
+        '/api/v2/push_providers',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertPushProviderResponse']?.(response.body);
+    decoders['UpsertPushProviderResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deletePushProvider(request: {
@@ -1382,16 +1403,16 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/push_providers/{type}/{name}',
       pathParams,
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getPushTemplates(request: {
@@ -1403,13 +1424,16 @@ export class CommonApi {
       push_provider_name: request?.push_provider_name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetPushTemplatesResponse>
-    >('GET', '/api/v2/push_templates', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetPushTemplatesResponse>(
+      'GET',
+      '/api/v2/push_templates',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetPushTemplatesResponse']?.(response.body);
+    decoders['GetPushTemplatesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertPushTemplate(
@@ -1423,20 +1447,18 @@ export class CommonApi {
       template: request?.template,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertPushTemplateResponse>
-    >(
-      'POST',
-      '/api/v2/push_templates',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertPushTemplateResponse>(
+        'POST',
+        '/api/v2/push_templates',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertPushTemplateResponse']?.(response.body);
+    decoders['UpsertPushTemplateResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getRateLimits(request?: {
@@ -1460,23 +1482,29 @@ export class CommonApi {
       endpoints: request?.endpoints,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetRateLimitsResponse>
-    >('GET', '/api/v2/rate_limits', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetRateLimitsResponse>(
+      'GET',
+      '/api/v2/rate_limits',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetRateLimitsResponse']?.(response.body);
+    decoders['GetRateLimitsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listRoles(): Promise<StreamResponse<ListRolesResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListRolesResponse>
-    >('GET', '/api/v2/roles', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListRolesResponse>(
+      'GET',
+      '/api/v2/roles',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListRolesResponse']?.(response.body);
+    decoders['ListRolesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createRole(
@@ -1486,13 +1514,17 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateRoleResponse>
-    >('POST', '/api/v2/roles', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<CreateRoleResponse>(
+      'POST',
+      '/api/v2/roles',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['CreateRoleResponse']?.(response.body);
+    decoders['CreateRoleResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async searchRoles(request: {
@@ -1510,13 +1542,16 @@ export class CommonApi {
       include_global_roles: request?.include_global_roles,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SearchRolesResponse>
-    >('GET', '/api/v2/roles/search', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<SearchRolesResponse>(
+      'GET',
+      '/api/v2/roles/search',
+      undefined,
+      queryParams,
+    );
 
-    decoders['SearchRolesResponse']?.(response.body);
+    decoders['SearchRolesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteRole(request: {
@@ -1526,16 +1561,16 @@ export class CommonApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/roles/{name}',
       pathParams,
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getTask(request: {
@@ -1545,13 +1580,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetTaskResponse>
-    >('GET', '/api/v2/tasks/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<GetTaskResponse>(
+      'GET',
+      '/api/v2/tasks/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['GetTaskResponse']?.(response.body);
+    decoders['GetTaskResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFile(request?: {
@@ -1561,16 +1599,16 @@ export class CommonApi {
       url: request?.url,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/uploads/file',
       undefined,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async uploadFile(
@@ -1581,9 +1619,7 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<FileUploadResponse>
-    >(
+    const response = await this.apiClient.sendRequest<FileUploadResponse>(
       'POST',
       '/api/v2/uploads/file',
       undefined,
@@ -1592,9 +1628,9 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders['FileUploadResponse']?.(response.body);
+    decoders['FileUploadResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteImage(request?: {
@@ -1604,16 +1640,16 @@ export class CommonApi {
       url: request?.url,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/uploads/image',
       undefined,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async uploadImage(
@@ -1625,9 +1661,7 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ImageUploadResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ImageUploadResponse>(
       'POST',
       '/api/v2/uploads/image',
       undefined,
@@ -1636,9 +1670,9 @@ export class CommonApi {
       'multipart/form-data',
     );
 
-    decoders['ImageUploadResponse']?.(response.body);
+    decoders['ImageUploadResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listUserGroups(request?: {
@@ -1654,13 +1688,16 @@ export class CommonApi {
       team_id: request?.team_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListUserGroupsResponse>
-    >('GET', '/api/v2/usergroups', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<ListUserGroupsResponse>(
+      'GET',
+      '/api/v2/usergroups',
+      undefined,
+      queryParams,
+    );
 
-    decoders['ListUserGroupsResponse']?.(response.body);
+    decoders['ListUserGroupsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createUserGroup(
@@ -1674,20 +1711,17 @@ export class CommonApi {
       member_ids: request?.member_ids,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateUserGroupResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateUserGroupResponse>(
       'POST',
       '/api/v2/usergroups',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateUserGroupResponse']?.(response.body);
+    decoders['CreateUserGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async searchUserGroups(request: {
@@ -1705,13 +1739,16 @@ export class CommonApi {
       team_id: request?.team_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SearchUserGroupsResponse>
-    >('GET', '/api/v2/usergroups/search', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<SearchUserGroupsResponse>(
+      'GET',
+      '/api/v2/usergroups/search',
+      undefined,
+      queryParams,
+    );
 
-    decoders['SearchUserGroupsResponse']?.(response.body);
+    decoders['SearchUserGroupsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteUserGroup(request: {
@@ -1725,16 +1762,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/usergroups/{id}',
       pathParams,
       queryParams,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getUserGroup(request: {
@@ -1748,13 +1785,16 @@ export class CommonApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetUserGroupResponse>
-    >('GET', '/api/v2/usergroups/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetUserGroupResponse>(
+      'GET',
+      '/api/v2/usergroups/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetUserGroupResponse']?.(response.body);
+    decoders['GetUserGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateUserGroup(
@@ -1769,20 +1809,17 @@ export class CommonApi {
       team_id: request?.team_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateUserGroupResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateUserGroupResponse>(
       'PUT',
       '/api/v2/usergroups/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateUserGroupResponse']?.(response.body);
+    decoders['UpdateUserGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addUserGroupMembers(
@@ -1797,20 +1834,18 @@ export class CommonApi {
       team_id: request?.team_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddUserGroupMembersResponse>
-    >(
-      'POST',
-      '/api/v2/usergroups/{id}/members',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<AddUserGroupMembersResponse>(
+        'POST',
+        '/api/v2/usergroups/{id}/members',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['AddUserGroupMembersResponse']?.(response.body);
+    decoders['AddUserGroupMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async removeUserGroupMembers(
@@ -1824,20 +1859,18 @@ export class CommonApi {
       team_id: request?.team_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RemoveUserGroupMembersResponse>
-    >(
-      'POST',
-      '/api/v2/usergroups/{id}/members/delete',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<RemoveUserGroupMembersResponse>(
+        'POST',
+        '/api/v2/usergroups/{id}/members/delete',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['RemoveUserGroupMembersResponse']?.(response.body);
+    decoders['RemoveUserGroupMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryUsers(request?: {
@@ -1847,13 +1880,16 @@ export class CommonApi {
       payload: request?.payload,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryUsersResponse>
-    >('GET', '/api/v2/users', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<QueryUsersResponse>(
+      'GET',
+      '/api/v2/users',
+      undefined,
+      queryParams,
+    );
 
-    decoders['QueryUsersResponse']?.(response.body);
+    decoders['QueryUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateUsersPartial(
@@ -1863,13 +1899,17 @@ export class CommonApi {
       users: request?.users,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateUsersResponse>
-    >('PATCH', '/api/v2/users', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<UpdateUsersResponse>(
+      'PATCH',
+      '/api/v2/users',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['UpdateUsersResponse']?.(response.body);
+    decoders['UpdateUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateUsers(
@@ -1879,13 +1919,17 @@ export class CommonApi {
       users: request?.users,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateUsersResponse>
-    >('POST', '/api/v2/users', undefined, undefined, body, 'application/json');
+    const response = await this.apiClient.sendRequest<UpdateUsersResponse>(
+      'POST',
+      '/api/v2/users',
+      undefined,
+      undefined,
+      body,
+    );
 
-    decoders['UpdateUsersResponse']?.(response.body);
+    decoders['UpdateUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getBlockedUsers(request?: {
@@ -1895,13 +1939,16 @@ export class CommonApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetBlockedUsersResponse>
-    >('GET', '/api/v2/users/block', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetBlockedUsersResponse>(
+      'GET',
+      '/api/v2/users/block',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetBlockedUsersResponse']?.(response.body);
+    decoders['GetBlockedUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async blockUsers(
@@ -1913,20 +1960,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<BlockUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<BlockUsersResponse>(
       'POST',
       '/api/v2/users/block',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['BlockUsersResponse']?.(response.body);
+    decoders['BlockUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deactivateUsers(
@@ -1939,20 +1983,17 @@ export class CommonApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeactivateUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeactivateUsersResponse>(
       'POST',
       '/api/v2/users/deactivate',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeactivateUsersResponse']?.(response.body);
+    decoders['DeactivateUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteUsers(
@@ -1969,20 +2010,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteUsersResponse>(
       'POST',
       '/api/v2/users/delete',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeleteUsersResponse']?.(response.body);
+    decoders['DeleteUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getUserLiveLocations(request?: {
@@ -1992,13 +2030,16 @@ export class CommonApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SharedLocationsResponse>
-    >('GET', '/api/v2/users/live_locations', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<SharedLocationsResponse>(
+      'GET',
+      '/api/v2/users/live_locations',
+      undefined,
+      queryParams,
+    );
 
-    decoders['SharedLocationsResponse']?.(response.body);
+    decoders['SharedLocationsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateLiveLocation(
@@ -2014,20 +2055,17 @@ export class CommonApi {
       longitude: request?.longitude,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SharedLocationResponse>
-    >(
+    const response = await this.apiClient.sendRequest<SharedLocationResponse>(
       'PUT',
       '/api/v2/users/live_locations',
       undefined,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['SharedLocationResponse']?.(response.body);
+    decoders['SharedLocationResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async reactivateUsers(
@@ -2040,20 +2078,17 @@ export class CommonApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ReactivateUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ReactivateUsersResponse>(
       'POST',
       '/api/v2/users/reactivate',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ReactivateUsersResponse']?.(response.body);
+    decoders['ReactivateUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async restoreUsers(
@@ -2063,18 +2098,17 @@ export class CommonApi {
       user_ids: request?.user_ids,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'POST',
       '/api/v2/users/restore',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async unblockUsers(
@@ -2086,20 +2120,17 @@ export class CommonApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnblockUsersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnblockUsersResponse>(
       'POST',
       '/api/v2/users/unblock',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UnblockUsersResponse']?.(response.body);
+    decoders['UnblockUsersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deactivateUser(
@@ -2113,20 +2144,17 @@ export class CommonApi {
       mark_messages_deleted: request?.mark_messages_deleted,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeactivateUserResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeactivateUserResponse>(
       'POST',
       '/api/v2/users/{user_id}/deactivate',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeactivateUserResponse']?.(response.body);
+    decoders['DeactivateUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async exportUser(request: {
@@ -2136,13 +2164,16 @@ export class CommonApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ExportUserResponse>
-    >('GET', '/api/v2/users/{user_id}/export', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<ExportUserResponse>(
+      'GET',
+      '/api/v2/users/{user_id}/export',
+      pathParams,
+      undefined,
+    );
 
-    decoders['ExportUserResponse']?.(response.body);
+    decoders['ExportUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async reactivateUser(
@@ -2157,19 +2188,16 @@ export class CommonApi {
       restore_messages: request?.restore_messages,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ReactivateUserResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ReactivateUserResponse>(
       'POST',
       '/api/v2/users/{user_id}/reactivate',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ReactivateUserResponse']?.(response.body);
+    decoders['ReactivateUserResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 }
