@@ -1,0 +1,65 @@
+name: RTC Live
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      rust_ref:
+        description: stream-video-rust branch, tag, or SHA
+        required: true
+        default: main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.repository }}-rtc-live
+  cancel-in-progress: false
+
+env:
+  RUN_STREAM_RTC_LIVE: "1"
+  STREAM_API_KEY: ${{ vars.TEST_API_KEY }}
+  STREAM_SECRET: ${{ secrets.TEST_SECRET }}
+  STREAM_NODE_RTC_NATIVE_PATH: ${{ github.workspace }}/stream-video-rust/bindings/node/stream-node-rtc.node
+
+jobs:
+  live:
+    name: Node RTC live SFU
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: GetStream/stream-video-rust
+          ref: ${{ inputs.rust_ref || 'main' }}
+          path: stream-video-rust
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: yarn
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential clang cmake libvpx-dev pkg-config
+      - name: Require live credentials
+        run: |
+          if [[ -z "${STREAM_API_KEY:-}" || -z "${STREAM_SECRET:-}" ]]; then
+            echo "TEST_API_KEY and TEST_SECRET are required for RTC live tests." >&2
+            exit 1
+          fi
+      - name: Install native binding dependencies
+        working-directory: stream-video-rust/bindings/node
+        run: npm ci --ignore-scripts
+      - name: Build native binding
+        working-directory: stream-video-rust/bindings/node
+        run: npm run build:local
+      - name: Install Node SDK dependencies
+        run: yarn install --immutable
+      - name: Run credentialed RTC live tests
+        run: yarn test:rtc:live
