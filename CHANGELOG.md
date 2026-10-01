@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.10](https://github.com/GetStream/stream-node/compare/v0.8.9...v0.8.10) (2026-10-01)
+
+
+### Features
+
+* Add include_soft_deleted_comments ([#362](https://github.com/GetStream/stream-node/issues/362)) ([0702ce4](https://github.com/GetStream/stream-node/commit/0702ce427afcdfecdc1b877b095c09cc422a8bb8))
+
 ## [0.8.9](https://github.com/GetStream/stream-node/compare/v0.8.8...v0.8.9) (2026-09-29)
 
 
