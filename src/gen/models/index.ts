@@ -842,6 +842,10 @@ export interface ActivityResponse {
    */
   text?: string;
   /**
+   * Number of top-level comments (comments directly on the activity, excluding replies). Only returned by GetActivity when include_top_level_comment_count=true; never set on feed reads or events. Same status/deletion rules as comment_count; not adjusted per viewer.
+   */
+  top_level_comment_count?: number;
+  /**
    * If visibility is 'tag', this is the tag name
    */
   visibility_tag?: string;
@@ -909,6 +913,10 @@ export interface ActivitySelectorConfig {
    */
   min_popularity?: number;
   /**
+   * Maximum number of candidate activities this selector contributes to a ranked feed (1-1000). Omit to use the default ranking buffer. Only supported on the popular, proximity, interest and query selectors, and ignored on feeds without ranking
+   */
+  ranking_candidate_limit?: number;
+  /**
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
@@ -944,6 +952,10 @@ export interface ActivitySelectorConfigResponse {
    * Minimum popularity threshold. For the 'popular' selector, values below 1 are normalized to the default (5) at read time.
    */
   min_popularity?: number;
+  /**
+   * Maximum number of candidate activities this selector contributes to a ranked feed
+   */
+  ranking_candidate_limit?: number;
   /**
    * Sort parameters for activity selection
    */
@@ -2672,7 +2684,8 @@ export interface BulkActionAppealsRequest {
    */
   unban?: UnbanActionRequestPayload;
   /**
-   * Deprecated: use restore instead — it now also reverses a block or shadow block. Configuration for unblock action.
+   * @deprecated
+   * Deprecated: Use restore instead, which now also reverses a block or shadow block. Configuration for unblock action.
    */
   unblock?: UnblockActionRequestPayload;
   /**
@@ -4260,6 +4273,9 @@ export interface ChannelConfig {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -4358,6 +4374,9 @@ export interface ChannelConfigWithInfo {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -5121,6 +5140,9 @@ export interface ChannelTypeConfig {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -5580,6 +5602,22 @@ export interface CheckResponse {
    */
   status: string;
   /**
+   * Intent topic label matched by this request's text (test mode only; omitted when no topic matched)
+   */
+  intent_matched_topic?: string;
+  /**
+   * Stage 2 conversation score (0-100) computed synchronously against this request's texts (test mode only). Omitted -- not zero -- when intent_matched_topic is set but scoring could not be completed (matched topic disabled/removed, or the scoring call itself failed); only present when a real score was computed
+   */
+  intent_score?: number;
+  /**
+   * The matched topic's configured score_threshold, for comparison against intent_score (test mode only). Same omitted-not-zero rule as intent_score
+   */
+  intent_score_threshold?: number;
+  /**
+   * Whether intent_score clears intent_score_threshold, i.e. whether this would fire moderation.intent_detected in production (test mode only). Same omitted-not-zero rule as intent_score
+   */
+  intent_would_fire?: boolean;
+  /**
    * ID of the running moderation task
    */
   task_id?: string;
@@ -5588,6 +5626,9 @@ export interface CheckResponse {
    */
   triggered_rules?: Array<TriggeredRuleResponse>;
   item?: ReviewQueueItemResponse;
+  /**
+   * @deprecated
+   */
   triggered_rule?: TriggeredRuleResponse;
 }
 
@@ -6168,6 +6209,9 @@ export interface ConfigOverridesRequest {
    * Maximum message length
    */
   max_message_length?: number;
+  /**
+   * Overrides the push notification level for this channel
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   /**
    * Enable/disable quotes
@@ -6255,6 +6299,7 @@ export interface ConfigResponse {
   automod_toxicity_config?: AutomodToxicityConfig;
   block_list_config?: BlockListConfig;
   flood_config?: FloodConfig;
+  intent_config?: IntentConfigResponse;
   llm_config?: LLMConfig;
   velocity_filter_config?: VelocityFilterConfig;
   video_call_rule_config?: VideoCallRuleConfig;
@@ -6571,6 +6616,9 @@ export interface CreateChannelTypeResponse {
   created_at: TimestampNS;
   custom_events: boolean;
   delivery_events: boolean;
+  /**
+   * Duration of the request in milliseconds
+   */
   duration: string;
   mark_messages_pending: boolean;
   max_message_length: number;
@@ -6599,6 +6647,9 @@ export interface CreateChannelTypeResponse {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -7063,6 +7114,7 @@ export interface CreateQueueRequest {
 }
 
 export interface CreateReminderRequest {
+  expires_at?: Date;
   remind_at?: Date;
   user_id?: string;
   /**
@@ -7689,6 +7741,17 @@ export interface DeleteFeedsBatchResponse {
    * The ID of the async task that will handle feed cleanup and hard deletion
    */
   task_id: string;
+}
+
+export interface DeleteFeedsRetentionPolicyRequest {
+  policy: 'old-activities';
+}
+
+export interface DeleteFeedsRetentionPolicyResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
 }
 
 export interface DeleteImportV2TaskResponse {
@@ -9327,6 +9390,13 @@ export interface FeedsReactionResponse {
   custom?: Record<string, any>;
 }
 
+export interface FeedsRetentionRunResponse {
+  app_pk: number;
+  date: string;
+  policy: string;
+  stats: RunStats;
+}
+
 export interface FeedsShareResponse {
   activity_id: string;
   created_at: TimestampNS;
@@ -9655,6 +9725,7 @@ export interface FloodSimilarConfig {
 }
 
 export interface FloodSimilarRuleParameters {
+  min_text_length?: number;
   similarity_distance?: number;
   threshold?: number;
   time_window?: string;
@@ -9869,6 +9940,10 @@ export interface FullUserResponse {
   shadow_banned: boolean;
   total_unread_count: number;
   unread_channels: number;
+  /**
+   * @deprecated
+   * Deprecated: Use total_unread_count instead.
+   */
   unread_count: number;
   unread_threads: number;
   updated_at: TimestampNS;
@@ -10098,6 +10173,9 @@ export interface GetChannelTypeResponse {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -10138,6 +10216,10 @@ export interface GetCommentResponse {
 }
 
 export interface GetCommentsResponse {
+  /**
+   * Total number of comments on the object, including replies at every depth
+   */
+  comment_count: number;
   duration: string;
   /**
    * Sort order used for the comments (first, last, top, best, controversial)
@@ -10149,6 +10231,10 @@ export interface GetCommentsResponse {
   comments: Array<ThreadedCommentResponse>;
   next?: string;
   prev?: string;
+  /**
+   * Number of comments directly on the object, excluding replies. Independent of depth, replies_limit and id_around, and not adjusted per viewer. Only present when include_top_level_comment_count is set
+   */
+  top_level_comment_count?: number;
 }
 
 export interface GetConfigResponse {
@@ -10283,6 +10369,39 @@ export interface GetFeedsRateLimitsResponse {
    * Rate limits for Web platform (endpoint name -> limit info)
    */
   web?: Record<string, LimitInfoResponse>;
+}
+
+export interface GetFeedsRetentionPolicyResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  enabled: boolean;
+  policies: Array<RetentionPolicy>;
+}
+
+export interface GetFeedsRetentionPolicyRunsRequest {
+  limit?: number;
+  next?: string;
+  prev?: string;
+  /**
+   * Array of sort parameters
+   */
+  sort?: Array<SortParamRequest>;
+  /**
+   * Filter conditions to apply to the query
+   */
+  filter_conditions?: Record<string, any>;
+}
+
+export interface GetFeedsRetentionPolicyRunsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  runs: Array<FeedsRetentionRunResponse>;
+  next?: string;
+  prev?: string;
 }
 
 export interface GetFlagCountRequest {
@@ -11295,6 +11414,136 @@ export interface InsertActionLogRequest {
 
 export interface InsertActionLogResponse {
   duration: string;
+}
+
+export interface IntentBufferedItem {
+  /**
+   * The ID of the user who authored the buffered message or comment
+   */
+  author_user_id: string;
+  /**
+   * When the buffered message or comment was created
+   */
+  created_at: TimestampNS;
+  /**
+   * The ID of the buffered message or comment
+   */
+  id: string;
+  /**
+   * The text of the buffered message or comment
+   */
+  text: string;
+}
+
+export interface IntentConfigRequest {
+  /**
+   * Topics to classify conversation text against (max 20, labels must be unique)
+   */
+  topics?: Array<IntentTopicRequest>;
+}
+
+export interface IntentConfigResponse {
+  /**
+   * Topics conversation text is classified against
+   */
+  topics: Array<IntentTopicResponse>;
+}
+
+export interface IntentDetectedEvent {
+  /**
+   * The channel CID (chat) or feed ID (feeds) the buffered conversation belongs to
+   */
+  conversation_id: string;
+  created_at: TimestampNS;
+  /**
+   * The ID of the most recently buffered entity
+   */
+  entity_id: string;
+  /**
+   * The type of the most recently buffered entity (chat message or feed comment)
+   */
+  entity_type: string;
+  /**
+   * The configured intent topic label that started the buffer
+   */
+  matched_topic: string;
+  /**
+   * The Stage 2 conversation score (0-100) that cleared score_threshold
+   */
+  score: number;
+  /**
+   * The ID of the user whose conversation was scored
+   */
+  user_id: string;
+  /**
+   * The buffered items that were scored, in the order they were captured
+   */
+  items: Array<IntentBufferedItem>;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: TimestampNS;
+}
+
+export interface IntentTopicRequest {
+  /**
+   * Unique topic label (e.g. purchase_intent)
+   */
+  label: string;
+  /**
+   * How long the buffer collects items before scoring runs
+   */
+  analysis_cooldown_seconds?: number;
+  /**
+   * Optional description used in the classification prompt; the label alone is used when empty
+   */
+  description?: string;
+  /**
+   * Whether this topic is evaluated
+   */
+  enabled?: boolean;
+  /**
+   * Items buffered per conversation before scoring runs early
+   */
+  max_captured_items?: number;
+  /**
+   * Suppresses this topic for a user and conversation after it fires; 0 uses the default
+   */
+  refire_cooldown_seconds?: number;
+  /**
+   * Conversation score (0-100) required to fire moderation.intent_detected
+   */
+  score_threshold?: number;
+}
+
+export interface IntentTopicResponse {
+  /**
+   * How long the buffer collects items before scoring runs
+   */
+  analysis_cooldown_seconds: number;
+  /**
+   * Whether this topic is evaluated
+   */
+  enabled: boolean;
+  /**
+   * Unique topic label (e.g. purchase_intent)
+   */
+  label: string;
+  /**
+   * Items buffered per conversation before scoring runs early
+   */
+  max_captured_items: number;
+  /**
+   * Conversation score (0-100) required to fire moderation.intent_detected
+   */
+  score_threshold: number;
+  /**
+   * Optional description used in the classification prompt; the label alone is used when empty
+   */
+  description?: string;
+  /**
+   * Suppresses this topic for a user and conversation after it fires; 0 uses the default
+   */
+  refire_cooldown_seconds?: number;
 }
 
 export interface InterestTagResponse {
@@ -14115,6 +14364,10 @@ export interface OwnUserResponse {
   role: string;
   total_unread_count: number;
   unread_channels: number;
+  /**
+   * @deprecated
+   * Deprecated: Use total_unread_count instead.
+   */
   unread_count: number;
   unread_threads: number;
   updated_at: TimestampNS;
@@ -15627,6 +15880,10 @@ export interface QueryCommentsRequest {
    */
   id_around?: string;
   /**
+   * When true, include soft-deleted comments in the result. Server-side only, and requires an object_id filter. Returns comments deleted by any path, including user-data deletion. Moderation-actioned comments (removed, hidden) remain excluded, and comments whose parent activity is itself deleted are not returned.
+   */
+  include_soft_deleted_comments?: boolean;
+  /**
    * Maximum number of comments to return
    */
   limit?: number;
@@ -16338,7 +16595,7 @@ export interface QueryReviewQueueRequest {
    */
   sort?: Array<SortParamRequest>;
   /**
-   * Filter conditions for review queue items. Accepts built-in fields (e.g. status, channel_cid, severity, recommended_action) and customer-supplied moderation_payload.custom keys: any key that is not a built-in field is matched against the item's custom moderation data (e.g. {"location_id": "loc-42"}). Use filter_config.filterable_custom_keys to discover which custom keys the app exposes as chips.
+   * Filter conditions for review queue items. Accepts built-in fields (e.g. status, channel_cid, severity, recommended_action) and customer-supplied moderation_payload.custom keys: any key that is not a built-in field is matched against the item's custom moderation data (e.g. {"location_id": "loc-42"}). Use filter_config.filterable_custom_keys to discover which custom keys the app exposes as chips. content_text searches the moderated text: "$q" is a keyword search (terms ANDed, no adjacency) over the indexed tsvector, while "$eq" (or "$in" for several wordings) matches the text exactly. The exact form is unindexed, so scope it with date_range rather than running it across the whole queue.
    */
   filter?: Record<string, any>;
   /**
@@ -17236,6 +17493,7 @@ export interface ReminderResponseData {
   message_id: string;
   updated_at: TimestampNS;
   user_id: string;
+  expires_at?: TimestampNS;
   remind_at?: TimestampNS;
   /**
    * Represents channel in chat
@@ -18562,6 +18820,21 @@ export interface SessionWarningResponse {
   time?: TimestampNS;
 }
 
+export interface SetFeedsRetentionPolicyRequest {
+  max_age_hours: number;
+  policy: 'old-activities';
+  enabled?: boolean;
+}
+
+export interface SetFeedsRetentionPolicyResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  enabled: boolean;
+  policy: RetentionPolicy;
+}
+
 export interface SetRetentionPolicyRequest {
   max_age_hours: number;
   policy: 'old-messages' | 'inactive-channels';
@@ -19184,7 +19457,8 @@ export interface SubmitActionRequest {
    */
   unban?: UnbanActionRequestPayload;
   /**
-   * Deprecated: use restore instead — it now also reverses a block or shadow block. Configuration for unblock action.
+   * @deprecated
+   * Deprecated: Use restore instead, which now also reverses a block or shadow block. Configuration for unblock action.
    */
   unblock?: UnblockActionRequestPayload;
   /**
@@ -20042,6 +20316,7 @@ export interface UnbanRequest {
    */
   unbanned_by_id?: string;
   /**
+   * @deprecated
    * User request object
    */
   unbanned_by?: UserRequest;
@@ -20827,6 +21102,9 @@ export interface UpdateChannelTypeRequest {
   partition_size?: number;
   partition_ttl?: string;
   polls?: boolean;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   push_notifications?: boolean;
   quotes?: boolean;
@@ -20864,6 +21142,9 @@ export interface UpdateChannelTypeResponse {
   created_at: TimestampNS;
   custom_events: boolean;
   delivery_events: boolean;
+  /**
+   * Duration of the request in milliseconds
+   */
   duration: string;
   mark_messages_pending: boolean;
   max_message_length: number;
@@ -20892,6 +21173,9 @@ export interface UpdateChannelTypeResponse {
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   partition_size?: number;
   partition_ttl?: string;
+  /**
+   * Sets the push notification level for a channel type
+   */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
@@ -21536,6 +21820,7 @@ export interface UpdateQueueRequest {
 }
 
 export interface UpdateReminderRequest {
+  expires_at?: Date;
   remind_at?: Date;
   user_id?: string;
   /**
@@ -21730,7 +22015,7 @@ export interface UpdateUsersResponse {
   duration: string;
   /**
    * @deprecated
-   * Deprecated: always empty. Removing a user from a team no longer deletes their memberships in that team's channels, so there is no task to poll
+   * Deprecated: Always empty. Removing a user from a team no longer deletes their memberships in that team's channels, so there is no task to poll.
    */
   membership_deletion_task_id: string;
   /**
@@ -21940,6 +22225,7 @@ export interface UpsertConfigRequest {
   bodyguard_config?: AITextConfig;
   flood_config?: FloodConfig;
   google_vision_config?: GoogleVisionConfig;
+  intent_config?: IntentConfigRequest;
   llm_config?: LLMConfig;
   rule_builder_config?: RuleBuilderConfig;
   /**
@@ -23127,6 +23413,7 @@ export type WHEvent =
   | ({
       type: 'moderation.image_analysis.complete';
     } & ModerationImageAnalysisCompleteEvent)
+  | ({ type: 'moderation.intent_detected' } & IntentDetectedEvent)
   | ({ type: 'moderation.mark_reviewed' } & ModerationMarkReviewedEvent)
   | ({
       type: 'moderation.text_analysis.complete';

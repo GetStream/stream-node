@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.8.10](https://github.com/GetStream/stream-node/compare/v0.8.9...v0.8.10) (2026-10-01)
+
+
+### Features
+
+* Add include_soft_deleted_comments ([#362](https://github.com/GetStream/stream-node/issues/362)) ([0702ce4](https://github.com/GetStream/stream-node/commit/0702ce427afcdfecdc1b877b095c09cc422a8bb8))
+
+## [0.8.9](https://github.com/GetStream/stream-node/compare/v0.8.8...v0.8.9) (2026-09-29)
+
+
+### Features
+
+* [FEEDS-1965] add top_level_comment_count to feeds getActivity and getComments ([#359](https://github.com/GetStream/stream-node/issues/359)) ([bf251c5](https://github.com/GetStream/stream-node/commit/bf251c58a1d1d12b87e49612760184027e121d78))
+* regenerate with the flat sendRequest response and no default JSON content type ([#357](https://github.com/GetStream/stream-node/issues/357)) ([9d50ab4](https://github.com/GetStream/stream-node/commit/9d50ab4f4f6a3038649cb1bd4e599af37dd06ae5))
+
+## [0.8.8](https://github.com/GetStream/stream-node/compare/v0.8.7...v0.8.8) (2026-09-24)
+
+
+### Features
+
+* Add include_soft_deleted_comments ([#355](https://github.com/GetStream/stream-node/issues/355)) ([2b5287f](https://github.com/GetStream/stream-node/commit/2b5287f46842aa79cf16b1e84cccdbf4e4fda6e5))
+* update to latest API spec ([#353](https://github.com/GetStream/stream-node/issues/353)) ([0897638](https://github.com/GetStream/stream-node/commit/08976387a19ad7d12988db5f8c3e99a6415492f7))
+
 ## [0.8.7](https://github.com/GetStream/stream-node/compare/v0.8.6...v0.8.7) (2026-09-21)
 
 

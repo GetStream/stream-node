@@ -54,6 +54,8 @@ import {
   DeleteFeedViewResponse,
   DeleteFeedsBatchRequest,
   DeleteFeedsBatchResponse,
+  DeleteFeedsRetentionPolicyRequest,
+  DeleteFeedsRetentionPolicyResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
   FollowBatchRequest,
@@ -68,6 +70,9 @@ import {
   GetFeedViewResponse,
   GetFeedVisibilityResponse,
   GetFeedsRateLimitsResponse,
+  GetFeedsRetentionPolicyResponse,
+  GetFeedsRetentionPolicyRunsRequest,
+  GetFeedsRetentionPolicyRunsResponse,
   GetFollowSuggestionsResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
@@ -128,6 +133,8 @@ import {
   RestoreCommentRequest,
   RestoreCommentResponse,
   RestoreFeedGroupResponse,
+  SetFeedsRetentionPolicyRequest,
+  SetFeedsRetentionPolicyResponse,
   SingleFollowResponse,
   TrackActivityMetricsRequest,
   TrackActivityMetricsResponse,
@@ -216,20 +223,17 @@ export class FeedsApi {
       search_data: request?.search_data,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddActivityResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AddActivityResponse>(
       'POST',
       '/api/v2/feeds/activities',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AddActivityResponse']?.(response.body);
+    decoders['AddActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertActivities(
@@ -242,20 +246,17 @@ export class FeedsApi {
       force_moderation: request?.force_moderation,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertActivitiesResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpsertActivitiesResponse>(
       'POST',
       '/api/v2/feeds/activities/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpsertActivitiesResponse']?.(response.body);
+    decoders['UpsertActivitiesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateActivitiesPartialBatch(
@@ -266,20 +267,18 @@ export class FeedsApi {
       force_moderation: request?.force_moderation,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateActivitiesPartialBatchResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/activities/batch/partial',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateActivitiesPartialBatchResponse>(
+        'PATCH',
+        '/api/v2/feeds/activities/batch/partial',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateActivitiesPartialBatchResponse']?.(response.body);
+    decoders['UpdateActivitiesPartialBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteActivities(
@@ -293,20 +292,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteActivitiesResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteActivitiesResponse>(
       'POST',
       '/api/v2/feeds/activities/delete',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeleteActivitiesResponse']?.(response.body);
+    decoders['DeleteActivitiesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async trackActivityMetrics(
@@ -318,20 +314,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<TrackActivityMetricsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/activities/metrics/track',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<TrackActivityMetricsResponse>(
+        'POST',
+        '/api/v2/feeds/activities/metrics/track',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['TrackActivityMetricsResponse']?.(response.body);
+    decoders['TrackActivityMetricsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryActivities(
@@ -358,20 +352,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryActivitiesResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryActivitiesResponse>(
       'POST',
       '/api/v2/feeds/activities/query',
       undefined,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['QueryActivitiesResponse']?.(response.body);
+    decoders['QueryActivitiesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async batchQueryActivityReactions(
@@ -388,20 +379,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<BatchQueryActivityReactionsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/activities/reactions/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<BatchQueryActivityReactionsResponse>(
+        'POST',
+        '/api/v2/feeds/activities/reactions/query',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['BatchQueryActivityReactionsResponse']?.(response.body);
+    decoders['BatchQueryActivityReactionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteBookmark(request: {
@@ -417,18 +406,16 @@ export class FeedsApi {
       activity_id: request?.activity_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteBookmarkResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteBookmarkResponse>(
       'DELETE',
       '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       queryParams,
     );
 
-    decoders['DeleteBookmarkResponse']?.(response.body);
+    decoders['DeleteBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateBookmark(
@@ -446,20 +433,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateBookmarkResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateBookmarkResponse>(
       'PATCH',
       '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateBookmarkResponse']?.(response.body);
+    decoders['UpdateBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addBookmark(
@@ -476,20 +460,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddBookmarkResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AddBookmarkResponse>(
       'POST',
       '/api/v2/feeds/activities/{activity_id}/bookmarks',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AddBookmarkResponse']?.(response.body);
+    decoders['AddBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async activityFeedback(
@@ -506,20 +487,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ActivityFeedbackResponse>
-    >(
+    const response = await this.apiClient.sendRequest<ActivityFeedbackResponse>(
       'POST',
       '/api/v2/feeds/activities/{activity_id}/feedback',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['ActivityFeedbackResponse']?.(response.body);
+    decoders['ActivityFeedbackResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async castPollVote(
@@ -535,20 +513,17 @@ export class FeedsApi {
       vote: request?.vote,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollVoteResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollVoteResponse>(
       'POST',
       '/api/v2/feeds/activities/{activity_id}/polls/{poll_id}/vote',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PollVoteResponse']?.(response.body);
+    decoders['PollVoteResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deletePollVote(request: {
@@ -566,18 +541,16 @@ export class FeedsApi {
       vote_id: request?.vote_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PollVoteResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PollVoteResponse>(
       'DELETE',
       '/api/v2/feeds/activities/{activity_id}/polls/{poll_id}/vote/{vote_id}',
       pathParams,
       queryParams,
     );
 
-    decoders['PollVoteResponse']?.(response.body);
+    decoders['PollVoteResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addActivityReaction(
@@ -599,20 +572,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddReactionResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AddReactionResponse>(
       'POST',
       '/api/v2/feeds/activities/{activity_id}/reactions',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AddReactionResponse']?.(response.body);
+    decoders['AddReactionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryActivityReactions(
@@ -629,20 +599,18 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryActivityReactionsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/activities/{activity_id}/reactions/query',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryActivityReactionsResponse>(
+        'POST',
+        '/api/v2/feeds/activities/{activity_id}/reactions/query',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['QueryActivityReactionsResponse']?.(response.body);
+    decoders['QueryActivityReactionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteActivityReaction(request: {
@@ -660,18 +628,17 @@ export class FeedsApi {
       type: request?.type,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteActivityReactionResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/activities/{activity_id}/reactions/{type}',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteActivityReactionResponse>(
+        'DELETE',
+        '/api/v2/feeds/activities/{activity_id}/reactions/{type}',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['DeleteActivityReactionResponse']?.(response.body);
+    decoders['DeleteActivityReactionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryActivityShares(request: {
@@ -689,18 +656,17 @@ export class FeedsApi {
       activity_id: request?.activity_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryActivitySharesResponse>
-    >(
-      'GET',
-      '/api/v2/feeds/activities/{activity_id}/shares',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryActivitySharesResponse>(
+        'GET',
+        '/api/v2/feeds/activities/{activity_id}/shares',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['QueryActivitySharesResponse']?.(response.body);
+    decoders['QueryActivitySharesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteActivity(request: {
@@ -716,13 +682,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteActivityResponse>
-    >('DELETE', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<DeleteActivityResponse>(
+      'DELETE',
+      '/api/v2/feeds/activities/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['DeleteActivityResponse']?.(response.body);
+    decoders['DeleteActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getActivity(request: {
@@ -733,6 +702,7 @@ export class FeedsApi {
     user_id?: string;
     language?: string;
     translate_text?: boolean;
+    include_top_level_comment_count?: boolean;
   }): Promise<StreamResponse<GetActivityResponse>> {
     const queryParams = {
       comment_sort: request?.comment_sort,
@@ -741,18 +711,22 @@ export class FeedsApi {
       user_id: request?.user_id,
       language: request?.language,
       translate_text: request?.translate_text,
+      include_top_level_comment_count: request?.include_top_level_comment_count,
     };
     const pathParams = {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetActivityResponse>
-    >('GET', '/api/v2/feeds/activities/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetActivityResponse>(
+      'GET',
+      '/api/v2/feeds/activities/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetActivityResponse']?.(response.body);
+    decoders['GetActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateActivityPartial(
@@ -773,20 +747,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateActivityPartialResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/activities/{id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateActivityPartialResponse>(
+        'PATCH',
+        '/api/v2/feeds/activities/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateActivityPartialResponse']?.(response.body);
+    decoders['UpdateActivityPartialResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateActivity(
@@ -821,20 +793,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateActivityResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateActivityResponse>(
       'PUT',
       '/api/v2/feeds/activities/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateActivityResponse']?.(response.body);
+    decoders['UpdateActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async restoreActivity(
@@ -854,20 +823,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RestoreActivityResponse>
-    >(
+    const response = await this.apiClient.sendRequest<RestoreActivityResponse>(
       'POST',
       '/api/v2/feeds/activities/{id}/restore',
       pathParams,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['RestoreActivityResponse']?.(response.body);
+    decoders['RestoreActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async translateActivity(
@@ -880,20 +846,18 @@ export class FeedsApi {
       language: request?.language,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<TranslateActivityResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/activities/{id}/translate',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<TranslateActivityResponse>(
+        'POST',
+        '/api/v2/feeds/activities/{id}/translate',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['TranslateActivityResponse']?.(response.body);
+    decoders['TranslateActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryBookmarkFolders(
@@ -907,20 +871,18 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryBookmarkFoldersResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/bookmark_folders/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryBookmarkFoldersResponse>(
+        'POST',
+        '/api/v2/feeds/bookmark_folders/query',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryBookmarkFoldersResponse']?.(response.body);
+    decoders['QueryBookmarkFoldersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteBookmarkFolder(request: {
@@ -930,18 +892,17 @@ export class FeedsApi {
       folder_id: request?.folder_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteBookmarkFolderResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/bookmark_folders/{folder_id}',
-      pathParams,
-      undefined,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteBookmarkFolderResponse>(
+        'DELETE',
+        '/api/v2/feeds/bookmark_folders/{folder_id}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['DeleteBookmarkFolderResponse']?.(response.body);
+    decoders['DeleteBookmarkFolderResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateBookmarkFolder(
@@ -957,20 +918,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateBookmarkFolderResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/bookmark_folders/{folder_id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateBookmarkFolderResponse>(
+        'PATCH',
+        '/api/v2/feeds/bookmark_folders/{folder_id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateBookmarkFolderResponse']?.(response.body);
+    decoders['UpdateBookmarkFolderResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryBookmarks(
@@ -994,20 +953,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryBookmarksResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryBookmarksResponse>(
       'POST',
       '/api/v2/feeds/bookmarks/query',
       undefined,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['QueryBookmarksResponse']?.(response.body);
+    decoders['QueryBookmarksResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteCollections(request: {
@@ -1017,13 +973,17 @@ export class FeedsApi {
       collection_refs: request?.collection_refs,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteCollectionsResponse>
-    >('DELETE', '/api/v2/feeds/collections', undefined, queryParams);
+    const response =
+      await this.apiClient.sendRequest<DeleteCollectionsResponse>(
+        'DELETE',
+        '/api/v2/feeds/collections',
+        undefined,
+        queryParams,
+      );
 
-    decoders['DeleteCollectionsResponse']?.(response.body);
+    decoders['DeleteCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async readCollections(request?: {
@@ -1035,13 +995,16 @@ export class FeedsApi {
       collection_refs: request?.collection_refs,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ReadCollectionsResponse>
-    >('GET', '/api/v2/feeds/collections', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<ReadCollectionsResponse>(
+      'GET',
+      '/api/v2/feeds/collections',
+      undefined,
+      queryParams,
+    );
 
-    decoders['ReadCollectionsResponse']?.(response.body);
+    decoders['ReadCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCollections(
@@ -1053,20 +1016,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCollectionsResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/collections',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateCollectionsResponse>(
+        'PATCH',
+        '/api/v2/feeds/collections',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateCollectionsResponse']?.(response.body);
+    decoders['UpdateCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createCollections(
@@ -1078,20 +1039,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateCollectionsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/collections',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<CreateCollectionsResponse>(
+        'POST',
+        '/api/v2/feeds/collections',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['CreateCollectionsResponse']?.(response.body);
+    decoders['CreateCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertCollections(
@@ -1101,20 +1060,18 @@ export class FeedsApi {
       collections: request?.collections,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertCollectionsResponse>
-    >(
-      'PUT',
-      '/api/v2/feeds/collections',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertCollectionsResponse>(
+        'PUT',
+        '/api/v2/feeds/collections',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertCollectionsResponse']?.(response.body);
+    decoders['UpsertCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCollections(
@@ -1130,20 +1087,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCollectionsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryCollectionsResponse>(
       'POST',
       '/api/v2/feeds/collections/query',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryCollectionsResponse']?.(response.body);
+    decoders['QueryCollectionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getComments(request: {
@@ -1159,6 +1113,7 @@ export class FeedsApi {
     limit?: number;
     prev?: string;
     next?: string;
+    include_top_level_comment_count?: boolean;
   }): Promise<StreamResponse<GetCommentsResponse>> {
     const queryParams = {
       object_id: request?.object_id,
@@ -1173,15 +1128,19 @@ export class FeedsApi {
       limit: request?.limit,
       prev: request?.prev,
       next: request?.next,
+      include_top_level_comment_count: request?.include_top_level_comment_count,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCommentsResponse>
-    >('GET', '/api/v2/feeds/comments', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<GetCommentsResponse>(
+      'GET',
+      '/api/v2/feeds/comments',
+      undefined,
+      queryParams,
+    );
 
-    decoders['GetCommentsResponse']?.(response.body);
+    decoders['GetCommentsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addComment(
@@ -1205,20 +1164,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddCommentResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AddCommentResponse>(
       'POST',
       '/api/v2/feeds/comments',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AddCommentResponse']?.(response.body);
+    decoders['AddCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addCommentsBatch(
@@ -1228,20 +1184,17 @@ export class FeedsApi {
       comments: request?.comments,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddCommentsBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AddCommentsBatchResponse>(
       'POST',
       '/api/v2/feeds/comments/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AddCommentsBatchResponse']?.(response.body);
+    decoders['AddCommentsBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryComments(
@@ -1257,6 +1210,7 @@ export class FeedsApi {
     const body = {
       filter: request?.filter,
       id_around: request?.id_around,
+      include_soft_deleted_comments: request?.include_soft_deleted_comments,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -1265,20 +1219,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCommentsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryCommentsResponse>(
       'POST',
       '/api/v2/feeds/comments/query',
       undefined,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['QueryCommentsResponse']?.(response.body);
+    decoders['QueryCommentsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async batchQueryCommentReactions(
@@ -1295,20 +1246,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<BatchQueryCommentReactionsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/comments/reactions/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<BatchQueryCommentReactionsResponse>(
+        'POST',
+        '/api/v2/feeds/comments/reactions/query',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['BatchQueryCommentReactionsResponse']?.(response.body);
+    decoders['BatchQueryCommentReactionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteCommentBookmark(request: {
@@ -1324,18 +1273,17 @@ export class FeedsApi {
       comment_id: request?.comment_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteCommentBookmarkResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/comments/{comment_id}/bookmarks',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteCommentBookmarkResponse>(
+        'DELETE',
+        '/api/v2/feeds/comments/{comment_id}/bookmarks',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['DeleteCommentBookmarkResponse']?.(response.body);
+    decoders['DeleteCommentBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCommentBookmark(
@@ -1353,20 +1301,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCommentBookmarkResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/comments/{comment_id}/bookmarks',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateCommentBookmarkResponse>(
+        'PATCH',
+        '/api/v2/feeds/comments/{comment_id}/bookmarks',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateCommentBookmarkResponse']?.(response.body);
+    decoders['UpdateCommentBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addCommentBookmark(
@@ -1383,20 +1329,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddCommentBookmarkResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/comments/{comment_id}/bookmarks',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<AddCommentBookmarkResponse>(
+        'POST',
+        '/api/v2/feeds/comments/{comment_id}/bookmarks',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['AddCommentBookmarkResponse']?.(response.body);
+    decoders['AddCommentBookmarkResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteComment(request: {
@@ -1412,13 +1356,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteCommentResponse>
-    >('DELETE', '/api/v2/feeds/comments/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<DeleteCommentResponse>(
+      'DELETE',
+      '/api/v2/feeds/comments/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['DeleteCommentResponse']?.(response.body);
+    decoders['DeleteCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getComment(request: {
@@ -1436,13 +1383,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCommentResponse>
-    >('GET', '/api/v2/feeds/comments/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetCommentResponse>(
+      'GET',
+      '/api/v2/feeds/comments/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetCommentResponse']?.(response.body);
+    decoders['GetCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateComment(
@@ -1465,20 +1415,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCommentResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateCommentResponse>(
       'PATCH',
       '/api/v2/feeds/comments/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateCommentResponse']?.(response.body);
+    decoders['UpdateCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateCommentPartial(
@@ -1499,20 +1446,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateCommentPartialResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/comments/{id}/partial',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateCommentPartialResponse>(
+        'POST',
+        '/api/v2/feeds/comments/{id}/partial',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateCommentPartialResponse']?.(response.body);
+    decoders['UpdateCommentPartialResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async addCommentReaction(
@@ -1533,20 +1478,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AddCommentReactionResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/comments/{id}/reactions',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<AddCommentReactionResponse>(
+        'POST',
+        '/api/v2/feeds/comments/{id}/reactions',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['AddCommentReactionResponse']?.(response.body);
+    decoders['AddCommentReactionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryCommentReactions(
@@ -1563,20 +1506,18 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryCommentReactionsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/comments/{id}/reactions/query',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryCommentReactionsResponse>(
+        'POST',
+        '/api/v2/feeds/comments/{id}/reactions/query',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['QueryCommentReactionsResponse']?.(response.body);
+    decoders['QueryCommentReactionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteCommentReaction(request: {
@@ -1594,18 +1535,17 @@ export class FeedsApi {
       type: request?.type,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteCommentReactionResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/comments/{id}/reactions/{type}',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteCommentReactionResponse>(
+        'DELETE',
+        '/api/v2/feeds/comments/{id}/reactions/{type}',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['DeleteCommentReactionResponse']?.(response.body);
+    decoders['DeleteCommentReactionResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getCommentReplies(request: {
@@ -1637,13 +1577,17 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetCommentRepliesResponse>
-    >('GET', '/api/v2/feeds/comments/{id}/replies', pathParams, queryParams);
+    const response =
+      await this.apiClient.sendRequest<GetCommentRepliesResponse>(
+        'GET',
+        '/api/v2/feeds/comments/{id}/replies',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['GetCommentRepliesResponse']?.(response.body);
+    decoders['GetCommentRepliesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async restoreComment(
@@ -1657,20 +1601,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RestoreCommentResponse>
-    >(
+    const response = await this.apiClient.sendRequest<RestoreCommentResponse>(
       'POST',
       '/api/v2/feeds/comments/{id}/restore',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['RestoreCommentResponse']?.(response.body);
+    decoders['RestoreCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async translateComment(
@@ -1683,20 +1624,17 @@ export class FeedsApi {
       language: request?.language,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<TranslateCommentResponse>
-    >(
+    const response = await this.apiClient.sendRequest<TranslateCommentResponse>(
       'POST',
       '/api/v2/feeds/comments/{id}/translate',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['TranslateCommentResponse']?.(response.body);
+    decoders['TranslateCommentResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listFeedGroups(request?: {
@@ -1706,13 +1644,16 @@ export class FeedsApi {
       include_soft_deleted: request?.include_soft_deleted,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListFeedGroupsResponse>
-    >('GET', '/api/v2/feeds/feed_groups', undefined, queryParams);
+    const response = await this.apiClient.sendRequest<ListFeedGroupsResponse>(
+      'GET',
+      '/api/v2/feeds/feed_groups',
+      undefined,
+      queryParams,
+    );
 
-    decoders['ListFeedGroupsResponse']?.(response.body);
+    decoders['ListFeedGroupsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createFeedGroup(
@@ -1735,20 +1676,17 @@ export class FeedsApi {
       stories: request?.stories,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateFeedGroupResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateFeedGroupResponse>(
       'POST',
       '/api/v2/feeds/feed_groups',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateFeedGroupResponse']?.(response.body);
+    decoders['CreateFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFeed(request: {
@@ -1766,18 +1704,16 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteFeedResponse>(
       'DELETE',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       queryParams,
     );
 
-    decoders['DeleteFeedResponse']?.(response.body);
+    decoders['DeleteFeedResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateFeed(
@@ -1817,20 +1753,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateFeedResponse>
-    >(
+    const response = await this.apiClient.sendRequest<GetOrCreateFeedResponse>(
       'POST',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       queryParams,
       body,
-      'application/json',
     );
 
-    decoders['GetOrCreateFeedResponse']?.(response.body);
+    decoders['GetOrCreateFeedResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFeed(
@@ -1851,20 +1784,17 @@ export class FeedsApi {
       location: request?.location,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateFeedResponse>(
       'PUT',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateFeedResponse']?.(response.body);
+    decoders['UpdateFeedResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async markActivity(
@@ -1884,18 +1814,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'POST',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/mark/batch',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async unpinActivity(request: {
@@ -1915,18 +1844,16 @@ export class FeedsApi {
       activity_id: request?.activity_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnpinActivityResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnpinActivityResponse>(
       'DELETE',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
       pathParams,
       queryParams,
     );
 
-    decoders['UnpinActivityResponse']?.(response.body);
+    decoders['UnpinActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async pinActivity(
@@ -1947,20 +1874,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<PinActivityResponse>
-    >(
+    const response = await this.apiClient.sendRequest<PinActivityResponse>(
       'POST',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/activities/{activity_id}/pin',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['PinActivityResponse']?.(response.body);
+    decoders['PinActivityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async changeFeedVisibility(
@@ -1978,20 +1902,18 @@ export class FeedsApi {
       pending_follows_action: request?.pending_follows_action,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ChangeFeedVisibilityResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/change_visibility',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<ChangeFeedVisibilityResponse>(
+        'POST',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/change_visibility',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['ChangeFeedVisibilityResponse']?.(response.body);
+    decoders['ChangeFeedVisibilityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFeedCounts(request: {
@@ -2003,18 +1925,16 @@ export class FeedsApi {
       feed_id: request?.feed_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedCountsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<GetFeedCountsResponse>(
       'GET',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/counts',
       pathParams,
       undefined,
     );
 
-    decoders['GetFeedCountsResponse']?.(response.body);
+    decoders['GetFeedCountsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFeedMembers(
@@ -2035,20 +1955,18 @@ export class FeedsApi {
       members: request?.members,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedMembersResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateFeedMembersResponse>(
+        'PATCH',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateFeedMembersResponse']?.(response.body);
+    decoders['UpdateFeedMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async acceptFeedMemberInvite(
@@ -2066,20 +1984,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AcceptFeedMemberInviteResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/accept',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<AcceptFeedMemberInviteResponse>(
+        'POST',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/accept',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['AcceptFeedMemberInviteResponse']?.(response.body);
+    decoders['AcceptFeedMemberInviteResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryFeedMembers(
@@ -2100,20 +2016,17 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryFeedMembersResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryFeedMembersResponse>(
       'POST',
       '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/query',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryFeedMembersResponse']?.(response.body);
+    decoders['QueryFeedMembersResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async rejectFeedMemberInvite(
@@ -2131,20 +2044,18 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RejectFeedMemberInviteResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/reject',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<RejectFeedMemberInviteResponse>(
+        'POST',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/members/reject',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['RejectFeedMemberInviteResponse']?.(response.body);
+    decoders['RejectFeedMemberInviteResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryPinnedActivities(
@@ -2172,20 +2083,18 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryPinnedActivitiesResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/pinned_activities/query',
-      pathParams,
-      queryParams,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryPinnedActivitiesResponse>(
+        'POST',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/pinned_activities/query',
+        pathParams,
+        queryParams,
+        body,
+      );
 
-    decoders['QueryPinnedActivitiesResponse']?.(response.body);
+    decoders['QueryPinnedActivitiesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFollowSuggestions(request: {
@@ -2201,18 +2110,17 @@ export class FeedsApi {
       feed_group_id: request?.feed_group_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFollowSuggestionsResponse>
-    >(
-      'GET',
-      '/api/v2/feeds/feed_groups/{feed_group_id}/follow_suggestions',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<GetFollowSuggestionsResponse>(
+        'GET',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/follow_suggestions',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['GetFollowSuggestionsResponse']?.(response.body);
+    decoders['GetFollowSuggestionsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async restoreFeedGroup(request: {
@@ -2222,18 +2130,16 @@ export class FeedsApi {
       feed_group_id: request?.feed_group_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RestoreFeedGroupResponse>
-    >(
+    const response = await this.apiClient.sendRequest<RestoreFeedGroupResponse>(
       'POST',
       '/api/v2/feeds/feed_groups/{feed_group_id}/restore',
       pathParams,
       undefined,
     );
 
-    decoders['RestoreFeedGroupResponse']?.(response.body);
+    decoders['RestoreFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFeedGroup(request: {
@@ -2247,13 +2153,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedGroupResponse>
-    >('DELETE', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<DeleteFeedGroupResponse>(
+      'DELETE',
+      '/api/v2/feeds/feed_groups/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['DeleteFeedGroupResponse']?.(response.body);
+    decoders['DeleteFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFeedGroup(request: {
@@ -2267,13 +2176,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedGroupResponse>
-    >('GET', '/api/v2/feeds/feed_groups/{id}', pathParams, queryParams);
+    const response = await this.apiClient.sendRequest<GetFeedGroupResponse>(
+      'GET',
+      '/api/v2/feeds/feed_groups/{id}',
+      pathParams,
+      queryParams,
+    );
 
-    decoders['GetFeedGroupResponse']?.(response.body);
+    decoders['GetFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateFeedGroup(
@@ -2298,20 +2210,18 @@ export class FeedsApi {
       stories: request?.stories,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateFeedGroupResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_groups/{id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<GetOrCreateFeedGroupResponse>(
+        'POST',
+        '/api/v2/feeds/feed_groups/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['GetOrCreateFeedGroupResponse']?.(response.body);
+    decoders['GetOrCreateFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFeedGroup(
@@ -2336,30 +2246,30 @@ export class FeedsApi {
       stories: request?.stories,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedGroupResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateFeedGroupResponse>(
       'PUT',
       '/api/v2/feeds/feed_groups/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateFeedGroupResponse']?.(response.body);
+    decoders['UpdateFeedGroupResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listFeedViews(): Promise<StreamResponse<ListFeedViewsResponse>> {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListFeedViewsResponse>
-    >('GET', '/api/v2/feeds/feed_views', undefined, undefined);
+    const response = await this.apiClient.sendRequest<ListFeedViewsResponse>(
+      'GET',
+      '/api/v2/feeds/feed_views',
+      undefined,
+      undefined,
+    );
 
-    decoders['ListFeedViewsResponse']?.(response.body);
+    decoders['ListFeedViewsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createFeedView(
@@ -2372,20 +2282,17 @@ export class FeedsApi {
       ranking: request?.ranking,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateFeedViewResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateFeedViewResponse>(
       'POST',
       '/api/v2/feeds/feed_views',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateFeedViewResponse']?.(response.body);
+    decoders['CreateFeedViewResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFeedView(request: {
@@ -2395,13 +2302,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedViewResponse>
-    >('DELETE', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<DeleteFeedViewResponse>(
+      'DELETE',
+      '/api/v2/feeds/feed_views/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['DeleteFeedViewResponse']?.(response.body);
+    decoders['DeleteFeedViewResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFeedView(request: {
@@ -2411,13 +2321,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedViewResponse>
-    >('GET', '/api/v2/feeds/feed_views/{id}', pathParams, undefined);
+    const response = await this.apiClient.sendRequest<GetFeedViewResponse>(
+      'GET',
+      '/api/v2/feeds/feed_views/{id}',
+      pathParams,
+      undefined,
+    );
 
-    decoders['GetFeedViewResponse']?.(response.body);
+    decoders['GetFeedViewResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateFeedView(
@@ -2432,20 +2345,18 @@ export class FeedsApi {
       ranking: request?.ranking,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateFeedViewResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/feed_views/{id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<GetOrCreateFeedViewResponse>(
+        'POST',
+        '/api/v2/feeds/feed_views/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['GetOrCreateFeedViewResponse']?.(response.body);
+    decoders['GetOrCreateFeedViewResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFeedView(
@@ -2460,32 +2371,33 @@ export class FeedsApi {
       ranking: request?.ranking,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedViewResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateFeedViewResponse>(
       'PUT',
       '/api/v2/feeds/feed_views/{id}',
       pathParams,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateFeedViewResponse']?.(response.body);
+    decoders['UpdateFeedViewResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async listFeedVisibilities(): Promise<
     StreamResponse<ListFeedVisibilitiesResponse>
   > {
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ListFeedVisibilitiesResponse>
-    >('GET', '/api/v2/feeds/feed_visibilities', undefined, undefined);
+    const response =
+      await this.apiClient.sendRequest<ListFeedVisibilitiesResponse>(
+        'GET',
+        '/api/v2/feeds/feed_visibilities',
+        undefined,
+        undefined,
+      );
 
-    decoders['ListFeedVisibilitiesResponse']?.(response.body);
+    decoders['ListFeedVisibilitiesResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFeedVisibility(request: {
@@ -2495,13 +2407,17 @@ export class FeedsApi {
       name: request?.name,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedVisibilityResponse>
-    >('GET', '/api/v2/feeds/feed_visibilities/{name}', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<GetFeedVisibilityResponse>(
+        'GET',
+        '/api/v2/feeds/feed_visibilities/{name}',
+        pathParams,
+        undefined,
+      );
 
-    decoders['GetFeedVisibilityResponse']?.(response.body);
+    decoders['GetFeedVisibilityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFeedVisibility(
@@ -2514,20 +2430,18 @@ export class FeedsApi {
       grants: request?.grants,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFeedVisibilityResponse>
-    >(
-      'PUT',
-      '/api/v2/feeds/feed_visibilities/{name}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateFeedVisibilityResponse>(
+        'PUT',
+        '/api/v2/feeds/feed_visibilities/{name}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateFeedVisibilityResponse']?.(response.body);
+    decoders['UpdateFeedVisibilityResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createFeedsBatch(
@@ -2539,20 +2453,17 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateFeedsBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<CreateFeedsBatchResponse>(
       'POST',
       '/api/v2/feeds/feeds/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['CreateFeedsBatchResponse']?.(response.body);
+    decoders['CreateFeedsBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFeedsBatch(
@@ -2564,20 +2475,17 @@ export class FeedsApi {
       purge_user_activities: request?.purge_user_activities,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedsBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<DeleteFeedsBatchResponse>(
       'POST',
       '/api/v2/feeds/feeds/delete',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['DeleteFeedsBatchResponse']?.(response.body);
+    decoders['DeleteFeedsBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async ownBatch(
@@ -2590,20 +2498,17 @@ export class FeedsApi {
       user: request?.user,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<OwnBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<OwnBatchResponse>(
       'POST',
       '/api/v2/feeds/feeds/own/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['OwnBatchResponse']?.(response.body);
+    decoders['OwnBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   protected async _queryFeeds(
@@ -2619,20 +2524,17 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryFeedsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryFeedsResponse>(
       'POST',
       '/api/v2/feeds/feeds/query',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryFeedsResponse']?.(response.body);
+    decoders['QueryFeedsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getFeedsRateLimits(request?: {
@@ -2656,13 +2558,17 @@ export class FeedsApi {
       server_side: request?.server_side,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetFeedsRateLimitsResponse>
-    >('GET', '/api/v2/feeds/feeds/rate_limits', undefined, queryParams);
+    const response =
+      await this.apiClient.sendRequest<GetFeedsRateLimitsResponse>(
+        'GET',
+        '/api/v2/feeds/feeds/rate_limits',
+        undefined,
+        queryParams,
+      );
 
-    decoders['GetFeedsRateLimitsResponse']?.(response.body);
+    decoders['GetFeedsRateLimitsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateFollow(
@@ -2683,20 +2589,17 @@ export class FeedsApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateFollowResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UpdateFollowResponse>(
       'PATCH',
       '/api/v2/feeds/follows',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UpdateFollowResponse']?.(response.body);
+    decoders['UpdateFollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async follow(
@@ -2716,20 +2619,17 @@ export class FeedsApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<SingleFollowResponse>
-    >(
+    const response = await this.apiClient.sendRequest<SingleFollowResponse>(
       'POST',
       '/api/v2/feeds/follows',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['SingleFollowResponse']?.(response.body);
+    decoders['SingleFollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async acceptFollow(
@@ -2741,20 +2641,17 @@ export class FeedsApi {
       follower_role: request?.follower_role,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<AcceptFollowResponse>
-    >(
+    const response = await this.apiClient.sendRequest<AcceptFollowResponse>(
       'POST',
       '/api/v2/feeds/follows/accept',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['AcceptFollowResponse']?.(response.body);
+    decoders['AcceptFollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async followBatch(
@@ -2766,20 +2663,17 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<FollowBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<FollowBatchResponse>(
       'POST',
       '/api/v2/feeds/follows/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['FollowBatchResponse']?.(response.body);
+    decoders['FollowBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateFollows(
@@ -2791,20 +2685,17 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<FollowBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<FollowBatchResponse>(
       'POST',
       '/api/v2/feeds/follows/batch/upsert',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['FollowBatchResponse']?.(response.body);
+    decoders['FollowBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryFollows(
@@ -2818,20 +2709,17 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryFollowsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<QueryFollowsResponse>(
       'POST',
       '/api/v2/feeds/follows/query',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['QueryFollowsResponse']?.(response.body);
+    decoders['QueryFollowsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async rejectFollow(
@@ -2842,20 +2730,17 @@ export class FeedsApi {
       target: request?.target,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<RejectFollowResponse>
-    >(
+    const response = await this.apiClient.sendRequest<RejectFollowResponse>(
       'POST',
       '/api/v2/feeds/follows/reject',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['RejectFollowResponse']?.(response.body);
+    decoders['RejectFollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateFollow(
@@ -2875,20 +2760,18 @@ export class FeedsApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateFollowResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/follows/upsert',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<GetOrCreateFollowResponse>(
+        'POST',
+        '/api/v2/feeds/follows/upsert',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['GetOrCreateFollowResponse']?.(response.body);
+    decoders['GetOrCreateFollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async unfollow(request: {
@@ -2908,18 +2791,16 @@ export class FeedsApi {
       target: request?.target,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnfollowResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnfollowResponse>(
       'DELETE',
       '/api/v2/feeds/follows/{source}/{target}',
       pathParams,
       queryParams,
     );
 
-    decoders['UnfollowResponse']?.(response.body);
+    decoders['UnfollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async createMembershipLevel(
@@ -2934,20 +2815,18 @@ export class FeedsApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<CreateMembershipLevelResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/membership_levels',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<CreateMembershipLevelResponse>(
+        'POST',
+        '/api/v2/feeds/membership_levels',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['CreateMembershipLevelResponse']?.(response.body);
+    decoders['CreateMembershipLevelResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryMembershipLevels(
@@ -2961,20 +2840,18 @@ export class FeedsApi {
       filter: request?.filter,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryMembershipLevelsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/membership_levels/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryMembershipLevelsResponse>(
+        'POST',
+        '/api/v2/feeds/membership_levels/query',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryMembershipLevelsResponse']?.(response.body);
+    decoders['QueryMembershipLevelsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteMembershipLevel(request: {
@@ -2984,16 +2861,16 @@ export class FeedsApi {
       id: request?.id,
     };
 
-    const response = await this.apiClient.sendRequest<StreamResponse<Response>>(
+    const response = await this.apiClient.sendRequest<Response>(
       'DELETE',
       '/api/v2/feeds/membership_levels/{id}',
       pathParams,
       undefined,
     );
 
-    decoders['Response']?.(response.body);
+    decoders['Response']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async updateMembershipLevel(
@@ -3010,20 +2887,103 @@ export class FeedsApi {
       custom: request?.custom,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpdateMembershipLevelResponse>
-    >(
-      'PATCH',
-      '/api/v2/feeds/membership_levels/{id}',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpdateMembershipLevelResponse>(
+        'PATCH',
+        '/api/v2/feeds/membership_levels/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpdateMembershipLevelResponse']?.(response.body);
+    decoders['UpdateMembershipLevelResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
+  }
+
+  async feedsGetRetentionPolicy(): Promise<
+    StreamResponse<GetFeedsRetentionPolicyResponse>
+  > {
+    const response =
+      await this.apiClient.sendRequest<GetFeedsRetentionPolicyResponse>(
+        'GET',
+        '/api/v2/feeds/retention_policy',
+        undefined,
+        undefined,
+      );
+
+    decoders['GetFeedsRetentionPolicyResponse']?.(response);
+
+    return response;
+  }
+
+  async feedsSetRetentionPolicy(
+    request: SetFeedsRetentionPolicyRequest,
+  ): Promise<StreamResponse<SetFeedsRetentionPolicyResponse>> {
+    const body = {
+      max_age_hours: request?.max_age_hours,
+      policy: request?.policy,
+      enabled: request?.enabled,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SetFeedsRetentionPolicyResponse>(
+        'POST',
+        '/api/v2/feeds/retention_policy',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['SetFeedsRetentionPolicyResponse']?.(response);
+
+    return response;
+  }
+
+  async feedsDeleteRetentionPolicy(
+    request: DeleteFeedsRetentionPolicyRequest,
+  ): Promise<StreamResponse<DeleteFeedsRetentionPolicyResponse>> {
+    const body = {
+      policy: request?.policy,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteFeedsRetentionPolicyResponse>(
+        'POST',
+        '/api/v2/feeds/retention_policy/delete',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['DeleteFeedsRetentionPolicyResponse']?.(response);
+
+    return response;
+  }
+
+  async feedsGetRetentionPolicyRuns(
+    request?: GetFeedsRetentionPolicyRunsRequest,
+  ): Promise<StreamResponse<GetFeedsRetentionPolicyRunsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<GetFeedsRetentionPolicyRunsResponse>(
+        'POST',
+        '/api/v2/feeds/retention_policy/runs',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['GetFeedsRetentionPolicyRunsResponse']?.(response);
+
+    return response;
   }
 
   async queryRevisionHistory(
@@ -3037,20 +2997,18 @@ export class FeedsApi {
       sort: request?.sort,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryRevisionHistoryResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/revisions/query',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryRevisionHistoryResponse>(
+        'POST',
+        '/api/v2/feeds/revisions/query',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryRevisionHistoryResponse']?.(response.body);
+    decoders['QueryRevisionHistoryResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async queryFeedsUsageStats(
@@ -3061,20 +3019,18 @@ export class FeedsApi {
       to: request?.to,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<QueryFeedsUsageStatsResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/stats/usage',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<QueryFeedsUsageStatsResponse>(
+        'POST',
+        '/api/v2/feeds/stats/usage',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['QueryFeedsUsageStatsResponse']?.(response.body);
+    decoders['QueryFeedsUsageStatsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async unfollowBatch(
@@ -3086,20 +3042,17 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnfollowBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnfollowBatchResponse>(
       'POST',
       '/api/v2/feeds/unfollow/batch',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UnfollowBatchResponse']?.(response.body);
+    decoders['UnfollowBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateUnfollows(
@@ -3111,20 +3064,17 @@ export class FeedsApi {
       enrich_own_fields: request?.enrich_own_fields,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UnfollowBatchResponse>
-    >(
+    const response = await this.apiClient.sendRequest<UnfollowBatchResponse>(
       'POST',
       '/api/v2/feeds/unfollow/batch/upsert',
       undefined,
       undefined,
       body,
-      'application/json',
     );
 
-    decoders['UnfollowBatchResponse']?.(response.body);
+    decoders['UnfollowBatchResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getOrCreateUnfollow(
@@ -3138,20 +3088,18 @@ export class FeedsApi {
       keep_history: request?.keep_history,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetOrCreateUnfollowResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/unfollow/upsert',
-      undefined,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<GetOrCreateUnfollowResponse>(
+        'POST',
+        '/api/v2/feeds/unfollow/upsert',
+        undefined,
+        undefined,
+        body,
+      );
 
-    decoders['GetOrCreateUnfollowResponse']?.(response.body);
+    decoders['GetOrCreateUnfollowResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteFeedUserData(
@@ -3164,20 +3112,18 @@ export class FeedsApi {
       hard_delete: request?.hard_delete,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteFeedUserDataResponse>
-    >(
-      'POST',
-      '/api/v2/feeds/users/{user_id}/delete',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteFeedUserDataResponse>(
+        'POST',
+        '/api/v2/feeds/users/{user_id}/delete',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['DeleteFeedUserDataResponse']?.(response.body);
+    decoders['DeleteFeedUserDataResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async exportFeedUserData(request: {
@@ -3187,13 +3133,17 @@ export class FeedsApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<ExportFeedUserDataResponse>
-    >('POST', '/api/v2/feeds/users/{user_id}/export', pathParams, undefined);
+    const response =
+      await this.apiClient.sendRequest<ExportFeedUserDataResponse>(
+        'POST',
+        '/api/v2/feeds/users/{user_id}/export',
+        pathParams,
+        undefined,
+      );
 
-    decoders['ExportFeedUserDataResponse']?.(response.body);
+    decoders['ExportFeedUserDataResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async deleteUserInterests(request: {
@@ -3207,18 +3157,17 @@ export class FeedsApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<DeleteUserInterestsResponse>
-    >(
-      'DELETE',
-      '/api/v2/feeds/users/{user_id}/interests',
-      pathParams,
-      queryParams,
-    );
+    const response =
+      await this.apiClient.sendRequest<DeleteUserInterestsResponse>(
+        'DELETE',
+        '/api/v2/feeds/users/{user_id}/interests',
+        pathParams,
+        queryParams,
+      );
 
-    decoders['DeleteUserInterestsResponse']?.(response.body);
+    decoders['DeleteUserInterestsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async getUserInterests(request: {
@@ -3232,18 +3181,16 @@ export class FeedsApi {
       user_id: request?.user_id,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<GetUserInterestsResponse>
-    >(
+    const response = await this.apiClient.sendRequest<GetUserInterestsResponse>(
       'GET',
       '/api/v2/feeds/users/{user_id}/interests',
       pathParams,
       queryParams,
     );
 
-    decoders['GetUserInterestsResponse']?.(response.body);
+    decoders['GetUserInterestsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 
   async upsertUserInterests(
@@ -3256,19 +3203,17 @@ export class FeedsApi {
       interests: request?.interests,
     };
 
-    const response = await this.apiClient.sendRequest<
-      StreamResponse<UpsertUserInterestsResponse>
-    >(
-      'PUT',
-      '/api/v2/feeds/users/{user_id}/interests',
-      pathParams,
-      undefined,
-      body,
-      'application/json',
-    );
+    const response =
+      await this.apiClient.sendRequest<UpsertUserInterestsResponse>(
+        'PUT',
+        '/api/v2/feeds/users/{user_id}/interests',
+        pathParams,
+        undefined,
+        body,
+      );
 
-    decoders['UpsertUserInterestsResponse']?.(response.body);
+    decoders['UpsertUserInterestsResponse']?.(response);
 
-    return { ...response.body, metadata: response.metadata };
+    return response;
   }
 }
