@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createTestClient } from './create-test-client';
 import { StreamClient } from '../src/StreamClient';
+import { StreamError } from '../src/types';
 
 describe('rate limit', () => {
   let client: StreamClient;
@@ -61,12 +62,14 @@ describe('rate limit', () => {
     try {
       await call.startTranscription();
       throw new Error(`Method didn't throw`);
-    } catch (error) {
+    } catch (err) {
+      const error = err as StreamError;
+
       expect(error.code).toBeDefined();
       expect(error.metadata).toBeDefined();
       expect(error.metadata.responseCode).toBe(404);
 
-      const rateLimit = error.metadata.rateLimit;
+      const rateLimit = error.metadata.rateLimit!;
 
       expect(rateLimit.rateLimit).toBeDefined();
     }
