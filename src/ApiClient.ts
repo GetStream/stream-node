@@ -28,7 +28,10 @@ export class ApiClient {
     const encodedParams = this.queryParamsStringify(queryParams);
     if (pathParams) {
       Object.keys(pathParams).forEach((paramName) => {
-        url = url.replace(`{${paramName}}`, pathParams[paramName]);
+        url = url.replace(
+          `{${paramName}}`,
+          encodeURIComponent(pathParams[paramName]),
+        );
       });
     }
 
