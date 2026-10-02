@@ -15290,9 +15290,13 @@ export interface QueryActivitiesRequest {
    * When true, include both expired and non-expired activities in the result.
    */
   include_expired_activities?: boolean;
+  /**
+   * When true, include activities hidden by moderation (shadowed or removed). Server-side only; not allowed when a user is set.
+   */
+  include_moderated_activities?: boolean;
   include_private_activities?: boolean;
   /**
-   * When true, include soft-deleted activities in the result.
+   * When true, include soft-deleted activities in the result. Server-side only; not allowed when a user is set.
    */
   include_soft_deleted_activities?: boolean;
   limit?: number;
@@ -16398,9 +16402,22 @@ export interface QueryModerationRulesResponse {
 
 export interface QueryPinnedActivitiesRequest {
   enrich_own_fields?: boolean;
+  /**
+   * When true, return pinned activities even if they have expired. Server-side only; not allowed when a user is set.
+   */
+  include_expired_activities?: boolean;
+  /**
+   * When true, return pinned activities even if moderation hides them (shadowed or removed). Server-side only; not allowed when a user is set.
+   */
+  include_moderated_activities?: boolean;
+  /**
+   * When true, return pinned activities even if they are soft-deleted. Server-side only; not allowed when a user is set.
+   */
+  include_soft_deleted_activities?: boolean;
   limit?: number;
   next?: string;
   prev?: string;
+  user_id?: string;
   /**
    * Sorting parameters for the query
    */
@@ -16409,6 +16426,10 @@ export interface QueryPinnedActivitiesRequest {
    * Filters to apply to the query
    */
   filter?: Record<string, any>;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
 }
 
 export interface QueryPinnedActivitiesResponse {

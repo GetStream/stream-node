@@ -341,6 +341,7 @@ export class FeedsApi {
     const body = {
       enrich_own_fields: request?.enrich_own_fields,
       include_expired_activities: request?.include_expired_activities,
+      include_moderated_activities: request?.include_moderated_activities,
       include_private_activities: request?.include_private_activities,
       include_soft_deleted_activities: request?.include_soft_deleted_activities,
       limit: request?.limit,
@@ -703,6 +704,8 @@ export class FeedsApi {
     language?: string;
     translate_text?: boolean;
     include_top_level_comment_count?: boolean;
+    include_soft_deleted_activities?: boolean;
+    include_moderated_activities?: boolean;
   }): Promise<StreamResponse<GetActivityResponse>> {
     const queryParams = {
       comment_sort: request?.comment_sort,
@@ -712,6 +715,8 @@ export class FeedsApi {
       language: request?.language,
       translate_text: request?.translate_text,
       include_top_level_comment_count: request?.include_top_level_comment_count,
+      include_soft_deleted_activities: request?.include_soft_deleted_activities,
+      include_moderated_activities: request?.include_moderated_activities,
     };
     const pathParams = {
       id: request?.id,
@@ -2076,11 +2081,16 @@ export class FeedsApi {
     };
     const body = {
       enrich_own_fields: request?.enrich_own_fields,
+      include_expired_activities: request?.include_expired_activities,
+      include_moderated_activities: request?.include_moderated_activities,
+      include_soft_deleted_activities: request?.include_soft_deleted_activities,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
+      user_id: request?.user_id,
       sort: request?.sort,
       filter: request?.filter,
+      user: request?.user,
     };
 
     const response =
