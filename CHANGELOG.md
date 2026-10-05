@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.11](https://github.com/GetStream/stream-node/compare/v0.8.10...v0.8.11) (2026-10-05)
+
+
+### Features
+
+* add include_moderated_activities and feeds read scope flags ([#364](https://github.com/GetStream/stream-node/issues/364)) ([c9dbd11](https://github.com/GetStream/stream-node/commit/c9dbd11e213ac4480fc608e39ea3ec32d2ae0379))
+
 ## [0.8.10](https://github.com/GetStream/stream-node/compare/v0.8.9...v0.8.10) (2026-10-01)
 
 
