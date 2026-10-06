@@ -58,6 +58,26 @@ describe('creating tokens', () => {
       }
     });
 
+    it('should not encode validity_in_seconds in the payload', () => {
+      const token = client.generateUserToken({
+        user_id: userId,
+        validity_in_seconds: 120,
+      });
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      expect(decodedToken).not.toHaveProperty('validity_in_seconds');
+      expect(Object.keys(decodedToken).sort()).toEqual(
+        ['exp', 'iat', 'user_id'].sort(),
+      );
+    });
+
+    it('should not mutate the provided payload', () => {
+      const payload = { user_id: userId, validity_in_seconds: 120 };
+      client.generateUserToken(payload);
+
+      expect(payload).toEqual({ user_id: userId, validity_in_seconds: 120 });
+    });
+
     it(`should make sure iat is correct`, () => {
       for (let i = 0; i < 5; i++) {
         const token = client.generateUserToken({ user_id: userId });
@@ -116,6 +136,18 @@ describe('creating tokens', () => {
       expect(decodedToken.user_id).toEqual(userId);
       expect(decodedToken.iat).toBeDefined();
       expect(decodedToken.exp).toBeDefined();
+    });
+
+    it('should not encode validity_in_seconds in the payload', () => {
+      const token = client.generateCallToken({
+        user_id: userId,
+        call_cids,
+        validity_in_seconds: 120,
+      });
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      expect(decodedToken).not.toHaveProperty('validity_in_seconds');
+      expect(decodedToken.exp - decodedToken.iat).toBe(120);
     });
 
     it('with default expiration', () => {
