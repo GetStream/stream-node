@@ -6,6 +6,8 @@ import {
   BlockUsersResponse,
   CancelImportV2TaskResponse,
   CheckExternalStorageResponse,
+  CheckGCPPubSubRequest,
+  CheckGCPPubSubResponse,
   CheckPushRequest,
   CheckPushResponse,
   CheckSNSRequest,
@@ -371,6 +373,29 @@ export class CommonApi {
     );
 
     decoders['UpdateBlockListResponse']?.(response);
+
+    return response;
+  }
+
+  async checkGCPPubSub(
+    request?: CheckGCPPubSubRequest,
+  ): Promise<StreamResponse<CheckGCPPubSubResponse>> {
+    const body = {
+      gcp_pubsub_event_based_ordering_key_enabled:
+        request?.gcp_pubsub_event_based_ordering_key_enabled,
+      gcp_pubsub_region: request?.gcp_pubsub_region,
+      gcp_pubsub_topic: request?.gcp_pubsub_topic,
+    };
+
+    const response = await this.apiClient.sendRequest<CheckGCPPubSubResponse>(
+      'POST',
+      '/api/v2/check_gcp_pubsub',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['CheckGCPPubSubResponse']?.(response);
 
     return response;
   }

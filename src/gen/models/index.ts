@@ -1,12 +1,31 @@
 export interface AIAudioConfigRequest {
+  /**
+   * Bodyguard credentials profile to classify transcripts with. Applies to the NLP engine only; ignored when LLM configurability is enabled. Empty falls back to the app-pinned profile, then the organization's top-level credentials
+   */
   profile?: string;
+  /**
+   * Deprecated pre-split rule list. Still the live config while no engine config exists; once one does it is kept as a fallback for whichever engine has none of its own
+   */
   rules?: Array<BodyguardRule>;
+  ai_text_config?: AITextConfig;
+  llm_config?: LLMConfig;
 }
 
 export interface AIAudioConfigResponse {
+  /**
+   * Whether the engine selected by the application's LLM configurability flag has a rule that does something. Derived, not stored
+   */
   enabled: boolean;
+  /**
+   * Bodyguard credentials profile transcripts are classified with. Applies to the NLP engine only
+   */
   profile: string;
+  /**
+   * The active engine's rules, flattened into the pre-split shape for clients that predate the per-engine configs. This is the whole config for a policy that has no per-engine config stored
+   */
   rules: Array<BodyguardRule>;
+  ai_text_config?: AITextConfig;
+  llm_config?: LLMConfig;
 }
 
 export interface AIImageConfig {
@@ -1449,7 +1468,7 @@ export interface AggregationConfig {
    */
   format?: string;
   /**
-   * Maximum number of activities kept in each aggregated group. Omit to use the default of 100. Must be between 1 and 100 when set.
+   * Maximum number of activities kept in each aggregated group. Omit to use the default: 15 for apps migrated from Feeds v2 or created on or after 2026-10-11, 100 otherwise. Must be between 1 and 100 when set.
    */
   group_size?: number;
   /**
@@ -1578,7 +1597,13 @@ export interface AnalyzeTextField {
 
 export interface AppResponseFields {
   allow_multi_user_devices: boolean;
+  /**
+   * A boolean value determining if async url enrichment is enabled.
+   */
   async_url_enrich_enabled: boolean;
+  /**
+   * A boolean value determining if auto translation is enabled.
+   */
   auto_translation_enabled: boolean;
   before_message_send_hook_system_messages: boolean;
   campaign_enabled: boolean;
@@ -1603,6 +1628,9 @@ export interface AppResponseFields {
   moderation_video_call_moderation_enabled: boolean;
   moderation_webhook_url: string;
   multi_tenant_enabled: boolean;
+  /**
+   * The name of the app.
+   */
   name: string;
   organization: string;
   permission_version: string;
@@ -1832,6 +1860,17 @@ export interface AsyncExportErrorEvent {
   received_at?: Date;
 }
 
+export interface AsyncExportLabelResultsEvent {
+  created_at: Date;
+  finished_at: Date;
+  started_at: Date;
+  task_id: string;
+  url: string;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: Date;
+}
+
 export interface AsyncExportModerationLogsEvent {
   created_at: Date;
   finished_at: Date;
@@ -1863,6 +1902,31 @@ export interface AsyncExportUsersEvent {
   custom: Record<string, any>;
   type: string;
   received_at?: Date;
+}
+
+export interface AsyncImportErrorEvent {
+  created_at: Date;
+  error: string;
+  finished_at: Date;
+  product: string;
+  state: string;
+  task_id: string;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: Date;
+  started_at?: Date;
+}
+
+export interface AsyncImportSuccessEvent {
+  created_at: Date;
+  finished_at: Date;
+  product: string;
+  state: string;
+  task_id: string;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: Date;
+  started_at?: Date;
 }
 
 export interface AsyncModerationCallbackConfig {
@@ -2109,6 +2173,10 @@ export interface BanRequest {
    */
   target_user_id: string;
   /**
+   * Whether to also ban the user from future channels created by the banner
+   */
+  ban_from_future_channels?: boolean;
+  /**
    * ID of the user performing the ban
    */
   banned_by_id?: string;
@@ -2117,6 +2185,10 @@ export interface BanRequest {
    */
   channel_cid?: string;
   delete_messages?: 'soft' | 'pruning' | 'hard';
+  /**
+   * Whether to delete reactions by the banned user on other users' messages
+   */
+  delete_reactions?: boolean;
   /**
    * Whether to ban the user's IP address
    */
@@ -2259,7 +2331,7 @@ export interface BlockListResponse {
    */
   name: string;
   /**
-   * Block list type. One of: regex, domain, domain_allowlist, email, email_allowlist, word
+   * Block list type. One of: regex, domain, domain_allowlist, email, email_allowlist, word, word_allowlist
    */
   type: string;
   /**
@@ -3459,6 +3531,51 @@ export interface CallRingEvent {
    * Identifies this ring of the call session
    */
   ring_id?: string;
+}
+
+export interface CallRingSettledEvent {
+  call_cid: string;
+  created_at: Date;
+  /**
+   * ID of the user who rang
+   */
+  initiated_by: string;
+  /**
+   * Final outcome of the ring: answered_all, answered_some, rejected_all, missed_all, cancelled or mixed
+   */
+  outcome: string;
+  /**
+   * When the ring was sent
+   */
+  rang_at: Date;
+  /**
+   * Identifies this ring of the call session, as carried on call.ring
+   */
+  ring_id: string;
+  /**
+   * Call session ID
+   */
+  session_id: string;
+  /**
+   * Why the ring closed: answered, rejected, cancel, timeout, ended or auto_end
+   */
+  settle_reason: string;
+  /**
+   * When the outcome left ringing
+   */
+  settled_at: Date;
+  /**
+   * ID of the user whose action closed the ring, or 'server' for the missed-call deadline and automatic ends
+   */
+  settled_by: string;
+  /**
+   * Final state of every rung user, keyed by user ID
+   */
+  targets: Record<string, RingSettledTarget>;
+  /**
+   * The type of event: "call.ring_settled" in this case
+   */
+  type: string;
 }
 
 export interface CallRtmpBroadcastFailedEvent {
@@ -4847,7 +4964,13 @@ export type ChannelOwnCapability =
   (typeof ChannelOwnCapability)[keyof typeof ChannelOwnCapability];
 
 export interface ChannelPushPreferencesResponse {
+  /**
+   * The scope level of the push notifications.
+   */
   chat_level?: string;
+  /**
+   * If provided the notifications will be disabled until the set date.
+   */
   disabled_until?: Date;
   chat_preferences?: ChatPreferencesResponse;
 }
@@ -4980,6 +5103,9 @@ export interface ChannelStateResponse {
   channel?: ChannelResponse;
   draft?: DraftResponse;
   membership?: ChannelMemberResponse;
+  /**
+   * The push preference details.
+   */
   push_preferences?: ChannelPushPreferencesResponse;
 }
 
@@ -5031,6 +5157,9 @@ export interface ChannelStateResponseFields {
   channel?: ChannelResponse;
   draft?: DraftResponse;
   membership?: ChannelMemberResponse;
+  /**
+   * The push preference details.
+   */
   push_preferences?: ChannelPushPreferencesResponse;
 }
 
@@ -5449,6 +5578,37 @@ export interface CheckExternalStorageResponse {
    */
   duration: string;
   file_url: string;
+}
+
+export interface CheckGCPPubSubRequest {
+  /**
+   * Publish the test message with an ordering key through the regional endpoint, as a hook with ordering enabled would; requires gcp_pubsub_region
+   */
+  gcp_pubsub_event_based_ordering_key_enabled?: boolean;
+  /**
+   * GCP region used for the regional Pub/Sub endpoint when ordering is enabled
+   */
+  gcp_pubsub_region?: string;
+  /**
+   * Fully qualified GCP Pub/Sub topic name (projects/{project}/topics/{topic})
+   */
+  gcp_pubsub_topic?: string;
+}
+
+export interface CheckGCPPubSubResponse {
+  duration: string;
+  /**
+   * Validation result. One of: ok, error
+   */
+  status: string;
+  /**
+   * Error text
+   */
+  error?: string;
+  /**
+   * Error data
+   */
+  data?: Record<string, any>;
 }
 
 export interface CheckPushRequest {
@@ -5961,6 +6121,68 @@ export interface CommentDeletedEvent {
   user?: UserResponseCommonFields;
 }
 
+export interface CommentFeedbackEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: Date;
+  comment_feedback: CommentFeedbackEventPayload;
+  custom: Record<string, any>;
+  /**
+   * The type of event: "feeds.comment.feedback" in this case
+   */
+  type: string;
+  received_at?: Date;
+  user?: UserResponseCommonFields;
+}
+
+export interface CommentFeedbackEventPayload {
+  /**
+   * The comment that received feedback
+   */
+  comment_id: string;
+  /**
+   * When the feedback was created
+   */
+  created_at: Date;
+  /**
+   * Whether the comment is hidden for the user
+   */
+  hide: boolean;
+  /**
+   * When the feedback was last updated
+   */
+  updated_at: Date;
+  /**
+   * User response object
+   */
+  user: UserResponse;
+}
+
+export interface CommentFeedbackRequest {
+  /**
+   * Whether to hide this comment for the user
+   */
+  hide?: boolean;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface CommentFeedbackResponse {
+  /**
+   * The ID of the comment that received feedback
+   */
+  comment_id: string;
+  duration: string;
+  /**
+   * Whether the comment is hidden for the user
+   */
+  hide: boolean;
+}
+
 export interface CommentReactionAddedEvent {
   /**
    * Date/time of creation
@@ -6030,6 +6252,10 @@ export interface CommentResponse {
    * Number of downvotes for this comment
    */
   downvote_count: number;
+  /**
+   * Only true in QueryComments results filtered with hidden: true
+   */
+  hidden: boolean;
   /**
    * Unique identifier for the comment
    */
@@ -6284,6 +6510,11 @@ export interface ContentCountRuleParameters {
   time_window?: string;
 }
 
+export interface ContentCountryCodeParameters {
+  operator?: string;
+  country_codes?: Array<string>;
+}
+
 export interface ContentCustomPropertyCountParameters {
   operator?: string;
   property_key?: string;
@@ -6333,7 +6564,7 @@ export interface CreateBlockListRequest {
   is_substring_matching_enabled?: boolean;
   team?: string;
   /**
-   * Block list type. One of: regex, domain, domain_allowlist, email, email_allowlist, word
+   * Block list type. One of: regex, domain, domain_allowlist, email, email_allowlist, word, word_allowlist
    */
   type?:
     | 'regex'
@@ -6341,7 +6572,8 @@ export interface CreateBlockListRequest {
     | 'domain_allowlist'
     | 'email'
     | 'email_allowlist'
-    | 'word';
+    | 'word'
+    | 'word_allowlist';
   user_id?: string;
   /**
    * User request object
@@ -7034,6 +7266,9 @@ export interface CreatePollRequest {
   max_votes_allowed?: number;
   team?: string;
   user_id?: string;
+  /**
+   * Represents the visibility of votes in a poll.
+   */
   voting_visibility?: 'anonymous' | 'public';
   options?: Array<PollOptionInput>;
   /**
@@ -7718,7 +7953,7 @@ export interface DeleteFeedsBatchResponse {
 }
 
 export interface DeleteFeedsRetentionPolicyRequest {
-  policy: 'old-activities';
+  policy: string;
 }
 
 export interface DeleteFeedsRetentionPolicyResponse {
@@ -8022,11 +8257,11 @@ export interface DeviceErrorInfo {
 
 export interface DeviceResponse {
   /**
-   * Date/time of creation
+   * The date when the device was created.
    */
   created_at: Date;
   /**
-   * Device ID
+   * The device identifier.
    */
   id: string;
   /**
@@ -8401,6 +8636,9 @@ export interface EntityCreatorResponse {
   name?: string;
   revoke_tokens_issued_before?: Date;
   devices?: Array<DeviceResponse>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   push_notifications?: PushNotificationSettingsResponse;
   teams_role?: Record<string, string>;
@@ -8437,6 +8675,10 @@ export interface EscalationMetadata {
 export interface EventHook {
   created_at?: Date;
   enabled?: boolean;
+  gcp_pubsub_auth_type?: string;
+  gcp_pubsub_event_based_ordering_key_enabled?: boolean;
+  gcp_pubsub_region?: string;
+  gcp_pubsub_topic?: string;
   hook_type?: string;
   id?: string;
   product?: string;
@@ -9299,6 +9541,11 @@ export interface FeedsNotificationTrigger {
   custom?: Record<string, any>;
 }
 
+export interface FeedsPolicyConfig {
+  max_age_hours: number;
+  feed_groups?: Array<string>;
+}
+
 export interface FeedsPreferences {
   /**
    * Push notification preference for comments on user's activities. One of: all, none
@@ -9362,6 +9609,13 @@ export interface FeedsReactionResponse {
   user: UserResponse;
   comment_id?: string;
   custom?: Record<string, any>;
+}
+
+export interface FeedsRetentionPolicy {
+  app_pk: number;
+  enabled_at: Date;
+  policy: string;
+  config: FeedsPolicyConfig;
 }
 
 export interface FeedsRetentionRunResponse {
@@ -9441,6 +9695,7 @@ export interface FeedsV3CommentResponse {
   confidence_score: number;
   created_at: Date;
   downvote_count: number;
+  hidden: boolean;
   id: string;
   object_id: string;
   object_type: string;
@@ -9515,6 +9770,10 @@ export interface FilterConfigResponse {
    * AI image moderation labels available as filter values. Reflects the app's effective image taxonomy: custom Bodyguard taxonomy when enabled, otherwise the standard L1 label set.
    */
   ai_image_labels?: Array<string>;
+  /**
+   * Labels the image OCR pipeline can flag, available as filter values on the `label` field under the ai_image category. The app's LLM labels when LLM configurability is enabled, otherwise the AI text labels. OCR and image-classification labels share the `label` field, so a name present in both matches either.
+   */
+  ai_image_ocr_labels?: Array<string>;
   /**
    * AI text moderation labels available as filter values
    */
@@ -9937,6 +10196,9 @@ export interface FullUserResponse {
   name?: string;
   revoke_tokens_issued_before?: Date;
   latest_hidden_channels?: Array<string>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   teams_role?: Record<string, string>;
 }
@@ -10012,6 +10274,9 @@ export interface GetApplicationResponse {
    * Duration of the request in milliseconds
    */
   duration: string;
+  /**
+   * A type representing the app settings.
+   */
   app: AppResponseFields;
 }
 
@@ -10351,7 +10616,7 @@ export interface GetFeedsRetentionPolicyResponse {
    */
   duration: string;
   enabled: boolean;
-  policies: Array<RetentionPolicy>;
+  policies: Array<FeedsRetentionPolicy>;
 }
 
 export interface GetFeedsRetentionPolicyRunsRequest {
@@ -10591,6 +10856,10 @@ export interface GetOrCreateFeedRequest {
   user_id?: string;
   view?: string;
   watch?: boolean;
+  /**
+   * Feature-gated; not available for all apps. Request-scoped list of actor/user IDs whose activities are filtered from this GetOrCreateFeed response only. Merged (union) into the viewing user's in-memory blocked authors for this request; never persisted to blocked_users. Max: 1000.
+   */
+  discard_actors?: Array<string>;
   data?: FeedInput;
   /**
    * Options to skip specific enrichments to improve performance. Default is false (enrichments are included). Setting a field to true skips that enrichment.
@@ -12364,6 +12633,9 @@ export interface MemberUserRequest {
   role?: string;
   teams?: Array<string>;
   custom?: Record<string, any>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   teams_role?: Record<string, string>;
 }
@@ -12637,6 +12909,9 @@ export interface MessageModerationResult {
    * User who moderated the message
    */
   moderated_by?: string;
+  /**
+   * Response from AI moderation
+   */
   ai_moderation_response?: ModerationResponse;
   /**
    * Sets thresholds for AI moderation
@@ -13744,9 +14019,21 @@ export interface ModerationQueueResponse {
 }
 
 export interface ModerationResponse {
+  /**
+   * Action taken by automod
+   */
   action: string;
+  /**
+   * Explicit score
+   */
   explicit: number;
+  /**
+   * Spam score
+   */
   spam: number;
+  /**
+   * Toxicity score
+   */
   toxic: number;
 }
 
@@ -14359,7 +14646,13 @@ export interface OwnUserResponse {
   revoke_tokens_issued_before?: Date;
   blocked_user_ids?: Array<string>;
   latest_hidden_channels?: Array<string>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
+  /**
+   * The push preference details.
+   */
   push_preferences?: PushPreferencesResponse;
   teams_role?: Record<string, string>;
   total_unread_count_by_team?: Record<string, number>;
@@ -14986,8 +15279,17 @@ export interface PredefinedFilterStatsResponse {
 }
 
 export interface PrivacySettingsResponse {
+  /**
+   * The settings for the delivery receipt events.
+   */
   delivery_receipts?: DeliveryReceiptsResponse;
+  /**
+   * The settings for the read receipt events.
+   */
   read_receipts?: ReadReceiptsResponse;
+  /**
+   * The settings for typing indicator events.
+   */
   typing_indicators?: TypingIndicatorsResponse;
 }
 
@@ -15123,7 +15425,13 @@ export interface PushPreferenceInput {
 
 export interface PushPreferencesResponse {
   call_level?: string;
+  /**
+   * The scope level of the push notifications.
+   */
   chat_level?: string;
+  /**
+   * If provided the notifications will be disabled until the set date.
+   */
   disabled_until?: Date;
   feeds_level?: string;
   chat_preferences?: ChatPreferencesResponse;
@@ -15586,6 +15894,48 @@ export interface QueryCallParticipantsResponse {
   call: CallResponse;
 }
 
+export interface QueryCallRingAttemptsRequest {
+  /**
+   * Call ID
+   */
+  id: string;
+  /**
+   * The type of call
+   */
+  type: string;
+  /**
+   * Limit the attempts to one call session; omit to read every session of the call
+   */
+  call_session_id?: string;
+}
+
+export interface QueryCallRingAttemptsResponse {
+  /**
+   * The ID of the call the attempts belong to
+   */
+  call_id: string;
+  /**
+   * The type of the call the attempts belong to
+   */
+  call_type: string;
+  /**
+   * The number of attempts returned
+   */
+  count: number;
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * The attempts, newest first
+   */
+  ring_attempts: Array<RingAttemptResponse>;
+  /**
+   * The call session the attempts were limited to, null when every session was read
+   */
+  call_session_id?: string;
+}
+
 export interface QueryCallSessionParticipantStatsResponse {
   call_id: string;
   call_session_id: string;
@@ -15858,7 +16208,7 @@ export interface QueryCommentsRequest {
    */
   id_around?: string;
   /**
-   * When true, include soft-deleted comments in the result. Server-side only, and requires an object_id filter. Returns comments deleted by any path, including user-data deletion. Moderation-actioned comments (removed, hidden) remain excluded, and comments whose parent activity is itself deleted are not returned.
+   * When true, include soft-deleted comments in the result. Server-side only, and requires an object_id filter. Covers comments removed via deleteComment and via soft user-data deletion. Moderation-actioned comments (removed, hidden, shadow_blocked) remain excluded, as are comments whose parent activity is itself deleted.
    */
   include_soft_deleted_comments?: boolean;
   /**
@@ -16934,6 +17284,10 @@ export interface RankingConfig {
    */
   type: 'expression' | 'interest';
   /**
+   * Activities scoring strictly below this value are dropped from the ranked feed. Not supported on aggregated feeds
+   */
+  exclude_below?: number;
+  /**
    * Scoring formula. Required when type is 'expression' or 'interest'
    */
   score?: string;
@@ -17832,6 +18186,7 @@ export interface ReviewQueueItemResponse {
    */
   confidence_score?: number;
   config_key?: string;
+  country_code?: string;
   /**
    * ID of who created the entity
    */
@@ -17897,6 +18252,69 @@ export interface RevisionHistoryResponse {
   previous_obj_serialized?: Record<string, any>;
 }
 
+export interface RingAttemptResponse {
+  /**
+   * The application this ring belongs to
+   */
+  app_pk: number;
+  /**
+   * The ID of the call that was rung
+   */
+  call_id: string;
+  /**
+   * The type of the call that was rung
+   */
+  call_type: string;
+  /**
+   * When the ring went out
+   */
+  created_at: Date;
+  /**
+   * When the ring expires, i.e. when the missed call deadline fires
+   */
+  expires_at: Date;
+  /**
+   * The user that started the ring
+   */
+  initiated_by: string;
+  /**
+   * The derived outcome: ringing, answered_some, answered_all, rejected_all, missed_all, cancelled or mixed
+   */
+  outcome: string;
+  /**
+   * The ring, as published in the ring_id of the call.ring event
+   */
+  ring_id: string;
+  /**
+   * The call session that was rung
+   */
+  session_id: string;
+  /**
+   * Why the ring settled: answered, rejected, cancel, timeout, ended or auto_end; empty while it is still ringing
+   */
+  settle_reason: string;
+  /**
+   * The user that settled the ring, or 'server'; empty while it is still ringing
+   */
+  settled_by: string;
+  /**
+   * Opaque context stored on the ring by the caller
+   */
+  custom: Record<string, any>;
+  /**
+   * The rung users, keyed by user ID
+   */
+  targets: Record<string, RingTargetResponse>;
+  /**
+   * When the ring was deleted
+   */
+  deleted_at?: Date;
+  /**
+   * When the outcome left ringing
+   */
+  settled_at?: Date;
+}
+
 export interface RingCallRequest {
   /**
    * Indicate if call should be video
@@ -17924,6 +18342,37 @@ export interface RingCallResponse {
   ring_id?: string;
 }
 
+export interface RingDeliveryResponse {
+  /**
+   * The transport the ring was dispatched over: ws, apns_voip, apns or fcm
+   */
+  channel: string;
+  /**
+   * When the ring was dispatched
+   */
+  sent_at: Date;
+  /**
+   * When the device acknowledged the ring; not populated yet
+   */
+  acked_at?: Date;
+  /**
+   * The device the ring was dispatched to, empty for websocket deliveries which fan out to every connection
+   */
+  device_id?: string;
+  /**
+   * When the device displayed the ring; not populated yet
+   */
+  displayed_at?: Date;
+  /**
+   * When the device fetched the call; not populated yet
+   */
+  fetched_at?: Date;
+  /**
+   * When the push provider accepted the dispatch; not populated yet
+   */
+  provider_accepted_at?: Date;
+}
+
 export interface RingSettings {
   auto_cancel_timeout_ms: number;
   incoming_call_timeout_ms: number;
@@ -17949,6 +18398,31 @@ export interface RingSettingsResponse {
   auto_cancel_timeout_ms: number;
   incoming_call_timeout_ms: number;
   missed_call_timeout_ms: number;
+}
+
+export interface RingSettledTarget {
+  state: string;
+  state_at: Date;
+  reason?: string;
+}
+
+export interface RingTargetResponse {
+  /**
+   * The reject or cancel reason, empty otherwise
+   */
+  reason: string;
+  /**
+   * The target's state for this ring: pending, accepted, rejected, missed or cancelled
+   */
+  state: string;
+  /**
+   * When the target last changed state
+   */
+  state_at: Date;
+  /**
+   * The dispatches of this ring to the target's devices
+   */
+  deliveries: Array<RingDeliveryResponse>;
 }
 
 export interface Role {
@@ -18009,6 +18483,7 @@ export interface RuleBuilderCondition {
   channel_message_count_rule_params?: ChannelMessageCountRuleParameters;
   closed_caption_rule_params?: ClosedCaptionRuleParameters;
   content_count_rule_params?: ContentCountRuleParameters;
+  content_country_code_params?: ContentCountryCodeParameters;
   content_custom_property_count_params?: ContentCustomPropertyCountParameters;
   content_custom_property_params?: ContentCustomPropertyParameters;
   content_flag_count_rule_params?: FlagCountRuleParameters;
@@ -18817,8 +19292,9 @@ export interface SessionWarningResponse {
 
 export interface SetFeedsRetentionPolicyRequest {
   max_age_hours: number;
-  policy: 'old-activities';
+  policy: string;
   enabled?: boolean;
+  feed_groups?: Array<string>;
 }
 
 export interface SetFeedsRetentionPolicyResponse {
@@ -18827,7 +19303,7 @@ export interface SetFeedsRetentionPolicyResponse {
    */
   duration: string;
   enabled: boolean;
-  policy: RetentionPolicy;
+  policy: FeedsRetentionPolicy;
 }
 
 export interface SetRetentionPolicyRequest {
@@ -18930,14 +19406,42 @@ export interface SharedLocationResponse {
 }
 
 export interface SharedLocationResponseData {
+  /**
+   * The CID (type:id) of the channel that the location is attached to.
+   */
   channel_cid: string;
+  /**
+   * The date when the location was created.
+   */
   created_at: Date;
+  /**
+   * The ID of the device that created the location.
+   */
   created_by_device_id: string;
+  /**
+   * The latitude of the location.
+   */
   latitude: number;
+  /**
+   * The longitude of the location.
+   */
   longitude: number;
+  /**
+   * The ID of the message that the location is attached to.
+   */
   message_id: string;
+  /**
+   * The date when the location was updated.
+   */
   updated_at: Date;
+  /**
+   * The ID of the user that created the location.
+   */
   user_id: string;
+  /**
+   * The date when the location sharing ends.
+   * If it's empty, it means the location sharing is static instead of live.
+   */
   end_at?: Date;
   /**
    * Represents channel in chat
@@ -19829,6 +20333,7 @@ export interface ThreadedCommentResponse {
   confidence_score: number;
   created_at: Date;
   downvote_count: number;
+  hidden: boolean;
   id: string;
   object_id: string;
   object_type: string;
@@ -20512,14 +21017,32 @@ export interface UnreadCountsBatchResponse {
 }
 
 export interface UnreadCountsChannel {
+  /**
+   * The channel CID (type:id).
+   */
   channel_id: string;
+  /**
+   * The date which the current user last read the channel.
+   */
   last_read: Date;
+  /**
+   * The number of unread messages inside the channel.
+   */
   unread_count: number;
 }
 
 export interface UnreadCountsChannelType {
+  /**
+   * The number of unread channels of this channel type.
+   */
   channel_count: number;
+  /**
+   * The channel type.
+   */
   channel_type: string;
+  /**
+   * The number of unread messages of all the channels with this type.
+   */
   unread_count: number;
 }
 
@@ -20533,9 +21056,21 @@ export interface UnreadCountsResponse {
 }
 
 export interface UnreadCountsThread {
+  /**
+   * The date which the current user last read the thread.
+   */
   last_read: Date;
+  /**
+   * The id of the last reply which the current user read in the thread.
+   */
   last_read_message_id: string;
+  /**
+   * The message id of the root of the thread.
+   */
   parent_message_id: string;
+  /**
+   * The number of unread replies inside the thread.
+   */
   unread_count: number;
 }
 
@@ -22905,6 +23440,9 @@ export interface UserRequest {
    * Custom user data
    */
   custom?: Record<string, any>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   /**
    * Map of team-specific roles for the user
@@ -22986,6 +23524,9 @@ export interface UserResponse {
    * List of devices user is using
    */
   devices?: Array<DeviceResponse>;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   push_notifications?: PushNotificationSettingsResponse;
   teams_role?: Record<string, string>;
@@ -23031,6 +23572,9 @@ export interface UserResponsePrivacyFields {
   last_active?: Date;
   name?: string;
   revoke_tokens_issued_before?: Date;
+  /**
+   * The privacy settings of the user.
+   */
   privacy_settings?: PrivacySettingsResponse;
   teams_role?: Record<string, string>;
 }
@@ -23294,6 +23838,7 @@ export type WHEvent =
   | ({ type: 'call.recording_stopped' } & CallRecordingStoppedEvent)
   | ({ type: 'call.rejected' } & CallRejectedEvent)
   | ({ type: 'call.ring' } & CallRingEvent)
+  | ({ type: 'call.ring_settled' } & CallRingSettledEvent)
   | ({ type: 'call.rtmp_broadcast_failed' } & CallRtmpBroadcastFailedEvent)
   | ({ type: 'call.rtmp_broadcast_started' } & CallRtmpBroadcastStartedEvent)
   | ({ type: 'call.rtmp_broadcast_stopped' } & CallRtmpBroadcastStoppedEvent)
@@ -23339,6 +23884,8 @@ export type WHEvent =
     } & AsyncBulkImageModerationEvent)
   | ({ type: 'export.channels.error' } & AsyncExportErrorEvent)
   | ({ type: 'export.channels.success' } & AsyncExportChannelsEvent)
+  | ({ type: 'export.label_results.error' } & AsyncExportErrorEvent)
+  | ({ type: 'export.label_results.success' } & AsyncExportLabelResultsEvent)
   | ({ type: 'export.moderation_logs.error' } & AsyncExportErrorEvent)
   | ({
       type: 'export.moderation_logs.success';
@@ -23368,6 +23915,7 @@ export type WHEvent =
   | ({ type: 'feeds.bookmark_folder.updated' } & BookmarkFolderUpdatedEvent)
   | ({ type: 'feeds.comment.added' } & CommentAddedEvent)
   | ({ type: 'feeds.comment.deleted' } & CommentDeletedEvent)
+  | ({ type: 'feeds.comment.feedback' } & CommentFeedbackEvent)
   | ({ type: 'feeds.comment.reaction.added' } & CommentReactionAddedEvent)
   | ({ type: 'feeds.comment.reaction.deleted' } & CommentReactionDeletedEvent)
   | ({ type: 'feeds.comment.reaction.updated' } & CommentReactionUpdatedEvent)
@@ -23388,6 +23936,8 @@ export type WHEvent =
   | ({ type: 'feeds.notification_feed.updated' } & NotificationFeedUpdatedEvent)
   | ({ type: 'feeds.stories_feed.updated' } & StoriesFeedUpdatedEvent)
   | ({ type: 'flag.updated' } & FlagUpdatedEvent)
+  | ({ type: 'import.error' } & AsyncImportErrorEvent)
+  | ({ type: 'import.success' } & AsyncImportSuccessEvent)
   | ({ type: 'ingress.error' } & IngressErrorEvent)
   | ({ type: 'ingress.started' } & IngressStartedEvent)
   | ({ type: 'ingress.stopped' } & IngressStoppedEvent)
@@ -23469,6 +24019,9 @@ export interface WSEvent {
   thread_id?: string;
   user_id?: string;
   watcher_count?: number;
+  /**
+   * Response from AI moderation
+   */
   automoderation_scores?: ModerationResponse;
   /**
    * Represents channel in chat
@@ -23513,11 +24066,29 @@ export interface WrappedUnreadCountsResponse {
    * Duration of the request in milliseconds
    */
   duration: string;
+  /**
+   * The total number of unread messages.
+   */
   total_unread_count: number;
+  /**
+   * The total number of unread threads.
+   */
   total_unread_threads_count: number;
+  /**
+   * The unread information per channel type.
+   */
   channel_type: Array<UnreadCountsChannelType>;
+  /**
+   * The unread information per channel.
+   */
   channels: Array<UnreadCountsChannel>;
+  /**
+   * The unread information per thread.
+   */
   threads: Array<UnreadCountsThread>;
+  /**
+   * The total number of unread messages grouped by team.
+   */
   total_unread_count_by_team?: Record<string, number>;
 }
 
