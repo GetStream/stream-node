@@ -94,7 +94,6 @@ describe.skip('channel file uploads', () => {
     const fileBuffer = fs.readFileSync(filePath);
 
     const response = await channel.uploadChannelFile({
-      // @ts-expect-error API spec says file should be a string
       file: new File([fileBuffer], 'test-file.pdf'),
       user: { id: user.id },
     });
@@ -122,7 +121,6 @@ describe.skip('channel file uploads', () => {
     ];
 
     const response = await channel.uploadChannelImage({
-      // @ts-expect-error API spec says file should be a string
       file: new File([fileBuffer], 'test-image.jpg'),
       user: { id: user.id },
       upload_sizes: uploadSizes,
