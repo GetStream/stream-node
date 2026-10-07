@@ -1,6 +1,12 @@
 import { ChannelApi } from './gen/chat/ChannelApi';
-import { ChannelGetOrCreateRequest, QueryMembersPayload } from './gen/models';
+import {
+  ChannelGetOrCreateRequest,
+  QueryMembersPayload,
+  UploadChannelFileRequest,
+  UploadChannelRequest,
+} from './gen/models';
 import { OmitTypeId } from './types';
+import { File } from 'buffer';
 
 export class StreamChannel extends ChannelApi {
   get cid() {
@@ -36,4 +42,20 @@ export class StreamChannel extends ChannelApi {
       },
     });
   }
+
+  // @ts-expect-error API spec says file should be a string
+  uploadChannelFile = (
+    request: Omit<UploadChannelFileRequest, 'file'> & { file: File },
+  ) => {
+    // @ts-expect-error API spec says file should be a string
+    return super.uploadChannelFile(request);
+  };
+
+  // @ts-expect-error API spec says file should be a string
+  uploadChannelImage = (
+    request: Omit<UploadChannelRequest, 'file'> & { file: File },
+  ) => {
+    // @ts-expect-error API spec says file should be a string
+    return super.uploadChannelImage(request);
+  };
 }
