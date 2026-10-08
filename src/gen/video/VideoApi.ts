@@ -45,6 +45,8 @@ import {
   QueryCallParticipantSessionsResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
+  QueryCallRingAttemptsRequest,
+  QueryCallRingAttemptsResponse,
   QueryCallSessionParticipantStatsResponse,
   QueryCallSessionParticipantStatsTimelineResponse,
   QueryCallSessionStatsRequest,
@@ -184,6 +186,29 @@ export class VideoApi {
     );
 
     decoders['QueryCallMembersResponse']?.(response);
+
+    return response;
+  }
+
+  async queryCallRingAttempts(
+    request: QueryCallRingAttemptsRequest,
+  ): Promise<StreamResponse<QueryCallRingAttemptsResponse>> {
+    const body = {
+      id: request?.id,
+      type: request?.type,
+      call_session_id: request?.call_session_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryCallRingAttemptsResponse>(
+        'POST',
+        '/api/v2/video/call/ring_attempts',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryCallRingAttemptsResponse']?.(response);
 
     return response;
   }

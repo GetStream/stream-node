@@ -467,6 +467,19 @@ decoders['AsyncExportErrorEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['AsyncExportLabelResultsEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['AsyncExportModerationLogsEvent'] = (input?: {
   [key: string]: any;
 }) => {
@@ -504,6 +517,32 @@ decoders['AsyncExportUsersEvent'] = (input?: { [key: string]: any }) => {
     started_at: { type: 'DatetimeType', isSingle: true },
 
     received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['AsyncImportErrorEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['AsyncImportSuccessEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1068,6 +1107,17 @@ decoders['CallRingEvent'] = (input?: { [key: string]: any }) => {
     call: { type: 'CallResponse', isSingle: true },
 
     user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['CallRingSettledEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    rang_at: { type: 'DatetimeType', isSingle: true },
+
+    settled_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1921,6 +1971,17 @@ decoders['CommentDeletedEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['CommentFeedbackEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['CommentReactionAddedEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -2644,6 +2705,13 @@ decoders['FeedsReactionResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['FeedsRetentionPolicy'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    enabled_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['FeedsShareResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -3027,7 +3095,7 @@ decoders['GetFeedsRetentionPolicyResponse'] = (input?: {
   [key: string]: any;
 }) => {
   const typeMappings: TypeMapping = {
-    policies: { type: 'RetentionPolicy', isSingle: false },
+    policies: { type: 'FeedsRetentionPolicy', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -4420,6 +4488,15 @@ decoders['QueryCallParticipantsResponse'] = (input?: {
   return decode(typeMappings, input);
 };
 
+decoders['QueryCallRingAttemptsResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    ring_attempts: { type: 'RingAttemptResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['QueryCallSessionParticipantStatsResponse'] = (input?: {
   [key: string]: any;
 }) => {
@@ -5054,6 +5131,45 @@ decoders['RevisionHistoryResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['RingAttemptResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    expires_at: { type: 'DatetimeType', isSingle: true },
+
+    targets: { type: 'RingTargetResponse', isSingle: false },
+
+    deleted_at: { type: 'DatetimeType', isSingle: true },
+
+    settled_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['RingDeliveryResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    sent_at: { type: 'DatetimeType', isSingle: true },
+
+    acked_at: { type: 'DatetimeType', isSingle: true },
+
+    displayed_at: { type: 'DatetimeType', isSingle: true },
+
+    fetched_at: { type: 'DatetimeType', isSingle: true },
+
+    provider_accepted_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['RingTargetResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    state_at: { type: 'DatetimeType', isSingle: true },
+
+    deliveries: { type: 'RingDeliveryResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['Role'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -5214,7 +5330,7 @@ decoders['SetFeedsRetentionPolicyResponse'] = (input?: {
   [key: string]: any;
 }) => {
   const typeMappings: TypeMapping = {
-    policy: { type: 'RetentionPolicy', isSingle: true },
+    policy: { type: 'FeedsRetentionPolicy', isSingle: true },
   };
   return decode(typeMappings, input);
 };
