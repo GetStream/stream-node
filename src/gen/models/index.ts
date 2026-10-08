@@ -891,6 +891,10 @@ export interface ActivitySelectorConfig {
    */
   ranking_candidate_limit?: number;
   /**
+   * Maximum time in milliseconds this selector may take (25-5000). A selector that runs over its budget is dropped from that read instead of failing it, and stays out for the rest of that pagination session. The budget can only tighten the default, never extend it. Omit to use the default. Only supported on the popular, proximity, interest, query and follow_suggestion selectors
+   */
+  time_budget_ms?: number;
+  /**
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
@@ -930,6 +934,10 @@ export interface ActivitySelectorConfigResponse {
    * Maximum number of candidate activities this selector contributes to a ranked feed
    */
   ranking_candidate_limit?: number;
+  /**
+   * Maximum time in milliseconds this selector may take before it is dropped from the read
+   */
+  time_budget_ms?: number;
   /**
    * Sort parameters for activity selection
    */
@@ -10627,6 +10635,10 @@ export interface GetOrCreateFeedResponse {
   feed: FeedResponse;
   next?: string;
   prev?: string;
+  /**
+   * Activity selectors dropped from this read because they exceeded their time budget (see the time_budget_ms selector setting). Their activities are missing from this page, and they stay out for the rest of this pagination session. Omitted when every selector completed
+   */
+  degraded_selectors?: Array<string>;
   followers_pagination?: PagerResponse;
   following_pagination?: PagerResponse;
   member_pagination?: PagerResponse;
