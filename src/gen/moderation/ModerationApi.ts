@@ -382,9 +382,11 @@ export class ModerationApi {
   ): Promise<StreamResponse<ModerationBanResponse>> {
     const body = {
       target_user_id: request?.target_user_id,
+      ban_from_future_channels: request?.ban_from_future_channels,
       banned_by_id: request?.banned_by_id,
       channel_cid: request?.channel_cid,
       delete_messages: request?.delete_messages,
+      delete_reactions: request?.delete_reactions,
       ip_ban: request?.ip_ban,
       reason: request?.reason,
       shadow: request?.shadow,

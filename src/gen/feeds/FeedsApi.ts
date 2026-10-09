@@ -27,6 +27,8 @@ import {
   CastPollVoteRequest,
   ChangeFeedVisibilityRequest,
   ChangeFeedVisibilityResponse,
+  CommentFeedbackRequest,
+  CommentFeedbackResponse,
   CreateCollectionsRequest,
   CreateCollectionsResponse,
   CreateFeedGroupRequest,
@@ -1433,6 +1435,31 @@ export class FeedsApi {
     return response;
   }
 
+  async commentFeedback(
+    request: CommentFeedbackRequest & { id: string },
+  ): Promise<StreamResponse<CommentFeedbackResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      hide: request?.hide,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<CommentFeedbackResponse>(
+      'POST',
+      '/api/v2/feeds/comments/{id}/feedback',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['CommentFeedbackResponse']?.(response);
+
+    return response;
+  }
+
   async updateCommentPartial(
     request: UpdateCommentPartialRequest & { id: string },
   ): Promise<StreamResponse<UpdateCommentPartialResponse>> {
@@ -1746,6 +1773,7 @@ export class FeedsApi {
       user_id: request?.user_id,
       view: request?.view,
       watch: request?.watch,
+      discard_actors: request?.discard_actors,
       data: request?.data,
       enrichment_options: request?.enrichment_options,
       external_ranking: request?.external_ranking,
@@ -2934,6 +2962,7 @@ export class FeedsApi {
       max_age_hours: request?.max_age_hours,
       policy: request?.policy,
       enabled: request?.enabled,
+      feed_groups: request?.feed_groups,
     };
 
     const response =
