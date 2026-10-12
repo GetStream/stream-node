@@ -10887,6 +10887,7 @@ export interface GetOrCreateFeedRequest {
    * User request object
    */
   user?: UserRequest;
+  viewer_location?: Location;
 }
 
 export interface GetOrCreateFeedResponse {

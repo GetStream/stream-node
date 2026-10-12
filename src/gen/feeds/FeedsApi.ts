@@ -1784,6 +1784,7 @@ export class FeedsApi {
       interest_weights: request?.interest_weights,
       member_pagination: request?.member_pagination,
       user: request?.user,
+      viewer_location: request?.viewer_location,
     };
 
     const response = await this.apiClient.sendRequest<GetOrCreateFeedResponse>(
