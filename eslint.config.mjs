@@ -50,6 +50,8 @@ export default tseslint.config(
   {
     // These read raw, untyped JSON: API error payloads and test fixtures.
     files: ["src/ApiClient.ts", "__tests__/**/*.ts"],
+    // The docs snippet tests keep the strict rules.
+    ignores: ["__tests__/docs-snippets/**"],
     rules: {
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",

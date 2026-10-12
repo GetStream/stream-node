@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "rootDir": "../..",
+    "types": ["node"],
+    // Docs snippets import the package by name: point it at src, not the dist build.
+    "paths": { "@stream-io/node-sdk": ["../../index.ts"] }
+  },
+  "include": ["./**/*.ts", "./*.mts", "../../src/**/*", "../../index.ts"]
+}
