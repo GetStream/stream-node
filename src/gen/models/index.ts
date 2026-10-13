@@ -21341,7 +21341,7 @@ export interface UpdateAppRequest {
   datadog_info?: DataDogInfo;
   file_upload_config?: FileUploadConfig;
   firebase_config?: FirebaseConfig;
-  grants?: Record<string, Array<string>> | null;
+  grants?: Record<string, Array<string>>;
   huawei_config?: HuaweiConfig;
   image_upload_config?: FileUploadConfig;
   moderation_dashboard_preferences?: ModerationDashboardPreferences;
@@ -21673,7 +21673,7 @@ export interface UpdateChannelTypeRequest {
    */
   automod_thresholds?: Thresholds;
   chat_preferences?: ChatPreferences;
-  grants?: Record<string, Array<string>> | null;
+  grants?: Record<string, Array<string>>;
 }
 
 export interface UpdateChannelTypeResponse {
