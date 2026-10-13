@@ -1,4 +1,5 @@
 import type { StreamClient } from '../../../index';
+import { DOCS_TEST_PREFIX } from './ids';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -59,18 +60,107 @@ export const isChannelTypeMissing = (error: unknown) => {
   );
 };
 
-/** How long channel type changes take to reach every API node. */
+/**
+ * How long a change to a built-in or pre-existing channel type gets before it is read
+ * back (e.g. by the DRIFT check, which compares those types). Reads of a channel type can
+ * return the old value for a while after an update, longer than the API takes to apply it.
+ */
 export const CHANNEL_TYPE_PROPAGATION_MS = 30000;
 
 /**
- * Channel type changes are eventually consistent: after `createChannelType` or
- * `updateChannelType`, API nodes can disagree for up to ~30s. A `channel.create()` can
- * succeed and the next `sendMessage` still fail with "channel type does not exist" (or
- * still see the old settings). Call this right after creating/updating a channel type,
- * before using it. Polling doesn't help because different nodes answer differently.
+ * How long an update to a docs-test channel type gets before it is used. Measured on the
+ * test app (2026-10-13): every API node enforced an update within ~3s.
  */
-export const waitForChannelTypePropagation = () =>
-  sleep(CHANNEL_TYPE_PROPAGATION_MS);
+export const CHANNEL_TYPE_UPDATE_MS = 10000;
+
+/**
+ * A new channel type is waited for at least `CHANNEL_TYPE_UPDATE_MS` after creation and
+ * until this many lookups in a row accept it. Lookups alone aren't enough: they reuse one
+ * keep-alive connection, so they can all reach a node that already knows the type.
+ */
+const CHANNEL_TYPE_AGREEING_LOOKUPS = 10;
+
+/** Channel type changes since the last `waitForChannelTypePropagation()`. */
+const pendingChannelTypes = {
+  created: new Map<string, { client: StreamClient; at: number }>(),
+  lastUpdate: undefined as { at: number; existing: boolean } | undefined,
+};
+
+/**
+ * Records `createChannelType` / `updateChannelType` calls of `client` (incl. calls from
+ * the snippets) for `waitForChannelTypePropagation()`. Called by `getServerClient()`.
+ */
+export const trackChannelTypeChanges = (client: StreamClient) => {
+  const chat = client.chat;
+  const create = chat.createChannelType.bind(chat);
+  chat.createChannelType = async (request) => {
+    const response = await create(request);
+    pendingChannelTypes.created.set(request.name, { client, at: Date.now() });
+    return response;
+  };
+  const update = chat.updateChannelType.bind(chat);
+  chat.updateChannelType = async (request) => {
+    const response = await update(request);
+    // A type created since the last wait counts as new; anything else (built-in types,
+    // types that existed before) is compared by the DRIFT check.
+    pendingChannelTypes.lastUpdate = {
+      at: Date.now(),
+      existing:
+        !pendingChannelTypes.created.has(request.name) &&
+        !request.name.startsWith(DOCS_TEST_PREFIX),
+    };
+    return response;
+  };
+  return client;
+};
+
+/** Waits until `CHANNEL_TYPE_AGREEING_LOOKUPS` lookups in a row know channel type `name`. */
+const waitForChannelTypeKnown = async (client: StreamClient, name: string) => {
+  let streak = 0;
+  await retry(
+    async () => {
+      while (streak < CHANNEL_TYPE_AGREEING_LOOKUPS) {
+        try {
+          await client.chat.queryChannels({
+            filter_conditions: { type: name },
+            limit: 1,
+            state: false,
+          });
+          streak++;
+        } catch (error) {
+          streak = 0;
+          throw error;
+        }
+      }
+    },
+    { timeout: 60000, interval: 500, retryIf: isChannelTypeMissing },
+  );
+};
+
+/**
+ * Channel type changes are eventually consistent: right after `createChannelType` or
+ * `updateChannelType`, API nodes can disagree (a `channel.create()` can succeed and the
+ * next `sendMessage` still fail with "channel type does not exist", or still see the old
+ * settings). Call this right after creating/updating a channel type, before using it.
+ * It waits for what changed since the last call: new types `CHANNEL_TYPE_UPDATE_MS`
+ * after creation and until lookups agree on them, updates of docs-test types `CHANNEL_TYPE_UPDATE_MS` and updates of other types
+ * `CHANNEL_TYPE_PROPAGATION_MS` after the last update.
+ */
+export const waitForChannelTypePropagation = async () => {
+  for (const [name, { client, at }] of pendingChannelTypes.created) {
+    await waitForChannelTypeKnown(client, name);
+    await sleep(at + CHANNEL_TYPE_UPDATE_MS - Date.now());
+  }
+  pendingChannelTypes.created.clear();
+  const { lastUpdate } = pendingChannelTypes;
+  pendingChannelTypes.lastUpdate = undefined;
+  if (lastUpdate) {
+    const wait = lastUpdate.existing
+      ? CHANNEL_TYPE_PROPAGATION_MS
+      : CHANNEL_TYPE_UPDATE_MS;
+    await sleep(lastUpdate.at + wait - Date.now());
+  }
+};
 
 /**
  * Retries `fn` while it fails with "channel type does not exist". Only a fallback on

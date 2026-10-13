@@ -106,6 +106,12 @@ const scanners: Record<string, Scanner> = {
         id: channel.cid,
         createdAt: channel.created_at,
         remove: () => hardDeleteChannels(client, [channel.cid]),
+        // One delete task per 100 channels instead of one per channel.
+        removeMany: async (cids) => {
+          for (const batch of chunk(cids, 100)) {
+            await retryOnRateLimit(() => hardDeleteChannels(client, batch));
+          }
+        },
       });
     for (const ids of chunk(channelIds, 100)) {
       const { channels } = await client.chat.queryChannels({
