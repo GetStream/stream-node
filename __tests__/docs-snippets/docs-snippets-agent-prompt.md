@@ -15,8 +15,8 @@ You are verifying the server-side Node.js code snippets of one Stream Chat docs 
 - Only touch:
   - the test files for this page under `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/pages/`
   - the docs page itself
-  - this page's status row (and its entries in the Blockers detail / Setup notes / Open docs bugs / Possible SDK issues sections). Fixed docs bugs go in the report only; record a docs bug in **Open docs bugs** only if you leave it unfixed in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`
-- Do not edit the helpers, the configs, other pages, or anything in `src/` (`src/gen` is generated from the OpenAPI spec, so hand edits would be lost). If a helper is missing something, write a local helper in your test file and propose the shared helper in your report. If the SDK is wrong (types or behavior), report it under "Possible SDK issues".
+  - this page's status row (and its entries in the Blockers detail / Setup notes / API behavior issues / API spec / node SDK issues / Open docs bugs sections). Fixed docs bugs go in the report only; record a docs bug in **Open docs bugs** only if you leave it unfixed in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`
+- Do not edit the helpers, the configs, other pages, or anything in `src/` (`src/gen` is generated from the OpenAPI spec, so hand edits would be lost). If a helper is missing something, write a local helper in your test file and propose the shared helper in your report. If the OpenAPI spec or the generated SDK is wrong, report it under "API spec / node SDK issues".
 - Change existing docs snippets as little as possible, and only when they are actually wrong.
 - Never put the API key, secret or push credentials in any file. They are loaded from the repo root `.env` (`STREAM_API_KEY`, `STREAM_SECRET`, optional `DOCS_PUSH_FIREBASE_CREDENTIALS`).
 - In getstream.io, never run `npm run ci` or `npm run lint` for the whole repo. They rewrite thousands of files, including image assets. Use only the per-file commands listed below.
@@ -89,7 +89,11 @@ If a docs snippet is wrong (wrong method name or signature, a type error against
 2. Write it to the docs page with `DOCS_SYNC_WRITE=<page path> yarn test:docs:sync`, then check `git diff` in getstream.io: only the intended fence should change.
 3. Record it for the report as before/after with the reason and the evidence (error message or type error).
 
-If the snippet is correct but the node SDK types reject it or the SDK misbehaves, don't change the snippet or `src/`: put it in `it.skip('BLOCKED: SDK issue: ...')` and report it under "Possible SDK issues".
+Tell three kinds of problem apart, and record each in its own list in the todo:
+
+- **Docs bug**: the snippet (or the page) is wrong. Fix the snippet as above; prose and non-Node.js fences are out of scope, record those under **Open docs bugs**.
+- **API spec / node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec or the generated SDK is wrong (missing or wrongly typed fields, wrong response types, a required field typed optional). Don't change the snippet or `src/`; record it under **API spec / node SDK issues** (say whether it looks like the spec or the generator) and report it. If the types reject a correct snippet, stop and report it: `it.skip` doesn't help, skipped bodies are still typechecked.
+- **API behavior issue**: the API itself seems faulty, or behaves differently from what the docs say (fields missing from responses, data silently dropped, settings not enforced, inconsistent answers between API nodes). Assert what the API actually does and record it under **API behavior issues** with the probe evidence. It is not a blocker: it doesn't make the page `[~]` on its own.
 
 If you're not sure whether the snippet or your setup is wrong, don't edit the docs. Mark it as an open question in the report instead.
 
@@ -109,7 +113,7 @@ yarn test:docs:sync                                 # your page: every Node.js f
 
 Don't use `@ts-ignore`/`@ts-expect-error` or `eslint-disable` to silence a docs snippet. The one lint-only docs change allowed: a fence that assigns a value it never reads, which the test can't read either (block-scoped), gets a `console.log` of the field the page talks about (see `learnings.md`); report it as a docs correction. A type error in a snippet is either a docs bug (fix it as above) or an SDK typing bug (report it).
 
-Finally, update the page's row in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`: `[x]` when done, `[~]` when there are open questions.
+Finally, update the page's row in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`: `[x]` when done, `[~]` only when some snippets couldn't run (a blocker); API behavior issues and open docs bugs are recorded in their lists and don't make a page `[~]`.
 
 ## Final report (your last message)
 
@@ -117,5 +121,5 @@ Finally, update the page's row in `/Users/zitaszupera/Stream/stream-node/__tests
 2. **Docs snippet corrections**: for each one, a before/after diff, the reason, and the evidence. These need human review.
 3. **Skipped / untestable snippets**: for each one, the snippet and why (including 🔑 push snippets skipped without credentials, and whether you ran them with credentials).
 4. **Client-side code in Node.js snippets**: each fence or part of a fence that needs a connected user, with the error or the reason.
-5. **Possible SDK issues**: type or runtime problems that look like node SDK bugs rather than docs bugs (not fixed).
+5. **API spec / node SDK issues** and **API behavior issues**: two separate lists (see above), each item with its evidence (not fixed).
 6. **Proposed learnings** for `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/learnings.md`: a numbered list of short, reusable lessons that would have saved you time. Skip page-specific trivia. The user will approve or reject each one.
