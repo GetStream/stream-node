@@ -11,7 +11,7 @@ yarn test:docs                                                          # all do
 yarn test:docs pages/node/01-quick_start/01-backend_quickstart.test.ts  # one file
 yarn types:docs                                                         # typecheck the docs tests
 yarn test:docs:sync                                                     # test regions == docs fences (no network)
-yarn test:docs:sweep                                                    # remove docs-test leftovers older than 30 min (DOCS_SWEEP_DRY_RUN=1 to list only, DOCS_SWEEP_MIN_AGE=0 for all)
+yarn test:docs:sweep                                                    # remove docs-test leftovers older than 30 min, incl. channels, and turns off retention policies (DOCS_SWEEP_DRY_RUN=1 to list only, DOCS_SWEEP_MIN_AGE=0 for all)
 yarn eslint __tests__/docs-snippets && npx prettier --check __tests__/docs-snippets   # lint
 ```
 
@@ -32,7 +32,9 @@ notifications or webhook events arrive.
 pages/<docs section>/<docs page>.test.ts    # Node.js snippets, run with the server client
 helpers/                                    # server client, unique ids, cleanup registry, server-side helpers,
                                             # waits, leak check, app snapshot, push credentials
-setup.ts                                    # .env loading, per-file leak check and app-settings drift check
+env.ts                                      # .env loading (fails without STREAM_API_KEY / STREAM_SECRET)
+setup.ts                                    # per-file leak check and app-settings drift check
+global-setup.ts                             # end-of-run sweep: removes leftovers of files that failed while loading
 sync/                                       # `yarn test:docs:sync` (docs fence <-> test region check)
 maintenance/                                # `yarn test:docs:sweep`
 docs-snippets-todo.md                       # pages to cover, their status, blockers and setup notes
@@ -54,10 +56,11 @@ The path mirrors the docs path, e.g. `_default/04-messages/01-send_message.md` m
 - Tests in one file may share data created in `beforeAll`. Nothing may leak across files.
 - `cleanup.run()` attempts every step and then throws if anything failed, so leftovers show up as a failed `afterAll` instead of piling up in the app. Server-side hard channel deletion is a background task: `Cleanup` waits for it (`waitForTask`) and retries deleting channel types until their channels are gone.
 - **Leak check** (`setup.ts`, runs automatically after each file's own `afterAll`): looks up everything minted by `uniqueId` in that file (users, channels, channel types, commands, roles, custom permissions, blocklists, segments, campaigns, user groups, moderation configs, predefined filters, push providers, polls). Anything still there fails the file with a `LEAK` error listing it, and is then removed. Per-user data (reminders, devices, drafts, ...) goes away with the user. It also snapshots app settings (incl. push and webhook config), pre-existing channel types and retention policies before the file and fails with `DRIFT` if anything changed and wasn't restored.
+- **End-of-run sweep** (`global-setup.ts`, after every `yarn test:docs`): a file that throws while loading runs no hooks, so its cleanup and leak check never run. The sweep removes every `docs-test` resource created since the run started (channels are found by listing every channel created since then) and fails the run with a `LEAK` list. It also puts back the retention policies the run started with and fails with `DRIFT` if it had to. Don't run two `yarn test:docs` at once: the sweep would remove the other run's resources.
 - Anything created under a non-`uniqueId` name can't be found by the leak check or the sweep. Don't do that.
-- **Eventual consistency**: channel type changes (`createChannelType` / `updateChannelType`) take ~30s to reach every API node. Call `await waitForChannelTypePropagation()` (from `helpers/wait.ts`) right after creating or updating a channel type. Timeouts are 90s per test and 180s per hook to leave room for this. Use `retry(fn, { retryIf })` for other eventually-consistent reads (e.g. search).
+- **Eventual consistency**: channel type changes (`createChannelType` / `updateChannelType`) take ~30s to reach every API node. Call `await waitForChannelTypePropagation()` (from `helpers/wait.ts`) right after creating or updating a channel type. Timeouts are 90s per test and 180s per hook to leave room for this. Use `retry(fn, { retryIf })` for other eventually-consistent reads (e.g. search). Background tasks: `waitForTask(client, taskId)`, and `waitForBatchTask` for channel batch updates (their top-level status completes too early).
 - **App settings**: pages are run one at a time, so tests may change app settings and built-in channel types, but must restore them (`cleanup.add`). The check after each file fails with `DRIFT` otherwise.
-- `updateChannelType(client, name, patch)` (`helpers/channel-types.ts`) fills in the fields the request requires; `grantMessagingMembers` (`helpers/grants.ts`) adds `messaging` member grants and registers the restore. `helpers/server.ts` has repeated lookups: `sendServerMessage`, `getServerUser` / `getServerMember` / `getServerChannel` (throw unless exactly one result matches), `deletePollsCreatedBy` and `waitForAppSetting`.
+- `updateChannelType(client, name, patch)` (`helpers/channel-types.ts`) fills in the fields the request requires; `grantMessagingMembers` (`helpers/grants.ts`) adds `messaging` member grants and registers the restore. `helpers/server.ts` has repeated lookups: `sendServerMessage`, `getServerUser` / `getServerMember` / `getServerChannel` (throw unless exactly one result matches), `deletePollsCreatedBy`, `waitForAppSetting` and `waitForTeamIdSupport` (multi-tenancy toggles).
 - One `it` per docs snippet (or per closely related group of snippets in the same tab group).
 - Add basic `expect`s after each snippet to prove it did what the docs claim.
 

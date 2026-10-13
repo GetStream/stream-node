@@ -50,8 +50,14 @@ export const retryOnRateLimit = <T>(fn: () => Promise<T>) =>
   retry(fn, { timeout: 90000, interval: 5000, retryIf: isRateLimited });
 
 /** "<type>: channel type does not exist" - returned until a new channel type has propagated. */
-export const isChannelTypeMissing = (error: unknown) =>
-  errorMessage(error).includes('channel type does not exist');
+export const isChannelTypeMissing = (error: unknown) => {
+  const message = errorMessage(error);
+  // Messages differ per endpoint, e.g. deleteChannelType: "<name> is not a defined channel type".
+  return (
+    message.includes('channel type does not exist') ||
+    message.includes('is not a defined channel type')
+  );
+};
 
 /** How long channel type changes take to reach every API node. */
 export const CHANNEL_TYPE_PROPAGATION_MS = 30000;
@@ -94,3 +100,30 @@ export const waitForTask = async (
   }
   return task;
 };
+
+/**
+ * Polls a channel batch update task (`updateChannelsBatch`) until the inner
+ * `result.status` is `completed` and `result.finished_at` is set: its top-level `status`
+ * reaches `completed` before the channels are updated, so `waitForTask` isn't enough.
+ * A batch started right after another one can take ~60s: raise the test's timeout.
+ */
+export const waitForBatchTask = (
+  client: StreamClient,
+  taskId: string,
+  timeout = 150000,
+) =>
+  retry(
+    async () => {
+      const task = await client.getTask({ id: taskId });
+      if (task.status === 'failed') {
+        throw new Error(`task ${taskId} failed: ${JSON.stringify(task)}`);
+      }
+      if (task.result?.status !== 'completed' || !task.result?.finished_at) {
+        throw new Error(
+          `batch ${taskId} is not finished yet: ${JSON.stringify(task)}`,
+        );
+      }
+      return task;
+    },
+    { timeout, interval: 1000 },
+  );

@@ -15,7 +15,7 @@ You are verifying the server-side Node.js code snippets of one Stream Chat docs 
 - Only touch:
   - the test files for this page under `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/pages/`
   - the docs page itself
-  - this page's status row (and its entries in the Blockers detail / Setup notes / Known docs bugs / Possible SDK issues sections) in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`
+  - this page's status row (and its entries in the Blockers detail / Setup notes / Open docs bugs / Possible SDK issues sections). Fixed docs bugs go in the report only; record a docs bug in **Open docs bugs** only if you leave it unfixed in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`
 - Do not edit the helpers, the configs, other pages, or anything in `src/` (`src/gen` is generated from the OpenAPI spec, so hand edits would be lost). If a helper is missing something, write a local helper in your test file and propose the shared helper in your report. If the SDK is wrong (types or behavior), report it under "Possible SDK issues".
 - Change existing docs snippets as little as possible, and only when they are actually wrong.
 - Never put the API key, secret or push credentials in any file. They are loaded from the repo root `.env` (`STREAM_API_KEY`, `STREAM_SECRET`, optional `DOCS_PUSH_FIREBASE_CREDENTIALS`).
@@ -25,7 +25,7 @@ You are verifying the server-side Node.js code snippets of one Stream Chat docs 
 
 1. `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/learnings.md`: issues that earlier agents ran into. Follow it.
 2. `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/README.md`: layout, helpers, isolation, cleanup and snippet-marker conventions. Look at `pages/node/01-quick_start/01-backend_quickstart.test.ts` as an example.
-3. The page itself, and its row in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`. Also read the page's entries in the TODO's **Blockers detail**, **Setup notes** and **Known docs bugs** sections, and the **App facts** line.
+3. The page itself, and its row in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`. Also read the page's entries in the TODO's **Blockers detail** and **Setup notes** sections, and the **App facts** line.
 4. The SDK source for every method a snippet calls: `src/StreamClient.ts`, `src/StreamChatClient.ts`, `src/StreamChannel.ts`, `src/StreamModerationClient.ts` and the generated `src/gen/` clients and models (`src/gen/models/index.ts`), for the method name, its request object and its response type. When it's unclear whether a server-side endpoint exists or what it accepts, check the OpenAPI spec: https://github.com/GetStream/protocol/tree/main/openapi/v2 (`chat-serverside-api.json`).
 
 ## What to build
@@ -107,7 +107,7 @@ yarn test:docs:sync                                 # your page: every Node.js f
 
 `yarn test:docs:sync`'s coverage check also lists pages nobody has done yet: only your page must be absent from it.
 
-Don't use `@ts-ignore`/`@ts-expect-error` to silence a docs snippet. A type error in a snippet is either a docs bug (fix it as above) or an SDK typing bug (report it).
+Don't use `@ts-ignore`/`@ts-expect-error` or `eslint-disable` to silence a docs snippet. The one lint-only docs change allowed: a fence that assigns a value it never reads, which the test can't read either (block-scoped), gets a `console.log` of the field the page talks about (see `learnings.md`); report it as a docs correction. A type error in a snippet is either a docs bug (fix it as above) or an SDK typing bug (report it).
 
 Finally, update the page's row in `/Users/zitaszupera/Stream/stream-node/__tests__/docs-snippets/docs-snippets-todo.md`: `[x]` when done, `[~]` when there are open questions.
 

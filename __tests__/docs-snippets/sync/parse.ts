@@ -244,6 +244,9 @@ const COMPARE_OPTIONS: Options = {
   semi: true,
   printWidth: 80,
   trailingComma: 'all',
+  // Prettier keeps an object expanded once it is broken over lines, so a one-line docs call
+  // wrapped at test indentation would never match again: collapse what fits on one line.
+  objectWrap: 'collapse',
 };
 
 /**

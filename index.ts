@@ -10,3 +10,4 @@ export {
   InvalidWebhookError,
   InvalidWebhookErrorMessages,
 } from './src/utils/webhook';
+export { StreamError } from './src/types';

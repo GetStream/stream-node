@@ -5,8 +5,9 @@ export default defineConfig({
   test: {
     root: import.meta.dirname,
     include: ["./maintenance/sweep.ts"],
-    setupFiles: ["./setup.ts"],
-    // Shows console output (leak / drift warnings) for passing tests too.
+    // Only loads the env: the per-file leak / drift checks would flag the sweep's own removals.
+    setupFiles: ["./env.ts"],
+    // Shows console output for passing tests too.
     reporters: ["verbose"],
     testTimeout: 600000,
     hookTimeout: 180000,

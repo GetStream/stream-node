@@ -19,6 +19,8 @@ export default defineConfig({
     root: import.meta.dirname,
     include: ["./pages/**/*.test.ts"],
     setupFiles: ["./setup.ts"],
+    // Removes leftovers of test files that failed while loading (no hooks ran).
+    globalSetup: ["./global-setup.ts"],
     // Shows console output (leak / drift warnings) for passing tests too.
     reporters: ["verbose"],
     // Generous because some app-level changes are eventually consistent: a new channel

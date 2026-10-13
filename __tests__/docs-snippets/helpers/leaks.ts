@@ -19,12 +19,18 @@ export type Leftover = {
 
 /**
  * Decides which resources are leftovers. `matches` gets ids / names (and a poll's
- * `created_by_id`); `channelIds` is needed because channels can't be searched by prefix.
+ * `created_by_id`). Channels can't be searched by id prefix: they are found by
+ * `channelIds`, and with `channelsCreatedSince` also by listing every channel created
+ * since then and keeping the ones whose id `matches`.
  */
 export type LeftoverFilter = {
   matches: (idOrName: string) => boolean;
   channelIds?: string[];
+  channelsCreatedSince?: Date;
 };
+
+/** Channel queries can't page past this offset. */
+const MAX_CHANNEL_OFFSET = 1000;
 
 /** Hard deletes channels and waits for the background delete task. */
 const hardDeleteChannels = async (client: StreamClient, cids: string[]) => {
@@ -92,25 +98,49 @@ const scanners: Record<string, Scanner> = {
     return found;
   },
 
-  async channels(client, { channelIds = [] }) {
-    const found: Leftover[] = [];
+  async channels(client, { matches, channelIds = [], channelsCreatedSince }) {
+    const found = new Map<string, Leftover>();
+    const add = (channel: { cid: string; created_at: Date }) =>
+      found.set(channel.cid, {
+        kind: 'channel',
+        id: channel.cid,
+        createdAt: channel.created_at,
+        remove: () => hardDeleteChannels(client, [channel.cid]),
+      });
     for (const ids of chunk(channelIds, 100)) {
       const { channels } = await client.chat.queryChannels({
         filter_conditions: { id: { $in: ids } },
         limit: 100,
         state: false,
       });
-      for (const { channel } of channels) {
-        if (!channel) continue;
-        found.push({
-          kind: 'channel',
-          id: channel.cid,
-          createdAt: channel.created_at,
-          remove: () => hardDeleteChannels(client, [channel.cid]),
-        });
+      for (const { channel } of channels) if (channel) add(channel);
+    }
+    if (channelsCreatedSince) {
+      const limit = 30;
+      for (let offset = 0; ; offset += limit) {
+        if (offset > MAX_CHANNEL_OFFSET) {
+          throw new Error(
+            `more than ${MAX_CHANNEL_OFFSET} channels created since ${channelsCreatedSince.toISOString()}, the rest were not scanned`,
+          );
+        }
+        const { channels } = await retryOnRateLimit(() =>
+          client.chat.queryChannels({
+            filter_conditions: {
+              created_at: { $gte: channelsCreatedSince.toISOString() },
+            },
+            sort: [{ field: 'created_at', direction: 1 }],
+            limit,
+            offset,
+            state: false,
+          }),
+        );
+        for (const { channel } of channels) {
+          if (channel && matches(channel.id)) add(channel);
+        }
+        if (channels.length < limit) break;
       }
     }
-    return found;
+    return [...found.values()];
   },
 
   async channelTypes(client, { matches }) {

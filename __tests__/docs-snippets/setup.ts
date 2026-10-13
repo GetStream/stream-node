@@ -1,6 +1,5 @@
-import { config } from 'dotenv';
-import path from 'node:path';
 import { afterAll, beforeAll } from 'vitest';
+import './env';
 import { getServerClient } from './helpers/clients';
 import { mintedIds, runId } from './helpers/ids';
 import {
@@ -11,15 +10,6 @@ import {
 import { diffAppSnapshots, takeAppSnapshot } from './helpers/snapshot';
 import type { AppSnapshot } from './helpers/snapshot';
 import { retry } from './helpers/wait';
-
-// The node SDK's test app, shared with the integration tests (repo root .env).
-config({ path: path.join(__dirname, '../../.env'), quiet: true });
-
-if (!process.env.STREAM_API_KEY || !process.env.STREAM_SECRET) {
-  throw new Error(
-    'Missing STREAM_API_KEY / STREAM_SECRET. Copy .env-example to .env in the repo root and fill it in.',
-  );
-}
 
 // These hooks are registered before the test file's own hooks, so `afterAll` below
 // runs after the file's cleanup (vitest runs after-hooks in reverse order).

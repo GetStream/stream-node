@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from 'node:util';
 import type {
   MessageRequest,
   QueryChannelsRequest,
@@ -101,7 +102,8 @@ export const waitForAppSetting = async <K extends keyof AppSettings>(
   let streak = 0;
   for (let attempt = 0; attempt < attempts && streak < agreeing; attempt++) {
     const { app } = await serverClient.getApp();
-    streak = app[key] === expected ? streak + 1 : 0;
+    // Deep compare: object and array settings (`file_upload_config`, `event_hooks`) too.
+    streak = isDeepStrictEqual(app[key], expected) ? streak + 1 : 0;
     if (streak === 0)
       await new Promise((resolve) => setTimeout(resolve, interval));
   }
@@ -109,5 +111,38 @@ export const waitForAppSetting = async <K extends keyof AppSettings>(
     throw new Error(
       `app setting ${String(key)} never settled on ${JSON.stringify(expected)}`,
     );
+  }
+};
+
+/**
+ * `waitForAppSetting` only proves that `getApp` agrees: other endpoints of some API nodes
+ * keep the old `multi_tenant_enabled` value for a while longer. Polls `listUserGroups`
+ * with `team_id` until `agreeing` calls in a row accept it (`supported`) or reject it
+ * with the multi-tenancy error. Call it after `waitForAppSetting`, both after enabling
+ * multi-tenancy and after restoring it.
+ */
+export const waitForTeamIdSupport = async (
+  serverClient: StreamClient,
+  teamId: string,
+  supported: boolean,
+  { agreeing = 10, timeout = 90000, interval = 500 } = {},
+) => {
+  const startedAt = Date.now();
+  let streak = 0;
+  while (streak < agreeing) {
+    if (Date.now() - startedAt > timeout) {
+      throw new Error(`team_id support never settled on ${supported}`);
+    }
+    let accepted = true;
+    try {
+      await serverClient.listUserGroups({ limit: 1, team_id: teamId });
+    } catch (error) {
+      if (!(error instanceof Error && /multi-tenancy/.test(error.message)))
+        throw error;
+      accepted = false;
+    }
+    streak = accepted === supported ? streak + 1 : 0;
+    if (streak === 0)
+      await new Promise((resolve) => setTimeout(resolve, interval));
   }
 };
