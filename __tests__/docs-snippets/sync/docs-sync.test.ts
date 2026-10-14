@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ALLOWED_JS_LABELS,
   applyCopy,
-  DOCS_CHAT_DIR,
+  DOCS_DIR,
   EXCLUDED_PAGES,
   fenceId,
   findSidebarPages,
@@ -20,15 +20,17 @@ import type { DocsFence, TestRegion } from './parse';
 
 // `yarn test:docs:sync`, in this order:
 // 1. Every `Node.js` fence (except comment-only fences) on the pages of the chat Node
-//    sidebar has a test region. `JavaScript` (client-side) fences are out of scope.
-// 2. Every JS fence on those pages is labelled `JavaScript` or `Node.js`.
+//    sidebar and the platform sidebar has a test region. `JavaScript`, `React` and
+//    `React Native` (client-side) fences, and fences inside a
+//    `<disclosure label="... (no SDK)">` block, are out of scope.
+// 2. Every JS fence on those pages is labelled with one of `ALLOWED_JS_LABELS`.
 // 3. Every marked test region points at an existing fence and matches it (after
 //    applying COPY values and formatting both sides the same way).
 // Pages in `EXCLUDED_PAGES` (parse.ts) are skipped.
 //   DOCS_SYNC_WRITE=<page>  overwrite that page's fences with the test code instead of
 //                           comparing (page path as in the markers, e.g.
-//                           _default/04-messages/01-send_message.md; `1` = all pages)
-//   DOCS_CHAT_DIR=...  path to getstream.io/content/docs/chat (default: sibling checkout)
+//                           chat/_default/04-messages/01-send_message.md; `1` = all pages)
+//   DOCS_DIR=...  path to getstream.io/content/docs (default: sibling checkout)
 
 const writeTarget = process.env.DOCS_SYNC_WRITE;
 const shouldWrite = (docs: string) =>
@@ -52,9 +54,9 @@ it('collects the test regions', () => {
 
 // Without a docs checkout there is nothing to compare against: skip (vitest still runs
 // the describe body to collect tests, so it must not read the docs either).
-const hasDocs = fs.existsSync(DOCS_CHAT_DIR);
+const hasDocs = fs.existsSync(DOCS_DIR);
 
-describe.skipIf(!hasDocs)(`docs sync (${DOCS_CHAT_DIR})`, () => {
+describe.skipIf(!hasDocs)(`docs sync (${DOCS_DIR})`, () => {
   // Pages with tests count even if they are no longer in the sidebar.
   const pages = [
     ...new Set([...(hasDocs ? findSidebarPages() : []), ...regionPages]),
@@ -76,6 +78,7 @@ describe.skipIf(!hasDocs)(`docs sync (${DOCS_CHAT_DIR})`, () => {
           (fence) =>
             fence.tab === NODE_TAB &&
             !fence.commentOnly &&
+            !fence.noSdk &&
             !covered.has(fenceId(fence)),
         )
         .map((fence) => where(file, fence)),
@@ -139,7 +142,7 @@ describe.skipIf(!hasDocs)(`docs sync (${DOCS_CHAT_DIR})`, () => {
 
 /** Replaces one fence body; re-reads the file so several writes to one page compose. */
 const writeFence = (docsFile: string, fence: DocsFence, code: string) => {
-  const docs = path.relative(DOCS_CHAT_DIR, docsFile);
+  const docs = path.relative(DOCS_DIR, docsFile);
   const current = parseDocsFences(docs, fs.readFileSync(docsFile, 'utf8')).find(
     (candidate) => fenceId(candidate) === fenceId(fence),
   );

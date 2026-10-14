@@ -9,5 +9,6 @@ export * from './src/StreamFeed';
 export {
   InvalidWebhookError,
   InvalidWebhookErrorMessages,
+  verifyAndParseWebhook,
 } from './src/utils/webhook';
 export { StreamError } from './src/types';

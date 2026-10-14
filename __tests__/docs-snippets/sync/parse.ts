@@ -3,15 +3,15 @@ import path from 'node:path';
 import { format } from 'prettier';
 import type { Options } from 'prettier';
 
-/** `content/docs/chat` in a getstream.io checkout (override with DOCS_CHAT_DIR). */
-export const DOCS_CHAT_DIR = path.resolve(
-  process.env.DOCS_CHAT_DIR ??
-    path.join(__dirname, '../../../../getstream.io/content/docs/chat'),
+/** `content/docs` in a getstream.io checkout (override with DOCS_DIR). */
+export const DOCS_DIR = path.resolve(
+  process.env.DOCS_DIR ??
+    path.join(__dirname, '../../../../getstream.io/content/docs'),
 );
 
 /** Identifies one code fence on a docs page. */
 export type FenceKey = {
-  /** Page path relative to `content/docs/chat`, e.g. `_default/04-messages/01-send_message.md`. */
+  /** Page path relative to `content/docs`, e.g. `chat/_default/04-messages/01-send_message.md`. */
   docs: string;
   /** Text of the nearest heading above the fence (`""` before the first heading). */
   heading: string;
@@ -34,6 +34,8 @@ export type DocsFence = FenceKey & {
   indent: string;
   /** The body is only comments (e.g. a "server-side only" placeholder): nothing to test. */
   commentOnly: boolean;
+  /** Inside a `<disclosure label="... (no SDK)">` block: a reference implementation that doesn't use the SDK. */
+  noSdk: boolean;
 };
 
 export type TestRegion = FenceKey & {
@@ -53,15 +55,28 @@ const JS_LANGS = new Set(['js', 'javascript', 'ts', 'typescript']);
 export const JS_TAB = 'JavaScript';
 /** The tested tab (`@stream-io/node-sdk` code). */
 export const NODE_TAB = 'Node.js';
+/** Out of scope too: client-side React / React Native SDK code. */
+const OUT_OF_SCOPE_TABS = ['React', 'React Native'];
+/**
+ * Opens a block of reference implementations that don't use the SDK (platform pages).
+ * Its `Node.js` fences are out of scope.
+ */
+const NO_SDK_DISCLOSURE_RE =
+  /^\s*<disclosure\b[^>]*label="[^"]*\(no SDK\)[^"]*"/i;
 /** Every JS fence must carry one of these labels. */
-export const ALLOWED_JS_LABELS = [JS_TAB, NODE_TAB];
-
-/** Node sidebar of the chat docs: the pages whose `Node.js` fences are tested. */
-const SIDEBAR_FILE = '[chat][node].json';
+export const ALLOWED_JS_LABELS = [JS_TAB, NODE_TAB, ...OUT_OF_SCOPE_TABS];
 
 /**
- * Pages in the Node sidebar that are deliberately not validated (page path
- * relative to `content/docs/chat`, reason).
+ * Sidebars whose pages' `Node.js` fences are tested: the chat Node sidebar and the
+ * platform docs (shared by all SDKs).
+ */
+const SIDEBAR_FILES = ['[chat][node].json', '[platform][default].json'];
+/** Sidebar entries outside these docs are ignored. */
+const PAGE_PREFIXES = ['chat/', 'platform/'];
+
+/**
+ * Sidebar pages that are deliberately not validated (page path relative to
+ * `content/docs`, reason).
  */
 export const EXCLUDED_PAGES: Record<string, string> = {};
 
@@ -87,7 +102,7 @@ export const isCommentOnly = (code: string) =>
 /**
  * All JS fences (`js`/`javascript`/`ts`/`typescript`) of a docs page, keyed the same way
  * as the test markers. Includes `JavaScript` and unlabelled fences (for the label check);
- * only `Node.js` fences are tested.
+ * only `Node.js` fences outside no-SDK disclosures are tested.
  */
 export const parseDocsFences = (
   docs: string,
@@ -97,11 +112,14 @@ export const parseDocsFences = (
   const fences: DocsFence[] = [];
   const counts = new Map<string, number>();
   let heading = '';
+  let noSdk = false;
   for (let i = 0; i < lines.length; i++) {
     const open = /^(\s*)(`{3,})(\S*)(.*)$/.exec(lines[i]);
     if (!open) {
       const h = /^#{1,6}\s+(.*?)\s*#*\s*$/.exec(lines[i]);
       if (h) heading = h[1];
+      if (NO_SDK_DISCLOSURE_RE.test(lines[i])) noSdk = true;
+      else if (/^\s*<\/disclosure>/i.test(lines[i])) noSdk = false;
       continue;
     }
     const [, indent, ticks, lang, rest] = open;
@@ -125,6 +143,7 @@ export const parseDocsFences = (
         lang,
         code,
         commentOnly: isCommentOnly(code),
+        noSdk,
         line: i + 1,
         bodyStart: i + 1,
         bodyEnd: end,
@@ -178,7 +197,7 @@ const keyFromAttrs = (
  * Snippet regions of a test file:
  *
  * ```ts
- * // #region snippet docs="_default/04-messages/01-send_message.md" heading="Sending a Message" tab="Node.js" index=1
+ * // #region snippet docs="chat/_default/04-messages/01-send_message.md" heading="Sending a Message" tab="Node.js" index=1
  * // COPY: channelId="general", userId="john"
  * ...docs code...
  * // #endregion snippet
@@ -281,28 +300,31 @@ export const formatForDocs = async (code: string, markdownFile: string) => {
 type SidebarItem = { markdown?: string; children?: SidebarItem[] };
 
 /**
- * Pages of the chat Node sidebar (paths relative to `content/docs/chat`), minus
+ * Pages of the tested sidebars (paths relative to `content/docs`), minus
  * `EXCLUDED_PAGES`.
  */
 export const findSidebarPages = () => {
-  const file = path.join(DOCS_CHAT_DIR, '..', '_sidebars', SIDEBAR_FILE);
-  const { items } = JSON.parse(fs.readFileSync(file, 'utf8')) as {
-    items: SidebarItem[];
-  };
   const pages = new Set<string>();
   const walk = (entries: SidebarItem[] = []) => {
     for (const entry of entries) {
-      if (entry.markdown?.startsWith('chat/'))
-        pages.add(entry.markdown.slice('chat/'.length));
+      const page = entry.markdown;
+      if (page && PAGE_PREFIXES.some((prefix) => page.startsWith(prefix)))
+        pages.add(page);
       walk(entry.children);
     }
   };
-  walk(items);
+  for (const sidebar of SIDEBAR_FILES) {
+    const file = path.join(DOCS_DIR, '_sidebars', sidebar);
+    const { items } = JSON.parse(fs.readFileSync(file, 'utf8')) as {
+      items: SidebarItem[];
+    };
+    walk(items);
+  }
   return [...pages].filter((page) => !(page in EXCLUDED_PAGES)).sort();
 };
 
 export const readDocsPage = (docs: string) => {
-  const file = path.join(DOCS_CHAT_DIR, docs);
+  const file = path.join(DOCS_DIR, docs);
   return { file, markdown: fs.readFileSync(file, 'utf8') };
 };
 
