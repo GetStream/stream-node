@@ -27,6 +27,8 @@ import {
   CastPollVoteRequest,
   ChangeFeedVisibilityRequest,
   ChangeFeedVisibilityResponse,
+  CommentFeedbackRequest,
+  CommentFeedbackResponse,
   CreateCollectionsRequest,
   CreateCollectionsResponse,
   CreateFeedGroupRequest,
@@ -207,6 +209,7 @@ export class FeedsApi {
       poll_id: request?.poll_id,
       restrict_replies: request?.restrict_replies,
       skip_enrich_url: request?.skip_enrich_url,
+      skip_existing: request?.skip_existing,
       skip_push: request?.skip_push,
       text: request?.text,
       user_id: request?.user_id,
@@ -244,6 +247,7 @@ export class FeedsApi {
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       force_moderation: request?.force_moderation,
+      skip_existing: request?.skip_existing,
     };
 
     const response = await this.apiClient.sendRequest<UpsertActivitiesResponse>(
@@ -509,6 +513,8 @@ export class FeedsApi {
       poll_id: request?.poll_id,
     };
     const body = {
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       user: request?.user,
       vote: request?.vote,
@@ -973,9 +979,11 @@ export class FeedsApi {
 
   async deleteCollections(request: {
     collection_refs: Array<string>;
+    hard_delete?: boolean;
   }): Promise<StreamResponse<DeleteCollectionsResponse>> {
     const queryParams = {
       collection_refs: request?.collection_refs,
+      hard_delete: request?.hard_delete,
     };
 
     const response =
@@ -1433,6 +1441,31 @@ export class FeedsApi {
     return response;
   }
 
+  async commentFeedback(
+    request: CommentFeedbackRequest & { id: string },
+  ): Promise<StreamResponse<CommentFeedbackResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      hide: request?.hide,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<CommentFeedbackResponse>(
+      'POST',
+      '/api/v2/feeds/comments/{id}/feedback',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['CommentFeedbackResponse']?.(response);
+
+    return response;
+  }
+
   async updateCommentPartial(
     request: UpdateCommentPartialRequest & { id: string },
   ): Promise<StreamResponse<UpdateCommentPartialResponse>> {
@@ -1746,6 +1779,7 @@ export class FeedsApi {
       user_id: request?.user_id,
       view: request?.view,
       watch: request?.watch,
+      discard_actors: request?.discard_actors,
       data: request?.data,
       enrichment_options: request?.enrichment_options,
       external_ranking: request?.external_ranking,
@@ -2669,6 +2703,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -2691,6 +2726,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -2934,6 +2970,7 @@ export class FeedsApi {
       max_age_hours: request?.max_age_hours,
       policy: request?.policy,
       enabled: request?.enabled,
+      feed_groups: request?.feed_groups,
     };
 
     const response =
@@ -3048,6 +3085,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       delete_notification_activity: request?.delete_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -3070,6 +3108,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       delete_notification_activity: request?.delete_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
     };

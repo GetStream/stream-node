@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.12](https://github.com/GetStream/stream-node/compare/v0.8.11...v0.8.12) (2026-10-09)
+
+
+### Features
+
+* add selector time_budget_ms and degraded_selectors ([#371](https://github.com/GetStream/stream-node/issues/371)) ([b60a393](https://github.com/GetStream/stream-node/commit/b60a39319672a283e0e2407102b4f508a7a376d2))
+* update to latest API spec ([#368](https://github.com/GetStream/stream-node/issues/368)) ([f2d53d2](https://github.com/GetStream/stream-node/commit/f2d53d2fa0e7e800bfa04f90f97f434d16ec79b0))
+
+
+### Bug Fixes
+
+* don't encode validity_in_seconds in user/call token payloads ([#366](https://github.com/GetStream/stream-node/issues/366)) ([e74fad5](https://github.com/GetStream/stream-node/commit/e74fad5d59382f9138a2eadb568edde25501034e))
+* file type in uploadChannelImage/uploadChannelFile methods ([#370](https://github.com/GetStream/stream-node/issues/370)) ([3748509](https://github.com/GetStream/stream-node/commit/3748509b8295cecc98e6917c5811bc405c8f21cd))
+
 ## [0.8.11](https://github.com/GetStream/stream-node/compare/v0.8.10...v0.8.11) (2026-10-05)
 
 

@@ -125,7 +125,6 @@ describe('multipart form data serialization', () => {
     await chat.uploadChannelImage({
       type: 'messaging',
       id: 'channel-id',
-      // @ts-expect-error API spec says file should be a string
       file: new File(['image-contents'], 'test-image.jpg'),
       upload_sizes: [{ width: 100, height: 100 }],
       user: { id: 'user-id' },
@@ -144,7 +143,6 @@ describe('multipart form data serialization', () => {
     await chat.uploadChannelFile({
       type: 'messaging',
       id: 'channel-id',
-      // @ts-expect-error API spec says file should be a string
       file: new File(['file-contents'], 'test-file.pdf'),
       user: { id: 'user-id' },
     });
@@ -152,5 +150,63 @@ describe('multipart form data serialization', () => {
     const formData = fetchSpy.mock.calls[0][1]!.body as FormData;
     expect(formData.get('user')).toBe('{"id":"user-id"}');
     expect(formData.get('file')).toBeInstanceOf(File);
+  });
+
+  it('encodes a channel image upload made from a channel', async () => {
+    const fetchSpy = mockFetch();
+    const channel = new StreamChatClient(createApiClient()).channel(
+      'messaging',
+      'channel-id',
+    );
+
+    await channel.uploadChannelImage({
+      file: new File(['image-contents'], 'test-image.jpg'),
+      upload_sizes: [{ width: 100, height: 100 }],
+      user: { id: 'user-id' },
+    });
+
+    const [url, init] = fetchSpy.mock.calls[0];
+    expect(url).toContain('/api/v2/chat/channels/messaging/channel-id/image');
+    const formData = init!.body as FormData;
+    expect(formData.get('user')).toBe('{"id":"user-id"}');
+    expect(formData.get('upload_sizes')).toBe('[{"width":100,"height":100}]');
+    const sent = formData.get('file');
+    expect(sent).toBeInstanceOf(File);
+    expect((sent as File).name).toBe('test-image.jpg');
+  });
+
+  it('encodes a channel file upload made from a channel', async () => {
+    const fetchSpy = mockFetch();
+    const channel = new StreamChatClient(createApiClient()).channel(
+      'messaging',
+      'channel-id',
+    );
+
+    await channel.uploadChannelFile({
+      file: new File(['file-contents'], 'test-file.pdf'),
+      user: { id: 'user-id' },
+    });
+
+    const [url, init] = fetchSpy.mock.calls[0];
+    expect(url).toContain('/api/v2/chat/channels/messaging/channel-id/file');
+    const formData = init!.body as FormData;
+    expect(formData.get('user')).toBe('{"id":"user-id"}');
+    const sent = formData.get('file');
+    expect(sent).toBeInstanceOf(File);
+    expect((sent as File).name).toBe('test-file.pdf');
+  });
+
+  it('refuses a channel upload before the channel has an id', () => {
+    const fetchSpy = mockFetch();
+    const channel = new StreamChatClient(createApiClient()).channel(
+      'messaging',
+    );
+
+    expect(() =>
+      channel.uploadChannelFile({
+        file: new File(['file-contents'], 'test-file.pdf'),
+      }),
+    ).toThrow("Channel isn't yet created");
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });

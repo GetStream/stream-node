@@ -71,6 +71,8 @@ import {
   QueryBannedUsersResponse,
   QueryCampaignsRequest,
   QueryCampaignsResponse,
+  QueryChannelBansRequest,
+  QueryChannelBansResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
   QueryDraftsRequest,
@@ -452,6 +454,7 @@ export class ChatApi {
     const body = {
       limit: request?.limit,
       user_id: request?.user_id,
+      sort: request?.sort,
       groups: request?.groups,
       user: request?.user,
     };
@@ -657,6 +660,37 @@ export class ChatApi {
     );
 
     decoders['UpdateChannelResponse']?.(response);
+
+    return response;
+  }
+
+  async queryChannelBans(
+    request: QueryChannelBansRequest & { type: string; id: string },
+  ): Promise<StreamResponse<QueryChannelBansResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      exclude_expired_bans: request?.exclude_expired_bans,
+      include_total: request?.include_total,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      filter_conditions: request?.filter_conditions,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<QueryChannelBansResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/bans/query',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['QueryChannelBansResponse']?.(response);
 
     return response;
   }
@@ -1854,6 +1888,8 @@ export class ChatApi {
       poll_id: request?.poll_id,
     };
     const body = {
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       user: request?.user,
       vote: request?.vote,

@@ -133,12 +133,17 @@ export class StreamClient extends CommonApi {
       iat?: number;
     } & Record<string, unknown>,
   ) => {
+    // validity_in_seconds is only used to compute exp, don't encode it
+    const { validity_in_seconds, ...claims } = payload;
     const defaultIat = Math.floor((Date.now() - 1000) / 1000);
-    payload.iat = payload.iat ?? defaultIat;
-    const validityInSeconds = payload.validity_in_seconds ?? 60 * 60;
-    payload.exp = payload.exp ?? payload.iat + validityInSeconds;
+    const iat = claims.iat ?? defaultIat;
+    const exp = claims.exp ?? iat + (validity_in_seconds ?? 60 * 60);
 
-    return JWTUserToken(this.secret, payload as UserTokenPayload);
+    return JWTUserToken(this.secret, {
+      ...claims,
+      iat,
+      exp,
+    } as UserTokenPayload);
   };
 
   /**
@@ -154,9 +159,11 @@ export class StreamClient extends CommonApi {
     } & Record<string, unknown>,
   ) => {
     const defaultIat = Math.floor((Date.now() - 1000) / 1000);
-    payload.iat = payload.iat ?? defaultIat;
 
-    return JWTUserToken(this.secret, payload as UserTokenPayload);
+    return JWTUserToken(this.secret, {
+      ...payload,
+      iat: payload.iat ?? defaultIat,
+    } as UserTokenPayload);
   };
 
   /**
