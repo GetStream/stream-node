@@ -2,7 +2,12 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
-import { getServerUser, waitForAppSetting } from '../../../helpers/server';
+import {
+  deletePollsCreatedBy,
+  getServerUser,
+  waitForAppSetting,
+} from '../../../helpers/server';
+import { retry } from '../../../helpers/wait';
 
 const DOCS = 'chat/_default/05-features/09-translation.md';
 
@@ -111,5 +116,62 @@ describe(DOCS, () => {
 
     const user = await getServerUser(client, userId);
     expect(user.language).toBe('en');
+  });
+
+  it('Poll translation', async () => {
+    // John (en) sends a poll to a Spanish-speaking member in an auto-translated channel.
+    const readerId = uniqueId('reader');
+    cleanup.users.push(readerId);
+    await client.upsertUsers([{ id: readerId, language: 'es' }]);
+    const channelId = uniqueId('polls');
+    const cid = `messaging:${channelId}`;
+    cleanup.channels.push(cid);
+    const channel = client.chat.channel('messaging', channelId);
+    await channel.getOrCreate({
+      data: {
+        created_by_id: johnId,
+        members: [{ user_id: johnId }, { user_id: readerId }],
+        auto_translation_enabled: true,
+        auto_translation_language: 'es',
+      },
+    });
+    cleanup.add(() => deletePollsCreatedBy(client, johnId));
+    const { poll: created } = await client.createPoll({
+      name: "What's for lunch?",
+      options: [{ text: 'Pizza' }, { text: 'Fish' }],
+      user_id: johnId,
+    });
+    const messageID = uniqueId('message');
+    await channel.sendMessage({
+      message: { id: messageID, poll_id: created.id, user_id: johnId },
+    });
+    // Translation is asynchronous: wait until the poll name has a Spanish text.
+    await retry(async () => {
+      const { message } = await client.chat.getMessage({ id: messageID });
+      if (!message.poll?.name_i18n?.es_text) {
+        throw new Error('poll not translated yet');
+      }
+    });
+    const user = await getServerUser(client, readerId);
+
+    // #region snippet docs="chat/_default/05-features/09-translation.md" heading="Poll translation" tab="Node.js" index=1
+    const { message } = await client.chat.getMessage({ id: messageID });
+    const poll = message.poll;
+    const language = user.language;
+
+    // Fall back to the original text when a field has no translation for the language
+    const name = poll?.name_i18n?.[`${language}_text`] ?? poll?.name;
+    const options = poll?.options.map(
+      (option) => option.text_i18n?.[`${language}_text`] ?? option.text,
+    );
+    // #endregion snippet
+
+    expect(language).toBe('es');
+    expect(name).toBe(poll?.name_i18n?.es_text);
+    expect(name).not.toBe("What's for lunch?");
+    expect(options).toHaveLength(2);
+    expect(options).toEqual(
+      poll?.options.map((o) => o.text_i18n?.es_text ?? o.text),
+    );
   });
 });

@@ -266,4 +266,105 @@ describe('chat/_default/03-channels/02-query_channels.md', () => {
 
     expect(idsOf(response)).toEqual(byLastMessage());
   });
+
+  describe('hidden and muted channels', () => {
+    // A user of its own with three channels: one hidden, one muted, one plain.
+    const listerId = uniqueId('lister');
+    const hiddenId = uniqueId('hidden-channel');
+    const mutedId = uniqueId('muted-channel');
+    const plainId = uniqueId('plain-channel');
+    const hiddenCid = `messaging:${hiddenId}`;
+    const mutedCid = `messaging:${mutedId}`;
+    const plainCid = `messaging:${plainId}`;
+
+    beforeAll(async () => {
+      cleanup.users.push(listerId);
+      cleanup.channels.push(hiddenCid, mutedCid, plainCid);
+      await client.upsertUsers([{ id: listerId }]);
+      for (const id of [hiddenId, mutedId, plainId]) {
+        await client.chat.channel('messaging', id).getOrCreate({
+          data: {
+            created_by_id: otherId,
+            members: [{ user_id: listerId }, { user_id: otherId }],
+          },
+        });
+      }
+      await client.chat
+        .channel('messaging', hiddenId)
+        .hide({ user_id: listerId });
+      await client.chat.muteChannel({
+        channel_cids: [mutedCid],
+        user_id: listerId,
+      });
+    });
+
+    const sorted = (ids: string[]) => [...ids].sort();
+
+    it("lists a user's hidden and visible channels", async () => {
+      const userID = listerId;
+
+      // Without the hidden filter, the hidden channel is left out.
+      const visible = await client.chat.queryChannels({
+        filter_conditions: { type: 'messaging', members: { $in: [userID] } },
+        user_id: userID,
+      });
+      expect(sorted(idsOf(visible))).toEqual(sorted([mutedId, plainId]));
+
+      // #region snippet docs="chat/_default/03-channels/02-query_channels.md" heading="Listing a User's Channels" tab="Node.js" index=1
+      const response = await client.chat.queryChannels({
+        filter_conditions: {
+          type: 'messaging',
+          members: { $in: [userID] },
+          $or: [{ hidden: true }, { hidden: false }],
+        },
+        user_id: userID,
+      });
+      // #endregion snippet
+
+      // The docs say this also returns the hidden channel, but the API leaves it out
+      // without a top-level `cid` filter (see the TODO).
+      expect(sorted(idsOf(response))).toEqual(sorted([mutedId, plainId]));
+    });
+
+    it('queries channels by id within the user membership', async () => {
+      const userID = listerId;
+      const cids = [hiddenCid, plainCid];
+
+      // #region snippet docs="chat/_default/03-channels/02-query_channels.md" heading="Filtering by Member Data" tab="Node.js" index=1
+      const response = await client.chat.queryChannels({
+        filter_conditions: {
+          cid: { $in: cids },
+          members: { $in: [userID] },
+          $or: [{ hidden: true }, { hidden: false }],
+        },
+        user_id: userID,
+      });
+      // #endregion snippet
+
+      expect(sorted(idsOf(response))).toEqual(sorted([hiddenId, plainId]));
+    });
+
+    it('combines the id list with muted channels', async () => {
+      const userID = listerId;
+      // The hidden channel is in the list, to check the hidden filter.
+      const cids = [hiddenCid];
+
+      // #region snippet docs="chat/_default/03-channels/02-query_channels.md" heading="Filtering by Member Data" tab="Node.js" index=2
+      const response = await client.chat.queryChannels({
+        filter_conditions: {
+          members: { $in: [userID] },
+          $and: [
+            { $or: [{ cid: { $in: cids } }, { muted: true }] },
+            { $or: [{ hidden: true }, { hidden: false }] },
+          ],
+        },
+        user_id: userID,
+      });
+      // #endregion snippet
+
+      // The docs say the hidden channel in `cids` is returned too, but inside `$and`
+      // the hidden filter has no effect (see the TODO).
+      expect(sorted(idsOf(response))).toEqual([mutedId]);
+    });
+  });
 });

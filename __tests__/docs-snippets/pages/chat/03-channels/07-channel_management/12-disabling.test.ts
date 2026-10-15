@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type {
+  QueryChannelsResponse,
   UpdateChannelPartialResponse,
   UpdateChannelResponse,
 } from '../../../../../../index';
@@ -72,5 +73,37 @@ describe(DOCS, () => {
 
     const { channel: current } = await getServerChannel(client, cid);
     expect(current?.disabled).toBe(false);
+  });
+
+  it('filters out disabled channels', async () => {
+    // A disabled channel: server-side queries return it unless the filter excludes it.
+    const disabledId = uniqueId('disabled');
+    const disabledCid = `messaging:${disabledId}`;
+    cleanup.channels.push(disabledCid);
+    const disabled = client.chat.channel('messaging', disabledId);
+    await disabled.getOrCreate({ data: { created_by_id: ownerId } });
+    await disabled.updateChannelPartial({ set: { disabled: true } });
+    const unfiltered = await client.chat.queryChannels({
+      filter_conditions: { cid: disabledCid },
+    });
+    expect(unfiltered.channels[0]?.channel?.disabled).toBe(true);
+    const filtered = await client.chat.queryChannels({
+      filter_conditions: { cid: disabledCid, disabled: false },
+    });
+    expect(filtered.channels).toEqual([]);
+
+    const spy = vi.spyOn(client.chat, 'queryChannels');
+
+    // #region snippet docs="chat/_default/03-channels/07-channel_management/12-disabling.md" heading="" tab="Node.js" index=1
+    await client.chat.queryChannels({ filter_conditions: { disabled: false } });
+    // #endregion snippet
+
+    const response = await (spy.mock.results[0]
+      .value as Promise<QueryChannelsResponse>);
+    spy.mockRestore();
+    expect(response.channels.length).toBeGreaterThan(0);
+    expect(response.channels.map((c) => c.channel?.disabled)).not.toContain(
+      true,
+    );
   });
 });

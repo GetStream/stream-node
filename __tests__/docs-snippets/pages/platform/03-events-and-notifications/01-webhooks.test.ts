@@ -481,6 +481,33 @@ describe(DOCS, () => {
     // #endregion snippet
   });
 
+  it.skip('BLOCKED: needs a real GCS service account (Pending message hooks)', async () => {
+    // updateApp rejects the placeholder credentials with code 4 "failover_config for hook
+    // has invalid gcs_credentials: dialing: auth: email must be provided" (2026-10-15).
+
+    // #region snippet docs="platform/03-events-and-notifications/01-webhooks.md" heading="Pending message hooks" tab="Node.js" index=1
+    await client.updateApp({
+      event_hooks: [
+        {
+          enabled: true,
+          hook_type: 'pending_message',
+          webhook_url: 'https://example.com/pending-messages',
+          timeout_ms: 10000,
+          callback: {
+            mode: 'CALLBACK_MODE_REST',
+          },
+          failover_config: {
+            type: 'gcs',
+            gcs_bucket: 'my-failover-bucket',
+            gcs_path: 'stream/failed-pending-messages',
+            gcs_credentials: '{"type":"service_account","project_id":"..."}',
+          },
+        },
+      ],
+    });
+    // #endregion snippet
+  });
+
   it('Disabling Failover', async () => {
     // #region snippet docs="platform/03-events-and-notifications/01-webhooks.md" heading="Disabling Failover" tab="Node.js" index=1
     await client.updateApp({
