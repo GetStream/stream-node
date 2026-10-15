@@ -1,9 +1,34 @@
-# Docs snippet tests: learnings
+# Docs snippet tests: agent notes
 
-Lessons collected from agent runs. Read this before working on a page.
-Entries are added only after the user approves them (agents propose them in their final report).
+Read this before working on a page. **Test conventions** are the rules every test follows; **API quirks** are API and SDK behavior found while testing.
+New entries are added only after the user approves them (agents propose them in their final report).
 
-## Setup and tooling
+## Test conventions
+
+### General
+
+- Import the SDK from `../../../../index` (relative depth varies) and test helpers from `helpers/`. Use `import type` for types.
+- `@stream-io/node-sdk` is aliased to the repo's `index.ts` (`resolve.alias` in `vitest.config.mts`, `paths` in `tsconfig.json`), so a docs fence that starts with `import ... from "@stream-io/node-sdk"` can be a region at module level: declare the values it uses (e.g. `apiKey`) above it.
+- The docs call the server client `client`: use `const client = getServerClient()` (`helpers/clients.ts`, 30s timeout) and the same variable names as the docs (`client`, `channel`, ...). `createUserToken(userId)` signs user tokens.
+- Snippets act on behalf of users with `user_id` / `created_by_id`: those users must exist (`client.upsertUsers`) and have `uniqueId` ids.
+- **Isolation**: the id or name of everything a test creates comes from `uniqueId('name')`: users, channels, channel types, roles, commands, blocklists, segments, campaigns (name), user groups, moderation config keys, predefined filters, push providers. Polls are matched by their creator, so create them as a `uniqueId` user. Never use fixed ids like `"john"` or `"general"`.
+- **Cleanup**: register everything you create on a `Cleanup` instance and call `cleanup.run()` in `afterAll`. App-level settings changed by a test must be restored with `cleanup.add(...)`.
+- Tests in one file may share data created in `beforeAll`. Nothing may leak across files.
+- `cleanup.run()` attempts every step and then throws if anything failed, so leftovers show up as a failed `afterAll` instead of piling up in the app. Server-side hard channel deletion is a background task: `Cleanup` waits for it (`waitForTask`) and retries deleting channel types until their channels are gone.
+- **Leak check** (`setup.ts`, runs automatically after each file's own `afterAll`): looks up everything minted by `uniqueId` in that file (users, channels, channel types, commands, roles, custom permissions, blocklists, segments, campaigns, user groups, moderation configs, predefined filters, push providers, polls). Anything still there fails the file with a `LEAK` error listing it, and is then removed. Per-user data (reminders, devices, drafts, ...) goes away with the user. It also snapshots app settings (incl. push and webhook config), pre-existing channel types and retention policies before the file and fails with `DRIFT` if anything changed and wasn't restored.
+- **End-of-run sweep** (`global-setup.ts`, after every `yarn test:docs`): a file that throws while loading runs no hooks, so its cleanup and leak check never run. The sweep removes every `docs-test` resource created since the run started (channels are found by listing every channel created since then) and fails the run with a `LEAK` list. It also puts back the retention policies the run started with and fails with `DRIFT` if it had to. Don't run two `yarn test:docs` at once: the sweep would remove the other run's resources.
+- Anything created under a non-`uniqueId` name can't be found by the leak check or the sweep. Don't do that.
+- **Eventual consistency**: channel type changes (`createChannelType` / `updateChannelType`) take ~30s to reach every API node. Call `await waitForChannelTypePropagation()` (from `helpers/wait.ts`) right after creating or updating a channel type. Timeouts are 90s per test and 180s per hook to leave room for this. Use `retry(fn, { retryIf })` for other eventually-consistent reads (e.g. search). Background tasks: `waitForTask(client, taskId)`, and `waitForBatchTask` for channel batch updates (their top-level status completes too early).
+- **App settings**: pages are run one at a time, so tests may change app settings and built-in channel types, but must restore them (`cleanup.add`). The check after each file fails with `DRIFT` otherwise.
+- `updateChannelType(client, name, patch)` (`helpers/channel-types.ts`) fills in the fields the request requires; `grantMessagingMembers` (`helpers/grants.ts`) adds `messaging` member grants and registers the restore. `helpers/server.ts` has repeated lookups: `sendServerMessage`, `getServerUser` / `getServerMember` / `getServerChannel` (throw unless exactly one result matches), `deletePollsCreatedBy`, `waitForAppSetting` and `waitForTeamIdSupport` (multi-tenancy toggles).
+- One `it` per docs snippet (or per closely related group of snippets in the same tab group).
+- Add basic `expect`s after each snippet to prove it did what the docs claim.
+
+### Test app
+
+- App facts (node SDK test app, probed 2026-10-12): push v3 with one provider `firebase:firebase` (not a docs-test one: tests must not touch or use it, e.g. no `upsertPushProvider` / `deletePushProvider` on it and no devices or `checkPush` with `push_provider_name: "firebase"`), permissions v2, multi-tenancy off, `disable_auth_checks` off, auto-translation off, campaigns on (segments, user groups and polls endpoints answer), no webhook / SQS / SNS / custom action handler URLs set (`webhook_url`, `custom_action_handler_url`, `sqs_url`, `sns_topic_arn` empty), one entry in `event_hooks`, no retention policies. Channel types: `livestream`, `messaging`, `team`, `agent`, `commerce`, `gaming`, plus `streamnodetest*` types left by the integration tests. Delivery receipts: `delivery_events: true` is accepted on create/update channel type without support enablement (2026-10-12). Location sharing: enabled (2026-10-12); channels still need `shared_locations` (`config_overrides` or channel type), otherwise `sendMessage` with `shared_location` fails with code 17 "location sharing is not enabled for this channel". Translation: `translateMessage` works with auto-translation off; `updateApp({ auto_translation_enabled: true })` is accepted (restored after, 2026-10-12). Restricted visibility messages: enabled (`restricted_visibility` on `sendMessage` works, 2026-10-12). User response time: `updateApp({ user_response_time_enabled: true })` is accepted and `avg_response_time` appears on the replying user within seconds (restored after, 2026-10-12). Dynamic partitioning: `partition_size` / `partition_ttl` accepted on create/update channel type without support enablement (2026-10-12). Message history (audit logs): enabled; `queryMessageHistory` is rate limited to 6 requests per minute (2026-10-12). Feature availability is probed per page: propose new findings for this list in your report.
+
+### Setup and tooling
 
 - A fence that creates a channel type and uses it right away: spy on `client.chat.createChannelType` with a `mockImplementation` that awaits the bound original and then `waitForChannelTypePropagation()`, so the region runs as written without "channel type does not exist" from another API node.
 
@@ -40,7 +65,7 @@ Entries are added only after the user approves them (agents propose them in thei
 - A fence before the page's first heading uses `heading=""` in its marker. To COPY-map a docs string that contains a test id (`"/ticket suspicious transaction with id 1234"`), map the whole string to a variable built from the id (`ticketText="..."`).
 - Two dependent fences that both declare the same `const` (e.g. `response`) can share one `it`: put the second region in its own `{ ... }` block; it still sees the outer variables.
 
-## Server client (`@stream-io/node-sdk`)
+### Server client (`@stream-io/node-sdk`)
 
 - `createChannelType` doesn't take every field `updateChannelType` does (e.g. `reminders`, `grants`, TS2353): create with the required fields only, assert the default, then update. To restore an app setting (e.g. `reminders_interval`), save `getApp().app.<key>` and `cleanup.add` an `updateApp` with it followed by `waitForAppSetting(client, '<key>', original)`.
 
@@ -65,7 +90,58 @@ Entries are added only after the user approves them (agents propose them in thei
 - Optional response fields (`GetTaskResponse.result`, `MessageResponse.i18n`) aren't narrowed by a status check: a fence reading `response.result.url` fails TS18048, and the docs fix is `?.`.
 - `getApp().app.enforce_unique_usernames` is typed `string` but `updateApp` expects `'no' | 'app' | 'team'`: cast the saved value when restoring it. `"team"` is accepted with multi-tenancy off.
 
-## API and SDK behavior
+### Docs conventions
+
+- A Node.js fence that reads `error.metadata` in a `catch` fails TS18046 (`unknown`): the docs fix is `error instanceof StreamError && ...` (`metadata` is `Partial<RequestMetadata>`, so `rateLimit` needs `?.`). Placeholder calls (`client....`, `client.queryUsers(...)`) are syntax errors: replace them with the call the sibling tabs use, with a COPY-mapped literal id.
+- Unawaited calls used as statements in a Node.js fence (`client.updateApp(...)`, `client.queryUsers(...)`) fail `@typescript-eslint/no-floating-promises`: the docs fix is to add `await` (to assert on the results, spy on the method and await `mock.results`). A fence that declares the same `const` several times (TS2451): give each its own name; switching to `let` and reassigning fails `no-useless-assignment` when the earlier values are never read.
+- A fence that assigns a value it never reads, where the test can't read it either (block-scoped, e.g. `if (page1.next) { const page2 = ... }`), fails `no-unused-vars`. Fix the docs minimally by logging the field the page talks about (`console.log(taskResponse.result?.status)`, `console.log(page2.threads)`). Never use `eslint-disable`. In the test, assert the variables that are in scope after the region directly, and read the block-scoped value from the log: `vi.spyOn(console, 'log').mockImplementation(() => undefined)` before the region, `log.mock.calls[0]` after it (example: `pages/04-messages/03-threads.test.ts`, "Supported Sort Fields"). An unused catch parameter (`catch (err) { // comment }`) fails the same rule (`caughtErrors: "all"`): add `console.error(err)` and, in the test, spy on `console.error`.
+
+- A fence that runs conflicting operations on one placeholder id (soft- then hard-delete a channel, truncate again with an earlier `truncated_at`, delete a message after hard-deleting it) is a docs bug: give the later call its own id (`otherChannel` / `"random"`, `anotherMessageID`), reusing a name another tab already uses when there is one.
+
+- A fence that reuses the same placeholder ids for a call that needs a different resource (e.g. `deleteChannels({ cids: [cid1, cid2], skip_truncate: true })` after hard-deleting `cid1`/`cid2`, "distinct channels only") is a docs bug: give that call its own ids (`distinctCid1`, `distinctCid2`). Don't swap request fields in a spy to make it pass.
+
+- Undefined app-supplied values in a fence (`userId`, `channelId`, ...) aren't docs bugs: define them in the test just before the region and leave the docs as they are.
+
+- A docs fix is the code change only: don't add explanatory comments to the fence (e.g. why `user_id` is needed). Put the reason in the report.
+
+### Isolation and cleanup
+
+- Per-user data (reminders, drafts, ...) is easiest to assert exactly with one `uniqueId` user per test, each COPY-mapped to the docs' `"user-id"` literal.
+
+- To prove something does NOT happen (e.g. a silent message doesn't raise the unread count), add a positive control: read the member's `unread_messages` from `getServerChannel(client, cid, { user_id })` (`read` array), then send a normal message and `retry` until it goes up by 1, so a 0 can't come from a lagging counter.
+- Unread counts: `client.chat.unreadCounts({ user_id }).total_unread_count` is user-wide (across all that user's channels, so give each test its own `uniqueId` user for an exact total), `getServerChannel(client, cid, { user_id }).read` is per channel, and `channel.get({ state: true }).read` lists every member. They update within a second of a send or mark read/unread (`retry` is enough). `markUnread({ message_id, user_id })` marks that message and every later one unread: mark the channel read first, then assert the count equals the messages from that one onwards.
+
+- A `DRIFT` that lists every built-in channel type with the same change the page never made (e.g. `grants` gaining `anonymous: []`) comes from outside the file: an app-wide change still propagating, or another suite (`yarn test`) on the same app. Check with repeated `listChannelTypes()` calls and rerun once it settles; don't add restore code for settings the page doesn't touch, and report it.
+
+- Snippets that target every channel of a built-in type (`filter: { types: { $in: ["messaging"] } }`) must not run as written: COPY-map the type name to a `uniqueId` channel type (create it, push it to `cleanup.channelTypes`, `waitForChannelTypePropagation()`). The same applies to snippets that change a built-in type (`updateChannelType({ name: "messaging", ... })`): run them on a `uniqueId` type via COPY (`channelType="messaging"`), so nothing built-in needs restoring.
+
+- Short-lived state from an earlier test (e.g. the docs' 10-second mute) can expire before a later test uses it: recreate it outside the region in the test that needs it.
+
+- To prove a sort snippet does the work (e.g. `pinned_at: -1` first), create the item it should put first before the other one: without the sort the newer one comes first, so `toEqual([expected, other])` only passes with the sort.
+
+- `uniqueId(...)` names must be kebab-case (no spaces or `&`): the leak check passes every minted id to a channel `id: { $in }` query, which fails with "invalid id value" and leaves that scan undone. Put docs literals like `"Design Team"` in a COPY variable.
+- Docs pagination cursors (`id_gt: "last-id"`, `name_gt: "abc"`) can filter out the test's own resources: map them to `''` with a COPY variable so the assertions see what the test created.
+- Docs segment filters ("all users created after 2020") target the whole app: COPY-map them to something only the test's users match (the test start time, a `uniqueId` custom field value) before a campaign is started.
+- Channels the API creates from templates (campaign channels named `{{receiver.id}}-{{sender.id}}`) aren't found by the leak check: find them by member in cleanup and push them to `cleanup.channels`. Keep the `uniqueId` names short so the combined id stays under 64 characters.
+- `queryPolls` filters (`is_closed: true`) match every poll in the app. When the fence can't be scoped by COPY, create two matching polls and assert their relative order under the docs sort instead of the full list.
+- `event_hooks` changes: `updateApp({ event_hooks })` replaces every hook. Save `getApp().app.event_hooks` before the region and `cleanup.add` an `updateApp({ event_hooks: original })`; passing the saved hooks back keeps their ids (no DRIFT). `waitForAppSetting(client, 'event_hooks', original)` can fail to settle because `updated_at` changes on restore: compare the hooks without `created_at` / `updated_at` in a `retry`. Restore the originals before each snippet that claims to preserve existing hooks, so it can assert their ids are kept. `event_types: []` reads back as every event type plus `"*"`: assert with `arrayContaining`.
+- SQS / SNS hooks with placeholder keys are accepted; `checkSQS` / `checkSNS` with fake keys resolve with `status: "error"` and an AWS "InvalidClientTokenId" message instead of rejecting (spy on the method to assert the result). Failover configs are validated on save: placeholder GCS credentials fail with code 4, and `type: "s3"` is not enabled on the test app (code 4). Probe with one `updateApp` call before writing setup.
+- `waitForChannelTypePropagation()` waits only for what changed since its last call (`getServerClient()` records channel type creates and updates): a new type ≥10s after creation plus 10 agreeing lookups, an update of a docs-test type 10s, an update of a built-in or pre-existing type 30s (the DRIFT check reads those back). Measured 2026-10-13: updates are enforced everywhere within ~3s, but `getChannelType` / `listChannelTypes` reads can return the old value for over a minute, so read a type back with a retry (`waitForChannelType`-style) or assert the update response. A test with two waits on a built-in type needs an explicit timeout above the 90s default.
+- An app setting that changes API behavior (e.g. `enforce_unique_usernames`) can break later tests in the same file: restore it at the end of the test that changes it, and keep the `cleanup.add` restore as a fallback.
+- The leak check doesn't track video calls: create them with `uniqueId` ids and `cleanup.add(() => client.video.call(type, id).delete({ hard: true }))`, ignoring "not found".
+- Feeds v3 works on the test app (feed groups `user`, `timeline`, `notification`, ...), but the leak check and the end-of-run sweep don't track feeds: create them with `uniqueId` ids (`client.feeds.feed(group, id).getOrCreate({ user_id })`) and `cleanup.add(() => feed.delete({ hard_delete: true }))` (ignore "not found" when a snippet may already have deleted it). After a soft `deleteFeedUserData`, `getActivity` on the user's activity rejects with `metadata.responseCode: 404`.
+- Feed groups are app-wide and eventually consistent: create them with a `uniqueId` id and `cleanup.add(() => client.feeds.deleteFeedGroup({ id, hard_delete: true }))`. Calls into a new group can fail with code 16 "Feed group with ID ... not found" for a while: spy on the call with a `mockImplementation` that retries the bound original on "not found".
+- `notification` feeds aren't created automatically: `create_notification_activity` silently returns `notification_created: false` unless the target user's `notification` feed exists, so create it in setup. Deleting a feed that doesn't exist fails with "Feed ...:<id> can't be found": match both "not found" and "can't be found" when cleanup ignores missing feeds.
+- Feed visibilities (`updateFeedVisibility`) are app-wide and not in the DRIFT snapshot. Save `getFeedVisibility({ name }).feed_visibility.grants`, restore only the roles the snippet changed (an update only touches the roles it names), and `retry` until the whole grants object equals the original.
+- App-level resources that the leak and drift checks don't track (e.g. retention policies): save the original list in `beforeAll`, and `cleanup.add` a restore that puts the originals back and deletes anything the file added. Check that the app is back to its original state after the run.
+- A role can't be deleted while a user has it: in cleanup, set that user's role back to `'user'` before `deleteRole` (`Cleanup` deletes users only after the custom steps).
+- Unset optional app settings (`before_message_send_hook_url`, `..._attempt_timeout_ms`) are absent from `getApp()`; restoring with `''` / `0` makes them absent again, so `waitForAppSetting(client, key, undefined)` settles with no DRIFT.
+- Custom commands are app-wide: give them `uniqueId` names (hyphens are accepted). A command used by a channel type can't be deleted (code 4 "command in use by channel type ..."), and `Cleanup` runs custom steps before deleting channel types: set the type's `commands` to `[]` first (`updateChannelType` helper), then delete the command, retrying on "in use".
+- `queryReviewQueue` filters by `entity_type` match the whole app: flag a fresh message just before the region, assert it is `items[0]` under the docs sort and that every item has that `entity_type`.
+
+## API quirks
+
+### API and SDK behavior
 
 - Reminders need `user_message_reminders` on the channel (code 4 "reminders are not enabled for this channel"): `updateChannelPartial({ set: { config_overrides: { user_message_reminders: true } } })` on a `messaging` channel works immediately, no channel type change. `remind_at` must be at least one minute in the future on create and update: for an "overdue" filter, create the reminder ~62s ahead at the start of `beforeAll` and put slow setup after it so the wait overlaps. One reminder per user and message.
 
@@ -148,55 +224,6 @@ Entries are added only after the user approves them (agents propose them in thei
 - Export tasks (`exportChannels`, `exportUsers`, `feeds.exportFeedUserData`; also `feeds.deleteFeedUserData`) finish within seconds: `waitForTask` is enough, and `result.url` downloads with plain `fetch` (no auth), so assert the export's contents (v2: one JSON object per line).
 - `client.moderation.flag`: a repeat flag by the same user on the same entity raises `flags_count`, but the review item's `flags` keep only the first one (later `reason` / `custom` are dropped). A fence that flags one placeholder id several times from one user with different reasons is a docs bug: give each call its own entity id. Check flags by `retry`ing `client.moderation.queryReviewQueue({ filter: { entity_id } })` until it returns one item (about a second), then assert `items[0].flags[i]`.
 
-## Server-side vs client-side
+### Server-side vs client-side
 
 - Client-only setup (e.g. creating a draft) can be done with `fetch` as the user: `POST https://chat.stream-io-api.com/channels/{type}/{id}/draft?api_key=...` with headers `Authorization: createUserToken(userId)`, `stream-auth-type: jwt` and body `{ message: { text, parent_id? } }` (example: `pages/05-features/10-advanced/12-drafts.test.ts`).
-
-## Docs conventions
-
-- A Node.js fence that reads `error.metadata` in a `catch` fails TS18046 (`unknown`): the docs fix is `error instanceof StreamError && ...` (`metadata` is `Partial<RequestMetadata>`, so `rateLimit` needs `?.`). Placeholder calls (`client....`, `client.queryUsers(...)`) are syntax errors: replace them with the call the sibling tabs use, with a COPY-mapped literal id.
-- Unawaited calls used as statements in a Node.js fence (`client.updateApp(...)`, `client.queryUsers(...)`) fail `@typescript-eslint/no-floating-promises`: the docs fix is to add `await` (to assert on the results, spy on the method and await `mock.results`). A fence that declares the same `const` several times (TS2451): give each its own name; switching to `let` and reassigning fails `no-useless-assignment` when the earlier values are never read.
-- A fence that assigns a value it never reads, where the test can't read it either (block-scoped, e.g. `if (page1.next) { const page2 = ... }`), fails `no-unused-vars`. Fix the docs minimally by logging the field the page talks about (`console.log(taskResponse.result?.status)`, `console.log(page2.threads)`). Never use `eslint-disable`. In the test, assert the variables that are in scope after the region directly, and read the block-scoped value from the log: `vi.spyOn(console, 'log').mockImplementation(() => undefined)` before the region, `log.mock.calls[0]` after it (example: `pages/04-messages/03-threads.test.ts`, "Supported Sort Fields"). An unused catch parameter (`catch (err) { // comment }`) fails the same rule (`caughtErrors: "all"`): add `console.error(err)` and, in the test, spy on `console.error`.
-
-- A fence that runs conflicting operations on one placeholder id (soft- then hard-delete a channel, truncate again with an earlier `truncated_at`, delete a message after hard-deleting it) is a docs bug: give the later call its own id (`otherChannel` / `"random"`, `anotherMessageID`), reusing a name another tab already uses when there is one.
-
-- A fence that reuses the same placeholder ids for a call that needs a different resource (e.g. `deleteChannels({ cids: [cid1, cid2], skip_truncate: true })` after hard-deleting `cid1`/`cid2`, "distinct channels only") is a docs bug: give that call its own ids (`distinctCid1`, `distinctCid2`). Don't swap request fields in a spy to make it pass.
-
-- Undefined app-supplied values in a fence (`userId`, `channelId`, ...) aren't docs bugs: define them in the test just before the region and leave the docs as they are.
-
-- A docs fix is the code change only: don't add explanatory comments to the fence (e.g. why `user_id` is needed). Put the reason in the report.
-
-## Isolation and cleanup
-
-- Per-user data (reminders, drafts, ...) is easiest to assert exactly with one `uniqueId` user per test, each COPY-mapped to the docs' `"user-id"` literal.
-
-- To prove something does NOT happen (e.g. a silent message doesn't raise the unread count), add a positive control: read the member's `unread_messages` from `getServerChannel(client, cid, { user_id })` (`read` array), then send a normal message and `retry` until it goes up by 1, so a 0 can't come from a lagging counter.
-- Unread counts: `client.chat.unreadCounts({ user_id }).total_unread_count` is user-wide (across all that user's channels, so give each test its own `uniqueId` user for an exact total), `getServerChannel(client, cid, { user_id }).read` is per channel, and `channel.get({ state: true }).read` lists every member. They update within a second of a send or mark read/unread (`retry` is enough). `markUnread({ message_id, user_id })` marks that message and every later one unread: mark the channel read first, then assert the count equals the messages from that one onwards.
-
-- A `DRIFT` that lists every built-in channel type with the same change the page never made (e.g. `grants` gaining `anonymous: []`) comes from outside the file: an app-wide change still propagating, or another suite (`yarn test`) on the same app. Check with repeated `listChannelTypes()` calls and rerun once it settles; don't add restore code for settings the page doesn't touch, and report it.
-
-- Snippets that target every channel of a built-in type (`filter: { types: { $in: ["messaging"] } }`) must not run as written: COPY-map the type name to a `uniqueId` channel type (create it, push it to `cleanup.channelTypes`, `waitForChannelTypePropagation()`). The same applies to snippets that change a built-in type (`updateChannelType({ name: "messaging", ... })`): run them on a `uniqueId` type via COPY (`channelType="messaging"`), so nothing built-in needs restoring.
-
-- Short-lived state from an earlier test (e.g. the docs' 10-second mute) can expire before a later test uses it: recreate it outside the region in the test that needs it.
-
-- To prove a sort snippet does the work (e.g. `pinned_at: -1` first), create the item it should put first before the other one: without the sort the newer one comes first, so `toEqual([expected, other])` only passes with the sort.
-
-- `uniqueId(...)` names must be kebab-case (no spaces or `&`): the leak check passes every minted id to a channel `id: { $in }` query, which fails with "invalid id value" and leaves that scan undone. Put docs literals like `"Design Team"` in a COPY variable.
-- Docs pagination cursors (`id_gt: "last-id"`, `name_gt: "abc"`) can filter out the test's own resources: map them to `''` with a COPY variable so the assertions see what the test created.
-- Docs segment filters ("all users created after 2020") target the whole app: COPY-map them to something only the test's users match (the test start time, a `uniqueId` custom field value) before a campaign is started.
-- Channels the API creates from templates (campaign channels named `{{receiver.id}}-{{sender.id}}`) aren't found by the leak check: find them by member in cleanup and push them to `cleanup.channels`. Keep the `uniqueId` names short so the combined id stays under 64 characters.
-- `queryPolls` filters (`is_closed: true`) match every poll in the app. When the fence can't be scoped by COPY, create two matching polls and assert their relative order under the docs sort instead of the full list.
-- `event_hooks` changes: `updateApp({ event_hooks })` replaces every hook. Save `getApp().app.event_hooks` before the region and `cleanup.add` an `updateApp({ event_hooks: original })`; passing the saved hooks back keeps their ids (no DRIFT). `waitForAppSetting(client, 'event_hooks', original)` can fail to settle because `updated_at` changes on restore: compare the hooks without `created_at` / `updated_at` in a `retry`. Restore the originals before each snippet that claims to preserve existing hooks, so it can assert their ids are kept. `event_types: []` reads back as every event type plus `"*"`: assert with `arrayContaining`.
-- SQS / SNS hooks with placeholder keys are accepted; `checkSQS` / `checkSNS` with fake keys resolve with `status: "error"` and an AWS "InvalidClientTokenId" message instead of rejecting (spy on the method to assert the result). Failover configs are validated on save: placeholder GCS credentials fail with code 4, and `type: "s3"` is not enabled on the test app (code 4). Probe with one `updateApp` call before writing setup.
-- `waitForChannelTypePropagation()` waits only for what changed since its last call (`getServerClient()` records channel type creates and updates): a new type ≥10s after creation plus 10 agreeing lookups, an update of a docs-test type 10s, an update of a built-in or pre-existing type 30s (the DRIFT check reads those back). Measured 2026-10-13: updates are enforced everywhere within ~3s, but `getChannelType` / `listChannelTypes` reads can return the old value for over a minute, so read a type back with a retry (`waitForChannelType`-style) or assert the update response. A test with two waits on a built-in type needs an explicit timeout above the 90s default.
-- An app setting that changes API behavior (e.g. `enforce_unique_usernames`) can break later tests in the same file: restore it at the end of the test that changes it, and keep the `cleanup.add` restore as a fallback.
-- The leak check doesn't track video calls: create them with `uniqueId` ids and `cleanup.add(() => client.video.call(type, id).delete({ hard: true }))`, ignoring "not found".
-- Feeds v3 works on the test app (feed groups `user`, `timeline`, `notification`, ...), but the leak check and the end-of-run sweep don't track feeds: create them with `uniqueId` ids (`client.feeds.feed(group, id).getOrCreate({ user_id })`) and `cleanup.add(() => feed.delete({ hard_delete: true }))` (ignore "not found" when a snippet may already have deleted it). After a soft `deleteFeedUserData`, `getActivity` on the user's activity rejects with `metadata.responseCode: 404`.
-- Feed groups are app-wide and eventually consistent: create them with a `uniqueId` id and `cleanup.add(() => client.feeds.deleteFeedGroup({ id, hard_delete: true }))`. Calls into a new group can fail with code 16 "Feed group with ID ... not found" for a while: spy on the call with a `mockImplementation` that retries the bound original on "not found".
-- `notification` feeds aren't created automatically: `create_notification_activity` silently returns `notification_created: false` unless the target user's `notification` feed exists, so create it in setup. Deleting a feed that doesn't exist fails with "Feed ...:<id> can't be found": match both "not found" and "can't be found" when cleanup ignores missing feeds.
-- Feed visibilities (`updateFeedVisibility`) are app-wide and not in the DRIFT snapshot. Save `getFeedVisibility({ name }).feed_visibility.grants`, restore only the roles the snippet changed (an update only touches the roles it names), and `retry` until the whole grants object equals the original.
-- App-level resources that the leak and drift checks don't track (e.g. retention policies): save the original list in `beforeAll`, and `cleanup.add` a restore that puts the originals back and deletes anything the file added. Check that the app is back to its original state after the run.
-- A role can't be deleted while a user has it: in cleanup, set that user's role back to `'user'` before `deleteRole` (`Cleanup` deletes users only after the custom steps).
-- Unset optional app settings (`before_message_send_hook_url`, `..._attempt_timeout_ms`) are absent from `getApp()`; restoring with `''` / `0` makes them absent again, so `waitForAppSetting(client, key, undefined)` settles with no DRIFT.
-- Custom commands are app-wide: give them `uniqueId` names (hyphens are accepted). A command used by a channel type can't be deleted (code 4 "command in use by channel type ..."), and `Cleanup` runs custom steps before deleting channel types: set the type's `commands` to `[]` first (`updateChannelType` helper), then delete the command, retrying on "in use".
-- `queryReviewQueue` filters by `entity_type` match the whole app: flag a fresh message just before the region, assert it is `items[0]` under the docs sort and that every item has that `entity_type`.
