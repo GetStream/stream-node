@@ -19563,7 +19563,7 @@ export interface ScheduledMessageResponse {
    */
   scheduled_at: Date;
   /**
-   * Status of the scheduled message. One of: scheduled, sending, failed, canceled, sent
+   * Status of the scheduled message. One of: scheduled, sending, failed, canceled, sent. A message is sending from its first send attempt until it is sent or fails, including while it waits to retry a failed attempt; it cannot be edited, canceled or sent now while sending
    */
   status: string;
   /**
@@ -19620,7 +19620,7 @@ export interface ScheduledMessagesFilter {
    */
   cid?: string;
   /**
-   * Only these statuses. One or more of: scheduled, sending, failed
+   * Only these statuses, as reported in each scheduled message's status. One or more of: scheduled, sending, failed
    */
   status?: Array<string>;
 }
