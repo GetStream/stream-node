@@ -373,8 +373,8 @@ describe(DOCS, () => {
       }
       // Monthly mode: totals only, no daily breakdown.
       expect(january.teams.every((t) => !t.users_daily.daily)).toBe(true);
-      // The test app returns no rows at all (not even the docs' team "" row, see the
-      // TODO's API behavior issues), so the pagination branch only runs once it does.
+      // The test app returns no rows at all (not even the docs' team "" row: an API
+      // behavior issue), so the pagination branch only runs once it does.
       expect(response.teams.length).toBeLessThanOrEqual(pageSize);
       expect(log).toHaveBeenCalledTimes(response.next ? 1 : 0);
     });

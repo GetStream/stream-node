@@ -46,7 +46,7 @@ setup.ts                                    # per-file leak check and app-settin
 global-setup.ts                             # end-of-run sweep: removes leftovers of files that failed while loading
 sync/                                       # `yarn test:docs:sync` (docs fence <-> test region check)
 maintenance/                                # `yarn test:docs:sweep`
-docs-snippets-todo.md                       # open API, API spec / node SDK and docs issues
+docs-snippets-todo.md                       # open API spec / generator and node SDK issues
 AGENTS.md                                   # test conventions and API quirks, read before working on a page
 ```
 

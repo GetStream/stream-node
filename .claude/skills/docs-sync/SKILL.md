@@ -113,8 +113,8 @@ Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` fo
 3. Run the page's test: `yarn test:docs <test file>`, then `yarn types:docs`.
 4. If it passes, done. If it fails, decide why:
    - **Test setup** (missing user, permission, channel config, eventual consistency): fix the setup, not the region.
-   - **API spec / node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec or the generated SDK is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): add it to "API spec / node SDK issues" in the TODO and report it. `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
-   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and add it to "API behavior issues" in the TODO with the evidence.
+   - **API spec / generator or node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec, the generated SDK code or the hand-written node SDK code is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): add it to "API spec / generator issues" or "Node SDK issues" in the TODO and report it. `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
+   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and report it with the evidence (see "Report"). Don't add it to the TODO.
    - **The docs snippet is wrong**: fix it as described in "Broken docs snippet" below.
    - **Not sure** whether the snippet or the setup is wrong: don't touch the docs. Leave the test failing or put the snippet in `it.skip('BLOCKED: <reason>', ...)` and report it as an open question.
 
@@ -189,5 +189,6 @@ End with:
 4. **New and removed tests**: snippets added, regions removed with their fences, renamed markers.
 5. **Docs changes**: every fence changed in `$DOCS_DIR` (fixes, labels, client-side code), each with before/after, reason and evidence. These need human review.
 6. **Skipped snippets**: new `it.skip` / credential-gated snippets and why.
-7. **TODO changes**: entries added to or removed from the three issue lists.
-8. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.
+7. **TODO changes**: entries added to or removed from the TODO lists.
+8. **API behavior issues**: where the API behaves differently from what the docs say, each with the request, the observed result, what the docs claim, and how the test handles it.
+9. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.
