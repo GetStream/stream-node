@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.13](https://github.com/GetStream/stream-node/compare/v0.8.12...v0.8.13) (2026-10-16)
+
+
+### Features
+
+* add viewer_location to GetOrCreateFeedRequest ([#372](https://github.com/GetStream/stream-node/issues/372)) ([5983bdc](https://github.com/GetStream/stream-node/commit/5983bdcb143fde71ae70d5857b08b4c7677bf8c6))
+
+
+### Bug Fixes
+
+* SDK issues from running chat docs snippets; chat docs snippet runner ([#373](https://github.com/GetStream/stream-node/issues/373)) ([bd78f75](https://github.com/GetStream/stream-node/commit/bd78f7595d7d4514f08575e8af63378fa3bc6677))
+
 ## [0.8.12](https://github.com/GetStream/stream-node/compare/v0.8.11...v0.8.12) (2026-10-09)
 
 
