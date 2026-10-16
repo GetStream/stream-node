@@ -67,7 +67,7 @@
     "typescript-eslint": "^8.67.0",
     "undici": "^7.30.0",
     "vite": "^8.2.1",
-    "vitest": "~4.1.10"
+    "vitest": "~5.0.5"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
