@@ -1,0 +1,14 @@
+# Docs snippet tests: todo
+
+Open issues found while testing the docs snippets, in two lists: [API spec / generator issues](#api-spec--generator-issues) (the OpenAPI spec is wrong, or the generator turns it into wrong node SDK code) and [Node SDK issues](#node-sdk-issues) (the hand-written node SDK code is wrong). The API itself works. Not fixed by the agents (no `src/` changes). Remove an entry once it is fixed.
+
+## API spec / generator issues
+
+- **06-app_and_channel_settings/03-chat_permission_policies** (node SDK generator): `UpdateChannelTypeRequest.grants` and `UpdateAppRequest.grants` are typed `Record<string, string[]>` without `| null`, while the spec marks them `nullable: true` and the docs reset a scope with `grants: null` (TS2322). The API accepts `null` and resets the grants to the defaults. The generator drops `nullable` everywhere (`src/gen/models/index.ts` has no `| null` at all, e.g. `pin_expires?: Date`): a generator change in `../chat` (`tools/openapi`). Not patched (the local `src/gen` patch was reverted on 2026-10-13), so `yarn types:docs` reports TS2322 on the "Granting permissions" Node.js #4 region until the generator emits `| null`. Reported: [Slack thread](https://getstream.slack.com/archives/C07AL9Q0T2T/p1791403182844109).
+- **05-features/06-campaign_api** (API spec): `updateCampaign` and `stopCampaign` are typed as returning `CampaignResponse`, but the API returns `{ campaign: CampaignResponse, ... }` (like `StartCampaignResponse`), so `response.campaign` is a TS2339 error and `response.name` etc. are undefined at runtime. The response schemas of `PUT /campaigns/{id}` and `POST /campaigns/{id}/stop`. Reported: [Slack thread](https://getstream.slack.com/archives/C07AL9Q0T2T/p1791403182844109).
+- **04-messages/08-unread_reminders** (API spec, to check): `CreateChannelTypeRequest` has no `reminders` field, while `UpdateChannelTypeRequest` has it, so a channel type can't be created with reminders on in one call from typed code. Check whether the spec (`CreateChannelType`) lacks it or the API doesn't accept it. Reported: [Slack thread](https://getstream.slack.com/archives/C07AL9Q0T2T/p1791403182844109).
+- **platform/02-identity-and-access/01-authentication** (node SDK generator): `UpdateAppRequest.revoke_tokens_issued_before` is typed `Date` without `| null`, so the docs' `updateApp({ revoke_tokens_issued_before: null })` ("Undoing the revoke", Node.js #2) fails TS2322 and `yarn types:docs` reports it. Same root cause as the `grants: null` entry above (the generator drops `nullable`); check that the spec marks the field nullable. Not run against the API (see Blockers detail). `UpdateUserPartialRequest.set` is `Record<string, any>`, so the user-level `set: { revoke_tokens_issued_before: null }` typechecks. Reported (as the generator `nullable` issue): [Slack thread](https://getstream.slack.com/archives/C07AL9Q0T2T/p1791403182844109).
+
+## Node SDK issues
+
+None open.

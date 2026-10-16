@@ -108,13 +108,14 @@ export class ApiClient {
           `The request was aborted due to to the ${this.apiConfig.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
           metadata,
           undefined,
-          error as ErrorOptions,
+          { cause: error },
         );
       } else {
         throw new StreamError(
           `The request failed due to an unexpected error`,
           metadata,
-          error as number,
+          undefined,
+          { cause: error },
         );
       }
     }

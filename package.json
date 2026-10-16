@@ -23,6 +23,10 @@
     "prepack": "yarn build",
     "test": "vitest",
     "test:bun": "bun run vitest",
+    "test:docs": "vitest run --config __tests__/docs-snippets/vitest.config.mts",
+    "test:docs:sync": "vitest run --config __tests__/docs-snippets/vitest.sync.config.mts",
+    "test:docs:sweep": "vitest run --config __tests__/docs-snippets/vitest.sweep.config.mts",
+    "types:docs": "tsc -p __tests__/docs-snippets/tsconfig.json",
     "start": "vite build --watch",
     "build": "rm -rf dist && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
     "generate:open-api": "./generate-openapi.sh",
@@ -61,6 +65,7 @@
     "prettier": "^3.9.6",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.67.0",
+    "undici": "^7.30.0",
     "vite": "^8.2.1",
     "vitest": "~4.1.10"
   },
