@@ -41,6 +41,11 @@ export default defineConfig({
     },
     testTimeout: 60000,
     include: ["__tests__/**/*.test.ts"],
+    typecheck: {
+      enabled: true,
+      tsconfig: "./tsconfig.test.json",
+      include: ["__tests__/**/*.test.ts"],
+    },
     includeSource: ["src/**/*.ts"],
     retry: 3,
   },
