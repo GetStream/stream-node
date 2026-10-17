@@ -1424,6 +1424,30 @@ decoders['ChangeFeedVisibilityResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['ChannelBanResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    channel_ban: { type: 'ChannelBanScopeResponse', isSingle: true },
+
+    future_channel_ban: { type: 'ChannelBanScopeResponse', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelBanScopeResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    expires: { type: 'DatetimeType', isSingle: true },
+
+    banned_by: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['ChannelBatchCompletedEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     batch_created_at: { type: 'DatetimeType', isSingle: true },
@@ -1643,6 +1667,8 @@ decoders['ChannelStateResponse'] = (input?: { [key: string]: any }) => {
     pending_messages: { type: 'PendingMessageResponse', isSingle: false },
 
     read: { type: 'ReadStateResponse', isSingle: false },
+
+    scheduled_messages: { type: 'ScheduledMessageResponse', isSingle: false },
 
     watchers: { type: 'UserResponse', isSingle: false },
 
@@ -2342,6 +2368,15 @@ decoders['DeleteReactionResponse'] = (input?: { [key: string]: any }) => {
     message: { type: 'MessageResponse', isSingle: true },
 
     reaction: { type: 'ReactionResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['DeleteScheduledMessageResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3360,15 +3395,6 @@ decoders['IngressStoppedEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
-decoders['IntentDetectedEvent'] = (input?: { [key: string]: any }) => {
-  const typeMappings: TypeMapping = {
-    created_at: { type: 'DatetimeType', isSingle: true },
-
-    received_at: { type: 'DatetimeType', isSingle: true },
-  };
-  return decode(typeMappings, input);
-};
-
 decoders['KickedUserEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -4260,6 +4286,28 @@ decoders['PolicyTestSetResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['PollClosedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['PollDeletedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['PollResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     poll: { type: 'PollResponseData', isSingle: true },
@@ -4278,6 +4326,56 @@ decoders['PollResponseData'] = (input?: { [key: string]: any }) => {
     own_votes: { type: 'PollVoteResponseData', isSingle: false },
 
     created_by: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['PollUpdatedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['PollVoteCastedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    poll_vote: { type: 'PollVoteResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['PollVoteChangedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    poll_vote: { type: 'PollVoteResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['PollVoteRemovedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    poll: { type: 'PollResponseData', isSingle: true },
+
+    poll_vote: { type: 'PollVoteResponseData', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -4564,6 +4662,13 @@ decoders['QueryCampaignsResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['QueryChannelBansResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    bans: { type: 'ChannelBanResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['QueryChannelsResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     channels: { type: 'ChannelStateResponseFields', isSingle: false },
@@ -4758,6 +4863,15 @@ decoders['QueryReviewQueueResponse'] = (input?: { [key: string]: any }) => {
 decoders['QueryRevisionHistoryResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     revisions: { type: 'RevisionHistoryResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['QueryScheduledMessagesResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_messages: { type: 'ScheduledMessageResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -5104,6 +5218,8 @@ decoders['ReviewQueueItemResponse'] = (input?: { [key: string]: any }) => {
 
     message: { type: 'ChatMessageResponse', isSingle: true },
 
+    poll: { type: 'PollResponseData', isSingle: true },
+
     reaction: { type: 'Reaction', isSingle: true },
   };
   return decode(typeMappings, input);
@@ -5195,6 +5311,65 @@ decoders['SIPTrunkResponse'] = (input?: { [key: string]: any }) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledMessageContentResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    pin_expires: { type: 'DatetimeType', isSingle: true },
+
+    shared_location: { type: 'ScheduledMessageLocation', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledMessageFailedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledMessageLocation'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    end_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledMessageResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    message: { type: 'ScheduledMessageContentResponse', isSingle: true },
+
+    user: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledMessageSentEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -5306,6 +5481,8 @@ decoders['SendMessageResponse'] = (input?: { [key: string]: any }) => {
     message: { type: 'MessageResponse', isSingle: true },
 
     channel_context: { type: 'ChannelContextResponse', isSingle: true },
+
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -5315,6 +5492,15 @@ decoders['SendReactionResponse'] = (input?: { [key: string]: any }) => {
     message: { type: 'MessageResponse', isSingle: true },
 
     reaction: { type: 'ReactionResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['SendScheduledMessageNowResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -5881,6 +6067,15 @@ decoders['UpdateSIPInboundRoutingRuleResponse'] = (input?: {
 decoders['UpdateSIPTrunkResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['UpdateScheduledMessageResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_message: { type: 'ScheduledMessageResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };

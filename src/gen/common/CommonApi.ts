@@ -1071,6 +1071,8 @@ export class CommonApi {
       name: request?.name,
       allow_answers: request?.allow_answers,
       allow_user_suggested_options: request?.allow_user_suggested_options,
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       description: request?.description,
       enforce_unique_vote: request?.enforce_unique_vote,
       id: request?.id,
@@ -1105,6 +1107,8 @@ export class CommonApi {
       name: request?.name,
       allow_answers: request?.allow_answers,
       allow_user_suggested_options: request?.allow_user_suggested_options,
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       description: request?.description,
       enforce_unique_vote: request?.enforce_unique_vote,
       is_closed: request?.is_closed,
@@ -1209,6 +1213,8 @@ export class CommonApi {
       poll_id: request?.poll_id,
     };
     const body = {
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       unset: request?.unset,
       set: request?.set,
@@ -1236,6 +1242,8 @@ export class CommonApi {
     };
     const body = {
       text: request?.text,
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       custom: request?.custom,
       user: request?.user,
@@ -1263,6 +1271,8 @@ export class CommonApi {
     const body = {
       id: request?.id,
       text: request?.text,
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       custom: request?.custom,
       user: request?.user,
