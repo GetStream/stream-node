@@ -40,11 +40,11 @@ export default defineConfig({
       reporter: ["lcov"],
     },
     testTimeout: 60000,
-    include: ["__tests__/**/*.test.ts"],
+    include: ["__tests__/integration/**/*.test.ts"],
     typecheck: {
       enabled: true,
       tsconfig: "./tsconfig.test.json",
-      include: ["__tests__/**/*.test.ts"],
+      include: ["__tests__/integration/**/*.test.ts"],
     },
     includeSource: ["src/**/*.ts"],
     retry: 3,

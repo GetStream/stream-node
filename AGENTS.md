@@ -38,7 +38,8 @@ src/
   StreamFeedsClient.ts        # Feeds-specific client
   StreamModerationClient.ts   # Moderation-specific client
 __tests__/                    # Test files
-  *.test.ts                   # Test files for each module
+  integration/*.test.ts       # Test files for each module (`yarn test`)
+  docs-snippets/              # Docs snippet tests (`yarn test:docs`, see its README.md)
 ```
 
 Use the closest folder's patterns and conventions when editing.
@@ -132,7 +133,7 @@ Commit / PR conventions
 • Ensure public API changes include docs and migration notes.
 
 Testing policy
-• Add/extend tests in the `__tests__/` folder with .test.ts suffix.
+• Add/extend tests in the `__tests__/integration/` folder with .test.ts suffix.
 • Cover:
 • Core API clients and models (StreamClient, StreamChatClient, etc.)
 • Utility functions (token creation, rate limiting)

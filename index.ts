@@ -9,6 +9,7 @@ export * from './src/StreamFeed';
 export {
   InvalidWebhookError,
   InvalidWebhookErrorMessages,
+  verifyAndParseWebhook,
 } from './src/utils/webhook';
 export {
   convertTimestampToDate,
@@ -20,3 +21,4 @@ export {
   nsToMs,
   nsToRfc3339,
 } from './src/utils/time';
+export { StreamError } from './src/types';
