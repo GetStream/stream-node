@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { isDeepStrictEqual } from 'util';
 import zlib from 'zlib';
 import {
   afterAll,
@@ -18,18 +17,12 @@ import type {
 import { InvalidWebhookError } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
-import { retry } from '../../../helpers/wait';
+import {
+  saveAndRestoreEventHooks,
+  waitForEventHooks,
+} from '../../../helpers/server';
 
 const DOCS = 'platform/03-events-and-notifications/01-webhooks.md';
-
-/** A hook without its server-managed timestamps (they change on every update). */
-const withoutTimestamps = (hooks: EventHook[]) =>
-  hooks.map((hook) => {
-    const copy = { ...hook };
-    delete copy.created_at;
-    delete copy.updated_at;
-    return copy;
-  });
 
 /** A sample webhook event and its serialized form, as Stream would send it. */
 const sampleEvent = {
@@ -47,31 +40,9 @@ describe(DOCS, () => {
   const client = getServerClient();
   const cleanup = new Cleanup(client);
   let originalHooks: EventHook[] = [];
-
-  /** Reads `event_hooks` until `check` accepts them (getApp is eventually consistent). */
+  let restoreHooks: () => Promise<void>;
   const waitForHooks = (check: (hooks: EventHook[]) => boolean) =>
-    retry(async () => {
-      const { app } = await client.getApp();
-      if (!check(app.event_hooks)) {
-        throw new Error(
-          `event_hooks not updated yet: ${JSON.stringify(app.event_hooks.map((h) => h.webhook_url ?? h.sqs_queue_url ?? h.sns_topic_arn))}`,
-        );
-      }
-      return app.event_hooks;
-    });
-
-  /** Puts the app's original hooks back (same ids) and waits until every read agrees. */
-  const restoreHooks = async () => {
-    await client.updateApp({ event_hooks: originalHooks });
-    for (let agreeing = 0; agreeing < 5; agreeing++) {
-      await waitForHooks((hooks) =>
-        isDeepStrictEqual(
-          withoutTimestamps(hooks),
-          withoutTimestamps(originalHooks),
-        ),
-      );
-    }
-  };
+    waitForEventHooks(client, check);
 
   /** The hooks that are there before a "preserve existing hooks" snippet runs. */
   const expectOriginalHooksKept = (hooks: EventHook[]) => {
@@ -82,8 +53,8 @@ describe(DOCS, () => {
   };
 
   beforeAll(async () => {
-    originalHooks = (await client.getApp()).app.event_hooks;
-    cleanup.add(restoreHooks);
+    ({ original: originalHooks, restore: restoreHooks } =
+      await saveAndRestoreEventHooks(client, cleanup));
   });
 
   afterEach(() => vi.restoreAllMocks());

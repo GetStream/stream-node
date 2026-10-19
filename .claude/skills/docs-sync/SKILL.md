@@ -6,7 +6,7 @@ argument-hint: "[path to the getstream.io checkout or its content/docs folder]"
 
 # Docs sync
 
-The tests in `__tests__/docs-snippets/` run the server-side `Node.js` snippets of the Stream docs (the chat Node sidebar and the platform sidebar) against a real Stream app with the `@stream-io/node-sdk` server client. Each docs fence has exactly one marked region in a test, and `yarn test:docs:sync` checks that they still agree. This skill makes them agree again after either side changed.
+The tests in `__tests__/docs-snippets/` run the server-side `Node.js` snippets of the Stream docs (the chat, activity feeds v3 and moderation Node sidebars, the video API sidebar and the platform sidebar: `SIDEBAR_FILES` in `sync/parse.ts`) against a real Stream app with the `@stream-io/node-sdk` server client. Each docs fence has exactly one marked region in a test, and `yarn test:docs:sync` checks that they still agree. This skill makes them agree again after either side changed.
 
 **Docs have preference.** When a region and its fence differ, the docs version is the source of truth: update the test to match it. Change the docs only when the docs snippet doesn't work (type error against the node SDK, runtime error that isn't caused by test setup, wrong request or response shape), and then write the fix back from the test.
 
@@ -49,9 +49,9 @@ Before the sync check, make sure every server-side snippet on the tested pages h
 
 ### Scope
 
-- Pages: every page of the `[chat][node].json` and `[platform][default].json` sidebars (`$DOCS_DIR/_sidebars/`) under `chat/` or `platform/`, the same list as `findSidebarPages` in `sync/parse.ts`.
+- Pages: every page of the tested sidebars (`SIDEBAR_FILES` in `sync/parse.ts`, `$DOCS_DIR/_sidebars/`) under `PAGE_PREFIXES`, the same list as `findSidebarPages`.
 - Fences: every JS fence (`js`, `javascript`, `ts`, `typescript`) labelled `JavaScript` or unlabelled, together with its tab group: the other fences in the same `<Tabs>` block, or the fence alone when it isn't in one.
-- Out of scope: `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, and comment-only fences.
+- Out of scope: `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, fences listed in `EXCLUDED_FENCES` (`sync/parse.ts`), and comment-only fences.
 
 List them with a throwaway script in the scratchpad (page, heading, line, the labels in the group, the code). Then classify each group by its tabs first and the prose second:
 
@@ -90,7 +90,7 @@ It runs without network and reports four kinds of failure. Collect them all, gro
 
 | Failure                                    | Meaning                                                                                                                                                                 |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `snippets without a test region`           | A `Node.js` fence on a tested sidebar page (chat Node, platform) has no region: a new snippet, a new page, or a fence whose key changed (see the next row).             |
+| `snippets without a test region`           | A `Node.js` fence on a tested sidebar page (`SIDEBAR_FILES`) has no region: a new snippet, a new page, or a fence whose key changed (see the next row).                 |
 | mislabelled JS fences                      | A JS fence is unlabelled or has a label other than `JavaScript`, `React`, `React Native`, `Node.js` or their stream-chat-js@9 versions.                                 |
 | `no such fence`                            | A region's key (`docs`, `heading`, `tab`, `index`) matches no fence: the fence was removed, moved, or its heading was renamed. The failure lists the page's fence keys. |
 | `<region> differs from <docs file>:<line>` | The region's code and the fence's code differ.                                                                                                                          |
@@ -128,13 +128,14 @@ When a fix lands that resolves an entry in `docs-snippets-todo.md` (the docs fix
 
 ### New fence without a region
 
-Write a test for it in the page's test file (create the file if the page is new). The path mirrors the docs path relative to `content/docs/`, without `/_default`: `chat/_default/04-messages/01-send_message.md` → `__tests__/docs-snippets/pages/chat/04-messages/01-send_message.test.ts`. Follow `__tests__/docs-snippets/AGENTS.md` (isolation with `uniqueId`, `Cleanup`, one `it` per snippet, basic `expect`s after each region). In short:
+Write a test for it in the page's test file (create the file if the page is new). The path mirrors the docs path relative to `content/docs/`, without `/_default`: `chat/_default/04-messages/01-send_message.md` → `__tests__/docs-snippets/pages/chat/04-messages/01-send_message.test.ts`, `activity-feeds/v3-latest/_default/05-activities/01-activities.md` → `__tests__/docs-snippets/pages/activity-feeds/v3-latest/05-activities/01-activities.test.ts`. Follow `__tests__/docs-snippets/AGENTS.md` (isolation with `uniqueId`, `Cleanup`, one `it` per snippet, basic `expect`s after each region). In short:
 
 - Run the snippet with `const client = getServerClient()` (`helpers/clients.ts`), named `client` as in the docs. Users the snippet acts for (`user_id`, `created_by_id`) must exist first, with `uniqueId` ids.
 - Everything between the markers is the docs code; setup goes before, assertions after. Fragments get the minimal surrounding code to compile and run.
 - Comment-only fences need no region.
 - A fence that isn't code (e.g. a bare data shape) is a docs bug: rewrite it as code that runs (e.g. reading and logging the fields), and report it. Never remove a `Node.js` fence just because it is a fragment or can't be tested: wrap it, or put it in `it.skip`.
 - A snippet the test app can't run goes in `it.skip('BLOCKED: <reason>', ...)` so it is still typechecked; report the exact API error.
+- **Another SDK's code in a `Node.js` fence** (e.g. Feeds v2 `getstream` client code: `client.flagUser`, `client.user(id).flag`, `ctx.alice.feed(...)`): it isn't `@stream-io/node-sdk` code and isn't ours to update. Don't rewrite or relabel it: add the fence to `EXCLUDED_FENCES` in `sync/parse.ts` with a reason, and report it.
 - **Client-side code in a `Node.js` fence** (needs a connected user or a WebSocket, or a method the node SDK doesn't have: `connectUser`, `channel.watch()`, `client.on(...)`): never test different code from what the fence shows. If the node SDK can do the same thing, make the smallest docs fix that turns the fence into that call (`channel.watch()` → `channel.getOrCreate()`, `user_id` instead of `connectUser`). If it can't (events, WebSocket, local client state), the fence is mislabelled: label it `JavaScript`. Its `Node.js (stream-chat-js@9)` partner, if any, becomes `JavaScript (stream-chat-js@9)`, code unchanged. Use `it.skip('BLOCKED: client-side code: ...')` only while that decision is open. Report it either way. To check what a server-side endpoint accepts, read the SDK source (`src/StreamClient.ts`, `src/StreamChatClient.ts`, `src/StreamChannel.ts`, `src/gen/`) or the OpenAPI spec (`chat-serverside-api.json` in https://github.com/GetStream/protocol/tree/main/openapi/v2).
 - **Push and webhooks**: don't test that notifications or webhook events arrive; assert the response or read the setting back (`getApp()`, `listPushProviders()`, ...). Never touch or use the test app's own push provider (see "Test app" in `AGENTS.md`): only use providers the test creates with `uniqueId` names. Snippets that need real credentials run in `describe.skipIf(!hasFirebaseCredentials)` (`helpers/push.ts`); the README's "Push credentials" section has the details.
 - **App-level side effects** (app settings, built-in channel types, grants, webhook URLs, push config, ...): read the original value first and restore it with `cleanup.add(...)`, or the file fails with `DRIFT`.
