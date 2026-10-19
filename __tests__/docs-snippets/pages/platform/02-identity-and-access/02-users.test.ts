@@ -317,7 +317,7 @@ describe(DOCS, () => {
     expect(response.users.length).toBeGreaterThan(0);
     expect(response.users.length).toBeLessThanOrEqual(10);
     expect(response.users.every((u) => u.role === 'admin')).toBe(true);
-    const created = response.users.map((u) => u.created_at.getTime());
+    const created = response.users.map((u) => u.created_at);
     expect(created).toEqual([...created].sort((a, b) => b - a));
     // The newest admin is the one created just now.
     expect(response.users.map((u) => u.id)).toContain(adminId);
@@ -451,7 +451,7 @@ describe(DOCS, () => {
         (r) => r.value as Promise<DeactivateUserResponse>,
       ),
     );
-    expect(deactivated.user?.deactivated_at).toBeInstanceOf(Date);
+    expect(deactivated.user?.deactivated_at).toEqual(expect.any(Number));
     // Bulk reactivation is asynchronous too.
     const [reactivated] = await Promise.all(
       reactivateUsers.mock.results.map(
@@ -462,7 +462,7 @@ describe(DOCS, () => {
     expect((await findUser(userId))?.deactivated_at).toBeUndefined();
     await waitForTask(client, deactivateResponse.task_id);
     for (const id of [bulkUser1, bulkUser2]) {
-      expect((await findUser(id))?.deactivated_at).toBeInstanceOf(Date);
+      expect((await findUser(id))?.deactivated_at).toEqual(expect.any(Number));
     }
   });
 
@@ -489,7 +489,7 @@ describe(DOCS, () => {
         const { message: stored } = await client.chat.getMessage({
           id: message.id,
         });
-        expect(stored.deleted_at).toBeInstanceOf(Date);
+        expect(stored.deleted_at).toEqual(expect.any(Number));
       });
       return result;
     });
@@ -511,7 +511,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     expect(deactivate.user).toMatchObject({ id: userID });
-    expect(deactivate.user?.deactivated_at).toBeInstanceOf(Date);
+    expect(deactivate.user?.deactivated_at).toEqual(expect.any(Number));
     expect(reactivate.user).toMatchObject({ id: userID, name: 'I am back' });
     expect(reactivate.user?.deactivated_at).toBeUndefined();
     await retry(async () => {

@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -168,8 +169,10 @@ describe(DOCS, () => {
       [messageId, anotherMessageId].sort(),
     );
     const timed = byMessage.get(messageId)?.remind_at;
-    expect(timed).toBeInstanceOf(Date);
-    expect(timed?.getTime()).toBeGreaterThanOrEqual(startedAt + 3600000 - 1000);
+    expect(timed).toEqual(expect.any(Number));
+    expect(nsToMs(timed ?? 0)).toBeGreaterThanOrEqual(
+      startedAt + 3600000 - 1000,
+    );
     expect(byMessage.get(anotherMessageId)?.remind_at ?? null).toBeNull();
   });
 
@@ -203,8 +206,8 @@ describe(DOCS, () => {
       // #endregion snippet
 
       const newDueDate = updated.reminder.remind_at;
-      expect(newDueDate).toBeInstanceOf(Date);
-      expect(newDueDate?.getTime()).toBeGreaterThanOrEqual(
+      expect(newDueDate).toEqual(expect.any(Number));
+      expect(nsToMs(newDueDate ?? 0)).toBeGreaterThanOrEqual(
         startedAt + 7200000 - 1000,
       );
       expect(log.mock.calls[0]).toEqual([newDueDate]);

@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import type { UpsertPushPreferencesResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -298,8 +299,7 @@ describe(DOCS, () => {
     expect(preferences?.call_level).toBe('all');
     expect(
       Math.abs(
-        (preferences?.disabled_until?.getTime() ?? 0) -
-          oneHourFromNow.getTime(),
+        nsToMs(preferences?.disabled_until ?? 0) - oneHourFromNow.getTime(),
       ),
     ).toBeLessThan(1000);
   });

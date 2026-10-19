@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import { StreamError } from '../../../../../index';
 import type {
   CampaignResponse,
@@ -135,7 +136,7 @@ describe(DOCS, () => {
     expect(['scheduled', 'in_progress', 'completed']).toContain(
       campaign?.status,
     );
-    expect(campaign?.scheduled_for?.getTime() ?? 0).toBeLessThan(
+    expect(nsToMs(campaign?.scheduled_for ?? 0)).toBeLessThan(
       Date.now() + 60000,
     );
   };
@@ -304,8 +305,8 @@ describe(DOCS, () => {
       id: anotherCampaignId,
     });
     expect(scheduled?.status).toBe('scheduled');
-    expect(scheduled?.scheduled_for).toBeInstanceOf(Date);
-    expect(scheduled?.stop_at).toBeInstanceOf(Date);
+    expect(scheduled?.scheduled_for).toEqual(expect.any(Number));
+    expect(scheduled?.stop_at).toEqual(expect.any(Number));
   });
 
   it('updates, starts, stops, deletes and queries a campaign', async () => {
@@ -832,7 +833,7 @@ describe(DOCS, () => {
       expect(typeof stats?.progress).toBe('number');
       expect(typeof stats?.stats_messages_sent).toBe('number');
       expect(typeof stats?.stats_users_sent).toBe('number');
-      expect(stats?.stats_started_at).toBeInstanceOf(Date);
+      expect(stats?.stats_started_at).toEqual(expect.any(Number));
     });
   });
 

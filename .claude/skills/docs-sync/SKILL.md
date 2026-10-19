@@ -73,7 +73,7 @@ To check what the node SDK can do, read `src/StreamClient.ts`, `src/StreamChatCl
 ### Writing the Node.js fence
 
 - Mirror the `JavaScript` fence: same comments, structure and placeholder literals (`"user-1"`, `"messaging:general"`).
-- Use the node SDK's shapes and types: `client.chat.*` / `client.feeds.*`, request objects (`filter_conditions`, `preferences: [...]`), `Date` where the types say `Date` (not `.toISOString()`), and `user_id` where the client code acts as the connected user (server-side `queryChannels` with `hidden` / `muted`, drafts, devices need it).
+- Use the node SDK's shapes and types: `client.chat.*` / `client.feeds.*`, request objects (`filter_conditions`, `preferences: [...]`), `Date` where the request types say `Date` (not `.toISOString()`), the SDK time helpers (`nsToDate`, `nsToMs`) for response timestamps (unix-ns numbers, not `Date`s), and `user_id` where the client code acts as the connected user (server-side `queryChannels` with `hidden` / `muted`, drafts, devices need it).
 - Don't write a `Node.js (stream-chat-js@9)` fence for it: list the group in the report so the v9 version can be added by hand.
 - Put it before the group's `</Tabs>`. A fence that isn't in a `<Tabs>` block: wrap it and the new fence in `<Tabs>`.
 - From `$DOCS_DIR`, run `npx prettier --write <page path>` and `node scripts/tab-lint.mjs <page path>` (it puts the tabs in the canonical order: client SDKs first, then server SDKs).

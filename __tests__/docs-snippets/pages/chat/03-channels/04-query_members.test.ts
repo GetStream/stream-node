@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { nsToDate } from '../../../../../index';
 import type { MembersResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -107,7 +108,7 @@ describe(DOCS, () => {
         filter_conditions: {},
         sort: [{ field: 'created_at', direction: -1 }],
         limit: 100,
-        created_at_before: lastByCreatedAt.created_at,
+        created_at_before: nsToDate(lastByCreatedAt.created_at),
       },
     });
 

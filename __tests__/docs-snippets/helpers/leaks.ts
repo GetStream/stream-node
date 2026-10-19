@@ -1,14 +1,26 @@
+import { nsToDate } from '../../../index';
 import type { StreamClient } from '../../../index';
 import { DOCS_TEST_PREFIX } from './ids';
 import { hardDeleteUsers } from './users';
 import { retry, retryOnRateLimit, waitForTask } from './wait';
 
+/** A leftover's `createdAt` as a `Date`, or `undefined` when it has none. */
+export const leftoverCreatedAt = ({ createdAt }: Leftover) => {
+  if (createdAt === undefined) return undefined;
+  return typeof createdAt === 'number'
+    ? nsToDate(createdAt)
+    : new Date(createdAt);
+};
+
 /** Something a docs test created and didn't remove. */
 export type Leftover = {
   kind: string;
   id: string;
-  /** Used by the sweep to skip resources of runs that may still be in progress. */
-  createdAt?: Date | string;
+  /**
+   * Used by the sweep to skip resources of runs that may still be in progress. A unix-ns
+   * timestamp from a response, or an RFC3339 string; read it with `leftoverCreatedAt`.
+   */
+  createdAt?: number | string;
   remove: () => Promise<unknown>;
   /**
    * Removes many leftovers of this kind in one call (e.g. users in one `deleteUsers`).
@@ -100,7 +112,7 @@ const scanners: Record<string, Scanner> = {
 
   async channels(client, { matches, channelIds = [], channelsCreatedSince }) {
     const found = new Map<string, Leftover>();
-    const add = (channel: { cid: string; created_at: Date }) =>
+    const add = (channel: { cid: string; created_at: number }) =>
       found.set(channel.cid, {
         kind: 'channel',
         id: channel.cid,

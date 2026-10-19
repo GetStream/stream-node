@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import type {
   MuteChannelResponse,
   QueryChannelsResponse,
@@ -82,14 +83,12 @@ describe(DOCS, () => {
     const now = Date.now();
     const twoWeeksExpires = muteOf(twoWeeks)?.expires;
     expect(twoWeeksExpires).toBeDefined();
-    expect(new Date(twoWeeksExpires ?? 0).getTime()).toBeGreaterThan(
+    expect(nsToMs(twoWeeksExpires ?? 0)).toBeGreaterThan(
       now + 13 * 24 * 60 * 60 * 1000,
     );
     const tenSecondsExpires = muteOf(tenSeconds)?.expires;
     expect(tenSecondsExpires).toBeDefined();
-    expect(new Date(tenSecondsExpires ?? 0).getTime()).toBeLessThan(
-      now + 60 * 1000,
-    );
+    expect(nsToMs(tenSecondsExpires ?? 0)).toBeLessThan(now + 60 * 1000);
     expect(await mutedCids()).toEqual([cid]);
   });
 
