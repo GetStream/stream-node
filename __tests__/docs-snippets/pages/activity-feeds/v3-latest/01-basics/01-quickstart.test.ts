@@ -185,7 +185,7 @@ describe(DOCS, () => {
       return response;
     });
     expect(after.notification_status?.unread).toBe(0);
-    expect(after.notification_status?.last_read_at).toBeInstanceOf(Date);
+    expect(after.notification_status?.last_read_at).toEqual(expect.any(Number));
   });
 
   it('creates a poll, attaches it to an activity and votes', async () => {

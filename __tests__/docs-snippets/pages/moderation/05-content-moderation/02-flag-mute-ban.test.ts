@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import type { StreamClient, UserResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -144,9 +145,9 @@ describe(DOCS, () => {
     const { mutes } = await getServerUser(client, mutingUserId);
     expect(mutes.map((m) => m.target?.id)).toEqual([mutedUser]);
     // 60 minutes
-    expect(
-      (mutes[0].expires?.getTime() ?? 0) - mutes[0].created_at.getTime(),
-    ).toBe(60 * 60 * 1000);
+    expect(nsToMs(mutes[0].expires ?? 0) - nsToMs(mutes[0].created_at)).toBe(
+      60 * 60 * 1000,
+    );
   });
 
   it('unmutes a user', async () => {
@@ -194,9 +195,9 @@ describe(DOCS, () => {
     expect(bans[0].banned_by?.id).toBe(moderatorId);
     expect(bans[0].channel).toBeUndefined();
     // 1440 minutes
-    expect(
-      (bans[0].expires?.getTime() ?? 0) - bans[0].created_at.getTime(),
-    ).toBe(1440 * 60 * 1000);
+    expect(nsToMs(bans[0].expires ?? 0) - nsToMs(bans[0].created_at)).toBe(
+      1440 * 60 * 1000,
+    );
   });
 
   it('bans a user from one channel', async () => {
@@ -314,7 +315,9 @@ describe(DOCS, () => {
     await retry(
       async () => {
         const user = await getServerUser(client, expiredBanned);
-        if ((user.ban_expires?.getTime() ?? Infinity) > Date.now()) {
+        if (
+          (user.ban_expires ? nsToMs(user.ban_expires) : Infinity) > Date.now()
+        ) {
           throw new Error('ban not expired yet');
         }
       },

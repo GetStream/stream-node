@@ -1,5 +1,5 @@
 import { nsToDate } from '../../../index';
-import type { StreamClient } from '../../../index';
+import type { StreamClient, TimestampNS } from '../../../index';
 import { DOCS_TEST_PREFIX } from './ids';
 import { deleteMembershipLevel } from './feeds';
 import {
@@ -414,12 +414,17 @@ const scanners: Record<string, Scanner> = {
     // without one it fails with code 4 "cannot specify sort and next/prev at the same
     // time" (2026-10-16).
     const scan = async (filter_conditions: Record<string, unknown>) => {
-      let after: Date | undefined;
+      let after: TimestampNS | undefined;
       for (;;) {
         const response = await retryOnRateLimit(() =>
           client.video.queryCalls({
             filter_conditions: after
-              ? { $and: [filter_conditions, { created_at: { $gt: after } }] }
+              ? {
+                  $and: [
+                    filter_conditions,
+                    { created_at: { $gt: nsToDate(after) } },
+                  ],
+                }
               : filter_conditions,
             sort: [{ field: 'created_at', direction: 1 }],
             limit: 100,

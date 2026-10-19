@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import { OwnCapability } from '../../../../../../index';
 import { getServerClient } from '../../../../helpers/clients';
 import { Cleanup } from '../../../../helpers/cleanup';
@@ -315,7 +316,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     const { call: stored } = await call.get();
-    expect(stored.ended_at).toBeInstanceOf(Date);
+    expect(stored.ended_at).toEqual(expect.any(Number));
   });
 
   it('queries calls with sorting and pagination', async () => {
@@ -403,7 +404,9 @@ describe(DOCS, () => {
     >);
     expect(calls.length).toBeGreaterThan(0);
     for (const { call } of calls) {
-      expect(call.starts_at?.getTime()).toBeGreaterThan(inNext30mins.getTime());
+      expect(nsToMs(call.starts_at ?? 0)).toBeGreaterThan(
+        inNext30mins.getTime(),
+      );
     }
   });
 
