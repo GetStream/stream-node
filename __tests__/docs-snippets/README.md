@@ -1,9 +1,15 @@
 # Docs snippet tests
 
-Typed tests that run the server-side Node.js snippets of the chat docs (the pages of the Node sidebar,
-`getstream.io/content/docs/_sidebars/[chat][node].json`) and of the platform docs (the pages of
-`getstream.io/content/docs/_sidebars/[platform][default].json`) against a real Stream app.
-Only fences labelled `Node.js` are in scope (docs fences must always have a label): they are fixed when they are
+Typed tests that run the server-side Node.js snippets of the Stream docs against a real Stream app: the pages of
+these sidebars in `getstream.io/content/docs/_sidebars/` (`SIDEBAR_FILES` in `sync/parse.ts`):
+
+- chat: `[chat][node].json`
+- activity feeds (v3): `[activity-feeds][node][v3].json`
+- moderation: `[moderation][node].json`
+- video: `[video][api].json` (the server-side API docs)
+- platform: `[platform][default].json`
+
+Only fences labelled `Node.js` are in scope (a fence label, or the `label` of the enclosing `<tabs-item>` on the video pages) (docs fences must always have a label): they are fixed when they are
 wrong. `JavaScript`, `React` and `React Native` fences (client-side code) and `Node.js` fences inside a `<disclosure label="... (no SDK)">` block (reference
 implementations without the SDK) are out of scope and are neither tested nor changed.
 
@@ -38,6 +44,9 @@ check that notifications or webhook events arrive.
 
 ```
 pages/chat/<docs section>/<page>.test.ts    # chat Node.js snippets, run with the server client
+pages/activity-feeds/v3-latest/<docs section>/<page>.test.ts  # feeds v3 Node.js snippets
+pages/moderation/<docs section>/<page>.test.ts  # moderation Node.js snippets
+pages/video/api/<docs section>/<page>.test.ts  # video API Node.js snippets
 pages/platform/<docs section>/<page>.test.ts  # platform Node.js snippets
 helpers/                                    # server client, unique ids, cleanup registry, server-side helpers,
                                             # waits, leak check, app snapshot, push credentials
@@ -52,7 +61,9 @@ AGENTS.md                                   # test conventions and API quirks, r
 
 The path mirrors the docs path (relative to `content/docs`) without `/_default`, e.g.
 `chat/_default/04-messages/01-send_message.md` maps to `pages/chat/04-messages/01-send_message.test.ts`,
-`chat/node/01-quick_start/...` to `pages/chat/node/01-quick_start/...` and
+`chat/node/01-quick_start/...` to `pages/chat/node/01-quick_start/...`,
+`activity-feeds/v3-latest/_default/05-activities/01-activities.md` to `pages/activity-feeds/v3-latest/05-activities/01-activities.test.ts`,
+`video/api/01-basics/03-calls.md` to `pages/video/api/01-basics/03-calls.test.ts` and
 `platform/02-identity-and-access/02-users.md` to `pages/platform/02-identity-and-access/02-users.test.ts`.
 
 ## Conventions
@@ -74,14 +85,14 @@ await channel.getOrCreate({ data: { created_by_id: creatorId } });
 ```
 
 - **Fence key**:
-  - `docs` is the page path relative to `getstream.io/content/docs/` (`chat/...` or `platform/...`).
+  - `docs` is the page path relative to `getstream.io/content/docs/` (`chat/...`, `activity-feeds/...`, `moderation/...`, `video/...` or `platform/...`).
   - `heading` is the text of the nearest heading above the fence.
-  - `tab` is the fence `label` (or `unlabelled`).
+  - `tab` is the fence `label`, else the `label` of the enclosing `<tabs-item>` (or `unlabelled`).
   - `index` is 1-based among fences with the same heading text and tab (default 1).
 - **COPY**: `name="literal"` pairs, applied to the region before comparing (identifier `name` becomes the docs literal). Don't use COPY variables as object keys or shorthand properties.
 - **Comparison**: both sides are formatted with the same prettier options, so quote style and line wrapping don't matter, but any code or comment change does.
-- **Coverage** (checked first): every `Node.js` fence (`js`/`javascript`/`ts`/`typescript`) on the pages of the chat Node sidebar and the platform sidebar (`content/docs/_sidebars/[chat][node].json`, `[platform][default].json`), whether or not the page has tests yet, must have a region (inside `it.skip` if it can't run). `JavaScript` / `React` / `React Native` fences and comment-only fences are ignored.
+- **Coverage** (checked first): every `Node.js` fence (`js`/`javascript`/`ts`/`typescript`) on the pages of the tested sidebars (see the top of this file; `$fragment` entries are resolved from `_sidebars/fragments/`), whether or not the page has tests yet, must have a region (inside `it.skip` if it can't run). `JavaScript` / `React` / `React Native` fences and comment-only fences are ignored.
 - **Labels**: every JS fence on those pages must be labelled `JavaScript`, `React`, `React Native` or `Node.js`; unlabelled or otherwise labelled JS fences fail.
-- **Excluded pages**: `EXCLUDED_PAGES` in `sync/parse.ts` lists sidebar pages that are deliberately not validated, with a reason. Both checks skip them.
+- **Excluded pages and fences**: `EXCLUDED_PAGES` in `sync/parse.ts` lists sidebar pages that are deliberately not validated, with a reason. Both checks skip them. `EXCLUDED_FENCES` does the same for single `Node.js` fences (keyed by fence id) that hold another SDK's code, e.g. Feeds v2 `getstream` client code on the moderation Feeds v2 quick start: not ours to test or update.
 - **`DOCS_SYNC_WRITE=<page path> yarn test:docs:sync`** writes the regions of that page into the docs fences (docs prettier style). Use it to apply a fix to the docs. `DOCS_SYNC_WRITE=1` writes all pages.
 - **`DOCS_DIR`** points at another docs checkout (default: `../getstream.io/content/docs` next to this repo). The check is skipped if the directory doesn't exist.

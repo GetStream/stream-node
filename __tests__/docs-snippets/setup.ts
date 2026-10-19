@@ -29,7 +29,7 @@ afterAll(async () => {
   if (mintedIds.size) {
     const filter = {
       matches: (id: string) => mintedIds.has(id) || id.includes(runId),
-      channelIds: [...mintedIds],
+      ids: [...mintedIds],
     };
     let scan = await findLeftovers(serverClient, filter);
     if (scan.leftovers.length) {
@@ -55,7 +55,7 @@ afterAll(async () => {
       leakError = new Error(
         `[docs-snippets] LEAK: this test file left resources behind (they have now been removed` +
           `${failed.length ? `, except ${failed.length} that failed - run \`yarn test:docs:sweep\`` : ''}).\n` +
-          `Register them on \`Cleanup\` (cleanup.users / channels / channelTypes, or cleanup.add(...)):\n` +
+          `Register them on \`Cleanup\` (cleanup.users / channels / channelTypes / calls / feeds / feedGroups, or cleanup.add(...)):\n` +
           describeLeftovers(scan.leftovers),
       );
     }

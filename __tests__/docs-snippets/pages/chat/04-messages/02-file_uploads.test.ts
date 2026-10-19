@@ -3,32 +3,23 @@ import { rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
-import { StreamError } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
+import { ignoreMissingFile, jpeg, MINIMAL_PDF } from '../../../helpers/uploads';
 
 // A 4x4 JPEG and a minimal PDF, written to a temp dir: the docs read `./image1.jpg`,
 // `./image2.jpg` and `./report.pdf`, COPY-mapped to these paths.
-const JPEG_BASE64 =
-  '/9j/4AAQSkZJRgABAQAAkACQAAD/4QCARXhpZgAATU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAACQAAAAAQAAAJAAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAASgAwAEAAAAAQAAAAQAAAAA/8AAEQgABAAEAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAgICAgICAwICAwUDAwMFBgUFBQUGCAYGBgYGCAoICAgICAgKCgoKCgoKCgwMDAwMDA4ODg4ODw8PDw8PDw8PD//bAEMBAgICBAQEBwQEBxALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/dAAQAAf/aAAwDAQACEQMRAD8A/fSJPL34JO5i3J6Z7D2qXNNHeloA/9k=';
 const fixtureDir = mkdtempSync(join(tmpdir(), 'docs-file-uploads-'));
 const image1Path = join(fixtureDir, 'image1.jpg');
 const image2Path = join(fixtureDir, 'image2.jpg');
 const reportPath = join(fixtureDir, 'report.pdf');
-writeFileSync(image1Path, Buffer.from(JPEG_BASE64, 'base64'));
-writeFileSync(image2Path, Buffer.from(JPEG_BASE64, 'base64'));
-writeFileSync(reportPath, '%PDF-1.4\n%%EOF\n');
+writeFileSync(image1Path, jpeg);
+writeFileSync(image2Path, jpeg);
+writeFileSync(reportPath, MINIMAL_PDF);
 
 const client = getServerClient();
 
-/** Swallows the 404 of deleting an upload that is already gone. */
-const ignoreMissingFile = (error: unknown) => {
-  if (error instanceof StreamError && error.metadata?.responseCode === 404) {
-    return;
-  }
-  throw error;
-};
 const cleanup = new Cleanup(client);
 const johnId = uniqueId('john');
 const channelId = uniqueId('general');
@@ -124,7 +115,6 @@ describe('chat/_default/04-messages/02-file_uploads.md', () => {
 
   it('deletes files', async () => {
     const uploadChannel = client.chat.channel('messaging', channelId);
-    const jpeg = Buffer.from(JPEG_BASE64, 'base64');
     const { file: fileURL } = await uploadChannel.uploadChannelFile({
       file: new File(['hello'], 'hello.txt', { type: 'text/plain' }),
       user: { id: johnId },
