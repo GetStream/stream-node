@@ -1973,6 +1973,7 @@ export interface AsyncExportUsersEvent {
 export interface AsyncImportErrorEvent {
   created_at: TimestampNS;
   error: string;
+  error_code: string;
   finished_at: TimestampNS;
   product: string;
   state: string;
@@ -5113,6 +5114,10 @@ export interface ChannelResponse {
    */
   custom: Record<string, any>;
   /**
+   * Number of members who are not deactivated or deleted
+   */
+  active_member_count?: number;
+  /**
    * Whether auto translation is enabled or not
    */
   auto_translation_enabled?: boolean;
@@ -5193,17 +5198,54 @@ export interface ChannelResponse {
 
 export interface ChannelStateResponse {
   duration: string;
+  /**
+   * List of channel members
+   */
   members: Array<ChannelMemberResponse>;
+  /**
+   * List of channel messages
+   */
   messages: Array<MessageResponse>;
+  /**
+   * List of pinned messages in the channel
+   */
   pinned_messages: Array<MessageResponse>;
   threads: Array<ThreadStateResponse>;
+  /**
+   * Milliseconds until the current user's slow mode cool down period ends. Only set on client-side get or create channel and get channel requests while the user is under cool down
+   */
   cooldown_remaining_ms?: number;
+  /**
+   * Whether this channel is hidden or not
+   */
   hidden?: boolean;
+  /**
+   * Messages before this date are hidden from the user
+   */
   hide_messages_before?: TimestampNS;
+  /**
+   * Number of channel watchers
+   */
   watcher_count?: number;
+  /**
+   * Active live locations in the channel
+   */
   active_live_locations?: Array<SharedLocationResponseData>;
+  /**
+   * Pending messages that this user has sent
+   */
   pending_messages?: Array<PendingMessageResponse>;
+  /**
+   * List of read states
+   */
   read?: Array<ReadStateResponse>;
+  /**
+   * The caller's own scheduled, sending and failed messages in this channel. Set only by a client-side GetOrCreateChannel or QueryChannels with include_scheduled_messages; absent when not requested or not known, in which case use the scheduled messages query
+   */
+  scheduled_messages?: Array<ScheduledMessageResponse>;
+  /**
+   * List of user who is watching the channel
+   */
   watchers?: Array<UserResponse>;
   /**
    * Represents channel in chat
@@ -5259,6 +5301,10 @@ export interface ChannelStateResponseFields {
    * List of read states
    */
   read?: Array<ReadStateResponse>;
+  /**
+   * The caller's own scheduled, sending and failed messages in this channel. Set only by a client-side GetOrCreateChannel or QueryChannels with include_scheduled_messages; absent when not requested or not known, in which case use the scheduled messages query
+   */
+  scheduled_messages?: Array<ScheduledMessageResponse>;
   /**
    * List of user who is watching the channel
    */
@@ -5729,14 +5775,20 @@ export interface CheckPushRequest {
    */
   apn_template?: string;
   /**
-   * Type of event for push templates (default: message.new). One of: message.new, message.updated, reaction.new, reaction.updated, notification.reminder_due
+   * Type of event for push templates (default: message.new). One of: message.new, message.updated, reaction.new, reaction.updated, notification.reminder_due, feeds.activity.added, feeds.comment.added, feeds.activity.reaction.added, feeds.comment.reaction.added, feeds.follow.created, feeds.notification_feed.updated
    */
   event_type?:
     | 'message.new'
     | 'message.updated'
     | 'reaction.new'
     | 'reaction.updated'
-    | 'notification.reminder_due';
+    | 'notification.reminder_due'
+    | 'feeds.activity.added'
+    | 'feeds.comment.added'
+    | 'feeds.activity.reaction.added'
+    | 'feeds.comment.reaction.added'
+    | 'feeds.follow.created'
+    | 'feeds.notification_feed.updated';
   /**
    * Push message data template for Firebase
    */
@@ -6864,7 +6916,7 @@ export interface CreateChannelTypeRequest {
   /**
    * Partition TTL
    */
-  partition_ttl?: string;
+  partition_ttl?: string | null;
   /**
    * Polls
    */
@@ -6878,6 +6930,10 @@ export interface CreateChannelTypeRequest {
    */
   push_notifications?: boolean;
   /**
+   * Enables message quotes
+   */
+  quotes?: boolean;
+  /**
    * Reactions
    */
   reactions?: boolean;
@@ -6885,6 +6941,10 @@ export interface CreateChannelTypeRequest {
    * Read events
    */
   read_events?: boolean;
+  /**
+   * Enables message reminders
+   */
+  reminders?: boolean;
   /**
    * Replies
    */
@@ -6923,11 +6983,15 @@ export interface CreateChannelTypeRequest {
    * List of permissions for the channel type
    */
   permissions?: Array<PolicyRequest>;
+  /**
+   * Sets thresholds for AI moderation
+   */
+  automod_thresholds?: Thresholds;
   chat_preferences?: ChatPreferences;
   /**
    * List of grants for the channel type
    */
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, Array<string>> | null;
 }
 
 export interface CreateChannelTypeResponse {
@@ -8244,6 +8308,17 @@ export interface DeleteSIPTrunkResponse {
   duration: string;
 }
 
+export interface DeleteScheduledMessageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * A message scheduled to be sent later
+   */
+  scheduled_message: ScheduledMessageResponse;
+}
+
 export interface DeleteSegmentTargetsRequest {
   /**
    * Target IDs
@@ -8340,11 +8415,12 @@ export interface DeleteUsersRequest {
   /**
    * Conversation channels delete mode.
    * Conversation channel is any channel which only has two members one of which is the user being deleted.
-   * * null or empty string - doesn't delete any conversation channels
+   * * null or empty string - doesn't delete any conversation channels, unless user is 'hard', in which case it defaults to 'hard'
    * * soft - marks all conversation channels as deleted (same effect as Delete Channels with 'hard' option disabled)
    * * hard - deletes channel and all its data completely including messages (same effect as Delete Channels with 'hard' option enabled)
+   * * keep - doesn't delete any conversation channels. Use it with user 'hard', where null or empty string defaults to 'hard'
    */
-  conversations?: 'soft' | 'hard';
+  conversations?: 'soft' | 'hard' | 'keep';
   /**
    * Delete user files.
    * * false or empty string - doesn't delete any files
@@ -8365,7 +8441,7 @@ export interface DeleteUsersRequest {
    * User delete mode.
    * * soft - marks user as deleted and retains all user data
    * * pruning - marks user as deleted and nullifies user information
-   * * hard - deletes user completely. Requires 'hard' option for messages and conversations as well
+   * * hard - deletes user completely. Requires 'hard' option for messages, and 'hard' or 'keep' option for conversations
    */
   user?: 'soft' | 'pruning' | 'hard';
 }
@@ -12042,7 +12118,9 @@ export interface KickedUserEvent {
 export interface LLMConfig {
   app_context?: string;
   async?: boolean;
+  custom_keys_context_description?: string;
   enabled?: boolean;
+  context_custom_keys?: Array<string>;
   rules?: Array<LLMRule>;
   severity_descriptions?: Record<string, string>;
 }
@@ -13283,7 +13361,7 @@ export interface MessageRequest {
   /**
    * Date when pinned message expires
    */
-  pin_expires?: Date;
+  pin_expires?: Date | null;
   /**
    * Whether message is pinned or not
    */
@@ -13291,7 +13369,7 @@ export interface MessageRequest {
   /**
    * Date when message got pinned
    */
-  pinned_at?: Date;
+  pinned_at?: Date | null;
   /**
    * Identifier of the poll to include in the message
    */
@@ -15337,6 +15415,52 @@ export interface PolicyTestTotals {
   unscored: number;
 }
 
+export interface PollClosedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  /**
+   * The type of event: "poll.closed" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
+}
+
+export interface PollDeletedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  /**
+   * The type of event: "poll.deleted" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
+}
+
 export interface PollOptionInput {
   text?: string;
   custom?: Record<string, any>;
@@ -15401,6 +15525,101 @@ export interface PollResponseData {
   created_by?: UserResponse;
   description_i18n?: Record<string, string>;
   name_i18n?: Record<string, string>;
+}
+
+export interface PollUpdatedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  /**
+   * The type of event: "poll.updated" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
+}
+
+export interface PollVoteCastedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  poll_vote: PollVoteResponseData;
+  /**
+   * The type of event: "poll.vote_casted" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
+}
+
+export interface PollVoteChangedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  poll_vote: PollVoteResponseData;
+  /**
+   * The type of event: "poll.vote_changed" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
+}
+
+export interface PollVoteRemovedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  custom: Record<string, any>;
+  poll: PollResponseData;
+  poll_vote: PollVoteResponseData;
+  /**
+   * The type of event: "poll.vote_removed" in this case
+   */
+  type: string;
+  activity_id?: string;
+  /**
+   * The CID of the channel containing the poll
+   */
+  cid?: string;
+  /**
+   * The ID of the message containing the poll
+   */
+  message_id?: string;
+  received_at?: TimestampNS;
 }
 
 export interface PollVoteResponse {
@@ -15615,11 +15834,19 @@ export interface PushPreferenceInput {
    */
   remove_disable?: boolean;
   /**
+   * Remove the user's quiet-hours schedule, the counterpart of remove_disable. It is applied before schedule, so sending both in one item replaces the stored schedule instead of merging into it. Cannot be combined with channel_cid. To switch from a schedule to a snooze, send remove_schedule together with disabled_until.
+   */
+  remove_schedule?: boolean;
+  /**
    * The user id for which to set the push preferences. Required when using server side auths, defaults to current user with client side auth.
    */
   user_id?: string;
   chat_preferences?: ChatPreferencesInput;
   feeds_preferences?: FeedsPreferences;
+  /**
+   * A recurring quiet-hours schedule: while any quiet window is active, push notifications for the user are suppressed. Suppressed notifications are dropped, not delayed.
+   */
+  schedule?: PushScheduleInput;
 }
 
 export interface PushPreferencesResponse {
@@ -15635,6 +15862,10 @@ export interface PushPreferencesResponse {
   feeds_level?: string;
   chat_preferences?: ChatPreferencesResponse;
   feeds_preferences?: FeedsPreferencesResponse;
+  /**
+   * A recurring quiet-hours schedule: while any quiet window is active, push notifications for the user are suppressed. Suppressed notifications are dropped, not delayed.
+   */
+  schedule?: PushScheduleResponse;
 }
 
 export interface PushProvider {
@@ -15724,6 +15955,28 @@ export interface PushProviderResponse {
   huawei_app_secret?: string;
   xiaomi_app_secret?: string;
   xiaomi_package_name?: string;
+}
+
+export interface PushScheduleInput {
+  /**
+   * IANA time zone name the quiet windows are evaluated in, for example Europe/Amsterdam or America/New_York. Daylight saving time is followed automatically for region-based names. Offsets such as +02:00 and the name "Local" are rejected; fixed-offset zones such as UTC or Etc/GMT-2 are accepted but never shift for daylight saving time. When updating an existing schedule, a non-empty timezone replaces the stored one and leaves the stored quiet_hours untouched.
+   */
+  timezone?: string;
+  /**
+   * The quiet windows, 1 to 7 rules. Push is suppressed while any rule is active. When present it replaces all stored rules; omit it to keep them, for example to change only the timezone. An empty array counts as omitted, so it cannot be used to clear the rules: use remove_schedule for that.
+   */
+  quiet_hours?: Array<QuietHoursRuleInput>;
+}
+
+export interface PushScheduleResponse {
+  /**
+   * IANA time zone name the quiet windows are evaluated in, for example Europe/Amsterdam.
+   */
+  timezone: string;
+  /**
+   * The quiet windows. Push is suppressed while any rule is active.
+   */
+  quiet_hours: Array<QuietHoursRuleResponse>;
 }
 
 export interface PushTemplate {
@@ -15925,10 +16178,10 @@ export interface QueryBannedUsersPayload {
    * Filter conditions to apply to the query
    */
   filter_conditions: Record<string, any>;
-  created_at_after?: TimestampNS;
-  created_at_after_or_equal?: TimestampNS;
-  created_at_before?: TimestampNS;
-  created_at_before_or_equal?: TimestampNS;
+  created_at_after?: Date;
+  created_at_after_or_equal?: Date;
+  created_at_before?: Date;
+  created_at_before_or_equal?: Date;
   /**
    * Whether to exclude expired bans or not
    */
@@ -16342,6 +16595,10 @@ export interface QueryChannelsDefaults {
 
 export interface QueryChannelsRequest {
   /**
+   * Whether to include active_member_count for each channel
+   */
+  include_active_member_count?: boolean;
+  /**
    * Number of channels to limit
    */
   limit?: number;
@@ -16648,6 +16905,10 @@ export interface QueryFeedsUsageStatsResponse {
 }
 
 export interface QueryFollowsRequest {
+  /**
+   * When true (server-side only), the response includes group_counts: accepted following counts keyed by the followed feed's group. Requires exactly one source_feed / source_fid string equality. HTTP 400 if target_feed appears, if two source FIDs are given, or if $in / $or / $nor mentions those keys. Independent of paging and of other filters, including status.
+   */
+  include_group_counts?: boolean;
   limit?: number;
   next?: string;
   prev?: string;
@@ -16675,13 +16936,17 @@ export interface QueryFollowsResponse {
    * Cursor for previous page
    */
   prev?: string;
+  /**
+   * Accepted following counts keyed by followed feed group. Present only when include_group_counts is set with a source_feed equality.
+   */
+  group_counts?: Record<string, number>;
 }
 
 export interface QueryFutureChannelBansPayload {
-  created_at_after?: TimestampNS;
-  created_at_after_or_equal?: TimestampNS;
-  created_at_before?: TimestampNS;
-  created_at_before_or_equal?: TimestampNS;
+  created_at_after?: Date;
+  created_at_after_or_equal?: Date;
+  created_at_before?: Date;
+  created_at_before_or_equal?: Date;
   /**
    * Whether to exclude expired bans or not
    */
@@ -16755,10 +17020,10 @@ export interface QueryLabelResultsResponse {
 
 export interface QueryMembersPayload {
   type: string;
-  created_at_after?: TimestampNS;
-  created_at_after_or_equal?: TimestampNS;
-  created_at_before?: TimestampNS;
-  created_at_before_or_equal?: TimestampNS;
+  created_at_after?: Date;
+  created_at_after_or_equal?: Date;
+  created_at_before?: Date;
+  created_at_before_or_equal?: Date;
   id?: string;
   limit?: number;
   offset?: number;
@@ -17255,6 +17520,45 @@ export interface QueryRevisionHistoryResponse {
   prev?: string;
 }
 
+export interface QueryScheduledMessagesRequest {
+  /**
+   * Page size, 1 to 100. Defaults to 20
+   */
+  limit?: number;
+  /**
+   * Cursor from the previous page
+   */
+  next?: string;
+  user_id?: string;
+  /**
+   * Only scheduled_at ascending is supported. Pending messages come before failed ones
+   */
+  sort?: Array<SortParamRequest>;
+  /**
+   * Filter for querying scheduled messages
+   */
+  filter?: ScheduledMessagesFilter;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface QueryScheduledMessagesResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * Pending messages first, then failed ones, each by scheduled_at
+   */
+  scheduled_messages: Array<ScheduledMessageResponse>;
+  /**
+   * Cursor for the next page; empty on the last page
+   */
+  next?: string;
+}
+
 export interface QuerySegmentTargetsRequest {
   /**
    * Limit
@@ -17460,6 +17764,36 @@ export interface QueueResponse {
    */
   duration: string;
   queue?: ModerationQueueResponse;
+}
+
+export interface QuietHoursRuleInput {
+  /**
+   * When the window closes, as HH:MM local wall-clock time between 00:00 and 24:00. The end is exclusive: a window ending at 07:00 is already over at 07:00. An end earlier than start wraps past midnight into the next day (start 22:00, end 07:00). 24:00 means the end of the day, so start 00:00 with end 24:00 covers the whole day.
+   */
+  end: string;
+  /**
+   * When the window opens, as HH:MM local wall-clock time between 00:00 and 23:59. Must differ from end.
+   */
+  start: string;
+  /**
+   * The days of the week the window opens on, any of mon, tue, wed, thu, fri, sat, sun, each at most once. A window belongs to the day it opens: ["fri"] with 22:00 to 07:00 is quiet from Friday 22:00 until Saturday 07:00, and not on Saturday night. Empty or omitted means every day.
+   */
+  days?: Array<string>;
+}
+
+export interface QuietHoursRuleResponse {
+  /**
+   * When the window closes, as HH:MM local wall-clock time between 00:00 and 24:00. The end is exclusive. An end earlier than start wraps past midnight into the next day.
+   */
+  end: string;
+  /**
+   * When the window opens, as HH:MM local wall-clock time between 00:00 and 23:59.
+   */
+  start: string;
+  /**
+   * The days of the week the window opens on, any of mon, tue, wed, thu, fri, sat, sun. A window belongs to the day it opens: ["fri"] with 22:00 to 07:00 is quiet from Friday 22:00 until Saturday 07:00. Omitted means every day.
+   */
+  days?: Array<string>;
 }
 
 export interface RTMPBroadcastRequest {
@@ -19187,6 +19521,29 @@ export interface SRTIngress {
   address: string;
 }
 
+export interface ScheduledMessageChannelResponse {
+  /**
+   * Channel CID (<type>:<id>)
+   */
+  cid: string;
+  /**
+   * Channel ID
+   */
+  id: string;
+  /**
+   * Channel type
+   */
+  type: string;
+  /**
+   * Channel image, from its custom data
+   */
+  image?: string;
+  /**
+   * Channel name, from its custom data
+   */
+  name?: string;
+}
+
 export interface ScheduledMessageContentResponse {
   /**
    * Text of the message
@@ -19324,7 +19681,7 @@ export interface ScheduledMessageResponse {
    */
   scheduled_at: TimestampNS;
   /**
-   * Status of the scheduled message. One of: scheduled, sending, failed, canceled, sent
+   * Status of the scheduled message. One of: scheduled, sending, failed, canceled, sent. A message is sending from its first send attempt until it is sent or fails, including while it waits to retry a failed attempt; it cannot be edited, canceled or sent now while sending
    */
   status: string;
   /**
@@ -19340,9 +19697,13 @@ export interface ScheduledMessageResponse {
    */
   user: UserResponse;
   /**
-   * Why sending the message failed. Only set when status is failed. One of: banned, no_permission, channel_frozen, channel_deleted, user_deleted, moderation_blocked, hook_rejected, expired, internal_error, invalid_message
+   * Why sending the message failed. Only set when status is failed. One of: banned, no_permission, channel_frozen, channel_deleted, user_deleted, moderation_blocked, hook_rejected, expired, internal_error, invalid_message, pending_not_supported
    */
   failure_reason?: string;
+  /**
+   * The channel of a scheduled message
+   */
+  channel?: ScheduledMessageChannelResponse;
 }
 
 export interface ScheduledMessageSentEvent {
@@ -19369,6 +19730,17 @@ export interface ScheduledMessageSentEvent {
    * A message scheduled to be sent later
    */
   scheduled_message?: ScheduledMessageResponse;
+}
+
+export interface ScheduledMessagesFilter {
+  /**
+   * Only scheduled messages of this channel
+   */
+  cid?: string;
+  /**
+   * Only these statuses, as reported in each scheduled message's status. One or more of: scheduled, sending, failed
+   */
+  status?: Array<string>;
 }
 
 export interface ScoreBands {
@@ -19654,6 +20026,10 @@ export interface SendMessageRequest {
   include_mentioned_members?: boolean;
   keep_channel_hidden?: boolean;
   pending?: boolean;
+  /**
+   * When set, the message is not sent now: it is stored and sent at this time (UTC). The response then carries scheduled_message. Must be at least 1 minute and at most the app's maximum lead time (120 days by default) from now. Slash commands cannot be scheduled
+   */
+  scheduled_at?: Date;
   skip_enrich_url?: boolean;
   skip_push?: boolean;
   pending_message_metadata?: Record<string, string>;
@@ -19680,6 +20056,10 @@ export interface SendMessageResponse {
    * Pending message metadata
    */
   pending_message_metadata?: Record<string, string>;
+  /**
+   * A message scheduled to be sent later
+   */
+  scheduled_message?: ScheduledMessageResponse;
 }
 
 export interface SendReactionRequest {
@@ -19707,6 +20087,19 @@ export interface SendReactionResponse {
    */
   message: MessageResponse;
   reaction: ReactionResponse;
+}
+
+export interface SendScheduledMessageNowRequest {}
+
+export interface SendScheduledMessageNowResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * A message scheduled to be sent later
+   */
+  scheduled_message: ScheduledMessageResponse;
 }
 
 export interface SendUserCustomEventRequest {
@@ -21801,7 +22194,7 @@ export interface UpdateAppRequest {
   datadog_info?: DataDogInfo;
   file_upload_config?: FileUploadConfig;
   firebase_config?: FirebaseConfig;
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, Array<string>> | null;
   huawei_config?: HuaweiConfig;
   image_upload_config?: FileUploadConfig;
   moderation_dashboard_preferences?: ModerationDashboardPreferences;
@@ -22102,7 +22495,7 @@ export interface UpdateChannelTypeRequest {
   message_retention?: string;
   mutes?: boolean;
   partition_size?: number;
-  partition_ttl?: string;
+  partition_ttl?: string | null;
   polls?: boolean;
   /**
    * Sets the push notification level for a channel type
@@ -22133,7 +22526,7 @@ export interface UpdateChannelTypeRequest {
    */
   automod_thresholds?: Thresholds;
   chat_preferences?: ChatPreferences;
-  grants?: Record<string, Array<string>>;
+  grants?: Record<string, Array<string>> | null;
 }
 
 export interface UpdateChannelTypeResponse {
@@ -22935,6 +23328,28 @@ export interface UpdateSIPTrunkResponse {
    * SIP trunk information
    */
   sip_trunk?: SIPTrunkResponse;
+}
+
+export interface UpdateScheduledMessageRequest {
+  /**
+   * New send time (UTC). Must be at least 1 minute and at most the app's maximum lead time from now
+   */
+  scheduled_at?: Date;
+  /**
+   * Message data for creating or updating a message
+   */
+  message?: MessageRequest;
+}
+
+export interface UpdateScheduledMessageResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * A message scheduled to be sent later
+   */
+  scheduled_message: ScheduledMessageResponse;
 }
 
 export interface UpdateSegmentRequest {
@@ -24479,6 +24894,12 @@ export type WHEvent =
   | ({
       type: 'notification.thread_message_new';
     } & NotificationThreadMessageNewEvent)
+  | ({ type: 'poll.closed' } & PollClosedEvent)
+  | ({ type: 'poll.deleted' } & PollDeletedEvent)
+  | ({ type: 'poll.updated' } & PollUpdatedEvent)
+  | ({ type: 'poll.vote_casted' } & PollVoteCastedEvent)
+  | ({ type: 'poll.vote_changed' } & PollVoteChangedEvent)
+  | ({ type: 'poll.vote_removed' } & PollVoteRemovedEvent)
   | ({ type: 'reaction.deleted' } & ReactionDeletedEvent)
   | ({ type: 'reaction.new' } & ReactionNewEvent)
   | ({ type: 'reaction.updated' } & ReactionUpdatedEvent)

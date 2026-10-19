@@ -2748,6 +2748,7 @@ export class FeedsApi {
     request?: QueryFollowsRequest,
   ): Promise<StreamResponse<QueryFollowsResponse>> {
     const body = {
+      include_group_counts: request?.include_group_counts,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,

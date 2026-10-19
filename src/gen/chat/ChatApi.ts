@@ -30,6 +30,7 @@ import {
   DeleteReminderResponse,
   DeleteRetentionPolicyRequest,
   DeleteRetentionPolicyResponse,
+  DeleteScheduledMessageResponse,
   DeleteSegmentTargetsRequest,
   EventResponse,
   ExportChannelsRequest,
@@ -89,6 +90,8 @@ import {
   QueryReactionsResponse,
   QueryRemindersRequest,
   QueryRemindersResponse,
+  QueryScheduledMessagesRequest,
+  QueryScheduledMessagesResponse,
   QuerySegmentTargetsRequest,
   QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
@@ -105,6 +108,8 @@ import {
   SendMessageResponse,
   SendReactionRequest,
   SendReactionResponse,
+  SendScheduledMessageNowRequest,
+  SendScheduledMessageNowResponse,
   SendUserCustomEventRequest,
   SetRetentionPolicyRequest,
   SetRetentionPolicyResponse,
@@ -143,6 +148,8 @@ import {
   UpdatePredefinedFilterResponse,
   UpdateReminderRequest,
   UpdateReminderResponse,
+  UpdateScheduledMessageRequest,
+  UpdateScheduledMessageResponse,
   UpdateSegmentRequest,
   UpdateSegmentResponse,
   UpdateThreadPartialRequest,
@@ -347,6 +354,7 @@ export class ChatApi {
     request?: QueryChannelsRequest,
   ): Promise<StreamResponse<QueryChannelsResponse>> {
     const body = {
+      include_active_member_count: request?.include_active_member_count,
       limit: request?.limit,
       member_limit: request?.member_limit,
       message_limit: request?.message_limit,
@@ -950,6 +958,7 @@ export class ChatApi {
       include_mentioned_members: request?.include_mentioned_members,
       keep_channel_hidden: request?.keep_channel_hidden,
       pending: request?.pending,
+      scheduled_at: request?.scheduled_at,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
       pending_message_metadata: request?.pending_message_metadata,
@@ -1225,8 +1234,10 @@ export class ChatApi {
       polls: request?.polls,
       push_level: request?.push_level,
       push_notifications: request?.push_notifications,
+      quotes: request?.quotes,
       reactions: request?.reactions,
       read_events: request?.read_events,
+      reminders: request?.reminders,
       replies: request?.replies,
       search: request?.search,
       shared_locations: request?.shared_locations,
@@ -1239,6 +1250,7 @@ export class ChatApi {
       blocklists: request?.blocklists,
       commands: request?.commands,
       permissions: request?.permissions,
+      automod_thresholds: request?.automod_thresholds,
       chat_preferences: request?.chat_preferences,
       grants: request?.grants,
     };
@@ -2371,6 +2383,99 @@ export class ChatApi {
       );
 
     decoders['GetRetentionPolicyRunsResponse']?.(response);
+
+    return response;
+  }
+
+  async queryScheduledMessages(
+    request?: QueryScheduledMessagesRequest,
+  ): Promise<StreamResponse<QueryScheduledMessagesResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryScheduledMessagesResponse>(
+        'POST',
+        '/api/v2/chat/scheduled_messages/query',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryScheduledMessagesResponse']?.(response);
+
+    return response;
+  }
+
+  async deleteScheduledMessage(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteScheduledMessageResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteScheduledMessageResponse>(
+        'DELETE',
+        '/api/v2/chat/scheduled_messages/{id}',
+        pathParams,
+        undefined,
+      );
+
+    decoders['DeleteScheduledMessageResponse']?.(response);
+
+    return response;
+  }
+
+  async updateScheduledMessage(
+    request: UpdateScheduledMessageRequest & { id: string },
+  ): Promise<StreamResponse<UpdateScheduledMessageResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      scheduled_at: request?.scheduled_at,
+      message: request?.message,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<UpdateScheduledMessageResponse>(
+        'PATCH',
+        '/api/v2/chat/scheduled_messages/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['UpdateScheduledMessageResponse']?.(response);
+
+    return response;
+  }
+
+  async sendScheduledMessageNow(
+    request: SendScheduledMessageNowRequest & { id: string },
+  ): Promise<StreamResponse<SendScheduledMessageNowResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {};
+
+    const response =
+      await this.apiClient.sendRequest<SendScheduledMessageNowResponse>(
+        'POST',
+        '/api/v2/chat/scheduled_messages/{id}/send_now',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['SendScheduledMessageNowResponse']?.(response);
 
     return response;
   }
