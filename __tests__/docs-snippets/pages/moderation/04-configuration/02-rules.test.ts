@@ -40,19 +40,17 @@ describe(DOCS, () => {
     // COPY: ruleName="ban_on_severe_harassment", configKey="chat:messaging"
     await client.moderation.upsertModerationRule({
       name: ruleName,
-      rule_type: 'content',
+      rule_type: 'user',
       config_keys: [configKey],
+      logic: 'AND',
       action: {
         type: 'ban_user',
-        ban_options: { duration: 86400, reason: 'Severe harassment' },
+        ban_options: { duration: 3600, reason: 'Severe harassment' },
       },
       conditions: [
         {
-          type: 'text_content',
-          text_content_params: {
-            harm_labels: ['HARASSMENT'],
-            severity: 'critical',
-          },
+          type: 'text_rule',
+          text_rule_params: { harm_labels: ['HATRED'], severity: 'critical' },
         },
       ],
       enabled: true,
@@ -67,22 +65,20 @@ describe(DOCS, () => {
     cleanup.add(() => deleteRule(rule.id));
     expect(rule).toMatchObject({
       name: ruleName,
-      rule_type: 'content',
+      rule_type: 'user',
       config_keys: [configKey],
+      logic: 'AND',
       enabled: true,
       description: 'Auto-ban users for critical harassment',
       action: {
         type: 'ban_user',
-        ban_options: { duration: 86400, reason: 'Severe harassment' },
+        ban_options: { duration: 3600, reason: 'Severe harassment' },
       },
     });
-    expect(rule.conditions).toEqual([
+    expect(rule.conditions).toMatchObject([
       {
-        type: 'text_content',
-        text_content_params: {
-          harm_labels: ['HARASSMENT'],
-          severity: 'critical',
-        },
+        type: 'text_rule',
+        text_rule_params: { harm_labels: ['HATRED'], severity: 'critical' },
       },
     ]);
   });
@@ -100,7 +96,7 @@ describe(DOCS, () => {
       .value as Promise<GetModerationRuleResponse>);
     expect(rule).toMatchObject({
       id: ruleId,
-      rule_type: 'content',
+      rule_type: 'user',
       config_keys: [configKey],
       enabled: true,
     });

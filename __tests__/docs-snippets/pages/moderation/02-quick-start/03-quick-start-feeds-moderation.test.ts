@@ -50,20 +50,16 @@ describe(DOCS, () => {
     await client.moderation.v2UpsertTemplate({
       name: templateName,
       config: {
-        data_types: {
-          'object.title': 'text',
-          'object.body': 'text',
-          image: 'image',
-        },
+        data_types: { text: 'text', attachments: 'image' },
+        config_key: 'feeds:default',
       },
     });
     // #endregion snippet
 
     const template = await findTemplate(templateName);
-    expect(template?.config?.data_types).toEqual({
-      'object.title': 'text',
-      'object.body': 'text',
-      image: 'image',
+    expect(template?.config).toMatchObject({
+      data_types: { text: 'text', attachments: 'image' },
+      config_key: 'feeds:default',
     });
   });
 

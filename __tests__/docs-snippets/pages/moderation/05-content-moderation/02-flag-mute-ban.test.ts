@@ -265,7 +265,7 @@ describe(DOCS, () => {
     // COPY: unbanTarget="user_to_unban"
     await client.moderation.unban({
       target_user_id: unbanTarget,
-      unbanned_by_id: moderatorId,
+      created_by: moderatorId,
     });
     // #endregion snippet
 

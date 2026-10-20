@@ -93,13 +93,13 @@ describe(DOCS, () => {
       expect(probe.type).toBe('error');
     });
 
+    const channelType = 'messaging';
+
     // #region snippet docs="moderation/_default/02-quick-start/02-quick-start-chat-moderation.md" heading="Server side integration" tab="Node.js" index=1
-    const { message } = await channel.sendMessage({
-      message: {
-        text,
-        attachments,
-        user_id: sentBy,
-      },
+    const { message } = await client.chat.sendMessage({
+      type: channelType,
+      id: channelId,
+      message: { text, attachments, user_id: sentBy },
       force_moderation: true,
     });
     // #endregion snippet

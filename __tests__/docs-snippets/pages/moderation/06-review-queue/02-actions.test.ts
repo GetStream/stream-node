@@ -114,13 +114,14 @@ describe(DOCS, () => {
     const { itemId, creatorId } = await flagMessage();
 
     // #region snippet docs="moderation/_default/06-review-queue/02-actions.md" heading="Ban User" tab="Node.js" index=1
-    // COPY: itemId="review_queue_item_id"
+    // COPY: itemId="review_queue_item_id", cid="messaging:general"
     await client.moderation.submitAction({
       action_type: 'ban',
       item_id: itemId,
       ban: {
         reason: 'Repeated harassment',
         timeout: 1440,
+        channel_cid: cid,
         channel_ban_only: true,
       },
       user_id: moderatorId,
@@ -196,9 +197,7 @@ describe(DOCS, () => {
     await client.moderation.submitAction({
       action_type: 'restore',
       item_id: itemId,
-      restore: {
-        decision_reason: 'Content was incorrectly flagged',
-      },
+      restore: { decision_reason: 'Content was incorrectly flagged' },
       user_id: moderatorId,
     });
     // #endregion snippet

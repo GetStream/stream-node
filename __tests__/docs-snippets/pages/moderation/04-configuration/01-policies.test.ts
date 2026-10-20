@@ -62,7 +62,7 @@ describe(DOCS, () => {
         rules: [
           { label: 'SPAM', action: 'flag' },
           {
-            label: 'MORAL_HARASSMENT',
+            label: 'HATRED',
             severity_rules: [
               { severity: 'low', action: 'flag' },
               { severity: 'high', action: 'remove' },
@@ -107,7 +107,7 @@ describe(DOCS, () => {
     ).toEqual([
       { label: 'SPAM', action: 'flag', severity_rules: [] },
       {
-        label: 'MORAL_HARASSMENT',
+        label: 'HATRED',
         action: '',
         severity_rules: [
           { severity: 'low', action: 'flag' },
