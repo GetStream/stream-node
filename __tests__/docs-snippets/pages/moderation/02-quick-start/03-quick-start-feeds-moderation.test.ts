@@ -79,7 +79,7 @@ describe(DOCS, () => {
   });
 
   // The fence is right for the API, but the generated `v2DeleteTemplate()` takes no
-  // arguments (TS2554, see the TODO) and sends no name, so it fails with code 4 "name is
+  // arguments (TS2554) and sends no name, so it fails with code 4 "name is
   // a required field". Cleanup deletes the template instead.
   it.skip('BLOCKED: SDK issue: v2DeleteTemplate() cannot send the template name', async () => {
     // #region snippet docs="moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md" heading="Delete Template" tab="Node.js" index=1

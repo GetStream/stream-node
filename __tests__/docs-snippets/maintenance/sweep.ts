@@ -42,7 +42,7 @@ it('sweeps docs-test leftovers', async () => {
   if (errors.length) console.warn(`could not scan:\n  ${errors.join('\n  ')}`);
 
   // Retention policies have fixed names, so a docs-test one can't be told apart from
-  // another; the docs test app has none (see the todo's App facts), so turn off any that
+  // another; the docs test app has none (see "Test app" in AGENTS.md), so turn off any that
   // are set. They delete old messages and inactive channels on the shared app.
   const policies = (await getRetentionPolicies(serverClient)) ?? [];
   if (policies.length) {

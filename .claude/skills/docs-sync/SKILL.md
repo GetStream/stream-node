@@ -38,8 +38,7 @@ Before editing tests, read:
 
 1. `__tests__/docs-snippets/AGENTS.md`: test conventions, test app facts and API quirks. Follow it.
 2. `__tests__/docs-snippets/README.md`: layout, commands, push credentials and the snippet-marker format (fence key, COPY, `DOCS_SYNC_WRITE`).
-3. `__tests__/docs-snippets/docs-snippets-todo.md`: the open issues. A difference may be the docs fixing one of them.
-4. `$DOCS_DIR/AGENTS.md`, if it exists: the docs writing rules (e.g. no em-dashes).
+3. `$DOCS_DIR/AGENTS.md`, if it exists: the docs writing rules (e.g. no em-dashes).
 
 Live tests need `STREAM_API_KEY` and `STREAM_SECRET` of the docs test app in the repo root `.env` (see `.env-example`); `DOCS_PUSH_FIREBASE_CREDENTIALS` is optional (push tests are skipped without it). If the key or secret is missing, ask the user for them. Without them you can still sync, typecheck and lint, but you can't tell whether a changed snippet works: say so in the report, and don't change any docs snippet in that case.
 
@@ -114,8 +113,8 @@ Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` fo
 3. Run the page's test: `yarn test:docs <test file>`, then `yarn types:docs`.
 4. If it passes, done. If it fails, decide why:
    - **Test setup** (missing user, permission, channel config, eventual consistency): fix the setup, not the region.
-   - **API spec / generator or node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec, the generated SDK code or the hand-written node SDK code is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): add it to "API spec / generator issues" or "Node SDK issues" in the TODO and report it. `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
-   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and report it with the evidence (see "Report"). Don't add it to the TODO.
+   - **API spec / generator or node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec, the generated SDK code or the hand-written node SDK code is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): report it with the evidence (see "Report"). `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
+   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and report it with the evidence (see "Report").
    - **The docs snippet is wrong**: fix it as described in "Broken docs snippet" below.
    - **Not sure** whether the snippet or the setup is wrong: don't touch the docs. Leave the test failing or put the snippet in `it.skip('BLOCKED: <reason>', ...)` and report it as an open question.
 
@@ -123,8 +122,6 @@ Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` fo
 
 - **Heading renamed or fence moved/reordered**: update the marker's `heading` / `tab` / `index` to the key the failure lists (it matches the fence with the same code).
 - **Fence removed from the docs**: remove the region together with its `it` (or the part of the `it` that only exists for it) and any setup only it used. If a whole page was removed or left the sidebar, remove its test file.
-
-When a fix lands that resolves an entry in `docs-snippets-todo.md` (the docs fixed a recorded docs bug, say), remove that entry.
 
 ### New fence without a region
 
@@ -156,7 +153,7 @@ Only when the docs snippet itself doesn't work (wrong method name or signature, 
    Never run `npm run ci` or `npm run lint` for the whole docs repo: they rewrite thousands of files, including images.
 5. Record the fix for the report: before/after, reason, and evidence (error message or type error).
 
-Docs bugs you leave unfixed (prose, non-`Node.js` fences, or waiting for a decision) go to "Open docs bugs" in the TODO.
+Docs bugs you leave unfixed (prose, non-`Node.js` fences, or waiting for a decision) go in the report (see "Report").
 
 ## 6. Gates
 
@@ -191,6 +188,7 @@ End with:
 4. **New and removed tests**: snippets added, regions removed with their fences, renamed markers.
 5. **Docs changes**: every fence changed in `$DOCS_DIR` (fixes, labels, client-side code), each with before/after, reason and evidence. These need human review.
 6. **Skipped snippets**: new `it.skip` / credential-gated snippets and why.
-7. **TODO changes**: entries added to or removed from the TODO lists.
-8. **API behavior issues**: where the API behaves differently from what the docs say, each with the request, the observed result, what the docs claim, and how the test handles it.
-9. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.
+7. **API spec / generator and node SDK issues**: where the snippet is correct and the API accepts it, but the spec, the generated code or the hand-written node SDK code is wrong. Each with the fence, the type or runtime error, what the API actually accepts or returns, and how the test handles it (`it.skip`, local cast, or a `yarn types:docs` error that stays until the SDK is fixed).
+8. **Open docs bugs**: docs bugs left unfixed (prose, non-`Node.js` fences, or waiting for a decision), each with the page, the problem and the evidence.
+9. **API behavior issues**: where the API behaves differently from what the docs say, each with the request, the observed result, what the docs claim, and how the test handles it.
+10. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.
