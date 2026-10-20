@@ -124,8 +124,7 @@ describe(DOCS, () => {
       'Create customer support tickets',
     );
     // The page says fields that aren't sent stay unchanged, but the API resets
-    // `args` and `set` (the SDK leaves them out of the body): see the TODO's
-    // Open docs bugs.
+    // `args` and `set` (the SDK leaves them out of the body).
     const command = await client.chat.getCommand({ name: ticketCommand });
     expect(command).toMatchObject({
       description: 'Create customer support tickets',

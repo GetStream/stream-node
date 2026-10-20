@@ -34,15 +34,15 @@ it('sweeps docs-test leftovers', async () => {
   const { leftovers, errors } = await findLeftovers(serverClient, {
     // `includes`: guest user ids are rewritten to `guest-<uuid>-docs-test-...`.
     matches: (id) => id.includes(DOCS_TEST_PREFIX),
-    // Channels can't be searched by id prefix: list every channel and keep the docs-test
+    // Channels, calls and feeds can't be searched by id prefix: list every one and keep the docs-test
     // ones (they can outlive their creator, e.g. when a file crashed before cleanup).
-    channelsCreatedSince: new Date(0),
+    createdSince: new Date(0),
   });
 
   if (errors.length) console.warn(`could not scan:\n  ${errors.join('\n  ')}`);
 
   // Retention policies have fixed names, so a docs-test one can't be told apart from
-  // another; the docs test app has none (see the todo's App facts), so turn off any that
+  // another; the docs test app has none (see "Test app" in AGENTS.md), so turn off any that
   // are set. They delete old messages and inactive channels on the shared app.
   const policies = (await getRetentionPolicies(serverClient)) ?? [];
   if (policies.length) {

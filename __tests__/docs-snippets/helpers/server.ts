@@ -1,10 +1,13 @@
 import { isDeepStrictEqual } from 'node:util';
 import type {
+  EventHook,
   MessageRequest,
   QueryChannelsRequest,
   SendMessageRequest,
   StreamClient,
 } from '../../../index';
+import type { Cleanup } from './cleanup';
+import { retry } from './wait';
 
 /**
  * Server-side lookups and actions the tests repeat. Lookups throw unless exactly one
@@ -114,6 +117,59 @@ export const waitForAppSetting = async <K extends keyof AppSettings>(
   }
 };
 
+/** Hooks without their server-managed timestamps (they change on every update). */
+export const withoutTimestamps = (hooks: EventHook[]) =>
+  hooks.map((hook) => {
+    const copy = { ...hook };
+    delete copy.created_at;
+    delete copy.updated_at;
+    return copy;
+  });
+
+/** Reads `event_hooks` until `check` accepts them (getApp is eventually consistent). */
+export const waitForEventHooks = (
+  serverClient: StreamClient,
+  check: (hooks: EventHook[]) => boolean,
+) =>
+  retry(async () => {
+    const { app } = await serverClient.getApp();
+    if (!check(app.event_hooks)) {
+      const targets = app.event_hooks.map(
+        (h) => h.webhook_url ?? h.sqs_queue_url ?? h.sns_topic_arn,
+      );
+      throw new Error(
+        `event_hooks not updated yet: ${JSON.stringify(targets)}`,
+      );
+    }
+    return app.event_hooks;
+  });
+
+/**
+ * Saves the app's `event_hooks` and registers their restore on `cleanup`. `restore()`
+ * puts the saved hooks back (same ids, so no DRIFT) and waits until 5 reads in a row
+ * agree, ignoring `created_at` / `updated_at`; call it before a snippet that claims to
+ * keep the existing hooks.
+ */
+export const saveAndRestoreEventHooks = async (
+  serverClient: StreamClient,
+  cleanup: Cleanup,
+) => {
+  const original = (await serverClient.getApp()).app.event_hooks;
+  const restore = async () => {
+    await serverClient.updateApp({ event_hooks: original });
+    for (let agreeing = 0; agreeing < 5; agreeing++) {
+      await waitForEventHooks(serverClient, (hooks) =>
+        isDeepStrictEqual(
+          withoutTimestamps(hooks),
+          withoutTimestamps(original),
+        ),
+      );
+    }
+  };
+  cleanup.add(restore);
+  return { original, restore };
+};
+
 /**
  * `waitForAppSetting` only proves that `getApp` agrees: other endpoints of some API nodes
  * keep the old `multi_tenant_enabled` value for a while longer. Polls `listUserGroups`
@@ -146,3 +202,57 @@ export const waitForTeamIdSupport = async (
       await new Promise((resolve) => setTimeout(resolve, interval));
   }
 };
+
+/**
+ * The review queue item of `entityId` once it has `flags` flags (flags arrive within
+ * about a second of `client.moderation.flag`). Throws unless exactly one item matches.
+ */
+export const waitForReviewItem = (
+  client: StreamClient,
+  entityId: string,
+  { flags = 1 }: { flags?: number } = {},
+) =>
+  retry(async () => {
+    const { items } = await client.moderation.queryReviewQueue({
+      filter: { entity_id: entityId },
+    });
+    const item = expectOne(items, `review queue item for ${entityId}`);
+    if (item.flags.length !== flags) {
+      throw new Error(`expected ${flags} flag(s), got ${item.flags.length}`);
+    }
+    return item;
+  });
+
+/**
+ * Deletes a Feeds v2 moderation template. The generated `v2DeleteTemplate()` takes no
+ * arguments, but the API needs `{ name }` in the DELETE body.
+ */
+export const deleteFeedModerationTemplate = (
+  client: StreamClient,
+  name: string,
+) =>
+  client.moderation.apiClient.sendRequest(
+    'DELETE',
+    '/api/v2/moderation/feeds_moderation_template',
+    undefined,
+    undefined,
+    { name },
+  );
+
+/**
+ * Deletes an external storage if it exists. Right after a create, the delete can fail
+ * with code 4 "external storage ... does not exist" while the storage is still listed,
+ * so it is retried until the name is gone from `listExternalStorage`.
+ */
+export const deleteExternalStorageIfExists = (
+  client: StreamClient,
+  name: string,
+) =>
+  retry(
+    async () => {
+      const { external_storages } = await client.listExternalStorage();
+      if (!(name in external_storages)) return;
+      await client.deleteExternalStorage({ name });
+    },
+    { retryIf: (error) => String(error).includes('does not exist') },
+  );

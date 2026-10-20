@@ -5,6 +5,7 @@ import {
   ALLOWED_JS_LABELS,
   applyCopy,
   DOCS_DIR,
+  EXCLUDED_FENCES,
   EXCLUDED_PAGES,
   fenceId,
   findSidebarPages,
@@ -19,15 +20,15 @@ import {
 import type { DocsFence, TestRegion } from './parse';
 
 // `yarn test:docs:sync`, in this order:
-// 1. Every `Node.js` fence (except comment-only fences) on the pages of the chat Node
-//    sidebar and the platform sidebar has a test region. `JavaScript`, `React` and
+// 1. Every `Node.js` fence (except comment-only fences) on the pages of the tested
+//    sidebars (`SIDEBAR_FILES` in parse.ts) has a test region. `JavaScript`, `React` and
 //    `React Native` (client-side) fences, the stream-chat-js@9 fences
 //    (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), and fences inside a
 //    `<disclosure label="... (no SDK)">` block, are out of scope.
 // 2. Every JS fence on those pages is labelled with one of `ALLOWED_JS_LABELS`.
 // 3. Every marked test region points at an existing fence and matches it (after
 //    applying COPY values and formatting both sides the same way).
-// Pages in `EXCLUDED_PAGES` (parse.ts) are skipped.
+// Pages in `EXCLUDED_PAGES` and fences in `EXCLUDED_FENCES` (parse.ts) are skipped.
 //   DOCS_SYNC_WRITE=<page>  overwrite that page's fences with the test code instead of
 //                           comparing (page path as in the markers, e.g.
 //                           chat/_default/04-messages/01-send_message.md; `1` = all pages)
@@ -80,13 +81,14 @@ describe.skipIf(!hasDocs)(`docs sync (${DOCS_DIR})`, () => {
             fence.tab === NODE_TAB &&
             !fence.commentOnly &&
             !fence.noSdk &&
+            !(fenceId(fence) in EXCLUDED_FENCES) &&
             !covered.has(fenceId(fence)),
         )
         .map((fence) => where(file, fence)),
     );
     expect(
       missing,
-      'snippets without a test region; add one (in it.skip if it cannot run), or add the page to EXCLUDED_PAGES in sync/parse.ts with a reason',
+      'snippets without a test region; add one (in it.skip if it cannot run), or add the page to EXCLUDED_PAGES (or the fence to EXCLUDED_FENCES) in sync/parse.ts with a reason',
     ).toEqual([]);
   });
 

@@ -23,8 +23,9 @@ import {
 const CLOCK_SKEW_MS = 5000;
 
 const createdAt = (leftover: Leftover) => {
-  // Campaigns and polls are listed as `<id> (<name>)`; ids minted by `uniqueId` carry
-  // their creation time, anything else falls back to the server timestamp.
+  // Campaigns, polls and moderation rules are listed as `<id> (<name>)`, calls and feeds
+  // by cid / fid (`<type>:<id>`); ids minted by `uniqueId` carry their creation time,
+  // anything else falls back to the server timestamp.
   const fromId = createdAtFromId(leftover.id.split(' ')[0]);
   if (fromId) return fromId;
   return leftover.createdAt ? new Date(leftover.createdAt) : undefined;
@@ -52,7 +53,7 @@ export default async function setup() {
     const { leftovers, errors } = await findLeftovers(client, {
       // `includes`: guest user ids are rewritten to `guest-<uuid>-docs-test-...`.
       matches: (id) => id.includes(DOCS_TEST_PREFIX),
-      channelsCreatedSince: new Date(startedAt - CLOCK_SKEW_MS),
+      createdSince: new Date(startedAt - CLOCK_SKEW_MS),
     });
     if (errors.length) {
       console.warn(

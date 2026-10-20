@@ -57,7 +57,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     // Only the override is checked: this app (moderation enabled) doesn't block
-    // messages with the channel-level blocklist's words (see the TODO).
+    // messages with the channel-level blocklist's words.
     const after = await channelConfig();
     expect(after.blocklist).toBe(blocklistName);
     expect(after.blocklist_behavior).toBe('block');

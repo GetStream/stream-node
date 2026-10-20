@@ -226,11 +226,11 @@ describe(DOCS, () => {
     });
 
     // A user-level-only call returns no channel preferences, and a channel-only call
-    // returns the user's entry as null (typed non-null, see the TODO).
+    // returns the user's entry as null (typed non-null).
     expect(userLevel.user_channel_preferences).toEqual({});
     expect(memberLevel.user_preferences[userId1]).toBeNull();
-    // Server-side queryChannels doesn't return `push_preferences`, even with a user_id
-    // (see the TODO), so the responses above are the read back. If this starts
+    // Server-side queryChannels doesn't return `push_preferences`, even with a user_id,
+    // so the responses above are the read back. If this starts
     // failing, assert the preferences here instead.
     const member = await getServerChannel(client, channelCid, {
       user_id: userId1,

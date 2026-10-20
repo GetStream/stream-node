@@ -14,12 +14,11 @@ import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
 import { waitForAppSetting } from '../../../helpers/server';
 import { retry } from '../../../helpers/wait';
+import { jpeg } from '../../../helpers/uploads';
 
 const DOCS = 'chat/_default/06-app_and_channel_settings/02-app_settings.md';
 
 // A 4x4 JPEG, uploaded once as `.jpeg` (allowed) and once as `.jpg` (not in the docs list).
-const JPEG_BASE64 =
-  '/9j/4AAQSkZJRgABAQAAkACQAAD/4QCARXhpZgAATU0AKgAAAAgABAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAIdpAAQAAAABAAAATgAAAAAAAACQAAAAAQAAAJAAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAASgAwAEAAAAAQAAAAQAAAAA/8AAEQgABAAEAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAgICAgICAwICAwUDAwMFBgUFBQUGCAYGBgYGCAoICAgICAgKCgoKCgoKCgwMDAwMDA4ODg4ODw8PDw8PDw8PD//bAEMBAgICBAQEBwQEBxALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/dAAQAAf/aAAwDAQACEQMRAD8A/fSJPL34JO5i3J6Z7D2qXNNHeloA/9k=';
 
 // Short CSV content is sniffed as text/plain by the API, so use a few rows.
 const CSV = 'name,age,city\nalice,30,Amsterdam\nbob,25,Boulder\n'.repeat(20);
@@ -219,7 +218,6 @@ describe(DOCS, () => {
       allowed_mime_types: ['image/gif', 'image/jpeg', 'image/png'],
     });
 
-    const jpeg = Buffer.from(JPEG_BASE64, 'base64');
     // A .webp upload is rejected once the setting has reached the API nodes.
     const webpError = await retry(async () => {
       const message = await uploadError(() =>

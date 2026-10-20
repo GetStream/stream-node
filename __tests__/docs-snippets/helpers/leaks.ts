@@ -1,5 +1,10 @@
 import type { StreamClient } from '../../../index';
 import { DOCS_TEST_PREFIX } from './ids';
+import { deleteMembershipLevel } from './feeds';
+import {
+  deleteExternalStorageIfExists,
+  deleteFeedModerationTemplate,
+} from './server';
 import { hardDeleteUsers } from './users';
 import { retry, retryOnRateLimit, waitForTask } from './wait';
 
@@ -19,14 +24,14 @@ export type Leftover = {
 
 /**
  * Decides which resources are leftovers. `matches` gets ids / names (and a poll's
- * `created_by_id`). Channels can't be searched by id prefix: they are found by
- * `channelIds`, and with `channelsCreatedSince` also by listing every channel created
- * since then and keeping the ones whose id `matches`.
+ * `created_by_id`). Channels, calls and feeds can't be searched by id prefix: they are
+ * found by `ids`, and with `createdSince` also by listing every one created since then
+ * and keeping the ones whose id `matches`.
  */
 export type LeftoverFilter = {
   matches: (idOrName: string) => boolean;
-  channelIds?: string[];
-  channelsCreatedSince?: Date;
+  ids?: string[];
+  createdSince?: Date;
 };
 
 /** Channel queries can't page past this offset. */
@@ -47,6 +52,13 @@ const hardDeleteChannels = async (client: StreamClient, cids: string[]) => {
  * used for poll queries / deletes.
  */
 const POLL_QUERY_USER_ID = 'docs-snippets-leak-checker';
+
+/**
+ * Moderation custom views are only listed for an admin `user_id`, and `listQueues`
+ * re-creates a deleted user, so a permanent admin helper user (outside the docs-test
+ * prefix) is used.
+ */
+const QUEUE_QUERY_USER_ID = 'docs-snippets-leak-checker-admin';
 
 type Scanner = (
   client: StreamClient,
@@ -98,7 +110,7 @@ const scanners: Record<string, Scanner> = {
     return found;
   },
 
-  async channels(client, { matches, channelIds = [], channelsCreatedSince }) {
+  async channels(client, { matches, ids: channelIds = [], createdSince }) {
     const found = new Map<string, Leftover>();
     const add = (channel: { cid: string; created_at: Date }) =>
       found.set(channel.cid, {
@@ -121,18 +133,18 @@ const scanners: Record<string, Scanner> = {
       });
       for (const { channel } of channels) if (channel) add(channel);
     }
-    if (channelsCreatedSince) {
+    if (createdSince) {
       const limit = 30;
       for (let offset = 0; ; offset += limit) {
         if (offset > MAX_CHANNEL_OFFSET) {
           throw new Error(
-            `more than ${MAX_CHANNEL_OFFSET} channels created since ${channelsCreatedSince.toISOString()}, the rest were not scanned`,
+            `more than ${MAX_CHANNEL_OFFSET} channels created since ${createdSince.toISOString()}, the rest were not scanned`,
           );
         }
         const { channels } = await retryOnRateLimit(() =>
           client.chat.queryChannels({
             filter_conditions: {
-              created_at: { $gte: channelsCreatedSince.toISOString() },
+              created_at: { $gte: createdSince.toISOString() },
             },
             sort: [{ field: 'created_at', direction: 1 }],
             limit,
@@ -360,9 +372,258 @@ const scanners: Record<string, Scanner> = {
     } while (next);
     return found;
   },
+
+  async externalStorages(client, { matches }) {
+    const { external_storages } = await client.listExternalStorage();
+    return Object.keys(external_storages)
+      .filter((name) => matches(name))
+      .map((name) => ({
+        kind: 'external storage',
+        id: name,
+        remove: () => deleteExternalStorageIfExists(client, name),
+      }));
+  },
+
+  async callTypes(client, { matches }) {
+    const { call_types } = await client.video.listCallTypes();
+    return Object.values(call_types)
+      .filter((type) => matches(type.name))
+      .map((type) => ({
+        kind: 'call type',
+        id: type.name,
+        createdAt: type.created_at,
+        remove: () => client.video.deleteCallType({ name: type.name }),
+      }));
+  },
+
+  async calls(client, { matches, ids = [], createdSince }) {
+    const found = new Map<string, Leftover>();
+    // Paged by `created_at`: a `next` request must repeat the original `sort`, and
+    // without one it fails with code 4 "cannot specify sort and next/prev at the same
+    // time" (2026-10-16).
+    const scan = async (filter_conditions: Record<string, unknown>) => {
+      let after: Date | undefined;
+      for (;;) {
+        const response = await retryOnRateLimit(() =>
+          client.video.queryCalls({
+            filter_conditions: after
+              ? { $and: [filter_conditions, { created_at: { $gt: after } }] }
+              : filter_conditions,
+            sort: [{ field: 'created_at', direction: 1 }],
+            limit: 100,
+          }),
+        );
+        for (const { call } of response.calls) {
+          if (!matches(call.id)) continue;
+          found.set(call.cid, {
+            kind: 'call',
+            id: call.cid,
+            createdAt: call.created_at,
+            remove: () =>
+              client.video.deleteCall({
+                type: call.type,
+                id: call.id,
+                hard: true,
+              }),
+          });
+        }
+        if (response.calls.length < 100) return;
+        after = response.calls[response.calls.length - 1].call.created_at;
+      }
+    };
+    for (const batch of chunk(ids, 100)) await scan({ id: { $in: batch } });
+    if (createdSince) {
+      await scan({ created_at: { $gte: createdSince.toISOString() } });
+    }
+    return [...found.values()];
+  },
+
+  async feedGroups(client, { matches }) {
+    const { groups } = await client.feeds.listFeedGroups({
+      include_soft_deleted: true,
+    });
+    return Object.values(groups)
+      .filter((group) => matches(group.id))
+      .map((group) => ({
+        kind: 'feed group',
+        id: group.id,
+        createdAt: group.created_at,
+        remove: () =>
+          client.feeds.deleteFeedGroup({ id: group.id, hard_delete: true }),
+      }));
+  },
+
+  async feeds(client, { matches, ids = [], createdSince }) {
+    const found = new Map<string, Leftover>();
+    const scan = async (filter: Record<string, unknown>) => {
+      let next: string | undefined;
+      do {
+        const response = await retryOnRateLimit(() =>
+          client.feeds.queryFeeds({ filter, limit: 100, next }),
+        );
+        for (const feed of response.feeds) {
+          if (!matches(feed.id)) continue;
+          found.set(feed.feed, {
+            kind: 'feed',
+            id: feed.feed,
+            createdAt: feed.created_at,
+            remove: () =>
+              client.feeds.deleteFeed({
+                feed_group_id: feed.group_id,
+                feed_id: feed.id,
+                hard_delete: true,
+              }),
+          });
+        }
+        next = response.next;
+      } while (next);
+    };
+    for (const batch of chunk(ids, 100)) await scan({ id: { $in: batch } });
+    if (createdSince) {
+      await scan({ created_at: { $gte: createdSince.toISOString() } });
+    }
+    return [...found.values()];
+  },
+
+  async membershipLevels(client, { matches }) {
+    const found: Leftover[] = [];
+    let next: string | undefined;
+    do {
+      const response = await client.feeds.queryMembershipLevels({
+        limit: 100,
+        next,
+      });
+      for (const level of response.membership_levels) {
+        if (!matches(level.id) && !matches(level.name)) continue;
+        found.push({
+          kind: 'membership level',
+          id: level.id,
+          createdAt: level.created_at,
+          remove: () => deleteMembershipLevel(client, level.id),
+        });
+      }
+      next = response.next;
+    } while (next);
+    return found;
+  },
+
+  async collections(client, { matches }) {
+    const found: Leftover[] = [];
+    let next: string | undefined;
+    do {
+      const response = await client.feeds.queryCollections({
+        limit: 100,
+        next,
+      });
+      for (const collection of response.collections) {
+        if (!matches(collection.name) && !matches(collection.id)) continue;
+        const ref = `${collection.name}:${collection.id}`;
+        found.push({
+          kind: 'collection',
+          id: ref,
+          createdAt: collection.created_at,
+          remove: () =>
+            client.feeds.deleteCollections({ collection_refs: [ref] }),
+          removeMany: async (refs) => {
+            for (const batch of chunk(refs, 100)) {
+              await client.feeds.deleteCollections({ collection_refs: batch });
+            }
+          },
+        });
+      }
+      next = response.next;
+    } while (next);
+    return found;
+  },
+
+  async feedViews(client, { matches }) {
+    const { views } = await client.feeds.listFeedViews();
+    return Object.values(views)
+      .filter((view) => matches(view.id))
+      .map((view) => ({
+        kind: 'feed view',
+        id: view.id,
+        remove: () => client.feeds.deleteFeedView({ id: view.id }),
+      }));
+  },
+
+  async feedModerationTemplates(client, { matches }) {
+    const { templates } = await client.moderation.v2QueryTemplates();
+    return templates
+      .filter((template) => matches(template.name))
+      .map((template) => ({
+        kind: 'feed moderation template',
+        id: template.name,
+        createdAt: template.created_at,
+        remove: () => deleteFeedModerationTemplate(client, template.name),
+      }));
+  },
+
+  async policyTestSets(client, { matches }) {
+    const { sets } = await client.moderation.listPolicyTestSets();
+    return sets
+      .filter((set) => matches(set.name))
+      .map((set) => ({
+        kind: 'moderation evaluation set',
+        id: `${set.id} (${set.name})`,
+        createdAt: set.created_at,
+        remove: () => client.moderation.deletePolicyTestSet({ id: set.id }),
+      }));
+  },
+
+  async moderationQueues(client, { matches }) {
+    await client.upsertUsers([
+      {
+        id: QUEUE_QUERY_USER_ID,
+        name: 'Docs snippets leak checker (admin)',
+        role: 'admin',
+      },
+    ]);
+    const { queues } = await client.moderation.listQueues({
+      user_id: QUEUE_QUERY_USER_ID,
+    });
+    return queues
+      .filter((queue) => matches(queue.name))
+      .map((queue) => ({
+        kind: 'moderation view',
+        id: `${queue.id} (${queue.name})`,
+        createdAt: queue.created_at,
+        remove: () =>
+          client.moderation.deleteQueue({
+            id: queue.id,
+            user_id: QUEUE_QUERY_USER_ID,
+          }),
+      }));
+  },
+
+  async moderationRules(client, { matches }) {
+    const found: Leftover[] = [];
+    let next: string | undefined;
+    do {
+      const response = await client.moderation.queryModerationRules({
+        limit: 100,
+        next,
+      });
+      for (const rule of response.rules) {
+        if (!matches(rule.id) && !matches(rule.name)) continue;
+        found.push({
+          kind: 'moderation rule',
+          id: `${rule.id} (${rule.name})`,
+          createdAt: rule.created_at,
+          remove: () => client.moderation.deleteModerationRule({ id: rule.id }),
+        });
+      }
+      next = response.next;
+    } while (next);
+    return found;
+  },
 };
 
-/** Resource kinds that are checked. Anything else (reminders, devices, drafts, ...) is per-user and goes away with the user. */
+/**
+ * Resource kinds that are checked. Anything else (reminders, devices, drafts, ...) is
+ * per-user and goes away with the user; activities, comments and reactions go away with
+ * their feed or user.
+ */
 export const SCANNED_KINDS = Object.keys(scanners);
 
 /**
@@ -399,7 +660,15 @@ export const removeLeftovers = async (leftovers: Leftover[]) => {
     'segment',
     'channel',
     'channel type',
+    'call',
+    'call type',
+    'external storage',
+    'feed',
+    'feed group',
+    'membership level',
+    'feed view',
     'user',
+    'moderation rule',
     'moderation config',
   ];
   const rank = (kind: string) =>

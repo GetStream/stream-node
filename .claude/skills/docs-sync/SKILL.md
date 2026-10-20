@@ -6,7 +6,7 @@ argument-hint: "[path to the getstream.io checkout or its content/docs folder]"
 
 # Docs sync
 
-The tests in `__tests__/docs-snippets/` run the server-side `Node.js` snippets of the Stream docs (the chat Node sidebar and the platform sidebar) against a real Stream app with the `@stream-io/node-sdk` server client. Each docs fence has exactly one marked region in a test, and `yarn test:docs:sync` checks that they still agree. This skill makes them agree again after either side changed.
+The tests in `__tests__/docs-snippets/` run the server-side `Node.js` snippets of the Stream docs (the chat, activity feeds v3 and moderation Node sidebars, the video API sidebar and the platform sidebar: `SIDEBAR_FILES` in `sync/parse.ts`) against a real Stream app with the `@stream-io/node-sdk` server client. Each docs fence has exactly one marked region in a test, and `yarn test:docs:sync` checks that they still agree. This skill makes them agree again after either side changed.
 
 **Docs have preference.** When a region and its fence differ, the docs version is the source of truth: update the test to match it. Change the docs only when the docs snippet doesn't work (type error against the node SDK, runtime error that isn't caused by test setup, wrong request or response shape), and then write the fix back from the test.
 
@@ -38,8 +38,7 @@ Before editing tests, read:
 
 1. `__tests__/docs-snippets/AGENTS.md`: test conventions, test app facts and API quirks. Follow it.
 2. `__tests__/docs-snippets/README.md`: layout, commands, push credentials and the snippet-marker format (fence key, COPY, `DOCS_SYNC_WRITE`).
-3. `__tests__/docs-snippets/docs-snippets-todo.md`: the open issues. A difference may be the docs fixing one of them.
-4. `$DOCS_DIR/AGENTS.md`, if it exists: the docs writing rules (e.g. no em-dashes).
+3. `$DOCS_DIR/AGENTS.md`, if it exists: the docs writing rules (e.g. no em-dashes).
 
 Live tests need `STREAM_API_KEY` and `STREAM_SECRET` of the docs test app in the repo root `.env` (see `.env-example`); `DOCS_PUSH_FIREBASE_CREDENTIALS` is optional (push tests are skipped without it). If the key or secret is missing, ask the user for them. Without them you can still sync, typecheck and lint, but you can't tell whether a changed snippet works: say so in the report, and don't change any docs snippet in that case.
 
@@ -49,9 +48,9 @@ Before the sync check, make sure every server-side snippet on the tested pages h
 
 ### Scope
 
-- Pages: every page of the `[chat][node].json` and `[platform][default].json` sidebars (`$DOCS_DIR/_sidebars/`) under `chat/` or `platform/`, the same list as `findSidebarPages` in `sync/parse.ts`.
+- Pages: every page of the tested sidebars (`SIDEBAR_FILES` in `sync/parse.ts`, `$DOCS_DIR/_sidebars/`) under `PAGE_PREFIXES`, the same list as `findSidebarPages`.
 - Fences: every JS fence (`js`, `javascript`, `ts`, `typescript`) labelled `JavaScript` or unlabelled, together with its tab group: the other fences in the same `<Tabs>` block, or the fence alone when it isn't in one.
-- Out of scope: `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, and comment-only fences.
+- Out of scope: `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, fences listed in `EXCLUDED_FENCES` (`sync/parse.ts`), and comment-only fences.
 
 List them with a throwaway script in the scratchpad (page, heading, line, the labels in the group, the code). Then classify each group by its tabs first and the prose second:
 
@@ -90,7 +89,7 @@ It runs without network and reports four kinds of failure. Collect them all, gro
 
 | Failure                                    | Meaning                                                                                                                                                                 |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `snippets without a test region`           | A `Node.js` fence on a tested sidebar page (chat Node, platform) has no region: a new snippet, a new page, or a fence whose key changed (see the next row).             |
+| `snippets without a test region`           | A `Node.js` fence on a tested sidebar page (`SIDEBAR_FILES`) has no region: a new snippet, a new page, or a fence whose key changed (see the next row).                 |
 | mislabelled JS fences                      | A JS fence is unlabelled or has a label other than `JavaScript`, `React`, `React Native`, `Node.js` or their stream-chat-js@9 versions.                                 |
 | `no such fence`                            | A region's key (`docs`, `heading`, `tab`, `index`) matches no fence: the fence was removed, moved, or its heading was renamed. The failure lists the page's fence keys. |
 | `<region> differs from <docs file>:<line>` | The region's code and the fence's code differ.                                                                                                                          |
@@ -114,8 +113,8 @@ Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` fo
 3. Run the page's test: `yarn test:docs <test file>`, then `yarn types:docs`.
 4. If it passes, done. If it fails, decide why:
    - **Test setup** (missing user, permission, channel config, eventual consistency): fix the setup, not the region.
-   - **API spec / generator or node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec, the generated SDK code or the hand-written node SDK code is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): add it to "API spec / generator issues" or "Node SDK issues" in the TODO and report it. `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
-   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and report it with the evidence (see "Report"). Don't add it to the TODO.
+   - **API spec / generator or node SDK issue**: the snippet is correct and the API accepts it, but the OpenAPI spec, the generated SDK code or the hand-written node SDK code is wrong (missing or wrongly typed fields, wrong response types). Don't change the snippet or `src/` (`src/gen` is generated, hand edits are lost): report it with the evidence (see "Report"). `it.skip` doesn't help with type errors: skipped bodies are still typechecked.
+   - **API behavior issue**: the API behaves differently from what the docs say. Assert what it actually does, and report it with the evidence (see "Report").
    - **The docs snippet is wrong**: fix it as described in "Broken docs snippet" below.
    - **Not sure** whether the snippet or the setup is wrong: don't touch the docs. Leave the test failing or put the snippet in `it.skip('BLOCKED: <reason>', ...)` and report it as an open question.
 
@@ -124,17 +123,16 @@ Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` fo
 - **Heading renamed or fence moved/reordered**: update the marker's `heading` / `tab` / `index` to the key the failure lists (it matches the fence with the same code).
 - **Fence removed from the docs**: remove the region together with its `it` (or the part of the `it` that only exists for it) and any setup only it used. If a whole page was removed or left the sidebar, remove its test file.
 
-When a fix lands that resolves an entry in `docs-snippets-todo.md` (the docs fixed a recorded docs bug, say), remove that entry.
-
 ### New fence without a region
 
-Write a test for it in the page's test file (create the file if the page is new). The path mirrors the docs path relative to `content/docs/`, without `/_default`: `chat/_default/04-messages/01-send_message.md` → `__tests__/docs-snippets/pages/chat/04-messages/01-send_message.test.ts`. Follow `__tests__/docs-snippets/AGENTS.md` (isolation with `uniqueId`, `Cleanup`, one `it` per snippet, basic `expect`s after each region). In short:
+Write a test for it in the page's test file (create the file if the page is new). The path mirrors the docs path relative to `content/docs/`, without `/_default`: `chat/_default/04-messages/01-send_message.md` → `__tests__/docs-snippets/pages/chat/04-messages/01-send_message.test.ts`, `activity-feeds/v3-latest/_default/05-activities/01-activities.md` → `__tests__/docs-snippets/pages/activity-feeds/v3-latest/05-activities/01-activities.test.ts`. Follow `__tests__/docs-snippets/AGENTS.md` (isolation with `uniqueId`, `Cleanup`, one `it` per snippet, basic `expect`s after each region). In short:
 
 - Run the snippet with `const client = getServerClient()` (`helpers/clients.ts`), named `client` as in the docs. Users the snippet acts for (`user_id`, `created_by_id`) must exist first, with `uniqueId` ids.
 - Everything between the markers is the docs code; setup goes before, assertions after. Fragments get the minimal surrounding code to compile and run.
 - Comment-only fences need no region.
 - A fence that isn't code (e.g. a bare data shape) is a docs bug: rewrite it as code that runs (e.g. reading and logging the fields), and report it. Never remove a `Node.js` fence just because it is a fragment or can't be tested: wrap it, or put it in `it.skip`.
 - A snippet the test app can't run goes in `it.skip('BLOCKED: <reason>', ...)` so it is still typechecked; report the exact API error.
+- **Another SDK's code in a `Node.js` fence** (e.g. Feeds v2 `getstream` client code: `client.flagUser`, `client.user(id).flag`, `ctx.alice.feed(...)`): it isn't `@stream-io/node-sdk` code and isn't ours to update. Don't rewrite or relabel it: add the fence to `EXCLUDED_FENCES` in `sync/parse.ts` with a reason, and report it.
 - **Client-side code in a `Node.js` fence** (needs a connected user or a WebSocket, or a method the node SDK doesn't have: `connectUser`, `channel.watch()`, `client.on(...)`): never test different code from what the fence shows. If the node SDK can do the same thing, make the smallest docs fix that turns the fence into that call (`channel.watch()` → `channel.getOrCreate()`, `user_id` instead of `connectUser`). If it can't (events, WebSocket, local client state), the fence is mislabelled: label it `JavaScript`. Its `Node.js (stream-chat-js@9)` partner, if any, becomes `JavaScript (stream-chat-js@9)`, code unchanged. Use `it.skip('BLOCKED: client-side code: ...')` only while that decision is open. Report it either way. To check what a server-side endpoint accepts, read the SDK source (`src/StreamClient.ts`, `src/StreamChatClient.ts`, `src/StreamChannel.ts`, `src/gen/`) or the OpenAPI spec (`chat-serverside-api.json` in https://github.com/GetStream/protocol/tree/main/openapi/v2).
 - **Push and webhooks**: don't test that notifications or webhook events arrive; assert the response or read the setting back (`getApp()`, `listPushProviders()`, ...). Never touch or use the test app's own push provider (see "Test app" in `AGENTS.md`): only use providers the test creates with `uniqueId` names. Snippets that need real credentials run in `describe.skipIf(!hasFirebaseCredentials)` (`helpers/push.ts`); the README's "Push credentials" section has the details.
 - **App-level side effects** (app settings, built-in channel types, grants, webhook URLs, push config, ...): read the original value first and restore it with `cleanup.add(...)`, or the file fails with `DRIFT`.
@@ -155,7 +153,7 @@ Only when the docs snippet itself doesn't work (wrong method name or signature, 
    Never run `npm run ci` or `npm run lint` for the whole docs repo: they rewrite thousands of files, including images.
 5. Record the fix for the report: before/after, reason, and evidence (error message or type error).
 
-Docs bugs you leave unfixed (prose, non-`Node.js` fences, or waiting for a decision) go to "Open docs bugs" in the TODO.
+Docs bugs you leave unfixed (prose, non-`Node.js` fences, or waiting for a decision) go in the report (see "Report").
 
 ## 6. Gates
 
@@ -190,6 +188,7 @@ End with:
 4. **New and removed tests**: snippets added, regions removed with their fences, renamed markers.
 5. **Docs changes**: every fence changed in `$DOCS_DIR` (fixes, labels, client-side code), each with before/after, reason and evidence. These need human review.
 6. **Skipped snippets**: new `it.skip` / credential-gated snippets and why.
-7. **TODO changes**: entries added to or removed from the TODO lists.
-8. **API behavior issues**: where the API behaves differently from what the docs say, each with the request, the observed result, what the docs claim, and how the test handles it.
-9. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.
+7. **API spec / generator and node SDK issues**: where the snippet is correct and the API accepts it, but the spec, the generated code or the hand-written node SDK code is wrong. Each with the fence, the type or runtime error, what the API actually accepts or returns, and how the test handles it (`it.skip`, local cast, or a `yarn types:docs` error that stays until the SDK is fixed).
+8. **Open docs bugs**: docs bugs left unfixed (prose, non-`Node.js` fences, or waiting for a decision), each with the page, the problem and the evidence.
+9. **API behavior issues**: where the API behaves differently from what the docs say, each with the request, the observed result, what the docs claim, and how the test handles it.
+10. **Proposed additions to `__tests__/docs-snippets/AGENTS.md`**: short, reusable lessons. Skip page-specific details.

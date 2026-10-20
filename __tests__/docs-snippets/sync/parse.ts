@@ -75,18 +75,48 @@ const NO_SDK_DISCLOSURE_RE =
 export const ALLOWED_JS_LABELS = [JS_TAB, NODE_TAB, ...OUT_OF_SCOPE_TABS];
 
 /**
- * Sidebars whose pages' `Node.js` fences are tested: the chat Node sidebar and the
- * platform docs (shared by all SDKs).
+ * Sidebars whose pages' `Node.js` fences are tested: the chat, activity feeds (v3) and
+ * moderation Node sidebars, the video API (server-side) sidebar, and the platform docs
+ * (shared by all SDKs).
  */
-const SIDEBAR_FILES = ['[chat][node].json', '[platform][default].json'];
+const SIDEBAR_FILES = [
+  '[chat][node].json',
+  '[activity-feeds][node][v3].json',
+  '[moderation][node].json',
+  '[video][api].json',
+  '[platform][default].json',
+];
 /** Sidebar entries outside these docs are ignored. */
-const PAGE_PREFIXES = ['chat/', 'platform/'];
+const PAGE_PREFIXES = [
+  'chat/',
+  'activity-feeds/',
+  'moderation/',
+  'video/',
+  'platform/',
+];
 
 /**
  * Sidebar pages that are deliberately not validated (page path relative to
  * `content/docs`, reason).
  */
 export const EXCLUDED_PAGES: Record<string, string> = {};
+
+const FEEDS_V2_CLIENT =
+  'Feeds v2 code for the `getstream` package (a different SDK), not @stream-io/node-sdk';
+
+/**
+ * `Node.js` fences that are deliberately not tested (fence id as printed by `fenceId`,
+ * reason): code for another SDK that the docs label `Node.js`. They are not ours to
+ * update. Both checks skip them, and the label check accepts their label.
+ */
+export const EXCLUDED_FENCES: Record<string, string> = {
+  'moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md > "Flag User" > Node.js #1':
+    FEEDS_V2_CLIENT,
+  'moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md > "Flag Activity" > Node.js #1':
+    FEEDS_V2_CLIENT,
+  'moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md > "Flag Reaction" > Node.js #1':
+    FEEDS_V2_CLIENT,
+};
 
 const dedent = (lines: string[]) => {
   const indents = lines
@@ -121,6 +151,8 @@ export const parseDocsFences = (
   const counts = new Map<string, number>();
   let heading = '';
   let noSdk = false;
+  // Label of the enclosing `<tabs-item label="...">` (video docs), for fences without one.
+  let tabsItemLabel: string | undefined;
   for (let i = 0; i < lines.length; i++) {
     const open = /^(\s*)(`{3,})(\S*)(.*)$/.exec(lines[i]);
     if (!open) {
@@ -128,6 +160,9 @@ export const parseDocsFences = (
       if (h) heading = h[1];
       if (NO_SDK_DISCLOSURE_RE.test(lines[i])) noSdk = true;
       else if (/^\s*<\/disclosure>/i.test(lines[i])) noSdk = false;
+      const item = /^\s*<tabs-item\b[^>]*\blabel="([^"]*)"/i.exec(lines[i]);
+      if (item) tabsItemLabel = item[1];
+      else if (/^\s*<\/tabs-item>/i.test(lines[i])) tabsItemLabel = undefined;
       continue;
     }
     const [, indent, ticks, lang, rest] = open;
@@ -137,7 +172,8 @@ export const parseDocsFences = (
       !new RegExp(`^\\s*${ticks}\\s*$`).test(lines[end])
     )
       end++;
-    const tab = /label="([^"]*)"/.exec(rest)?.[1] ?? 'unlabelled';
+    const tab =
+      /label="([^"]*)"/.exec(rest)?.[1] ?? tabsItemLabel ?? 'unlabelled';
     if (JS_LANGS.has(lang.toLowerCase())) {
       const countKey = `${heading}\u0000${tab}`;
       const index = (counts.get(countKey) ?? 0) + 1;
@@ -305,7 +341,12 @@ export const formatForDocs = async (code: string, markdownFile: string) => {
   }
 };
 
-type SidebarItem = { markdown?: string; children?: SidebarItem[] };
+type SidebarItem = {
+  markdown?: string;
+  children?: SidebarItem[];
+  /** Name of a shared item (or item list) in `_sidebars/fragments/<name>.json`. */
+  $fragment?: string;
+};
 
 /**
  * Pages of the tested sidebars (paths relative to `content/docs`), minus
@@ -318,6 +359,18 @@ export const findSidebarPages = () => {
       const page = entry.markdown;
       if (page && PAGE_PREFIXES.some((prefix) => page.startsWith(prefix)))
         pages.add(page);
+      if (entry.$fragment) {
+        const fragment = path.join(
+          DOCS_DIR,
+          '_sidebars',
+          'fragments',
+          `${entry.$fragment}.json`,
+        );
+        // A fragment is one item or a list of items.
+        const items = JSON.parse(fs.readFileSync(fragment, 'utf8')) as
+          SidebarItem | SidebarItem[];
+        walk(Array.isArray(items) ? items : [items]);
+      }
       walk(entry.children);
     }
   };
