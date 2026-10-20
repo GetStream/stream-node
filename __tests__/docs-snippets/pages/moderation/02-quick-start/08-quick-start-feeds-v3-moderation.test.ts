@@ -71,7 +71,7 @@ describe(DOCS, () => {
       ai_text_config: {
         rules: [
           { label: 'SPAM', action: 'flag' },
-          { label: 'MORAL_HARASSMENT', action: 'remove' },
+          { label: 'HATRED', action: 'remove' },
         ],
       },
       block_list_config: {
@@ -95,7 +95,7 @@ describe(DOCS, () => {
       })),
     ).toEqual([
       { label: 'SPAM', action: 'flag' },
-      { label: 'MORAL_HARASSMENT', action: 'remove' },
+      { label: 'HATRED', action: 'remove' },
     ]);
     expect(
       config?.block_list_config?.rules?.map(({ name, action }) => ({

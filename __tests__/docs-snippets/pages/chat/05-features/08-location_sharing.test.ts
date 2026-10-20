@@ -146,15 +146,8 @@ describe(DOCS, () => {
     });
 
     // Enabling it for a channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       shared_locations: true,
     });
     // #endregion snippet

@@ -87,7 +87,6 @@ describe(DOCS, () => {
         images: ['example.com/test.jpg'],
       },
       config_key: configKey,
-      options: { force_sync: true },
     });
     // #endregion snippet
 

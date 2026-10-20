@@ -225,7 +225,7 @@ export const waitForReviewItem = (
 
 /**
  * Deletes a Feeds v2 moderation template. The generated `v2DeleteTemplate()` takes no
- * arguments, but the API needs `{ name }` in the DELETE body (see the TODO).
+ * arguments, but the API needs `{ name }` in the DELETE body.
  */
 export const deleteFeedModerationTemplate = (
   client: StreamClient,

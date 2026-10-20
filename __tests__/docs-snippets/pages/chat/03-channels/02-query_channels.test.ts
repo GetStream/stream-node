@@ -322,7 +322,7 @@ describe('chat/_default/03-channels/02-query_channels.md', () => {
       // #endregion snippet
 
       // The docs say this also returns the hidden channel, but the API leaves it out
-      // without a top-level `cid` filter (see the TODO).
+      // without a top-level `cid` filter.
       expect(sorted(idsOf(response))).toEqual(sorted([mutedId, plainId]));
     });
 
@@ -363,7 +363,7 @@ describe('chat/_default/03-channels/02-query_channels.md', () => {
       // #endregion snippet
 
       // The docs say the hidden channel in `cids` is returned too, but inside `$and`
-      // the hidden filter has no effect (see the TODO).
+      // the hidden filter has no effect.
       expect(sorted(idsOf(response))).toEqual([mutedId]);
     });
   });

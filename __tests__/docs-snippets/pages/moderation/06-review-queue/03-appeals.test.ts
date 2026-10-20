@@ -257,7 +257,7 @@ describe(DOCS, () => {
     expect(item).toMatchObject({ id: appealId, status: 'submitted' });
   });
 
-  it('accepts appeals while unbanning and unblocking', async () => {
+  it('accepts appeals while unbanning and restoring', async () => {
     // A ban appeal.
     const bannedId = await bannedUser();
     const { appeal_id: appealId } = await client.moderation.appeal({
@@ -294,18 +294,16 @@ describe(DOCS, () => {
       appeal_id: appealId,
       unban: {
         decision_reason: 'I am unbanning a user',
-        // channel_cids: ["cid1", "cid2"], // optional: for channel-specific unbans
+        // channel_cid: "messaging:general", // optional: unban in this channel only
       },
       user_id: moderatorId,
     });
 
-    // Approve appeal while unblocking content
+    // Approve appeal while restoring content
     await client.moderation.submitAction({
-      action_type: 'unblock',
+      action_type: 'restore',
       item_id: itemId,
-      unblock: {
-        decision_reason: 'I am unblocking content',
-      },
+      restore: { decision_reason: 'I am restoring content' },
       user_id: moderatorId,
     });
     // #endregion snippet
@@ -317,7 +315,7 @@ describe(DOCS, () => {
     expect(await getBans(bannedId)).toEqual([]);
     expect(await getAppeal(blockedAppealId)).toMatchObject({
       status: 'accepted',
-      decision_reason: 'I am unblocking content',
+      decision_reason: 'I am restoring content',
     });
     const { message } = await client.chat.getMessage({ id: blocked.id });
     expect(message.type).toBe('regular');

@@ -4282,8 +4282,6 @@ export interface CampaignStatsResponse {
   stats_users_sent: number;
 }
 
-export interface CancelImportV2TaskRequest {}
-
 export interface CancelImportV2TaskResponse {
   /**
    * Duration of the request in milliseconds
@@ -6546,8 +6544,6 @@ export interface CommentUpdatedEvent {
   user?: UserResponseCommonFields;
 }
 
-export interface CommitMessageRequest {}
-
 export interface CompositeRecordingResponse {
   status: string;
 }
@@ -8680,8 +8676,6 @@ export interface EncryptionSettingsResponse {
   mode: 'available' | 'disabled' | 'auto-on';
 }
 
-export interface EndCallRequest {}
-
 export interface EndCallResponse {
   /**
    * Duration of the request in milliseconds
@@ -8693,6 +8687,7 @@ export interface EnrichedActivity {
   foreign_id?: string;
   id?: string;
   score?: number;
+  time?: string;
   verb?: string;
   to?: Array<string>;
   actor?: Data;
@@ -8739,15 +8734,15 @@ export interface EnrichedReaction {
   activity_id: string;
   kind: string;
   user_id: string;
+  created_at?: string;
   id?: string;
   parent?: string;
+  updated_at?: string;
   target_feeds?: Array<string>;
   children_counts?: Record<string, number>;
-  created_at?: Time;
   data?: Record<string, any>;
   latest_children?: Record<string, Array<EnrichedReaction>>;
   own_children?: Record<string, Array<EnrichedReaction>>;
-  updated_at?: Time;
   user?: Data;
 }
 
@@ -9024,8 +9019,6 @@ export interface ExportChannelsResponse {
    */
   task_id: string;
 }
-
-export interface ExportFeedUserDataRequest {}
 
 export interface ExportFeedUserDataResponse {
   duration: string;
@@ -14099,6 +14092,10 @@ export interface ModerationFlagResponse {
   result: Array<Record<string, any>>;
   content_published_at?: TimestampNS;
   entity_creator_id?: string;
+  /**
+   * Unique identifier of the flag
+   */
+  id?: string;
   reason?: string;
   review_queue_item_id?: string;
   labels?: Array<string>;
@@ -18670,8 +18667,6 @@ export interface RestoreCommentResponse {
   comment: CommentResponse;
 }
 
-export interface RestoreFeedGroupRequest {}
-
 export interface RestoreFeedGroupResponse {
   duration: string;
   feed_group: FeedGroupResponse;
@@ -18797,6 +18792,10 @@ export interface ReviewQueueItemResponse {
    * When the item was reviewed
    */
   reviewed_at?: TimestampNS;
+  /**
+   * IDs of the item's flags a moderator marked as false positives
+   */
+  false_positive_flags?: Array<string>;
   /**
    * Teams associated with this item
    */
@@ -20090,8 +20089,6 @@ export interface SendReactionResponse {
   reaction: ReactionResponse;
 }
 
-export interface SendScheduledMessageNowRequest {}
-
 export interface SendScheduledMessageNowResponse {
   /**
    * Duration of the request in milliseconds
@@ -20478,8 +20475,6 @@ export interface StartFrameRecordingResponse {
   duration: string;
 }
 
-export interface StartHLSBroadcastingRequest {}
-
 export interface StartHLSBroadcastingResponse {
   duration: string;
   /**
@@ -20487,8 +20482,6 @@ export interface StartHLSBroadcastingResponse {
    */
   playlist_url: string;
 }
-
-export interface StartPolicyTestRunRequest {}
 
 export interface StartRTMPBroadcastsRequest {
   /**
@@ -20574,8 +20567,6 @@ export interface StartTranscriptionResponse {
   duration: string;
 }
 
-export interface StopAllRTMPBroadcastsRequest {}
-
 export interface StopAllRTMPBroadcastsResponse {
   /**
    * Duration of the request in milliseconds
@@ -20583,7 +20574,13 @@ export interface StopAllRTMPBroadcastsResponse {
   duration: string;
 }
 
-export interface StopCampaignRequest {}
+export interface StopCampaignResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  campaign?: CampaignResponse;
+}
 
 export interface StopClosedCaptionsRequest {
   stop_transcription?: boolean;
@@ -20596,16 +20593,12 @@ export interface StopClosedCaptionsResponse {
   duration: string;
 }
 
-export interface StopFrameRecordingRequest {}
-
 export interface StopFrameRecordingResponse {
   /**
    * Duration of the request in milliseconds
    */
   duration: string;
 }
-
-export interface StopHLSBroadcastingRequest {}
 
 export interface StopHLSBroadcastingResponse {
   /**
@@ -20834,23 +20827,46 @@ export interface SubmitActionResponse {
   item?: ReviewQueueItemResponse;
 }
 
+export interface SubmitModerationFeedbackItem {
+  /**
+   * Action originally produced for this item
+   */
+  current_recommended_action?: string;
+  /**
+   * ID of the moderation flag the feedback is about
+   */
+  flag_id?: string;
+  /**
+   * Image URL, required for kind=image
+   */
+  image_url?: string;
+  /**
+   * Content kind: text or image
+   */
+  kind?: 'text' | 'image';
+  /**
+   * Identifies this piece of content within the entity (keyframe ID, caption ID, message ID, title, description, thumbnail, ...)
+   */
+  reference?: string;
+  /**
+   * Text content, for kind=text
+   */
+  text?: string;
+  /**
+   * Classifications originally produced for this item
+   */
+  current_labels?: Array<string>;
+}
+
 export interface SubmitModerationFeedbackRequest {
-  /**
-   * The moderated content the moderator is providing feedback on
-   */
-  message: string;
-  /**
-   * Original publication time of the moderated content (RFC3339)
-   */
-  published_at: string;
-  /**
-   * Provider-side reference identifying the moderated content
-   */
-  reference: string;
   /**
    * Optional moderation channel UUID for context
    */
   channel_id?: string;
+  /**
+   * Moderator's confidence in this feedback (LOW, MEDIUM, HIGH, VERY_HIGH); forwarded to the moderation provider. Optional
+   */
+  confidence?: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
   /**
    * Action originally produced by the moderation system
    */
@@ -20860,9 +20876,46 @@ export interface SubmitModerationFeedbackRequest {
    */
   description?: string;
   /**
+   * ID of the user who created the entity
+   */
+  entity_creator_id?: string;
+  /**
+   * ID of the entity the items belong to
+   */
+  entity_id?: string;
+  /**
+   * Type of the entity the items belong to
+   */
+  entity_type?: string;
+  /**
    * Optional moderator-supplied action
    */
   expected_recommended_action?: string;
+  /**
+   * Whether the referenced flags are marked (true, default) or unmarked (false) as false positives
+   */
+  false_positive?: boolean;
+  /**
+   * false_positive (default) disputes existing detections; false_negative reports missed content: items carry the content, expected_labels is required and flag_id is not allowed
+   */
+  feedback_type?: 'false_positive' | 'false_negative';
+  /**
+   * The moderated content the moderator is providing feedback on. Required unless items is provided
+   */
+  message?: string;
+  /**
+   * Original publication time of the moderated content (RFC3339). Required unless items is provided
+   */
+  published_at?: string;
+  /**
+   * Provider-side reference identifying the moderated content. Required unless items is provided
+   */
+  reference?: string;
+  /**
+   * Review queue item the feedback targets, as an alternative to entity_type and entity_id
+   */
+  review_queue_item_id?: string;
+  user_id?: string;
   /**
    * Classifications originally produced by the moderation system
    */
@@ -20871,10 +20924,34 @@ export interface SubmitModerationFeedbackRequest {
    * Optional moderator-supplied classifications (up to 16 entries)
    */
   expected_labels?: Array<string>;
+  /**
+   * Pieces of content of one entity the feedback is about (1 to 50)
+   */
+  items?: Array<SubmitModerationFeedbackItem>;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
 }
 
 export interface SubmitModerationFeedbackResponse {
   duration: string;
+  /**
+   * ID of the first stored feedback item, when any was stored
+   */
+  feedback_id?: string;
+  /**
+   * Review queue item the feedback was applied to
+   */
+  review_queue_item_id?: string;
+  /**
+   * IDs of the item's flags marked as false positives after this request
+   */
+  false_positive_flags?: Array<string>;
+  /**
+   * IDs of the stored feedback items, one per submitted item
+   */
+  feedback_item_ids?: Array<string>;
 }
 
 export interface SubscriberAllMetrics {
@@ -21252,8 +21329,6 @@ export interface ThumbnailsSettingsRequest {
 export interface ThumbnailsSettingsResponse {
   enabled: boolean;
 }
-
-export interface Time {}
 
 export interface TimeWindow {
   from: string;
@@ -22166,7 +22241,10 @@ export interface UpdateAppRequest {
   reminders_interval?: number;
   reminders_max_members?: number;
   reminders_max_per_user?: number;
-  revoke_tokens_issued_before?: Date;
+  /**
+   * Revokes tokens issued before this date
+   */
+  revoke_tokens_issued_before?: Date | null;
   sns_key?: string;
   sns_secret?: string;
   sns_topic_arn?: string;
@@ -22369,6 +22447,15 @@ export interface UpdateCampaignRequest {
   channel_template?: CampaignChannelTemplate;
 }
 
+export interface UpdateCampaignResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  campaign?: CampaignResponse;
+  users?: PagerResponse;
+}
+
 export interface UpdateChannelPartialRequest {
   user_id?: string;
   unset?: Array<string>;
@@ -22483,9 +22570,8 @@ export interface UpdateChannelResponse {
 }
 
 export interface UpdateChannelTypeRequest {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
-  max_message_length: number;
+  automod?: 'disabled' | 'simple' | 'AI';
+  automod_behavior?: 'flag' | 'block' | 'shadow_block';
   blocklist?: string;
   blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
   connect_events?: boolean;
@@ -22493,6 +22579,7 @@ export interface UpdateChannelTypeRequest {
   custom_events?: boolean;
   delivery_events?: boolean;
   mark_messages_pending?: boolean;
+  max_message_length?: number;
   message_retention?: string;
   mutes?: boolean;
   partition_size?: number;
@@ -24647,10 +24734,6 @@ export interface VideoContentParameters {
   label_operator?: string;
   harm_labels?: Array<string>;
 }
-
-export interface VideoEndCallRequestPayload {}
-
-export interface VideoKickUserRequestPayload {}
 
 export interface VideoReactionOverTimeResponse {
   by_minute?: Array<CountByMinuteResponse>;

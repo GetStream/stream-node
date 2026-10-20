@@ -13,6 +13,8 @@ import type {
   CampaignResponse,
   CreateSegmentResponse,
   QuerySegmentTargetsResponse,
+  StopCampaignResponse,
+  UpdateCampaignResponse,
 } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -322,6 +324,7 @@ describe(DOCS, () => {
     });
     const updateCampaign = vi.spyOn(client.chat, 'updateCampaign');
     const startCampaign = vi.spyOn(client.chat, 'startCampaign');
+    const stopCampaign = vi.spyOn(client.chat, 'stopCampaign');
     const listedSegmentId = sharedSegmentId;
     const encodedNext = '';
     const anotherCampaignId = await createDraftCampaign();
@@ -378,10 +381,9 @@ describe(DOCS, () => {
 
     const [updated] = await Promise.all(
       updateCampaign.mock.results.map(
-        (r) => r.value as Promise<CampaignResponse>,
+        (r) => r.value as Promise<UpdateCampaignResponse>,
       ),
     );
-    // Typed as `CampaignResponse`, but the API wraps it in `campaign` (see the report).
     expect(updated).toMatchObject({
       campaign: {
         name: updatedName,
@@ -391,6 +393,9 @@ describe(DOCS, () => {
       },
     });
     expect(startCampaign).toHaveBeenCalledTimes(2);
+    const stopped = await (stopCampaign.mock.results[0]
+      .value as Promise<StopCampaignResponse>);
+    expect(stopped.campaign?.id).toBe(testCampaignId);
     const { campaign: started } = await client.chat.getCampaign({
       id: anotherCampaignId,
     });

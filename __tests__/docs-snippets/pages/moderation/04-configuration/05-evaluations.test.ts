@@ -148,7 +148,7 @@ describe(DOCS, () => {
     expect(baseline_run_id).toBe(runId);
   });
 
-  // The generated `listPolicyTestSets()` takes no arguments (TS2554, see the TODO), so
+  // The generated `listPolicyTestSets()` takes no arguments (TS2554), so
   // `limit` isn't sent: the API returns its default page size.
   it('lists evaluation sets', async () => {
     // #region snippet docs="moderation/_default/04-configuration/05-evaluations.md" heading="List evaluation sets" tab="Node.js" index=1

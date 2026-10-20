@@ -41,16 +41,9 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/04-messages/08-unread_reminders.md" heading="Enabling Unread Reminders" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     // Enable reminders for the messaging channel type
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       reminders: true,
     });
 
@@ -64,8 +57,8 @@ describe(DOCS, () => {
       return response;
     });
     expect(updated.reminders).toBe(true);
-    expect(updated.automod).toBe(current.automod);
-    expect(updated.max_message_length).toBe(current.max_message_length);
+    expect(updated.automod).toBe(before.automod);
+    expect(updated.max_message_length).toBe(before.max_message_length);
 
     await waitForAppSetting(client, 'reminders_interval', 3600);
     const { app } = await client.getApp();

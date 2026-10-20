@@ -105,22 +105,16 @@ describe(DOCS, () => {
     });
 
     // Enabling it for a channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
     const update = await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       user_message_reminders: true,
     });
     // #endregion snippet
     await waitForChannelTypePropagation();
 
     expect(update.user_message_reminders).toBe(true);
-    expect(update.automod).toBe(current.automod);
-    expect(update.max_message_length).toBe(current.max_message_length);
+    expect(update.automod).toBe(before.automod);
+    expect(update.max_message_length).toBe(before.max_message_length);
 
     const updated = await client.chat.getChannelType({ name: channelType });
     expect(updated.user_message_reminders).toBe(true);

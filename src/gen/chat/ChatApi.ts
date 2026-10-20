@@ -1,13 +1,11 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   AddSegmentTargetsRequest,
-  CampaignResponse,
   CastPollVoteRequest,
   ChannelBatchUpdateRequest,
   ChannelBatchUpdateResponse,
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
-  CommitMessageRequest,
   CreateCampaignRequest,
   CreateCampaignResponse,
   CreateChannelTypeRequest,
@@ -108,7 +106,6 @@ import {
   SendMessageResponse,
   SendReactionRequest,
   SendReactionResponse,
-  SendScheduledMessageNowRequest,
   SendScheduledMessageNowResponse,
   SendUserCustomEventRequest,
   SetRetentionPolicyRequest,
@@ -118,7 +115,7 @@ import {
   SortParamRequest,
   StartCampaignRequest,
   StartCampaignResponse,
-  StopCampaignRequest,
+  StopCampaignResponse,
   TranslateMessageRequest,
   TranslateMessageResponse,
   TruncateChannelRequest,
@@ -130,6 +127,7 @@ import {
   UnreadCountsBatchRequest,
   UnreadCountsBatchResponse,
   UpdateCampaignRequest,
+  UpdateCampaignResponse,
   UpdateChannelPartialRequest,
   UpdateChannelPartialResponse,
   UpdateChannelRequest,
@@ -271,7 +269,7 @@ export class ChatApi {
 
   async updateCampaign(
     request: UpdateCampaignRequest & { id: string },
-  ): Promise<StreamResponse<CampaignResponse>> {
+  ): Promise<StreamResponse<UpdateCampaignResponse>> {
     const pathParams = {
       id: request?.id,
     };
@@ -292,7 +290,7 @@ export class ChatApi {
       channel_template: request?.channel_template,
     };
 
-    const response = await this.apiClient.sendRequest<CampaignResponse>(
+    const response = await this.apiClient.sendRequest<UpdateCampaignResponse>(
       'PUT',
       '/api/v2/chat/campaigns/{id}',
       pathParams,
@@ -300,7 +298,7 @@ export class ChatApi {
       body,
     );
 
-    decoders['CampaignResponse']?.(response);
+    decoders['UpdateCampaignResponse']?.(response);
 
     return response;
   }
@@ -329,23 +327,21 @@ export class ChatApi {
     return response;
   }
 
-  async stopCampaign(
-    request: StopCampaignRequest & { id: string },
-  ): Promise<StreamResponse<CampaignResponse>> {
+  async stopCampaign(request: {
+    id: string;
+  }): Promise<StreamResponse<StopCampaignResponse>> {
     const pathParams = {
       id: request?.id,
     };
-    const body = {};
 
-    const response = await this.apiClient.sendRequest<CampaignResponse>(
+    const response = await this.apiClient.sendRequest<StopCampaignResponse>(
       'POST',
       '/api/v2/chat/campaigns/{id}/stop',
       pathParams,
       undefined,
-      body,
     );
 
-    decoders['CampaignResponse']?.(response);
+    decoders['StopCampaignResponse']?.(response);
 
     return response;
   }
@@ -1316,7 +1312,6 @@ export class ChatApi {
     const body = {
       automod: request?.automod,
       automod_behavior: request?.automod_behavior,
-      max_message_length: request?.max_message_length,
       blocklist: request?.blocklist,
       blocklist_behavior: request?.blocklist_behavior,
       connect_events: request?.connect_events,
@@ -1324,6 +1319,7 @@ export class ChatApi {
       custom_events: request?.custom_events,
       delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
+      max_message_length: request?.max_message_length,
       message_retention: request?.message_retention,
       mutes: request?.mutes,
       partition_size: request?.partition_size,
@@ -1692,20 +1688,18 @@ export class ChatApi {
     return response;
   }
 
-  async commitMessage(
-    request: CommitMessageRequest & { id: string },
-  ): Promise<StreamResponse<MessageActionResponse>> {
+  async commitMessage(request: {
+    id: string;
+  }): Promise<StreamResponse<MessageActionResponse>> {
     const pathParams = {
       id: request?.id,
     };
-    const body = {};
 
     const response = await this.apiClient.sendRequest<MessageActionResponse>(
       'POST',
       '/api/v2/chat/messages/{id}/commit',
       pathParams,
       undefined,
-      body,
     );
 
     decoders['MessageActionResponse']?.(response);
@@ -2458,13 +2452,12 @@ export class ChatApi {
     return response;
   }
 
-  async sendScheduledMessageNow(
-    request: SendScheduledMessageNowRequest & { id: string },
-  ): Promise<StreamResponse<SendScheduledMessageNowResponse>> {
+  async sendScheduledMessageNow(request: {
+    id: string;
+  }): Promise<StreamResponse<SendScheduledMessageNowResponse>> {
     const pathParams = {
       id: request?.id,
     };
-    const body = {};
 
     const response =
       await this.apiClient.sendRequest<SendScheduledMessageNowResponse>(
@@ -2472,7 +2465,6 @@ export class ChatApi {
         '/api/v2/chat/scheduled_messages/{id}/send_now',
         pathParams,
         undefined,
-        body,
       );
 
     decoders['SendScheduledMessageNowResponse']?.(response);

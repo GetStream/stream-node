@@ -50,20 +50,16 @@ describe(DOCS, () => {
     await client.moderation.v2UpsertTemplate({
       name: templateName,
       config: {
-        data_types: {
-          'object.title': 'text',
-          'object.body': 'text',
-          image: 'image',
-        },
+        data_types: { text: 'text', attachments: 'image' },
+        config_key: 'feeds:default',
       },
     });
     // #endregion snippet
 
     const template = await findTemplate(templateName);
-    expect(template?.config?.data_types).toEqual({
-      'object.title': 'text',
-      'object.body': 'text',
-      image: 'image',
+    expect(template?.config).toMatchObject({
+      data_types: { text: 'text', attachments: 'image' },
+      config_key: 'feeds:default',
     });
   });
 
@@ -83,7 +79,7 @@ describe(DOCS, () => {
   });
 
   // The fence is right for the API, but the generated `v2DeleteTemplate()` takes no
-  // arguments (TS2554, see the TODO) and sends no name, so it fails with code 4 "name is
+  // arguments (TS2554) and sends no name, so it fails with code 4 "name is
   // a required field". Cleanup deletes the template instead.
   it.skip('BLOCKED: SDK issue: v2DeleteTemplate() cannot send the template name', async () => {
     // #region snippet docs="moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md" heading="Delete Template" tab="Node.js" index=1

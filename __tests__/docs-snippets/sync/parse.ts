@@ -99,7 +99,10 @@ const PAGE_PREFIXES = [
  * Sidebar pages that are deliberately not validated (page path relative to
  * `content/docs`, reason).
  */
-export const EXCLUDED_PAGES: Record<string, string> = {};
+export const EXCLUDED_PAGES: Record<string, string> = {
+  'activity-feeds/v3-latest/_default/13-importing_data/03_v2_to_v3_code_migration.md':
+    'Feeds v2 to v3 porting guide: before/after code in fences titled "Feeds v2" / "Feeds v3", not SDK tabs (a `label` would replace the visible title)',
+};
 
 const FEEDS_V2_CLIENT =
   'Feeds v2 code for the `getstream` package (a different SDK), not @stream-io/node-sdk';
