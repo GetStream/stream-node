@@ -10,7 +10,8 @@ these sidebars in `getstream.io/content/docs/_sidebars/` (`SIDEBAR_FILES` in `sy
 - platform: `[platform][default].json`
 
 Only fences labelled `Node.js` are in scope (a fence label, or the `label` of the enclosing `<tabs-item>` on the video pages) (docs fences must always have a label): they are fixed when they are
-wrong. `JavaScript`, `React` and `React Native` fences (client-side code) and `Node.js` fences inside a `<disclosure label="... (no SDK)">` block (reference
+wrong. `JavaScript`, `React` and `React Native` fences (client-side code), the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`,
+`Node.js (stream-chat-js@9)`) and `Node.js` fences inside a `<disclosure label="... (no SDK)">` block (reference
 implementations without the SDK) are out of scope and are neither tested nor changed.
 
 ```sh
@@ -91,8 +92,8 @@ await channel.getOrCreate({ data: { created_by_id: creatorId } });
   - `index` is 1-based among fences with the same heading text and tab (default 1).
 - **COPY**: `name="literal"` pairs, applied to the region before comparing (identifier `name` becomes the docs literal). Don't use COPY variables as object keys or shorthand properties.
 - **Comparison**: both sides are formatted with the same prettier options, so quote style and line wrapping don't matter, but any code or comment change does.
-- **Coverage** (checked first): every `Node.js` fence (`js`/`javascript`/`ts`/`typescript`) on the pages of the tested sidebars (see the top of this file; `$fragment` entries are resolved from `_sidebars/fragments/`), whether or not the page has tests yet, must have a region (inside `it.skip` if it can't run). `JavaScript` / `React` / `React Native` fences and comment-only fences are ignored.
-- **Labels**: every JS fence on those pages must be labelled `JavaScript`, `React`, `React Native` or `Node.js`; unlabelled or otherwise labelled JS fences fail.
+- **Coverage** (checked first): every `Node.js` fence (`js`/`javascript`/`ts`/`typescript`) on the pages of the tested sidebars (see the top of this file; `$fragment` entries are resolved from `_sidebars/fragments/`), whether or not the page has tests yet, must have a region (inside `it.skip` if it can't run). `JavaScript` / `React` / `React Native` / stream-chat-js@9 fences and comment-only fences are ignored.
+- **Labels**: every JS fence on those pages must be labelled `JavaScript`, `React`, `React Native`, `Node.js`, `JavaScript (stream-chat-js@9)` or `Node.js (stream-chat-js@9)`; unlabelled or otherwise labelled JS fences fail.
 - **Excluded pages and fences**: `EXCLUDED_PAGES` in `sync/parse.ts` lists sidebar pages that are deliberately not validated, with a reason. Both checks skip them. `EXCLUDED_FENCES` does the same for single `Node.js` fences (keyed by fence id) that hold another SDK's code, e.g. Feeds v2 `getstream` client code on the moderation Feeds v2 quick start: not ours to test or update.
 - **`DOCS_SYNC_WRITE=<page path> yarn test:docs:sync`** writes the regions of that page into the docs fences (docs prettier style). Use it to apply a fix to the docs. `DOCS_SYNC_WRITE=1` writes all pages.
 - **`DOCS_DIR`** points at another docs checkout (default: `../getstream.io/content/docs` next to this repo). The check is skipped if the directory doesn't exist.

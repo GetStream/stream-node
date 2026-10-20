@@ -22,7 +22,8 @@ import type { DocsFence, TestRegion } from './parse';
 // `yarn test:docs:sync`, in this order:
 // 1. Every `Node.js` fence (except comment-only fences) on the pages of the tested
 //    sidebars (`SIDEBAR_FILES` in parse.ts) has a test region. `JavaScript`, `React` and
-//    `React Native` (client-side) fences, and fences inside a
+//    `React Native` (client-side) fences, the stream-chat-js@9 fences
+//    (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), and fences inside a
 //    `<disclosure label="... (no SDK)">` block, are out of scope.
 // 2. Every JS fence on those pages is labelled with one of `ALLOWED_JS_LABELS`.
 // 3. Every marked test region points at an existing fence and matches it (after
@@ -99,7 +100,7 @@ describe.skipIf(!hasDocs)(`docs sync (${DOCS_DIR})`, () => {
     );
     expect(
       mislabelled,
-      `JS fences need label="${ALLOWED_JS_LABELS.join('" or label="')}" (client-side code or @stream-io/node-sdk code)`,
+      `JS fences need label="${ALLOWED_JS_LABELS.join('" or label="')}" (client-side code, @stream-io/node-sdk code, or their stream-chat-js@9 versions)`,
     ).toEqual([]);
   });
 

@@ -55,8 +55,16 @@ const JS_LANGS = new Set(['js', 'javascript', 'ts', 'typescript']);
 export const JS_TAB = 'JavaScript';
 /** The tested tab (`@stream-io/node-sdk` code). */
 export const NODE_TAB = 'Node.js';
-/** Out of scope too: client-side React / React Native SDK code. */
-const OUT_OF_SCOPE_TABS = ['React', 'React Native'];
+/**
+ * Out of scope too: client-side React / React Native SDK code, and the stream-chat-js@9
+ * versions shown next to `JavaScript` (client-side) and `Node.js` (server-side).
+ */
+const OUT_OF_SCOPE_TABS = [
+  'React',
+  'React Native',
+  'JavaScript (stream-chat-js@9)',
+  'Node.js (stream-chat-js@9)',
+];
 /**
  * Opens a block of reference implementations that don't use the SDK (platform pages).
  * Its `Node.js` fences are out of scope.
