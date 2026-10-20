@@ -1,13 +1,11 @@
 import { ApiClient, StreamResponse } from '../../gen-imports';
 import {
   AddSegmentTargetsRequest,
-  CampaignResponse,
   CastPollVoteRequest,
   ChannelBatchUpdateRequest,
   ChannelBatchUpdateResponse,
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
-  CommitMessageRequest,
   CreateCampaignRequest,
   CreateCampaignResponse,
   CreateChannelTypeRequest,
@@ -30,6 +28,7 @@ import {
   DeleteReminderResponse,
   DeleteRetentionPolicyRequest,
   DeleteRetentionPolicyResponse,
+  DeleteScheduledMessageResponse,
   DeleteSegmentTargetsRequest,
   EventResponse,
   ExportChannelsRequest,
@@ -71,6 +70,8 @@ import {
   QueryBannedUsersResponse,
   QueryCampaignsRequest,
   QueryCampaignsResponse,
+  QueryChannelBansRequest,
+  QueryChannelBansResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
   QueryDraftsRequest,
@@ -87,6 +88,8 @@ import {
   QueryReactionsResponse,
   QueryRemindersRequest,
   QueryRemindersResponse,
+  QueryScheduledMessagesRequest,
+  QueryScheduledMessagesResponse,
   QuerySegmentTargetsRequest,
   QuerySegmentTargetsResponse,
   QuerySegmentsRequest,
@@ -103,6 +106,7 @@ import {
   SendMessageResponse,
   SendReactionRequest,
   SendReactionResponse,
+  SendScheduledMessageNowResponse,
   SendUserCustomEventRequest,
   SetRetentionPolicyRequest,
   SetRetentionPolicyResponse,
@@ -111,7 +115,7 @@ import {
   SortParamRequest,
   StartCampaignRequest,
   StartCampaignResponse,
-  StopCampaignRequest,
+  StopCampaignResponse,
   TranslateMessageRequest,
   TranslateMessageResponse,
   TruncateChannelRequest,
@@ -123,6 +127,7 @@ import {
   UnreadCountsBatchRequest,
   UnreadCountsBatchResponse,
   UpdateCampaignRequest,
+  UpdateCampaignResponse,
   UpdateChannelPartialRequest,
   UpdateChannelPartialResponse,
   UpdateChannelRequest,
@@ -141,6 +146,8 @@ import {
   UpdatePredefinedFilterResponse,
   UpdateReminderRequest,
   UpdateReminderResponse,
+  UpdateScheduledMessageRequest,
+  UpdateScheduledMessageResponse,
   UpdateSegmentRequest,
   UpdateSegmentResponse,
   UpdateThreadPartialRequest,
@@ -262,7 +269,7 @@ export class ChatApi {
 
   async updateCampaign(
     request: UpdateCampaignRequest & { id: string },
-  ): Promise<StreamResponse<CampaignResponse>> {
+  ): Promise<StreamResponse<UpdateCampaignResponse>> {
     const pathParams = {
       id: request?.id,
     };
@@ -283,7 +290,7 @@ export class ChatApi {
       channel_template: request?.channel_template,
     };
 
-    const response = await this.apiClient.sendRequest<CampaignResponse>(
+    const response = await this.apiClient.sendRequest<UpdateCampaignResponse>(
       'PUT',
       '/api/v2/chat/campaigns/{id}',
       pathParams,
@@ -291,7 +298,7 @@ export class ChatApi {
       body,
     );
 
-    decoders['CampaignResponse']?.(response);
+    decoders['UpdateCampaignResponse']?.(response);
 
     return response;
   }
@@ -320,23 +327,21 @@ export class ChatApi {
     return response;
   }
 
-  async stopCampaign(
-    request: StopCampaignRequest & { id: string },
-  ): Promise<StreamResponse<CampaignResponse>> {
+  async stopCampaign(request: {
+    id: string;
+  }): Promise<StreamResponse<StopCampaignResponse>> {
     const pathParams = {
       id: request?.id,
     };
-    const body = {};
 
-    const response = await this.apiClient.sendRequest<CampaignResponse>(
+    const response = await this.apiClient.sendRequest<StopCampaignResponse>(
       'POST',
       '/api/v2/chat/campaigns/{id}/stop',
       pathParams,
       undefined,
-      body,
     );
 
-    decoders['CampaignResponse']?.(response);
+    decoders['StopCampaignResponse']?.(response);
 
     return response;
   }
@@ -345,6 +350,7 @@ export class ChatApi {
     request?: QueryChannelsRequest,
   ): Promise<StreamResponse<QueryChannelsResponse>> {
     const body = {
+      include_active_member_count: request?.include_active_member_count,
       limit: request?.limit,
       member_limit: request?.member_limit,
       message_limit: request?.message_limit,
@@ -452,6 +458,7 @@ export class ChatApi {
     const body = {
       limit: request?.limit,
       user_id: request?.user_id,
+      sort: request?.sort,
       groups: request?.groups,
       user: request?.user,
     };
@@ -657,6 +664,37 @@ export class ChatApi {
     );
 
     decoders['UpdateChannelResponse']?.(response);
+
+    return response;
+  }
+
+  async queryChannelBans(
+    request: QueryChannelBansRequest & { type: string; id: string },
+  ): Promise<StreamResponse<QueryChannelBansResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      exclude_expired_bans: request?.exclude_expired_bans,
+      include_total: request?.include_total,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      filter_conditions: request?.filter_conditions,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<QueryChannelBansResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/bans/query',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['QueryChannelBansResponse']?.(response);
 
     return response;
   }
@@ -916,6 +954,7 @@ export class ChatApi {
       include_mentioned_members: request?.include_mentioned_members,
       keep_channel_hidden: request?.keep_channel_hidden,
       pending: request?.pending,
+      scheduled_at: request?.scheduled_at,
       skip_enrich_url: request?.skip_enrich_url,
       skip_push: request?.skip_push,
       pending_message_metadata: request?.pending_message_metadata,
@@ -1191,8 +1230,10 @@ export class ChatApi {
       polls: request?.polls,
       push_level: request?.push_level,
       push_notifications: request?.push_notifications,
+      quotes: request?.quotes,
       reactions: request?.reactions,
       read_events: request?.read_events,
+      reminders: request?.reminders,
       replies: request?.replies,
       search: request?.search,
       shared_locations: request?.shared_locations,
@@ -1205,6 +1246,7 @@ export class ChatApi {
       blocklists: request?.blocklists,
       commands: request?.commands,
       permissions: request?.permissions,
+      automod_thresholds: request?.automod_thresholds,
       chat_preferences: request?.chat_preferences,
       grants: request?.grants,
     };
@@ -1270,7 +1312,6 @@ export class ChatApi {
     const body = {
       automod: request?.automod,
       automod_behavior: request?.automod_behavior,
-      max_message_length: request?.max_message_length,
       blocklist: request?.blocklist,
       blocklist_behavior: request?.blocklist_behavior,
       connect_events: request?.connect_events,
@@ -1278,6 +1319,7 @@ export class ChatApi {
       custom_events: request?.custom_events,
       delivery_events: request?.delivery_events,
       mark_messages_pending: request?.mark_messages_pending,
+      max_message_length: request?.max_message_length,
       message_retention: request?.message_retention,
       mutes: request?.mutes,
       partition_size: request?.partition_size,
@@ -1646,20 +1688,18 @@ export class ChatApi {
     return response;
   }
 
-  async commitMessage(
-    request: CommitMessageRequest & { id: string },
-  ): Promise<StreamResponse<MessageActionResponse>> {
+  async commitMessage(request: {
+    id: string;
+  }): Promise<StreamResponse<MessageActionResponse>> {
     const pathParams = {
       id: request?.id,
     };
-    const body = {};
 
     const response = await this.apiClient.sendRequest<MessageActionResponse>(
       'POST',
       '/api/v2/chat/messages/{id}/commit',
       pathParams,
       undefined,
-      body,
     );
 
     decoders['MessageActionResponse']?.(response);
@@ -1854,6 +1894,8 @@ export class ChatApi {
       poll_id: request?.poll_id,
     };
     const body = {
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       user: request?.user,
       vote: request?.vote,
@@ -2335,6 +2377,97 @@ export class ChatApi {
       );
 
     decoders['GetRetentionPolicyRunsResponse']?.(response);
+
+    return response;
+  }
+
+  async queryScheduledMessages(
+    request?: QueryScheduledMessagesRequest,
+  ): Promise<StreamResponse<QueryScheduledMessagesResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryScheduledMessagesResponse>(
+        'POST',
+        '/api/v2/chat/scheduled_messages/query',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryScheduledMessagesResponse']?.(response);
+
+    return response;
+  }
+
+  async deleteScheduledMessage(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteScheduledMessageResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteScheduledMessageResponse>(
+        'DELETE',
+        '/api/v2/chat/scheduled_messages/{id}',
+        pathParams,
+        undefined,
+      );
+
+    decoders['DeleteScheduledMessageResponse']?.(response);
+
+    return response;
+  }
+
+  async updateScheduledMessage(
+    request: UpdateScheduledMessageRequest & { id: string },
+  ): Promise<StreamResponse<UpdateScheduledMessageResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      scheduled_at: request?.scheduled_at,
+      message: request?.message,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<UpdateScheduledMessageResponse>(
+        'PATCH',
+        '/api/v2/chat/scheduled_messages/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['UpdateScheduledMessageResponse']?.(response);
+
+    return response;
+  }
+
+  async sendScheduledMessageNow(request: {
+    id: string;
+  }): Promise<StreamResponse<SendScheduledMessageNowResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SendScheduledMessageNowResponse>(
+        'POST',
+        '/api/v2/chat/scheduled_messages/{id}/send_now',
+        pathParams,
+        undefined,
+      );
+
+    decoders['SendScheduledMessageNowResponse']?.(response);
 
     return response;
   }

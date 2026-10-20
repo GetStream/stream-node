@@ -209,6 +209,7 @@ export class FeedsApi {
       poll_id: request?.poll_id,
       restrict_replies: request?.restrict_replies,
       skip_enrich_url: request?.skip_enrich_url,
+      skip_existing: request?.skip_existing,
       skip_push: request?.skip_push,
       text: request?.text,
       user_id: request?.user_id,
@@ -246,6 +247,7 @@ export class FeedsApi {
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       force_moderation: request?.force_moderation,
+      skip_existing: request?.skip_existing,
     };
 
     const response = await this.apiClient.sendRequest<UpsertActivitiesResponse>(
@@ -511,6 +513,8 @@ export class FeedsApi {
       poll_id: request?.poll_id,
     };
     const body = {
+      config_key: request?.config_key,
+      config_team: request?.config_team,
       user_id: request?.user_id,
       user: request?.user,
       vote: request?.vote,
@@ -975,9 +979,11 @@ export class FeedsApi {
 
   async deleteCollections(request: {
     collection_refs: Array<string>;
+    hard_delete?: boolean;
   }): Promise<StreamResponse<DeleteCollectionsResponse>> {
     const queryParams = {
       collection_refs: request?.collection_refs,
+      hard_delete: request?.hard_delete,
     };
 
     const response =
@@ -1784,7 +1790,6 @@ export class FeedsApi {
       interest_weights: request?.interest_weights,
       member_pagination: request?.member_pagination,
       user: request?.user,
-      viewer_location: request?.viewer_location,
     };
 
     const response = await this.apiClient.sendRequest<GetOrCreateFeedResponse>(
@@ -2698,6 +2703,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -2720,6 +2726,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<FollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -2741,6 +2748,7 @@ export class FeedsApi {
     request?: QueryFollowsRequest,
   ): Promise<StreamResponse<QueryFollowsResponse>> {
     const body = {
+      include_group_counts: request?.include_group_counts,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
@@ -3078,6 +3086,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       delete_notification_activity: request?.delete_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
     };
@@ -3100,6 +3109,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UnfollowBatchResponse>> {
     const body = {
       follows: request?.follows,
+      async: request?.async,
       delete_notification_activity: request?.delete_notification_activity,
       enrich_own_fields: request?.enrich_own_fields,
     };
