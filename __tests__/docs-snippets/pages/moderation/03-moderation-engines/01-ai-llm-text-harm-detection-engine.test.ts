@@ -4,16 +4,6 @@ import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
 
-// SDK issue: the API accepts and returns `llm_config.context_custom_keys` and
-// `custom_keys_context_description`, but the OpenAPI spec (and so the generated
-// `LLMConfig`) doesn't have them yet (TS2353). Type them here so the fence runs as written.
-declare module '../../../../../src/gen/models' {
-  interface LLMConfig {
-    context_custom_keys?: string[];
-    custom_keys_context_description?: string;
-  }
-}
-
 const DOCS =
   'moderation/_default/03-moderation-engines/01-ai-llm-text-harm-detection-engine.md';
 
