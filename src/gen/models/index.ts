@@ -16867,8 +16867,11 @@ export interface QueryFeedsUsageStatsResponse {
   duration: string;
   activities: DailyMetricStatsResponse;
   api_requests: DailyMetricStatsResponse;
+  collections: DailyMetricStatsResponse;
+  comments: DailyMetricStatsResponse;
   follows: DailyMetricStatsResponse;
   openai_requests: DailyMetricStatsResponse;
+  reactions: DailyMetricStatsResponse;
   emau?: EMAUStatsResponse;
 }
 
