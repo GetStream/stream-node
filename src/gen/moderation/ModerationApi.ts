@@ -66,6 +66,8 @@ import {
   QueryReviewQueueResponse,
   QueueResponse,
   Response,
+  RevealMediaRequest,
+  RevealMediaResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   SubmitModerationFeedbackRequest,
@@ -1207,6 +1209,28 @@ export class ModerationApi {
     );
 
     decoders['QueueResponse']?.(response);
+
+    return response;
+  }
+
+  async revealMedia(
+    request: RevealMediaRequest,
+  ): Promise<StreamResponse<RevealMediaResponse>> {
+    const body = {
+      item_id: request?.item_id,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<RevealMediaResponse>(
+      'POST',
+      '/api/v2/moderation/reveal_media',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['RevealMediaResponse']?.(response);
 
     return response;
   }

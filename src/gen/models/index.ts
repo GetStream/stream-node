@@ -4574,6 +4574,10 @@ export interface ChannelConfigWithInfo {
    * Sets the push notification level for a channel type
    */
   push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  /**
+   * Maximum number of scheduled messages (scheduled or sending) a user can have in this channel. Present only when scheduled messages are enabled for the app. Scheduling more returns error code 117 (scheduled_limit_channel)
+   */
+  scheduled_messages_max_per_channel?: number;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -4746,6 +4750,10 @@ export interface ChannelGetOrCreateRequest {
    * Whether this channel will be hidden for the user who created the channel or not
    */
   hide_for_creator?: boolean;
+  /**
+   * Adds scheduled_messages to the response: the acting user's own scheduled, sending and failed messages in this channel (server-side requests name the user with data.created_by_id or data.created_by; without one the field is omitted). Absent from the response when there are more than 100 or they could not be loaded; use the scheduled messages query then
+   */
+  include_scheduled_messages?: boolean;
   /**
    * Refresh channel state
    */
@@ -12705,6 +12713,21 @@ export interface MaxStreakChangedEvent {
   received_at?: TimestampNS;
 }
 
+export interface MediaDisplayResponse {
+  /**
+   * Reveals must be recorded via the reveal media endpoint (blurred CSAM or gore)
+   */
+  audit_reveal: boolean;
+  /**
+   * Default rendering before a reveal
+   */
+  mode: 'normal' | 'blur' | 'blur_grayscale';
+  /**
+   * Only users with the RevealProtectedMedia permission may reveal the media (CSAM)
+   */
+  reveal_restricted: boolean;
+}
+
 export interface MemberAddedEvent {
   /**
    * Date/time of creation
@@ -14075,10 +14098,12 @@ export interface ModerationDashboardPreferences {
   flag_user_on_flagged_content?: boolean;
   include_attachment_payload?: boolean;
   media_queue_blur_enabled?: boolean;
+  text_redaction_enabled?: boolean;
   allowed_moderation_action_reasons?: Array<string>;
   escalation_reasons?: Array<string>;
   filterable_custom_keys?: Array<string>;
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
+  media_label_display?: Record<string, string>;
   overview_dashboard?: OverviewDashboardConfig;
 }
 
@@ -18690,6 +18715,26 @@ export interface RetentionRunResponse {
   stats: RunStats;
 }
 
+export interface RevealMediaRequest {
+  /**
+   * ID of the review queue item whose media is revealed
+   */
+  item_id: string;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface RevealMediaResponse {
+  duration: string;
+  /**
+   * Display policy for a review queue item's images and video
+   */
+  media_display: MediaDisplayResponse;
+}
+
 export interface ReviewQueueItemNewEvent {
   created_at: TimestampNS;
   custom: Record<string, any>;
@@ -18766,6 +18811,10 @@ export interface ReviewQueueItemResponse {
    * Detected languages in the content
    */
   languages: Array<string>;
+  /**
+   * Display policy for a review queue item's images and video
+   */
+  media_display: MediaDisplayResponse;
   /**
    * When the review was completed
    */

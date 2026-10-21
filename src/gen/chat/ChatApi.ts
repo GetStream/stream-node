@@ -507,6 +507,7 @@ export class ChatApi {
     };
     const body = {
       hide_for_creator: request?.hide_for_creator,
+      include_scheduled_messages: request?.include_scheduled_messages,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
       member_custom_include: request?.member_custom_include,
@@ -1063,6 +1064,7 @@ export class ChatApi {
     };
     const body = {
       hide_for_creator: request?.hide_for_creator,
+      include_scheduled_messages: request?.include_scheduled_messages,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
       member_custom_include: request?.member_custom_include,
