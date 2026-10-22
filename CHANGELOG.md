@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.14](https://github.com/GetStream/stream-node/compare/v0.8.13...v0.8.14) (2026-10-22)
+
+
+### Features
+
+* add comments, reactions and collections to QueryFeedsUsageStatsResponse ([#379](https://github.com/GetStream/stream-node/issues/379)) ([4572577](https://github.com/GetStream/stream-node/commit/457257701f3aed84c4a0ce17ff7d9f67ed4a552c))
+
 ## [0.8.13](https://github.com/GetStream/stream-node/compare/v0.8.12...v0.8.13) (2026-10-16)
 
 
