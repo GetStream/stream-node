@@ -41,6 +41,18 @@ export const retryOnFeedGroupMissing = (
 };
 
 /**
+ * Waits until a new feed group can be read back several times in a row, for setup
+ * before a region that calls `addActivity` into it (which can't be retried blindly).
+ */
+export const waitForFeedGroup = async (client: StreamClient, id: string) => {
+  for (let i = 0; i < 5; i++) {
+    await retry(() => client.feeds.getFeedGroup({ id }), {
+      retryIf: isFeedGroupMissing,
+    });
+  }
+};
+
+/**
  * Adds an activity (setup only) into a feed whose group may be new. `addActivity` can
  * answer "Feed group ... not found" after it already stored the activity, so a blind
  * retry adds it twice: give it a `uniqueId` id and retry only while it isn't stored.

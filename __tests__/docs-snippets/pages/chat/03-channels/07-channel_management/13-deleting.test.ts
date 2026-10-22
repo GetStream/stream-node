@@ -102,7 +102,7 @@ describe(DOCS, () => {
     deleteSpy.mockRestore();
 
     expect(soft.channel?.cid).toBe(cid);
-    expect(soft.channel?.deleted_at).toBeInstanceOf(Date);
+    expect(soft.channel?.deleted_at).toEqual(expect.any(Number));
     expect(hard.channel?.cid).toBe(otherCid);
     expect(await countChannels([cid, otherCid])).toBe(0);
   });

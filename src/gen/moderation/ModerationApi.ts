@@ -66,6 +66,8 @@ import {
   QueryReviewQueueResponse,
   QueueResponse,
   Response,
+  RevealMediaRequest,
+  RevealMediaResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   SubmitModerationFeedbackRequest,
@@ -1211,6 +1213,28 @@ export class ModerationApi {
     return response;
   }
 
+  async revealMedia(
+    request: RevealMediaRequest,
+  ): Promise<StreamResponse<RevealMediaResponse>> {
+    const body = {
+      item_id: request?.item_id,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<RevealMediaResponse>(
+      'POST',
+      '/api/v2/moderation/reveal_media',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['RevealMediaResponse']?.(response);
+
+    return response;
+  }
+
   async queryReviewQueue(
     request?: QueryReviewQueueRequest,
   ): Promise<StreamResponse<QueryReviewQueueResponse>> {
@@ -1344,18 +1368,28 @@ export class ModerationApi {
   }
 
   async submitModerationFeedback(
-    request: SubmitModerationFeedbackRequest,
+    request?: SubmitModerationFeedbackRequest,
   ): Promise<StreamResponse<SubmitModerationFeedbackResponse>> {
     const body = {
+      channel_id: request?.channel_id,
+      confidence: request?.confidence,
+      current_recommended_action: request?.current_recommended_action,
+      description: request?.description,
+      entity_creator_id: request?.entity_creator_id,
+      entity_id: request?.entity_id,
+      entity_type: request?.entity_type,
+      expected_recommended_action: request?.expected_recommended_action,
+      false_positive: request?.false_positive,
+      feedback_type: request?.feedback_type,
       message: request?.message,
       published_at: request?.published_at,
       reference: request?.reference,
-      channel_id: request?.channel_id,
-      current_recommended_action: request?.current_recommended_action,
-      description: request?.description,
-      expected_recommended_action: request?.expected_recommended_action,
+      review_queue_item_id: request?.review_queue_item_id,
+      user_id: request?.user_id,
       current_labels: request?.current_labels,
       expected_labels: request?.expected_labels,
+      items: request?.items,
+      user: request?.user,
     };
 
     const response =

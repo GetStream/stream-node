@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import type { StreamClient } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -134,10 +135,9 @@ describe(DOCS, () => {
     expect(bans[0].channel?.cid).toBe(cid);
     expect(bans[0].reason).toBe('Repeated harassment');
     expect(bans[0].expires).toBeDefined();
-    expect(
-      new Date(bans[0].expires ?? 0).getTime() -
-        new Date(bans[0].created_at).getTime(),
-    ).toBe(1440 * 60 * 1000);
+    expect(nsToMs(bans[0].expires ?? 0) - nsToMs(bans[0].created_at)).toBe(
+      1440 * 60 * 1000,
+    );
     const { users } = await client.queryUsers({
       payload: { filter_conditions: { id: creatorId } },
     });

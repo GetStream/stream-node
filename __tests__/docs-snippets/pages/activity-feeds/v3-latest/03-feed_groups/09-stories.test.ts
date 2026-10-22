@@ -1,4 +1,5 @@
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import { getServerClient } from '../../../../helpers/clients';
 import { Cleanup } from '../../../../helpers/cleanup';
 import { uniqueId } from '../../../../helpers/ids';
@@ -125,7 +126,7 @@ describe(DOCS, () => {
     );
     // The stored time can be 1 ms off the ISO string that was sent.
     expect(
-      Math.abs((story.expires_at?.getTime() ?? 0) - tomorrow.getTime()),
+      Math.abs(nsToMs(story.expires_at ?? 0) - tomorrow.getTime()),
     ).toBeLessThanOrEqual(1);
   });
 

@@ -78,16 +78,9 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/12-best_practices/05-marketplace_best_practices.md" heading="Unread Message Reminders" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // Enable reminders for the messaging channel type. automod, automod_behavior and
-    // max_message_length are required on this endpoint, so carry the current values
-    // through to avoid overwriting them.
-    const current = await client.chat.getChannelType({ name: channelType });
-
+    // Enable reminders for the messaging channel type
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       reminders: true,
     });
 
@@ -98,7 +91,7 @@ describe(DOCS, () => {
     await waitForChannelTypePropagation();
     const updated = await client.chat.getChannelType({ name: featuresType });
     expect(updated.reminders).toBe(true);
-    expect(updated.max_message_length).toBe(current.max_message_length);
+    expect(updated.max_message_length).toBe(before.max_message_length);
     await waitForAppSetting(client, 'reminders_interval', 3600);
   });
 
@@ -151,15 +144,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/12-best_practices/05-marketplace_best_practices.md" heading="Pending Messages" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required on this endpoint,
-    // so carry the current values through to avoid overwriting them.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       mark_messages_pending: true,
     });
     // #endregion snippet
@@ -185,15 +171,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/12-best_practices/05-marketplace_best_practices.md" heading="Recommended Settings" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required on this endpoint,
-    // so carry the current values through to avoid overwriting them.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       typing_events: true, // Show when users are typing
       read_events: true, // Track read status for messages
       reactions: true, // Allow reactions for quick responses

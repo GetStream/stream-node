@@ -103,16 +103,9 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/12-best_practices/02-moderation.md" heading="Disabling the permission to post links or add attachments" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     // Remove link and attachment permissions for channel_member role
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       grants: {
         channel_member: [
           'read-channel',
@@ -320,16 +313,9 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/12-best_practices/02-moderation.md" heading="Slash commands for banning" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     // Enable ban/unban commands for a channel type
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       commands: ['giphy', 'ban', 'unban', 'mute', 'unmute', 'flag'],
     });
     // #endregion snippet

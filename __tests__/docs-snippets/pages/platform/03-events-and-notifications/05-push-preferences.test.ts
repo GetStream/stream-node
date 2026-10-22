@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import type { UpsertPushPreferencesResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -78,15 +79,8 @@ describe(DOCS, () => {
     // #region snippet docs="platform/03-events-and-notifications/05-push-preferences.md" heading="Channel Configuration Push Level" tab="Node.js" index=1
     // COPY: channelType="messaging", channelId="announcements"
     // Set push_level on a channel type
-    // automod, automod_behavior and max_message_length are required on this endpoint,
-    // so carry the current values through to avoid overwriting them.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       push_level: 'all_mentions',
     });
 
@@ -106,8 +100,8 @@ describe(DOCS, () => {
       return response;
     });
     expect(updated.push_level).toBe('all_mentions');
-    expect(updated.automod).toBe(current.automod);
-    expect(updated.max_message_length).toBe(current.max_message_length);
+    expect(updated.automod).toBe(before.automod);
+    expect(updated.max_message_length).toBe(before.max_message_length);
 
     // The override wins over the type's `all_mentions` in the merged channel config.
     const { channel: response } = await channel.getOrCreate({});
@@ -298,8 +292,7 @@ describe(DOCS, () => {
     expect(preferences?.call_level).toBe('all');
     expect(
       Math.abs(
-        (preferences?.disabled_until?.getTime() ?? 0) -
-          oneHourFromNow.getTime(),
+        nsToMs(preferences?.disabled_until ?? 0) - oneHourFromNow.getTime(),
       ),
     ).toBeLessThan(1000);
   });

@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -104,22 +105,16 @@ describe(DOCS, () => {
     });
 
     // Enabling it for a channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
     const update = await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       user_message_reminders: true,
     });
     // #endregion snippet
     await waitForChannelTypePropagation();
 
     expect(update.user_message_reminders).toBe(true);
-    expect(update.automod).toBe(current.automod);
-    expect(update.max_message_length).toBe(current.max_message_length);
+    expect(update.automod).toBe(before.automod);
+    expect(update.max_message_length).toBe(before.max_message_length);
 
     const updated = await client.chat.getChannelType({ name: channelType });
     expect(updated.user_message_reminders).toBe(true);
@@ -168,8 +163,10 @@ describe(DOCS, () => {
       [messageId, anotherMessageId].sort(),
     );
     const timed = byMessage.get(messageId)?.remind_at;
-    expect(timed).toBeInstanceOf(Date);
-    expect(timed?.getTime()).toBeGreaterThanOrEqual(startedAt + 3600000 - 1000);
+    expect(timed).toEqual(expect.any(Number));
+    expect(nsToMs(timed ?? 0)).toBeGreaterThanOrEqual(
+      startedAt + 3600000 - 1000,
+    );
     expect(byMessage.get(anotherMessageId)?.remind_at ?? null).toBeNull();
   });
 
@@ -203,8 +200,8 @@ describe(DOCS, () => {
       // #endregion snippet
 
       const newDueDate = updated.reminder.remind_at;
-      expect(newDueDate).toBeInstanceOf(Date);
-      expect(newDueDate?.getTime()).toBeGreaterThanOrEqual(
+      expect(newDueDate).toEqual(expect.any(Number));
+      expect(nsToMs(newDueDate ?? 0)).toBeGreaterThanOrEqual(
         startedAt + 7200000 - 1000,
       );
       expect(log.mock.calls[0]).toEqual([newDueDate]);

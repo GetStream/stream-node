@@ -9,6 +9,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -198,8 +199,7 @@ describe(DOCS, () => {
       // Stored with sub-millisecond rounding: compare to the millisecond.
       expect(
         Math.abs(
-          (user.revoke_tokens_issued_before?.getTime() ?? 0) -
-            revokeDate.getTime(),
+          nsToMs(user.revoke_tokens_issued_before ?? 0) - revokeDate.getTime(),
         ),
       ).toBeLessThanOrEqual(1);
     }

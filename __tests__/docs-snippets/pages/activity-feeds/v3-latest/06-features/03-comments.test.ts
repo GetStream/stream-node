@@ -160,7 +160,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     expect(response.comment.text).toBe('Updated comment');
-    expect(response.comment.edited_at).toBeInstanceOf(Date);
+    expect(response.comment.edited_at).toEqual(expect.any(Number));
     expect(log).toHaveBeenCalledWith(response.comment.edited_at);
   });
 
