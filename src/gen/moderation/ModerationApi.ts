@@ -56,6 +56,8 @@ import {
   QueryLabelResultsResponse,
   QueryModerationConfigsRequest,
   QueryModerationConfigsResponse,
+  QueryModerationFeedbackRequest,
+  QueryModerationFeedbackResponse,
   QueryModerationFlagsRequest,
   QueryModerationFlagsResponse,
   QueryModerationLogsRequest,
@@ -641,6 +643,34 @@ export class ModerationApi {
     );
 
     decoders['CustomCheckResponse']?.(response);
+
+    return response;
+  }
+
+  async queryModerationFeedback(
+    request?: QueryModerationFeedbackRequest,
+  ): Promise<StreamResponse<QueryModerationFeedbackResponse>> {
+    const body = {
+      item_limit: request?.item_limit,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryModerationFeedbackResponse>(
+        'POST',
+        '/api/v2/moderation/feedback_items',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryModerationFeedbackResponse']?.(response);
 
     return response;
   }

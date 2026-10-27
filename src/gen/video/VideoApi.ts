@@ -58,6 +58,7 @@ import {
   QueryCallsResponse,
   QueryUserFeedbackRequest,
   QueryUserFeedbackResponse,
+  RecordingType,
   ReportClientEventRequest,
   ReportClientEventResponse,
   ResolveSipAuthRequest,
@@ -678,7 +679,7 @@ export class VideoApi {
     request: StartRecordingRequest & {
       type: string;
       id: string;
-      recording_type: string;
+      recording_type: RecordingType;
     },
   ): Promise<StreamResponse<StartRecordingResponse>> {
     const pathParams = {
@@ -707,7 +708,7 @@ export class VideoApi {
     request: StopRecordingRequest & {
       type: string;
       id: string;
-      recording_type: string;
+      recording_type: RecordingType;
     },
   ): Promise<StreamResponse<StopRecordingResponse>> {
     const pathParams = {

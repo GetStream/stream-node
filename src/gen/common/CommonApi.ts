@@ -14,6 +14,8 @@ import {
   CheckSNSResponse,
   CheckSQSRequest,
   CheckSQSResponse,
+  ClaimGuestUserRequest,
+  ClaimGuestUserResponse,
   CreateBlockListRequest,
   CreateBlockListResponse,
   CreateDeviceRequest,
@@ -2004,6 +2006,27 @@ export class CommonApi {
     );
 
     decoders['BlockUsersResponse']?.(response);
+
+    return response;
+  }
+
+  async claimGuestUser(
+    request: ClaimGuestUserRequest,
+  ): Promise<StreamResponse<ClaimGuestUserResponse>> {
+    const body = {
+      guest_user_id: request?.guest_user_id,
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<ClaimGuestUserResponse>(
+      'POST',
+      '/api/v2/users/claim_guest',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['ClaimGuestUserResponse']?.(response);
 
     return response;
   }

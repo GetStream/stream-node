@@ -99,6 +99,8 @@ import {
   QueryThreadsRequest,
   QueryThreadsResponse,
   Response,
+  RewindChannelRequest,
+  RewindChannelResponse,
   SearchPayload,
   SearchResponse,
   SendEventRequest,
@@ -1110,6 +1112,34 @@ export class ChatApi {
     );
 
     decoders['MarkReadResponse']?.(response);
+
+    return response;
+  }
+
+  async rewindChannel(
+    request: RewindChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<RewindChannelResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      expected_last_message_id: request?.expected_last_message_id,
+      message_id: request?.message_id,
+      inclusive: request?.inclusive,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<RewindChannelResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/rewind',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['RewindChannelResponse']?.(response);
 
     return response;
   }
@@ -2812,9 +2842,11 @@ export class ChatApi {
 
   async unreadCounts(request?: {
     user_id?: string;
+    include_large_channels?: boolean;
   }): Promise<StreamResponse<WrappedUnreadCountsResponse>> {
     const queryParams = {
       user_id: request?.user_id,
+      include_large_channels: request?.include_large_channels,
     };
 
     const response =

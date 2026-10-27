@@ -178,8 +178,10 @@ export interface APNSPayload {
 }
 
 export interface AWSRekognitionRule {
-  action:
-    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
+  /**
+   * What a moderation rule does when it matches.
+   */
+  action: ModerationAction;
   label: string;
   min_confidence: number;
   subclassifications?: Record<string, any>;
@@ -333,7 +335,10 @@ export interface ActivityAddedEvent {
    * The type of event: "feeds.activity.added" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -350,7 +355,10 @@ export interface ActivityDeletedEvent {
    * The type of event: "feeds.activity.deleted" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -443,7 +451,10 @@ export interface ActivityMarkEvent {
    * The type of event: "feeds.activity.marked" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   /**
    * Whether all activities were marked as read
    */
@@ -514,7 +525,10 @@ export interface ActivityPinnedEvent {
    * The type of event: "feeds.activity.pinned" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -562,7 +576,10 @@ export interface ActivityReactionAddedEvent {
    * The type of event: "feeds.activity.reaction.added" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -580,7 +597,10 @@ export interface ActivityReactionDeletedEvent {
    * The type of the reaction that was removed
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -598,7 +618,10 @@ export interface ActivityReactionUpdatedEvent {
    * The type of event: "feeds.activity.reaction.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -615,7 +638,10 @@ export interface ActivityRemovedFromFeedEvent {
    * The type of event: "feeds.activity.removed_from_feed" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -657,7 +683,7 @@ export interface ActivityRequest {
   /**
    * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
    */
-  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies?: RestrictReplies;
   /**
    * Whether to skip URL enrichment for the activity
    */
@@ -677,7 +703,7 @@ export interface ActivityRequest {
   /**
    * Visibility setting for the activity. One of: public, private, tag
    */
-  visibility?: 'public' | 'private' | 'tag';
+  visibility?: ActivityVisibility;
   /**
    * If visibility is 'tag', this is the tag name and is required
    */
@@ -753,7 +779,7 @@ export interface ActivityResponse {
   /**
    * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
    */
-  restrict_replies: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies: RestrictReplies;
   /**
    * Ranking score for this activity
    */
@@ -773,7 +799,7 @@ export interface ActivityResponse {
   /**
    * Visibility setting for the activity. One of: public, private, tag
    */
-  visibility: 'public' | 'private' | 'tag';
+  visibility: ActivityVisibility;
   /**
    * Media attachments for the activity
    */
@@ -906,7 +932,10 @@ export interface ActivityRestoredEvent {
    * The type of the event
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -915,14 +944,7 @@ export interface ActivitySelectorConfig {
   /**
    * Type of selector. One of: popular, proximity, following, current_feed, query, interest, follow_suggestion
    */
-  type:
-    | 'popular'
-    | 'proximity'
-    | 'following'
-    | 'current_feed'
-    | 'query'
-    | 'interest'
-    | 'follow_suggestion';
+  type: ActivitySelectorType;
   /**
    * Time threshold for activity selection (string). Expected RFC3339 format (e.g., 2006-01-02T15:04:05Z07:00). Cannot be used together with cutoff_window
    */
@@ -959,14 +981,7 @@ export interface ActivitySelectorConfigResponse {
   /**
    * Type of selector
    */
-  type:
-    | 'popular'
-    | 'proximity'
-    | 'following'
-    | 'current_feed'
-    | 'query'
-    | 'interest'
-    | 'follow_suggestion';
+  type: ActivitySelectorType;
   /**
    * Time threshold for activity selection (timestamp)
    */
@@ -1002,6 +1017,15 @@ export interface ActivitySelectorConfigResponse {
   params?: Record<string, any>;
 }
 
+export type ActivitySelectorType =
+  | 'popular'
+  | 'proximity'
+  | 'following'
+  | 'current_feed'
+  | 'query'
+  | 'interest'
+  | 'follow_suggestion';
+
 export interface ActivityUnpinnedEvent {
   /**
    * Date/time of creation
@@ -1017,7 +1041,10 @@ export interface ActivityUnpinnedEvent {
    * The type of event: "feeds.activity.unpinned" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -1034,10 +1061,15 @@ export interface ActivityUpdatedEvent {
    * The type of the event
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
+
+export type ActivityVisibility = 'public' | 'private' | 'tag';
 
 export interface AddActivityRequest {
   /**
@@ -1079,7 +1111,7 @@ export interface AddActivityRequest {
   /**
    * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
    */
-  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies?: RestrictReplies;
   /**
    * Whether to skip URL enrichment for the activity
    */
@@ -1100,7 +1132,7 @@ export interface AddActivityRequest {
   /**
    * Visibility setting for the activity. One of: public, private, tag
    */
-  visibility?: 'public' | 'private' | 'tag';
+  visibility?: ActivityVisibility;
   /**
    * If visibility is 'tag', this is the tag name and is required
    */
@@ -1542,6 +1574,10 @@ export interface AnalyzeImageField {
    */
   classifications?: Array<Classification>;
   /**
+   * URLs found in the image, as `{url, source}` objects: `source` is `qr` (decoded from a QR code) or `ocr` (in text visible in the image). Independent of the action; omitted when none were found.
+   */
+  detected_urls?: Array<DetectedURLResponse>;
+  /**
    * Flat list of Bodyguard OCR text-moderation labels on the image's extracted text (e.g. VULGARITY, PII). Each entry: `name` + `severity`. Populated when BG's OCR pipeline returned non-empty results for this image.
    */
   ocr_classifications?: Array<Classification>;
@@ -1644,6 +1680,10 @@ export interface AnalyzeTextField {
    * Flat list of detected Bodyguard text labels (e.g. INSULT, VULGARITY). Each entry carries `name` and `severity`.
    */
   classifications?: Array<Classification>;
+  /**
+   * URLs found in the text, as `{url, source}` objects with `source` = `text`. Independent of the action; omitted when none were found.
+   */
+  detected_urls?: Array<DetectedURLResponse>;
 }
 
 export interface AppDefaults {
@@ -1893,6 +1933,22 @@ export interface AppealResponse {
   duration: string;
 }
 
+export interface ArrangeConfig {
+  /**
+   * Activity field that defines a source. One of: type, user_id
+   */
+  key?: string;
+  /**
+   * Arrangement mode. Currently only 'blend' is supported; 'diversify' and 'slot' are reserved
+   */
+  mode?: string;
+  /**
+   * Activities scoring strictly below this value are moved to the end of the feed, in score order, before the mode runs. 0 is a valid value. Must be greater than exclude_below when both are set
+   */
+  tail_below?: number;
+  blend?: BlendArrangeConfig;
+}
+
 export interface AsyncBulkImageModerationEvent {
   created_at: TimestampNS;
   finished_at: TimestampNS;
@@ -2048,9 +2104,14 @@ export interface Audience {
   shape?: string;
 }
 
+export type AudioDefaultDevice = 'speaker' | 'earpiece';
+
 export interface AudioSettings {
   access_request_enabled: boolean;
-  default_device: 'speaker' | 'earpiece';
+  /**
+   * The device a call routes audio to by default.
+   */
+  default_device: AudioDefaultDevice;
   hifi_audio_enabled: boolean;
   mic_default_on: boolean;
   opus_dtx_enabled: boolean;
@@ -2060,7 +2121,10 @@ export interface AudioSettings {
 }
 
 export interface AudioSettingsRequest {
-  default_device: 'speaker' | 'earpiece';
+  /**
+   * The device a call routes audio to by default.
+   */
+  default_device: AudioDefaultDevice;
   access_request_enabled?: boolean;
   hifi_audio_enabled?: boolean;
   mic_default_on?: boolean;
@@ -2072,7 +2136,10 @@ export interface AudioSettingsRequest {
 
 export interface AudioSettingsResponse {
   access_request_enabled: boolean;
-  default_device: 'speaker' | 'earpiece';
+  /**
+   * The device a call routes audio to by default.
+   */
+  default_device: AudioDefaultDevice;
   hifi_audio_enabled: boolean;
   mic_default_on: boolean;
   opus_dtx_enabled: boolean;
@@ -2092,6 +2159,8 @@ export interface AutomodDetailsResponse {
   result?: MessageModerationResult;
 }
 
+export type AutomodMode = 'disabled' | 'simple' | 'AI';
+
 export interface AutomodPlatformCircumventionConfig {
   async?: boolean;
   enabled?: boolean;
@@ -2099,8 +2168,10 @@ export interface AutomodPlatformCircumventionConfig {
 }
 
 export interface AutomodRule {
-  action:
-    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
+  /**
+   * What a moderation rule does when it matches.
+   */
+  action: ModerationAction;
   label: string;
   threshold: number;
 }
@@ -2112,8 +2183,10 @@ export interface AutomodSemanticFiltersConfig {
 }
 
 export interface AutomodSemanticFiltersRule {
-  action:
-    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
+  /**
+   * What a moderation rule does when it matches.
+   */
+  action: ModerationAction;
   name: string;
   threshold: number;
 }
@@ -2171,7 +2244,7 @@ export interface BanActionRequestPayload {
   /**
    * Message deletion mode: soft, pruning, or hard
    */
-  delete_messages?: 'soft' | 'pruning' | 'hard';
+  delete_messages?: DeleteMessages;
   /**
    * Whether to ban by IP address
    */
@@ -2227,7 +2300,10 @@ export interface BanInfoResponse {
 }
 
 export interface BanOptions {
-  delete_messages?: 'soft' | 'pruning' | 'hard';
+  /**
+   * How a ban or user deletion treats the user's messages.
+   */
+  delete_messages?: DeleteMessages;
   duration?: number;
   ip_ban?: boolean;
   reason?: string;
@@ -2251,7 +2327,10 @@ export interface BanRequest {
    * Channel where the ban applies
    */
   channel_cid?: string;
-  delete_messages?: 'soft' | 'pruning' | 'hard';
+  /**
+   * How a ban or user deletion treats the user's messages.
+   */
+  delete_messages?: DeleteMessages;
   /**
    * Whether to delete reactions by the banned user on other users' messages
    */
@@ -2361,6 +2440,21 @@ export interface BatchQueryCommentReactionsResponse {
   reactions: Array<FeedsReactionResponse>;
   next?: string;
   prev?: string;
+}
+
+export interface BlendArrangeConfig {
+  /**
+   * Minimum gap, 0 to 50, for every source without a min_gap entry
+   */
+  default_min_gap?: number;
+  /**
+   * Minimum number of slots between two items of a source, per key value, 0 to 50. The key '*' requires weights['*']. Combinations of weights and gaps that cannot be satisfied are rejected
+   */
+  min_gap?: Record<string, number>;
+  /**
+   * Relative weight per key value, greater than 0, at most 8 entries. Weights are normalized, so 80/20 equals 4/1. The key '*' is the catch-all source for key values without their own weight; unweighted values are otherwise placed after the blended section
+   */
+  weights?: Record<string, number>;
 }
 
 export interface BlockActionRequestPayload {
@@ -3189,6 +3283,8 @@ export interface CallLevelEventPayload {
   payload?: Record<string, any>;
 }
 
+export type CallLifecycleMode = 'reusable' | 'single_use';
+
 export interface CallLiveStartedEvent {
   call_cid: string;
   created_at: TimestampNS;
@@ -3414,7 +3510,7 @@ export interface CallRecordingFailedEvent {
   /**
    * The type of recording
    */
-  recording_type: 'composite' | 'individual' | 'raw';
+  recording_type: RecordingType;
   /**
    * The type of event: "call.recording_failed" in this case
    */
@@ -3428,7 +3524,7 @@ export interface CallRecordingReadyEvent {
   /**
    * The type of recording
    */
-  recording_type: 'composite' | 'individual' | 'raw';
+  recording_type: RecordingType;
   /**
    * CallRecording represents a recording of a call.
    */
@@ -3446,7 +3542,7 @@ export interface CallRecordingStartedEvent {
   /**
    * The type of recording
    */
-  recording_type: 'composite' | 'individual' | 'raw';
+  recording_type: RecordingType;
   /**
    * The type of event: "call.recording_started" in this case
    */
@@ -3460,7 +3556,7 @@ export interface CallRecordingStoppedEvent {
   /**
    * The type of recording
    */
-  recording_type: 'composite' | 'individual' | 'raw';
+  recording_type: RecordingType;
   /**
    * The type of event: "call.recording_stopped" in this case
    */
@@ -4204,6 +4300,8 @@ export interface CallsPerDayReportResponse {
   daily: Array<DailyAggregateCallsPerDayReportResponse>;
 }
 
+export type CameraFacing = 'front' | 'back' | 'external';
+
 export interface CampaignChannelMember {
   user_id: string;
   channel_role?: string;
@@ -4264,6 +4362,10 @@ export interface CampaignResponse {
   sender?: UserResponse;
 }
 
+export type CampaignSenderMode = 'exclude' | 'include';
+
+export type CampaignSenderVisibility = 'hidden' | 'archived';
+
 export interface CampaignStartedEvent {
   created_at: TimestampNS;
   custom: Record<string, any>;
@@ -4310,7 +4412,7 @@ export interface ChangeFeedVisibilityRequest {
   /**
    * Feed visibility level: public, visible, followers, members, or private
    */
-  visibility: 'public' | 'visible' | 'followers' | 'members' | 'private';
+  visibility: FeedVisibility;
   /**
    * What to do with existing pending follows when loosening visibility from 'followers': auto_approve (default) or reject
    */
@@ -4406,7 +4508,7 @@ export interface ChannelBatchUpdateRequest {
    */
   hide_history_before?: Date;
   /**
-   * For updateData only. Requires a root cids $eq or $in filter with at most 100 CIDs and no root $or/$and. Split larger selections into requests of at most 100 CIDs. A success_channels_count response means the database update completed; a task_id response means it was queued and must be polled, including on older API nodes.
+   * For updateData and hide only. Requires a root cids $eq or $in filter with at most 100 CIDs and no root $or/$and. A synchronous hide also requires 1 to 10 distinct member user IDs. Split larger selections into requests of at most 100 CIDs. A success_channels_count response means the database update completed; a task_id response means it was queued and must be polled, including on older API nodes.
    */
   synchronous?: boolean;
   /**
@@ -4424,7 +4526,7 @@ export interface ChannelBatchUpdateRequest {
 export interface ChannelBatchUpdateResponse {
   duration: string;
   /**
-   * Positive count of channels selected for a completed synchronous database update, not an affected-row count. Concurrent deletion may reduce the rows written. task_id is absent.
+   * Count of channels selected for a completed synchronous database update, not an affected-row count. Concurrent deletion may reduce the rows written. Omitted when the count is 0, which happens for a synchronous hide where none of the member users exist. task_id is absent.
    */
   success_channels_count?: number;
   /**
@@ -4434,8 +4536,14 @@ export interface ChannelBatchUpdateResponse {
 }
 
 export interface ChannelConfig {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -4466,13 +4574,16 @@ export interface ChannelConfig {
    */
   commands: Array<string>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -4496,7 +4607,7 @@ export interface ChannelConfigOverrides {
   /**
    * Overrides the push notification level for this channel
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   /**
    * Enables message quotes
    */
@@ -4538,8 +4649,14 @@ export interface ChannelConfigOverrides {
 }
 
 export interface ChannelConfigWithInfo {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -4567,17 +4684,32 @@ export interface ChannelConfigWithInfo {
   user_message_reminders: boolean;
   commands: Array<Command>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
+  /**
+   * How far ahead, in seconds, a message can be scheduled. Present only when scheduled messages are enabled for the app. A later scheduled_at returns error code 116 (scheduled_at_too_far), whose max_lead_time_seconds carries the same value
+   */
+  scheduled_messages_max_lead_time_seconds?: number;
   /**
    * Maximum number of scheduled messages (scheduled or sending) a user can have in this channel. Present only when scheduled messages are enabled for the app. Scheduling more returns error code 117 (scheduled_limit_channel)
    */
   scheduled_messages_max_per_channel?: number;
+  /**
+   * Maximum number of scheduled messages (scheduled or sending) a user can have across all channels. Present only when scheduled messages are enabled for the app. Scheduling more returns error code 118 (scheduled_limit_user)
+   */
+  scheduled_messages_max_per_user?: number;
+  /**
+   * Minimum time ahead, in seconds, a message is scheduled for. Present only when scheduled messages are enabled for the app. A future scheduled_at closer than this is moved later, to the first whole minute at least this far ahead; it is never rejected
+   */
+  scheduled_messages_min_lead_time_seconds?: number;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -4986,6 +5118,8 @@ export interface ChannelMetadata {
   team?: string;
 }
 
+export type ChannelModerationBehavior = 'flag' | 'block' | 'shadow_block';
+
 export interface ChannelMute {
   /**
    * Date/time of creation
@@ -5202,6 +5336,73 @@ export interface ChannelResponse {
   truncated_by?: UserResponse;
 }
 
+export interface ChannelRewindResponse {
+  /**
+   * Date/time of the rewind
+   */
+  created_at: TimestampNS;
+  /**
+   * Number of messages the rewind hid that were not hidden already
+   */
+  hidden_count_at_rewind: number;
+  /**
+   * ID of the rewind
+   */
+  id: string;
+  /**
+   * Whether `message_id` was hidden too
+   */
+  inclusive: boolean;
+  /**
+   * ID of the message the channel was rewound to
+   */
+  message_id: string;
+}
+
+export interface ChannelRewoundEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  /**
+   * Represents channel in chat
+   */
+  channel: ChannelResponse;
+  custom: Record<string, any>;
+  /**
+   * A rewind of an agent channel
+   */
+  rewind: ChannelRewindResponse;
+  /**
+   * The type of event: "channel.rewound" in this case
+   */
+  type: string;
+  /**
+   * The ID of the channel which was rewound
+   */
+  channel_id?: string;
+  /**
+   * The number of members in the channel
+   */
+  channel_member_count?: number;
+  channel_message_count?: number;
+  /**
+   * The type of the channel which was rewound
+   */
+  channel_type?: string;
+  /**
+   * The CID of the channel which was rewound
+   */
+  cid?: string;
+  received_at?: TimestampNS;
+  /**
+   * The team ID
+   */
+  team?: string;
+  channel_custom?: Record<string, any>;
+  user?: UserResponseCommonFields;
+}
+
 export interface ChannelStateResponse {
   duration: string;
   /**
@@ -5373,8 +5574,14 @@ export interface ChannelTruncatedEvent {
 }
 
 export interface ChannelTypeConfig {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -5404,13 +5611,16 @@ export interface ChannelTypeConfig {
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -6013,6 +6223,28 @@ export interface CheckSQSResponse {
   data?: Record<string, any>;
 }
 
+export interface ClaimGuestUserRequest {
+  /**
+   * ID of the guest user to claim
+   */
+  guest_user_id: string;
+  /**
+   * ID of the regular user that claims the guest and receives its channels, messages and reactions
+   */
+  user_id: string;
+}
+
+export interface ClaimGuestUserResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * ID of the task that moves the guest's channels, messages and reactions to the claiming user
+   */
+  task_id: string;
+}
+
 export interface Classification {
   name: string;
   confidence?: number;
@@ -6233,6 +6465,8 @@ export interface CollectionResponse {
   custom?: Record<string, any>;
 }
 
+export type CollectionStatus = 'ok' | 'notfound';
+
 export interface Command {
   /**
    * Arguments help text, shown in commands auto-completion
@@ -6273,7 +6507,10 @@ export interface CommentAddedEvent {
    * The type of event: "feeds.comment.added" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -6290,7 +6527,10 @@ export interface CommentDeletedEvent {
    * The type of event: "feeds.comment.deleted" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -6371,7 +6611,10 @@ export interface CommentReactionAddedEvent {
    * The type of event: "feeds.comment.reaction.added" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -6389,7 +6632,10 @@ export interface CommentReactionDeletedEvent {
    * The type of reaction that was removed
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
 
@@ -6407,7 +6653,10 @@ export interface CommentReactionUpdatedEvent {
    * The type of event: "feeds.comment.reaction.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -6457,7 +6706,7 @@ export interface CommentResponse {
   /**
    * Status of the comment. One of: active, deleted, removed, hidden
    */
-  status: 'active' | 'deleted' | 'removed' | 'hidden' | 'shadow_blocked';
+  status: CommentStatus;
   /**
    * When the comment was last updated
    */
@@ -6530,10 +6779,16 @@ export interface CommentRestoredEvent {
    * The type of event: "feeds.comment.restored" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
+
+export type CommentStatus =
+  'active' | 'deleted' | 'removed' | 'hidden' | 'shadow_blocked';
 
 export interface CommentUpdatedEvent {
   /**
@@ -6547,7 +6802,10 @@ export interface CommentUpdatedEvent {
    * The type of event: "feeds.comment.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -6584,7 +6842,7 @@ export interface ConfigOverridesRequest {
   /**
    * Overrides the push notification level for this channel
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   /**
    * Enable/disable quotes
    */
@@ -6826,11 +7084,11 @@ export interface CreateCampaignRequest {
   /**
    * The sender mode of the campaign
    */
-  sender_mode?: 'exclude' | 'include';
+  sender_mode?: CampaignSenderMode;
   /**
    * The visibility of the created channels for the sender
    */
-  sender_visibility?: 'hidden' | 'archived';
+  sender_visibility?: CampaignSenderVisibility;
   /**
    * Whether the campaign should show channels, if they are hidden
    */
@@ -6867,7 +7125,7 @@ export interface CreateChannelTypeRequest {
   /**
    * Automod. One of: disabled, simple, AI
    */
-  automod: 'disabled' | 'simple' | 'AI';
+  automod: AutomodMode;
   /**
    * Automod behavior. One of: flag, block
    */
@@ -6887,7 +7145,7 @@ export interface CreateChannelTypeRequest {
   /**
    * Blocklist behavior. One of: flag, block, shadow_block
    */
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  blocklist_behavior?: ChannelModerationBehavior;
   /**
    * Connect events
    */
@@ -6928,7 +7186,7 @@ export interface CreateChannelTypeRequest {
   /**
    * Default push notification level for the channel type. One of: all, all_mentions, mentions, direct_mentions, none
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   /**
    * Push notifications
    */
@@ -6999,8 +7257,14 @@ export interface CreateChannelTypeRequest {
 }
 
 export interface CreateChannelTypeResponse {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -7034,13 +7298,16 @@ export interface CreateChannelTypeResponse {
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -7105,7 +7372,7 @@ export interface CreateDeviceRequest {
   /**
    * Push provider
    */
-  push_provider: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
+  push_provider: PushProviderName;
   /**
    * Stable physical device identifier used to deduplicate pushes across push providers (e.g. APNs VoIP and Firebase on the same iOS device). Distinct from 'id', which is the push token.
    */
@@ -7175,8 +7442,7 @@ export interface CreateFeedGroupRequest {
   /**
    * Default visibility for the feed group, can be 'public', 'visible', 'followers', 'members', or 'private'. Defaults to 'visible' if not provided.
    */
-  default_visibility?:
-    'public' | 'visible' | 'followers' | 'members' | 'private';
+  default_visibility?: FeedVisibility;
   /**
    * Configuration for activity processors
    */
@@ -7469,7 +7735,7 @@ export interface CreatePollRequest {
   /**
    * Represents the visibility of votes in a poll.
    */
-  voting_visibility?: 'anonymous' | 'public';
+  voting_visibility?: VotingVisibility;
   options?: Array<PollOptionInput>;
   /**
    * Custom data for this object
@@ -8200,6 +8466,8 @@ export interface DeleteMessageResponse {
   message: MessageResponse;
 }
 
+export type DeleteMessages = 'soft' | 'pruning' | 'hard';
+
 export interface DeleteModerationConfigResponse {
   duration: string;
 }
@@ -8294,7 +8562,10 @@ export interface DeleteReminderResponse {
 }
 
 export interface DeleteRetentionPolicyRequest {
-  policy: 'old-messages' | 'inactive-channels';
+  /**
+   * What a retention policy applies to.
+   */
+  policy: RetentionPolicyType;
 }
 
 export interface DeleteRetentionPolicyResponse {
@@ -8349,7 +8620,7 @@ export interface DeleteUserMessagesRequestPayload {
   /**
    * Message deletion mode: soft, pruning, or hard
    */
-  delete_messages: 'soft' | 'pruning' | 'hard';
+  delete_messages: DeleteMessages;
   /**
    * Optional: scope deletion to a single channel (alternative to app-wide deletion)
    */
@@ -8479,6 +8750,17 @@ export interface DeliveryZoneSegment {
   poor_pct?: number;
   share_pct?: number;
   watch_share_pct?: number;
+}
+
+export interface DetectedURLResponse {
+  /**
+   * The URL as found.
+   */
+  url: string;
+  /**
+   * Where it was found: `qr` (decoded from a QR code in an image), `ocr` (in text visible in an image) or `text` (in a moderated text).
+   */
+  source?: string;
 }
 
 export interface DeviceDataResponse {
@@ -8674,14 +8956,14 @@ export interface EncryptionSettingsRequest {
   /**
    * Encryption mode. One of: available, disabled, auto-on
    */
-  mode?: 'available' | 'disabled' | 'auto-on';
+  mode?: FeatureActivationMode;
 }
 
 export interface EncryptionSettingsResponse {
   /**
    * the resolved encryption mode for the call
    */
-  mode: 'available' | 'disabled' | 'auto-on';
+  mode: FeatureActivationMode;
 }
 
 export interface EndCallResponse {
@@ -8719,7 +9001,7 @@ export interface EnrichedCollectionResponse {
   /**
    * Enrichment status of the collection. One of: ok, notfound
    */
-  status: 'ok' | 'notfound';
+  status: CollectionStatus;
   /**
    * When the collection was created
    */
@@ -9036,6 +9318,29 @@ export interface ExportFeedUserDataResponse {
   task_id: string;
 }
 
+export interface ExportFeedsByTypeRequest {
+  /**
+   * Only export rows created at or after this time. On reactions and follows it requires user_id; on comments soft-deleted rows are left out
+   */
+  created_at_from?: Date;
+  /**
+   * Only export rows created before this time. On reactions and follows it requires user_id; on comments soft-deleted rows are left out
+   */
+  created_at_to?: Date;
+  /**
+   * Only export rows of this user: activities, comments and reactions by the user; follows where the user created the source or the target feed. With user_id, soft-deleted activities and comments are left out
+   */
+  user_id?: string;
+}
+
+export interface ExportFeedsResponse {
+  duration: string;
+  /**
+   * The task ID for the export task
+   */
+  task_id: string;
+}
+
 export interface ExportUserResponse {
   /**
    * Duration of the request in milliseconds
@@ -9087,6 +9392,8 @@ export interface FailedChannelUpdates {
   cids: Array<string>;
 }
 
+export type FeatureActivationMode = 'available' | 'disabled' | 'auto-on';
+
 export interface FeedCreatedEvent {
   /**
    * Date/time of creation
@@ -9101,7 +9408,10 @@ export interface FeedCreatedEvent {
    * The type of event: "feeds.feed.created" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
 
@@ -9116,7 +9426,10 @@ export interface FeedDeletedEvent {
    * The type of event: "feeds.feed.deleted" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -9126,7 +9439,10 @@ export interface FeedGroup {
   app_pk: number;
   created_at: TimestampNS;
   default_follower_role: string;
-  default_visibility: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  default_visibility: FeedVisibility;
   group_id: string;
   updated_at: TimestampNS;
   activity_processors: Array<ActivityProcessorConfig>;
@@ -9153,7 +9469,10 @@ export interface FeedGroupChangedEvent {
    * The type of event: "feeds.feed_group.changed" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   feed_group?: FeedGroup;
   user?: UserResponseCommonFields;
@@ -9174,7 +9493,10 @@ export interface FeedGroupDeletedEvent {
    * The type of event: "feeds.feed_group.deleted" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
 
@@ -9198,8 +9520,7 @@ export interface FeedGroupResponse {
   /**
    * Default visibility for activities. One of: public, visible, followers, members, private
    */
-  default_visibility?:
-    'public' | 'visible' | 'followers' | 'members' | 'private';
+  default_visibility?: FeedVisibility;
   deleted_at?: TimestampNS;
   /**
    * Configuration for activity processors
@@ -9238,7 +9559,10 @@ export interface FeedGroupRestoredEvent {
    * The type of event: "feeds.feed_group.restored" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
 
@@ -9256,7 +9580,10 @@ export interface FeedGroupScope {
 export interface FeedInput {
   description?: string;
   name?: string;
-  visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
+  /**
+   * Who can see and follow a feed.
+   */
+  visibility?: FeedVisibility;
   filter_tags?: Array<string>;
   members?: Array<FeedMemberRequest>;
   custom?: Record<string, any>;
@@ -9275,7 +9602,10 @@ export interface FeedMemberAddedEvent {
    * The type of event: "feeds.feed_member.added" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -9292,7 +9622,10 @@ export interface FeedMemberRemovedEvent {
    * The type of event: "feeds.feed_member.removed" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -9332,7 +9665,7 @@ export interface FeedMemberResponse {
   /**
    * Status of the membership. One of: member, pending, rejected
    */
-  status: 'member' | 'pending' | 'rejected';
+  status: FeedMemberStatus;
   /**
    * When the membership was last updated
    */
@@ -9356,6 +9689,8 @@ export interface FeedMemberResponse {
   membership_level?: MembershipLevelResponse;
 }
 
+export type FeedMemberStatus = 'member' | 'pending' | 'rejected';
+
 export interface FeedMemberUpdatedEvent {
   /**
    * Date/time of creation
@@ -9368,7 +9703,10 @@ export interface FeedMemberUpdatedEvent {
    * The type of event: "feeds.feed_member.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -9448,7 +9786,7 @@ export interface FeedRequest {
   /**
    * Visibility setting for the feed. One of: public, visible, followers, members, private
    */
-  visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
+  visibility?: FeedVisibility;
   /**
    * Tags used for filtering feeds
    */
@@ -9521,7 +9859,7 @@ export interface FeedResponse {
   /**
    * Visibility setting for the feed
    */
-  visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
+  visibility?: FeedVisibility;
   /**
    * Tags used for filtering feeds
    */
@@ -9605,7 +9943,7 @@ export interface FeedSuggestionResponse {
   /**
    * Visibility setting for the feed
    */
-  visibility?: 'public' | 'visible' | 'followers' | 'members' | 'private';
+  visibility?: FeedVisibility;
   /**
    * Tags used for filtering feeds
    */
@@ -9640,7 +9978,10 @@ export interface FeedUpdatedEvent {
    * The type of event: "feeds.feed.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
@@ -9661,6 +10002,9 @@ export interface FeedViewResponse {
   aggregation?: AggregationConfig;
   ranking?: RankingConfig;
 }
+
+export type FeedVisibility =
+  'public' | 'visible' | 'followers' | 'members' | 'private';
 
 export interface FeedVisibilityResponse {
   /**
@@ -9699,7 +10043,10 @@ export interface FeedsEnrichedCollectionResponse {
   created_at: TimestampNS;
   id: string;
   name: string;
-  status: string;
+  /**
+   * Enrichment status of a collection entry.
+   */
+  status: CollectionStatus;
   updated_at: TimestampNS;
   user_id: string;
   custom: Record<string, any>;
@@ -9723,7 +10070,10 @@ export interface FeedsFeedResponse {
    */
   created_by: UserResponse;
   deleted_at?: TimestampNS;
-  visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  visibility?: FeedVisibility;
   filter_tags?: Array<string>;
   custom?: Record<string, any>;
   location?: FeedsActivityLocation;
@@ -9882,12 +10232,18 @@ export interface FeedsV3ActivityResponse {
   popularity: number;
   preview: boolean;
   reaction_count: number;
-  restrict_replies: string;
+  /**
+   * Who is allowed to reply to an activity.
+   */
+  restrict_replies: RestrictReplies;
   score: number;
   share_count: number;
   type: string;
   updated_at: TimestampNS;
-  visibility: string;
+  /**
+   * Who can see an activity.
+   */
+  visibility: ActivityVisibility;
   attachments: Array<Attachment>;
   comments: Array<FeedsV3CommentResponse>;
   feeds: Array<string>;
@@ -9941,7 +10297,10 @@ export interface FeedsV3CommentResponse {
   reaction_count: number;
   reply_count: number;
   score: number;
-  status: string;
+  /**
+   * Moderation status of a comment.
+   */
+  status: CommentStatus;
   updated_at: TimestampNS;
   upvote_count: number;
   mentioned_users: Array<UserResponse>;
@@ -10251,7 +10610,10 @@ export interface FollowCreatedEvent {
    * The type of event: "feeds.follow.created" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
 
@@ -10267,9 +10629,14 @@ export interface FollowDeletedEvent {
    * The type of event: "feeds.follow.deleted" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
 }
+
+export type FollowPushPreference = 'all' | 'none';
 
 export interface FollowRequest {
   /**
@@ -10304,7 +10671,7 @@ export interface FollowRequest {
   /**
    * Push preference for the follow relationship
    */
-  push_preference?: 'all' | 'none';
+  push_preference?: FollowPushPreference;
   /**
    * Whether to skip push for this follow
    */
@@ -10312,7 +10679,7 @@ export interface FollowRequest {
   /**
    * Status of the follow relationship. One of: accepted, pending, rejected
    */
-  status?: 'accepted' | 'pending' | 'rejected';
+  status?: FollowStatus;
   /**
    * Custom data for the follow relationship
    */
@@ -10331,11 +10698,11 @@ export interface FollowResponse {
   /**
    * Push preference for notifications. One of: all, none
    */
-  push_preference: 'all' | 'none';
+  push_preference: FollowPushPreference;
   /**
    * Status of the follow relationship. One of: accepted, pending, rejected
    */
-  status: 'accepted' | 'pending' | 'rejected';
+  status: FollowStatus;
   /**
    * When the follow relationship was last updated
    */
@@ -10356,6 +10723,8 @@ export interface FollowResponse {
   custom?: Record<string, any>;
 }
 
+export type FollowStatus = 'accepted' | 'pending' | 'rejected';
+
 export interface FollowUpdatedEvent {
   /**
    * Date/time of creation
@@ -10368,13 +10737,30 @@ export interface FollowUpdatedEvent {
    * The type of event: "feeds.follow.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
+}
+
+export interface ForYouConfig {
+  /**
+   * Turns For You ranking on. Groups: only the non-aggregated 'foryou' group. Views: applies only when read on that group
+   */
+  enabled?: boolean;
+  /**
+   * Name of a registered ranking preset that stands in for 'score' when score is empty. One of: for_you_v2, hot
+   */
+  preset?: string;
 }
 
 export interface FrameRecordSettings {
   capture_interval_in_seconds: number;
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   quality?: string;
 }
 
@@ -10384,15 +10770,23 @@ export interface FrameRecordingResponse {
 
 export interface FrameRecordingSettingsRequest {
   capture_interval_in_seconds: number;
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   quality?: '360p' | '480p' | '720p' | '1080p' | '1440p';
 }
 
 export interface FrameRecordingSettingsResponse {
   capture_interval_in_seconds: number;
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   quality?: string;
 }
+
+export type FriendReactionType = 'following' | 'mutual';
 
 export interface FriendReactionsOptions {
   /**
@@ -10406,7 +10800,7 @@ export interface FriendReactionsOptions {
   /**
    * Default: 'following'. The type of friend relationship to use. 'following' = users you follow, 'mutual' = users with mutual follows. One of: following, mutual
    */
-  type?: 'following' | 'mutual';
+  type?: FriendReactionType;
 }
 
 export interface FullUserResponse {
@@ -10621,8 +11015,14 @@ export interface GetCampaignResponse {
 }
 
 export interface GetChannelTypeResponse {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -10656,13 +11056,16 @@ export interface GetChannelTypeResponse {
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -11072,8 +11475,7 @@ export interface GetOrCreateFeedGroupRequest {
   /**
    * Default visibility for the feed group, can be 'public', 'visible', 'followers', 'members', or 'private'. Defaults to 'visible' if not provided.
    */
-  default_visibility?:
-    'public' | 'visible' | 'followers' | 'members' | 'private';
+  default_visibility?: FeedVisibility;
   /**
    * Configuration for activity processors
    */
@@ -11709,7 +12111,10 @@ export interface Incident {
 }
 
 export interface IndividualRecordSettings {
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   output_types?: Array<string>;
 }
 
@@ -11721,7 +12126,7 @@ export interface IndividualRecordingSettingsRequest {
   /**
    * Recording mode. One of: available, disabled, auto-on
    */
-  mode: 'available' | 'disabled' | 'auto-on';
+  mode: FeatureActivationMode;
   /**
    * Output types to include: audio_only, video_only, audio_video, screenshare_audio_only, screenshare_video_only, screenshare_audio_video
    */
@@ -11729,7 +12134,10 @@ export interface IndividualRecordingSettingsRequest {
 }
 
 export interface IndividualRecordingSettingsResponse {
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   output_types?: Array<string>;
 }
 
@@ -11879,7 +12287,10 @@ export interface IngressVideoEncodingResponse {
 
 export interface IngressVideoLayer {
   bitrate: number;
-  codec: 'h264' | 'vp8';
+  /**
+   * The codec an ingress video layer is encoded with.
+   */
+  codec: VideoCodec;
   frame_rate: number;
   max_dimension: number;
   min_dimension: number;
@@ -11887,7 +12298,10 @@ export interface IngressVideoLayer {
 
 export interface IngressVideoLayerRequest {
   bitrate: number;
-  codec: 'h264' | 'vp8';
+  /**
+   * The codec an ingress video layer is encoded with.
+   */
+  codec: VideoCodec;
   frame_rate_limit: number;
   max_dimension: number;
   min_dimension: number;
@@ -12290,16 +12704,25 @@ export interface LabelsResponse {
   labels?: Array<string>;
 }
 
+export type LayoutName =
+  'spotlight' | 'grid' | 'single-participant' | 'mobile' | 'custom';
+
 export interface LayoutSettings {
   external_app_url: string;
   external_css_url: string;
-  name: 'spotlight' | 'grid' | 'single-participant' | 'mobile' | 'custom';
+  /**
+   * The layout a call recording or broadcast is composed with.
+   */
+  name: LayoutName;
   detect_orientation?: boolean;
   options?: Record<string, any>;
 }
 
 export interface LayoutSettingsRequest {
-  name: 'spotlight' | 'grid' | 'single-participant' | 'mobile' | 'custom';
+  /**
+   * The layout a call recording or broadcast is composed with.
+   */
+  name: LayoutName;
   detect_orientation?: boolean;
   external_app_url?: string;
   external_css_url?: string;
@@ -12309,7 +12732,10 @@ export interface LayoutSettingsRequest {
 export interface LayoutSettingsResponse {
   external_app_url: string;
   external_css_url: string;
-  name: 'spotlight' | 'grid' | 'single-participant' | 'mobile' | 'custom';
+  /**
+   * The layout a call recording or broadcast is composed with.
+   */
+  name: LayoutName;
   detect_orientation?: boolean;
   options?: Record<string, any>;
 }
@@ -12318,14 +12744,14 @@ export interface LifecycleSettingsRequest {
   /**
    * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer (currently: when the caller cancels the ring). Fixed at call creation
    */
-  mode?: 'reusable' | 'single_use';
+  mode?: CallLifecycleMode;
 }
 
 export interface LifecycleSettingsResponse {
   /**
    * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer (currently: when the caller cancels the ring). Fixed at call creation
    */
-  mode: 'reusable' | 'single_use';
+  mode: CallLifecycleMode;
 }
 
 export interface LimitInfoResponse {
@@ -13929,6 +14355,9 @@ export interface MetricsPct {
   quality_score?: number;
 }
 
+export type ModerationAction =
+  'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
+
 export interface ModerationActionConfigResponse {
   /**
    * The action to take
@@ -14105,6 +14534,140 @@ export interface ModerationDashboardPreferences {
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
   media_label_display?: Record<string, string>;
   overview_dashboard?: OverviewDashboardConfig;
+}
+
+export interface ModerationFeedbackItemResponse {
+  /**
+   * When the item was submitted; all items of one submission share it
+   */
+  created_at: TimestampNS;
+  /**
+   * Feedback item ID
+   */
+  id: string;
+  /**
+   * false_positive or false_negative
+   */
+  kind: string;
+  /**
+   * Bodyguard's ID for the delivered feedback
+   */
+  bodyguard_feedback_id?: string;
+  /**
+   * When Bodyguard accepted the feedback; unset if not sent
+   */
+  bodyguard_sent_at?: TimestampNS;
+  /**
+   * Channel of a single-message feedback
+   */
+  channel_id?: string;
+  /**
+   * Moderator's confidence
+   */
+  confidence?: string;
+  /**
+   * Action the content had
+   */
+  current_recommended_action?: string;
+  /**
+   * Moderator's description
+   */
+  description?: string;
+  /**
+   * ID of the moderated entity
+   */
+  entity_id?: string;
+  /**
+   * Type of the moderated entity
+   */
+  entity_type?: string;
+  /**
+   * Action the moderator expected
+   */
+  expected_recommended_action?: string;
+  /**
+   * Flag the feedback disputes
+   */
+  flag_id?: string;
+  /**
+   * Image content of the item
+   */
+  image_url?: string;
+  /**
+   * Publish time of a single-message feedback
+   */
+  published_at?: string;
+  /**
+   * Which content of the entity the item is about
+   */
+  reference?: string;
+  /**
+   * Moderator who submitted the feedback
+   */
+  reporter_id?: string;
+  /**
+   * Review queue item the feedback is about
+   */
+  review_queue_item_id?: string;
+  /**
+   * Text content of the item
+   */
+  text?: string;
+  /**
+   * Labels the content had
+   */
+  current_labels?: Array<string>;
+  /**
+   * Labels the moderator expected
+   */
+  expected_labels?: Array<string>;
+}
+
+export interface ModerationFeedbackSubmissionResponse {
+  /**
+   * When the submission was made
+   */
+  created_at: TimestampNS;
+  /**
+   * Number of items in the submission, matching the filter or not
+   */
+  item_count: number;
+  /**
+   * Number of items in the submission that match the filter, including those left out by item_limit
+   */
+  matched_count: number;
+  /**
+   * Number of items in the submission that Bodyguard accepted
+   */
+  sent_count: number;
+  /**
+   * The submission's items that match the filter
+   */
+  items: Array<ModerationFeedbackItemResponse>;
+  /**
+   * ID of the moderated entity
+   */
+  entity_id?: string;
+  /**
+   * Type of the moderated entity
+   */
+  entity_type?: string;
+  /**
+   * Moderator who submitted the feedback
+   */
+  reporter_id?: string;
+  /**
+   * Review queue item the feedback is about
+   */
+  review_queue_item_id?: string;
+  /**
+   * Distinct labels the submission's items had
+   */
+  current_labels?: Array<string>;
+  /**
+   * Distinct labels the moderator expected across the submission's items
+   */
+  expected_labels?: Array<string>;
 }
 
 export interface ModerationFlagResponse {
@@ -14359,11 +14922,27 @@ export interface ModerationRulesTriggeredEvent {
   custom: Record<string, any>;
   rule: ModerationRuleInfo;
   type: string;
+  /**
+   * Application ID the rule belongs to.
+   */
+  app_id?: number;
+  /**
+   * The `category` sent on the labels request. Omitted when the event was not produced by the labels API.
+   */
+  category?: string;
   received_at?: TimestampNS;
   /**
    * The review queue item ID if applicable
    */
   review_queue_item_id?: string;
+  /**
+   * Configured count that fires the condition. This is the number stored on the rule, not the live counter.
+   */
+  threshold?: number;
+  /**
+   * Configured window of the condition that fired, for example 10m.
+   */
+  time_window?: string;
   /**
    * The violation number for call rules (optional)
    */
@@ -14372,6 +14951,14 @@ export interface ModerationRulesTriggeredEvent {
    * Ordered list of contents whose verdicts contributed to an aggregation rule's threshold. Populated only for aggregation rules when callers supplied `content_ids`.
    */
   matched_contents?: Array<MatchedContent>;
+  /**
+   * Cross-user webhook_only flood rules only: the distinct users who sent the content since the previous webhook for this rule. Omitted on other events.
+   */
+  matched_user_ids?: Array<string>;
+  /**
+   * The rule's config_keys. Omitted when the rule is application-wide.
+   */
+  scope?: Array<string>;
   intent?: IntentEvaluationInfo;
 }
 
@@ -14504,7 +15091,10 @@ export interface NetworkMetricsReportResponse {
 }
 
 export interface NoiseCancellationSettings {
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
 }
 
 export interface NotificationComment {
@@ -14564,7 +15154,10 @@ export interface NotificationFeedUpdatedEvent {
    * The type of event: "feeds.notification_feed.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   /**
    * Aggregated activities for notification feeds
@@ -14829,8 +15422,10 @@ export interface OCRContentParameters {
 }
 
 export interface OCRRule {
-  action:
-    'flag' | 'shadow' | 'remove' | 'bounce' | 'bounce_flag' | 'bounce_remove';
+  /**
+   * What a moderation rule does when it matches.
+   */
+  action: ModerationAction;
   label: string;
 }
 
@@ -15533,7 +16128,7 @@ export interface PollResponseData {
   /**
    * Voting visibility of the poll
    */
-  voting_visibility: 'anonymous' | 'public';
+  voting_visibility: VotingVisibility;
   latest_answers: Array<PollVoteResponseData>;
   options: Array<PollOptionResponseData>;
   own_votes: Array<PollVoteResponseData>;
@@ -15799,6 +16394,9 @@ export interface PushConfig {
   offline_only?: boolean;
 }
 
+export type PushLevel =
+  'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+
 export interface PushNotificationConfig {
   /**
    * Whether push notifications are enabled for this feed group
@@ -15921,6 +16519,8 @@ export interface PushProvider {
   xiaomi_package_name?: string;
   push_templates?: Array<PushTemplate>;
 }
+
+export type PushProviderName = 'firebase' | 'apn' | 'huawei' | 'xiaomi';
 
 export interface PushProviderRequest {
   name: string;
@@ -16599,11 +17199,11 @@ export interface QueryChannelBansResponse {
 
 export interface QueryChannelsDefaults {
   /**
-   * Number of channels returned when `limit` is omitted.
+   * Number of channels returned when `limit` is omitted. A request asking for at most one message and one member per channel can return more, up to the higher ceiling described on `max_limit`.
    */
   limit: number;
   /**
-   * Largest number of channels returned for one request. A bigger `limit` is silently clamped to this value rather than rejected. An app with no per-app override gets a higher ceiling for the narrow case of a request asking for at most one message and one member per channel.
+   * Largest number of channels returned for one request. A bigger `limit` is silently clamped to this value rather than rejected. An app with no per-app `max_limit` gets a higher ceiling for the narrow case of a request asking for at most one message and one member per channel.
    */
   max_limit: number;
   /**
@@ -16922,14 +17522,17 @@ export interface QueryFeedsUsageStatsResponse {
   duration: string;
   activities: DailyMetricStatsResponse;
   api_requests: DailyMetricStatsResponse;
+  collections: DailyMetricStatsResponse;
+  comments: DailyMetricStatsResponse;
   follows: DailyMetricStatsResponse;
   openai_requests: DailyMetricStatsResponse;
+  reactions: DailyMetricStatsResponse;
   emau?: EMAUStatsResponse;
 }
 
 export interface QueryFollowsRequest {
   /**
-   * When true (server-side only), the response includes group_counts: accepted following counts keyed by the followed feed's group. Requires exactly one source_feed / source_fid string equality. HTTP 400 if target_feed appears, if two source FIDs are given, or if $in / $or / $nor mentions those keys. Independent of paging and of other filters, including status.
+   * When true (server-side only), the response includes group_counts: accepted following counts keyed by the followed feed's group. Requires exactly one source_feed / source_fid string equality. HTTP 400 if target_feed appears, if two source FIDs are given, or if $in / $or mentions those keys. Independent of paging and of other filters, including status.
    */
   include_group_counts?: boolean;
   limit?: number;
@@ -17184,6 +17787,40 @@ export interface QueryModerationConfigsResponse {
   configs: Array<ConfigResponse>;
   next?: string;
   prev?: string;
+}
+
+export interface QueryModerationFeedbackRequest {
+  /**
+   * Maximum number of matching items returned per submission, 1 to 50; all by default
+   */
+  item_limit?: number;
+  limit?: number;
+  next?: string;
+  prev?: string;
+  user_id?: string;
+  /**
+   * Sorting parameters: created_at only, newest first by default
+   */
+  sort?: Array<SortParamRequest>;
+  /**
+   * Filter conditions
+   */
+  filter?: Record<string, any>;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface QueryModerationFeedbackResponse {
+  duration: string;
+  /**
+   * Feedback submissions with at least one item matching the filter, each with its matching items
+   */
+  submissions: Array<ModerationFeedbackSubmissionResponse>;
+  next?: string;
+  prev?: string;
+  filter_config?: FilterConfigResponse;
 }
 
 export interface QueryModerationFlagsRequest {
@@ -17904,13 +18541,15 @@ export interface RankingConfig {
    */
   exclude_below?: number;
   /**
-   * Scoring formula. Required when type is 'expression' or 'interest'
+   * Scoring formula. Required when type is 'expression' (unless for_you.preset is set) or 'interest'
    */
   score?: string;
+  arrange?: ArrangeConfig;
   /**
    * Default values for ranking
    */
   defaults?: Record<string, any>;
+  for_you?: ForYouConfig;
   /**
    * Decay functions configuration
    */
@@ -17918,7 +18557,10 @@ export interface RankingConfig {
 }
 
 export interface RawRecordSettings {
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   audio_only?: boolean;
 }
 
@@ -17930,7 +18572,7 @@ export interface RawRecordingSettingsRequest {
   /**
    * Recording mode. One of: available, disabled, auto-on
    */
-  mode: 'available' | 'disabled' | 'auto-on';
+  mode: FeatureActivationMode;
   /**
    * If true, only audio tracks will be recorded
    */
@@ -17938,7 +18580,10 @@ export interface RawRecordingSettingsRequest {
 }
 
 export interface RawRecordingSettingsResponse {
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   audio_only?: boolean;
 }
 
@@ -18300,7 +18945,7 @@ export interface RecordSettingsRequest {
   /**
    * Recording mode. One of: available, disabled, auto-on
    */
-  mode: 'available' | 'disabled' | 'auto-on';
+  mode: FeatureActivationMode;
   /**
    * Whether to record audio only
    */
@@ -18324,10 +18969,15 @@ export interface RecordSettingsRequest {
 
 export interface RecordSettingsResponse {
   audio_only: boolean;
-  mode: string;
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   quality: string;
   layout: LayoutSettingsResponse;
 }
+
+export type RecordingType = 'composite' | 'individual' | 'raw';
 
 export interface RejectAppealRequestPayload {
   /**
@@ -18701,12 +19351,16 @@ export interface RestoreUsersRequest {
   user_ids: Array<string>;
 }
 
+export type RestrictReplies = 'everyone' | 'people_i_follow' | 'nobody';
+
 export interface RetentionPolicy {
   app_pk: number;
   enabled_at: TimestampNS;
   policy: string;
   config: PolicyConfig;
 }
+
+export type RetentionPolicyType = 'old-messages' | 'inactive-channels';
 
 export interface RetentionRunResponse {
   app_pk: number;
@@ -18893,6 +19547,41 @@ export interface RevisionHistoryResponse {
   user_id: string;
   changed_fields?: Array<string>;
   previous_obj_serialized?: Record<string, any>;
+}
+
+export interface RewindChannelRequest {
+  /**
+   * ID of the newest visible message the caller saw. The rewind fails with a conflict when it is no longer the newest
+   */
+  expected_last_message_id: string;
+  /**
+   * ID of the top-level message to rewind the channel to. Every message created after it is hidden
+   */
+  message_id: string;
+  /**
+   * When true, `message_id` is hidden too and the message before it becomes the newest visible message
+   */
+  inclusive?: boolean;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface RewindChannelResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * A rewind of an agent channel
+   */
+  rewind: ChannelRewindResponse;
+  /**
+   * Represents channel in chat
+   */
+  channel?: ChannelResponse;
 }
 
 export interface RingAttemptResponse {
@@ -19692,6 +20381,19 @@ export interface ScheduledMessageFailedEvent {
   scheduled_message?: ScheduledMessageResponse;
 }
 
+export type ScheduledMessageFailureReason =
+  | 'banned'
+  | 'no_permission'
+  | 'channel_frozen'
+  | 'channel_deleted'
+  | 'user_deleted'
+  | 'moderation_blocked'
+  | 'hook_rejected'
+  | 'expired'
+  | 'internal_error'
+  | 'invalid_message'
+  | 'pending_not_supported';
+
 export interface ScheduledMessageLocation {
   /**
    * The ID of the device that created the location.
@@ -19711,6 +20413,8 @@ export interface ScheduledMessageLocation {
    */
   longitude?: number;
 }
+
+export type ScheduledMessageQueryStatus = 'scheduled' | 'sending' | 'failed';
 
 export interface ScheduledMessageResponse {
   /**
@@ -19732,7 +20436,7 @@ export interface ScheduledMessageResponse {
   /**
    * Status of the scheduled message. One of: scheduled, sending, failed, canceled, sent. A message is sending from its first send attempt until it is sent or fails, including while it waits to retry a failed attempt; it cannot be edited, canceled or sent now while sending
    */
-  status: string;
+  status: ScheduledMessageStatus;
   /**
    * Date/time of the last update
    */
@@ -19748,7 +20452,7 @@ export interface ScheduledMessageResponse {
   /**
    * Why sending the message failed. Only set when status is failed. One of: banned, no_permission, channel_frozen, channel_deleted, user_deleted, moderation_blocked, hook_rejected, expired, internal_error, invalid_message, pending_not_supported
    */
-  failure_reason?: string;
+  failure_reason?: ScheduledMessageFailureReason;
   /**
    * The channel of a scheduled message
    */
@@ -19781,6 +20485,9 @@ export interface ScheduledMessageSentEvent {
   scheduled_message?: ScheduledMessageResponse;
 }
 
+export type ScheduledMessageStatus =
+  'scheduled' | 'sending' | 'failed' | 'canceled' | 'sent';
+
 export interface ScheduledMessagesFilter {
   /**
    * Only scheduled messages of this channel
@@ -19789,7 +20496,7 @@ export interface ScheduledMessagesFilter {
   /**
    * Only these statuses, as reported in each scheduled message's status. One or more of: scheduled, sending, failed
    */
-  status?: Array<string>;
+  status?: Array<ScheduledMessageQueryStatus>;
 }
 
 export interface ScoreBands {
@@ -20076,7 +20783,7 @@ export interface SendMessageRequest {
   keep_channel_hidden?: boolean;
   pending?: boolean;
   /**
-   * When set, the message is not sent now: it is stored and sent at this time (UTC). The response then carries scheduled_message. Must be at least 1 minute and at most the app's maximum lead time (120 days by default) from now. Slash commands cannot be scheduled
+   * When set to a future time, the message is not sent now: it is stored and sent at that time (UTC), rounded up to the first whole minute that is at least 1 minute from now, never earlier than requested. The response then carries scheduled_message with the rounded time. Must be at most the app's maximum lead time (120 days by default) from now. A time that is now or in the past sends the message now as if scheduled_at was not set, unless the request's message ID belongs to a scheduled message that was canceled or already sent. Slash commands cannot be scheduled
    */
   scheduled_at?: Date;
   skip_enrich_url?: boolean;
@@ -20197,7 +20904,10 @@ export interface SetFeedsRetentionPolicyResponse {
 
 export interface SetRetentionPolicyRequest {
   max_age_hours: number;
-  policy: 'old-messages' | 'inactive-channels';
+  /**
+   * What a retention policy applies to.
+   */
+  policy: RetentionPolicyType;
 }
 
 export interface SetRetentionPolicyResponse {
@@ -20210,12 +20920,22 @@ export interface SetRetentionPolicyResponse {
 
 export interface SetupSession {
   created_at: TimestampNS;
-  current_step: string;
-  status: string;
+  /**
+   * A step in the moderation setup wizard.
+   */
+  current_step: SetupStep;
+  /**
+   * Whether a moderation setup session is still in progress.
+   */
+  status: SetupStatus;
   updated_at: TimestampNS;
   setup_data: Record<string, any>;
   completed_at?: TimestampNS;
 }
+
+export type SetupStatus = 'in_progress' | 'completed';
+
+export type SetupStep = 'welcome' | 'input' | 'configure' | 'live';
 
 export interface ShadowBlockActionRequestPayload {
   /**
@@ -20420,8 +21140,10 @@ export interface SortParamRequest {
   /**
    * Type of field to sort by. Empty string or omitted means string type (default). One of: number, boolean
    */
-  type?: string;
+  type?: SortParamType;
 }
+
+export type SortParamType = '' | 'number' | 'boolean';
 
 export interface SourceHealth {
   co_host_peak: number;
@@ -20468,44 +21190,7 @@ export interface StartClosedCaptionsRequest {
   /**
    * The spoken language in the call, if not provided the language defined in the transcription settings will be used. One of: auto, ar, bg, ca, cs, da, de, el, en, es, et, fi, fr, he, hi, hr, hu, id, it, ja, ko, ms, nl, no, pl, pt, ro, ru, sk, sl, sv, ta, th, tl, tr, uk, zh
    */
-  language?:
-    | 'auto'
-    | 'en'
-    | 'fr'
-    | 'es'
-    | 'de'
-    | 'it'
-    | 'nl'
-    | 'pt'
-    | 'pl'
-    | 'ca'
-    | 'cs'
-    | 'da'
-    | 'el'
-    | 'fi'
-    | 'id'
-    | 'ja'
-    | 'ru'
-    | 'sv'
-    | 'ta'
-    | 'th'
-    | 'tr'
-    | 'hu'
-    | 'ro'
-    | 'zh'
-    | 'ar'
-    | 'tl'
-    | 'he'
-    | 'hi'
-    | 'hr'
-    | 'ko'
-    | 'ms'
-    | 'no'
-    | 'uk'
-    | 'bg'
-    | 'et'
-    | 'sl'
-    | 'sk';
+  language?: TranscriptionLanguage;
   speech_segment_config?: SpeechSegmentConfig;
 }
 
@@ -20565,44 +21250,7 @@ export interface StartTranscriptionRequest {
   /**
    * The spoken language in the call, if not provided the language defined in the transcription settings will be used. One of: auto, ar, bg, ca, cs, da, de, el, en, es, et, fi, fr, he, hi, hr, hu, id, it, ja, ko, ms, nl, no, pl, pt, ro, ru, sk, sl, sv, ta, th, tl, tr, uk, zh
    */
-  language?:
-    | 'auto'
-    | 'en'
-    | 'fr'
-    | 'es'
-    | 'de'
-    | 'it'
-    | 'nl'
-    | 'pt'
-    | 'pl'
-    | 'ca'
-    | 'cs'
-    | 'da'
-    | 'el'
-    | 'fi'
-    | 'id'
-    | 'ja'
-    | 'ru'
-    | 'sv'
-    | 'ta'
-    | 'th'
-    | 'tr'
-    | 'hu'
-    | 'ro'
-    | 'zh'
-    | 'ar'
-    | 'tl'
-    | 'he'
-    | 'hi'
-    | 'hr'
-    | 'ko'
-    | 'ms'
-    | 'no'
-    | 'uk'
-    | 'bg'
-    | 'et'
-    | 'sl'
-    | 'sk';
+  language?: TranscriptionLanguage;
   /**
    * Store transcriptions in this external storage
    */
@@ -20729,7 +21377,10 @@ export interface StoriesFeedUpdatedEvent {
    * The type of event: "feeds.stories_feed.updated" in this case
    */
   type: string;
-  feed_visibility?: string;
+  /**
+   * Who can see and follow a feed.
+   */
+  feed_visibility?: FeedVisibility;
   received_at?: TimestampNS;
   /**
    * Individual activities for stories feeds
@@ -21327,7 +21978,7 @@ export interface ThreadedCommentResponse {
   /**
    * Status of the comment. One of: active, deleted, removed, hidden
    */
-  status: 'active' | 'deleted' | 'removed' | 'hidden' | 'shadow_blocked';
+  status: CommentStatus;
   updated_at: TimestampNS;
   upvote_count: number;
   mentioned_users: Array<UserResponse>;
@@ -21450,143 +22101,92 @@ export interface TrackStatsResponse {
   track_type: string;
 }
 
+export type TranscriptionLanguage =
+  | 'auto'
+  | 'en'
+  | 'fr'
+  | 'es'
+  | 'de'
+  | 'it'
+  | 'nl'
+  | 'pt'
+  | 'pl'
+  | 'ca'
+  | 'cs'
+  | 'da'
+  | 'el'
+  | 'fi'
+  | 'id'
+  | 'ja'
+  | 'ru'
+  | 'sv'
+  | 'ta'
+  | 'th'
+  | 'tr'
+  | 'hu'
+  | 'ro'
+  | 'zh'
+  | 'ar'
+  | 'tl'
+  | 'he'
+  | 'hi'
+  | 'hr'
+  | 'ko'
+  | 'ms'
+  | 'no'
+  | 'uk'
+  | 'bg'
+  | 'et'
+  | 'sl'
+  | 'sk';
+
 export interface TranscriptionSettings {
   /**
    * One of: available, disabled, auto-on
    */
-  closed_caption_mode: 'available' | 'disabled' | 'auto-on';
+  closed_caption_mode: FeatureActivationMode;
   /**
    * The language used in this call as a two letter code
    */
-  language:
-    | 'auto'
-    | 'en'
-    | 'fr'
-    | 'es'
-    | 'de'
-    | 'it'
-    | 'nl'
-    | 'pt'
-    | 'pl'
-    | 'ca'
-    | 'cs'
-    | 'da'
-    | 'el'
-    | 'fi'
-    | 'id'
-    | 'ja'
-    | 'ru'
-    | 'sv'
-    | 'ta'
-    | 'th'
-    | 'tr'
-    | 'hu'
-    | 'ro'
-    | 'zh'
-    | 'ar'
-    | 'tl'
-    | 'he'
-    | 'hi'
-    | 'hr'
-    | 'ko'
-    | 'ms'
-    | 'no'
-    | 'uk'
-    | 'bg'
-    | 'et'
-    | 'sl'
-    | 'sk';
-  mode: 'available' | 'disabled' | 'auto-on';
+  language: TranscriptionLanguage;
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   speech_segment_config?: SpeechSegmentConfig;
   translation?: TranslationSettings;
 }
 
 export interface TranscriptionSettingsRequest {
-  closed_caption_mode?: 'available' | 'disabled' | 'auto-on';
-  language?:
-    | 'auto'
-    | 'en'
-    | 'fr'
-    | 'es'
-    | 'de'
-    | 'it'
-    | 'nl'
-    | 'pt'
-    | 'pl'
-    | 'ca'
-    | 'cs'
-    | 'da'
-    | 'el'
-    | 'fi'
-    | 'id'
-    | 'ja'
-    | 'ru'
-    | 'sv'
-    | 'ta'
-    | 'th'
-    | 'tr'
-    | 'hu'
-    | 'ro'
-    | 'zh'
-    | 'ar'
-    | 'tl'
-    | 'he'
-    | 'hi'
-    | 'hr'
-    | 'ko'
-    | 'ms'
-    | 'no'
-    | 'uk'
-    | 'bg'
-    | 'et'
-    | 'sl'
-    | 'sk';
-  mode?: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  closed_caption_mode?: FeatureActivationMode;
+  /**
+   * Language a call is transcribed or captioned in.
+   */
+  language?: TranscriptionLanguage;
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode?: FeatureActivationMode;
   speech_segment_config?: SpeechSegmentConfig;
   translation?: TranslationSettings;
 }
 
 export interface TranscriptionSettingsResponse {
-  closed_caption_mode: 'available' | 'disabled' | 'auto-on';
-  language:
-    | 'auto'
-    | 'en'
-    | 'fr'
-    | 'es'
-    | 'de'
-    | 'it'
-    | 'nl'
-    | 'pt'
-    | 'pl'
-    | 'ca'
-    | 'cs'
-    | 'da'
-    | 'el'
-    | 'fi'
-    | 'id'
-    | 'ja'
-    | 'ru'
-    | 'sv'
-    | 'ta'
-    | 'th'
-    | 'tr'
-    | 'hu'
-    | 'ro'
-    | 'zh'
-    | 'ar'
-    | 'tl'
-    | 'he'
-    | 'hi'
-    | 'hr'
-    | 'ko'
-    | 'ms'
-    | 'no'
-    | 'uk'
-    | 'bg'
-    | 'et'
-    | 'sl'
-    | 'sk';
-  mode: 'available' | 'disabled' | 'auto-on';
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  closed_caption_mode: FeatureActivationMode;
+  /**
+   * Language a call is transcribed or captioned in.
+   */
+  language: TranscriptionLanguage;
+  /**
+   * Whether a call feature is available, disabled, or turned on automatically.
+   */
+  mode: FeatureActivationMode;
   speech_segment_config?: SpeechSegmentConfig;
   translation?: TranslationSettings;
 }
@@ -22012,6 +22612,10 @@ export interface UnreadCountsChannel {
    */
   channel_id: string;
   /**
+   * Whether the channel has messages newer than the user's last read. Large channels have no unread_count and only report this.
+   */
+  has_unread: boolean;
+  /**
    * The date which the current user last read the channel.
    */
   last_read: TimestampNS;
@@ -22178,7 +22782,7 @@ export interface UpdateActivityRequest {
   /**
    * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
    */
-  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies?: RestrictReplies;
   /**
    * If true, runs activity processors on the updated activity. Processors will only run if the activity text and/or attachments are changed. Defaults to false.
    */
@@ -22195,7 +22799,7 @@ export interface UpdateActivityRequest {
   /**
    * Visibility setting for the activity
    */
-  visibility?: 'public' | 'private' | 'tag';
+  visibility?: ActivityVisibility;
   /**
    * If visibility is 'tag', this is the tag name and is required
    */
@@ -22486,8 +23090,14 @@ export interface UpdateCampaignRequest {
   description?: string;
   id?: string;
   name?: string;
-  sender_mode?: 'exclude' | 'include';
-  sender_visibility?: 'hidden' | 'archived';
+  /**
+   * Whether a campaign includes or excludes its sender.
+   */
+  sender_mode?: CampaignSenderMode;
+  /**
+   * How a campaign appears to its sender.
+   */
+  sender_visibility?: CampaignSenderVisibility;
   show_channels?: boolean;
   skip_push?: boolean;
   skip_webhook?: boolean;
@@ -22619,10 +23229,19 @@ export interface UpdateChannelResponse {
 }
 
 export interface UpdateChannelTypeRequest {
-  automod?: 'disabled' | 'simple' | 'AI';
-  automod_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod?: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior?: ChannelModerationBehavior;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   connect_events?: boolean;
   count_messages?: boolean;
   custom_events?: boolean;
@@ -22637,7 +23256,7 @@ export interface UpdateChannelTypeRequest {
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   push_notifications?: boolean;
   quotes?: boolean;
   reactions?: boolean;
@@ -22667,8 +23286,14 @@ export interface UpdateChannelTypeRequest {
 }
 
 export interface UpdateChannelTypeResponse {
-  automod: 'disabled' | 'simple' | 'AI';
-  automod_behavior: 'flag' | 'block' | 'shadow_block';
+  /**
+   * Automod level applied to a channel type.
+   */
+  automod: AutomodMode;
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  automod_behavior: ChannelModerationBehavior;
   connect_events: boolean;
   count_messages: boolean;
   created_at: TimestampNS;
@@ -22702,13 +23327,16 @@ export interface UpdateChannelTypeResponse {
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block' | 'shadow_block';
+  /**
+   * What automod or a blocklist does when it matches.
+   */
+  blocklist_behavior?: ChannelModerationBehavior;
   partition_size?: number;
   partition_ttl?: string;
   /**
    * Sets the push notification level for a channel type
    */
-  push_level?: 'all' | 'all_mentions' | 'mentions' | 'direct_mentions' | 'none';
+  push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
@@ -22934,8 +23562,7 @@ export interface UpdateFeedGroupRequest {
   /**
    * Default visibility for the feed group. One of: public, visible, followers, members, private
    */
-  default_visibility?:
-    'public' | 'visible' | 'followers' | 'members' | 'private';
+  default_visibility?: FeedVisibility;
   /**
    * Configuration for activity processors
    */
@@ -23087,7 +23714,7 @@ export interface UpdateFollowRequest {
   /**
    * Push preference for the follow relationship
    */
-  push_preference?: 'all' | 'none';
+  push_preference?: FollowPushPreference;
   /**
    * Whether to skip push for this follow
    */
@@ -23095,7 +23722,7 @@ export interface UpdateFollowRequest {
   /**
    * Status of the follow relationship. One of: accepted, pending, rejected
    */
-  status?: 'accepted' | 'pending' | 'rejected';
+  status?: FollowStatus;
   /**
    * Custom data for the follow relationship
    */
@@ -23324,7 +23951,7 @@ export interface UpdatePollRequest {
   /**
    * Voting visibility
    */
-  voting_visibility?: 'anonymous' | 'public';
+  voting_visibility?: VotingVisibility;
   /**
    * Poll options
    */
@@ -23469,7 +24096,7 @@ export interface UpdateSIPTrunkResponse {
 
 export interface UpdateScheduledMessageRequest {
   /**
-   * New send time (UTC). Must be at least 1 minute and at most the app's maximum lead time from now
+   * New send time (UTC). Must be in the future and at most the app's maximum lead time from now. Rounded up to the first whole minute that is at least 1 minute from now, never earlier than requested. Resending the stored time leaves it unchanged
    */
   scheduled_at?: Date;
   /**
@@ -24030,11 +24657,11 @@ export interface UpsertSetupSessionRequest {
   /**
    * The current step of the setup wizard. One of: welcome, input, configure, live
    */
-  current_step: 'welcome' | 'input' | 'configure' | 'live';
+  current_step: SetupStep;
   /**
    * The status of the setup session. One of: in_progress, completed
    */
-  status: 'in_progress' | 'completed';
+  status: SetupStatus;
   /**
    * Per-step data keyed by step name (welcome, input, configure, live)
    */
@@ -24126,6 +24753,21 @@ export interface UserChannelBanCountRuleParameters {
 export interface UserChannelCountRuleParameters {
   threshold?: number;
   time_window?: string;
+}
+
+export interface UserClaimedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  claimed_by: UserResponseCommonFields;
+  custom: Record<string, any>;
+  user: UserResponseCommonFields;
+  /**
+   * The type of event: "user.claimed" in this case
+   */
+  type: string;
+  received_at?: TimestampNS;
 }
 
 export interface UserCreatedWithinParameters {
@@ -24779,6 +25421,8 @@ export interface VideoCallRuleConfig {
   rules?: Array<HarmConfig>;
 }
 
+export type VideoCodec = 'h264' | 'vp8';
+
 export interface VideoContentParameters {
   label_operator?: string;
   harm_labels?: Array<string>;
@@ -24812,7 +25456,10 @@ export interface VideoRuleParameters {
 export interface VideoSettings {
   access_request_enabled: boolean;
   camera_default_on: boolean;
-  camera_facing: 'front' | 'back' | 'external';
+  /**
+   * Which camera a call opens with.
+   */
+  camera_facing: CameraFacing;
   enabled: boolean;
   target_resolution: TargetResolution;
 }
@@ -24820,7 +25467,10 @@ export interface VideoSettings {
 export interface VideoSettingsRequest {
   access_request_enabled?: boolean;
   camera_default_on?: boolean;
-  camera_facing?: 'front' | 'back' | 'external';
+  /**
+   * Which camera a call opens with.
+   */
+  camera_facing?: CameraFacing;
   enabled?: boolean;
   target_resolution?: TargetResolution;
 }
@@ -24828,7 +25478,10 @@ export interface VideoSettingsRequest {
 export interface VideoSettingsResponse {
   access_request_enabled: boolean;
   camera_default_on: boolean;
-  camera_facing: 'front' | 'back' | 'external';
+  /**
+   * Which camera a call opens with.
+   */
+  camera_facing: CameraFacing;
   enabled: boolean;
   target_resolution: TargetResolution;
 }
@@ -24848,6 +25501,8 @@ export interface VoteData {
   answer_text?: string;
   option_id?: string;
 }
+
+export type VotingVisibility = 'anonymous' | 'public';
 
 export type WHEvent =
   | ({ type: '*' } & CustomEvent)
@@ -24928,6 +25583,7 @@ export type WHEvent =
   | ({ type: 'channel.hidden' } & ChannelHiddenEvent)
   | ({ type: 'channel.max_streak_changed' } & MaxStreakChangedEvent)
   | ({ type: 'channel.muted' } & ChannelMutedEvent)
+  | ({ type: 'channel.rewound' } & ChannelRewoundEvent)
   | ({ type: 'channel.truncated' } & ChannelTruncatedEvent)
   | ({ type: 'channel.unfrozen' } & ChannelUnFrozenEvent)
   | ({ type: 'channel.unmuted' } & ChannelUnmutedEvent)
@@ -25045,6 +25701,7 @@ export type WHEvent =
   | ({ type: 'scheduled_message.sent' } & ScheduledMessageSentEvent)
   | ({ type: 'thread.updated' } & ThreadUpdatedEvent)
   | ({ type: 'user.banned' } & UserBannedEvent)
+  | ({ type: 'user.claimed' } & UserClaimedEvent)
   | ({ type: 'user.deactivated' } & UserDeactivatedEvent)
   | ({ type: 'user.deleted' } & UserDeletedEvent)
   | ({ type: 'user.flagged' } & UserFlaggedEvent)

@@ -27,6 +27,7 @@ import {
   QueryCallParticipantSessionsResponse,
   QueryCallParticipantsRequest,
   QueryCallParticipantsResponse,
+  RecordingType,
   RingCallRequest,
   RingCallResponse,
   SendCallEventRequest,
@@ -208,7 +209,7 @@ export class CallApi {
   }
 
   startRecording(
-    request: StartRecordingRequest & { recording_type: string },
+    request: StartRecordingRequest & { recording_type: RecordingType },
   ): Promise<StreamResponse<StartRecordingResponse>> {
     return this.videoApi.startRecording({
       id: this.id,
@@ -218,7 +219,7 @@ export class CallApi {
   }
 
   stopRecording(
-    request: StopRecordingRequest & { recording_type: string },
+    request: StopRecordingRequest & { recording_type: RecordingType },
   ): Promise<StreamResponse<StopRecordingResponse>> {
     return this.videoApi.stopRecording({
       id: this.id,

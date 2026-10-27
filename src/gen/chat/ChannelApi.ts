@@ -15,6 +15,8 @@ import {
   QueryChannelBansRequest,
   QueryChannelBansResponse,
   Response,
+  RewindChannelRequest,
+  RewindChannelResponse,
   SendEventRequest,
   SendMessageRequest,
   SendMessageResponse,
@@ -357,6 +359,22 @@ export class ChannelApi {
     }
 
     return this.chatApi.markRead({ id: this.id, type: this.type, ...request });
+  }
+
+  rewind(
+    request: RewindChannelRequest,
+  ): Promise<StreamResponse<RewindChannelResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.rewindChannel({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   }
 
   show(
