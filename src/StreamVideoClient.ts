@@ -28,6 +28,13 @@ export class StreamVideoClient extends VideoApi {
     return new StreamCall(this, type, id, this.streamClient);
   };
 
+  /**
+   * Connects an OpenAI Realtime agent to a call through Stream's `/video/connect_agent` proxy.
+   *
+   * @deprecated The OpenAI Realtime proxy is deprecated and will be removed in a
+   * future major release. Build voice and video AI agents with Vision Agents
+   * instead: https://visionagents.ai/integrations/llm/openai
+   */
   connectOpenAi = async (options: {
     call: StreamCall;
     agentUserId: string;
