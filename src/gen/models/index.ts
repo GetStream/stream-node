@@ -918,6 +918,10 @@ export interface ActivitySelectorConfig {
    */
   time_budget_ms?: number;
   /**
+   * Radius in kilometers the proximity selector searches around the viewer's location (the request's viewer_location, else the user's custom.location) when its filter has no near or within_bounds. Greater than 0 and at most 250. Omit to use the default (10). Only supported on the proximity selector
+   */
+  viewer_location_radius_km?: number;
+  /**
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
@@ -961,6 +965,10 @@ export interface ActivitySelectorConfigResponse {
    * Maximum time in milliseconds this selector may take before it is dropped from the read
    */
   time_budget_ms?: number;
+  /**
+   * Radius in kilometers the proximity selector searches around the viewer's location
+   */
+  viewer_location_radius_km?: number;
   /**
    * Sort parameters for activity selection
    */
