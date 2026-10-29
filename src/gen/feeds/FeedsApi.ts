@@ -24,6 +24,7 @@ import {
   BatchQueryActivityReactionsResponse,
   BatchQueryCommentReactionsRequest,
   BatchQueryCommentReactionsResponse,
+  CancelExportFeedsResponse,
   CastPollVoteRequest,
   ChangeFeedVisibilityRequest,
   ChangeFeedVisibilityResponse,
@@ -62,6 +63,7 @@ import {
   ExportFeedUserDataResponse,
   ExportFeedsByTypeRequest,
   ExportFeedsResponse,
+  FeedVisibility,
   FollowBatchRequest,
   FollowBatchResponse,
   FollowRequest,
@@ -1690,6 +1692,26 @@ export class FeedsApi {
     return response;
   }
 
+  async cancelExportFeeds(request: {
+    task_id: string;
+  }): Promise<StreamResponse<CancelExportFeedsResponse>> {
+    const pathParams = {
+      task_id: request?.task_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<CancelExportFeedsResponse>(
+        'POST',
+        '/api/v2/feeds/export/{task_id}/cancel',
+        pathParams,
+        undefined,
+      );
+
+    decoders['CancelExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
   async exportFeedsByType(
     request: ExportFeedsByTypeRequest & { type: string },
   ): Promise<StreamResponse<ExportFeedsResponse>> {
@@ -2486,7 +2508,7 @@ export class FeedsApi {
   }
 
   async getFeedVisibility(request: {
-    name: string;
+    name: FeedVisibility;
   }): Promise<StreamResponse<GetFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,
@@ -2506,7 +2528,7 @@ export class FeedsApi {
   }
 
   async updateFeedVisibility(
-    request: UpdateFeedVisibilityRequest & { name: string },
+    request: UpdateFeedVisibilityRequest & { name: FeedVisibility },
   ): Promise<StreamResponse<UpdateFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,

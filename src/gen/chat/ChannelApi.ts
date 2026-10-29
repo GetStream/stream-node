@@ -4,6 +4,10 @@ import {
   ChannelStateResponse,
   DeleteChannelResponse,
   EventResponse,
+  ForkChannelRequest,
+  ForkChannelResponse,
+  ForkMessageIDsRequest,
+  ForkMessageIDsResponse,
   GetDraftResponse,
   GetManyMessagesResponse,
   GetPinnedMessagesResponse,
@@ -200,6 +204,38 @@ export class ChannelApi {
     }
 
     return this.chatApi.uploadChannelFile({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  fork(
+    request: ForkChannelRequest,
+  ): Promise<StreamResponse<ForkChannelResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.forkChannel({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  forkMessageIDs(
+    request: ForkMessageIDsRequest,
+  ): Promise<StreamResponse<ForkMessageIDsResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.forkMessageIDs({
       id: this.id,
       type: this.type,
       ...request,

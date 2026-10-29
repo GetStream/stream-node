@@ -23,6 +23,8 @@ import {
   DeleteChannelsRequest,
   DeleteChannelsResponse,
   DeleteCommandResponse,
+  DeleteHistoryWindowTeamsRequest,
+  DeleteHistoryWindowTeamsResponse,
   DeleteMessageResponse,
   DeleteReactionResponse,
   DeleteReminderResponse,
@@ -33,10 +35,15 @@ import {
   EventResponse,
   ExportChannelsRequest,
   ExportChannelsResponse,
+  ForkChannelRequest,
+  ForkChannelResponse,
+  ForkMessageIDsRequest,
+  ForkMessageIDsResponse,
   GetCampaignResponse,
   GetChannelTypeResponse,
   GetCommandResponse,
   GetDraftResponse,
+  GetHistoryWindowTeamsResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
   GetPinnedMessagesResponse,
@@ -110,6 +117,8 @@ import {
   SendReactionResponse,
   SendScheduledMessageNowResponse,
   SendUserCustomEventRequest,
+  SetHistoryWindowTeamsRequest,
+  SetHistoryWindowTeamsResponse,
   SetRetentionPolicyRequest,
   SetRetentionPolicyResponse,
   ShowChannelRequest,
@@ -832,6 +841,60 @@ export class ChatApi {
     return response;
   }
 
+  async forkChannel(
+    request: ForkChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<ForkChannelResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      message_id: request?.message_id,
+      channel: request?.channel,
+      exclude_attachments: request?.exclude_attachments,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<ForkChannelResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/fork',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ForkChannelResponse']?.(response);
+
+    return response;
+  }
+
+  async forkMessageIDs(
+    request: ForkMessageIDsRequest & { type: string; id: string },
+  ): Promise<StreamResponse<ForkMessageIDsResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      source_message_ids: request?.source_message_ids,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<ForkMessageIDsResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/fork/message_ids',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ForkMessageIDsResponse']?.(response);
+
+    return response;
+  }
+
   async hideChannel(
     request: HideChannelRequest & { type: string; id: string },
   ): Promise<StreamResponse<HideChannelResponse>> {
@@ -1543,6 +1606,64 @@ export class ChatApi {
     );
 
     decoders['ExportChannelsResponse']?.(response);
+
+    return response;
+  }
+
+  async getHistoryWindowTeams(): Promise<
+    StreamResponse<GetHistoryWindowTeamsResponse>
+  > {
+    const response =
+      await this.apiClient.sendRequest<GetHistoryWindowTeamsResponse>(
+        'GET',
+        '/api/v2/chat/history_window/teams',
+        undefined,
+        undefined,
+      );
+
+    decoders['GetHistoryWindowTeamsResponse']?.(response);
+
+    return response;
+  }
+
+  async setHistoryWindowTeams(
+    request: SetHistoryWindowTeamsRequest,
+  ): Promise<StreamResponse<SetHistoryWindowTeamsResponse>> {
+    const body = {
+      teams: request?.teams,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SetHistoryWindowTeamsResponse>(
+        'POST',
+        '/api/v2/chat/history_window/teams',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['SetHistoryWindowTeamsResponse']?.(response);
+
+    return response;
+  }
+
+  async deleteHistoryWindowTeams(
+    request: DeleteHistoryWindowTeamsRequest,
+  ): Promise<StreamResponse<DeleteHistoryWindowTeamsResponse>> {
+    const body = {
+      teams: request?.teams,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteHistoryWindowTeamsResponse>(
+        'POST',
+        '/api/v2/chat/history_window/teams/delete',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['DeleteHistoryWindowTeamsResponse']?.(response);
 
     return response;
   }

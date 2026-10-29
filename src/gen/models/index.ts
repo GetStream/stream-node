@@ -966,6 +966,10 @@ export interface ActivitySelectorConfig {
    */
   time_budget_ms?: number;
   /**
+   * Radius in kilometers the proximity selector searches around the viewer's location (the request's viewer_location, else the user's custom.location) when its filter has no near or within_bounds. Greater than 0 and at most 250. Omit to use the default (10). Only supported on the proximity selector
+   */
+  viewer_location_radius_km?: number;
+  /**
    * Sort parameters for activity selection
    */
   sort?: Array<SortParamRequest>;
@@ -1002,6 +1006,10 @@ export interface ActivitySelectorConfigResponse {
    * Maximum time in milliseconds this selector may take before it is dropped from the read
    */
   time_budget_ms?: number;
+  /**
+   * Radius in kilometers the proximity selector searches around the viewer's location
+   */
+  viewer_location_radius_km?: number;
   /**
    * Sort parameters for activity selection
    */
@@ -1597,7 +1605,8 @@ export interface AnalyzeRequest {
    */
   content_published_at?: Date;
   /**
-   * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE). Forwarded to the AI text provider as country context so it can resolve words whose meaning changes between countries.
+   * @deprecated
+   * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE). Ignored when country_codes is set, but an invalid value is still rejected with 400.
    */
   country_code?: string;
   /**
@@ -1613,6 +1622,10 @@ export interface AnalyzeRequest {
    */
   entity_type?: string;
   user_id?: string;
+  /**
+   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country, which AI text providers receive as country context. Takes precedence over country_code.
+   */
+  country_codes?: Array<string>;
   /**
    * Optional map from a content label (either a `texts` key or an `image:<key>` multipart label) to a caller-supplied per-instance identifier. Echoed on per-field verdicts and surfaced in `matched_contents` when an aggregation rule fires.
    */
@@ -1686,6 +1699,30 @@ export interface AnalyzeTextField {
   detected_urls?: Array<DetectedURLResponse>;
 }
 
+export interface AppChannelCountParameters {
+  threshold?: number;
+  time_window?: string;
+}
+
+export interface AppCountInfo {
+  /**
+   * The app-wide count condition that fired: `app_channel_count` or `app_message_count`.
+   */
+  condition_type: string;
+  /**
+   * Channels created or messages sent in the app within the window when the rule fired, the triggering event included.
+   */
+  count: number;
+  /**
+   * The configured threshold. The rule fires when the count reaches it.
+   */
+  threshold: number;
+  /**
+   * The configured time window, e.g. `5m`.
+   */
+  time_window: string;
+}
+
 export interface AppDefaults {
   /**
    * Defaults applied by the get-or-create channel endpoint.
@@ -1695,6 +1732,11 @@ export interface AppDefaults {
    * Defaults applied by the query channels endpoint.
    */
   query_channels: QueryChannelsDefaults;
+}
+
+export interface AppMessageCountParameters {
+  threshold?: number;
+  time_window?: string;
 }
 
 export interface AppResponseFields {
@@ -1746,6 +1788,7 @@ export interface AppResponseFields {
   sqs_url: string;
   suspended: boolean;
   suspended_explanation: string;
+  two_way_block_effect_enabled: boolean;
   use_hook_v2: boolean;
   user_response_time_enabled: boolean;
   webhook_url: string;
@@ -1975,6 +2018,17 @@ export interface AsyncExportErrorEvent {
   created_at: TimestampNS;
   error: string;
   finished_at: TimestampNS;
+  started_at: TimestampNS;
+  task_id: string;
+  custom: Record<string, any>;
+  type: string;
+  received_at?: TimestampNS;
+}
+
+export interface AsyncExportFeedsSuccessEvent {
+  created_at: TimestampNS;
+  finished_at: TimestampNS;
+  manifest_path: string;
   started_at: TimestampNS;
   task_id: string;
   custom: Record<string, any>;
@@ -2475,7 +2529,7 @@ export interface BlockListOptions {
   /**
    * Blocklist behavior. One of: flag, block, shadow_block
    */
-  behavior: 'flag' | 'block' | 'shadow_block';
+  behavior: ChannelModerationBehavior;
   /**
    * Blocklist name
    */
@@ -2607,6 +2661,8 @@ export interface BlockedUserResponse {
    */
   user: UserResponse;
 }
+
+export type BlocklistBehavior = 'flag' | 'block';
 
 export interface BodyguardImageAnalysisConfig {
   rules?: Array<BodyguardRule>;
@@ -3497,7 +3553,10 @@ export interface CallReactionEvent {
 export interface CallRecording {
   end_time: TimestampNS;
   filename: string;
-  recording_type: string;
+  /**
+   * The layout a call recording is produced in.
+   */
+  recording_type: RecordingType;
   session_id: string;
   start_time: TimestampNS;
   url: string;
@@ -4340,8 +4399,6 @@ export interface CampaignResponse {
   id: string;
   name: string;
   sender_id: string;
-  sender_mode: string;
-  sender_visibility: string;
   show_channels: boolean;
   skip_push: boolean;
   skip_webhook: boolean;
@@ -4353,6 +4410,14 @@ export interface CampaignResponse {
   users: Array<UserResponse>;
   stats: CampaignStatsResponse;
   scheduled_for?: TimestampNS;
+  /**
+   * Whether a campaign includes or excludes its sender.
+   */
+  sender_mode?: CampaignSenderMode;
+  /**
+   * How a campaign appears to its sender.
+   */
+  sender_visibility?: CampaignSenderVisibility;
   stop_at?: TimestampNS;
   channel_template?: CampaignChannelTemplate;
   message_template?: CampaignMessageTemplate;
@@ -4382,6 +4447,10 @@ export interface CampaignStatsResponse {
   stats_started_at: TimestampNS;
   stats_users_read: number;
   stats_users_sent: number;
+}
+
+export interface CancelExportFeedsResponse {
+  duration: string;
 }
 
 export interface CancelImportV2TaskResponse {
@@ -4595,7 +4664,10 @@ export interface ChannelConfig {
 
 export interface ChannelConfigOverrides {
   blocklist?: string;
-  blocklist_behavior?: 'flag' | 'block';
+  /**
+   * What a blocklist does when it matches. shadow_block is not accepted on a channel override.
+   */
+  blocklist_behavior?: BlocklistBehavior;
   /**
    * Enable/disable message counting
    */
@@ -4850,6 +4922,116 @@ export interface ChannelExport {
    * Channel type
    */
   type?: string;
+}
+
+export interface ChannelForkResponse {
+  /**
+   * CID of the fork
+   */
+  channel_cid: string;
+  /**
+   * Number of messages copied into the fork, once completed
+   */
+  copied_message_count: number;
+  /**
+   * Date/time of the fork
+   */
+  created_at: TimestampNS;
+  /**
+   * CID of the channel the fork was copied from
+   */
+  source_channel_cid: string;
+  /**
+   * ID of the message of the source channel the fork was made at
+   */
+  source_message_id: string;
+  /**
+   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are already there
+   */
+  status: string;
+  /**
+   * Maps the ID of each message the request copied, the newest page, to its ID in the fork. A fork message ID is a UUIDv5 of the fork CID and the source message ID; the fork message IDs endpoint maps any others
+   */
+  message_id_map: Record<string, string>;
+  /**
+   * ID of the task copying the older history of a backfilling fork
+   */
+  task_id?: string;
+}
+
+export interface ChannelForkSummary {
+  /**
+   * CID of the fork
+   */
+  channel_cid: string;
+  /**
+   * Number of messages copied into the fork, once completed
+   */
+  copied_message_count: number;
+  /**
+   * Date/time of the fork
+   */
+  created_at: TimestampNS;
+  /**
+   * CID of the channel the fork was copied from
+   */
+  source_channel_cid: string;
+  /**
+   * ID of the message of the source channel the fork was made at
+   */
+  source_message_id: string;
+  /**
+   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are already there
+   */
+  status: string;
+  /**
+   * ID of the task copying the older history of a backfilling fork
+   */
+  task_id?: string;
+}
+
+export interface ChannelForkedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: TimestampNS;
+  /**
+   * Represents channel in chat
+   */
+  channel: ChannelResponse;
+  custom: Record<string, any>;
+  /**
+   * A fork of an agent channel
+   */
+  fork: ChannelForkSummary;
+  /**
+   * The type of event: "channel.forked" in this case
+   */
+  type: string;
+  /**
+   * The ID of the channel which was forked
+   */
+  channel_id?: string;
+  /**
+   * The number of members in the channel
+   */
+  channel_member_count?: number;
+  channel_message_count?: number;
+  /**
+   * The type of the channel which was forked
+   */
+  channel_type?: string;
+  /**
+   * The CID of the channel which was forked
+   */
+  cid?: string;
+  received_at?: TimestampNS;
+  /**
+   * The team ID
+   */
+  team?: string;
+  channel_custom?: Record<string, any>;
+  user?: UserResponseCommonFields;
 }
 
 export interface ChannelFrozenEvent {
@@ -5114,7 +5296,10 @@ export interface ChannelMetadata {
   last_message_at?: TimestampNS;
   member_count?: number;
   message_count?: number;
-  push_level?: string;
+  /**
+   * How much a channel notifies its members.
+   */
+  push_level?: PushLevel;
   team?: string;
 }
 
@@ -6024,7 +6209,7 @@ export interface CheckPushRequest {
   /**
    * Push provider type. One of: firebase, apn, huawei, xiaomi
    */
-  push_provider_type?: string;
+  push_provider_type?: PushProviderName;
   /**
    * Don't require existing devices to render templates
    */
@@ -6085,7 +6270,8 @@ export interface CheckRequest {
    */
   content_published_at?: Date;
   /**
-   * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE), used as country context by AI text providers
+   * @deprecated
+   * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE). Ignored when country_codes is set, but an invalid value is still rejected with 400.
    */
   country_code?: string;
   /**
@@ -6093,6 +6279,10 @@ export interface CheckRequest {
    */
   test_mode?: boolean;
   user_id?: string;
+  /**
+   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country, which AI text providers receive as country context. Takes precedence over country_code.
+   */
+  country_codes?: Array<string>;
   config?: ModerationConfig;
   moderation_payload?: ModerationPayload;
   /**
@@ -6830,7 +7020,7 @@ export interface ConfigOverridesRequest {
   /**
    * Blocklist behavior. One of: flag, block
    */
-  blocklist_behavior?: 'flag' | 'block';
+  blocklist_behavior?: BlocklistBehavior;
   /**
    * Enable/disable message counting
    */
@@ -7129,7 +7319,7 @@ export interface CreateChannelTypeRequest {
   /**
    * Automod behavior. One of: flag, block
    */
-  automod_behavior: 'flag' | 'block';
+  automod_behavior: BlocklistBehavior;
   /**
    * Max message length
    */
@@ -8429,6 +8619,24 @@ export interface DeleteFeedsRetentionPolicyResponse {
   duration: string;
 }
 
+export interface DeleteHistoryWindowTeamsRequest {
+  /**
+   * Teams to put back on the app's default history window, 1 to 10, each listed once. A team without full history is ignored
+   */
+  teams: Array<string>;
+}
+
+export interface DeleteHistoryWindowTeamsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * The teams of the request that had full history and are now back on the default window
+   */
+  teams: Array<string>;
+}
+
 export interface DeleteImportV2TaskResponse {
   /**
    * Duration of the request in milliseconds
@@ -8786,7 +8994,7 @@ export interface DeviceResponse {
   /**
    * Push provider
    */
-  push_provider: string;
+  push_provider: PushProviderName;
   /**
    * User ID
    */
@@ -10755,6 +10963,128 @@ export interface ForYouConfig {
   preset?: string;
 }
 
+export interface ForkChannelRequest {
+  /**
+   * ID of the top-level message to fork at. The fork copies the visible messages created up to it, itself included, and their replies up to it. Fork only at a message the agent has finished writing: a message still being streamed is copied as it is at the time of the fork
+   */
+  message_id: string;
+  /**
+   * The channel a fork creates
+   */
+  channel: ForkChannelTarget;
+  /**
+   * When true, the copied messages carry no attachments. By default attachments are copied
+   */
+  exclude_attachments?: boolean;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface ForkChannelResponse {
+  duration: string;
+  /**
+   * List of channel members
+   */
+  members: Array<ChannelMemberResponse>;
+  /**
+   * List of channel messages
+   */
+  messages: Array<MessageResponse>;
+  /**
+   * List of pinned messages in the channel
+   */
+  pinned_messages: Array<MessageResponse>;
+  threads: Array<ThreadStateResponse>;
+  /**
+   * A fork of an agent channel
+   */
+  fork: ChannelForkResponse;
+  /**
+   * Milliseconds until the current user's slow mode cool down period ends. Only set on client-side get or create channel and get channel requests while the user is under cool down
+   */
+  cooldown_remaining_ms?: number;
+  /**
+   * Whether this channel is hidden or not
+   */
+  hidden?: boolean;
+  /**
+   * Messages before this date are hidden from the user
+   */
+  hide_messages_before?: TimestampNS;
+  /**
+   * Number of channel watchers
+   */
+  watcher_count?: number;
+  /**
+   * Active live locations in the channel
+   */
+  active_live_locations?: Array<SharedLocationResponseData>;
+  /**
+   * Pending messages that this user has sent
+   */
+  pending_messages?: Array<PendingMessageResponse>;
+  /**
+   * List of read states
+   */
+  read?: Array<ReadStateResponse>;
+  /**
+   * The caller's own scheduled, sending and failed messages in this channel. Set only by a client-side GetOrCreateChannel or QueryChannels with include_scheduled_messages; absent when not requested or not known, in which case use the scheduled messages query
+   */
+  scheduled_messages?: Array<ScheduledMessageResponse>;
+  /**
+   * List of user who is watching the channel
+   */
+  watchers?: Array<UserResponse>;
+  /**
+   * Represents channel in chat
+   */
+  channel?: ChannelResponse;
+  draft?: DraftResponse;
+  membership?: ChannelMemberResponse;
+  /**
+   * The push preference details.
+   */
+  push_preferences?: ChannelPushPreferencesResponse;
+}
+
+export interface ForkChannelTarget {
+  /**
+   * ID of the new agent channel
+   */
+  id: string;
+  /**
+   * Members of the new channel. Defaults to the source channel's members
+   */
+  members?: Array<ChannelMemberRequest>;
+  data?: ChannelInput;
+}
+
+export interface ForkMessageIDsRequest {
+  /**
+   * IDs of messages of the source channel, up to 1000
+   */
+  source_message_ids: Array<string>;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface ForkMessageIDsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * Maps each given source message ID the fork holds a copy of to the copy's ID. IDs the fork holds no copy of are left out
+   */
+  message_id_map: Record<string, string>;
+}
+
 export interface FrameRecordSettings {
   capture_interval_in_seconds: number;
   /**
@@ -11321,6 +11651,21 @@ export interface GetFollowSuggestionsResponse {
   algorithm_used?: string;
 }
 
+export interface GetHistoryWindowTeamsResponse {
+  /**
+   * History window, in hours, of every team without full history; 0 is full history
+   */
+  default_window_hours: number;
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * Teams with full history
+   */
+  teams: Array<HistoryWindowTeam>;
+}
+
 export interface GetImportResponse {
   /**
    * Duration of the request in milliseconds
@@ -11760,7 +12105,7 @@ export interface GetTaskResponse {
   created_at: TimestampNS;
   duration: string;
   /**
-   * Current status of task
+   * Current status of the whole operation. A task whose result reports an in-progress status of its own is returned as running until that status is terminal, so completed means the operation itself finished rather than that its first step was accepted. A result that never reaches a terminal status stops being reported as running after a fixed period and falls back to the task's own status.
    */
   status: string;
   /**
@@ -11770,7 +12115,7 @@ export interface GetTaskResponse {
   updated_at: TimestampNS;
   error?: ErrorResult;
   /**
-   * Result produced by task after completion
+   * Result produced by task after completion. A task that does its work in stages may carry a status of its own here, describing that work rather than the task; the top-level status already accounts for it, so use that to tell whether the operation has finished.
    */
   result?: Record<string, any>;
 }
@@ -11841,7 +12186,7 @@ export interface GroupedChannelsBucket {
 
 export interface GroupedChannelsGroupRequest {
   /**
-   * Max channels for this group; omitted or zero uses the request limit
+   * Max channels for this group; values above 15 are capped at 15. Omitted or zero uses the request limit
    */
   limit?: number;
   /**
@@ -11860,7 +12205,7 @@ export interface GroupedChannelsGroupRequest {
 
 export interface GroupedQueryChannelsRequest {
   /**
-   * Default max channels per group (default 10)
+   * Default max channels per group (default 10); values above 15 are capped at 15
    */
   limit?: number;
   user_id?: string;
@@ -11949,6 +12294,21 @@ export interface HideChannelResponse {
    * Duration of the request in milliseconds
    */
   duration: string;
+}
+
+export interface HistoryWindowTeam {
+  /**
+   * Date/time the team was first given full history
+   */
+  created_at: TimestampNS;
+  /**
+   * The team, as set on channels and users
+   */
+  team: string;
+  /**
+   * Date/time the team was last marked
+   */
+  updated_at: TimestampNS;
 }
 
 export interface HuaweiConfig {
@@ -12143,13 +12503,13 @@ export interface IndividualRecordingSettingsResponse {
 
 export interface IngressAudioEncodingOptions {
   bitrate: number;
-  channels: '1' | '2';
+  channels: number;
   enable_dtx: boolean;
 }
 
 export interface IngressAudioEncodingOptionsRequest {
   bitrate: number;
-  channels: '1' | '2';
+  channels: number;
   enable_dtx?: boolean;
 }
 
@@ -12209,7 +12569,7 @@ export interface IngressSource {
 }
 
 export interface IngressSourceRequest {
-  fps: '30' | '60';
+  fps: number;
   height: number;
   width: number;
 }
@@ -14767,6 +15127,7 @@ export interface ModerationMarkReviewedEvent {
 export interface ModerationPayload {
   country_code?: string;
   audios?: Array<string>;
+  country_codes?: Array<string>;
   image_ordered_keys?: Array<string>;
   images?: Array<string>;
   other_media?: Array<string>;
@@ -14930,11 +15291,19 @@ export interface ModerationRulesTriggeredEvent {
    * The `category` sent on the labels request. Omitted when the event was not produced by the labels API.
    */
   category?: string;
+  /**
+   * CID of the channel the moderated content belongs to. Omitted when the content has no channel.
+   */
+  channel_cid?: string;
   received_at?: TimestampNS;
   /**
    * The review queue item ID if applicable
    */
   review_queue_item_id?: string;
+  /**
+   * Highest severity (`LOW` / `MEDIUM` / `HIGH` / `CRITICAL`) among the moderation results that carried a matched label. Omitted when no label matched or the provider reports no severity.
+   */
+  severity?: string;
   /**
    * Configured count that fires the condition. This is the number stored on the rule, not the live counter.
    */
@@ -14952,6 +15321,10 @@ export interface ModerationRulesTriggeredEvent {
    */
   matched_contents?: Array<MatchedContent>;
   /**
+   * Harm labels on the moderated content that the rule's text label conditions (`text_content`, `text_rule`) matched. Omitted when the rule has no such condition.
+   */
+  matched_labels?: Array<string>;
+  /**
    * Cross-user webhook_only flood rules only: the distinct users who sent the content since the previous webhook for this rule. Omitted on other events.
    */
   matched_user_ids?: Array<string>;
@@ -14959,6 +15332,7 @@ export interface ModerationRulesTriggeredEvent {
    * The rule's config_keys. Omitted when the rule is application-wide.
    */
   scope?: Array<string>;
+  app_count?: AppCountInfo;
   intent?: IntentEvaluationInfo;
 }
 
@@ -19495,6 +19869,7 @@ export interface ReviewQueueItemResponse {
    * When the item was reviewed
    */
   reviewed_at?: TimestampNS;
+  country_codes?: Array<string>;
   /**
    * IDs of the item's flags a moderator marked as false positives
    */
@@ -19809,6 +20184,14 @@ export interface RuleBuilderAction {
 export interface RuleBuilderCondition {
   confidence?: number;
   type?: string;
+  /**
+   * app_channel_count params: fires when the app creates at least threshold distinct channels within time_window
+   */
+  app_channel_count_params?: AppChannelCountParameters;
+  /**
+   * app_message_count params: fires when the app sends at least threshold chat messages within time_window
+   */
+  app_message_count_params?: AppMessageCountParameters;
   call_custom_property_params?: CallCustomPropertyParameters;
   call_type_rule_params?: CallTypeRuleParameters;
   call_violation_count_params?: CallViolationCountParameters;
@@ -20900,6 +21283,24 @@ export interface SetFeedsRetentionPolicyResponse {
   duration: string;
   enabled: boolean;
   policy: FeedsRetentionPolicy;
+}
+
+export interface SetHistoryWindowTeamsRequest {
+  /**
+   * Teams to give full history, 1 to 10, each listed once. Marking a team that already has full history keeps its created_at
+   */
+  teams: Array<string>;
+}
+
+export interface SetHistoryWindowTeamsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * The teams of the request, each with full history
+   */
+  teams: Array<HistoryWindowTeam>;
 }
 
 export interface SetRetentionPolicyRequest {
@@ -22904,6 +23305,7 @@ export interface UpdateAppRequest {
   sqs_key?: string;
   sqs_secret?: string;
   sqs_url?: string;
+  two_way_block_effect_enabled?: boolean;
   user_response_time_enabled?: boolean;
   video_primary_use_case?:
     | 'video-calling'
@@ -24630,7 +25032,7 @@ export interface UpsertPushTemplateRequest {
   /**
    * Push provider type. One of: firebase, apn, huawei, xiaomi
    */
-  push_provider_type: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
+  push_provider_type: PushProviderName;
   /**
    * Whether to send push notification for this event
    */
@@ -25579,6 +25981,7 @@ export type WHEvent =
   | ({ type: 'campaign.started' } & CampaignStartedEvent)
   | ({ type: 'channel.created' } & ChannelCreatedEvent)
   | ({ type: 'channel.deleted' } & ChannelDeletedEvent)
+  | ({ type: 'channel.forked' } & ChannelForkedEvent)
   | ({ type: 'channel.frozen' } & ChannelFrozenEvent)
   | ({ type: 'channel.hidden' } & ChannelHiddenEvent)
   | ({ type: 'channel.max_streak_changed' } & MaxStreakChangedEvent)
@@ -25635,6 +26038,8 @@ export type WHEvent =
   | ({ type: 'feeds.comment.reaction.updated' } & CommentReactionUpdatedEvent)
   | ({ type: 'feeds.comment.restored' } & CommentRestoredEvent)
   | ({ type: 'feeds.comment.updated' } & CommentUpdatedEvent)
+  | ({ type: 'feeds.export.error' } & AsyncExportErrorEvent)
+  | ({ type: 'feeds.export.success' } & AsyncExportFeedsSuccessEvent)
   | ({ type: 'feeds.feed.created' } & FeedCreatedEvent)
   | ({ type: 'feeds.feed.deleted' } & FeedDeletedEvent)
   | ({ type: 'feeds.feed.updated' } & FeedUpdatedEvent)
