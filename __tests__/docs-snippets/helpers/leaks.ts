@@ -1,5 +1,9 @@
 import { nsToDate } from '../../../index';
-import type { StreamClient, TimestampNS } from '../../../index';
+import type {
+  PushProviderName,
+  StreamClient,
+  TimestampNS,
+} from '../../../index';
 import { DOCS_TEST_PREFIX } from './ids';
 import { deleteMembershipLevel } from './feeds';
 import {
@@ -349,7 +353,9 @@ const scanners: Record<string, Scanner> = {
         createdAt: provider.created_at,
         remove: () =>
           client.deletePushProvider({
-            type: provider.type,
+            // The spec types `PushProviderResponse.type` as a plain string, but the
+            // delete endpoint takes a `PushProviderName`: the listed type is one of them.
+            type: provider.type as PushProviderName,
             name: provider.name,
           }),
       }));

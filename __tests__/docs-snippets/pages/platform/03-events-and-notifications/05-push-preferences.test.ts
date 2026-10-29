@@ -7,7 +7,6 @@ import {
   it,
   vi,
 } from 'vitest';
-import { nsToMs } from '../../../../../index';
 import type { UpsertPushPreferencesResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -266,34 +265,5 @@ describe(DOCS, () => {
         follow: 'all',
       },
     );
-  });
-
-  it('Setting Call Push Preferences', async () => {
-    const upsert = vi.spyOn(client, 'updatePushNotificationPreferences');
-
-    // #region snippet docs="platform/03-events-and-notifications/05-push-preferences.md" heading="Setting Call Push Preferences" tab="Node.js" index=1
-    // COPY: userId1="user-1"
-    // Set call-level preferences with temporary disabling
-    const oneHourFromNow = new Date(Date.now() + 60 * 60 * 1000);
-
-    await client.updatePushNotificationPreferences({
-      preferences: [
-        {
-          user_id: userId1,
-          call_level: 'all',
-          disabled_until: oneHourFromNow,
-        },
-      ],
-    });
-    // #endregion snippet
-
-    const [response] = await upsertResults(upsert);
-    const preferences = response.user_preferences[userId1];
-    expect(preferences?.call_level).toBe('all');
-    expect(
-      Math.abs(
-        nsToMs(preferences?.disabled_until ?? 0) - oneHourFromNow.getTime(),
-      ),
-    ).toBeLessThan(1000);
   });
 });

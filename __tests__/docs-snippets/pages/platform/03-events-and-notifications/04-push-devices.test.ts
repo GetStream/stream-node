@@ -130,7 +130,7 @@ describe(DOCS, () => {
     type Device = {
       created_at: TimestampNS; // unix nanoseconds, nsToDate() converts it
       id: string;
-      push_provider: string;
+      push_provider: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
       user_id: string;
       disabled?: boolean;
       disabled_reason?: string;
