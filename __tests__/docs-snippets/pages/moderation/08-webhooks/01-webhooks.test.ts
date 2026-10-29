@@ -4,7 +4,7 @@ import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
 
-const DOCS = 'moderation/_default/11-guides/09-rule-triggered-webhooks.md';
+const DOCS = 'moderation/_default/08-webhooks/01-webhooks.md';
 
 describe(DOCS, () => {
   const client = getServerClient();
@@ -22,7 +22,7 @@ describe(DOCS, () => {
     const ruleName = uniqueId('high-profile-harms');
     const upsertRule = vi.spyOn(client.moderation, 'upsertModerationRule');
 
-    // #region snippet docs="moderation/_default/11-guides/09-rule-triggered-webhooks.md" heading="Content rule: notify on a harm label" tab="Node.js" index=1
+    // #region snippet docs="moderation/_default/08-webhooks/01-webhooks.md" heading="Content rule: notify on a harm label" tab="Node.js" index=1
     // COPY: configKey="chat:messaging", livestreamConfigKey="chat:livestream", ruleName="High-profile harms"
     await client.moderation.upsertModerationRule({
       name: ruleName,

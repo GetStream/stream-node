@@ -7,37 +7,9 @@ import { uniqueId } from '../../../helpers/ids';
 const DOCS =
   'moderation/_default/02-quick-start/07-quick-start-call-moderation.md';
 
-// Values the module-level region below uses (it must come after them: TDZ).
-const apiKey = process.env.STREAM_API_KEY as string;
-const secret = process.env.STREAM_SECRET as string;
-// The docs' "my-room-12345" entity and "user-abc" creator, test-owned.
-const roomEntityId = uniqueId('my-room');
-const creatorId = uniqueId('user-abc');
-// A real image: an unreachable one makes the check return `status: "partial"`.
-const keyframeUrl = 'https://getstream.io/images/og/OG_Home.png';
-await getServerClient().upsertUsers([{ id: creatorId }]);
-
-// #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Sending Keyframes" tab="Node.js" index=1
-// COPY: roomEntityId="my-room-12345", creatorId="user-abc", keyframeUrl="https://your-cdn.com/keyframe-001.jpg"
-import { StreamClient } from '@stream-io/node-sdk';
-
-const client = new StreamClient(apiKey, secret);
-
-const response = await client.moderation.check({
-  entity_type: 'external:call',
-  entity_id: roomEntityId,
-  entity_creator_id: creatorId,
-  content_published_at: new Date(),
-  moderation_payload: {
-    images: [keyframeUrl],
-  },
-});
-// #endregion snippet
-
 describe(DOCS, () => {
-  const serverClient = getServerClient();
-  const cleanup = new Cleanup(serverClient);
-  cleanup.users.push(creatorId);
+  const client = getServerClient();
+  const cleanup = new Cleanup(client);
 
   /** Deletes the rules `upsertModerationRule` created in a region, by the ids it returned. */
   const deleteUpsertedRules = (spy: {
@@ -49,7 +21,7 @@ describe(DOCS, () => {
           await (r.value as Promise<UpsertModerationRuleResponse>);
         if (!rule) throw new Error('upsertModerationRule returned no rule');
         cleanup.add(() =>
-          serverClient.moderation.deleteModerationRule({ id: rule.id }),
+          client.moderation.deleteModerationRule({ id: rule.id }),
         );
         return rule;
       }),
@@ -63,7 +35,7 @@ describe(DOCS, () => {
     const callRuleName = uniqueId('inappropriate-content-detection');
     const upsertRule = vi.spyOn(client.moderation, 'upsertModerationRule');
 
-    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Configure Via API" tab="Node.js" index=1
+    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Configure via API" tab="Node.js" index=1
     // COPY: callRuleName="Inappropriate Content Detection"
     await client.moderation.upsertModerationRule({
       name: callRuleName,
@@ -143,7 +115,7 @@ describe(DOCS, () => {
     const userRuleName = uniqueId('ban-repeat-call-offenders');
     const upsertRule = vi.spyOn(client.moderation, 'upsertModerationRule');
 
-    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Configure Via API" tab="Node.js" index=2
+    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Configure via API" tab="Node.js" index=2
     // COPY: userRuleName="Ban Repeat Call Offenders"
     await client.moderation.upsertModerationRule({
       name: userRuleName,
@@ -173,77 +145,5 @@ describe(DOCS, () => {
         },
       ],
     });
-  });
-
-  it('sends keyframes', () => {
-    // The check ran at module level (the fence imports the SDK).
-    expect(client).toBeInstanceOf(StreamClient);
-    expect(response.status).toBe('complete');
-    expect(response.recommended_action).toBe('keep');
-  });
-
-  it('sends closed captions', async () => {
-    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Sending Closed Captions" tab="Node.js" index=1
-    // COPY: roomEntityId="my-room-12345", creatorId="user-abc"
-    const response = await client.moderation.check({
-      entity_type: 'external:call',
-      entity_id: roomEntityId,
-      entity_creator_id: creatorId,
-      content_published_at: new Date(),
-      moderation_payload: {
-        texts: ['transcribed audio segment from the call'],
-      },
-    });
-    // #endregion snippet
-
-    expect(response.status).toBe('complete');
-    expect(response.recommended_action).toBe('keep');
-  });
-
-  it('runs a continuous moderation loop', async () => {
-    const roomId = uniqueId('room');
-
-    // #region snippet docs="moderation/_default/02-quick-start/07-quick-start-call-moderation.md" heading="Example: Continuous Moderation Loop" tab="Node.js" index=1
-    const ENTITY_ID = `room-${roomId}`;
-    const INTERVAL_MS = 5000;
-
-    async function moderateKeyframe(imageUrl: string, userId: string) {
-      return client.moderation.check({
-        entity_type: 'external:call',
-        entity_id: ENTITY_ID,
-        entity_creator_id: userId,
-        content_published_at: new Date(),
-        moderation_payload: {
-          images: [imageUrl],
-        },
-      });
-    }
-
-    async function moderateCaption(text: string, userId: string) {
-      return client.moderation.check({
-        entity_type: 'external:call',
-        entity_id: ENTITY_ID,
-        entity_creator_id: userId,
-        content_published_at: new Date(),
-        moderation_payload: {
-          texts: [text],
-        },
-      });
-    }
-    // #endregion snippet
-
-    expect(INTERVAL_MS).toBe(5000);
-    const check = vi.spyOn(client.moderation, 'check');
-    const keyframe = await moderateKeyframe(keyframeUrl, creatorId);
-    const caption = await moderateCaption('hello everyone', creatorId);
-    // With the page's call rule (keyframe condition) in place, the image is analysed
-    // asynchronously: `status: "partial"` plus a `task_id`.
-    expect(['complete', 'partial']).toContain(keyframe.status);
-    expect(keyframe.recommended_action).toBe('keep');
-    expect(caption.status).toBe('complete');
-    expect(check.mock.calls.map(([request]) => request.entity_id)).toEqual([
-      ENTITY_ID,
-      ENTITY_ID,
-    ]);
   });
 });

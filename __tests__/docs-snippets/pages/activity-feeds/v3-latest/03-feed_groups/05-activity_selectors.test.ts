@@ -9,6 +9,7 @@ import {
   vi,
 } from 'vitest';
 import type {
+  CreateFeedViewResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
   UpdateFeedGroupResponse,
@@ -44,6 +45,8 @@ const createUser = async (name: string) => {
 };
 
 const amsterdam = { lat: 52.373558, lng: 4.885261 };
+// About 17 km west of `amsterdam`.
+const haarlem = { lat: 52.3874, lng: 4.6462 };
 const withinAmsterdam = {
   within_bounds: {
     $eq: {
@@ -357,6 +360,130 @@ describe(DOCS, () => {
     await expect(feed.getOrCreate({ user_id: readerId })).rejects.toThrow(
       'no near or within_bounds filter provided',
     );
+  });
+
+  it('reads a proximity feed around a viewer location', async () => {
+    // The docs read john's timeline; the built-in timeline group has no
+    // proximity selector, so the fence reads a uniqueId group with one.
+    const timelineId = newFeedGroupId('timeline');
+    await client.feeds.createFeedGroup({
+      id: timelineId,
+      activity_selectors: [{ type: 'proximity' }],
+    });
+    const johnId = await createUser('john');
+    cleanup.feeds.push(`${timelineId}:${johnId}`);
+    // john has no stored location: without viewer_location the read fails.
+    await expect(
+      client.feeds.getOrCreateFeed({
+        feed_group_id: timelineId,
+        feed_id: johnId,
+        user_id: johnId,
+      }),
+    ).rejects.toThrow('no near or within_bounds filter provided');
+    const getOrCreate = vi.spyOn(client.feeds, 'getOrCreateFeed');
+    getOrCreate.mockClear();
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/03-feed_groups/05-activity_selectors.md" heading="Viewer location" tab="Node.js" index=1
+    // COPY: timelineId="timeline", johnId="john"
+    await client.feeds.getOrCreateFeed({
+      feed_group_id: timelineId,
+      feed_id: johnId,
+      user_id: johnId,
+      viewer_location: { lat: 52.373558, lng: 4.885261 },
+    });
+    // #endregion snippet
+
+    const response = await (getOrCreate.mock.results[0]
+      .value as Promise<GetOrCreateFeedResponse>);
+    expect(response.feed.feed).toBe(`${timelineId}:${johnId}`);
+    // hot and warm are posted in Amsterdam, within the default 10 km.
+    expect([...ours(response)].sort()).toEqual(['hot', 'warm']);
+    // Haarlem, ~17 km away: outside the default radius.
+    const far = await client.feeds.getOrCreateFeed({
+      feed_group_id: timelineId,
+      feed_id: johnId,
+      user_id: johnId,
+      viewer_location: haarlem,
+    });
+    expect(ours(far)).toEqual([]);
+    // Out-of-range coordinates are rejected with a 400.
+    await expect(
+      client.feeds.getOrCreateFeed({
+        feed_group_id: timelineId,
+        feed_id: johnId,
+        user_id: johnId,
+        viewer_location: { lat: 91, lng: 4.885261 },
+      }),
+    ).rejects.toMatchObject({ metadata: { responseCode: 400 } });
+  });
+
+  it('creates a feed view with a proximity radius', async () => {
+    const nearbyId = uniqueId('nearby');
+    cleanup.add(() =>
+      client.feeds.deleteFeedView({ id: nearbyId }).catch((error: unknown) => {
+        if (!String(error).includes('not found')) throw error;
+      }),
+    );
+    const create = vi.spyOn(client.feeds, 'createFeedView');
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/03-feed_groups/05-activity_selectors.md" heading="Viewer location" tab="Node.js" index=2
+    // COPY: nearbyId="nearby"
+    await client.feeds.createFeedView({
+      id: nearbyId,
+      activity_selectors: [
+        {
+          type: 'proximity',
+          // Search 50 miles around the viewer's location
+          viewer_location_radius_km: 80.4672,
+          filter: { activity_type: { $in: ['post', 'event'] } },
+        },
+      ],
+    });
+    // #endregion snippet
+
+    const { feed_view } = await (create.mock.results[0]
+      .value as Promise<CreateFeedViewResponse>);
+    // (2026-10-29) The API drops viewer_location_radius_km: the view is
+    // stored without it (also on getFeedView, and a radius of 300 is
+    // accepted although the docs say at most 250).
+    expect(feed_view.activity_selectors).toEqual([
+      {
+        type: 'proximity',
+        filter: { activity_type: { $in: ['post', 'event'] } },
+      },
+    ]);
+    // Read a plain group through the view around Amsterdam: hot and warm
+    // (posts). A workout in Amsterdam is left out by the activity_type filter.
+    const workoutId = await addActivityOnce(client, {
+      type: 'workout',
+      feeds: [`user:${authorId}`],
+      text: 'nearby workout',
+      location: amsterdam,
+      user_id: authorId,
+    });
+    const plainId = newFeedGroupId('plain');
+    await client.feeds.createFeedGroup({ id: plainId });
+    const feed = readerFeed(plainId);
+    // The view is new too: retry until every API node knows it.
+    const response = await retry(async () => {
+      const r = await feed.getOrCreate({
+        view: nearbyId,
+        viewer_location: amsterdam,
+        user_id: readerId,
+      });
+      if (ours(r).length !== 2) throw new Error(`got ${ours(r).join()}`);
+      return r;
+    });
+    expect([...ours(response)].sort()).toEqual(['hot', 'warm']);
+    expect(response.activities.map((a) => a.id)).not.toContain(workoutId);
+    // (2026-10-29) From Haarlem (~17 km away) the view finds nothing: the
+    // default 10 km radius applies, not the 80 km the docs set.
+    const far = await feed.getOrCreate({
+      view: nearbyId,
+      viewer_location: haarlem,
+      user_id: readerId,
+    });
+    expect(ours(far)).toEqual([]);
   });
 
   it('creates a group with the interest selector', async () => {

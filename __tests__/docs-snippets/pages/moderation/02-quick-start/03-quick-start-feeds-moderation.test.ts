@@ -3,6 +3,7 @@ import type { QueryFeedModerationTemplatesResponse } from '../../../../../index'
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
+import { waitForReviewItem } from '../../../helpers/server';
 
 const DOCS =
   'moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md';
@@ -88,5 +89,40 @@ describe(DOCS, () => {
     // #endregion snippet
 
     expect(await findTemplate(templateName)).toBeUndefined();
+  });
+
+  // The node SDK can't create Feeds v2 activities (the test app has no Feeds v2 data).
+  // Don't run this against the shared app: the failing flag still stores a review
+  // queue item, and every read that includes it (getReviewQueueItem, a
+  // queryReviewQueue page with it, submitAction on it) fails with the same empty
+  // code -1 error (2026-10-29).
+  it.skip('BLOCKED: flagging a Feeds v2 activity id that does not exist fails with code -1 (500), message: V2Flag failed with error: ""', async () => {
+    // The docs' undefined app values: a Feeds v2 activity (the moderation API takes
+    // any entity id) and its users.
+    const activityId = uniqueId('activity');
+    const actorId = uniqueId('actor');
+    const reporterId = uniqueId('reporter');
+    cleanup.users.push(actorId, reporterId);
+    await client.upsertUsers([{ id: actorId }, { id: reporterId }]);
+
+    // #region snippet docs="moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md" heading="User-Driven Actions" tab="Node.js" index=1
+    await client.moderation.flag({
+      entity_type: 'stream:feeds:v2:activity',
+      entity_id: activityId,
+      entity_creator_id: actorId,
+      reason: 'inappropriate_content',
+      user_id: reporterId,
+    });
+    // #endregion snippet
+
+    const item = await waitForReviewItem(client, activityId);
+    expect(item).toMatchObject({
+      entity_type: 'stream:feeds:v2:activity',
+      entity_creator_id: actorId,
+    });
+    expect(item.flags[0]).toMatchObject({
+      reason: 'inappropriate_content',
+      user_id: reporterId,
+    });
   });
 });

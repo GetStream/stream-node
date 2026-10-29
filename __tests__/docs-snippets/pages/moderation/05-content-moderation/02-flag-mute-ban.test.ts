@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { nsToMs } from '../../../../../index';
-import type { StreamClient, UserResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -400,27 +399,5 @@ describe(DOCS, () => {
     expect((await getServerUser(client, trustedUser)).bypass_moderation).toBe(
       true,
     );
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no getUserModerationReport (GET /api/v2/moderation/user_report is left out of the spec)', async () => {
-    const reportUser = await createUser('report-user');
-    // The node SDK has no getUserModerationReport: type the missing method (from the
-    // API's response) so the skipped region typechecks and lints. It isn't there at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        getUserModerationReport: (request: {
-          user_id: string;
-        }) => Promise<{ user: UserResponse }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/05-content-moderation/02-flag-mute-ban.md" heading="User Moderation Report" tab="Node.js" index=1
-    // COPY: reportUser="user_123"
-    const response = await client.moderation.getUserModerationReport({
-      user_id: reportUser,
-    });
-    // #endregion snippet
-
-    expect(response.user.id).toBe(reportUser);
   });
 });

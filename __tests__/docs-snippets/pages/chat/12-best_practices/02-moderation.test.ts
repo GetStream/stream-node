@@ -476,6 +476,68 @@ describe(DOCS, () => {
     expect(log.mock.calls.at(-1)).toEqual([response.next]);
   });
 
+  it('turns on two-way blocking', async () => {
+    const { app } = await client.getApp();
+    const original = app.two_way_block_effect_enabled;
+    expect(original).toBe(false);
+    const restore = async () => {
+      await client.updateApp({ two_way_block_effect_enabled: original });
+      await waitForAppSetting(client, 'two_way_block_effect_enabled', original);
+    };
+    cleanup.add(restore);
+
+    // A blocks B, and both are in a 1-on-1 channel and a group channel.
+    const blockerId = await createUser('blocker');
+    const blockedId = await createUser('blocked');
+    const otherId = await createUser('other');
+    await client.blockUsers({ blocked_user_id: blockedId, user_id: blockerId });
+    const newChannel = async (members: string[]) => {
+      const id = uniqueId('channel');
+      cleanup.channels.push(`messaging:${id}`);
+      await client.chat.channel('messaging', id).getOrCreate({
+        data: {
+          created_by_id: blockerId,
+          members: members.map((user_id) => ({ user_id })),
+        },
+      });
+      return `messaging:${id}`;
+    };
+    const oneOnOneCid = await newChannel([blockerId, blockedId]);
+    const groupCid = await newChannel([blockerId, blockedId, otherId]);
+    const unreadFor = async (cid: string, userId: string) => {
+      const channel = await getServerChannel(client, cid, { user_id: userId });
+      return channel.read?.find((r) => r.user.id === userId)?.unread_messages;
+    };
+
+    // #region snippet docs="chat/_default/12-best_practices/02-moderation.md" heading="Two-way blocking" tab="Node.js" index=1
+    await client.updateApp({
+      two_way_block_effect_enabled: true,
+    });
+    // #endregion snippet
+
+    await waitForAppSetting(client, 'two_way_block_effect_enabled', true, {
+      agreeing: 5,
+    });
+
+    // A's messages no longer count towards B's unread counts in their 1-on-1
+    // channel; group channels are unaffected (the positive control).
+    await sendServerMessage(client, oneOnOneCid, {
+      text: 'hi',
+      user_id: blockerId,
+    });
+    await sendServerMessage(client, groupCid, {
+      text: 'hi all',
+      user_id: blockerId,
+    });
+    await retry(async () => {
+      expect(await unreadFor(groupCid, blockedId)).toBe(1);
+    });
+    expect(await unreadFor(oneOnOneCid, blockedId)).toBe(0);
+
+    // Restore right away: the setting changes chat behavior app-wide.
+    await restore();
+  });
+
   it('blocks, lists and unblocks a user', async () => {
     const user1Id = await createUser('user1');
     const user2Id = await createUser('user2');

@@ -153,6 +153,57 @@ describe(DOCS, () => {
     expect(stored.settings.ring).toMatchObject(expected);
   });
 
+  it('sets the lifecycle mode on a call type', async () => {
+    const callTypeName = await createCallType(client, cleanup);
+    expect(
+      (await client.video.getCallType({ name: callTypeName })).settings
+        .lifecycle.mode,
+    ).toBe('reusable');
+
+    // #region snippet docs="video/api/01-basics/04-ring-calls.md" heading="Setting the mode" tab="Node.js" index=1
+    await client.video.updateCallType({
+      name: callTypeName,
+      settings: {
+        lifecycle: { mode: 'single_use' },
+      },
+    });
+    // #endregion snippet
+
+    const callType = await client.video.getCallType({ name: callTypeName });
+    expect(callType.settings.lifecycle.mode).toBe('single_use');
+  });
+
+  it('sets the lifecycle mode on one call', async () => {
+    const getOrCreate = vi.spyOn(client.video, 'getOrCreateCall');
+
+    // #region snippet docs="video/api/01-basics/04-ring-calls.md" heading="Setting the mode" tab="Node.js" index=2
+    // COPY: myselfId="myself", friendId="my friend"
+    const call = client.video.call('default', crypto.randomUUID());
+    await call.getOrCreate({
+      ring: true,
+      data: {
+        created_by_id: myselfId,
+        members: [{ user_id: myselfId }, { user_id: friendId }],
+        settings_override: {
+          lifecycle: { mode: 'single_use' },
+        },
+      },
+    });
+    // #endregion snippet
+    cleanup.calls.push(call.cid);
+
+    const response = await (getOrCreate.mock.results[0].value as ReturnType<
+      typeof client.video.getOrCreateCall
+    >);
+    expect(response.created).toBe(true);
+    expect(response.call.settings.lifecycle.mode).toBe('single_use');
+    // The built-in `default` type itself stays reusable.
+    expect(
+      (await client.video.getCallType({ name: 'default' })).settings.lifecycle
+        .mode,
+    ).toBe('reusable');
+  });
+
   it('configures push notifications on a call type', async () => {
     const pushCallType = uniqueId('call-type');
     const create = trackCallTypeCreates(client, cleanup);
