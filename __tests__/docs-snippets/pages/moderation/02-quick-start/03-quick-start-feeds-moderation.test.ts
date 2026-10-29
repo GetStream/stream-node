@@ -83,6 +83,7 @@ describe(DOCS, () => {
   // arguments (TS2554) and sends no name, so it fails with code 4 "name is
   // a required field". Cleanup deletes the template instead.
   it.skip('BLOCKED: SDK issue: v2DeleteTemplate() cannot send the template name', async () => {
+    // @ts-expect-error SDK issue: generated v2DeleteTemplate() takes no arguments, so the template name is not sent
     // #region snippet docs="moderation/_default/02-quick-start/03-quick-start-feeds-moderation.md" heading="Delete Template" tab="Node.js" index=1
     // COPY: templateName="mod_tmpl_1"
     await client.moderation.v2DeleteTemplate({ name: templateName });
