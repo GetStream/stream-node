@@ -150,7 +150,7 @@ describe(DOCS, () => {
     expect(configs.length).toBeGreaterThan(0);
     expect(configs.length).toBeLessThanOrEqual(10);
     // Newest first: the config this file just created is among them.
-    const createdAt = configs.map(({ created_at }) => created_at.getTime());
+    const createdAt = configs.map(({ created_at }) => created_at);
     expect(createdAt).toEqual([...createdAt].sort((a, b) => b - a));
     expect(configs.map(({ key }) => key)).toContain(configKey);
   });

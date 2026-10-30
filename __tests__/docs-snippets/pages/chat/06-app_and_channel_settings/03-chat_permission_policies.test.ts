@@ -249,9 +249,6 @@ describe(DOCS, () => {
       // update "channel_member" role grants in "messaging" scope
       await client.chat.updateChannelType({
         name: channelType,
-        automod: 'disabled',
-        automod_behavior: 'flag',
-        max_message_length: 5000,
         grants: {
           channel_member: [
             'read-channel', // allow access to the channel
@@ -287,13 +284,8 @@ describe(DOCS, () => {
 
       // #region snippet docs="chat/_default/06-app_and_channel_settings/03-chat_permission_policies.md" heading="Granting permissions" tab="Node.js" index=3
       // COPY: channelType="messaging"
-      const current = await client.chat.getChannelType({ name: channelType });
-
       await client.chat.updateChannelType({
         name: channelType,
-        automod: current.automod,
-        automod_behavior: current.automod_behavior,
-        max_message_length: current.max_message_length,
         grants: {
           guest: [], // removes all grants of "guest" role
           anonymous: [], // removes all grants of "anonymous" role
@@ -320,15 +312,8 @@ describe(DOCS, () => {
 
       // #region snippet docs="chat/_default/06-app_and_channel_settings/03-chat_permission_policies.md" heading="Granting permissions" tab="Node.js" index=4
       // COPY: channelType="messaging"
-      // automod, automod_behavior and max_message_length are required here, so read
-      // the current values and carry them through.
-      const current = await client.chat.getChannelType({ name: channelType });
-
       await client.chat.updateChannelType({
         name: channelType,
-        automod: current.automod,
-        automod_behavior: current.automod_behavior,
-        max_message_length: current.max_message_length,
         grants: null, // resets the whole scope to default settings
       });
       // #endregion snippet

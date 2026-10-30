@@ -121,4 +121,60 @@ describe(DOCS, () => {
     expect(response.status).toBe('complete');
     expect(['keep', 'flag', 'remove']).toContain(response.recommended_action);
   });
+
+  it('configures the LLM engine', async () => {
+    // The docs' app-wide "chat:messaging" policy, test-owned.
+    const policyKey = uniqueId('llm-policy');
+    cleanup.add(() => client.moderation.deleteConfig({ key: policyKey }));
+
+    // #region snippet docs="moderation/_default/03-moderation-engines/01-ai-llm-text-harm-detection-engine.md" heading="Configuration" tab="Node.js" index=1
+    // COPY: policyKey="chat:messaging"
+    await client.moderation.upsertConfig({
+      key: policyKey,
+      llm_config: {
+        app_context:
+          'A social chat app for adults. Casual tone is fine. Threats and scams are not.',
+        rules: [
+          {
+            label: 'SCAM',
+            description:
+              'Fraud, phishing, or requests for payment credentials.',
+            action: 'remove',
+          },
+          {
+            label: 'HATE_SPEECH',
+            description: 'Hatred, discrimination, or violence against a group.',
+            action: 'flag',
+          },
+        ],
+        severity_descriptions: {
+          low: 'Rude but not targeting a person.',
+          high: 'A direct attack or a credible threat.',
+        },
+      },
+    });
+    // #endregion snippet
+
+    const { config }: GetConfigResponse = await client.moderation.getConfig({
+      key: policyKey,
+    });
+    expect(config?.llm_config).toMatchObject({
+      enabled: true,
+      app_context:
+        'A social chat app for adults. Casual tone is fine. Threats and scams are not.',
+      severity_descriptions: {
+        low: 'Rude but not targeting a person.',
+        high: 'A direct attack or a credible threat.',
+      },
+    });
+    expect(
+      config?.llm_config?.rules?.map(({ label, action }) => ({
+        label,
+        action,
+      })),
+    ).toEqual([
+      { label: 'SCAM', action: 'remove' },
+      { label: 'HATE_SPEECH', action: 'flag' },
+    ]);
+  });
 });

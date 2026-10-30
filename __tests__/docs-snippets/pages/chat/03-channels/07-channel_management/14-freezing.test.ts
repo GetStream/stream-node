@@ -121,13 +121,8 @@ describe(DOCS, () => {
 
     const adminGrants = [...channelType.grants.admin, 'use-frozen-channel'];
 
-    // automod, automod_behavior and max_message_length are required on update and
-    // are not preserved when omitted, so read them back from the current type.
     await client.chat.updateChannelType({
       name: 'messaging',
-      automod: channelType.automod,
-      automod_behavior: channelType.automod_behavior,
-      max_message_length: channelType.max_message_length,
       grants: { admin: adminGrants },
     });
     // #endregion snippet

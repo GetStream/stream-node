@@ -1,6 +1,6 @@
 ---
 name: docs-sync
-description: Sync the stream-node docs snippet tests (__tests__/docs-snippets) with a getstream.io docs checkout. Asks for the docs repo, first sweeps the docs for missing or mislabelled Node.js snippets (server-side code labelled JavaScript, JavaScript-only snippets the node SDK can run), then runs `yarn test:docs:sync` against it, brings the tests up to date with docs changes (docs win), adds tests for new Node.js snippets, and writes fixes for broken snippets back to the docs. Use when the user asks to sync, check or update the docs snippets or docs snippet tests.
+description: Sync the stream-node docs snippet tests (__tests__/docs-snippets) with a getstream.io docs checkout. Asks for the docs repo, first sweeps the docs for missing or mislabelled Node.js snippets (server-side code labelled JavaScript, JavaScript-only snippets the node SDK can run), then runs `yarn test:docs:sync` against it, brings the tests up to date with docs changes (docs win), adds tests for new Node.js snippets, writes fixes for broken snippets back to the docs, and backfills missing stream-chat@9 fences from existing v9 code. Use when the user asks to sync, check or update the docs snippets or docs snippet tests.
 argument-hint: "[path to the getstream.io checkout or its content/docs folder]"
 ---
 
@@ -50,17 +50,17 @@ Before the sync check, make sure every server-side snippet on the tested pages h
 
 - Pages: every page of the tested sidebars (`SIDEBAR_FILES` in `sync/parse.ts`, `$DOCS_DIR/_sidebars/`) under `PAGE_PREFIXES`, the same list as `findSidebarPages`.
 - Fences: every JS fence (`js`, `javascript`, `ts`, `typescript`) labelled `JavaScript` or unlabelled, together with its tab group: the other fences in the same `<Tabs>` block, or the fence alone when it isn't in one.
-- Out of scope: `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, fences listed in `EXCLUDED_FENCES` (`sync/parse.ts`), and comment-only fences.
+- Out of scope: `React` and `React Native` fences, the stream-chat@9 fences (`JavaScript (stream-chat@9)`, `Node.js (stream-chat@9)`), `Node.js` fences inside a `<disclosure label="... (no SDK)">` block, fences listed in `EXCLUDED_FENCES` (`sync/parse.ts`), and comment-only fences.
 
 List them with a throwaway script in the scratchpad (page, heading, line, the labels in the group, the code). Then classify each group by its tabs first and the prose second:
 
-| Group                                                                                                    | Action                                                                                                                                                                                         |
-| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A `JavaScript` fence with server-only code (secret, `updateAppSettings`, `createToken`, ...)             | Relabel it `Node.js` and rewrite it to the node SDK call (`client.updateApp`, ...). Relabel its `JavaScript (stream-chat-js@9)` partner, if any, `Node.js (stream-chat-js@9)`, code unchanged. |
-| Only client SDKs (`JavaScript` plus Kotlin, Swift, Dart, Unity, Unreal, React, ...)                      | Client-side: no `Node.js` tab, even when a server equivalent exists.                                                                                                                           |
-| `JavaScript` only (or with non-SDK tabs such as `JSON`)                                                  | Add a `Node.js` tab when the node SDK can do the same thing, unless the heading or prose hints "client-side only". See below.                                                                  |
-| Other server SDK tabs (Python, Ruby, PHP, Go, C#, Java) but no `Node.js`                                 | Add a `Node.js` tab. If the others are comment-only notes ("client-side only operation"), add the same note for the Node SDK.                                                                  |
-| A client group, and the page has its own server-side section for it ("Server-Side Usage", "Server Side") | No `Node.js` tab: the server-side section covers it.                                                                                                                                           |
+| Group                                                                                                    | Action                                                                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A `JavaScript` fence with server-only code (secret, `updateAppSettings`, `createToken`, ...)             | Relabel it `Node.js` and rewrite it to the node SDK call (`client.updateApp`, ...). Relabel its `JavaScript (stream-chat@9)` partner, if any, `Node.js (stream-chat@9)`, code unchanged. |
+| Only client SDKs (`JavaScript` plus Kotlin, Swift, Dart, Unity, Unreal, React, ...)                      | Client-side: no `Node.js` tab, even when a server equivalent exists.                                                                                                                     |
+| `JavaScript` only (or with non-SDK tabs such as `JSON`)                                                  | Add a `Node.js` tab when the node SDK can do the same thing, unless the heading or prose hints "client-side only". See below.                                                            |
+| Other server SDK tabs (Python, Ruby, PHP, Go, C#, Java) but no `Node.js`                                 | Add a `Node.js` tab. If the others are comment-only notes ("client-side only operation"), add the same note for the Node SDK.                                                            |
+| A client group, and the page has its own server-side section for it ("Server-Side Usage", "Server Side") | No `Node.js` tab: the server-side section covers it.                                                                                                                                     |
 
 JavaScript-only groups are common: JavaScript is usually the first SDK documented, and the other SDKs follow later. Being alone is no hint that the code is client-side. Client APIs used in passing aren't either: translate them to the server side (`client.user?.language` → `user.language` of a user you have; the message from `client.chat.getMessage`). Skip the group only when:
 
@@ -72,8 +72,8 @@ To check what the node SDK can do, read `src/StreamClient.ts`, `src/StreamChatCl
 ### Writing the Node.js fence
 
 - Mirror the `JavaScript` fence: same comments, structure and placeholder literals (`"user-1"`, `"messaging:general"`).
-- Use the node SDK's shapes and types: `client.chat.*` / `client.feeds.*`, request objects (`filter_conditions`, `preferences: [...]`), `Date` where the types say `Date` (not `.toISOString()`), and `user_id` where the client code acts as the connected user (server-side `queryChannels` with `hidden` / `muted`, drafts, devices need it).
-- Don't write a `Node.js (stream-chat-js@9)` fence for it: list the group in the report so the v9 version can be added by hand.
+- Use the node SDK's shapes and types: `client.chat.*` / `client.feeds.*`, request objects (`filter_conditions`, `preferences: [...]`), `Date` where the request types say `Date` (not `.toISOString()`), the SDK time helpers (`nsToDate`, `nsToMs`) for response timestamps (unix-ns numbers, not `Date`s), and `user_id` where the client code acts as the connected user (server-side `queryChannels` with `hidden` / `muted`, drafts, devices need it).
+- Don't write its `Node.js (stream-chat@9)` partner here: step 6 backfills it from existing v9 code.
 - Put it before the group's `</Tabs>`. A fence that isn't in a `<Tabs>` block: wrap it and the new fence in `<Tabs>`.
 - From `$DOCS_DIR`, run `npx prettier --write <page path>` and `node scripts/tab-lint.mjs <page path>` (it puts the tabs in the canonical order: client SDKs first, then server SDKs).
 
@@ -90,7 +90,7 @@ It runs without network and reports four kinds of failure. Collect them all, gro
 | Failure                                    | Meaning                                                                                                                                                                 |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `snippets without a test region`           | A `Node.js` fence on a tested sidebar page (`SIDEBAR_FILES`) has no region: a new snippet, a new page, or a fence whose key changed (see the next row).                 |
-| mislabelled JS fences                      | A JS fence is unlabelled or has a label other than `JavaScript`, `React`, `React Native`, `Node.js` or their stream-chat-js@9 versions.                                 |
+| mislabelled JS fences                      | A JS fence is unlabelled or has a label other than `JavaScript`, `React`, `React Native`, `Node.js` or their stream-chat@9 versions.                                    |
 | `no such fence`                            | A region's key (`docs`, `heading`, `tab`, `index`) matches no fence: the fence was removed, moved, or its heading was renamed. The failure lists the page's fence keys. |
 | `<region> differs from <docs file>:<line>` | The region's code and the fence's code differ.                                                                                                                          |
 
@@ -104,7 +104,7 @@ Work one docs page at a time.
 
 ### Mislabelled fence
 
-Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` for client code. Code that works on both sides (e.g. a bare filter object) gets `JavaScript`: an unlabelled `js` fence already renders like `label="JavaScript"` (the JavaScript route's own sample, a titled fallback on the Node route), so the page doesn't change. Whether it also needs a `Node.js` tab is decided by the sweep (step 3). Otherwise, `JavaScript`, `React` and `React Native` fences, the stream-chat-js@9 fences (`JavaScript (stream-chat-js@9)`, `Node.js (stream-chat-js@9)`), and `Node.js` fences inside a `<disclosure label="... (no SDK)">` block (reference implementations without the SDK), are out of scope: never test or change them.
+Label it `Node.js` for `@stream-io/node-sdk` (server-side) code, `JavaScript` for client code. Code that works on both sides (e.g. a bare filter object) gets `JavaScript`: an unlabelled `js` fence already renders like `label="JavaScript"` (the JavaScript route's own sample, a titled fallback on the Node route), so the page doesn't change. Whether it also needs a `Node.js` tab is decided by the sweep (step 3). Otherwise, `JavaScript`, `React` and `React Native` fences, the stream-chat@9 fences (`JavaScript (stream-chat@9)`, `Node.js (stream-chat@9)`), and `Node.js` fences inside a `<disclosure label="... (no SDK)">` block (reference implementations without the SDK), are out of scope: never test or change them. The one exception: step 6 adds missing stream-chat@9 fences.
 
 ### Region differs from its fence (docs changed)
 
@@ -133,7 +133,7 @@ Write a test for it in the page's test file (create the file if the page is new)
 - A fence that isn't code (e.g. a bare data shape) is a docs bug: rewrite it as code that runs (e.g. reading and logging the fields), and report it. Never remove a `Node.js` fence just because it is a fragment or can't be tested: wrap it, or put it in `it.skip`.
 - A snippet the test app can't run goes in `it.skip('BLOCKED: <reason>', ...)` so it is still typechecked; report the exact API error.
 - **Another SDK's code in a `Node.js` fence** (e.g. Feeds v2 `getstream` client code: `client.flagUser`, `client.user(id).flag`, `ctx.alice.feed(...)`): it isn't `@stream-io/node-sdk` code and isn't ours to update. Don't rewrite or relabel it: add the fence to `EXCLUDED_FENCES` in `sync/parse.ts` with a reason, and report it.
-- **Client-side code in a `Node.js` fence** (needs a connected user or a WebSocket, or a method the node SDK doesn't have: `connectUser`, `channel.watch()`, `client.on(...)`): never test different code from what the fence shows. If the node SDK can do the same thing, make the smallest docs fix that turns the fence into that call (`channel.watch()` → `channel.getOrCreate()`, `user_id` instead of `connectUser`). If it can't (events, WebSocket, local client state), the fence is mislabelled: label it `JavaScript`. Its `Node.js (stream-chat-js@9)` partner, if any, becomes `JavaScript (stream-chat-js@9)`, code unchanged. Use `it.skip('BLOCKED: client-side code: ...')` only while that decision is open. Report it either way. To check what a server-side endpoint accepts, read the SDK source (`src/StreamClient.ts`, `src/StreamChatClient.ts`, `src/StreamChannel.ts`, `src/gen/`) or the OpenAPI spec (`chat-serverside-api.json` in https://github.com/GetStream/protocol/tree/main/openapi/v2).
+- **Client-side code in a `Node.js` fence** (needs a connected user or a WebSocket, or a method the node SDK doesn't have: `connectUser`, `channel.watch()`, `client.on(...)`): never test different code from what the fence shows. If the node SDK can do the same thing, make the smallest docs fix that turns the fence into that call (`channel.watch()` → `channel.getOrCreate()`, `user_id` instead of `connectUser`). If it can't (events, WebSocket, local client state), the fence is mislabelled: label it `JavaScript`. Its `Node.js (stream-chat@9)` partner, if any, becomes `JavaScript (stream-chat@9)`, code unchanged. Use `it.skip('BLOCKED: client-side code: ...')` only while that decision is open. Report it either way. To check what a server-side endpoint accepts, read the SDK source (`src/StreamClient.ts`, `src/StreamChatClient.ts`, `src/StreamChannel.ts`, `src/gen/`) or the OpenAPI spec (`chat-serverside-api.json` in https://github.com/GetStream/protocol/tree/main/openapi/v2).
 - **Push and webhooks**: don't test that notifications or webhook events arrive; assert the response or read the setting back (`getApp()`, `listPushProviders()`, ...). Never touch or use the test app's own push provider (see "Test app" in `AGENTS.md`): only use providers the test creates with `uniqueId` names. Snippets that need real credentials run in `describe.skipIf(!hasFirebaseCredentials)` (`helpers/push.ts`); the README's "Push credentials" section has the details.
 - **App-level side effects** (app settings, built-in channel types, grants, webhook URLs, push config, ...): read the original value first and restore it with `cleanup.add(...)`, or the file fails with `DRIFT`.
 
@@ -155,7 +155,37 @@ Only when the docs snippet itself doesn't work (wrong method name or signature, 
 
 Docs bugs you leave unfixed (prose, non-`Node.js` fences, or waiting for a decision) go in the report (see "Report").
 
-## 6. Gates
+## 6. Backfill stream-chat@9 fences
+
+The chat and platform pages show every stream-chat-js snippet twice: the current version (`JavaScript`, `Node.js`) and the v9 one (`JavaScript (stream-chat@9)`, `Node.js (stream-chat@9)`). Fences added on the docs `main` branch, or rewritten in this run, often arrive without their v9 partner. Run this step after the fixes, since they can relabel or rewrite fences.
+
+### Scope
+
+- Pages: the chat and platform sidebar pages. Feeds, video and moderation pages have no stream-chat-js code: skip them.
+- Fences: every `JavaScript` and `Node.js` fence whose group has no partner with the matching v9 label. Skip comment-only fences, `<disclosure label="... (no SDK)">` blocks, `EXCLUDED_FENCES`, and `Node.js` fences of APIs stream-chat-js never had (`client.video.*`, `client.feeds.*`, `client.moderation.*`).
+
+List them with a throwaway script in the scratchpad (page, heading, line, the group's labels).
+
+### Finding the v9 code
+
+Never write v9 code from scratch: copy it from one of these sources, in this order, and record which one you used.
+
+1. **The docs `main` branch** (`git fetch origin main`). `main` is the v9 docs: its plain `JavaScript` / `Node.js` / unlabelled `js` fence under the same heading is the v9 code. It only counts if it is v9 code (`serverClient`, `updateAppSettings`, positional arguments like `updateChannelType("messaging", {...})`, `channel.create()`). A fence identical to the branch's node SDK code (`payload: { filter_conditions }`, `client.chat.*`) means the page never had v9 code there.
+2. **The page's history on the docs branch**: the fence before the commit that rewrote it for stream-chat-js@10 (`git log -S'<a line of the fence>' -- <page>`, then `git show <commit>^:<page>`).
+3. **A fence replaced in this run**: when the sweep rewrote a server-side `JavaScript` fence to a `Node.js` one, the old code (`git diff` in `$DOCS_DIR`) is the v9 partner.
+4. **A `JavaScript` fence that is v9 server code** next to a `Node.js` fence (e.g. `client.partialUpdateUser(...)` beside `client.updateUsersPartial(...)`): relabel it `Node.js (stream-chat@9)`.
+5. **The same call in both versions** (e.g. `client.blockUser("user-to-block")`): only when another fence on the docs pairs that exact code with an identical v9 copy. Copy it.
+
+No source: leave the group as it is and list it in the report ("never had v9 code"). Don't ask whether to write one.
+
+### Writing the v9 fence
+
+- Copy the code unchanged. Label it `JavaScript (stream-chat@9)` for a `JavaScript` fence, `Node.js (stream-chat@9)` for a `Node.js` fence.
+- Put it right after its partner, in the same `<Tabs>`. A fence that isn't in a `<Tabs>` block: wrap it and the new fence in `<Tabs>`.
+- When a group's fences match their source fences by position, copy them in that order. When they don't (some added, some removed), match them by heading and code, and leave any you can't pair.
+- From `$DOCS_DIR`, run `npx prettier --write <page path>` and `node scripts/tab-lint.mjs <page path>`, then `DOCS_DIR=$DOCS_DIR yarn test:docs:sync`: v9 fences aren't tested, but the check must stay green.
+
+## 7. Gates
 
 All must pass before you finish:
 
@@ -176,14 +206,14 @@ Run `yarn test:docs` only on the test files you changed, never two runs at once,
 - Don't commit, push, stash or create branches in either repo.
 - Never write the API key, secret or push credentials to any file except the repo root `.env`.
 - Don't edit `src/`, `__tests__/docs-snippets/AGENTS.md`, the helpers or the configs. Propose changes in the report instead.
-- Change docs snippets as little as possible: only when they don't work, or to add or relabel `Node.js` fences in the sweep (step 3).
+- Change docs snippets as little as possible: only when they don't work, to add or relabel `Node.js` fences in the sweep (step 3), or to backfill stream-chat@9 fences (step 6).
 
 ## Report
 
 End with:
 
 1. **Docs folder** used, and both repos' branches.
-2. **Sweep**: `Node.js` fences added or relabelled, per page, and the groups you left without one and why (client SDKs only, a server-side section on the page, no node SDK equivalent, prose says client-side).
+2. **Sweep**: `Node.js` fences added or relabelled, per page, and the groups you left without one and why (client SDKs only, a server-side section on the page, no node SDK equivalent, prose says client-side). Then the stream-chat@9 fences backfilled, per page, each with its source (`main`, the commit, a fence replaced in this run, a relabel), and the groups left without one because they never had v9 code.
 3. **Tests updated from the docs**: per page, the regions changed and why the setup/assertions changed.
 4. **New and removed tests**: snippets added, regions removed with their fences, renamed markers.
 5. **Docs changes**: every fence changed in `$DOCS_DIR` (fixes, labels, client-side code), each with before/after, reason and evidence. These need human review.

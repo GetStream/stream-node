@@ -4,6 +4,7 @@ import { createdAtFromId, DOCS_TEST_PREFIX } from '../helpers/ids';
 import {
   describeLeftovers,
   findLeftovers,
+  leftoverCreatedAt,
   removeLeftovers,
 } from '../helpers/leaks';
 import type { Leftover } from '../helpers/leaks';
@@ -20,9 +21,8 @@ const dryRun = process.env.DOCS_SWEEP_DRY_RUN === '1';
 const minAgeMinutes = Number(process.env.DOCS_SWEEP_MIN_AGE ?? 30);
 
 const isOldEnough = (leftover: Leftover) => {
-  const createdAt = leftover.createdAt
-    ? new Date(leftover.createdAt)
-    : createdAtFromId(leftover.id.split(' ')[0]);
+  const createdAt =
+    leftoverCreatedAt(leftover) ?? createdAtFromId(leftover.id.split(' ')[0]);
   // Unknown age: only sweep it when explicitly asked to ignore age.
   if (!createdAt || Number.isNaN(createdAt.getTime()))
     return minAgeMinutes === 0;

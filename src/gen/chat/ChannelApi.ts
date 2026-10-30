@@ -4,6 +4,10 @@ import {
   ChannelStateResponse,
   DeleteChannelResponse,
   EventResponse,
+  ForkChannelRequest,
+  ForkChannelResponse,
+  ForkMessageIDsRequest,
+  ForkMessageIDsResponse,
   GetDraftResponse,
   GetManyMessagesResponse,
   GetPinnedMessagesResponse,
@@ -15,6 +19,8 @@ import {
   QueryChannelBansRequest,
   QueryChannelBansResponse,
   Response,
+  RewindChannelRequest,
+  RewindChannelResponse,
   SendEventRequest,
   SendMessageRequest,
   SendMessageResponse,
@@ -204,6 +210,38 @@ export class ChannelApi {
     });
   }
 
+  fork(
+    request: ForkChannelRequest,
+  ): Promise<StreamResponse<ForkChannelResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.forkChannel({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
+  forkMessageIDs(
+    request: ForkMessageIDsRequest,
+  ): Promise<StreamResponse<ForkMessageIDsResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.forkMessageIDs({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
+  }
+
   hide(
     request?: HideChannelRequest,
   ): Promise<StreamResponse<HideChannelResponse>> {
@@ -357,6 +395,22 @@ export class ChannelApi {
     }
 
     return this.chatApi.markRead({ id: this.id, type: this.type, ...request });
+  }
+
+  rewind(
+    request: RewindChannelRequest,
+  ): Promise<StreamResponse<RewindChannelResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.rewindChannel({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   }
 
   show(

@@ -56,14 +56,14 @@ export const JS_TAB = 'JavaScript';
 /** The tested tab (`@stream-io/node-sdk` code). */
 export const NODE_TAB = 'Node.js';
 /**
- * Out of scope too: client-side React / React Native SDK code, and the stream-chat-js@9
+ * Out of scope too: client-side React / React Native SDK code, and the stream-chat@9
  * versions shown next to `JavaScript` (client-side) and `Node.js` (server-side).
  */
 const OUT_OF_SCOPE_TABS = [
   'React',
   'React Native',
-  'JavaScript (stream-chat-js@9)',
-  'Node.js (stream-chat-js@9)',
+  'JavaScript (stream-chat@9)',
+  'Node.js (stream-chat@9)',
 ];
 /**
  * Opens a block of reference implementations that don't use the SDK (platform pages).
@@ -99,7 +99,10 @@ const PAGE_PREFIXES = [
  * Sidebar pages that are deliberately not validated (page path relative to
  * `content/docs`, reason).
  */
-export const EXCLUDED_PAGES: Record<string, string> = {};
+export const EXCLUDED_PAGES: Record<string, string> = {
+  'activity-feeds/v3-latest/_default/13-importing_data/03_v2_to_v3_code_migration.md':
+    'Feeds v2 to v3 porting guide: before/after code in fences titled "Feeds v2" / "Feeds v3", not SDK tabs (a `label` would replace the visible title)',
+};
 
 const FEEDS_V2_CLIENT =
   'Feeds v2 code for the `getstream` package (a different SDK), not @stream-io/node-sdk';

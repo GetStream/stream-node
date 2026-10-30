@@ -1,9 +1,19 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { StreamClient } from '../../../../../index';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+import { nsToMs } from '../../../../../index';
+import type { UpsertActionConfigResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
 import { sendServerMessage, waitForReviewItem } from '../../../helpers/server';
+import { retry } from '../../../helpers/wait';
 
 const DOCS = 'moderation/_default/06-review-queue/02-actions.md';
 
@@ -13,6 +23,7 @@ describe(DOCS, () => {
   const moderatorId = uniqueId('moderator');
   const channelId = uniqueId('actions-channel');
   const cid = `messaging:${channelId}`;
+  const upsertConfig = client.moderation.upsertConfig.bind(client.moderation);
 
   /**
    * Flags a fresh message of a new member (so bans of one test don't affect the
@@ -70,6 +81,7 @@ describe(DOCS, () => {
     cleanup.channels.push(cid);
   });
 
+  afterEach(() => vi.restoreAllMocks());
   afterAll(() => cleanup.run());
 
   it('marks an item as reviewed', async () => {
@@ -134,10 +146,9 @@ describe(DOCS, () => {
     expect(bans[0].channel?.cid).toBe(cid);
     expect(bans[0].reason).toBe('Repeated harassment');
     expect(bans[0].expires).toBeDefined();
-    expect(
-      new Date(bans[0].expires ?? 0).getTime() -
-        new Date(bans[0].created_at).getTime(),
-    ).toBe(1440 * 60 * 1000);
+    expect(nsToMs(bans[0].expires ?? 0) - nsToMs(bans[0].created_at)).toBe(
+      1440 * 60 * 1000,
+    );
     const { users } = await client.queryUsers({
       payload: { filter_conditions: { id: creatorId } },
     });
@@ -230,55 +241,120 @@ describe(DOCS, () => {
     );
   });
 
-  it.skip("BLOCKED: SDK issue: the node SDK has no bulkSubmitAction (POST /api/v2/moderation/bulk_submit_action is `Ignore: true` in the spec), and the API rejects the `actions` list: code 4 V2BulkSubmitAction failed with error: \"action is a required field, filters 'BulkSubmitActionRequest.filters' Error:Field validation for 'filters' failed on the 'required_without' tag, review_queue_item_ids 'BulkSubmitActionRequest.review_queue_item_ids' Error:Field validation for 'review_queue_item_ids' failed on the 'required_without' tag\"", async () => {
-    const [first, second, third] = await Promise.all([
-      flagMessage(),
-      flagMessage(),
-      flagMessage(),
-    ]);
-    const itemId1 = first.itemId;
-    const itemId2 = second.itemId;
-    const itemId3 = third.itemId;
-    // The node SDK has no bulkSubmitAction: type the missing method (with the request
-    // shape the docs use) so the skipped region typechecks and lints. It isn't there
-    // at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        bulkSubmitAction: (request: {
-          actions: Array<{
-            action_type: string;
-            item_id: string;
-            user_id: string;
-          }>;
-        }) => Promise<unknown>;
-      };
-    };
+  it('customizes a review queue button', async () => {
+    const entityType = 'stream:chat:v1:message';
+    /** The app's own (non-default) buttons for chat messages. */
+    const listButtons = async () =>
+      (
+        await client.moderation.getActionConfig({
+          entity_type: entityType,
+          exclude_defaults: true,
+        })
+      ).action_config[entityType] ?? [];
+    const original = await listButtons();
+    const upsertActionConfig = vi.spyOn(
+      client.moderation,
+      'upsertActionConfig',
+    );
 
-    // #region snippet docs="moderation/_default/06-review-queue/02-actions.md" heading="Bulk Submit Action" tab="Node.js" index=1
-    // COPY: itemId1="item_id_1", itemId2="item_id_2", itemId3="item_id_3"
-    await client.moderation.bulkSubmitAction({
-      actions: [
-        {
-          action_type: 'mark_reviewed',
-          item_id: itemId1,
-          user_id: moderatorId,
-        },
-        {
-          action_type: 'delete_message',
-          item_id: itemId2,
-          user_id: moderatorId,
-        },
-        {
-          action_type: 'mark_reviewed',
-          item_id: itemId3,
-          user_id: moderatorId,
-        },
-      ],
+    // #region snippet docs="moderation/_default/06-review-queue/02-actions.md" heading="Customize review queue buttons" tab="Node.js" index=1
+    await client.moderation.upsertActionConfig({
+      entity_type: 'stream:chat:v1:message',
+      order: 1,
+      action: 'delete_message',
+      description: 'Delete message',
     });
     // #endregion snippet
 
-    expect((await getItem(itemId1))?.latest_moderator_action).toBe(
-      'mark_reviewed',
+    const [{ action_config: created }] = await Promise.all(
+      upsertActionConfig.mock.results.map(
+        (r) => r.value as Promise<UpsertActionConfigResponse>,
+      ),
     );
+    const createdId = created?.id;
+    if (!createdId) throw new Error('upsertActionConfig returned no id');
+    // Without an `id` the request creates a new button (the app's own buttons stay).
+    expect(original.map(({ id }) => id)).not.toContain(createdId);
+    cleanup.add(async () => {
+      await client.moderation.deleteActionConfig({ id: createdId });
+      expect((await listButtons()).map(({ id }) => id)).toEqual(
+        original.map(({ id }) => id),
+      );
+    });
+    expect(created).toMatchObject({
+      entity_type: 'stream:chat:v1:message',
+      order: 1,
+      action: 'delete_message',
+      description: 'Delete message',
+    });
+    expect(
+      (await listButtons()).find(({ id }) => id === createdId),
+    ).toMatchObject({
+      action: 'delete_message',
+      description: 'Delete message',
+    });
+  });
+
+  it('masks blocklist matches with mask_flag', async () => {
+    // The docs' app-wide "chat" policy, test-owned: a channel-level policy of a new
+    // channel, so only that channel is moderated by it.
+    const maskChannelId = uniqueId('mask-channel');
+    const maskCid = `messaging:${maskChannelId}`;
+    const chatConfigKey = `chat:${maskCid}`;
+    const blocklistName = uniqueId('phone-numbers');
+    await client.chat
+      .channel('messaging', maskChannelId)
+      .getOrCreate({ data: { created_by_id: moderatorId } });
+    cleanup.channels.push(maskCid);
+    await client.createBlockList({
+      name: blocklistName,
+      words: ['frobnicate'],
+    });
+    cleanup.add(() => client.deleteBlockList({ name: blocklistName }));
+    cleanup.add(() => client.moderation.deleteConfig({ key: chatConfigKey }));
+    // A new blocklist isn't known to the moderation API right away.
+    vi.spyOn(client.moderation, 'upsertConfig').mockImplementation((request) =>
+      retry(() => upsertConfig(request), {
+        retryIf: (error) => String(error).includes('Blocklist not found'),
+      }),
+    );
+
+    // #region snippet docs="moderation/_default/06-review-queue/02-actions.md" heading="Mask" tab="Node.js" index=1
+    // COPY: chatConfigKey="chat"
+    await client.moderation.upsertConfig({
+      key: chatConfigKey,
+      block_list_config: {
+        enabled: true,
+        rules: [{ name: blocklistName, action: 'mask_flag', team: '' }],
+      },
+    });
+    // #endregion snippet
+
+    const { config } = await client.moderation.getConfig({
+      key: chatConfigKey,
+    });
+    expect(config?.block_list_config?.rules).toMatchObject([
+      { name: blocklistName, action: 'mask_flag' },
+    ]);
+    // A matching message is published with the word masked, and flagged.
+    const senderId = uniqueId('sender');
+    cleanup.users.push(senderId);
+    await client.upsertUsers([{ id: senderId }]);
+    const message = await retry(async () => {
+      const sent = await sendServerMessage(
+        client,
+        maskCid,
+        { text: 'please frobnicate now', user_id: senderId },
+        { force_moderation: true },
+      );
+      // The matched word is replaced (on the test app with four U+26B9 characters,
+      // whatever the word's length, 2026-10-29).
+      expect(sent.text).not.toContain('frobnicate');
+      expect(sent.text).toMatch(/^please \S+ now$/);
+      return sent;
+    });
+    expect(message.type).toBe('regular');
+    const item = await waitForReviewItem(client, message.id);
+    expect(item.entity_id).toBe(message.id);
   });
 });

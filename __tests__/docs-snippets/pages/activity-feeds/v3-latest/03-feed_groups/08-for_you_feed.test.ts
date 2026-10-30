@@ -14,6 +14,7 @@ import {
   copyFeedGroup,
   isFeedGroupMissing,
   retryOnFeedGroupMissing,
+  waitForFeedGroup,
 } from '../../../../helpers/feeds';
 import { uniqueId } from '../../../../helpers/ids';
 import { retry } from '../../../../helpers/wait';
@@ -71,6 +72,8 @@ describe(DOCS, () => {
     oneFid = await createFeed('user', oneId, oneId);
     const stockGroupId = newFeedGroupId('stock');
     await client.feeds.createFeedGroup({ id: stockGroupId });
+    // The fence adds an activity into this group, and addActivity can't be retried.
+    await waitForFeedGroup(client, stockGroupId);
     appleFid = await createFeed(stockGroupId, uniqueId('apple'), jackId);
   });
 

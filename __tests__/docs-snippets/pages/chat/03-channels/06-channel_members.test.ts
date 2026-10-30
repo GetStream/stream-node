@@ -343,4 +343,33 @@ describe(DOCS, () => {
     expect(member.channel_role).toBe('channel_moderator');
     expect(member.custom).toEqual({ key1: 'new value 1', key2: 'new value 2' });
   });
+
+  it('sets app-wide and channel badges', async () => {
+    const channelId = await newChannel([janeId]);
+    const cid = `messaging:${channelId}`;
+    const channel = client.chat.channel('messaging', channelId);
+
+    // #region snippet docs="chat/_default/03-channels/06-channel_members.md" heading="User Badges" tab="Node.js" index=1
+    // COPY: janeId="jane"
+    // App-wide badge, returned with the user (for example on message.user)
+    await client.updateUsersPartial({
+      users: [{ id: janeId, set: { badges: ['verified'] } }],
+    });
+
+    // Channel badge, returned with this channel's members
+    await channel.updateMemberPartial({
+      user_id: janeId,
+      set: { badges: ['host'] },
+    });
+    // #endregion snippet
+
+    const message = await sendServerMessage(client, cid, {
+      text: 'hi',
+      user_id: janeId,
+    });
+    expect(message.user?.custom).toMatchObject({ badges: ['verified'] });
+    const member = await getServerMember(client, cid, janeId);
+    expect(member.custom).toEqual({ badges: ['host'] });
+    expect(member.user?.custom).toMatchObject({ badges: ['verified'] });
+  });
 });

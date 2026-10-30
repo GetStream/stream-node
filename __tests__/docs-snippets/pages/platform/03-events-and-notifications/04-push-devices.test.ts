@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { DeviceResponse } from '../../../../../index';
+import type { DeviceResponse, TimestampNS } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -128,9 +128,9 @@ describe(DOCS, () => {
   it('device object (Listing from the feeds client SDKs)', () => {
     // #region snippet docs="platform/03-events-and-notifications/04-push-devices.md" heading="Listing from the feeds client SDKs" tab="Node.js" index=2
     type Device = {
-      created_at: Date;
+      created_at: TimestampNS; // unix nanoseconds, nsToDate() converts it
       id: string;
-      push_provider: string;
+      push_provider: 'firebase' | 'apn' | 'huawei' | 'xiaomi';
       user_id: string;
       disabled?: boolean;
       disabled_reason?: string;

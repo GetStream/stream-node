@@ -14,6 +14,8 @@ import {
   CheckSNSResponse,
   CheckSQSRequest,
   CheckSQSResponse,
+  ClaimGuestUserRequest,
+  ClaimGuestUserResponse,
   CreateBlockListRequest,
   CreateBlockListResponse,
   CreateDeviceRequest,
@@ -76,6 +78,7 @@ import {
   PollOptionResponse,
   PollResponse,
   PollVotesResponse,
+  PushProviderName,
   QueryPollVotesRequest,
   QueryPollsRequest,
   QueryPollsResponse,
@@ -186,6 +189,7 @@ export class CommonApi {
       sqs_key: request?.sqs_key,
       sqs_secret: request?.sqs_secret,
       sqs_url: request?.sqs_url,
+      two_way_block_effect_enabled: request?.two_way_block_effect_enabled,
       user_response_time_enabled: request?.user_response_time_enabled,
       video_primary_use_case: request?.video_primary_use_case,
       webhook_url: request?.webhook_url,
@@ -1430,7 +1434,7 @@ export class CommonApi {
   }
 
   async deletePushProvider(request: {
-    type: string;
+    type: PushProviderName;
     name: string;
   }): Promise<StreamResponse<Response>> {
     const pathParams = {
@@ -1451,7 +1455,7 @@ export class CommonApi {
   }
 
   async getPushTemplates(request: {
-    push_provider_type: string;
+    push_provider_type: PushProviderName;
     push_provider_name?: string;
   }): Promise<StreamResponse<GetPushTemplatesResponse>> {
     const queryParams = {
@@ -2004,6 +2008,27 @@ export class CommonApi {
     );
 
     decoders['BlockUsersResponse']?.(response);
+
+    return response;
+  }
+
+  async claimGuestUser(
+    request: ClaimGuestUserRequest,
+  ): Promise<StreamResponse<ClaimGuestUserResponse>> {
+    const body = {
+      guest_user_id: request?.guest_user_id,
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<ClaimGuestUserResponse>(
+      'POST',
+      '/api/v2/users/claim_guest',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['ClaimGuestUserResponse']?.(response);
 
     return response;
   }

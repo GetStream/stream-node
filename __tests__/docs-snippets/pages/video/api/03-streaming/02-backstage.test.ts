@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import { OwnCapability } from '../../../../../../index';
 import { createCallType } from '../../../../helpers/call-types';
 import { getServerClient } from '../../../../helpers/clients';
@@ -69,7 +70,7 @@ describe(DOCS, () => {
     >);
     expect(response.created).toBe(true);
     expect(response.call.backstage).toBe(true);
-    expect(response.call.starts_at?.getTime()).toBe(startsAt.getTime());
+    expect(nsToMs(response.call.starts_at ?? 0)).toBe(startsAt.getTime());
     expect(response.call.join_ahead_time_seconds).toBe(300);
     expect(response.call.settings.backstage).toMatchObject({
       enabled: true,

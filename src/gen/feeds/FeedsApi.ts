@@ -24,6 +24,7 @@ import {
   BatchQueryActivityReactionsResponse,
   BatchQueryCommentReactionsRequest,
   BatchQueryCommentReactionsResponse,
+  CancelExportFeedsResponse,
   CastPollVoteRequest,
   ChangeFeedVisibilityRequest,
   ChangeFeedVisibilityResponse,
@@ -60,6 +61,9 @@ import {
   DeleteFeedsRetentionPolicyResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
+  ExportFeedsByTypeRequest,
+  ExportFeedsResponse,
+  FeedVisibility,
   FollowBatchRequest,
   FollowBatchResponse,
   FollowRequest,
@@ -1675,6 +1679,64 @@ export class FeedsApi {
     return response;
   }
 
+  async exportFeedsApp(): Promise<StreamResponse<ExportFeedsResponse>> {
+    const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
+      'POST',
+      '/api/v2/feeds/export/app',
+      undefined,
+      undefined,
+    );
+
+    decoders['ExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
+  async cancelExportFeeds(request: {
+    task_id: string;
+  }): Promise<StreamResponse<CancelExportFeedsResponse>> {
+    const pathParams = {
+      task_id: request?.task_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<CancelExportFeedsResponse>(
+        'POST',
+        '/api/v2/feeds/export/{task_id}/cancel',
+        pathParams,
+        undefined,
+      );
+
+    decoders['CancelExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
+  async exportFeedsByType(
+    request: ExportFeedsByTypeRequest & { type: string },
+  ): Promise<StreamResponse<ExportFeedsResponse>> {
+    const pathParams = {
+      type: request?.type,
+    };
+    const body = {
+      created_at_from: request?.created_at_from,
+      created_at_to: request?.created_at_to,
+      user_id: request?.user_id,
+    };
+
+    const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
+      'POST',
+      '/api/v2/feeds/export/{type}',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
   async listFeedGroups(request?: {
     include_soft_deleted?: boolean;
   }): Promise<StreamResponse<ListFeedGroupsResponse>> {
@@ -2446,7 +2508,7 @@ export class FeedsApi {
   }
 
   async getFeedVisibility(request: {
-    name: string;
+    name: FeedVisibility;
   }): Promise<StreamResponse<GetFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,
@@ -2466,7 +2528,7 @@ export class FeedsApi {
   }
 
   async updateFeedVisibility(
-    request: UpdateFeedVisibilityRequest & { name: string },
+    request: UpdateFeedVisibilityRequest & { name: FeedVisibility },
   ): Promise<StreamResponse<UpdateFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,
@@ -2699,6 +2761,7 @@ export class FeedsApi {
     return response;
   }
 
+  /** @deprecated This endpoint is deprecated. */
   async followBatch(
     request: FollowBatchRequest,
   ): Promise<StreamResponse<FollowBatchResponse>> {
@@ -3082,6 +3145,7 @@ export class FeedsApi {
     return response;
   }
 
+  /** @deprecated This endpoint is deprecated. */
   async unfollowBatch(
     request: UnfollowBatchRequest,
   ): Promise<StreamResponse<UnfollowBatchResponse>> {

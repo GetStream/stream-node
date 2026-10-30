@@ -589,10 +589,10 @@ describe(DOCS, () => {
       // #region snippet docs="activity-feeds/v3-latest/_default/03-feed_groups/06-notification_feeds.md" heading="Legacy: Client-side computation" tab="Node.js" index=1
       // Deprecated — use group.is_read / group.is_seen instead
       const isRead =
-        (lastReadAt && group.updated_at.getTime() < lastReadAt.getTime()) ||
+        (lastReadAt && group.updated_at < lastReadAt) ||
         readActivities.includes(group.group);
       const isSeen =
-        (lastSeenAt && group.updated_at.getTime() < lastSeenAt.getTime()) ||
+        (lastSeenAt && group.updated_at < lastSeenAt) ||
         seenActivities.includes(group.group);
       // #endregion snippet
 

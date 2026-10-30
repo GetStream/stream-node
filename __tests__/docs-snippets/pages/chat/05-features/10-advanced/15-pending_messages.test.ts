@@ -83,15 +83,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/05-features/10-advanced/15-pending_messages.md" heading="Sending Pending Messages" tab="Node.js" index=1
     // COPY: channelType="messaging"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     const response = await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       mark_messages_pending: true,
     });
     // #endregion snippet

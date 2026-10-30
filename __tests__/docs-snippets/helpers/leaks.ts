@@ -1,4 +1,9 @@
-import type { StreamClient } from '../../../index';
+import { nsToDate } from '../../../index';
+import type {
+  PushProviderName,
+  StreamClient,
+  TimestampNS,
+} from '../../../index';
 import { DOCS_TEST_PREFIX } from './ids';
 import { deleteMembershipLevel } from './feeds';
 import {
@@ -8,12 +13,23 @@ import {
 import { hardDeleteUsers } from './users';
 import { retry, retryOnRateLimit, waitForTask } from './wait';
 
+/** A leftover's `createdAt` as a `Date`, or `undefined` when it has none. */
+export const leftoverCreatedAt = ({ createdAt }: Leftover) => {
+  if (createdAt === undefined) return undefined;
+  return typeof createdAt === 'number'
+    ? nsToDate(createdAt)
+    : new Date(createdAt);
+};
+
 /** Something a docs test created and didn't remove. */
 export type Leftover = {
   kind: string;
   id: string;
-  /** Used by the sweep to skip resources of runs that may still be in progress. */
-  createdAt?: Date | string;
+  /**
+   * Used by the sweep to skip resources of runs that may still be in progress. A unix-ns
+   * timestamp from a response, or an RFC3339 string; read it with `leftoverCreatedAt`.
+   */
+  createdAt?: number | string;
   remove: () => Promise<unknown>;
   /**
    * Removes many leftovers of this kind in one call (e.g. users in one `deleteUsers`).
@@ -112,7 +128,7 @@ const scanners: Record<string, Scanner> = {
 
   async channels(client, { matches, ids: channelIds = [], createdSince }) {
     const found = new Map<string, Leftover>();
-    const add = (channel: { cid: string; created_at: Date }) =>
+    const add = (channel: { cid: string; created_at: number }) =>
       found.set(channel.cid, {
         kind: 'channel',
         id: channel.cid,
@@ -337,7 +353,9 @@ const scanners: Record<string, Scanner> = {
         createdAt: provider.created_at,
         remove: () =>
           client.deletePushProvider({
-            type: provider.type,
+            // The spec types `PushProviderResponse.type` as a plain string, but the
+            // delete endpoint takes a `PushProviderName`: the listed type is one of them.
+            type: provider.type as PushProviderName,
             name: provider.name,
           }),
       }));
@@ -402,12 +420,17 @@ const scanners: Record<string, Scanner> = {
     // without one it fails with code 4 "cannot specify sort and next/prev at the same
     // time" (2026-10-16).
     const scan = async (filter_conditions: Record<string, unknown>) => {
-      let after: Date | undefined;
+      let after: TimestampNS | undefined;
       for (;;) {
         const response = await retryOnRateLimit(() =>
           client.video.queryCalls({
             filter_conditions: after
-              ? { $and: [filter_conditions, { created_at: { $gt: after } }] }
+              ? {
+                  $and: [
+                    filter_conditions,
+                    { created_at: { $gt: nsToDate(after) } },
+                  ],
+                }
               : filter_conditions,
             sort: [{ field: 'created_at', direction: 1 }],
             limit: 100,
