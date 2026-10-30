@@ -58,6 +58,7 @@ import {
   DeleteFeedsBatchResponse,
   DeleteFeedsRetentionPolicyRequest,
   DeleteFeedsRetentionPolicyResponse,
+  DeleteScheduledActivityResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
   FollowBatchRequest,
@@ -85,6 +86,7 @@ import {
   GetOrCreateFollowResponse,
   GetOrCreateUnfollowRequest,
   GetOrCreateUnfollowResponse,
+  GetScheduledActivityResponse,
   GetUserInterestsResponse,
   ListFeedGroupsResponse,
   ListFeedViewsResponse,
@@ -95,6 +97,7 @@ import {
   PinActivityRequest,
   PinActivityResponse,
   PollVoteResponse,
+  PublishScheduledActivityNowResponse,
   QueryActivitiesRequest,
   QueryActivitiesResponse,
   QueryActivityReactionsRequest,
@@ -124,6 +127,8 @@ import {
   QueryPinnedActivitiesResponse,
   QueryRevisionHistoryRequest,
   QueryRevisionHistoryResponse,
+  QueryScheduledActivitiesRequest,
+  QueryScheduledActivitiesResponse,
   ReadCollectionsResponse,
   RejectFeedMemberInviteRequest,
   RejectFeedMemberInviteResponse,
@@ -135,6 +140,8 @@ import {
   RestoreCommentRequest,
   RestoreCommentResponse,
   RestoreFeedGroupResponse,
+  ScheduleActivityRequest,
+  ScheduleActivityResponse,
   SetFeedsRetentionPolicyRequest,
   SetFeedsRetentionPolicyResponse,
   SingleFollowResponse,
@@ -180,6 +187,8 @@ import {
   UpdateFollowResponse,
   UpdateMembershipLevelRequest,
   UpdateMembershipLevelResponse,
+  UpdateScheduledActivityRequest,
+  UpdateScheduledActivityResponse,
   UpsertActivitiesRequest,
   UpsertActivitiesResponse,
   UpsertCollectionsRequest,
@@ -3056,6 +3065,160 @@ export class FeedsApi {
       );
 
     decoders['QueryRevisionHistoryResponse']?.(response);
+
+    return response;
+  }
+
+  async scheduleActivity(
+    request: ScheduleActivityRequest,
+  ): Promise<StreamResponse<ScheduleActivityResponse>> {
+    const body = {
+      type: request?.type,
+      feeds: request?.feeds,
+      copy_custom_to_notification: request?.copy_custom_to_notification,
+      create_notification_activity: request?.create_notification_activity,
+      create_users: request?.create_users,
+      expires_at: request?.expires_at,
+      force_moderation: request?.force_moderation,
+      id: request?.id,
+      parent_id: request?.parent_id,
+      poll_id: request?.poll_id,
+      restrict_replies: request?.restrict_replies,
+      scheduled_at: request?.scheduled_at,
+      skip_enrich_url: request?.skip_enrich_url,
+      skip_push: request?.skip_push,
+      text: request?.text,
+      user_id: request?.user_id,
+      visibility: request?.visibility,
+      visibility_tag: request?.visibility_tag,
+      attachments: request?.attachments,
+      collection_refs: request?.collection_refs,
+      collections: request?.collections,
+      filter_tags: request?.filter_tags,
+      interest_tags: request?.interest_tags,
+      mentioned_user_ids: request?.mentioned_user_ids,
+      custom: request?.custom,
+      location: request?.location,
+      search_data: request?.search_data,
+    };
+
+    const response = await this.apiClient.sendRequest<ScheduleActivityResponse>(
+      'POST',
+      '/api/v2/feeds/scheduled_activities',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['ScheduleActivityResponse']?.(response);
+
+    return response;
+  }
+
+  async queryScheduledActivities(
+    request?: QueryScheduledActivitiesRequest,
+  ): Promise<StreamResponse<QueryScheduledActivitiesResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      filter: request?.filter,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryScheduledActivitiesResponse>(
+        'POST',
+        '/api/v2/feeds/scheduled_activities/query',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryScheduledActivitiesResponse']?.(response);
+
+    return response;
+  }
+
+  async deleteScheduledActivity(request: {
+    id: string;
+  }): Promise<StreamResponse<DeleteScheduledActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteScheduledActivityResponse>(
+        'DELETE',
+        '/api/v2/feeds/scheduled_activities/{id}',
+        pathParams,
+        undefined,
+      );
+
+    decoders['DeleteScheduledActivityResponse']?.(response);
+
+    return response;
+  }
+
+  async getScheduledActivity(request: {
+    id: string;
+  }): Promise<StreamResponse<GetScheduledActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<GetScheduledActivityResponse>(
+        'GET',
+        '/api/v2/feeds/scheduled_activities/{id}',
+        pathParams,
+        undefined,
+      );
+
+    decoders['GetScheduledActivityResponse']?.(response);
+
+    return response;
+  }
+
+  async updateScheduledActivity(
+    request: UpdateScheduledActivityRequest & { id: string },
+  ): Promise<StreamResponse<UpdateScheduledActivityResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      scheduled_at: request?.scheduled_at,
+      activity: request?.activity,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<UpdateScheduledActivityResponse>(
+        'PATCH',
+        '/api/v2/feeds/scheduled_activities/{id}',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['UpdateScheduledActivityResponse']?.(response);
+
+    return response;
+  }
+
+  async publishScheduledActivityNow(request: {
+    id: string;
+  }): Promise<StreamResponse<PublishScheduledActivityNowResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<PublishScheduledActivityNowResponse>(
+        'POST',
+        '/api/v2/feeds/scheduled_activities/{id}/publish_now',
+        pathParams,
+        undefined,
+      );
+
+    decoders['PublishScheduledActivityNowResponse']?.(response);
 
     return response;
   }

@@ -8286,6 +8286,10 @@ export interface DeleteSIPTrunkResponse {
   duration: string;
 }
 
+export interface DeleteScheduledActivityResponse {
+  duration: string;
+}
+
 export interface DeleteScheduledMessageResponse {
   /**
    * Duration of the request in milliseconds
@@ -11313,6 +11317,14 @@ export interface GetRetentionPolicyRunsResponse {
 export interface GetReviewQueueItemResponse {
   duration: string;
   item?: ReviewQueueItemResponse;
+}
+
+export interface GetScheduledActivityResponse {
+  duration: string;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
 }
 
 export interface GetSegmentResponse {
@@ -15687,6 +15699,14 @@ export interface PrivacySettingsResponse {
   typing_indicators?: TypingIndicatorsResponse;
 }
 
+export interface PublishScheduledActivityNowResponse {
+  duration: string;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
+}
+
 export interface PublishedTrackFlags {
   audio: boolean;
   screenshare: boolean;
@@ -17497,6 +17517,45 @@ export interface QueryRevisionHistoryResponse {
   revisions: Array<RevisionHistoryResponse>;
   next?: string;
   prev?: string;
+}
+
+export interface QueryScheduledActivitiesFilter {
+  /**
+   * Only activities scheduled for this feed
+   */
+  fid?: string;
+  /**
+   * Only activities of this user. Server-side only; client-side requests always see their own.
+   */
+  user_id?: string;
+  /**
+   * Only activities with one of these statuses: scheduled, publishing, failed
+   */
+  status?: Array<string>;
+}
+
+export interface QueryScheduledActivitiesRequest {
+  /**
+   * Maximum number of scheduled activities to return. Default 25, maximum 100.
+   */
+  limit?: number;
+  /**
+   * Cursor from a previous response to fetch the next page
+   */
+  next?: string;
+  filter?: QueryScheduledActivitiesFilter;
+}
+
+export interface QueryScheduledActivitiesResponse {
+  duration: string;
+  /**
+   * The scheduled activities, ordered by scheduled_at
+   */
+  scheduled_activities: Array<ScheduledActivityResponse>;
+  /**
+   * Cursor for the next page, absent on the last page
+   */
+  next?: string;
 }
 
 export interface QueryScheduledMessagesRequest {
@@ -19496,6 +19555,274 @@ export interface SIPTrunkResponse {
 
 export interface SRTIngress {
   address: string;
+}
+
+export interface ScheduleActivityRequest {
+  /**
+   * Type of activity
+   */
+  type: string;
+  /**
+   * List of feeds to add the activity to with a default max limit of 25 feeds
+   */
+  feeds: Array<string>;
+  /**
+   * @deprecated
+   * Whether to copy custom data to the notification activity (only applies when create_notification_activity is true) Deprecated: use notification_context.trigger.custom and notification_context.target.custom instead
+   */
+  copy_custom_to_notification?: boolean;
+  /**
+   * Whether to create notification activities for mentioned users
+   */
+  create_notification_activity?: boolean;
+  /**
+   * If true, creates the user referenced by user_id when it does not exist. Server-side only.
+   */
+  create_users?: boolean;
+  /**
+   * Expiration time for the activity
+   */
+  expires_at?: string;
+  /**
+   * If true, forces moderation to run at publish for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
+   */
+  force_moderation?: boolean;
+  /**
+   * Optional ID for the activity
+   */
+  id?: string;
+  /**
+   * ID of parent activity for replies/comments
+   */
+  parent_id?: string;
+  /**
+   * ID of a poll to attach to activity
+   */
+  poll_id?: string;
+  /**
+   * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
+   */
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  /**
+   * When to publish the activity, an RFC 3339 time. A time less than a minute ahead or in the past is moved to one minute from now, and the time is rounded up to a whole minute.
+   */
+  scheduled_at?: Date;
+  /**
+   * Whether to skip URL enrichment for the activity
+   */
+  skip_enrich_url?: boolean;
+  /**
+   * Whether to skip push notifications
+   */
+  skip_push?: boolean;
+  /**
+   * Text content of the activity
+   */
+  text?: string;
+  /**
+   * ID of the user creating the activity
+   */
+  user_id?: string;
+  /**
+   * Visibility setting for the activity. One of: public, private, tag
+   */
+  visibility?: 'public' | 'private' | 'tag';
+  /**
+   * If visibility is 'tag', this is the tag name and is required
+   */
+  visibility_tag?: string;
+  /**
+   * List of attachments for the activity
+   */
+  attachments?: Array<Attachment>;
+  /**
+   * Collections that this activity references
+   */
+  collection_refs?: Array<string>;
+  /**
+   * Collections to create or update as part of this request, so an activity and the collections it references can be written in one call. Their refs (name:id) are added to collection_refs automatically; you do not need to restate them, and they count toward the same per-activity collection-reference limit, which is the effective cap here. A collection that already exists has its custom data updated. Use collection_refs instead when the collection already exists and you are only referencing it, which requires no collection permissions.
+   */
+  collections?: Array<CollectionRequest>;
+  /**
+   * Tags for filtering activities
+   */
+  filter_tags?: Array<string>;
+  /**
+   * Tags for indicating user interests
+   */
+  interest_tags?: Array<string>;
+  /**
+   * List of users mentioned in the activity
+   */
+  mentioned_user_ids?: Array<string>;
+  /**
+   * Custom data for the activity
+   */
+  custom?: Record<string, any>;
+  location?: Location;
+  /**
+   * Additional data for search indexing
+   */
+  search_data?: Record<string, any>;
+}
+
+export interface ScheduleActivityResponse {
+  duration: string;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
+}
+
+export interface ScheduledActivityFailedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: Date;
+  /**
+   * Why the activity failed to publish
+   */
+  failure_reason: string;
+  custom: Record<string, any>;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
+  /**
+   * The type of event: "feeds.scheduled_activity.failed" in this case
+   */
+  type: string;
+  received_at?: Date;
+  user?: UserResponseCommonFields;
+}
+
+export interface ScheduledActivityPreview {
+  /**
+   * Type of activity
+   */
+  type: string;
+  /**
+   * Feeds the activity will be added to
+   */
+  feeds: Array<string>;
+  /**
+   * When the published activity expires
+   */
+  expires_at?: Date;
+  /**
+   * ID the activity gets when published
+   */
+  id?: string;
+  /**
+   * ID of the parent activity
+   */
+  parent_id?: string;
+  /**
+   * ID of the poll attached to the activity
+   */
+  poll_id?: string;
+  /**
+   * Who may reply to the activity
+   */
+  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  /**
+   * Text content of the activity
+   */
+  text?: string;
+  /**
+   * Visibility of the activity
+   */
+  visibility?: 'public' | 'private' | 'tag';
+  /**
+   * Visibility tag of the activity
+   */
+  visibility_tag?: string;
+  /**
+   * Attachments of the activity
+   */
+  attachments?: Array<Attachment>;
+  /**
+   * Collections referenced by the activity
+   */
+  collection_refs?: Array<string>;
+  /**
+   * Filter tags of the activity
+   */
+  filter_tags?: Array<string>;
+  /**
+   * Interest tags of the activity
+   */
+  interest_tags?: Array<string>;
+  /**
+   * Users mentioned in the activity
+   */
+  mentioned_user_ids?: Array<string>;
+  /**
+   * Custom data of the activity
+   */
+  custom?: Record<string, any>;
+  location?: Location;
+  /**
+   * Search data of the activity
+   */
+  search_data?: Record<string, any>;
+}
+
+export interface ScheduledActivityPublishedEvent {
+  /**
+   * Date/time of creation
+   */
+  created_at: Date;
+  custom: Record<string, any>;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
+  /**
+   * The type of event: "feeds.scheduled_activity.published" in this case
+   */
+  type: string;
+  received_at?: Date;
+  user?: UserResponseCommonFields;
+}
+
+export interface ScheduledActivityResponse {
+  /**
+   * When the activity was scheduled
+   */
+  created_at: Date;
+  /**
+   * ID of the scheduled activity, also the ID the activity gets when published
+   */
+  id: string;
+  /**
+   * When the activity will be published
+   */
+  scheduled_at: Date;
+  /**
+   * One of: scheduled, publishing, failed, canceled
+   */
+  status: string;
+  /**
+   * When the scheduled activity was last changed
+   */
+  updated_at: Date;
+  /**
+   * ID of the user the activity is published as
+   */
+  user_id: string;
+  /**
+   * Feeds the activity will be added to
+   */
+  feeds: Array<string>;
+  /**
+   * The activity a scheduled activity will publish
+   */
+  activity: ScheduledActivityPreview;
+  /**
+   * Why the publish failed; set only when status is failed
+   */
+  failure_reason?: string;
 }
 
 export interface ScheduledMessageChannelResponse {
@@ -23311,6 +23638,22 @@ export interface UpdateSIPTrunkResponse {
   sip_trunk?: SIPTrunkResponse;
 }
 
+export interface UpdateScheduledActivityRequest {
+  /**
+   * When to publish the activity, an RFC 3339 time. A time less than a minute ahead or in the past is moved to one minute from now, and the time is rounded up to a whole minute.
+   */
+  scheduled_at?: Date;
+  activity?: ActivityRequest;
+}
+
+export interface UpdateScheduledActivityResponse {
+  duration: string;
+  /**
+   * An activity scheduled to be published at a future time
+   */
+  scheduled_activity: ScheduledActivityResponse;
+}
+
 export interface UpdateScheduledMessageRequest {
   /**
    * New send time (UTC). Must be at least 1 minute and at most the app's maximum lead time from now
@@ -24836,6 +25179,10 @@ export type WHEvent =
   | ({ type: 'feeds.follow.deleted' } & FollowDeletedEvent)
   | ({ type: 'feeds.follow.updated' } & FollowUpdatedEvent)
   | ({ type: 'feeds.notification_feed.updated' } & NotificationFeedUpdatedEvent)
+  | ({ type: 'feeds.scheduled_activity.failed' } & ScheduledActivityFailedEvent)
+  | ({
+      type: 'feeds.scheduled_activity.published';
+    } & ScheduledActivityPublishedEvent)
   | ({ type: 'feeds.stories_feed.updated' } & StoriesFeedUpdatedEvent)
   | ({ type: 'flag.updated' } & FlagUpdatedEvent)
   | ({ type: 'import.error' } & AsyncImportErrorEvent)
