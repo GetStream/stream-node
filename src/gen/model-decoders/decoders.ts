@@ -3291,6 +3291,13 @@ decoders['GetReviewQueueItemResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['GetScheduledActivityResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['GetSegmentResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     segment: { type: 'SegmentResponse', isSingle: true },
@@ -4431,6 +4438,15 @@ decoders['PredefinedFilterStatsResponse'] = (input?: {
   return decode(typeMappings, input);
 };
 
+decoders['PublishScheduledActivityNowResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['PublishedTrackMetrics'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     warnings: { type: 'SessionWarningResponse', isSingle: false },
@@ -4865,6 +4881,18 @@ decoders['QueryReviewQueueResponse'] = (input?: { [key: string]: any }) => {
 decoders['QueryRevisionHistoryResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     revisions: { type: 'RevisionHistoryResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['QueryScheduledActivitiesResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_activities: {
+      type: 'ScheduledActivityResponse',
+      isSingle: false,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -5313,6 +5341,61 @@ decoders['SIPTrunkResponse'] = (input?: { [key: string]: any }) => {
     created_at: { type: 'DatetimeType', isSingle: true },
 
     updated_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduleActivityResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledActivityFailedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledActivityPreview'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    expires_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledActivityPublishedEvent'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ScheduledActivityResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    scheduled_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
+
+    activity: { type: 'ScheduledActivityPreview', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -6083,6 +6166,15 @@ decoders['UpdateSIPInboundRoutingRuleResponse'] = (input?: {
 decoders['UpdateSIPTrunkResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     sip_trunk: { type: 'SIPTrunkResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['UpdateScheduledActivityResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    scheduled_activity: { type: 'ScheduledActivityResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
