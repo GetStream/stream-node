@@ -2521,6 +2521,7 @@ export interface BlockActionRequestPayload {
 export interface BlockListConfig {
   async?: boolean;
   enabled?: boolean;
+  explicit_urls_only?: boolean;
   match_substring?: boolean;
   rules?: Array<BlockListRule>;
 }
@@ -4930,7 +4931,7 @@ export interface ChannelForkResponse {
    */
   channel_cid: string;
   /**
-   * Number of messages copied into the fork, once completed
+   * Number of messages copied into the fork, once completed. On a failed fork, the number of messages of its history, newest first, copied before the copy failed; the fork can hold a few more
    */
   copied_message_count: number;
   /**
@@ -4946,17 +4947,29 @@ export interface ChannelForkResponse {
    */
   source_message_id: string;
   /**
-   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are already there
+   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are normally already there. The request reads at most 1,000 source messages: when those are mostly deleted, shadowed or replies shown in the channel, it copies fewer, at least the message the fork is made at, and the task copies the rest. `failed` when the copy failed for good (see `failed_reason`): nothing more is copied, the fork keeps what it holds and is usable, and it no longer counts toward the source's fork limit
    */
   status: string;
   /**
-   * Maps the ID of each message the request copied, the newest page, to its ID in the fork. A fork message ID is a UUIDv5 of the fork CID and the source message ID; the fork message IDs endpoint maps any others
+   * Maps the ID of each message the request copied, the newest page, to its ID in the fork; short when the request copied less than a page (see `status`). A fork message ID is a UUIDv5 of the fork CID and the source message ID; the fork message IDs endpoint maps any others
    */
   message_id_map: Record<string, string>;
+  /**
+   * Why the copy of a failed fork failed: `fork_message_id_taken` (the ID a message is copied under is held by another message; fork into another channel ID) or `message_too_large` (a source message is over a size limit of agent channels: its text, custom data or attachments)
+   */
+  failed_reason?: string;
+  /**
+   * ID, in the source channel, of the oldest message a truncated fork copied. The fork holds no older source message; replies of the oldest copied messages may also have been left out
+   */
+  oldest_source_message_id?: string;
   /**
    * ID of the task copying the older history of a backfilling fork
    */
   task_id?: string;
+  /**
+   * True, once completed, when the source held more than 10,000 messages up to the fork point: the fork holds the newest 10,000 of them
+   */
+  truncated?: boolean;
 }
 
 export interface ChannelForkSummary {
@@ -4965,7 +4978,7 @@ export interface ChannelForkSummary {
    */
   channel_cid: string;
   /**
-   * Number of messages copied into the fork, once completed
+   * Number of messages copied into the fork, once completed. On a failed fork, the number of messages of its history, newest first, copied before the copy failed; the fork can hold a few more
    */
   copied_message_count: number;
   /**
@@ -4981,13 +4994,25 @@ export interface ChannelForkSummary {
    */
   source_message_id: string;
   /**
-   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are already there
+   * `completed` once every message is copied. `backfilling` while a background task copies the history older than the newest page; the fork is usable meanwhile, and the newest messages, which an agent reads, are normally already there. The request reads at most 1,000 source messages: when those are mostly deleted, shadowed or replies shown in the channel, it copies fewer, at least the message the fork is made at, and the task copies the rest. `failed` when the copy failed for good (see `failed_reason`): nothing more is copied, the fork keeps what it holds and is usable, and it no longer counts toward the source's fork limit
    */
   status: string;
+  /**
+   * Why the copy of a failed fork failed: `fork_message_id_taken` (the ID a message is copied under is held by another message; fork into another channel ID) or `message_too_large` (a source message is over a size limit of agent channels: its text, custom data or attachments)
+   */
+  failed_reason?: string;
+  /**
+   * ID, in the source channel, of the oldest message a truncated fork copied. The fork holds no older source message; replies of the oldest copied messages may also have been left out
+   */
+  oldest_source_message_id?: string;
   /**
    * ID of the task copying the older history of a backfilling fork
    */
   task_id?: string;
+  /**
+   * True, once completed, when the source held more than 10,000 messages up to the fork point: the fork holds the newest 10,000 of them
+   */
+  truncated?: boolean;
 }
 
 export interface ChannelForkedEvent {
@@ -5009,7 +5034,7 @@ export interface ChannelForkedEvent {
    */
   type: string;
   /**
-   * The ID of the channel which was forked
+   * The ID of the channel the event is sent on
    */
   channel_id?: string;
   /**
@@ -5018,11 +5043,11 @@ export interface ChannelForkedEvent {
   channel_member_count?: number;
   channel_message_count?: number;
   /**
-   * The type of the channel which was forked
+   * The type of the channel the event is sent on
    */
   channel_type?: string;
   /**
-   * The CID of the channel which was forked
+   * The CID of the channel the event is sent on: the source, or the fork
    */
   cid?: string;
   received_at?: TimestampNS;
@@ -5515,6 +5540,10 @@ export interface ChannelResponse {
    * User response object
    */
   created_by?: UserResponse;
+  /**
+   * A fork of an agent channel
+   */
+  fork?: ChannelForkSummary;
   /**
    * User response object
    */
@@ -10777,7 +10806,7 @@ export interface FollowBatchRequest {
    */
   follows: Array<FollowRequest>;
   /**
-   * If true, the batch is queued as a background task, paced per app, and the response has empty follows and a task_id. Server-side only. Supported by the get-or-create endpoint (GetOrCreateFollows); FollowBatch rejects it. Async batches can apply out of order with other follow writes. Defaults to false.
+   * If true, the batch is queued as a background task, paced per app, and the response has empty follows and a task_id. Server-side only. Supported by the get-or-create endpoint (GetOrCreateFollows); FollowBatch rejects it. Async batches can apply out of order with other follow writes. When unset, server-side batches of at least 10 items run async for apps created on or after 2026-11-05; set false to opt out.
    */
   async?: boolean;
   /**
@@ -10801,7 +10830,7 @@ export interface FollowBatchResponse {
    */
   follows: Array<FollowResponse>;
   /**
-   * ID of the background task when the request was sent with async: true
+   * ID of the background task when the batch ran async
    */
   task_id?: string;
 }
@@ -13438,6 +13467,10 @@ export interface MarkReviewedRequestPayload {
    * Skip marking content as reviewed
    */
   disable_marking_content_as_reviewed?: boolean;
+  /**
+   * Internal moderator note, stored on the action log and returned by QueryModerationLogs. Not shown to the appealing user; use decision_reason for that
+   */
+  reason?: string;
 }
 
 export interface MarkUnreadRequest {
@@ -17757,6 +17790,42 @@ export interface QueryCommentsResponse {
   prev?: string;
 }
 
+export interface QueryDeletedChannelsRequest {
+  /**
+   * Number of channels per page, 1-100 (default 25)
+   */
+  limit?: number;
+  /**
+   * Cursor for the next page, from the previous response
+   */
+  next?: string;
+  /**
+   * Cursor for the previous page, from the previous response
+   */
+  prev?: string;
+  /**
+   * Sort order. Only created_at is supported; defaults to created_at ascending
+   */
+  sort?: Array<SortParamRequest>;
+  /**
+   * Optional filter. Omit it, or pass {}, to list every soft-deleted channel of the app; for example {"team": "tenant-a"} narrows to one tenant
+   */
+  filter_conditions?: Record<string, any>;
+}
+
+export interface QueryDeletedChannelsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * Soft-deleted channels matching the filter, each with deleted_at set
+   */
+  channels: Array<ChannelResponse>;
+  next?: string;
+  prev?: string;
+}
+
 export interface QueryDraftsRequest {
   limit?: number;
   next?: string;
@@ -19687,6 +19756,10 @@ export interface RestoreActionRequestPayload {
    * Reason for the appeal decision
    */
   decision_reason?: string;
+  /**
+   * Internal moderator note, stored on the action log and returned by QueryModerationLogs. Not shown to the appealing user; use decision_reason for that
+   */
+  reason?: string;
 }
 
 export interface RestoreActivityRequest {
@@ -22883,7 +22956,7 @@ export interface UnfollowBatchRequest {
    */
   follows: Array<UnfollowPair>;
   /**
-   * If true, the batch is queued as a background task, paced per app, and the response has empty follows and a task_id. Server-side only. Supported by the get-or-create endpoint (GetOrCreateUnfollows); UnfollowBatch rejects it. Async batches can apply out of order with other follow writes. Defaults to false.
+   * If true, the batch is queued as a background task, paced per app, and the response has empty follows and a task_id. Server-side only. Supported by the get-or-create endpoint (GetOrCreateUnfollows); UnfollowBatch rejects it. Async batches can apply out of order with other follow writes. When unset, server-side batches of at least 10 items run async for apps created on or after 2026-11-05; set false to opt out.
    */
   async?: boolean;
   /**
@@ -22903,7 +22976,7 @@ export interface UnfollowBatchResponse {
    */
   follows: Array<FollowResponse>;
   /**
-   * ID of the background task when the request was sent with async: true
+   * ID of the background task when the batch ran async
    */
   task_id?: string;
 }

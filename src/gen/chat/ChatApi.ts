@@ -81,6 +81,8 @@ import {
   QueryChannelBansResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
+  QueryDeletedChannelsRequest,
+  QueryDeletedChannelsResponse,
   QueryDraftsRequest,
   QueryDraftsResponse,
   QueryFutureChannelBansPayload,
@@ -436,6 +438,31 @@ export class ChatApi {
     );
 
     decoders['DeleteChannelsResponse']?.(response);
+
+    return response;
+  }
+
+  async queryDeletedChannels(
+    request?: QueryDeletedChannelsRequest,
+  ): Promise<StreamResponse<QueryDeletedChannelsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryDeletedChannelsResponse>(
+        'POST',
+        '/api/v2/chat/channels/deleted',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryDeletedChannelsResponse']?.(response);
 
     return response;
   }
