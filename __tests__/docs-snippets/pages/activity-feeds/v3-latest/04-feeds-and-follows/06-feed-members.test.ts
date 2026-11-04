@@ -175,6 +175,34 @@ describe(DOCS, () => {
     expect(acceptedOnly.members.map((m) => m.user.id)).toEqual([johnId]);
   });
 
+  it('removes a rejected invite row', async () => {
+    const feed = await createFeed();
+    const [johnId] = await createUsers('john');
+    await feed.updateFeedMembers({
+      operation: 'upsert',
+      members: [{ user_id: johnId, invite: true }],
+    });
+    await feed.rejectFeedMemberInvite({ user_id: johnId });
+    const everyStatus = {
+      filter: { status: { $in: ['member', 'pending', 'rejected'] } },
+    };
+    expect(
+      summary((await feed.queryFeedMembers(everyStatus)).members).map(
+        (m) => m.status,
+      ),
+    ).toEqual(['rejected']);
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/04-feeds-and-follows/06-feed-members.md" heading="Membership statuses" tab="Node.js" index=1
+    // COPY: johnId="john"
+    await feed.updateFeedMembers({
+      operation: 'remove',
+      members: [{ user_id: johnId }],
+    });
+    // #endregion snippet
+
+    expect((await feed.queryFeedMembers(everyStatus)).members).toEqual([]);
+  });
+
   it('queries feed members', async () => {
     const feed = await createFeed();
     const [moderatorId, feedModeratorId] = await createUsers(

@@ -43,10 +43,10 @@ describe(DOCS, () => {
     // #region snippet docs="video/api/01-basics/04-ring-calls.md" heading="Creating ring calls" tab="Node.js" index=1
     // COPY: myselfId="myself", friendId="my friend"
     // Make sure to use a unique id when creating ring calls
-    const call = client.video.call('default', crypto.randomUUID());
+    const call = client.video.call('audio_call', crypto.randomUUID());
     await call.getOrCreate({
       ring: true,
-      video: true, // Set it to `false` for audio calls. This is used to decide what type of incoming call screen is displayed client-side
+      video: false, // a voice call: the SDKs show the audio incoming call screen
       data: {
         created_by_id: myselfId,
         members: [{ user_id: myselfId }, { user_id: friendId }],
@@ -57,12 +57,15 @@ describe(DOCS, () => {
 
     expect(getOrCreate.mock.calls[0][0]).toMatchObject({
       ring: true,
-      video: true,
+      video: false,
     });
     const response = await (getOrCreate.mock.results[0].value as ReturnType<
       typeof client.video.getOrCreateCall
     >);
     expect(response.created).toBe(true);
+    expect(response.call.type).toBe('audio_call');
+    // The built-in `audio_call` type uses the `single_use` lifecycle by default.
+    expect(response.call.settings.lifecycle.mode).toBe('single_use');
     expect(response.call.created_by.id).toBe(myselfId);
     expect(response.members.map((m) => m.user_id).sort()).toEqual(
       [myselfId, friendId].sort(),
@@ -181,6 +184,7 @@ describe(DOCS, () => {
     const call = client.video.call('default', crypto.randomUUID());
     await call.getOrCreate({
       ring: true,
+      video: true,
       data: {
         created_by_id: myselfId,
         members: [{ user_id: myselfId }, { user_id: friendId }],
@@ -195,6 +199,7 @@ describe(DOCS, () => {
     const response = await (getOrCreate.mock.results[0].value as ReturnType<
       typeof client.video.getOrCreateCall
     >);
+    expect(getOrCreate.mock.calls[0][0]).toMatchObject({ video: true });
     expect(response.created).toBe(true);
     expect(response.call.settings.lifecycle.mode).toBe('single_use');
     // The built-in `default` type itself stays reusable.

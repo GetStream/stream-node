@@ -54,6 +54,20 @@ describe(DOCS, () => {
   const getItem = async (id: string) =>
     (await client.moderation.getReviewQueueItem({ id })).item;
 
+  /** The `reason` of the action log entry of `type` for a review queue item (once it is there). */
+  const getActionLogReason = (reviewQueueItemId: string, type: string) =>
+    retry(
+      async () => {
+        const { logs } = await client.moderation.queryModerationLogs({
+          filter: { review_queue_item_id: reviewQueueItemId },
+        });
+        const log = logs.find((entry) => entry.type === type);
+        if (!log) throw new Error(`no ${type} log for ${reviewQueueItemId}`);
+        return log.reason;
+      },
+      { retryIf: (e) => String(e).includes(' log for ') },
+    );
+
   const getBans = async (userId: string) =>
     (
       await client.queryBannedUsers({
@@ -208,7 +222,10 @@ describe(DOCS, () => {
     await client.moderation.submitAction({
       action_type: 'restore',
       item_id: itemId,
-      restore: { decision_reason: 'Content was incorrectly flagged' },
+      restore: {
+        reason: 'Removed by mistake, context checked',
+        decision_reason: 'Content was incorrectly flagged',
+      },
       user_id: moderatorId,
     });
     // #endregion snippet
@@ -216,6 +233,31 @@ describe(DOCS, () => {
     const { message } = await client.chat.getMessage({ id: messageId });
     expect(message.deleted_at).toBeUndefined();
     expect((await getItem(itemId))?.latest_moderator_action).toBe('restore');
+    // `reason` is the internal moderator note on the action log.
+    expect(await getActionLogReason(itemId, 'restore')).toBe(
+      'Removed by mistake, context checked',
+    );
+  });
+
+  it('attaches a moderator note to an action', async () => {
+    const { itemId } = await flagMessage();
+
+    // #region snippet docs="moderation/_default/06-review-queue/02-actions.md" heading="Moderator notes" tab="Node.js" index=1
+    // COPY: itemId="review_queue_item_id"
+    await client.moderation.submitAction({
+      action_type: 'mark_reviewed',
+      item_id: itemId,
+      mark_reviewed: { reason: 'Checked context, sarcasm between friends' },
+      user_id: moderatorId,
+    });
+    // #endregion snippet
+
+    expect((await getItem(itemId))?.latest_moderator_action).toBe(
+      'mark_reviewed',
+    );
+    expect(await getActionLogReason(itemId, 'mark_reviewed')).toBe(
+      'Checked context, sarcasm between friends',
+    );
   });
 
   it('triggers a custom action', async () => {

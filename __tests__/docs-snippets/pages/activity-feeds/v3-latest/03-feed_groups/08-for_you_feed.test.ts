@@ -187,4 +187,55 @@ describe(DOCS, () => {
       { tag: 'ruby', weight: -1, source: 'manual' },
     ]);
   });
+
+  it('explains why an activity is in the feed', async () => {
+    // Reasons are only returned on the app's built-in `foryou` group (read only
+    // here): the reader gets a uniqueId feed in it that follows an author whose
+    // activity matches the reader's interest.
+    const readerId = await createUser('reader');
+    const authorId = await createUser('author');
+    const authorFid = await createFeed('user', authorId, authorId);
+    await createFeed('foryou', readerId, readerId);
+    await client.feeds.follow({
+      source: `foryou:${readerId}`,
+      target: authorFid,
+    });
+    await client.feeds.upsertUserInterests({
+      user_id: readerId,
+      interests: [{ tag: 'nba' }],
+    });
+    await client.feeds.addActivity({
+      feeds: [authorFid],
+      type: 'post',
+      text: 'what a game',
+      interest_tags: ['nba'],
+      user_id: authorId,
+    });
+    // The follow and the new activity reach the feed within a few seconds.
+    await retry(async () => {
+      const { activities } = await client.feeds
+        .feed('foryou', readerId)
+        .getOrCreate({ user_id: readerId });
+      if (!activities.length) throw new Error('foryou feed still empty');
+    });
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/03-feed_groups/08-for_you_feed.md" heading="Why am I seeing this" tab="Node.js" index=1
+    // COPY: readerId="jack"
+    const feed = client.feeds.feed('foryou', readerId);
+    const response = await feed.getOrCreate({
+      user_id: readerId,
+      enrichment_options: { include_reasons: true },
+    });
+
+    console.log(response.activities[0].reasons); // ["popular", "interest:nba"]
+    // #endregion snippet
+
+    expect(response.activities[0].text).toBe('what a game');
+    expect(response.activities[0].reasons).toEqual([
+      'following',
+      'interest:nba',
+    ]);
+    expect(log.mock.calls[0]).toEqual([['following', 'interest:nba']]);
+  });
 });
