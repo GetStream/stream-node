@@ -26,7 +26,7 @@ export type TimestampNS = number & { readonly [timestampNsBrand]: true };
 
 export interface AIAudioConfigRequest {
   /**
-   * Bodyguard credentials profile to classify transcripts with. Applies to the NLP engine only; ignored when LLM configurability is enabled. Empty falls back to the app-pinned profile, then the organization's top-level credentials
+   * Bodyguard credentials profile to classify transcripts with. Applies to the NLP engine only; ignored when the policy's engine is LLM. Empty falls back to the app-pinned profile, then the organization's top-level credentials
    */
   profile?: string;
   /**
@@ -39,7 +39,7 @@ export interface AIAudioConfigRequest {
 
 export interface AIAudioConfigResponse {
   /**
-   * Whether the engine selected by the application's LLM configurability flag has a rule that does something. Derived, not stored
+   * Whether the policy's engine (engine.provider, else the application's LLM configurability flag) has a rule that does something. Derived, not stored
    */
   enabled: boolean;
   /**
@@ -58,6 +58,7 @@ export interface AIImageConfig {
   async?: boolean;
   enabled?: boolean;
   ocr_rules?: Array<OCRRule>;
+  ocr_severity_rules?: Array<BodyguardRule>;
   rules?: Array<AWSRekognitionRule>;
 }
 
@@ -883,7 +884,11 @@ export interface ActivityResponse {
   is_watched?: boolean;
   moderation_action?: string;
   /**
-   * Which activity selector provided this activity (e.g., 'following', 'popular', 'interest'). Only set when using multiple activity selectors with ranking.
+   * 1-based position of this activity. On ranked feeds it is the activity's slot in the ranked feed, continuing across pages; activities filtered out for this user leave gaps. Otherwise it is relative to the returned page. Only set on feed reads for paid plans with an authenticated user, when the app uses feed impressions (For You exploration, or a For You ranking that uses impressions_bucket).
+   */
+  position?: number;
+  /**
+   * Which activity selector provided this activity (e.g., 'following', 'popular', 'interest'), or 'exploration' for the For You exploration slot. Only set when using multiple activity selectors with ranking.
    */
   selector_source?: string;
   /**
@@ -906,6 +911,10 @@ export interface ActivityResponse {
    * Recent shares of the activity, one entry per share (org-gated)
    */
   latest_shares?: Array<ShareResponse>;
+  /**
+   * Codes explaining why this activity was shown (e.g. 'following', 'popular', 'interest:nba'). Only included when include_reasons is enabled in enrichment options.
+   */
+  reasons?: Array<string>;
   current_feed?: FeedResponse;
   i18n?: Record<string, string>;
   location?: Location;
@@ -1623,7 +1632,7 @@ export interface AnalyzeRequest {
   entity_type?: string;
   user_id?: string;
   /**
-   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country, which AI text providers receive as country context. Takes precedence over country_code.
+   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country. Every country is sent to the AI text and image harm detection engines as country context. Takes precedence over country_code.
    */
   country_codes?: Array<string>;
   /**
@@ -4197,6 +4206,8 @@ export interface CallTranscription {
   session_id: string;
   start_time: TimestampNS;
   url: string;
+  language?: string;
+  translated?: boolean;
 }
 
 export interface CallTranscriptionFailedEvent {
@@ -5844,6 +5855,12 @@ export interface ChannelTypeConfig {
   chat_preferences?: ChatPreferences;
 }
 
+export interface ChannelTypeRuleResponse {
+  channel_type: string;
+  enabled_at: TimestampNS;
+  max_age_hours: number;
+}
+
 export interface ChannelUnFrozenEvent {
   /**
    * Date/time of creation
@@ -6309,7 +6326,7 @@ export interface CheckRequest {
   test_mode?: boolean;
   user_id?: string;
   /**
-   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country, which AI text providers receive as country context. Takes precedence over country_code.
+   * ISO 3166-1 alpha-2 countries the content is aimed at (e.g. US, DE), up to 300. The first is the primary country. Every country is sent to the AI text and image harm detection engines as country context. Takes precedence over country_code.
    */
   country_codes?: Array<string>;
   config?: ModerationConfig;
@@ -7147,6 +7164,7 @@ export interface ConfigResponse {
   automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
   automod_toxicity_config?: AutomodToxicityConfig;
   block_list_config?: BlockListConfig;
+  engine?: ModerationEngineConfigResponse;
   flood_config?: FloodConfig;
   intent_config?: IntentConfigResponse;
   llm_config?: LLMConfig;
@@ -8803,6 +8821,7 @@ export interface DeleteRetentionPolicyRequest {
    * What a retention policy applies to.
    */
   policy: RetentionPolicyType;
+  channel_type?: string;
 }
 
 export interface DeleteRetentionPolicyResponse {
@@ -9287,6 +9306,10 @@ export interface EnrichmentOptions {
    */
   include_ranking_config?: boolean;
   /**
+   * Default: false. When true, For You activities include reasons: codes for why each was shown. Ignored with skip_all.
+   */
+  include_reasons?: boolean;
+  /**
    * Default: false. When true, includes score_vars in activity responses containing variable values used at ranking time.
    */
   include_score_vars?: boolean;
@@ -9555,19 +9578,38 @@ export interface ExportFeedUserDataResponse {
   task_id: string;
 }
 
+export interface ExportFeedsAppRequest {
+  /**
+   * Whether soft-deleted activities and comments are exported. Defaults to true
+   */
+  include_deleted?: boolean;
+  /**
+   * Only export these item types, e.g. activity or comment; each one of the export layout item types, without duplicates. poll and poll_vote require activity. Empty exports everything
+   */
+  types?: Array<string>;
+}
+
 export interface ExportFeedsByTypeRequest {
   /**
-   * Only export rows created at or after this time. On reactions and follows it requires user_id; on comments soft-deleted rows are left out
+   * Only export rows created at or after this time. On reactions it requires user_id or activity_ids, on follows user_id; on comments without activity_ids soft-deleted rows are left out
    */
   created_at_from?: Date;
   /**
-   * Only export rows created before this time. On reactions and follows it requires user_id; on comments soft-deleted rows are left out
+   * Only export rows created before this time. On reactions it requires user_id or activity_ids, on follows user_id; on comments without activity_ids soft-deleted rows are left out
    */
   created_at_to?: Date;
+  /**
+   * Whether soft-deleted activities and comments are exported. Defaults to false; true cannot be combined with user_id on activities or comments
+   */
+  include_deleted?: boolean;
   /**
    * Only export rows of this user: activities, comments and reactions by the user; follows where the user created the source or the target feed. With user_id, soft-deleted activities and comments are left out
    */
   user_id?: string;
+  /**
+   * Only export comments or reactions of these activities; not allowed on other types. At most 100 unique, non-empty IDs
+   */
+  activity_ids?: Array<string>;
 }
 
 export interface ExportFeedsResponse {
@@ -10990,6 +11032,30 @@ export interface ForYouConfig {
    * Name of a registered ranking preset that stands in for 'score' when score is empty. One of: for_you_v2, hot
    */
   preset?: string;
+  dwell?: ForYouDwellConfig;
+  exploration?: ForYouExplorationConfig;
+}
+
+export interface ForYouDwellConfig {
+  /**
+   * Keeps each user's long dwells. Requires for_you.enabled and a plan with activity metrics
+   */
+  enabled?: boolean;
+  /**
+   * Minimum dwell_ms that counts as a long dwell. 1000 to 60000, defaults to 5000
+   */
+  threshold_ms?: number;
+}
+
+export interface ForYouExplorationConfig {
+  /**
+   * Turns the exploration slot on. Requires for_you.enabled and a plan with activity metrics
+   */
+  enabled?: boolean;
+  /**
+   * 1-based position in the ranked list that receives the exploration activity. 1 to 100, defaults to 15
+   */
+  slot?: number;
 }
 
 export interface ForkChannelRequest {
@@ -11746,6 +11812,26 @@ export interface GetModerationRuleResponse {
   rule?: ModerationRuleV2Response;
 }
 
+export interface GetNotificationStatusResponse {
+  duration: string;
+  /**
+   * Number of unread activities or groups
+   */
+  unread: number;
+  /**
+   * Number of unseen activities or groups
+   */
+  unseen: number;
+  /**
+   * When the feed was last marked read
+   */
+  last_read_at?: TimestampNS;
+  /**
+   * When the feed was last marked seen
+   */
+  last_seen_at?: TimestampNS;
+}
+
 export interface GetOGResponse {
   duration: string;
   custom: Record<string, any>;
@@ -11932,6 +12018,10 @@ export interface GetOrCreateFeedResponse {
   next?: string;
   prev?: string;
   /**
+   * Signed token identifying this read. Pass it with activity metrics events to attribute them to this read. Only set on feed reads for paid plans with an authenticated user, when the app uses feed impressions (For You exploration, or a For You ranking that uses impressions_bucket)
+   */
+  request_id?: string;
+  /**
    * Activity selectors dropped from this read because they exceeded their time budget (see the time_budget_ms selector setting). Their activities are missing from this page, and they stay out for the rest of this pagination session. Omitted when every selector completed
    */
   degraded_selectors?: Array<string>;
@@ -12086,6 +12176,7 @@ export interface GetRetentionPolicyResponse {
    */
   duration: string;
   policies: Array<RetentionPolicy>;
+  channel_type_rules?: Array<ChannelTypeRuleResponse>;
 }
 
 export interface GetRetentionPolicyRunsRequest {
@@ -14927,6 +15018,28 @@ export interface ModerationDashboardPreferences {
   keyframe_classifications_map?: Record<string, Record<string, boolean>>;
   media_label_display?: Record<string, string>;
   overview_dashboard?: OverviewDashboardConfig;
+}
+
+export interface ModerationEngineConfigRequest {
+  /**
+   * LLM model used when the provider resolves to llm. Not allowed with provider nlp. Empty uses the app's moderation settings
+   */
+  model?: 'gpt-4o-mini' | 'gpt-4o';
+  /**
+   * llm or nlp. Empty follows the app's LLM moderation setting
+   */
+  provider?: 'llm' | 'nlp';
+}
+
+export interface ModerationEngineConfigResponse {
+  /**
+   * LLM model used when the provider resolves to llm. Not allowed with provider nlp. Empty uses the app's moderation settings
+   */
+  model?: string;
+  /**
+   * llm or nlp. Empty follows the app's LLM moderation setting
+   */
+  provider?: 'llm' | 'nlp';
 }
 
 export interface ModerationFeedbackItemResponse {
@@ -19807,13 +19920,15 @@ export interface RetentionPolicy {
   config: PolicyConfig;
 }
 
-export type RetentionPolicyType = 'old-messages' | 'inactive-channels';
+export type RetentionPolicyType =
+  'old-messages' | 'inactive-channels' | 'inactive-channels-by-type';
 
 export interface RetentionRunResponse {
   app_pk: number;
   date: string;
   policy: string;
   stats: RunStats;
+  channel_type?: string;
 }
 
 export interface RevealMediaRequest {
@@ -21382,6 +21497,7 @@ export interface SetRetentionPolicyRequest {
    * What a retention policy applies to.
    */
   policy: RetentionPolicyType;
+  channel_type?: string;
 }
 
 export interface SetRetentionPolicyResponse {
@@ -21390,6 +21506,7 @@ export interface SetRetentionPolicyResponse {
    */
   duration: string;
   policy: RetentionPolicy;
+  channel_type_rule?: ChannelTypeRuleResponse;
 }
 
 export interface SetupSession {
@@ -22522,13 +22639,25 @@ export interface TrackActivityMetricsEvent {
    */
   activity_id: string;
   /**
-   * The metric name (e.g. views, clicks, impressions). Alphanumeric and underscores only.
+   * The metric name (e.g. views, clicks, impressions, dwell). Alphanumeric and underscores only. dwell requires dwell_ms.
    */
   metric: string;
   /**
    * The amount to increment (positive) or decrement (negative). Defaults to 1. The absolute value counts against rate limits.
    */
   delta?: number;
+  /**
+   * Milliseconds the activity was in view. Required for the built-in dwell metric; apps with a custom dwell metric keep their own behavior.
+   */
+  dwell_ms?: number;
+  /**
+   * 1-based position of the activity in that feed read. A value below 1 fails only this event. Accepted but not stored yet.
+   */
+  position?: number;
+  /**
+   * The request_id returned by the feed read that showed the activity. An invalid, expired (older than 48h) or future-dated (more than 5 minutes ahead) value fails only this event. Impressions sent with a valid request_id feed ranking, are not added to the activity's metrics.impressions, and must use a delta of 1.
+   */
+  request_id?: string;
 }
 
 export interface TrackActivityMetricsEventResult {
@@ -22859,6 +22988,10 @@ export interface UnbanActionRequestPayload {
    * Also remove the future channels ban for this user
    */
   remove_future_channels_ban?: boolean;
+  /**
+   * When lifting a shadow ban, also restore the messages the user sent during it. Runs asynchronously; ignored for a regular ban
+   */
+  restore_shadowed_messages?: boolean;
   /**
    * Optional: unban user directly without review item
    */
@@ -24911,6 +25044,7 @@ export interface UpsertConfigRequest {
   aws_rekognition_config?: AIImageConfig;
   block_list_config?: BlockListConfig;
   bodyguard_config?: AITextConfig;
+  engine?: ModerationEngineConfigRequest;
   flood_config?: FloodConfig;
   google_vision_config?: GoogleVisionConfig;
   intent_config?: IntentConfigRequest;

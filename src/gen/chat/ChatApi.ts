@@ -2499,6 +2499,7 @@ export class ChatApi {
     const body = {
       max_age_hours: request?.max_age_hours,
       policy: request?.policy,
+      channel_type: request?.channel_type,
     };
 
     const response =
@@ -2520,6 +2521,7 @@ export class ChatApi {
   ): Promise<StreamResponse<DeleteRetentionPolicyResponse>> {
     const body = {
       policy: request?.policy,
+      channel_type: request?.channel_type,
     };
 
     const response =

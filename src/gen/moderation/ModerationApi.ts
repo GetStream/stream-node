@@ -524,6 +524,7 @@ export class ModerationApi {
       aws_rekognition_config: request?.aws_rekognition_config,
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
+      engine: request?.engine,
       flood_config: request?.flood_config,
       google_vision_config: request?.google_vision_config,
       intent_config: request?.intent_config,
@@ -677,15 +678,19 @@ export class ModerationApi {
     return response;
   }
 
-  async v2DeleteTemplate(): Promise<
-    StreamResponse<DeleteModerationTemplateResponse>
-  > {
+  async v2DeleteTemplate(request?: {
+    name?: string;
+  }): Promise<StreamResponse<DeleteModerationTemplateResponse>> {
+    const queryParams = {
+      name: request?.name,
+    };
+
     const response =
       await this.apiClient.sendRequest<DeleteModerationTemplateResponse>(
         'DELETE',
         '/api/v2/moderation/feeds_moderation_template',
         undefined,
-        undefined,
+        queryParams,
       );
 
     decoders['DeleteModerationTemplateResponse']?.(response);
@@ -1027,15 +1032,21 @@ export class ModerationApi {
     return response;
   }
 
-  async listPolicyTestSets(): Promise<
-    StreamResponse<PolicyTestSetListResponse>
-  > {
+  async listPolicyTestSets(request?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<StreamResponse<PolicyTestSetListResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      offset: request?.offset,
+    };
+
     const response =
       await this.apiClient.sendRequest<PolicyTestSetListResponse>(
         'GET',
         '/api/v2/moderation/policy_tests/sets',
         undefined,
-        undefined,
+        queryParams,
       );
 
     decoders['PolicyTestSetListResponse']?.(response);

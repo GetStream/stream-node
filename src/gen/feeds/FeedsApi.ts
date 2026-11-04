@@ -61,6 +61,7 @@ import {
   DeleteFeedsRetentionPolicyResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
+  ExportFeedsAppRequest,
   ExportFeedsByTypeRequest,
   ExportFeedsResponse,
   FeedVisibility,
@@ -80,6 +81,7 @@ import {
   GetFeedsRetentionPolicyRunsRequest,
   GetFeedsRetentionPolicyRunsResponse,
   GetFollowSuggestionsResponse,
+  GetNotificationStatusResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
   GetOrCreateFeedRequest,
@@ -1679,12 +1681,20 @@ export class FeedsApi {
     return response;
   }
 
-  async exportFeedsApp(): Promise<StreamResponse<ExportFeedsResponse>> {
+  async exportFeedsApp(
+    request?: ExportFeedsAppRequest,
+  ): Promise<StreamResponse<ExportFeedsResponse>> {
+    const body = {
+      include_deleted: request?.include_deleted,
+      types: request?.types,
+    };
+
     const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
       'POST',
       '/api/v2/feeds/export/app',
       undefined,
       undefined,
+      body,
     );
 
     decoders['ExportFeedsResponse']?.(response);
@@ -1721,7 +1731,9 @@ export class FeedsApi {
     const body = {
       created_at_from: request?.created_at_from,
       created_at_to: request?.created_at_to,
+      include_deleted: request?.include_deleted,
       user_id: request?.user_id,
+      activity_ids: request?.activity_ids,
     };
 
     const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
@@ -2156,6 +2168,34 @@ export class FeedsApi {
       );
 
     decoders['RejectFeedMemberInviteResponse']?.(response);
+
+    return response;
+  }
+
+  async getNotificationStatus(request: {
+    feed_group_id: string;
+    feed_id: string;
+    view?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<GetNotificationStatusResponse>> {
+    const queryParams = {
+      view: request?.view,
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+      feed_id: request?.feed_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<GetNotificationStatusResponse>(
+        'GET',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/notification_status',
+        pathParams,
+        queryParams,
+      );
+
+    decoders['GetNotificationStatusResponse']?.(response);
 
     return response;
   }
