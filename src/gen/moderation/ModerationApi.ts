@@ -56,6 +56,8 @@ import {
   QueryLabelResultsResponse,
   QueryModerationConfigsRequest,
   QueryModerationConfigsResponse,
+  QueryModerationFeedbackRequest,
+  QueryModerationFeedbackResponse,
   QueryModerationFlagsRequest,
   QueryModerationFlagsResponse,
   QueryModerationLogsRequest,
@@ -66,6 +68,8 @@ import {
   QueryReviewQueueResponse,
   QueueResponse,
   Response,
+  RevealMediaRequest,
+  RevealMediaResponse,
   SubmitActionRequest,
   SubmitActionResponse,
   SubmitModerationFeedbackRequest,
@@ -257,6 +261,7 @@ export class ModerationApi {
       entity_id: request?.entity_id,
       entity_type: request?.entity_type,
       user_id: request?.user_id,
+      country_codes: request?.country_codes,
       content_ids: request?.content_ids,
       custom: request?.custom,
       texts: request?.texts,
@@ -460,6 +465,7 @@ export class ModerationApi {
       country_code: request?.country_code,
       test_mode: request?.test_mode,
       user_id: request?.user_id,
+      country_codes: request?.country_codes,
       config: request?.config,
       moderation_payload: request?.moderation_payload,
       options: request?.options,
@@ -518,6 +524,7 @@ export class ModerationApi {
       aws_rekognition_config: request?.aws_rekognition_config,
       block_list_config: request?.block_list_config,
       bodyguard_config: request?.bodyguard_config,
+      engine: request?.engine,
       flood_config: request?.flood_config,
       google_vision_config: request?.google_vision_config,
       intent_config: request?.intent_config,
@@ -643,15 +650,47 @@ export class ModerationApi {
     return response;
   }
 
-  async v2DeleteTemplate(): Promise<
-    StreamResponse<DeleteModerationTemplateResponse>
-  > {
+  async queryModerationFeedback(
+    request?: QueryModerationFeedbackRequest,
+  ): Promise<StreamResponse<QueryModerationFeedbackResponse>> {
+    const body = {
+      item_limit: request?.item_limit,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      user_id: request?.user_id,
+      sort: request?.sort,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryModerationFeedbackResponse>(
+        'POST',
+        '/api/v2/moderation/feedback_items',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryModerationFeedbackResponse']?.(response);
+
+    return response;
+  }
+
+  async v2DeleteTemplate(request?: {
+    name?: string;
+  }): Promise<StreamResponse<DeleteModerationTemplateResponse>> {
+    const queryParams = {
+      name: request?.name,
+    };
+
     const response =
       await this.apiClient.sendRequest<DeleteModerationTemplateResponse>(
         'DELETE',
         '/api/v2/moderation/feeds_moderation_template',
         undefined,
-        undefined,
+        queryParams,
       );
 
     decoders['DeleteModerationTemplateResponse']?.(response);
@@ -993,15 +1032,21 @@ export class ModerationApi {
     return response;
   }
 
-  async listPolicyTestSets(): Promise<
-    StreamResponse<PolicyTestSetListResponse>
-  > {
+  async listPolicyTestSets(request?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<StreamResponse<PolicyTestSetListResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      offset: request?.offset,
+    };
+
     const response =
       await this.apiClient.sendRequest<PolicyTestSetListResponse>(
         'GET',
         '/api/v2/moderation/policy_tests/sets',
         undefined,
-        undefined,
+        queryParams,
       );
 
     decoders['PolicyTestSetListResponse']?.(response);
@@ -1211,6 +1256,28 @@ export class ModerationApi {
     return response;
   }
 
+  async revealMedia(
+    request: RevealMediaRequest,
+  ): Promise<StreamResponse<RevealMediaResponse>> {
+    const body = {
+      item_id: request?.item_id,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<RevealMediaResponse>(
+      'POST',
+      '/api/v2/moderation/reveal_media',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['RevealMediaResponse']?.(response);
+
+    return response;
+  }
+
   async queryReviewQueue(
     request?: QueryReviewQueueRequest,
   ): Promise<StreamResponse<QueryReviewQueueResponse>> {
@@ -1344,18 +1411,28 @@ export class ModerationApi {
   }
 
   async submitModerationFeedback(
-    request: SubmitModerationFeedbackRequest,
+    request?: SubmitModerationFeedbackRequest,
   ): Promise<StreamResponse<SubmitModerationFeedbackResponse>> {
     const body = {
+      channel_id: request?.channel_id,
+      confidence: request?.confidence,
+      current_recommended_action: request?.current_recommended_action,
+      description: request?.description,
+      entity_creator_id: request?.entity_creator_id,
+      entity_id: request?.entity_id,
+      entity_type: request?.entity_type,
+      expected_recommended_action: request?.expected_recommended_action,
+      false_positive: request?.false_positive,
+      feedback_type: request?.feedback_type,
       message: request?.message,
       published_at: request?.published_at,
       reference: request?.reference,
-      channel_id: request?.channel_id,
-      current_recommended_action: request?.current_recommended_action,
-      description: request?.description,
-      expected_recommended_action: request?.expected_recommended_action,
+      review_queue_item_id: request?.review_queue_item_id,
+      user_id: request?.user_id,
       current_labels: request?.current_labels,
       expected_labels: request?.expected_labels,
+      items: request?.items,
+      user: request?.user,
     };
 
     const response =

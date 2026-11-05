@@ -467,6 +467,19 @@ decoders['AsyncExportErrorEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['AsyncExportFeedsSuccessEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    finished_at: { type: 'DatetimeType', isSingle: true },
+
+    started_at: { type: 'DatetimeType', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['AsyncExportLabelResultsEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1527,6 +1540,35 @@ decoders['ChannelDeletedEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['ChannelForkResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelForkSummary'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelForkedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    fork: { type: 'ChannelForkSummary', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['ChannelFrozenEvent'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -1642,7 +1684,31 @@ decoders['ChannelResponse'] = (input?: { [key: string]: any }) => {
 
     created_by: { type: 'UserResponse', isSingle: true },
 
+    fork: { type: 'ChannelForkSummary', isSingle: true },
+
     truncated_by: { type: 'UserResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelRewindResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelRewoundEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    rewind: { type: 'ChannelRewindResponse', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -1747,6 +1813,13 @@ decoders['ChannelTypeConfig'] = (input?: { [key: string]: any }) => {
     updated_at: { type: 'DatetimeType', isSingle: true },
 
     commands: { type: 'Command', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ChannelTypeRuleResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    enabled_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -2910,6 +2983,47 @@ decoders['FollowUpdatedEvent'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['ForkChannelResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    members: { type: 'ChannelMemberResponse', isSingle: false },
+
+    messages: { type: 'MessageResponse', isSingle: false },
+
+    pinned_messages: { type: 'MessageResponse', isSingle: false },
+
+    threads: { type: 'ThreadStateResponse', isSingle: false },
+
+    fork: { type: 'ChannelForkResponse', isSingle: true },
+
+    hide_messages_before: { type: 'DatetimeType', isSingle: true },
+
+    active_live_locations: {
+      type: 'SharedLocationResponseData',
+      isSingle: false,
+    },
+
+    pending_messages: { type: 'PendingMessageResponse', isSingle: false },
+
+    read: { type: 'ReadStateResponse', isSingle: false },
+
+    scheduled_messages: { type: 'ScheduledMessageResponse', isSingle: false },
+
+    watchers: { type: 'UserResponse', isSingle: false },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+
+    draft: { type: 'DraftResponse', isSingle: true },
+
+    membership: { type: 'ChannelMemberResponse', isSingle: true },
+
+    push_preferences: {
+      type: 'ChannelPushPreferencesResponse',
+      isSingle: true,
+    },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['FullUserResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -3144,6 +3258,15 @@ decoders['GetFollowSuggestionsResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['GetHistoryWindowTeamsResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    teams: { type: 'HistoryWindowTeam', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['GetImportResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     import_task: { type: 'ImportTask', isSingle: true },
@@ -3177,6 +3300,17 @@ decoders['GetMessageResponse'] = (input?: { [key: string]: any }) => {
 decoders['GetModerationRuleResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     rule: { type: 'ModerationRuleV2Response', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['GetNotificationStatusResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    last_read_at: { type: 'DatetimeType', isSingle: true },
+
+    last_seen_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3280,6 +3414,8 @@ decoders['GetRepliesResponse'] = (input?: { [key: string]: any }) => {
 decoders['GetRetentionPolicyResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     policies: { type: 'RetentionPolicy', isSingle: false },
+
+    channel_type_rules: { type: 'ChannelTypeRuleResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -3345,6 +3481,15 @@ decoders['GroupedChannelsBucket'] = (input?: { [key: string]: any }) => {
 decoders['GroupedQueryChannelsResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     groups: { type: 'GroupedChannelsBucket', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['HistoryWindowTeam'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    updated_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -3932,6 +4077,28 @@ decoders['ModerationCustomActionEvent'] = (input?: { [key: string]: any }) => {
     received_at: { type: 'DatetimeType', isSingle: true },
 
     message: { type: 'MessageResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ModerationFeedbackItemResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    bodyguard_sent_at: { type: 'DatetimeType', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['ModerationFeedbackSubmissionResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    items: { type: 'ModerationFeedbackItemResponse', isSingle: false },
   };
   return decode(typeMappings, input);
 };
@@ -4701,6 +4868,13 @@ decoders['QueryCommentsResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['QueryDeletedChannelsResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    channels: { type: 'ChannelResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['QueryDraftsResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     drafts: { type: 'DraftResponse', isSingle: false },
@@ -4791,6 +4965,18 @@ decoders['QueryModerationConfigsResponse'] = (input?: {
 }) => {
   const typeMappings: TypeMapping = {
     configs: { type: 'ConfigResponse', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['QueryModerationFeedbackResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    submissions: {
+      type: 'ModerationFeedbackSubmissionResponse',
+      isSingle: false,
+    },
   };
   return decode(typeMappings, input);
 };
@@ -5249,6 +5435,15 @@ decoders['RevisionHistoryResponse'] = (input?: { [key: string]: any }) => {
   return decode(typeMappings, input);
 };
 
+decoders['RewindChannelResponse'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    rewind: { type: 'ChannelRewindResponse', isSingle: true },
+
+    channel: { type: 'ChannelResponse', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['RingAttemptResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     created_at: { type: 'DatetimeType', isSingle: true },
@@ -5523,9 +5718,20 @@ decoders['SetFeedsRetentionPolicyResponse'] = (input?: {
   return decode(typeMappings, input);
 };
 
+decoders['SetHistoryWindowTeamsResponse'] = (input?: {
+  [key: string]: any;
+}) => {
+  const typeMappings: TypeMapping = {
+    teams: { type: 'HistoryWindowTeam', isSingle: false },
+  };
+  return decode(typeMappings, input);
+};
+
 decoders['SetRetentionPolicyResponse'] = (input?: { [key: string]: any }) => {
   const typeMappings: TypeMapping = {
     policy: { type: 'RetentionPolicy', isSingle: true },
+
+    channel_type_rule: { type: 'ChannelTypeRuleResponse', isSingle: true },
   };
   return decode(typeMappings, input);
 };
@@ -6213,6 +6419,19 @@ decoders['UserBannedEvent'] = (input?: { [key: string]: any }) => {
     received_at: { type: 'DatetimeType', isSingle: true },
 
     created_by: { type: 'UserResponseCommonFields', isSingle: true },
+  };
+  return decode(typeMappings, input);
+};
+
+decoders['UserClaimedEvent'] = (input?: { [key: string]: any }) => {
+  const typeMappings: TypeMapping = {
+    created_at: { type: 'DatetimeType', isSingle: true },
+
+    claimed_by: { type: 'UserResponseCommonFields', isSingle: true },
+
+    user: { type: 'UserResponseCommonFields', isSingle: true },
+
+    received_at: { type: 'DatetimeType', isSingle: true },
   };
   return decode(typeMappings, input);
 };
