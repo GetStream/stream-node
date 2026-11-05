@@ -7,6 +7,7 @@ import {
   getServerMember,
   sendServerMessage,
 } from '../../../helpers/server';
+import { retry } from '../../../helpers/wait';
 
 const DOCS = 'chat/_default/03-channels/06-channel_members.md';
 
@@ -368,8 +369,13 @@ describe(DOCS, () => {
       user_id: janeId,
     });
     expect(message.user?.custom).toMatchObject({ badges: ['verified'] });
-    const member = await getServerMember(client, cid, janeId);
+    // queryMembers returns the member's user from before updateUsersPartial for
+    // ~1-2s (2026-11-05): retry until it has the badge.
+    const member = await retry(async () => {
+      const m = await getServerMember(client, cid, janeId);
+      expect(m.user?.custom).toMatchObject({ badges: ['verified'] });
+      return m;
+    });
     expect(member.custom).toEqual({ badges: ['host'] });
-    expect(member.user?.custom).toMatchObject({ badges: ['verified'] });
   });
 });

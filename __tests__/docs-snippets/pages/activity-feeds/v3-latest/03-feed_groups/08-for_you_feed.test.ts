@@ -113,6 +113,28 @@ describe(DOCS, () => {
   });
 
   it('adds activities with interest tags', async () => {
+    // addActivity into the new stock group can still answer "Feed group ... not
+    // found" from some API nodes after waitForFeedGroup (2026-11-05). Retry it
+    // like addActivityOnce: with an explicit id, only while it isn't stored.
+    const addActivity = client.feeds.addActivity.bind(client.feeds);
+    vi.spyOn(client.feeds, 'addActivity').mockImplementation((request) => {
+      const id = request.id ?? uniqueId('activity');
+      return retry(
+        async () => {
+          try {
+            return await addActivity({ ...request, id });
+          } catch (error) {
+            const stored = await client.feeds
+              .getActivity({ id })
+              .catch(() => undefined);
+            if (!stored) throw error;
+            return stored;
+          }
+        },
+        { retryIf: isFeedGroupMissing },
+      );
+    });
+
     // The built-in user group runs no activity processors on the test app
     // (2026-10-16), so the first activity gets no topics, despite the comment.
     // #region snippet docs="activity-feeds/v3-latest/_default/03-feed_groups/08-for_you_feed.md" heading="Step 2 - Activities with interest tags" tab="Node.js" index=1
