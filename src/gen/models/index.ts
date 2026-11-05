@@ -4043,6 +4043,7 @@ export interface CallSettingsResponse {
   thumbnails: ThumbnailsSettingsResponse;
   transcription: TranscriptionSettingsResponse;
   video: VideoSettingsResponse;
+  extra_opts?: Record<string, any>;
   ingress?: IngressSettingsResponse;
 }
 
@@ -25313,6 +25314,10 @@ export interface UserBannedEvent {
    * The type of event: "user.banned" in this case
    */
   type: string;
+  /**
+   * Whether the ban also applies to channels created later by the same creator. Without a channel, check user.banned to tell a global ban from a future-channels-only ban
+   */
+  ban_from_future_channels?: boolean;
   /**
    * The ID of the channel where the target user was banned
    */
