@@ -443,12 +443,10 @@ describe(DOCS, () => {
 
     const { feed_view } = await (create.mock.results[0]
       .value as Promise<CreateFeedViewResponse>);
-    // (2026-10-29) The API drops viewer_location_radius_km: the view is
-    // stored without it (also on getFeedView, and a radius of 300 is
-    // accepted although the docs say at most 250).
     expect(feed_view.activity_selectors).toEqual([
       {
         type: 'proximity',
+        viewer_location_radius_km: 80.4672,
         filter: { activity_type: { $in: ['post', 'event'] } },
       },
     ]);
@@ -476,14 +474,14 @@ describe(DOCS, () => {
     });
     expect([...ours(response)].sort()).toEqual(['hot', 'warm']);
     expect(response.activities.map((a) => a.id)).not.toContain(workoutId);
-    // (2026-10-29) From Haarlem (~17 km away) the view finds nothing: the
-    // default 10 km radius applies, not the 80 km the docs set.
+    // Haarlem (~17 km away) is outside the default 10 km radius, but inside
+    // the view's 80 km: the view still finds hot and warm.
     const far = await feed.getOrCreate({
       view: nearbyId,
       viewer_location: haarlem,
       user_id: readerId,
     });
-    expect(ours(far)).toEqual([]);
+    expect([...ours(far)].sort()).toEqual(['hot', 'warm']);
   });
 
   it('creates a group with the interest selector', async () => {
