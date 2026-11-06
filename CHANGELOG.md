@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.0](https://github.com/GetStream/stream-node/compare/v0.8.15...v0.9.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove date transofrmator ([#349](https://github.com/GetStream/stream-node/issues/349))
+
+### Features
+
+* remove date transofrmator ([#349](https://github.com/GetStream/stream-node/issues/349)) ([95d3ba6](https://github.com/GetStream/stream-node/commit/95d3ba6cdd840ca7eb9ec4a4999466b2f4b09bb9))
+
 ## [0.8.15](https://github.com/GetStream/stream-node/compare/v0.8.14...v0.8.15) (2026-10-28)
 
 
