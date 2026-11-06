@@ -228,7 +228,7 @@ describe(DOCS, () => {
     );
     expect(unreadByUser).toEqual({ [sender]: 0, [userID]: 1, [userID2]: 0 });
     expect(log).toHaveBeenCalledTimes(3);
-    expect(log).toHaveBeenCalledWith(userID, expect.any(Date), 1);
+    expect(log).toHaveBeenCalledWith(userID, expect.any(Number), 1);
   });
 
   it('reads the unread messages per channel', async () => {

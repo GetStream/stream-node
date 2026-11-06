@@ -103,19 +103,13 @@ describe(DOCS, () => {
   });
 
   it('updates the partition size', async () => {
+    const before = await client.chat.getChannelType({ name: channelType });
     const updateSpy = vi.spyOn(client.chat, 'updateChannelType');
 
     // #region snippet docs="chat/_default/05-features/10-advanced/16-dynamic_partitioning.md" heading="Updating dynamic partitioning" tab="Node.js" index=1
     // COPY: channelType="example"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       partition_size: 200,
     });
     // #endregion snippet
@@ -123,8 +117,8 @@ describe(DOCS, () => {
     const updated = await (updateSpy.mock.results[0]
       .value as Promise<UpdateChannelTypeResponse>);
     expect(updated.partition_size).toBe(200);
-    expect(updated.automod).toBe(current.automod);
-    expect(updated.max_message_length).toBe(current.max_message_length);
+    expect(updated.automod).toBe(before.automod);
+    expect(updated.max_message_length).toBe(before.max_message_length);
 
     await waitForChannelTypePropagation();
     const type = await waitForChannelType((r) => r.partition_size === 200);
@@ -148,13 +142,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/05-features/10-advanced/16-dynamic_partitioning.md" heading="Disabling dynamic partitioning" tab="Node.js" index=1
     // COPY: channelType="example"
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       partition_size: 0,
     });
     // #endregion snippet
@@ -188,13 +177,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/05-features/10-advanced/16-dynamic_partitioning.md" heading="Partition TTL" tab="Node.js" index=1
     // COPY: channelType="example"
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       partition_ttl: '24h',
     });
     // #endregion snippet

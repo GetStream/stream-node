@@ -290,7 +290,7 @@ describe(DOCS, () => {
     expect(response.activity.custom).toEqual({ color: 'red', size: 'L' });
     expect(unsetResponse.activity.text).toBe('Japan has over 6,800 islands.');
     expect(unsetResponse.activity.custom).toEqual({ size: 'L' });
-    expect(unsetResponse.activity.edited_at).toBeInstanceOf(Date);
+    expect(unsetResponse.activity.edited_at).toEqual(expect.any(Number));
     expect(log).toHaveBeenCalledTimes(2);
   });
 
@@ -312,7 +312,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     expect(response.activity.text).toBe('Updated text');
-    expect(response.activity.edited_at).toBeInstanceOf(Date);
+    expect(response.activity.edited_at).toEqual(expect.any(Number));
     expect(log).toHaveBeenCalledWith(response.activity.edited_at);
   });
 
@@ -349,7 +349,7 @@ describe(DOCS, () => {
         id,
         include_soft_deleted_activities: true,
       });
-      expect(activity.deleted_at).toBeInstanceOf(Date);
+      expect(activity.deleted_at).toEqual(expect.any(Number));
     }
   });
 
@@ -399,7 +399,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     expect(activity.id).toBe(activityId);
-    expect(activity.deleted_at).toBeInstanceOf(Date);
+    expect(activity.deleted_at).toEqual(expect.any(Number));
     expect(log).toHaveBeenCalledWith(undefined, activity.deleted_at);
   });
 

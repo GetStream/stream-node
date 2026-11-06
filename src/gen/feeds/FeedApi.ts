@@ -6,6 +6,7 @@ import {
   ChangeFeedVisibilityResponse,
   DeleteFeedResponse,
   GetFeedCountsResponse,
+  GetNotificationStatusResponse,
   GetOrCreateFeedRequest,
   GetOrCreateFeedResponse,
   MarkActivityRequest,
@@ -149,6 +150,17 @@ export class FeedApi {
     request?: RejectFeedMemberInviteRequest,
   ): Promise<StreamResponse<RejectFeedMemberInviteResponse>> {
     return this.feedsApi.rejectFeedMemberInvite({
+      feed_id: this.id,
+      feed_group_id: this.group,
+      ...request,
+    });
+  }
+
+  getNotificationStatus(request?: {
+    view?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<GetNotificationStatusResponse>> {
+    return this.feedsApi.getNotificationStatus({
       feed_id: this.id,
       feed_group_id: this.group,
       ...request,

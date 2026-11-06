@@ -440,6 +440,6 @@ describe(DOCS, () => {
       });
       return all.groups[feedGroupId];
     });
-    expect(deleted?.deleted_at).toBeInstanceOf(Date);
+    expect(deleted?.deleted_at).toEqual(expect.any(Number));
   });
 });

@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import type { TruncateChannelResponse } from '../../../../../../index';
 import { getServerClient } from '../../../../helpers/clients';
 import { Cleanup } from '../../../../helpers/cleanup';
@@ -136,11 +137,9 @@ describe(DOCS, () => {
     expect(visibleAfter[2]).toEqual([]);
     // `truncated_at` an hour ago keeps the messages sent since then.
     const truncatedAt = responses[3].channel?.truncated_at;
-    expect(truncatedAt).toBeInstanceOf(Date);
+    expect(truncatedAt).toEqual(expect.any(Number));
     if (truncatedAt) {
-      expect(Date.now() - truncatedAt.getTime()).toBeGreaterThan(
-        59 * 60 * 1000,
-      );
+      expect(Date.now() - nsToMs(truncatedAt)).toBeGreaterThan(59 * 60 * 1000);
     }
     expect(visibleAfter[3]).toEqual(['recent', 'before-4']);
   });

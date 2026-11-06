@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { nsToMs } from '../../../../../../index';
 import type {
   QueryModerationConfigsResponse,
   QueryReviewQueueResponse,
@@ -57,10 +58,7 @@ describe(DOCS, () => {
       payload: { filter_conditions: { user_id: { $eq: userId } } },
     });
     expect(bans).toHaveLength(1);
-    return (
-      ((bans[0].expires?.getTime() ?? 0) - bans[0].created_at.getTime()) /
-      60_000
-    );
+    return (nsToMs(bans[0].expires ?? 0) - nsToMs(bans[0].created_at)) / 60_000;
   };
 
   beforeAll(async () => {

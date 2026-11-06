@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { StreamClient, UserResponse } from '../../../../../index';
+import { nsToMs } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -144,9 +144,9 @@ describe(DOCS, () => {
     const { mutes } = await getServerUser(client, mutingUserId);
     expect(mutes.map((m) => m.target?.id)).toEqual([mutedUser]);
     // 60 minutes
-    expect(
-      (mutes[0].expires?.getTime() ?? 0) - mutes[0].created_at.getTime(),
-    ).toBe(60 * 60 * 1000);
+    expect(nsToMs(mutes[0].expires ?? 0) - nsToMs(mutes[0].created_at)).toBe(
+      60 * 60 * 1000,
+    );
   });
 
   it('unmutes a user', async () => {
@@ -194,9 +194,9 @@ describe(DOCS, () => {
     expect(bans[0].banned_by?.id).toBe(moderatorId);
     expect(bans[0].channel).toBeUndefined();
     // 1440 minutes
-    expect(
-      (bans[0].expires?.getTime() ?? 0) - bans[0].created_at.getTime(),
-    ).toBe(1440 * 60 * 1000);
+    expect(nsToMs(bans[0].expires ?? 0) - nsToMs(bans[0].created_at)).toBe(
+      1440 * 60 * 1000,
+    );
   });
 
   it('bans a user from one channel', async () => {
@@ -314,7 +314,9 @@ describe(DOCS, () => {
     await retry(
       async () => {
         const user = await getServerUser(client, expiredBanned);
-        if ((user.ban_expires?.getTime() ?? Infinity) > Date.now()) {
+        if (
+          (user.ban_expires ? nsToMs(user.ban_expires) : Infinity) > Date.now()
+        ) {
           throw new Error('ban not expired yet');
         }
       },
@@ -397,27 +399,5 @@ describe(DOCS, () => {
     expect((await getServerUser(client, trustedUser)).bypass_moderation).toBe(
       true,
     );
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no getUserModerationReport (GET /api/v2/moderation/user_report is left out of the spec)', async () => {
-    const reportUser = await createUser('report-user');
-    // The node SDK has no getUserModerationReport: type the missing method (from the
-    // API's response) so the skipped region typechecks and lints. It isn't there at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        getUserModerationReport: (request: {
-          user_id: string;
-        }) => Promise<{ user: UserResponse }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/05-content-moderation/02-flag-mute-ban.md" heading="User Moderation Report" tab="Node.js" index=1
-    // COPY: reportUser="user_123"
-    const response = await client.moderation.getUserModerationReport({
-      user_id: reportUser,
-    });
-    // #endregion snippet
-
-    expect(response.user.id).toBe(reportUser);
   });
 });

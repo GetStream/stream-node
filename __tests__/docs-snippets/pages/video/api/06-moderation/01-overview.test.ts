@@ -14,6 +14,7 @@ import type {
   GetBlockedUsersResponse,
   ModerationBanResponse,
   MuteUsersResponse,
+  TimestampNS,
   UpdateUserPermissionsResponse,
 } from '../../../../../../index';
 import { getServerClient } from '../../../../helpers/clients';
@@ -217,7 +218,10 @@ describe(DOCS, () => {
     const originalBan = client.moderation.ban.bind(client.moderation);
     const ban = vi.spyOn(client.moderation, 'ban');
     const unban = vi.spyOn(client.moderation, 'unban');
-    const bansAfterEachCall: Array<{ reason?: string; expires?: Date }> = [];
+    const bansAfterEachCall: Array<{
+      reason?: string;
+      expires?: TimestampNS;
+    }> = [];
     ban.mockImplementation(async (request) => {
       const response = await originalBan(request);
       const { bans } = await client.queryBannedUsers({
@@ -267,7 +271,7 @@ describe(DOCS, () => {
     expect(bansAfterEachCall).toHaveLength(3);
     expect(bansAfterEachCall[0]).toMatchObject({ reason: banReason });
     expect(bansAfterEachCall[0].expires).toBeUndefined();
-    expect(bansAfterEachCall[1].expires).toBeInstanceOf(Date);
+    expect(bansAfterEachCall[1].expires).toEqual(expect.any(Number));
     const { bans } = await client.queryBannedUsers({
       payload: { filter_conditions: { user_id: badUserId } },
     });
@@ -318,7 +322,7 @@ describe(DOCS, () => {
     expect((await findUser(userId))?.deactivated_at).toBeUndefined();
     await waitForTask(client, deactivateResponse.task_id);
     for (const id of [bulkUser1, bulkUser2]) {
-      expect((await findUser(id))?.deactivated_at).toBeInstanceOf(Date);
+      expect((await findUser(id))?.deactivated_at).toEqual(expect.any(Number));
     }
   });
 

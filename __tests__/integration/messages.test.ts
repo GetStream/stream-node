@@ -57,7 +57,6 @@ describe('messages API', () => {
   });
 
   it('thread replies', async () => {
-    const now = new Date();
     const response = await channel.sendMessage({
       message: {
         text: 'Hello from Stream Node SDK',
@@ -77,7 +76,6 @@ describe('messages API', () => {
 
     const getResponse = await client.chat.getReplies({
       parent_id: response.message.id,
-      created_at_after: now,
     });
 
     expect(

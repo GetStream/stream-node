@@ -46,16 +46,8 @@ describe(DOCS, () => {
     });
 
     // When updating an existing channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({
-      name: targetChannelType,
-    });
     await client.chat.updateChannelType({
       name: targetChannelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       delivery_events: true,
     });
     // #endregion snippet
@@ -67,14 +59,13 @@ describe(DOCS, () => {
       ),
     );
     expect(created.delivery_events).toBe(true);
-    expect(current.delivery_events).toBe(true);
-    expect(current.automod).toBe('disabled');
     const [updated] = await Promise.all(
       updateSpy.mock.results.map(
         (r) => r.value as ReturnType<typeof client.chat.updateChannelType>,
       ),
     );
     expect(updated.delivery_events).toBe(true);
+    expect(updated.automod).toBe('disabled');
     const after = await client.chat.getChannelType({ name: targetChannelType });
     expect(after.delivery_events).toBe(true);
     expect(after.max_message_length).toBe(5000);
@@ -120,16 +111,8 @@ describe(DOCS, () => {
     });
 
     // When updating an existing channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({
-      name: targetChannelType,
-    });
     await client.chat.updateChannelType({
       name: targetChannelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       read_events: true,
     });
     // #endregion snippet
@@ -141,13 +124,13 @@ describe(DOCS, () => {
       ),
     );
     expect(created.read_events).toBe(true);
-    expect(current.read_events).toBe(true);
     const [updated] = await Promise.all(
       updateSpy.mock.results.map(
         (r) => r.value as ReturnType<typeof client.chat.updateChannelType>,
       ),
     );
     expect(updated.read_events).toBe(true);
+    expect(updated.automod).toBe('disabled');
     const after = await client.chat.getChannelType({ name: targetChannelType });
     expect(after.read_events).toBe(true);
     expect(after.max_message_length).toBe(5000);

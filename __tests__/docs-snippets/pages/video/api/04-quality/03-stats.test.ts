@@ -21,11 +21,9 @@ describe(DOCS, () => {
     // #endregion snippet
 
     // The status covers the last minute.
-    expect(response.start_time).toBeInstanceOf(Date);
-    expect(response.end_time).toBeInstanceOf(Date);
-    expect(
-      response.end_time.getTime() - response.start_time.getTime(),
-    ).toBeGreaterThan(0);
+    expect(response.start_time).toEqual(expect.any(Number));
+    expect(response.end_time).toEqual(expect.any(Number));
+    expect(response.end_time - response.start_time).toBeGreaterThan(0);
     // The test app usually has no running calls, so the numbers can be 0.
     expect(typeof response.summary?.active_calls).toBe('number');
     expect(typeof response.summary?.active_publishers).toBe('number');

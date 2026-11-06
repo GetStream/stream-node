@@ -388,4 +388,42 @@ describe(DOCS, () => {
     expect(submitted.items.map((item) => item.id)).not.toContain(withoutAppeal);
     expect(byAppeal.items.map((item) => item.id)).toEqual([itemId]);
   });
+
+  it('restores content for several appeals at once', async () => {
+    const first = await deletedMessage();
+    const second = await deletedMessage();
+    const appealIds = await Promise.all(
+      [first, second].map(async ({ creatorId, messageId }) => {
+        const { appeal_id } = await client.moderation.appeal({
+          appeal_reason: 'Not spam',
+          entity_id: messageId,
+          entity_type: 'stream:chat:v1:message',
+          user_id: creatorId,
+        });
+        return appeal_id;
+      }),
+    );
+    const [appealId1, appealId2] = appealIds;
+
+    // #region snippet docs="moderation/_default/06-review-queue/03-appeals.md" heading="Bulk action" tab="Node.js" index=1
+    // COPY: appealId1="appeal_1", appealId2="appeal_2"
+    await client.moderation.bulkActionAppeals({
+      action_type: 'restore',
+      appeal_ids: [appealId1, appealId2],
+      restore: { decision_reason: 'Restored after review' },
+      user_id: moderatorId,
+    });
+    // #endregion snippet
+
+    for (const appealId of appealIds) {
+      expect(await getAppeal(appealId)).toMatchObject({
+        status: 'accepted',
+        decision_reason: 'Restored after review',
+      });
+    }
+    for (const { messageId } of [first, second]) {
+      const { message } = await client.chat.getMessage({ id: messageId });
+      expect(message.deleted_at).toBeUndefined();
+    }
+  });
 });
