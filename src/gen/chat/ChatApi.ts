@@ -23,6 +23,8 @@ import {
   DeleteChannelsRequest,
   DeleteChannelsResponse,
   DeleteCommandResponse,
+  DeleteHistoryWindowTeamsRequest,
+  DeleteHistoryWindowTeamsResponse,
   DeleteMessageResponse,
   DeleteReactionResponse,
   DeleteReminderResponse,
@@ -33,10 +35,15 @@ import {
   EventResponse,
   ExportChannelsRequest,
   ExportChannelsResponse,
+  ForkChannelRequest,
+  ForkChannelResponse,
+  ForkMessageIDsRequest,
+  ForkMessageIDsResponse,
   GetCampaignResponse,
   GetChannelTypeResponse,
   GetCommandResponse,
   GetDraftResponse,
+  GetHistoryWindowTeamsResponse,
   GetManyMessagesResponse,
   GetMessageResponse,
   GetPinnedMessagesResponse,
@@ -74,6 +81,8 @@ import {
   QueryChannelBansResponse,
   QueryChannelsRequest,
   QueryChannelsResponse,
+  QueryDeletedChannelsRequest,
+  QueryDeletedChannelsResponse,
   QueryDraftsRequest,
   QueryDraftsResponse,
   QueryFutureChannelBansPayload,
@@ -99,6 +108,8 @@ import {
   QueryThreadsRequest,
   QueryThreadsResponse,
   Response,
+  RewindChannelRequest,
+  RewindChannelResponse,
   SearchPayload,
   SearchResponse,
   SendEventRequest,
@@ -108,6 +119,8 @@ import {
   SendReactionResponse,
   SendScheduledMessageNowResponse,
   SendUserCustomEventRequest,
+  SetHistoryWindowTeamsRequest,
+  SetHistoryWindowTeamsResponse,
   SetRetentionPolicyRequest,
   SetRetentionPolicyResponse,
   ShowChannelRequest,
@@ -429,6 +442,31 @@ export class ChatApi {
     return response;
   }
 
+  async queryDeletedChannels(
+    request?: QueryDeletedChannelsRequest,
+  ): Promise<StreamResponse<QueryDeletedChannelsResponse>> {
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter_conditions: request?.filter_conditions,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryDeletedChannelsResponse>(
+        'POST',
+        '/api/v2/chat/channels/deleted',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryDeletedChannelsResponse']?.(response);
+
+    return response;
+  }
+
   async markDelivered(
     request?: MarkDeliveredRequest & { user_id?: string },
   ): Promise<StreamResponse<MarkDeliveredResponse>> {
@@ -507,6 +545,7 @@ export class ChatApi {
     };
     const body = {
       hide_for_creator: request?.hide_for_creator,
+      include_scheduled_messages: request?.include_scheduled_messages,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
       member_custom_include: request?.member_custom_include,
@@ -829,6 +868,60 @@ export class ChatApi {
     return response;
   }
 
+  async forkChannel(
+    request: ForkChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<ForkChannelResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      message_id: request?.message_id,
+      channel: request?.channel,
+      exclude_attachments: request?.exclude_attachments,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<ForkChannelResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/fork',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ForkChannelResponse']?.(response);
+
+    return response;
+  }
+
+  async forkMessageIDs(
+    request: ForkMessageIDsRequest & { type: string; id: string },
+  ): Promise<StreamResponse<ForkMessageIDsResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      source_message_ids: request?.source_message_ids,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<ForkMessageIDsResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/fork/message_ids',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ForkMessageIDsResponse']?.(response);
+
+    return response;
+  }
+
   async hideChannel(
     request: HideChannelRequest & { type: string; id: string },
   ): Promise<StreamResponse<HideChannelResponse>> {
@@ -1063,6 +1156,7 @@ export class ChatApi {
     };
     const body = {
       hide_for_creator: request?.hide_for_creator,
+      include_scheduled_messages: request?.include_scheduled_messages,
       state: request?.state,
       thread_unread_counts: request?.thread_unread_counts,
       member_custom_include: request?.member_custom_include,
@@ -1108,6 +1202,34 @@ export class ChatApi {
     );
 
     decoders['MarkReadResponse']?.(response);
+
+    return response;
+  }
+
+  async rewindChannel(
+    request: RewindChannelRequest & { type: string; id: string },
+  ): Promise<StreamResponse<RewindChannelResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      expected_last_message_id: request?.expected_last_message_id,
+      message_id: request?.message_id,
+      inclusive: request?.inclusive,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<RewindChannelResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/rewind',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['RewindChannelResponse']?.(response);
 
     return response;
   }
@@ -1511,6 +1633,64 @@ export class ChatApi {
     );
 
     decoders['ExportChannelsResponse']?.(response);
+
+    return response;
+  }
+
+  async getHistoryWindowTeams(): Promise<
+    StreamResponse<GetHistoryWindowTeamsResponse>
+  > {
+    const response =
+      await this.apiClient.sendRequest<GetHistoryWindowTeamsResponse>(
+        'GET',
+        '/api/v2/chat/history_window/teams',
+        undefined,
+        undefined,
+      );
+
+    decoders['GetHistoryWindowTeamsResponse']?.(response);
+
+    return response;
+  }
+
+  async setHistoryWindowTeams(
+    request: SetHistoryWindowTeamsRequest,
+  ): Promise<StreamResponse<SetHistoryWindowTeamsResponse>> {
+    const body = {
+      teams: request?.teams,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SetHistoryWindowTeamsResponse>(
+        'POST',
+        '/api/v2/chat/history_window/teams',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['SetHistoryWindowTeamsResponse']?.(response);
+
+    return response;
+  }
+
+  async deleteHistoryWindowTeams(
+    request: DeleteHistoryWindowTeamsRequest,
+  ): Promise<StreamResponse<DeleteHistoryWindowTeamsResponse>> {
+    const body = {
+      teams: request?.teams,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<DeleteHistoryWindowTeamsResponse>(
+        'POST',
+        '/api/v2/chat/history_window/teams/delete',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['DeleteHistoryWindowTeamsResponse']?.(response);
 
     return response;
   }
@@ -2319,6 +2499,7 @@ export class ChatApi {
     const body = {
       max_age_hours: request?.max_age_hours,
       policy: request?.policy,
+      channel_type: request?.channel_type,
     };
 
     const response =
@@ -2340,6 +2521,7 @@ export class ChatApi {
   ): Promise<StreamResponse<DeleteRetentionPolicyResponse>> {
     const body = {
       policy: request?.policy,
+      channel_type: request?.channel_type,
     };
 
     const response =
@@ -2810,9 +2992,11 @@ export class ChatApi {
 
   async unreadCounts(request?: {
     user_id?: string;
+    include_large_channels?: boolean;
   }): Promise<StreamResponse<WrappedUnreadCountsResponse>> {
     const queryParams = {
       user_id: request?.user_id,
+      include_large_channels: request?.include_large_channels,
     };
 
     const response =

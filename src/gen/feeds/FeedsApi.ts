@@ -24,6 +24,7 @@ import {
   BatchQueryActivityReactionsResponse,
   BatchQueryCommentReactionsRequest,
   BatchQueryCommentReactionsResponse,
+  CancelExportFeedsResponse,
   CastPollVoteRequest,
   ChangeFeedVisibilityRequest,
   ChangeFeedVisibilityResponse,
@@ -61,6 +62,10 @@ import {
   DeleteScheduledActivityResponse,
   DeleteUserInterestsResponse,
   ExportFeedUserDataResponse,
+  ExportFeedsAppRequest,
+  ExportFeedsByTypeRequest,
+  ExportFeedsResponse,
+  FeedVisibility,
   FollowBatchRequest,
   FollowBatchResponse,
   FollowRequest,
@@ -77,6 +82,7 @@ import {
   GetFeedsRetentionPolicyRunsRequest,
   GetFeedsRetentionPolicyRunsResponse,
   GetFollowSuggestionsResponse,
+  GetNotificationStatusResponse,
   GetOrCreateFeedGroupRequest,
   GetOrCreateFeedGroupResponse,
   GetOrCreateFeedRequest,
@@ -1684,6 +1690,74 @@ export class FeedsApi {
     return response;
   }
 
+  async exportFeedsApp(
+    request?: ExportFeedsAppRequest,
+  ): Promise<StreamResponse<ExportFeedsResponse>> {
+    const body = {
+      include_deleted: request?.include_deleted,
+      types: request?.types,
+    };
+
+    const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
+      'POST',
+      '/api/v2/feeds/export/app',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['ExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
+  async cancelExportFeeds(request: {
+    task_id: string;
+  }): Promise<StreamResponse<CancelExportFeedsResponse>> {
+    const pathParams = {
+      task_id: request?.task_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<CancelExportFeedsResponse>(
+        'POST',
+        '/api/v2/feeds/export/{task_id}/cancel',
+        pathParams,
+        undefined,
+      );
+
+    decoders['CancelExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
+  async exportFeedsByType(
+    request: ExportFeedsByTypeRequest & { type: string },
+  ): Promise<StreamResponse<ExportFeedsResponse>> {
+    const pathParams = {
+      type: request?.type,
+    };
+    const body = {
+      created_at_from: request?.created_at_from,
+      created_at_to: request?.created_at_to,
+      include_deleted: request?.include_deleted,
+      user_id: request?.user_id,
+      activity_ids: request?.activity_ids,
+    };
+
+    const response = await this.apiClient.sendRequest<ExportFeedsResponse>(
+      'POST',
+      '/api/v2/feeds/export/{type}',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['ExportFeedsResponse']?.(response);
+
+    return response;
+  }
+
   async listFeedGroups(request?: {
     include_soft_deleted?: boolean;
   }): Promise<StreamResponse<ListFeedGroupsResponse>> {
@@ -2107,6 +2181,34 @@ export class FeedsApi {
     return response;
   }
 
+  async getNotificationStatus(request: {
+    feed_group_id: string;
+    feed_id: string;
+    view?: string;
+    user_id?: string;
+  }): Promise<StreamResponse<GetNotificationStatusResponse>> {
+    const queryParams = {
+      view: request?.view,
+      user_id: request?.user_id,
+    };
+    const pathParams = {
+      feed_group_id: request?.feed_group_id,
+      feed_id: request?.feed_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<GetNotificationStatusResponse>(
+        'GET',
+        '/api/v2/feeds/feed_groups/{feed_group_id}/feeds/{feed_id}/notification_status',
+        pathParams,
+        queryParams,
+      );
+
+    decoders['GetNotificationStatusResponse']?.(response);
+
+    return response;
+  }
+
   async queryPinnedActivities(
     request: QueryPinnedActivitiesRequest & {
       feed_group_id: string;
@@ -2455,7 +2557,7 @@ export class FeedsApi {
   }
 
   async getFeedVisibility(request: {
-    name: string;
+    name: FeedVisibility;
   }): Promise<StreamResponse<GetFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,
@@ -2475,7 +2577,7 @@ export class FeedsApi {
   }
 
   async updateFeedVisibility(
-    request: UpdateFeedVisibilityRequest & { name: string },
+    request: UpdateFeedVisibilityRequest & { name: FeedVisibility },
   ): Promise<StreamResponse<UpdateFeedVisibilityResponse>> {
     const pathParams = {
       name: request?.name,
@@ -2708,6 +2810,7 @@ export class FeedsApi {
     return response;
   }
 
+  /** @deprecated This endpoint is deprecated. */
   async followBatch(
     request: FollowBatchRequest,
   ): Promise<StreamResponse<FollowBatchResponse>> {
@@ -3245,6 +3348,7 @@ export class FeedsApi {
     return response;
   }
 
+  /** @deprecated This endpoint is deprecated. */
   async unfollowBatch(
     request: UnfollowBatchRequest,
   ): Promise<StreamResponse<UnfollowBatchResponse>> {

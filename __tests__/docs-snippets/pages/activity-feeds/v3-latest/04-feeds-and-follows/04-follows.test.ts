@@ -3,6 +3,7 @@ import type {
   AcceptFollowResponse,
   FollowResponse,
   RejectFollowResponse,
+  SingleFollowResponse,
   UnfollowBatchResponse,
   UpdateFollowResponse,
 } from '../../../../../../index';
@@ -11,9 +12,10 @@ import { Cleanup } from '../../../../helpers/cleanup';
 import {
   isFeedGroupMissing,
   retryOnFeedGroupMissing,
+  waitForNotificationTypes,
 } from '../../../../helpers/feeds';
 import { uniqueId } from '../../../../helpers/ids';
-import { retry } from '../../../../helpers/wait';
+import { retry, waitForTask } from '../../../../helpers/wait';
 
 const DOCS =
   'activity-feeds/v3-latest/_default/04-feeds-and-follows/04-follows.md';
@@ -485,5 +487,170 @@ describe(DOCS, () => {
     expect(targets(unfollowed.follows)).toEqual([feed.feed]);
     expect(log.mock.calls).toHaveLength(3);
     expect(targets(await followsFrom(timeline.feed))).toEqual([feed2.feed]);
+  });
+
+  it('sets push preferences on follow', async () => {
+    const [johnId, aliceId, bobId, charlieId, dianaId, eveId] =
+      await createUsers('john', 'alice', 'bob', 'charlie', 'diana', 'eve');
+    const timeline = await createFeed('timeline', johnId, johnId);
+    for (const id of [aliceId, bobId, charlieId, dianaId, eveId]) {
+      await createFeed('user', id, id);
+    }
+    // create_notification_activity needs eve's notification feed to exist.
+    await createFeed('notification', eveId, eveId);
+    const [aliceFid, bobFid, charlieFid, dianaFid, eveFid] = [
+      aliceId,
+      bobId,
+      charlieId,
+      dianaId,
+      eveId,
+    ].map((id) => `user:${id}`);
+    const follow = vi.spyOn(client.feeds, 'follow');
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/04-feeds-and-follows/04-follows.md" heading="Push Preferences on Follow" tab="Node.js" index=1
+    // COPY: aliceFid="user:alice", bobFid="user:bob", charlieFid="user:charlie", dianaFid="user:diana", eveFid="user:eve"
+    // Scenario 1: Follow a user and receive notifications for their future activities
+    await client.feeds.follow({
+      source: timeline.feed,
+      target: aliceFid,
+      push_preference: 'all', // You'll get push notifications for Alice's future posts
+    });
+
+    // Scenario 2: Follow a user but don't get notifications for their activities
+    await client.feeds.follow({
+      source: timeline.feed,
+      target: bobFid,
+      push_preference: 'none', // You won't get push notifications for Bob's future posts
+    });
+
+    // Scenario 3: Follow a user silently
+    await client.feeds.follow({
+      source: timeline.feed,
+      target: charlieFid,
+      skip_push: true, // Charlie won't get a "you have a new follower" notification
+      push_preference: 'all', // But you'll still get notifications for Charlie's future posts
+    });
+
+    // Scenario 4: Silent follow with no future notifications
+    await client.feeds.follow({
+      source: timeline.feed,
+      target: dianaFid,
+      skip_push: true, // Diana won't know you followed her
+      push_preference: 'none', // And you won't get notifications for her posts
+    });
+
+    // Scenario 5: Follow a user and create notification activity for Eve
+    await client.feeds.follow({
+      source: timeline.feed,
+      target: eveFid,
+      skip_push: true, // Eve won't get a "you have a new follower" notification
+      create_notification_activity: true, // Eve's notification feed will have a new activity
+      push_preference: 'all', // But you'll still get notifications for Eve's future posts
+    });
+    // #endregion snippet
+
+    const follows = await Promise.all(
+      follow.mock.results.map(
+        async (r) => (await (r.value as Promise<SingleFollowResponse>)).follow,
+      ),
+    );
+    expect(follows.map((f) => [f.target_feed.feed, f.push_preference])).toEqual(
+      [
+        [aliceFid, 'all'],
+        [bobFid, 'none'],
+        [charlieFid, 'all'],
+        [dianaFid, 'none'],
+        [eveFid, 'all'],
+      ],
+    );
+    await waitForNotificationTypes(client, eveId, ['follow']);
+  });
+
+  it('limits the activities copied on follow', async () => {
+    const [aliceId, bobId, charlieId] = await createUsers(
+      'alice',
+      'bob',
+      'charlie',
+    );
+    const alice = await createFeed('timeline', aliceId, aliceId);
+    const bob = await createFeed('user', bobId, bobId);
+    const charlie = await createFeed('user', charlieId, charlieId);
+    // Activities that exist before the follows.
+    for (const [feed, userId] of [
+      [bob, bobId],
+      [charlie, charlieId],
+    ] as const) {
+      await client.feeds.addActivity({
+        feeds: [feed.feed],
+        type: 'post',
+        text: `older post by ${userId}`,
+        user_id: userId,
+      });
+    }
+    const aliceFid = alice.feed;
+    const bobFid = bob.feed;
+    const charlieFid = charlie.feed;
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/04-feeds-and-follows/04-follows.md" heading="Limiting copied activities" tab="Node.js" index=1
+    // COPY: aliceFid="timeline:alice", bobFid="user:bob", charlieFid="user:charlie"
+    // Follow without adding existing activities
+    await client.feeds.follow({
+      source: aliceFid,
+      target: bobFid,
+      activity_copy_limit: 0,
+    });
+
+    // Add only the 20 most recent activities
+    await client.feeds.follow({
+      source: aliceFid,
+      target: charlieFid,
+      activity_copy_limit: 20,
+    });
+    // #endregion snippet
+
+    expect(targets(await followsFrom(aliceFid))).toEqual(
+      [bobFid, charlieFid].sort(),
+    );
+    // Only charlie's existing activity is copied into alice's timeline.
+    const texts = await retry(async () => {
+      const { activities } = await alice.getOrCreate({ user_id: aliceId });
+      if (!activities.length) throw new Error('timeline still empty');
+      return activities.map((a) => a.text);
+    });
+    expect(texts).toEqual([`older post by ${charlieId}`]);
+  });
+
+  it('runs a batch follow as a background task', async () => {
+    const [aliceId, bobId, carolId] = await createUsers(
+      'alice',
+      'bob',
+      'carol',
+    );
+    const aliceFid = (await createFeed('timeline', aliceId, aliceId)).feed;
+    const bobFid = (await createFeed('user', bobId, bobId)).feed;
+    const carolFid = (await createFeed('user', carolId, carolId)).feed;
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/04-feeds-and-follows/04-follows.md" heading="Async batches" tab="Node.js" index=1
+    // COPY: aliceFid="timeline:alice", bobFid="user:bob", carolFid="user:carol"
+    const response = await client.feeds.getOrCreateFollows({
+      follows: [
+        { source: aliceFid, target: bobFid },
+        { source: aliceFid, target: carolFid },
+      ],
+      async: true,
+    });
+
+    console.log(response.task_id);
+    // #endregion snippet
+
+    expect(typeof response.task_id).toBe('string');
+    expect(log.mock.calls[0]).toEqual([response.task_id]);
+    expect(response.follows).toEqual([]);
+    expect(response.created).toEqual([]);
+    await waitForTask(client, response.task_id ?? '');
+    expect(targets(await followsFrom(aliceFid))).toEqual(
+      [bobFid, carolFid].sort(),
+    );
   });
 });

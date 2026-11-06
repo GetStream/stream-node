@@ -95,8 +95,8 @@ describe(DOCS, () => {
     expect(firstPage.next).toBeTruthy();
     expect(secondPage.feeds).toHaveLength(2);
     expect([...fids(firstPage), ...fids(secondPage)].sort()).toEqual(expected);
-    const times = [...firstPage.feeds, ...secondPage.feeds].map((f) =>
-      f.created_at.getTime(),
+    const times = [...firstPage.feeds, ...secondPage.feeds].map(
+      (f) => f.created_at,
     );
     expect(times).toEqual([...times].sort((a, b) => b - a));
   });

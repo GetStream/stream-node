@@ -5,6 +5,7 @@ import { createdAtFromId, DOCS_TEST_PREFIX } from './helpers/ids';
 import {
   describeLeftovers,
   findLeftovers,
+  leftoverCreatedAt,
   removeLeftovers,
 } from './helpers/leaks';
 import type { Leftover } from './helpers/leaks';
@@ -28,7 +29,7 @@ const createdAt = (leftover: Leftover) => {
   // anything else falls back to the server timestamp.
   const fromId = createdAtFromId(leftover.id.split(' ')[0]);
   if (fromId) return fromId;
-  return leftover.createdAt ? new Date(leftover.createdAt) : undefined;
+  return leftoverCreatedAt(leftover);
 };
 
 const loadEnv = () => {

@@ -1,4 +1,12 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 import { StreamError } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -53,6 +61,7 @@ describe(DOCS, () => {
     setId = set.id;
   });
 
+  afterEach(() => vi.restoreAllMocks());
   afterAll(async () => {
     await cleanup.run();
     // Leak check for evaluation sets: none of this file's sets may be left.
@@ -148,13 +157,17 @@ describe(DOCS, () => {
     expect(baseline_run_id).toBe(runId);
   });
 
-  // The generated `listPolicyTestSets()` takes no arguments (TS2554), so
-  // `limit` isn't sent: the API returns its default page size.
   it('lists evaluation sets', async () => {
+    const listPolicyTestSets = vi.spyOn(
+      client.moderation,
+      'listPolicyTestSets',
+    );
+
     // #region snippet docs="moderation/_default/04-configuration/05-evaluations.md" heading="List evaluation sets" tab="Node.js" index=1
     const response = await client.moderation.listPolicyTestSets({ limit: 50 });
     // #endregion snippet
 
+    expect(listPolicyTestSets.mock.calls[0][0]).toEqual({ limit: 50 });
     const listed = response.sets.find((set) => set.id === setId);
     expect(listed).toMatchObject({ name: rowsSetName, config_key: configKey });
     // `last_run` saves a request per set for the last-run status.

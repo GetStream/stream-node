@@ -94,15 +94,8 @@ describe(DOCS, () => {
 
     // #region snippet docs="chat/_default/06-app_and_channel_settings/01-channel_types.md" heading="Restricting guest access" tab="Node.js" index=1
     // COPY: agentType="agent"
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: agentType });
-
     await client.chat.updateChannelType({
       name: agentType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       grants: {
         guest: [], // guests can no longer create agent channels or act as owners
       },
@@ -146,8 +139,6 @@ describe(DOCS, () => {
     // Update an existing channel type
     await client.chat.updateChannelType({
       name: myChannelType,
-      automod: 'disabled',
-      automod_behavior: 'flag',
       max_message_length: 1000,
       reactions: false,
     });
@@ -214,15 +205,11 @@ describe(DOCS, () => {
   });
 
   it('edits commands and replies', async () => {
+    const before = await client.chat.getChannelType({ name: publicType });
     // #region snippet docs="chat/_default/06-app_and_channel_settings/01-channel_types.md" heading="Edit a Channel Type" tab="Node.js" index=1
     // COPY: publicType="public"
-    const current = await client.chat.getChannelType({ name: publicType });
-
     const update = await client.chat.updateChannelType({
       name: publicType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       replies: false,
       commands: ['all'],
     });
@@ -233,7 +220,7 @@ describe(DOCS, () => {
     expect(update.commands).toEqual(
       expect.arrayContaining(['ban', 'giphy', 'mute', 'unban', 'unmute']),
     );
-    expect(update.max_message_length).toBe(current.max_message_length);
+    expect(update.max_message_length).toBe(before.max_message_length);
 
     await waitForChannelTypePropagation();
     const type = await waitForChannelType(publicType, (r) => !r.replies);
@@ -245,13 +232,8 @@ describe(DOCS, () => {
   it('updates feature flags', async () => {
     // #region snippet docs="chat/_default/06-app_and_channel_settings/01-channel_types.md" heading="Edit a Channel Type" tab="Node.js" index=2
     // COPY: publicType="public"
-    const current = await client.chat.getChannelType({ name: publicType });
-
     const update = await client.chat.updateChannelType({
       name: publicType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       typing_events: false,
       read_events: true,
       connect_events: true,
@@ -283,12 +265,8 @@ describe(DOCS, () => {
   it('updates settings with new values', async () => {
     // #region snippet docs="chat/_default/06-app_and_channel_settings/01-channel_types.md" heading="Edit a Channel Type" tab="Node.js" index=3
     // COPY: publicType="public"
-    const current = await client.chat.getChannelType({ name: publicType });
-
     const update = await client.chat.updateChannelType({
       name: publicType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
       max_message_length: 140, // the value this example is changing
       commands: ['giphy', 'ban'],
     });

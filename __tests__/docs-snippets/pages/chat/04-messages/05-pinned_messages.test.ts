@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { convertTimestampToDate, nsToMs } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -83,10 +84,12 @@ describe(DOCS, () => {
 
     expect(message.pinned).toBe(true);
     expect(message.pinned_by?.id).toBe(john);
-    expect(message.pin_expires?.toISOString()).toBe('2077-01-01T00:00:00.000Z');
+    expect(convertTimestampToDate(message.pin_expires)?.toISOString()).toBe(
+      '2077-01-01T00:00:00.000Z',
+    );
 
     expect(timed.message?.pinned).toBe(true);
-    const timedExpiry = timed.message?.pin_expires?.getTime() ?? 0;
+    const timedExpiry = nsToMs(timed.message?.pin_expires ?? 0);
     expect(timedExpiry).toBeGreaterThanOrEqual(before + 110 * 1000);
     expect(timedExpiry).toBeLessThan(Date.now() + 130 * 1000);
 

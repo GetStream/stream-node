@@ -112,22 +112,22 @@ describe(DOCS, () => {
   });
 
   it('checks content', async () => {
-    const messageId = uniqueId('message');
+    const postId = uniqueId('post');
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
     // #region snippet docs="moderation/node/01-getting-started/01-getting-started.md" heading="Check content" tab="Node.js" index=1
-    // COPY: messageId="message-123", userId="user-456", myConfig="my_config"
+    // COPY: postId="post-123", userId="user-456", myConfig="my_config"
     const response = await client.moderation.check({
-      entity_type: 'stream:chat:v1:message',
-      entity_id: messageId,
+      entity_type: 'post',
+      entity_id: postId,
       entity_creator_id: userId,
       moderation_payload: {
-        texts: ['Hello, this is a test message'],
+        texts: ['Selling a bike, pickup in the city'],
       },
       config_key: myConfig,
     });
 
-    console.log(response.recommended_action); // "keep", "flag", or "remove"
+    console.log(response.recommended_action); // "keep", "flag", "remove", "shadow", or "bounce"
     // #endregion snippet
 
     expect(response.status).toBe('complete');
@@ -155,19 +155,25 @@ describe(DOCS, () => {
 
     // #region snippet docs="moderation/node/01-getting-started/01-getting-started.md" heading="Handle the response" tab="Node.js" index=1
     if (response.recommended_action === 'keep') {
-      // Content is safe, no action needed
+      // Publish the content
     } else if (response.recommended_action === 'flag') {
-      // Content is suspicious; Stream has queued it for review
+      // Publish it, and review the queued item
       console.log('Flagged for review:', response.item);
-    } else if (response.recommended_action === 'remove') {
-      // Content violates policies, remove it
-      console.log('Content removed:', response.item);
+    } else if (response.recommended_action === 'shadow') {
+      // Show it only to the author
+    } else if (
+      response.recommended_action === 'remove' ||
+      response.recommended_action === 'bounce' ||
+      response.recommended_action === 'bounce_remove'
+    ) {
+      // Do not publish it. Removed items stay in the review queue.
+      console.log('Not published:', response.item);
     }
     // #endregion snippet
 
     expect(response.recommended_action).toBe('remove');
     expect(log.mock.calls).toHaveLength(1);
-    expect(log.mock.calls[0][0]).toBe('Content removed:');
+    expect(log.mock.calls[0][0]).toBe('Not published:');
     expect(log.mock.calls[0][1]).toBe(response.item);
     expect(typeof response.item?.id).toBe('string');
   });

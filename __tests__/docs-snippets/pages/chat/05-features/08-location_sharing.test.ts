@@ -8,6 +8,7 @@ import {
   vi,
   type MockInstance,
 } from 'vitest';
+import { nsToMs } from '../../../../../index';
 import type { StreamClient } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
@@ -145,15 +146,8 @@ describe(DOCS, () => {
     });
 
     // Enabling it for a channel type.
-    // automod, automod_behavior and max_message_length are required here, so read
-    // the current values and carry them through.
-    const current = await client.chat.getChannelType({ name: channelType });
-
     await client.chat.updateChannelType({
       name: channelType,
-      automod: current.automod,
-      automod_behavior: current.automod_behavior,
-      max_message_length: current.max_message_length,
       shared_locations: true,
     });
     // #endregion snippet
@@ -246,7 +240,7 @@ describe(DOCS, () => {
       longitude: 10,
       message_id: message.id,
     });
-    expect(message.shared_location?.end_at?.getTime()).toBeGreaterThan(
+    expect(nsToMs(message.shared_location?.end_at ?? 0)).toBeGreaterThan(
       Date.now(),
     );
     expect(await activeLiveLocationIds()).toContain(message.id);
@@ -274,10 +268,8 @@ describe(DOCS, () => {
       StreamClient['updateLiveLocation']
     >);
     expect(stopped.message_id).toBe(messageID);
-    expect(stopped.end_at?.getTime()).toBeLessThanOrEqual(Date.now());
-    expect((await storedLocation(messageID))?.end_at?.getTime()).toBe(
-      stopped.end_at?.getTime(),
-    );
+    expect(nsToMs(stopped.end_at ?? 0)).toBeLessThanOrEqual(Date.now());
+    expect((await storedLocation(messageID))?.end_at).toBe(stopped.end_at);
     expect(await activeLiveLocationIds()).not.toContain(messageID);
   });
 

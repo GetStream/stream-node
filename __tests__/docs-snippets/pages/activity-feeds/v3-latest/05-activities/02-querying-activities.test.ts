@@ -95,7 +95,7 @@ describe(DOCS, () => {
     expect(response.activities.every((a) => a.type === 'post')).toBe(true);
     // Newest first: the activity just created comes first.
     expect(response.activities[0].id).toBe(activityId);
-    const times = response.activities.map((a) => a.created_at.getTime());
+    const times = response.activities.map((a) => a.created_at);
     expect(times).toEqual([...times].sort((a, b) => b - a));
   });
 
@@ -218,7 +218,7 @@ describe(DOCS, () => {
     // #endregion snippet
 
     const deleted = response.activities.find((a) => a.id === deletedId);
-    expect(deleted?.deleted_at).toBeInstanceOf(Date);
+    expect(deleted?.deleted_at).toEqual(expect.any(Number));
   });
 
   it('queries moderated activities', async () => {

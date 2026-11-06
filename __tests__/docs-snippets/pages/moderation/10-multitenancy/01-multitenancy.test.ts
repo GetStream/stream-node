@@ -379,19 +379,23 @@ describe(DOCS, () => {
         { name: globalBlocklist, team: '', action: 'flag' },
       ]);
 
-      // API behavior (2026-10-16): a team policy is not applied by `check` with
-      // `config_team` (nor to messages in team channels): a word of its global
-      // blocklist is kept, while the same rule in a policy without a team flags it
-      // (the review queue test above).
-      const { recommended_action } = await client.moderation.check({
-        entity_type: 'stream:chat:v1:message',
-        entity_id: uniqueId('message'),
-        entity_creator_id: author,
-        config_key: configKey,
-        config_team: teamA,
-        moderation_payload: { texts: ['please quuxify'] },
+      // `check` with `config_team` applies the team policy: a word of the team
+      // blocklist is removed, a word of the global blocklist is flagged.
+      const checkText = (text: string) =>
+        client.moderation.check({
+          entity_type: 'stream:chat:v1:message',
+          entity_id: uniqueId('message'),
+          entity_creator_id: author,
+          config_key: configKey,
+          config_team: teamA,
+          moderation_payload: { texts: [text] },
+        });
+      await retry(async () => {
+        const { recommended_action } = await checkText('please frobnicate');
+        expect(recommended_action).toBe('remove');
       });
-      expect(recommended_action).toBe('keep');
+      const { recommended_action } = await checkText('please quuxify');
+      expect(recommended_action).toBe('flag');
     });
   });
 });

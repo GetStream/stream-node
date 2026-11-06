@@ -246,6 +246,36 @@ describe(DOCS, () => {
     expect(response.next).toBeUndefined();
   });
 
+  it('Pagination', async () => {
+    const collectionName = uniqueId('movies');
+    const first = await createCollection(newCollection(collectionName));
+    const second = await createCollection(newCollection(collectionName));
+    const third = await createCollection(newCollection(collectionName));
+    // A page size of 1 makes the loop follow `next` across three pages.
+    const pageSize = 1;
+    const query = vi.spyOn(client.feeds, 'queryCollections');
+
+    // #region snippet docs="activity-feeds/v3-latest/_default/06-features/11-collections.md" heading="Pagination" tab="Node.js" index=1
+    // COPY: collectionName="movies", pageSize=100
+    let next;
+    const all = [];
+    do {
+      const page = await client.feeds.queryCollections({
+        filter: { name: collectionName },
+        limit: pageSize,
+        next,
+      });
+      all.push(...page.collections);
+      next = page.next;
+    } while (next);
+    // #endregion snippet
+
+    expect(query.mock.calls.length).toBeGreaterThanOrEqual(3);
+    expect(all.map((c) => c.id).sort()).toEqual(
+      [first.id, second.id, third.id].sort(),
+    );
+  });
+
   it('Adding Collections to an Activity', async () => {
     const { ref: collectionRef } = await createCollection();
     const jackFeed = `user:${jackId}`;

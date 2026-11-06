@@ -11,4 +11,14 @@ export {
   InvalidWebhookErrorMessages,
   verifyAndParseWebhook,
 } from './src/utils/webhook';
+export {
+  convertTimestampToDate,
+  dateToNs,
+  msToNs,
+  nowNs,
+  NS_PER_MS,
+  nsToDate,
+  nsToMs,
+  nsToRfc3339,
+} from './src/utils/time';
 export { StreamError } from './src/types';

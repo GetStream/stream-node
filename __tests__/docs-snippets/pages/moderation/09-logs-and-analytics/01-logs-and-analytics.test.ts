@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { StreamClient, UserResponse } from '../../../../../index';
 import { getServerClient } from '../../../helpers/clients';
 import { Cleanup } from '../../../helpers/cleanup';
 import { uniqueId } from '../../../helpers/ids';
@@ -80,95 +79,6 @@ describe(DOCS, () => {
     expect(response.logs.every((log) => log.type === 'delete_message')).toBe(
       true,
     );
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no exportModerationLogs (POST /api/v2/moderation/logs/export is `Ignore: true` in the spec)', async () => {
-    // The node SDK has no exportModerationLogs: type the missing method (with the
-    // request shape the docs use) so the skipped region typechecks and lints. It isn't
-    // there at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        exportModerationLogs: (request: {
-          filter: Record<string, unknown>;
-        }) => Promise<{ task_id: string }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/09-logs-and-analytics/01-logs-and-analytics.md" heading="Export Moderation Logs" tab="Node.js" index=1
-    const response = await client.moderation.exportModerationLogs({
-      filter: { created_at: { $gte: '2024-01-01T00:00:00Z' } },
-    });
-    // #endregion snippet
-
-    expect(response.task_id).toBeTruthy();
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no getModerationAnalytics (POST /api/v2/moderation/analytics is `Ignore: true` in the spec)', async () => {
-    // The node SDK has no getModerationAnalytics: type the missing method (with the
-    // request shape the docs use) so the skipped region typechecks and lints. It isn't
-    // there at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        getModerationAnalytics: (request: {
-          from: string;
-          to: string;
-        }) => Promise<{ analytics: Record<string, unknown> }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/09-logs-and-analytics/01-logs-and-analytics.md" heading="Get Moderation Analytics" tab="Node.js" index=1
-    const response = await client.moderation.getModerationAnalytics({
-      from: '2024-01-01T00:00:00Z',
-      to: '2024-01-31T23:59:59Z',
-    });
-    // #endregion snippet
-
-    expect(response.analytics).toBeDefined();
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no queryUsageStats (POST /api/v2/moderation/usage_stats is `Ignore: true` in the spec)', async () => {
-    // The node SDK has no queryUsageStats: type the missing method (with the request
-    // shape the docs use) so the skipped region typechecks and lints. It isn't there
-    // at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        queryUsageStats: (request: {
-          from: string;
-          to: string;
-        }) => Promise<{ items: unknown[] }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/09-logs-and-analytics/01-logs-and-analytics.md" heading="Query Usage Stats" tab="Node.js" index=1
-    const response = await client.moderation.queryUsageStats({
-      from: '2024-01-01T00:00:00Z',
-      to: '2024-01-31T23:59:59Z',
-    });
-    // #endregion snippet
-
-    expect(Array.isArray(response.items)).toBe(true);
-  });
-
-  it.skip('BLOCKED: SDK issue: the node SDK has no getUserModerationReport (GET /api/v2/moderation/user_report is left out of the spec)', async () => {
-    const reportUser = await createMember('report-user');
-    // The node SDK has no getUserModerationReport: type the missing method (from the
-    // API's response) so the skipped region typechecks and lints. It isn't there at runtime.
-    const client = getServerClient() as StreamClient & {
-      moderation: {
-        getUserModerationReport: (request: {
-          user_id: string;
-        }) => Promise<{ user: UserResponse }>;
-      };
-    };
-
-    // #region snippet docs="moderation/_default/09-logs-and-analytics/01-logs-and-analytics.md" heading="Get User Moderation Report" tab="Node.js" index=1
-    // COPY: reportUser="user_123"
-    const response = await client.moderation.getUserModerationReport({
-      user_id: reportUser,
-    });
-    // #endregion snippet
-
-    expect(response.user.id).toBe(reportUser);
   });
 
   it('gets the flag count of a user', async () => {
