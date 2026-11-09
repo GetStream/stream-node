@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/GetStream/stream-node/compare/v0.9.0...v0.9.1) (2026-11-09)
+
+
+### Features
+
+* deprecate connectOpenAi in favour of Vision Agents ([#381](https://github.com/GetStream/stream-node/issues/381)) ([bdae28d](https://github.com/GetStream/stream-node/commit/bdae28d3c3b69f57196b12c519ae71038c36153b))
+* expose the parsed API error on StreamError ([#388](https://github.com/GetStream/stream-node/issues/388)) ([13770c8](https://github.com/GetStream/stream-node/commit/13770c82dd505bf97bb55315625bdae6a378270e))
+
 ## [0.9.0](https://github.com/GetStream/stream-node/compare/v0.8.15...v0.9.0) (2026-11-06)
 
 
