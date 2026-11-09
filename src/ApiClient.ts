@@ -89,6 +89,7 @@ export class ApiClient {
           metadata,
           error!.code,
           undefined,
+          error!,
         );
       }
 
