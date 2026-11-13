@@ -67,7 +67,8 @@ describe.skip('AI agent integration', () => {
     const [, agent] = await createTestStreamAndRealtimeClients();
     let errorEvent: any = null;
 
-    agent.on('realtime.event', ({ event }: { event: any }) => {
+    agent.on('realtime.event', (payload) => {
+      const { event } = payload as { event: any };
       if (event.type === 'error') {
         errorEvent = event;
       }
@@ -147,7 +148,8 @@ describe.skip('AI agent integration', () => {
             required: ['lat', 'lng', 'location'],
           },
         },
-        async ({ lat, lng }: { lat: number; lng: number }) => {
+        async (args) => {
+          const { lat, lng } = args as { lat: number; lng: number };
           const result = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`,
           );
