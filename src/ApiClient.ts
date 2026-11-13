@@ -18,7 +18,7 @@ export class ApiClient {
   sendRequest = async <T>(
     method: string,
     url: string,
-    pathParams?: Record<string, string>,
+    pathParams?: Record<string, string | number>,
     queryParams?: Record<string, any>,
     body?: any,
     requestContentType?: string,
@@ -28,7 +28,10 @@ export class ApiClient {
     const encodedParams = this.queryParamsStringify(queryParams);
     if (pathParams) {
       Object.keys(pathParams).forEach((paramName) => {
-        url = url.replace(`{${paramName}}`, pathParams[paramName]);
+        url = url.replace(
+          `{${paramName}}`,
+          encodeURIComponent(pathParams[paramName]),
+        );
       });
     }
 

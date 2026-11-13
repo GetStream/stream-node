@@ -248,7 +248,7 @@ export interface ActionLogResponse {
    */
   reason: string;
   /**
-   * Classification of who triggered the action (e.g. user, moderator, automod, api_integration)
+   * Classification of who triggered the action (e.g. user, moderator, automod, agent_reviewer, api_integration)
    */
   reporter_type: string;
   /**
@@ -265,9 +265,10 @@ export interface ActionLogResponse {
   user_id: string;
   ai_providers: Array<string>;
   /**
-   * Additional metadata about the action
+   * Additional metadata about the action. An agent_recommendation log keeps the suggested action under recommended_action
    */
   custom: Record<string, any>;
+  agent_recommendation?: AgentRecommendationResponse;
   review_queue_item?: ReviewQueueItemResponse;
   /**
    * User response object
@@ -951,7 +952,7 @@ export interface ActivityRestoredEvent {
 
 export interface ActivitySelectorConfig {
   /**
-   * Type of selector. One of: popular, proximity, following, current_feed, query, interest, follow_suggestion
+   * Type of selector. One of: popular, proximity, following, current_feed, query, interest, follow_suggestion, friends_engaged
    */
   type: ActivitySelectorType;
   /**
@@ -962,6 +963,18 @@ export interface ActivitySelectorConfig {
    * Flexible relative time window for activity selection (e.g., '1h', '3d', '1y'). Activities older than this duration will be filtered out. Cannot be used together with cutoff_time
    */
   cutoff_window?: string;
+  /**
+   * Who counts as a friend for the friends_engaged selector: 'mutual' (default, users the viewer and they follow each other) or 'following' (users the viewer follows). Only supported on the friends_engaged selector
+   */
+  friend_type?: 'mutual' | 'following';
+  /**
+   * Maximum number of close friends the friends_engaged selector reads reactions from (1-50, default 10). Only supported on the friends_engaged selector
+   */
+  max_friends?: number;
+  /**
+   * Minimum number of distinct close friends that must have reacted to an activity for friends_engaged to select it (1-10, default 1, not above max_friends). Only supported on the friends_engaged selector
+   */
+  min_friends?: number;
   /**
    * Minimum popularity threshold. For the 'popular' selector, omit to use the default (5); values below 1 are rejected
    */
@@ -978,6 +991,10 @@ export interface ActivitySelectorConfig {
    * Radius in kilometers the proximity selector searches around the viewer's location (the request's viewer_location, else the user's custom.location) when its filter has no near or within_bounds. Greater than 0 and at most 250. Omit to use the default (10). Only supported on the proximity selector
    */
   viewer_location_radius_km?: number;
+  /**
+   * Reaction types that count for the friends_engaged selector (at most 10, default all types). Only supported on the friends_engaged selector
+   */
+  reaction_types?: Array<string>;
   /**
    * Sort parameters for activity selection
    */
@@ -1004,6 +1021,18 @@ export interface ActivitySelectorConfigResponse {
    */
   cutoff_window?: string;
   /**
+   * Who counts as a friend for the friends_engaged selector
+   */
+  friend_type?: 'mutual' | 'following';
+  /**
+   * Maximum number of close friends the friends_engaged selector reads reactions from
+   */
+  max_friends?: number;
+  /**
+   * Minimum number of distinct close friends that must have reacted for friends_engaged to select an activity
+   */
+  min_friends?: number;
+  /**
    * Minimum popularity threshold. For the 'popular' selector, values below 1 are normalized to the default (5) at read time.
    */
   min_popularity?: number;
@@ -1019,6 +1048,10 @@ export interface ActivitySelectorConfigResponse {
    * Radius in kilometers the proximity selector searches around the viewer's location
    */
   viewer_location_radius_km?: number;
+  /**
+   * Reaction types that count for the friends_engaged selector
+   */
+  reaction_types?: Array<string>;
   /**
    * Sort parameters for activity selection
    */
@@ -1041,7 +1074,8 @@ export type ActivitySelectorType =
   | 'current_feed'
   | 'query'
   | 'interest'
-  | 'follow_suggestion';
+  | 'follow_suggestion'
+  | 'friends_engaged';
 
 export interface ActivityUnpinnedEvent {
   /**
@@ -1506,6 +1540,262 @@ export interface AddUserGroupMembersResponse {
   user_group?: UserGroupResponse;
 }
 
+export interface AgentFeedbackResponse {
+  /**
+   * Nora review this correction is about
+   */
+  agent_review_id: string;
+  /**
+   * Text of the item when the correction was saved
+   */
+  content_excerpt: string;
+  /**
+   * When the correction was first saved
+   */
+  created_at: TimestampNS;
+  /**
+   * Moderator who submitted the correction
+   */
+  created_by: string;
+  /**
+   * Entity type of the queue item
+   */
+  entity_type: string;
+  /**
+   * Feedback row id
+   */
+  id: string;
+  /**
+   * How similar cases should be judged
+   */
+  improvement: string;
+  /**
+   * Review queue item the correction is about
+   */
+  item_id: string;
+  /**
+   * Action the moderator took
+   */
+  moderator_action: string;
+  /**
+   * Policy action Nora recommended
+   */
+  nora_action:
+    | 'keep'
+    | 'flag'
+    | 'mask'
+    | 'mask_flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove';
+  /**
+   * Why the moderator disagreed
+   */
+  reason: string;
+  /**
+   * When the correction was last saved
+   */
+  updated_at: TimestampNS;
+  /**
+   * Labels Nora matched on this review
+   */
+  labels: Array<string>;
+}
+
+export interface AgentRecommendationPayload {
+  /**
+   * Why Nora suggests this action. Stored on the action log, cut to 500 bytes
+   */
+  reason: string;
+  /**
+   * Action Nora suggests for the item
+   */
+  recommended_action:
+    | 'keep'
+    | 'flag'
+    | 'mask'
+    | 'mask_flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove'
+    | 'review';
+}
+
+export interface AgentRecommendationResponse {
+  /**
+   * Why Nora suggested this action
+   */
+  reason: string;
+  /**
+   * Action Nora suggested for the item
+   */
+  recommended_action:
+    | 'keep'
+    | 'flag'
+    | 'mask'
+    | 'mask_flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove'
+    | 'review';
+}
+
+export interface AgentReviewJudgmentResponse {
+  /**
+   * Why the agent matched this label
+   */
+  explanation?: string;
+  /**
+   * Moderation label this judgment is about
+   */
+  label?: string;
+  /**
+   * The agent's verdict for this label
+   */
+  verdict?: string;
+  /**
+   * Quotes from the content that support the verdict
+   */
+  evidence?: Array<string>;
+}
+
+export interface AgentReviewResponse {
+  /**
+   * True when the agent did not have the full context it needed
+   */
+  context_incomplete: boolean;
+  /**
+   * When this review was recorded
+   */
+  created_at: TimestampNS;
+  /**
+   * Lifecycle status of the review
+   */
+  status: 'pending' | 'processing' | 'done' | 'failed' | 'skipped';
+  /**
+   * Session id of the agent run that produced this review
+   */
+  agent_session_id?: string;
+  /**
+   * The agent's confidence in its recommended action, from 0 to 1
+   */
+  confidence?: number;
+  /**
+   * Whether the flag is supported, a likely false positive, or uncertain
+   */
+  flag_assessment?: 'supported' | 'likely_false_positive' | 'uncertain';
+  /**
+   * Model route that produced this review
+   */
+  model_route?: string;
+  /**
+   * Why Nora chose the recommended action
+   */
+  reason?: string;
+  /**
+   * Action the agent recommends for the item
+   */
+  recommended_action?:
+    | 'keep'
+    | 'flag'
+    | 'mask'
+    | 'mask_flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove'
+    | 'review';
+  /**
+   * Why the review was skipped or failed. Set when status is skipped or failed
+   */
+  skip_reason?: string;
+  /**
+   * Short summary of the review
+   */
+  summary?: string;
+  /**
+   * Per-label judgments, with the evidence the agent quoted
+   */
+  judgments?: Array<AgentReviewJudgmentResponse>;
+  /**
+   * Token usage reported for this review
+   */
+  usage?: Record<string, any>;
+}
+
+export interface AgentReviewSettingsPayload {
+  /**
+   * The app's Accelerate agent config with role agent_moderator.
+   */
+  agent_config_id?: string;
+  /**
+   * Minimum verdict confidence (0-1) for auto_act to apply an action. Defaults to 0.9.
+   */
+  auto_act_min_confidence?: number;
+  /**
+   * Days of the user's moderation history given to the agent. Defaults to 7, at most 30.
+   */
+  context_days?: number;
+  /**
+   * Surrounding items given to the agent on each side of the reviewed one: chat messages, Feeds comments, or the author's other Feeds activities. Defaults to 20, at most 100.
+   */
+  context_messages?: number;
+  /**
+   * Turns the agent reviewer on. It only runs when agent_config_id is set too.
+   */
+  enabled?: boolean;
+  /**
+   * Maximum reviews in flight for the app. Defaults to 10, at most 100.
+   */
+  max_concurrency?: number;
+  /**
+   * approve_first records the verdict for a moderator to approve; auto_act applies it when its confidence reaches auto_act_min_confidence; export_only changes nothing on the review queue and only exports each verdict for evaluation. Defaults to approve_first.
+   */
+  mode?: 'approve_first' | 'auto_act' | 'export_only';
+  /**
+   * Sends the images of the content under review to the agent, so it can judge them alongside the text. The agent config must run on a model that sees images. Defaults to false.
+   */
+  review_images?: boolean;
+  /**
+   * Fraction (0-1) of checks reviewed with scope all_checks. Defaults to 1.
+   */
+  sample_rate?: number;
+  /**
+   * Which checks are reviewed: flagged ones only, or all_checks sampled by sample_rate. Defaults to flagged.
+   */
+  scope?: 'flagged' | 'all_checks';
+  /**
+   * Moderation rule IDs: only items flagged by one of these rules are reviewed, and items flagged only by other sources are left to moderators. Empty reviews every flagged item. Only used with scope flagged; at most 100.
+   */
+  rule_ids?: Array<string>;
+}
+
+export interface AgentReviewSummaryResponse {
+  /**
+   * Verdict confidence from 0 to 1
+   */
+  confidence: number;
+  /**
+   * pending, processing, done, failed, or skipped
+   */
+  status: string;
+  /**
+   * Whether the flag matches the content. Set once the review is done
+   */
+  flag_assessment?: string;
+  /**
+   * The action Nora recommends. Set once the review is done
+   */
+  recommended_action?: string;
+}
+
 export interface AggregatedActivityResponse {
   /**
    * Number of activities in this aggregation
@@ -1826,7 +2116,15 @@ export interface AppResponseFields {
   geofences?: Array<GeofenceResponse>;
   image_moderation_labels?: Array<string>;
   activity_metrics_config?: Record<string, number>;
+  /**
+   * Settings for the moderation agent reviewer, which reviews moderation outcomes and proposes or applies an action.
+   */
+  agent_review?: AgentReviewSettingsPayload;
   datadog_info?: DataDogInfo;
+  /**
+   * Settings for the moderation agent reviewer, which reviews moderation outcomes and proposes or applies an action.
+   */
+  effective_agent_review?: AgentReviewSettingsPayload;
   moderation_dashboard_preferences?: ModerationDashboardPreferences;
 }
 
@@ -1991,7 +2289,7 @@ export interface ArrangeConfig {
    */
   key?: string;
   /**
-   * Arrangement mode. Currently only 'blend' is supported; 'diversify' and 'slot' are reserved
+   * Arrangement mode. 'blend' and 'diversify' are supported; 'slot' is reserved
    */
   mode?: string;
   /**
@@ -1999,6 +2297,7 @@ export interface ArrangeConfig {
    */
   tail_below?: number;
   blend?: BlendArrangeConfig;
+  diversify?: DiversifyArrangeConfig;
 }
 
 export interface AsyncBulkImageModerationEvent {
@@ -3150,6 +3449,7 @@ export interface CallCreatedEvent {
 }
 
 export interface CallCustomPropertyParameters {
+  expected_value?: any;
   operator?: string;
   property_key?: string;
 }
@@ -3648,7 +3948,7 @@ export interface CallRejectedEvent {
    */
   type: string;
   /**
-   * Provides information about why the call was rejected. You can provide any value, but the Stream API and SDKs use these default values: rejected, cancel, timeout and busy
+   * Provides information about why the call was rejected. You can provide any value, but the Stream API and SDKs use these default values: decline, cancel, timeout and busy
    */
   reason?: string;
 }
@@ -6637,6 +6937,7 @@ export interface ClosedCaptionRuleParameters {
   threshold?: number;
   time_window?: string;
   harm_labels?: Array<string>;
+  severities?: Array<string>;
   llm_harm_labels?: Record<string, string>;
 }
 
@@ -7146,6 +7447,10 @@ export interface ConfigResponse {
   updated_at: TimestampNS;
   supported_video_call_harm_types: Array<string>;
   /**
+   * The version of this configuration moderation currently runs
+   */
+  published_version?: number;
+  /**
    * Configurable image moderation label definitions for dashboard rendering
    */
   ai_image_label_definitions?: Array<AIImageLabelDefinition>;
@@ -7173,6 +7478,25 @@ export interface ConfigResponse {
   video_call_rule_config?: VideoCallRuleConfig;
 }
 
+export interface ConfigVersionResponse {
+  /**
+   * When this version was saved
+   */
+  created_at: TimestampNS;
+  /**
+   * ID of the user who saved this version, empty when saved without a user
+   */
+  created_by: string;
+  /**
+   * Whether this is the version moderation currently runs
+   */
+  published: boolean;
+  /**
+   * Sequential version number, per key and team
+   */
+  version: number;
+}
+
 export interface ContentCountRuleParameters {
   threshold?: number;
   time_window?: string;
@@ -7184,6 +7508,7 @@ export interface ContentCountryCodeParameters {
 }
 
 export interface ContentCustomPropertyCountParameters {
+  expected_value?: any;
   operator?: string;
   property_key?: string;
   threshold?: number;
@@ -7191,6 +7516,7 @@ export interface ContentCustomPropertyCountParameters {
 }
 
 export interface ContentCustomPropertyParameters {
+  expected_value?: any;
   operator?: string;
   property_key?: string;
 }
@@ -7209,6 +7535,38 @@ export interface CoordinatesResponse {
 export interface CountByMinuteResponse {
   count: number;
   start_ts: TimestampNS;
+}
+
+export interface CountReviewQueueRequest {
+  user_id?: string;
+  /**
+   * Filter conditions for review queue items, the same filter Query Review Queue takes. The count covers exactly the items that query lists for this filter, ignoring sort, paging and item locks.
+   */
+  filter?: Record<string, any>;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface CountReviewQueueResponse {
+  /**
+   * Whether more items match than are counted exactly (50,000), so total is a lower bound
+   */
+  capped: boolean;
+  duration: string;
+  /**
+   * Whether the count is missing or out of date because the queue changed since it was computed. A later request may return a fresher count.
+   */
+  pending: boolean;
+  /**
+   * Number of review queue items matching the filter. When capped is true, at least this many items match.
+   */
+  total: number;
+  /**
+   * When the count was computed. Counts are refreshed in the background as the review queue changes.
+   */
+  computed_at?: TimestampNS;
 }
 
 export interface Coverage {
@@ -9070,6 +9428,29 @@ export interface DeviceResponse {
   voip?: boolean;
 }
 
+export interface DiversifyArrangeConfig {
+  /**
+   * Decay strategy: per-repeat score multiplier, greater than 0 and less than 1. Defaults to 0.5
+   */
+  decay?: number;
+  /**
+   * Decay strategy: the lowest multiplier a repeated key can reach, at least 0 and less than 1. Defaults to 0.25
+   */
+  floor?: number;
+  /**
+   * Cap strategy: the most items of one key value allowed in any window of consecutive slots. At least 1
+   */
+  max?: number;
+  /**
+   * Diversify strategy: 'cap' (default) or 'decay'
+   */
+  strategy?: string;
+  /**
+   * Cap strategy: window size in slots, greater than max and at most 100. Defaults to max + 1
+   */
+  window?: number;
+}
+
 export interface DraftPayloadResponse {
   /**
    * Message ID is unique string identifier of the message
@@ -9470,6 +9851,10 @@ export interface EventHook {
   sns_event_based_message_group_id_enabled?: boolean;
   sns_key?: string;
   sns_region?: string;
+  /**
+   * @deprecated
+   * Deprecated: Role auth was never supported; use resource auth.
+   */
   sns_role_arn?: string;
   sns_secret?: string;
   sns_topic_arn?: string;
@@ -9478,6 +9863,10 @@ export interface EventHook {
   sqs_key?: string;
   sqs_queue_url?: string;
   sqs_region?: string;
+  /**
+   * @deprecated
+   * Deprecated: Role auth was never supported; use resource auth.
+   */
   sqs_role_arn?: string;
   sqs_secret?: string;
   timeout_ms?: number;
@@ -11331,6 +11720,26 @@ export interface GetActivityResponse {
   activity: ActivityResponse;
 }
 
+export interface GetAgentReviewStatusResponse {
+  /**
+   * Actions Nora took in the last 7 days
+   */
+  applied: number;
+  duration: string;
+  /**
+   * Items Nora escalated in the last 7 days
+   */
+  escalated: number;
+  /**
+   * Reviews that finished in the last 7 days
+   */
+  reviewed: number;
+  /**
+   * Why the latest review failed. Absent unless that review failed
+   */
+  last_error?: string;
+}
+
 export interface GetAppealResponse {
   duration: string;
   item?: AppealItemResponse;
@@ -11554,6 +11963,12 @@ export interface GetCommentsResponse {
 
 export interface GetConfigResponse {
   duration: string;
+  config?: ConfigResponse;
+}
+
+export interface GetConfigVersionResponse {
+  duration: string;
+  version: ConfigVersionResponse;
   config?: ConfigResponse;
 }
 
@@ -12206,6 +12621,7 @@ export interface GetRetentionPolicyRunsResponse {
 
 export interface GetReviewQueueItemResponse {
   duration: string;
+  agent_review?: AgentReviewResponse;
   item?: ReviewQueueItemResponse;
 }
 
@@ -12454,6 +12870,7 @@ export interface IPFlagCountRuleParameters {
   threshold?: number;
   time_window?: string;
   harm_labels?: Array<string>;
+  severities?: Array<string>;
 }
 
 export interface ImageContentParameters {
@@ -12541,6 +12958,8 @@ export interface ImportBlockListResponse {
   task_id: string;
 }
 
+export type ImportCustomFormat = 'root' | 'nested';
+
 export interface ImportTask {
   created_at: TimestampNS;
   id: string;
@@ -12570,6 +12989,10 @@ export interface ImportV2TaskItem {
 }
 
 export interface ImportV2TaskSettings {
+  /**
+   * How custom fields are read from imported items: root (default) takes unknown root keys as custom data, nested reads them from a custom object and is only supported for feeds imports.
+   */
+  custom_format?: ImportCustomFormat;
   merge_custom?: boolean;
   mode?: string;
   path?: string;
@@ -13223,14 +13646,14 @@ export interface LayoutSettingsResponse {
 
 export interface LifecycleSettingsRequest {
   /**
-   * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer (currently: when the caller cancels the ring). Fixed at call creation
+   * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer: when the caller cancels the ring, or when the ring times out on the server (missed_call_timeout_ms) without anyone accepting or joining. Fixed at call creation
    */
   mode?: CallLifecycleMode;
 }
 
 export interface LifecycleSettingsResponse {
   /**
-   * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer (currently: when the caller cancels the ring). Fixed at call creation
+   * Call lifecycle mode. One of: reusable, single_use. A single_use call cannot be reused once it has ended; the server ends it when its ring settles without an answer: when the caller cancels the ring, or when the ring times out on the server (missed_call_timeout_ms) without anyone accepting or joining. Fixed at call creation
    */
   mode: CallLifecycleMode;
 }
@@ -13271,6 +13694,18 @@ export interface LimitsSettingsResponse {
   max_participants_exclude_owner?: boolean;
 }
 
+export interface ListAgentFeedbackResponse {
+  duration: string;
+  /**
+   * Corrections, newest first
+   */
+  feedback: Array<AgentFeedbackResponse>;
+  /**
+   * Cursor for the next page. Absent when this is the last page
+   */
+  next?: string;
+}
+
 export interface ListBlockListResponse {
   /**
    * Duration of the request in milliseconds
@@ -13299,6 +13734,18 @@ export interface ListCommandsResponse {
    * List of commands
    */
   commands: Array<Command>;
+}
+
+export interface ListConfigVersionsResponse {
+  duration: string;
+  /**
+   * Retained versions of this configuration, newest first, including the published one
+   */
+  versions: Array<ConfigVersionResponse>;
+  /**
+   * The version moderation currently runs
+   */
+  published_version?: number;
 }
 
 export interface ListDevicesResponse {
@@ -13583,6 +14030,17 @@ export interface MarkUnreadRequest {
    * User request object
    */
   user?: UserRequest;
+}
+
+export interface MatchedBlocklist {
+  /**
+   * Blocklist name, as set on the rule condition.
+   */
+  name: string;
+  /**
+   * Distinct text the blocklist matched in the content, at most 10 values of up to 256 bytes each. Word, email and domain blocklists report a single match, in the normalized form they compare, even when several words hit; regex lists and domain/email allowlists report every match, except that an allowlist with LLM domain validation enabled reports the one URL the check kept. Regex lists match on the text with invisible characters removed, except the built-in URL list, which reports the URL as it appears in the content. Can be empty when the blocklist hit but no value was recorded (for example a flag stored before this field existed).
+   */
+  matches: Array<string>;
 }
 
 export interface MatchedContent {
@@ -14956,12 +15414,17 @@ export interface ModerationCheckCompletedEvent {
   custom: Record<string, any>;
   type: string;
   received_at?: TimestampNS;
+  /**
+   * Content payload for moderation
+   */
+  moderation_payload?: ModerationPayloadResponse;
 }
 
 export interface ModerationConfig {
   async?: boolean;
   created_at?: Date;
   key?: string;
+  published_version?: number;
   team?: string;
   updated_at?: Date;
   supported_video_call_harm_types?: Array<string>;
@@ -15023,24 +15486,45 @@ export interface ModerationDashboardPreferences {
 
 export interface ModerationEngineConfigRequest {
   /**
-   * LLM model used when the provider resolves to llm. Not allowed with provider nlp. Empty uses the app's moderation settings
+   * LLM model used when the provider resolves to llm, or a Stream model with provider stream (an alias, or a pinned version the server accepts). Not allowed with provider nlp. Empty uses the app's moderation settings, or the latest Stream model
    */
-  model?: 'gpt-4o-mini' | 'gpt-4o';
+  model?:
+    | 'gpt-4o-mini'
+    | 'gpt-4o'
+    | 'gpt-6-luna'
+    | 'stream-mammoth-1'
+    | 'stream-elephant-1';
   /**
-   * llm or nlp. Empty follows the app's LLM moderation setting
+   * llm, nlp or stream. Empty follows the app's LLM moderation setting
    */
-  provider?: 'llm' | 'nlp';
+  provider?: 'llm' | 'nlp' | 'stream';
+  /**
+   * OpenAI reasoning effort for model. Requires model, and must be one the model accepts. Empty uses the model's default
+   */
+  reasoning_effort?: string;
+  /**
+   * How sure a Stream model must be before it flags: relaxed, balanced or strict. Only with provider stream. Empty is balanced
+   */
+  strictness?: 'relaxed' | 'balanced' | 'strict';
 }
 
 export interface ModerationEngineConfigResponse {
   /**
-   * LLM model used when the provider resolves to llm. Not allowed with provider nlp. Empty uses the app's moderation settings
+   * LLM model used when the provider resolves to llm, or a Stream model with provider stream (an alias, or a pinned version the server accepts). Not allowed with provider nlp. Empty uses the app's moderation settings, or the latest Stream model
    */
   model?: string;
   /**
-   * llm or nlp. Empty follows the app's LLM moderation setting
+   * llm, nlp or stream. Empty follows the app's LLM moderation setting
    */
-  provider?: 'llm' | 'nlp';
+  provider?: 'llm' | 'nlp' | 'stream';
+  /**
+   * OpenAI reasoning effort for model. Requires model, and must be one the model accepts. Empty uses the model's default
+   */
+  reasoning_effort?: string;
+  /**
+   * How sure a Stream model must be before it flags: relaxed, balanced or strict. Only with provider stream. Empty is balanced
+   */
+  strictness?: 'relaxed' | 'balanced' | 'strict';
 }
 
 export interface ModerationFeedbackItemResponse {
@@ -15358,6 +15842,8 @@ export interface ModerationQueueResponse {
   description: string;
   id: string;
   item_count: number;
+  item_count_capped: boolean;
+  item_count_pending: boolean;
   name: string;
   type: string;
   updated_at: TimestampNS;
@@ -15463,6 +15949,10 @@ export interface ModerationRulesTriggeredEvent {
    * The violation number for call rules (optional)
    */
   violation_number?: number;
+  /**
+   * Blocklists that the rule's blocklist conditions (`text_content`, `text_rule`) matched, each with the text it matched in the content. Omitted when the rule has no such condition or none matched.
+   */
+  matched_blocklists?: Array<MatchedBlocklist>;
   /**
    * Ordered list of contents whose verdicts contributed to an aggregation rule's threshold. Populated only for aggregation rules when callers supplied `content_ids`.
    */
@@ -15940,6 +16430,7 @@ export interface OCRContentParameters {
   label_operator?: string;
   severity?: string;
   harm_labels?: Array<string>;
+  severities?: Array<string>;
 }
 
 export interface OCRRule {
@@ -16848,6 +17339,26 @@ export interface PrivacySettingsResponse {
    * The settings for typing indicator events.
    */
   typing_indicators?: TypingIndicatorsResponse;
+}
+
+export interface PublishConfigVersionRequest {
+  /**
+   * Team associated with the configuration
+   */
+  team?: string;
+  /**
+   * Optional user ID to associate with the audit log entry
+   */
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface PublishConfigVersionResponse {
+  duration: string;
+  config?: ConfigResponse;
 }
 
 export interface PublishedTrackFlags {
@@ -20068,6 +20579,7 @@ export interface ReviewQueueItemResponse {
    */
   teams?: Array<string>;
   activity?: EnrichedActivity;
+  agent_review?: AgentReviewSummaryResponse;
   appeal?: AppealItemResponse;
   /**
    * User response object
@@ -20831,6 +21343,60 @@ export interface SRTIngress {
   address: string;
 }
 
+export interface SaveConfigVersionRequest {
+  /**
+   * Latest version the edit was based on, 0 for a policy without versions. The save is rejected when a newer version exists
+   */
+  base_version: number;
+  /**
+   * Unique identifier for the moderation configuration
+   */
+  key: string;
+  /**
+   * Whether moderation should be performed asynchronously
+   */
+  async?: boolean;
+  /**
+   * Team associated with the configuration
+   */
+  team?: string;
+  /**
+   * Optional user ID to associate with the audit log entry
+   */
+  user_id?: string;
+  ai_audio_config?: AIAudioConfigRequest;
+  ai_image_config?: AIImageConfig;
+  ai_text_config?: AITextConfig;
+  ai_video_config?: AIVideoConfigRequest;
+  automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
+  automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
+  automod_toxicity_config?: AutomodToxicityConfig;
+  aws_rekognition_config?: AIImageConfig;
+  block_list_config?: BlockListConfig;
+  bodyguard_config?: AITextConfig;
+  engine?: ModerationEngineConfigRequest;
+  flood_config?: FloodConfig;
+  google_vision_config?: GoogleVisionConfig;
+  intent_config?: IntentConfigRequest;
+  llm_config?: LLMConfig;
+  rule_builder_config?: RuleBuilderConfig;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+  velocity_filter_config?: VelocityFilterConfig;
+  video_call_rule_config?: VideoCallRuleConfig;
+}
+
+export interface SaveConfigVersionResponse {
+  duration: string;
+  version: ConfigVersionResponse;
+  /**
+   * The version moderation currently runs
+   */
+  published_version?: number;
+}
+
 export interface ScheduledMessageChannelResponse {
   /**
    * Channel CID (<type>:<id>)
@@ -21093,6 +21659,97 @@ export interface ScreensharingSettingsResponse {
   access_request_enabled: boolean;
   enabled: boolean;
   target_resolution?: TargetResolution;
+}
+
+export interface SearchAllChannelsSection {
+  /**
+   * Opaque cursor for the next page of this section, present only when more results exist. Pass it back under next.channels with the same query
+   */
+  next?: string;
+  /**
+   * Channels the caller is a member of whose name starts with the query, in the same shape as the query channels endpoint's results but without messages or members
+   */
+  channels?: Array<ChannelStateResponseFields>;
+  error?: SearchAllSectionError;
+  warning?: SearchAllWarning;
+}
+
+export interface SearchAllMessagesSection {
+  /**
+   * Opaque cursor for the next page of this section, present only when more results exist. Pass it back under next.messages with the same query
+   */
+  next?: string;
+  /**
+   * Matching messages, newest first, in the same shape as the search endpoint's results
+   */
+  results?: Array<SearchResult>;
+  error?: SearchAllSectionError;
+  results_warning?: SearchWarning;
+  warning?: SearchAllWarning;
+}
+
+export interface SearchAllRequest {
+  /**
+   * Number of results per section, 1-30. Defaults to 10. Applies to every requested section; there is no per-section limit
+   */
+  limit?: number;
+  /**
+   * Free-text search phrase, 1-80 characters after trimming whitespace. Required. Matched as a prefix of a user's name or username and of a channel's name, and as full-text against message text
+   */
+  query?: string;
+  /**
+   * Which sections to search: any subset of messages, users and channels. Defaults to all three when omitted; must not be empty when provided. Response sections always appear in the order messages, users, channels
+   */
+  entities?: Array<string>;
+  /**
+   * Opaque pagination cursors from a previous response, keyed by entity. A cursor that fails to decode restarts that section from page 1 with a cursor_rejected warning; the request fails with 400 only when every cursor supplied for a requested entity is invalid. Cursors for entities not in entities are ignored
+   */
+  next?: Record<string, string>;
+}
+
+export interface SearchAllResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  channels?: SearchAllChannelsSection;
+  messages?: SearchAllMessagesSection;
+  users?: SearchAllUsersSection;
+}
+
+export interface SearchAllSectionError {
+  /**
+   * Error code. backend_timeout and backend_unavailable are retryable; unsupported (the app's configuration cannot serve this section) and internal_error are not
+   */
+  code:
+    | 'backend_unavailable'
+    | 'backend_timeout'
+    | 'unsupported'
+    | 'internal_error';
+  /**
+   * Human-readable description of the failure
+   */
+  message: string;
+}
+
+export interface SearchAllUsersSection {
+  /**
+   * Opaque cursor for the next page of this section, present only when more results exist. Pass it back under next.users with the same query
+   */
+  next?: string;
+  /**
+   * Users whose name or username starts with the query, in the same shape as the query users endpoint's results
+   */
+  users?: Array<FullUserResponse>;
+  error?: SearchAllSectionError;
+  warning?: SearchAllWarning;
+}
+
+export interface SearchAllWarning {
+  /**
+   * Warning code. cursor_rejected: the cursor supplied for this section failed to decode, so the section restarted from page 1
+   */
+  code: 'cursor_rejected';
 }
 
 export interface SearchPayload {
@@ -21987,7 +22644,7 @@ export interface StoriesFeedUpdatedEvent {
 
 export interface SubmitActionRequest {
   /**
-   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, delete_poll, delete_poll_option, delete_poll_answer, ban, custom, unban, restore, delete_user, delete_user_messages, unblock, block, shadow_block, unmask, kick_user, end_call, escalate, de_escalate
+   * Type of moderation action to perform. One of: mark_reviewed, delete_message, delete_activity, delete_comment, delete_reaction, delete_poll, delete_poll_option, delete_poll_answer, ban, custom, unban, restore, delete_user, delete_user_messages, unblock, block, shadow_block, unmask, kick_user, end_call, escalate, de_escalate, agent_recommendation
    */
   action_type:
     | 'flag'
@@ -22014,7 +22671,8 @@ export interface SubmitActionRequest {
     | 'reject_appeal'
     | 'escalate'
     | 'de_escalate'
-    | 'bypass';
+    | 'bypass'
+    | 'agent_recommendation';
   /**
    * UUID of the appeal to act on (required for reject_appeal, optional for other actions)
    */
@@ -22024,6 +22682,7 @@ export interface SubmitActionRequest {
    */
   item_id?: string;
   user_id?: string;
+  agent_recommendation?: AgentRecommendationPayload;
   /**
    * Configuration for ban moderation action
    */
@@ -22117,6 +22776,95 @@ export interface SubmitActionResponse {
   auto_restore_warning?: string;
   appeal_item?: AppealItemResponse;
   item?: ReviewQueueItemResponse;
+}
+
+export interface SubmitAgentFeedbackRequest {
+  /**
+   * Review queue item Nora reviewed
+   */
+  item_id: string;
+  /**
+   * Action the moderator took
+   */
+  moderator_action: string;
+  /**
+   * How similar cases should be judged, up to 2000 characters
+   */
+  improvement?: string;
+  /**
+   * Why the moderator disagreed, up to 2000 characters
+   */
+  reason?: string;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface SubmitAgentFeedbackResponse {
+  /**
+   * Nora review this correction is about
+   */
+  agent_review_id: string;
+  /**
+   * Text of the item when the correction was saved
+   */
+  content_excerpt: string;
+  /**
+   * When the correction was first saved
+   */
+  created_at: TimestampNS;
+  /**
+   * Moderator who submitted the correction
+   */
+  created_by: string;
+  duration: string;
+  /**
+   * Entity type of the queue item
+   */
+  entity_type: string;
+  /**
+   * Feedback row id
+   */
+  id: string;
+  /**
+   * How similar cases should be judged
+   */
+  improvement: string;
+  /**
+   * Review queue item the correction is about
+   */
+  item_id: string;
+  /**
+   * Action the moderator took
+   */
+  moderator_action: string;
+  /**
+   * Policy action Nora recommended
+   */
+  nora_action:
+    | 'keep'
+    | 'flag'
+    | 'mask'
+    | 'mask_flag'
+    | 'shadow'
+    | 'remove'
+    | 'bounce'
+    | 'bounce_flag'
+    | 'bounce_remove';
+  /**
+   * Why the moderator disagreed
+   */
+  reason: string;
+  /**
+   * When the correction was last saved
+   */
+  updated_at: TimestampNS;
+  /**
+   * Labels Nora matched on this review
+   */
+  labels: Array<string>;
 }
 
 export interface SubmitModerationFeedbackItem {
@@ -22365,6 +23113,7 @@ export interface TextContentParameters {
   text_length_operator?: string;
   blocklist_match?: Array<string>;
   harm_labels?: Array<string>;
+  severities?: Array<string>;
   llm_harm_labels?: Record<string, string>;
 }
 
@@ -22377,6 +23126,7 @@ export interface TextRuleParameters {
   blocklist_match?: Array<string>;
   harm_labels?: Array<string>;
   semantic_filter_names?: Array<string>;
+  severities?: Array<string>;
   llm_harm_labels?: Record<string, string>;
 }
 
@@ -23530,6 +24280,10 @@ export interface UpdateAppRequest {
   user_search_disallowed_roles?: Array<string>;
   webhook_events?: Array<string>;
   activity_metrics_config?: Record<string, number>;
+  /**
+   * Settings for the moderation agent reviewer, which reviews moderation outcomes and proposes or applies an action.
+   */
+  agent_review?: AgentReviewSettingsPayload;
   apn_config?: APNConfig;
   async_moderation_config?: AsyncModerationConfiguration;
   datadog_info?: DataDogInfo;
@@ -25394,6 +26148,7 @@ export interface UserCustomEventRequest {
 }
 
 export interface UserCustomPropertyParameters {
+  expected_value?: any;
   operator?: string;
   property_key?: string;
 }
