@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import zlib from 'zlib';
 
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { StreamClient } from '../../src/StreamClient';
 import {
@@ -15,6 +15,7 @@ import {
   parseSqs,
   verifyAndParseWebhook,
   verifySignature,
+  webhookConfig,
 } from '../../src/utils/webhook';
 
 const JSON_BODY =
@@ -126,6 +127,48 @@ describe('Webhook verification + parsing', () => {
       expect(() => gunzipPayload(bad)).toThrow(
         InvalidWebhookErrorMessages.gzipFailed,
       );
+    });
+
+    describe('size limit', () => {
+      const defaultLimit = webhookConfig.maxPayloadBytes;
+
+      afterEach(() => {
+        webhookConfig.maxPayloadBytes = defaultLimit;
+      });
+
+      it('defaults to 10 MiB', () => {
+        expect(defaultLimit).toBe(10 * 1024 * 1024);
+      });
+
+      it('inflates a body of exactly the limit', () => {
+        expect(gunzipPayload(gzip(Buffer.alloc(defaultLimit))).length).toBe(
+          defaultLimit,
+        );
+      });
+
+      it('rejects a gzip bomb before the signature check', () => {
+        const bomb = gzip(Buffer.alloc(defaultLimit + 1));
+        expect(() =>
+          verifyAndParseWebhook(bomb, 'deadbeef', API_SECRET),
+        ).toThrow(
+          `${InvalidWebhookErrorMessages.gzipFailed}: payload exceeds ${defaultLimit} bytes`,
+        );
+        expect(() => parseSqs(base64(bomb))).toThrow('payload exceeds');
+      });
+
+      it('honours a custom limit', () => {
+        webhookConfig.maxPayloadBytes = JSON_BODY.length - 1;
+        expect(() => gunzipPayload(gzip(JSON_BODY))).toThrow(
+          InvalidWebhookError,
+        );
+        webhookConfig.maxPayloadBytes = JSON_BODY.length;
+        expect(gunzipPayload(gzip(JSON_BODY)).toString('utf8')).toBe(JSON_BODY);
+      });
+
+      it('does not limit uncompressed bodies', () => {
+        webhookConfig.maxPayloadBytes = 1;
+        expect(gunzipPayload(JSON_BODY).toString('utf8')).toBe(JSON_BODY);
+      });
     });
   });
 

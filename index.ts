@@ -10,6 +10,7 @@ export {
   InvalidWebhookError,
   InvalidWebhookErrorMessages,
   verifyAndParseWebhook,
+  webhookConfig,
 } from './src/utils/webhook';
 export {
   convertTimestampToDate,
