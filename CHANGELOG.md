@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/GetStream/stream-node/compare/v0.9.1...v0.9.2) (2026-11-13)
+
+
+### Features
+
+* regenerate OpenAPI clients from latest spec ([#392](https://github.com/GetStream/stream-node/issues/392)) ([315e419](https://github.com/GetStream/stream-node/commit/315e419fd043f8758bdb75b887395273d1a8e7d6))
+
 ## [0.9.1](https://github.com/GetStream/stream-node/compare/v0.9.0...v0.9.1) (2026-11-09)
 
 
