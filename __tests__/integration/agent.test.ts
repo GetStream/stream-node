@@ -73,7 +73,7 @@ describe.skip('AI agent integration', () => {
       }
     });
 
-    agent.updateSession({ voice: 'does-not-exists' as any });
+    agent.updateSession({ voice: 'does-not-exists' });
 
     await vi.waitUntil(() => errorEvent !== null);
     expect(errorEvent.type).to.eq('error');
