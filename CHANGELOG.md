@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3](https://github.com/GetStream/stream-node/compare/v0.9.2...v0.9.3) (2026-11-13)
+
+
+### Bug Fixes
+
+* limit decompressed webhook payloads to 10 MiB, configurable with webhookConfig.maxPayloadBytes ([#394](https://github.com/GetStream/stream-node/issues/394)) ([3de82bd](https://github.com/GetStream/stream-node/commit/3de82bda9eff5a2531c3d90086bb221e01a2f3e7))
+
 ## [0.9.2](https://github.com/GetStream/stream-node/compare/v0.9.1...v0.9.2) (2026-11-13)
 
 
