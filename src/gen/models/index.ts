@@ -12389,6 +12389,10 @@ export interface GetOrCreateFeedRequest {
   next?: string;
   overwrite_interest_weights?: boolean;
   prev?: string;
+  /**
+   * Default: false. When true, a missing feed returns 404 instead of being created. Cannot be combined with data.
+   */
+  skip_feed_creation?: boolean;
   user_id?: string;
   view?: string;
   watch?: boolean;
