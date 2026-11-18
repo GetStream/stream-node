@@ -19284,7 +19284,7 @@ export interface QueryScheduledActivitiesFilter {
   /**
    * Only activities with one of these statuses: scheduled, publishing, failed
    */
-  status?: Array<string>;
+  status?: Array<ScheduledActivityQueryStatus>;
 }
 
 export interface QueryScheduledActivitiesRequest {
@@ -21585,7 +21585,7 @@ export interface ScheduledActivityFailedEvent {
   /**
    * Why the activity failed to publish
    */
-  failure_reason: string;
+  failure_reason: ScheduledActivityFailureReason;
   custom: Record<string, any>;
   /**
    * An activity scheduled to be published at a future time
@@ -21598,6 +21598,17 @@ export interface ScheduledActivityFailedEvent {
   received_at?: TimestampNS;
   user?: UserResponseCommonFields;
 }
+
+export type ScheduledActivityFailureReason =
+  | 'banned'
+  | 'no_permission'
+  | 'feed_deleted'
+  | 'user_deleted'
+  | 'moderation_blocked'
+  | 'id_conflict'
+  | 'expired'
+  | 'invalid_activity'
+  | 'internal_error';
 
 export interface ScheduledActivityPreview {
   /**
@@ -21689,6 +21700,9 @@ export interface ScheduledActivityPublishedEvent {
   user?: UserResponseCommonFields;
 }
 
+export type ScheduledActivityQueryStatus =
+  'scheduled' | 'publishing' | 'failed';
+
 export interface ScheduledActivityResponse {
   /**
    * When the activity was scheduled
@@ -21705,7 +21719,7 @@ export interface ScheduledActivityResponse {
   /**
    * One of: scheduled, publishing, failed, canceled
    */
-  status: string;
+  status: ScheduledActivityStatus;
   /**
    * When the scheduled activity was last changed
    */
@@ -21725,8 +21739,11 @@ export interface ScheduledActivityResponse {
   /**
    * Why the publish failed; set only when status is failed
    */
-  failure_reason?: string;
+  failure_reason?: ScheduledActivityFailureReason;
 }
+
+export type ScheduledActivityStatus =
+  'scheduled' | 'publishing' | 'failed' | 'canceled';
 
 export interface ScheduledMessageChannelResponse {
   /**
