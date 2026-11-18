@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.4](https://github.com/GetStream/stream-node/compare/v0.9.3...v0.9.4) (2026-11-18)
+
+
+### Features
+
+* add skip_feed_creation to GetOrCreateFeedRequest ([#396](https://github.com/GetStream/stream-node/issues/396)) ([54d7fe1](https://github.com/GetStream/stream-node/commit/54d7fe162b8cdf85244ed438af48d7ef92498558))
+
 ## [0.9.3](https://github.com/GetStream/stream-node/compare/v0.9.2...v0.9.3) (2026-11-13)
 
 
