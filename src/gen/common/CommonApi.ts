@@ -200,6 +200,7 @@ export class CommonApi {
       user_search_disallowed_roles: request?.user_search_disallowed_roles,
       webhook_events: request?.webhook_events,
       activity_metrics_config: request?.activity_metrics_config,
+      agent_review: request?.agent_review,
       apn_config: request?.apn_config,
       async_moderation_config: request?.async_moderation_config,
       datadog_info: request?.datadog_info,
@@ -715,12 +716,20 @@ export class CommonApi {
     return response;
   }
 
-  async listImports(): Promise<StreamResponse<ListImportsResponse>> {
+  async listImports(request?: {
+    limit?: number;
+    offset?: number;
+  }): Promise<StreamResponse<ListImportsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      offset: request?.offset,
+    };
+
     const response = await this.apiClient.sendRequest<ListImportsResponse>(
       'GET',
       '/api/v2/imports',
       undefined,
-      undefined,
+      queryParams,
     );
 
     decoders['ListImportsResponse']?.(response);

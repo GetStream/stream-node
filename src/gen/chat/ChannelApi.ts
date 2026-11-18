@@ -75,6 +75,7 @@ export class ChannelApi {
     messages_id_gt?: string;
     messages_id_gte?: string;
     messages_id_around?: string;
+    include_soft_deleted_channel?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<ChannelStateResponse>> {
     if (!this.id) {

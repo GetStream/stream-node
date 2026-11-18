@@ -110,6 +110,8 @@ import {
   Response,
   RewindChannelRequest,
   RewindChannelResponse,
+  SearchAllRequest,
+  SearchAllResponse,
   SearchPayload,
   SearchResponse,
   SendEventRequest,
@@ -607,6 +609,7 @@ export class ChatApi {
     messages_id_gt?: string;
     messages_id_gte?: string;
     messages_id_around?: string;
+    include_soft_deleted_channel?: boolean;
     user_id?: string;
   }): Promise<StreamResponse<ChannelStateResponse>> {
     const queryParams = {
@@ -619,6 +622,7 @@ export class ChatApi {
       messages_id_gt: request?.messages_id_gt,
       messages_id_gte: request?.messages_id_gte,
       messages_id_around: request?.messages_id_around,
+      include_soft_deleted_channel: request?.include_soft_deleted_channel,
       user_id: request?.user_id,
     };
     const pathParams = {
@@ -2669,6 +2673,29 @@ export class ChatApi {
     );
 
     decoders['SearchResponse']?.(response);
+
+    return response;
+  }
+
+  async searchAll(
+    request?: SearchAllRequest,
+  ): Promise<StreamResponse<SearchAllResponse>> {
+    const body = {
+      limit: request?.limit,
+      query: request?.query,
+      entities: request?.entities,
+      next: request?.next,
+    };
+
+    const response = await this.apiClient.sendRequest<SearchAllResponse>(
+      'POST',
+      '/api/v2/chat/search/all',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['SearchAllResponse']?.(response);
 
     return response;
   }

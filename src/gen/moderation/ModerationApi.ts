@@ -19,6 +19,8 @@ import {
   CheckResponse,
   CheckS3AccessRequest,
   CheckS3AccessResponse,
+  CountReviewQueueRequest,
+  CountReviewQueueResponse,
   CreatePolicyTestSetRequest,
   CreateQueueRequest,
   CustomCheckRequest,
@@ -31,8 +33,10 @@ import {
   FlagItemResponse,
   FlagRequest,
   GetActionConfigResponse,
+  GetAgentReviewStatusResponse,
   GetAppealResponse,
   GetConfigResponse,
+  GetConfigVersionResponse,
   GetFlagCountRequest,
   GetFlagCountResponse,
   GetModerationRuleResponse,
@@ -42,6 +46,8 @@ import {
   InsertActionLogResponse,
   LabelsRequest,
   LabelsResponse,
+  ListAgentFeedbackResponse,
+  ListConfigVersionsResponse,
   ListQueuesResponse,
   ModerationBanResponse,
   MuteRequest,
@@ -49,6 +55,8 @@ import {
   PolicyTestRunResponse,
   PolicyTestSetListResponse,
   PolicyTestSetResponse,
+  PublishConfigVersionRequest,
+  PublishConfigVersionResponse,
   QueryAppealsRequest,
   QueryAppealsResponse,
   QueryFeedModerationTemplatesResponse,
@@ -70,8 +78,12 @@ import {
   Response,
   RevealMediaRequest,
   RevealMediaResponse,
+  SaveConfigVersionRequest,
+  SaveConfigVersionResponse,
   SubmitActionRequest,
   SubmitActionResponse,
+  SubmitAgentFeedbackRequest,
+  SubmitAgentFeedbackResponse,
   SubmitModerationFeedbackRequest,
   SubmitModerationFeedbackResponse,
   UnbanRequest,
@@ -245,6 +257,70 @@ export class ModerationApi {
     );
 
     decoders['InsertActionLogResponse']?.(response);
+
+    return response;
+  }
+
+  async listAgentFeedback(request?: {
+    limit?: number;
+    next?: string;
+  }): Promise<StreamResponse<ListAgentFeedbackResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+      next: request?.next,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<ListAgentFeedbackResponse>(
+        'GET',
+        '/api/v2/moderation/agent_feedback',
+        undefined,
+        queryParams,
+      );
+
+    decoders['ListAgentFeedbackResponse']?.(response);
+
+    return response;
+  }
+
+  async submitAgentFeedback(
+    request: SubmitAgentFeedbackRequest,
+  ): Promise<StreamResponse<SubmitAgentFeedbackResponse>> {
+    const body = {
+      item_id: request?.item_id,
+      moderator_action: request?.moderator_action,
+      improvement: request?.improvement,
+      reason: request?.reason,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SubmitAgentFeedbackResponse>(
+        'POST',
+        '/api/v2/moderation/agent_feedback',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['SubmitAgentFeedbackResponse']?.(response);
+
+    return response;
+  }
+
+  async getAgentReviewStatus(): Promise<
+    StreamResponse<GetAgentReviewStatusResponse>
+  > {
+    const response =
+      await this.apiClient.sendRequest<GetAgentReviewStatusResponse>(
+        'GET',
+        '/api/v2/moderation/agent_review_status',
+        undefined,
+        undefined,
+      );
+
+    decoders['GetAgentReviewStatusResponse']?.(response);
 
     return response;
   }
@@ -548,6 +624,51 @@ export class ModerationApi {
     return response;
   }
 
+  async saveConfigVersion(
+    request: SaveConfigVersionRequest,
+  ): Promise<StreamResponse<SaveConfigVersionResponse>> {
+    const body = {
+      base_version: request?.base_version,
+      key: request?.key,
+      async: request?.async,
+      team: request?.team,
+      user_id: request?.user_id,
+      ai_audio_config: request?.ai_audio_config,
+      ai_image_config: request?.ai_image_config,
+      ai_text_config: request?.ai_text_config,
+      ai_video_config: request?.ai_video_config,
+      automod_platform_circumvention_config:
+        request?.automod_platform_circumvention_config,
+      automod_semantic_filters_config: request?.automod_semantic_filters_config,
+      automod_toxicity_config: request?.automod_toxicity_config,
+      aws_rekognition_config: request?.aws_rekognition_config,
+      block_list_config: request?.block_list_config,
+      bodyguard_config: request?.bodyguard_config,
+      engine: request?.engine,
+      flood_config: request?.flood_config,
+      google_vision_config: request?.google_vision_config,
+      intent_config: request?.intent_config,
+      llm_config: request?.llm_config,
+      rule_builder_config: request?.rule_builder_config,
+      user: request?.user,
+      velocity_filter_config: request?.velocity_filter_config,
+      video_call_rule_config: request?.video_call_rule_config,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<SaveConfigVersionResponse>(
+        'POST',
+        '/api/v2/moderation/config/versions',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['SaveConfigVersionResponse']?.(response);
+
+    return response;
+  }
+
   async deleteConfig(request: {
     key: string;
     team?: string;
@@ -593,6 +714,82 @@ export class ModerationApi {
     );
 
     decoders['GetConfigResponse']?.(response);
+
+    return response;
+  }
+
+  async listConfigVersions(request: {
+    key: string;
+    team?: string;
+  }): Promise<StreamResponse<ListConfigVersionsResponse>> {
+    const queryParams = {
+      team: request?.team,
+    };
+    const pathParams = {
+      key: request?.key,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<ListConfigVersionsResponse>(
+        'GET',
+        '/api/v2/moderation/config/{key}/versions',
+        pathParams,
+        queryParams,
+      );
+
+    decoders['ListConfigVersionsResponse']?.(response);
+
+    return response;
+  }
+
+  async getConfigVersion(request: {
+    key: string;
+    version: number;
+    team?: string;
+  }): Promise<StreamResponse<GetConfigVersionResponse>> {
+    const queryParams = {
+      team: request?.team,
+    };
+    const pathParams = {
+      key: request?.key,
+      version: request?.version,
+    };
+
+    const response = await this.apiClient.sendRequest<GetConfigVersionResponse>(
+      'GET',
+      '/api/v2/moderation/config/{key}/versions/{version}',
+      pathParams,
+      queryParams,
+    );
+
+    decoders['GetConfigVersionResponse']?.(response);
+
+    return response;
+  }
+
+  async publishConfigVersion(
+    request: PublishConfigVersionRequest & { key: string; version: number },
+  ): Promise<StreamResponse<PublishConfigVersionResponse>> {
+    const pathParams = {
+      key: request?.key,
+      version: request?.version,
+    };
+    const body = {
+      team: request?.team,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<PublishConfigVersionResponse>(
+        'POST',
+        '/api/v2/moderation/config/{key}/versions/{version}/publish',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['PublishConfigVersionResponse']?.(response);
 
     return response;
   }
@@ -1309,6 +1506,28 @@ export class ModerationApi {
     return response;
   }
 
+  async countReviewQueue(
+    request?: CountReviewQueueRequest,
+  ): Promise<StreamResponse<CountReviewQueueResponse>> {
+    const body = {
+      user_id: request?.user_id,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response = await this.apiClient.sendRequest<CountReviewQueueResponse>(
+      'POST',
+      '/api/v2/moderation/review_queue/count',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['CountReviewQueueResponse']?.(response);
+
+    return response;
+  }
+
   async getReviewQueueItem(request: {
     id: string;
   }): Promise<StreamResponse<GetReviewQueueItemResponse>> {
@@ -1373,6 +1592,7 @@ export class ModerationApi {
       appeal_id: request?.appeal_id,
       item_id: request?.item_id,
       user_id: request?.user_id,
+      agent_recommendation: request?.agent_recommendation,
       ban: request?.ban,
       block: request?.block,
       bypass: request?.bypass,
@@ -1454,12 +1674,14 @@ export class ModerationApi {
       target_user_id: string;
       channel_cid?: string;
       created_by?: string;
+      remove_future_channels_ban?: boolean;
     },
   ): Promise<StreamResponse<UnbanResponse>> {
     const queryParams = {
       target_user_id: request?.target_user_id,
       channel_cid: request?.channel_cid,
       created_by: request?.created_by,
+      remove_future_channels_ban: request?.remove_future_channels_ban,
     };
     const body = {
       unbanned_by_id: request?.unbanned_by_id,

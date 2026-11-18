@@ -1,3 +1,5 @@
+import type { APIError } from './gen/models';
+
 export type OmitTypeId<T> = Omit<T, 'type' | 'id' | 'connection_id'>;
 
 export interface ApiConfig {
@@ -27,6 +29,12 @@ export class StreamError extends Error {
     public metadata: Partial<RequestMetadata>,
     public code?: number,
     errorOptions?: ErrorOptions,
+    /**
+     * The error body the API returned (`exception_fields`, `details`,
+     * `more_info`, `status_code`, ...). Undefined when the request failed
+     * before a response arrived or the response body was not JSON.
+     */
+    public apiError?: APIError,
   ) {
     super(message, errorOptions);
   }

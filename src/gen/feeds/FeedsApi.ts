@@ -727,6 +727,7 @@ export class FeedsApi {
     include_top_level_comment_count?: boolean;
     include_soft_deleted_activities?: boolean;
     include_moderated_activities?: boolean;
+    skip_viewer_visibility?: boolean;
   }): Promise<StreamResponse<GetActivityResponse>> {
     const queryParams = {
       comment_sort: request?.comment_sort,
@@ -738,6 +739,7 @@ export class FeedsApi {
       include_top_level_comment_count: request?.include_top_level_comment_count,
       include_soft_deleted_activities: request?.include_soft_deleted_activities,
       include_moderated_activities: request?.include_moderated_activities,
+      skip_viewer_visibility: request?.skip_viewer_visibility,
     };
     const pathParams = {
       id: request?.id,
@@ -1859,6 +1861,7 @@ export class FeedsApi {
       next: request?.next,
       overwrite_interest_weights: request?.overwrite_interest_weights,
       prev: request?.prev,
+      skip_feed_creation: request?.skip_feed_creation,
       user_id: request?.user_id,
       view: request?.view,
       watch: request?.watch,

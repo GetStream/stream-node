@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.9.4](https://github.com/GetStream/stream-node/compare/v0.9.3...v0.9.4) (2026-11-18)
+
+
+### Features
+
+* add skip_feed_creation to GetOrCreateFeedRequest ([#396](https://github.com/GetStream/stream-node/issues/396)) ([54d7fe1](https://github.com/GetStream/stream-node/commit/54d7fe162b8cdf85244ed438af48d7ef92498558))
+
+## [0.9.3](https://github.com/GetStream/stream-node/compare/v0.9.2...v0.9.3) (2026-11-13)
+
+
+### Bug Fixes
+
+* limit decompressed webhook payloads to 10 MiB, configurable with webhookConfig.maxPayloadBytes ([#394](https://github.com/GetStream/stream-node/issues/394)) ([3de82bd](https://github.com/GetStream/stream-node/commit/3de82bda9eff5a2531c3d90086bb221e01a2f3e7))
+
+## [0.9.2](https://github.com/GetStream/stream-node/compare/v0.9.1...v0.9.2) (2026-11-13)
+
+
+### Features
+
+* regenerate OpenAPI clients from latest spec ([#392](https://github.com/GetStream/stream-node/issues/392)) ([315e419](https://github.com/GetStream/stream-node/commit/315e419fd043f8758bdb75b887395273d1a8e7d6))
+
+## [0.9.1](https://github.com/GetStream/stream-node/compare/v0.9.0...v0.9.1) (2026-11-09)
+
+
+### Features
+
+* deprecate connectOpenAi in favour of Vision Agents ([#381](https://github.com/GetStream/stream-node/issues/381)) ([bdae28d](https://github.com/GetStream/stream-node/commit/bdae28d3c3b69f57196b12c519ae71038c36153b))
+* expose the parsed API error on StreamError ([#388](https://github.com/GetStream/stream-node/issues/388)) ([13770c8](https://github.com/GetStream/stream-node/commit/13770c82dd505bf97bb55315625bdae6a378270e))
+
+## [0.9.0](https://github.com/GetStream/stream-node/compare/v0.8.15...v0.9.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove date transofrmator ([#349](https://github.com/GetStream/stream-node/issues/349))
+
+### Features
+
+* remove date transofrmator ([#349](https://github.com/GetStream/stream-node/issues/349)) ([95d3ba6](https://github.com/GetStream/stream-node/commit/95d3ba6cdd840ca7eb9ec4a4999466b2f4b09bb9))
+
 ## [0.8.15](https://github.com/GetStream/stream-node/compare/v0.8.14...v0.8.15) (2026-10-28)
 
 
