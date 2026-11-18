@@ -5,12 +5,25 @@ on:
     branches:
       - main
 
+# The org no longer lets GITHUB_TOKEN create pull requests, so release-please
+# authenticates with a GitHub App installation token instead.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.NODE_RELEASE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.NODE_RELEASE_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-issues: write # release-please labels its PRs
+
       - uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.app-token.outputs.token }}
