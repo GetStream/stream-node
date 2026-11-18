@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.5](https://github.com/GetStream/stream-node/compare/v0.9.4...v0.9.5) (2026-11-18)
+
+
+### Features
+
+* add scheduled activities (FEEDS-2164) ([#385](https://github.com/GetStream/stream-node/issues/385)) ([9cf22e6](https://github.com/GetStream/stream-node/commit/9cf22e6aada60f422eff4db46086211aba6b1f00))
+
 ## [0.9.4](https://github.com/GetStream/stream-node/compare/v0.9.3...v0.9.4) (2026-11-18)
 
 
