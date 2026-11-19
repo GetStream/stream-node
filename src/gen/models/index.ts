@@ -18564,6 +18564,38 @@ export interface QueryFeedModerationTemplatesResponse {
   templates: Array<QueryFeedModerationTemplate>;
 }
 
+export interface QueryFeedsReactionsRequest {
+  /**
+   * Which reactions to list: activity reactions or comment reactions
+   */
+  object_type: 'activity' | 'comment';
+  /**
+   * The user whose reactions to list
+   */
+  user_id: string;
+  limit?: number;
+  next?: string;
+  prev?: string;
+  /**
+   * Sort by created_at only (a single field); defaults to created_at descending
+   */
+  sort?: Array<SortParamRequest>;
+  /**
+   * Optional filter; only reaction_type and created_at are accepted
+   */
+  filter?: Record<string, any>;
+}
+
+export interface QueryFeedsReactionsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  reactions: Array<FeedsReactionResponse>;
+  next?: string;
+  prev?: string;
+}
+
 export interface QueryFeedsRequest {
   enrich_own_fields?: boolean;
   limit?: number;
