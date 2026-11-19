@@ -121,6 +121,8 @@ import {
   QueryCommentsResponse,
   QueryFeedMembersRequest,
   QueryFeedMembersResponse,
+  QueryFeedsReactionsRequest,
+  QueryFeedsReactionsResponse,
   QueryFeedsRequest,
   QueryFeedsResponse,
   QueryFeedsUsageStatsRequest,
@@ -3060,6 +3062,33 @@ export class FeedsApi {
       );
 
     decoders['UpdateMembershipLevelResponse']?.(response);
+
+    return response;
+  }
+
+  async queryFeedsReactions(
+    request: QueryFeedsReactionsRequest,
+  ): Promise<StreamResponse<QueryFeedsReactionsResponse>> {
+    const body = {
+      object_type: request?.object_type,
+      user_id: request?.user_id,
+      limit: request?.limit,
+      next: request?.next,
+      prev: request?.prev,
+      sort: request?.sort,
+      filter: request?.filter,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryFeedsReactionsResponse>(
+        'POST',
+        '/api/v2/feeds/reactions/query',
+        undefined,
+        undefined,
+        body,
+      );
+
+    decoders['QueryFeedsReactionsResponse']?.(response);
 
     return response;
   }
