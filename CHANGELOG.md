@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.6](https://github.com/GetStream/stream-node/compare/v0.9.5...v0.9.6) (2026-11-19)
+
+
+### Features
+
+* add queryFeedsReactions ([#401](https://github.com/GetStream/stream-node/issues/401)) ([ec57879](https://github.com/GetStream/stream-node/commit/ec578790278757551a80749560b226d26e3f561d))
+
 ## [0.9.5](https://github.com/GetStream/stream-node/compare/v0.9.4...v0.9.5) (2026-11-18)
 
 
