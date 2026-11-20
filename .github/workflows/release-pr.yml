@@ -13,16 +13,19 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    # stream-node-release-bot was uninstalled in the 2026-11-20 org app cleanup; the Release PR
+    # is now opened by getstream-sdk-bot, like the other server-side SDKs. Its key lives only
+    # in the sdk-bot environment, which deploys from main.
+    environment: sdk-bot
     steps:
       - name: Create GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ vars.NODE_RELEASE_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.NODE_RELEASE_BOT_PRIVATE_KEY }}
+          client-id: Iv23lioh9qYGjBIp9nsK
+          private-key: ${{ secrets.SDK_BOT_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
-          permission-issues: write # release-please labels its PRs
 
       - uses: googleapis/release-please-action@v5
         with:
