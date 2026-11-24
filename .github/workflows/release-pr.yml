@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   release-please:
-    runs-on: ubuntu-latest
+    runs-on: { group: github-public-ubuntu-static }
     # stream-node-release-bot was uninstalled in the 2026-11-20 org app cleanup; the Release PR
     # is now opened by getstream-sdk-bot, like the other server-side SDKs. Its key lives only
     # in the sdk-bot environment, which deploys from main.
