@@ -155,6 +155,9 @@ export function verifySignature(
   signature: string,
   secret: string,
 ): boolean {
+  if (!secret || !signature) {
+    return false;
+  }
   const key = Buffer.from(secret, 'utf8');
   const hash = crypto.createHmac('sha256', key).update(body).digest('hex');
   try {
