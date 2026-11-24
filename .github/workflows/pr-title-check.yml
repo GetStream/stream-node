@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   lint:
-    runs-on: { group: github-public-ubuntu-static }
+    runs-on: { group: github-public-amd64 }
     permissions:
       statuses: write
     steps:
