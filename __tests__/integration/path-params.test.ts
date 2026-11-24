@@ -71,4 +71,18 @@ describe('path param serialization', () => {
       '/api/v2/moderation/config/chat%3Amessaging/versions/3',
     );
   });
+
+  it.each(['', '.', '..'])(
+    'rejects empty or dot-segment path parameter %j',
+    async (badValue) => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch');
+
+      await expect(
+        createApiClient().sendRequest('GET', '/api/v2/chat/messages/{id}', {
+          id: badValue,
+        }),
+      ).rejects.toThrow("Invalid path parameter 'id'");
+      expect(fetchSpy).not.toHaveBeenCalled();
+    },
+  );
 });
