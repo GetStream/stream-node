@@ -4,18 +4,11 @@ import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 import { isScalar, stringifyArrayParam } from './utils/query-params';
 
-/** Default multipart upload timeout in milliseconds, see `ApiConfig.uploadTimeout`. */
-export const DEFAULT_UPLOAD_TIMEOUT = 60_000;
-
 export class ApiClient {
   private readonly dispatcher?: RequestInit['dispatcher'];
-  private readonly uploadTimeout: number;
 
   constructor(public readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
-    this.uploadTimeout =
-      this.apiConfig.uploadTimeout ??
-      Math.max(this.apiConfig.timeout, DEFAULT_UPLOAD_TIMEOUT);
   }
 
   /**
@@ -58,18 +51,20 @@ export class ApiClient {
       headers['Content-Type'] = requestContentType ?? 'application/json';
     }
 
-    // Uploads get their own, larger timeout so big files still go through,
-    // but never an unbounded one: a stalled upload must not hang forever.
-    const timeout = isMultipart ? this.uploadTimeout : this.apiConfig.timeout;
-    const signal = AbortSignal.timeout(timeout);
+    // `timeout` is a deadline for the whole request, which suits small JSON
+    // calls but not uploads, whose duration grows with the file. Uploads are
+    // instead bounded by the HTTP agent's own timeouts (see
+    // `StreamClientOptions.timeout`).
+    const timeout = this.apiConfig.timeout;
+    const signal = isMultipart ? undefined : AbortSignal.timeout(timeout);
 
     const encodedBody = isMultipart
       ? this.multipartBodyStringify(body as Record<string, any>)
       : JSON.stringify(body);
 
-    // Set once the response headers arrive. The timeout also covers reading
-    // the body, so a timeout can fire after the server already handled the
-    // request; keeping the metadata lets the caller tell the two cases apart.
+    // Set once the response headers arrive. If the request fails after that,
+    // e.g. times out while the body is read, the server may already have
+    // handled it; the error keeps the metadata so the caller can tell.
     let metadata: RequestMetadata | undefined;
 
     try {
@@ -125,20 +120,19 @@ export class ApiClient {
         clientRequestId,
         responseCode: error.status,
       };
+      const alreadyAnswered = metadata
+        ? `. The server answered with ${metadata.responseCode} before the response body was fully received, so it may have already processed the request, check before retrying it`
+        : '';
       if (isAbortError(error)) {
-        const option = isMultipart ? 'uploadTimeout' : 'timeout';
-        const message = metadata
-          ? `The ${metadata.responseCode} response body was not fully received within the ${timeout}ms timeout, you can set the ${option} in the StreamClient constructor. ` +
-            'The server may have already processed the request' +
-            (isMultipart ? ' and stored the upload' : '') +
-            ', check before retrying it'
-          : `The request was aborted due to to the ${timeout}ms timeout, you can set the ${option} in the StreamClient constructor`;
-        throw new StreamError(message, errorMetadata, undefined, {
-          cause: error,
-        });
+        throw new StreamError(
+          `The request was aborted due to to the ${timeout}ms timeout, you can set the timeout in the StreamClient constructor${alreadyAnswered}`,
+          errorMetadata,
+          undefined,
+          { cause: error },
+        );
       } else {
         throw new StreamError(
-          `The request failed due to an unexpected error`,
+          `The request failed due to an unexpected error${alreadyAnswered}`,
           errorMetadata,
           undefined,
           { cause: error },

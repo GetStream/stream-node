@@ -22,21 +22,23 @@ import { StreamFeedsClient } from './StreamFeedsClient';
 import { File } from 'buffer';
 
 export interface StreamClientOptions {
-  /** The timeout for requests in milliseconds. The default is 3000. */
-  timeout?: number;
   /**
-   * The timeout for multipart (file and image) uploads in milliseconds.
-   * Defaults to the larger of `timeout` and 60000.
+   * The timeout for requests in milliseconds. The default is 3000.
    *
-   * Like `timeout`, it covers the whole request, including reading the
-   * response. An upload can time out after the server already stored it; the
-   * error's `metadata.responseCode` is set when the response headers arrived,
-   * so check for the upload before retrying.
+   * It does not apply to file and image uploads, which take longer the larger
+   * the file is. Those are bounded by the HTTP agent's timeouts instead: on
+   * Node.js, undici's `headersTimeout` (300000 by default) limits the upload
+   * plus the wait for the response, and `bodyTimeout` (300000) limits the
+   * gaps while reading it. Pass an `agent` to change them, for example
+   * `new Agent({ headersTimeout: 600_000 })` for slower uploads.
    */
-  uploadTimeout?: number;
+  timeout?: number;
   basePath?: string;
   // We use unknown here because RequestInit['dispatcher'] is different between Node versions
-  /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
+  /**
+   * The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use.
+   * Its timeouts bound file and image uploads, see `timeout`.
+   */
   agent?: unknown;
 }
 
@@ -70,7 +72,6 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: chatBaseUrl,
       timeout,
-      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
@@ -79,7 +80,6 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: videoBaseUrl,
       timeout,
-      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
@@ -88,7 +88,6 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: feedsBaseUrl,
       timeout,
-      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
