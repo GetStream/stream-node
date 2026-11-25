@@ -93,16 +93,20 @@ import {
   GetOrCreateUnfollowRequest,
   GetOrCreateUnfollowResponse,
   GetScheduledActivityResponse,
+  GetTrendingTopicsResponse,
   GetUserInterestsResponse,
   ListFeedGroupsResponse,
   ListFeedViewsResponse,
   ListFeedVisibilitiesResponse,
+  ListPromotedTopicsResponse,
   MarkActivityRequest,
   OwnBatchRequest,
   OwnBatchResponse,
   PinActivityRequest,
   PinActivityResponse,
   PollVoteResponse,
+  PromoteTopicsRequest,
+  PromoteTopicsResponse,
   PublishScheduledActivityNowResponse,
   QueryActivitiesRequest,
   QueryActivitiesResponse,
@@ -163,6 +167,7 @@ import {
   UnfollowBatchResponse,
   UnfollowResponse,
   UnpinActivityResponse,
+  UnpromoteTopicsResponse,
   UpdateActivitiesPartialBatchRequest,
   UpdateActivitiesPartialBatchResponse,
   UpdateActivityPartialRequest,
@@ -3066,6 +3071,63 @@ export class FeedsApi {
     return response;
   }
 
+  async listPromotedTopics(): Promise<
+    StreamResponse<ListPromotedTopicsResponse>
+  > {
+    const response =
+      await this.apiClient.sendRequest<ListPromotedTopicsResponse>(
+        'GET',
+        '/api/v2/feeds/promoted_topics',
+        undefined,
+        undefined,
+      );
+
+    decoders['ListPromotedTopicsResponse']?.(response);
+
+    return response;
+  }
+
+  async promoteTopics(
+    request: PromoteTopicsRequest,
+  ): Promise<StreamResponse<PromoteTopicsResponse>> {
+    const body = {
+      ttl: request?.ttl,
+      tags: request?.tags,
+      weight: request?.weight,
+    };
+
+    const response = await this.apiClient.sendRequest<PromoteTopicsResponse>(
+      'POST',
+      '/api/v2/feeds/promoted_topics',
+      undefined,
+      undefined,
+      body,
+    );
+
+    decoders['PromoteTopicsResponse']?.(response);
+
+    return response;
+  }
+
+  async unpromoteTopics(request: {
+    id: string;
+  }): Promise<StreamResponse<UnpromoteTopicsResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+
+    const response = await this.apiClient.sendRequest<UnpromoteTopicsResponse>(
+      'DELETE',
+      '/api/v2/feeds/promoted_topics/{id}',
+      pathParams,
+      undefined,
+    );
+
+    decoders['UnpromoteTopicsResponse']?.(response);
+
+    return response;
+  }
+
   async queryFeedsReactions(
     request: QueryFeedsReactionsRequest,
   ): Promise<StreamResponse<QueryFeedsReactionsResponse>> {
@@ -3563,6 +3625,30 @@ export class FeedsApi {
       );
 
     decoders['UpsertUserInterestsResponse']?.(response);
+
+    return response;
+  }
+
+  async getTrendingTopics(request: {
+    user_id: string;
+    limit?: number;
+  }): Promise<StreamResponse<GetTrendingTopicsResponse>> {
+    const queryParams = {
+      limit: request?.limit,
+    };
+    const pathParams = {
+      user_id: request?.user_id,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<GetTrendingTopicsResponse>(
+        'GET',
+        '/api/v2/feeds/users/{user_id}/trending_topics',
+        pathParams,
+        queryParams,
+      );
+
+    decoders['GetTrendingTopicsResponse']?.(response);
 
     return response;
   }

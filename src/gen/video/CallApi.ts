@@ -275,8 +275,8 @@ export class CallApi {
     session: string;
     user: string;
     user_session: string;
-    since?: Date;
-    until?: Date;
+    since?: Date | string;
+    until?: Date | string;
   }): Promise<StreamResponse<GetCallParticipantSessionMetricsResponse>> {
     return this.videoApi.getCallParticipantSessionMetrics({
       id: this.id,
