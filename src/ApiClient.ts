@@ -51,20 +51,16 @@ export class ApiClient {
       headers['Content-Type'] = requestContentType ?? 'application/json';
     }
 
-    // `timeout` is a deadline for the whole request, which suits small JSON
-    // calls but not uploads, whose duration grows with the file. Uploads are
-    // instead bounded by the HTTP agent's own timeouts (see
-    // `StreamClientOptions.timeout`).
-    const timeout = this.apiConfig.timeout;
-    const signal = isMultipart ? undefined : AbortSignal.timeout(timeout);
+    // Uploads are bounded by the agent's timeouts, see `StreamClientOptions.timeout`.
+    const signal = isMultipart
+      ? undefined
+      : AbortSignal.timeout(this.apiConfig.timeout);
 
     const encodedBody = isMultipart
       ? this.multipartBodyStringify(body as Record<string, any>)
       : JSON.stringify(body);
 
-    // Set once the response headers arrive. If the request fails after that,
-    // e.g. times out while the body is read, the server may already have
-    // handled it; the error keeps the metadata so the caller can tell.
+    // Set once headers arrive, so later errors keep the response status.
     let metadata: RequestMetadata | undefined;
 
     try {
@@ -90,8 +86,7 @@ export class ApiClient {
         try {
           error = (await response.json()) as APIError;
         } catch (bodyError: any) {
-          // A timeout while reading the error body is still a timeout,
-          // handled (with the metadata) below.
+          // Report a timeout while reading the body as a timeout.
           if (isAbortError(bodyError)) throw bodyError;
           throw new StreamError(
             `Stream error: ${response.status} - ${response.statusText}`,
@@ -120,19 +115,16 @@ export class ApiClient {
         clientRequestId,
         responseCode: error.status,
       };
-      const alreadyAnswered = metadata
-        ? `. The server answered with ${metadata.responseCode} before the response body was fully received, so it may have already processed the request, check before retrying it`
-        : '';
       if (isAbortError(error)) {
         throw new StreamError(
-          `The request was aborted due to to the ${timeout}ms timeout, you can set the timeout in the StreamClient constructor${alreadyAnswered}`,
+          `The request was aborted due to to the ${this.apiConfig.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
           errorMetadata,
           undefined,
           { cause: error },
         );
       } else {
         throw new StreamError(
-          `The request failed due to an unexpected error${alreadyAnswered}`,
+          `The request failed due to an unexpected error`,
           errorMetadata,
           undefined,
           { cause: error },

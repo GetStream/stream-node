@@ -24,20 +24,15 @@ import { File } from 'buffer';
 export interface StreamClientOptions {
   /**
    * The timeout for requests in milliseconds. The default is 3000.
-   *
-   * It does not apply to file and image uploads, which take longer the larger
-   * the file is. Those are bounded by the HTTP agent's timeouts instead: on
-   * Node.js, undici's `headersTimeout` (300000 by default) limits the upload
-   * plus the wait for the response, and `bodyTimeout` (300000) limits the
-   * gaps while reading it. Pass an `agent` to change them, for example
-   * `new Agent({ headersTimeout: 600_000 })` for slower uploads.
+   * File and image uploads are bounded by the `agent`'s timeouts instead
+   * (undici's `headersTimeout` and `bodyTimeout`, 300000 by default).
    */
   timeout?: number;
   basePath?: string;
   // We use unknown here because RequestInit['dispatcher'] is different between Node versions
   /**
    * The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use.
-   * Its timeouts bound file and image uploads, see `timeout`.
+   * Its timeouts also apply to uploads.
    */
   agent?: unknown;
 }

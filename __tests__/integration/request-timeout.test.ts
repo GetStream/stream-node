@@ -141,7 +141,6 @@ describe('request timeouts', () => {
         expect(error.metadata.responseHeaders?.get('x-ratelimit-limit')).toBe(
           '100',
         );
-        expect(error.message).toContain('may have already processed');
       },
     );
 
@@ -161,7 +160,6 @@ describe('request timeouts', () => {
       expect(error.metadata.clientRequestId).toEqual(expect.any(String));
       expect((error.cause as Error).name).toBe('TimeoutError');
       expect(error.message).toContain('100ms timeout');
-      expect(error.message).toContain('may have already processed');
     });
 
     it('reports a timeout, not a status error, when an error body times out', async () => {
