@@ -8,14 +8,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write # Required for OIDC
-  contents: write # required for committing the version bump
+  contents: read
 
 jobs:
   Release:
     name: 🚀 Release
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged && startsWith(github.head_ref, 'release-please--branches--main')
+    # A manual run publishes whatever the selected branch holds, so only allow it from main.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged &&
+      startsWith(github.head_ref, 'release-please--branches--main'))
     runs-on: { group: github-public-amd64 }
+    # The npm Trusted Publishing token is minted in this job. The environment is where its
+    # reviewers are enforced, and the trusted publisher on npmjs.com can pin it, so a copy of
+    # this workflow on any other branch cannot mint a usable token.
+    environment: npm
+    permissions:
+      id-token: write # Required for OIDC
+      contents: write # required for committing the version bump
     steps:
       - uses: actions/checkout@v7
         with:
