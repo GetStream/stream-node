@@ -1,3 +1,5 @@
+import { createServer, Server, ServerResponse } from 'http';
+import { AddressInfo } from 'net';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiClient, DEFAULT_UPLOAD_TIMEOUT } from '../../src/ApiClient';
 import { StreamClient } from '../../src/StreamClient';
@@ -118,5 +120,96 @@ describe('upload timeout', () => {
     expect(error).toBeInstanceOf(StreamError);
     expect((error as StreamError).message).toContain('20ms timeout');
     expect((error as StreamError).message).toContain('uploadTimeout');
+  });
+
+  describe('when the response body stalls after the headers', () => {
+    let server: Server | undefined;
+
+    afterEach(async () => {
+      server?.closeAllConnections();
+      await new Promise((resolve) => server?.close(resolve) ?? resolve(null));
+      server = undefined;
+    });
+
+    /** A real server that sends the headers and part of the body, then stalls. */
+    const stallingServer = async (
+      status: number,
+      contentType = 'application/json',
+      partialBody = '{"file":',
+    ) => {
+      server = createServer((req, res: ServerResponse) => {
+        req.resume();
+        req.on('end', () => {
+          res.writeHead(status, {
+            'Content-Type': contentType,
+            'x-ratelimit-limit': '100',
+          });
+          res.write(partialBody);
+        });
+      });
+      await new Promise<void>((resolve) =>
+        server!.listen(0, '127.0.0.1', resolve),
+      );
+      return `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+    };
+
+    const uploadTo = async (baseUrl: string): Promise<StreamError> => {
+      try {
+        await upload(createApiClient({ baseUrl, uploadTimeout: 100 }));
+      } catch (e) {
+        return e as StreamError;
+      }
+      throw new Error('the upload should have failed');
+    };
+
+    it('keeps the status and headers of a success response', async () => {
+      const error = await uploadTo(await stallingServer(201));
+
+      expect(error).toBeInstanceOf(StreamError);
+      expect(error.metadata.responseCode).toBe(201);
+      expect(error.metadata.responseHeaders?.get('x-ratelimit-limit')).toBe(
+        '100',
+      );
+      expect(error.metadata.rateLimit?.rateLimit).toBe(100);
+      expect(error.metadata.clientRequestId).toEqual(expect.any(String));
+      expect((error.cause as Error).name).toBe('TimeoutError');
+      expect(error.message).toContain('100ms timeout');
+      expect(error.message).toContain('uploadTimeout');
+      expect(error.message).toContain('may have already processed');
+    });
+
+    it('reports a timeout, not a status error, for an error response', async () => {
+      const error = await uploadTo(await stallingServer(400));
+
+      expect(error).toBeInstanceOf(StreamError);
+      expect(error.metadata.responseCode).toBe(400);
+      expect(error.metadata.responseHeaders?.get('x-ratelimit-limit')).toBe(
+        '100',
+      );
+      expect((error.cause as Error).name).toBe('TimeoutError');
+      expect(error.message).toContain('100ms timeout');
+    });
+
+    it('keeps the parse error as the cause of a non-JSON error response', async () => {
+      server = createServer((req, res) => {
+        req.resume();
+        req.on('end', () => {
+          res.writeHead(502, { 'Content-Type': 'text/html' });
+          res.end('<html>bad gateway</html>');
+        });
+      });
+      await new Promise<void>((resolve) =>
+        server!.listen(0, '127.0.0.1', resolve),
+      );
+      const baseUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+
+      const error = await uploadTo(baseUrl);
+
+      expect(error).toBeInstanceOf(StreamError);
+      expect(error.message).toBe('Stream error: 502 - Bad Gateway');
+      expect(error.code).toBe(502);
+      expect(error.metadata.responseCode).toBe(502);
+      expect(error.cause).toBeInstanceOf(SyntaxError);
+    });
   });
 });

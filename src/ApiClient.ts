@@ -67,6 +67,11 @@ export class ApiClient {
       ? this.multipartBodyStringify(body as Record<string, any>)
       : JSON.stringify(body);
 
+    // Set once the response headers arrive. The timeout also covers reading
+    // the body, so a timeout can fire after the server already handled the
+    // request; keeping the metadata lets the caller tell the two cases apart.
+    let metadata: RequestMetadata | undefined;
+
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
         signal,
@@ -78,7 +83,7 @@ export class ApiClient {
 
       const responseHeaders = response.headers;
 
-      const metadata: RequestMetadata = {
+      metadata = {
         clientRequestId,
         responseHeaders,
         responseCode: response.status,
@@ -89,11 +94,15 @@ export class ApiClient {
         let error: APIError;
         try {
           error = (await response.json()) as APIError;
-        } catch {
+        } catch (bodyError: any) {
+          // A timeout while reading the error body is still a timeout,
+          // handled (with the metadata) below.
+          if (isAbortError(bodyError)) throw bodyError;
           throw new StreamError(
             `Stream error: ${response.status} - ${response.statusText}`,
             metadata,
             response.status,
+            { cause: bodyError },
           );
         }
         throw new StreamError(
@@ -112,21 +121,25 @@ export class ApiClient {
       if (error instanceof StreamError) {
         throw error;
       }
-      const metadata: Partial<RequestMetadata> = {
+      const errorMetadata: Partial<RequestMetadata> = metadata ?? {
         clientRequestId,
         responseCode: error.status,
       };
-      if (error.name === 'AbortError' || error.name === 'TimeoutError') {
-        throw new StreamError(
-          `The request was aborted due to to the ${timeout}ms timeout, you can set the ${isMultipart ? 'uploadTimeout' : 'timeout'} in the StreamClient constructor`,
-          metadata,
-          undefined,
-          { cause: error },
-        );
+      if (isAbortError(error)) {
+        const option = isMultipart ? 'uploadTimeout' : 'timeout';
+        const message = metadata
+          ? `The ${metadata.responseCode} response body was not fully received within the ${timeout}ms timeout, you can set the ${option} in the StreamClient constructor. ` +
+            'The server may have already processed the request' +
+            (isMultipart ? ' and stored the upload' : '') +
+            ', check before retrying it'
+          : `The request was aborted due to to the ${timeout}ms timeout, you can set the ${option} in the StreamClient constructor`;
+        throw new StreamError(message, errorMetadata, undefined, {
+          cause: error,
+        });
       } else {
         throw new StreamError(
           `The request failed due to an unexpected error`,
-          metadata,
+          errorMetadata,
           undefined,
           { cause: error },
         );
@@ -172,3 +185,7 @@ export class ApiClient {
     return newParams.join('&');
   };
 }
+
+const isAbortError = (error: unknown) =>
+  error instanceof Error &&
+  (error.name === 'AbortError' || error.name === 'TimeoutError');

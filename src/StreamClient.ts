@@ -27,6 +27,11 @@ export interface StreamClientOptions {
   /**
    * The timeout for multipart (file and image) uploads in milliseconds.
    * Defaults to the larger of `timeout` and 60000.
+   *
+   * Like `timeout`, it covers the whole request, including reading the
+   * response. An upload can time out after the server already stored it; the
+   * error's `metadata.responseCode` is set when the response headers arrived,
+   * so check for the upload before retrying.
    */
   uploadTimeout?: number;
   basePath?: string;
