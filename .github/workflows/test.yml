@@ -33,6 +33,10 @@ jobs:
         run: yarn install --immutable
       - name: Lint
         run: yarn lint
+      - name: Check packed manifest has no install scripts
+        run: |
+          yarn pack -o package.tgz
+          node scripts/check-packed-manifest.mjs package.tgz
   test-node:
     strategy:
       matrix:
