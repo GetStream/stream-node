@@ -30,5 +30,16 @@ jobs:
       - name: Install Dependencies
         run: yarn install --immutable
 
+      # Pack once, check that tarball, and publish the same file, so the
+      # artifact that reaches npm is the one that was checked.
+      - name: Pack package
+        run: yarn pack -o package.tgz
+
+      - name: Check packed manifest has no install scripts
+        run: node scripts/check-packed-manifest.mjs package.tgz
+
+      # npm publishes a tarball as-is; `yarn npm publish` always packs afresh.
+      # npm >= 11.5.1 (bundled with Node 24) authenticates through OIDC
+      # trusted publishing and generates provenance.
       - name: Publish package
-        run: yarn npm publish
+        run: npm publish ./package.tgz --access public --provenance
