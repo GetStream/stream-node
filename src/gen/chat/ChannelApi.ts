@@ -2,6 +2,8 @@ import { StreamResponse, ChatApi } from '../../gen-imports';
 import {
   ChannelGetOrCreateRequest,
   ChannelStateResponse,
+  CreateDraftRequest,
+  CreateDraftResponse,
   DeleteChannelResponse,
   EventResponse,
   ForkChannelRequest,
@@ -167,6 +169,22 @@ export class ChannelApi {
     }
 
     return this.chatApi.getDraft({ id: this.id, type: this.type, ...request });
+  }
+
+  createDraft(
+    request: CreateDraftRequest,
+  ): Promise<StreamResponse<CreateDraftResponse>> {
+    if (!this.id) {
+      throw new Error(
+        `Channel isn't yet created, call getOrCreateDistinctChannel() before this operation`,
+      );
+    }
+
+    return this.chatApi.createDraft({
+      id: this.id,
+      type: this.type,
+      ...request,
+    });
   }
 
   sendEvent(request: SendEventRequest): Promise<StreamResponse<EventResponse>> {
@@ -347,12 +365,12 @@ export class ChannelApi {
     id_gt?: string;
     id_lte?: string;
     id_lt?: string;
-    pinned_at_after_or_equal?: Date;
-    pinned_at_after?: Date;
-    pinned_at_before_or_equal?: Date;
-    pinned_at_before?: Date;
+    pinned_at_after_or_equal?: Date | string;
+    pinned_at_after?: Date | string;
+    pinned_at_before_or_equal?: Date | string;
+    pinned_at_before?: Date | string;
     id_around?: string;
-    pinned_at_around?: Date;
+    pinned_at_around?: Date | string;
     user_id?: string;
     sort?: Array<SortParamRequest>;
     member_custom_include?: Array<string>;
