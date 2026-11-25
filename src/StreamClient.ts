@@ -124,6 +124,9 @@ export class StreamClient extends CommonApi {
    * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
    * - exp - when the token expires, unix timestamp in seconds
    * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   *
+   * Any other property is added to the token as a custom claim. `user_id` must be a
+   * non-empty string and the reserved `server` claim is rejected.
    */
   generateUserToken = (
     payload: {
