@@ -28,10 +28,15 @@ export class ApiClient {
     const encodedParams = this.queryParamsStringify(queryParams);
     if (pathParams) {
       Object.keys(pathParams).forEach((paramName) => {
-        const rawValue = String(pathParams[paramName]);
+        const value: unknown = pathParams[paramName];
+        const rawValue =
+          typeof value === 'string' || typeof value === 'number'
+            ? String(value)
+            : '';
         if (rawValue === '' || rawValue === '.' || rawValue === '..') {
-          throw new Error(
+          throw new StreamError(
             `Invalid path parameter '${paramName}': must not be empty or a dot-segment`,
+            {},
           );
         }
         url = url.replace(`{${paramName}}`, encodeURIComponent(rawValue));
