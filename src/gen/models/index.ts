@@ -1148,6 +1148,7 @@ export interface AddActivityRequest {
    * Whether to create notification activities for mentioned users
    */
   create_notification_activity?: boolean;
+  create_system_feeds?: boolean;
   create_users?: boolean;
   enrich_own_fields?: boolean;
   /**
@@ -26591,6 +26592,10 @@ export interface UpsertActivitiesRequest {
    * List of activities to create or update
    */
   activities: Array<ActivityRequest>;
+  /**
+   * Server-side only. If true, a missing feed whose id is not a user id (e.g. game:123) is created as a system feed with no user owner. Missing feeds named after an existing user are created either way. Built-in groups (such as user, timeline and notification) and notification groups still require a user. Default: false.
+   */
+  create_system_feeds?: boolean;
   /**
    * Server-side only. If true, auto-creates users referenced by activity user_id values that don't already exist. Default: false.
    */
