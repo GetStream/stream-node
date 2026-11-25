@@ -16,8 +16,8 @@ declare const timestampNsBrand: unique symbol;
  *   nowNs()                   the local clock, wire-comparable
  *   asTimestampNS(n)          brand a number already in ns (DB rows, fixtures) -- no conversion
  *
- * A request date field is typed `Date`, not this -- pass `nsToDate(t)` when handing a
- * server-sent timestamp back to the API, or `nsToRfc3339(t)` where precision matters.
+ * A request date field is typed `Date | string`, not this -- pass `nsToRfc3339(t)` when
+ * handing a server-sent timestamp back to the API, since a `Date` stops at the millisecond.
  *
  * Values above `Number.MAX_SAFE_INTEGER` are quantised to ~256ns, so ordering holds
  * but exact equality after a JSON round-trip does not.
@@ -80,19 +80,27 @@ export interface AITextConfig {
 export interface AIVideoConfig {
   async?: boolean;
   enabled?: boolean;
+  ocr_rules?: Array<OCRRule>;
+  ocr_severity_rules?: Array<BodyguardRule>;
   rules?: Array<AWSRekognitionRule>;
 }
 
 export interface AIVideoConfigRequest {
   async?: boolean;
   enabled?: boolean;
+  ocr_rules?: Array<OCRRule>;
+  ocr_severity_rules?: Array<BodyguardRule>;
   rules?: Array<AWSRekognitionRule>;
+  audio_config?: AIAudioConfigRequest;
 }
 
 export interface AIVideoConfigResponse {
   enabled: boolean;
   rules: Array<AWSRekognitionRule>;
   async?: boolean;
+  ocr_rules?: Array<OCRRule>;
+  ocr_severity_rules?: Array<BodyguardRule>;
+  audio_config?: AIAudioConfigResponse;
 }
 
 export interface APIError {
@@ -1140,6 +1148,7 @@ export interface AddActivityRequest {
    * Whether to create notification activities for mentioned users
    */
   create_notification_activity?: boolean;
+  create_system_feeds?: boolean;
   create_users?: boolean;
   enrich_own_fields?: boolean;
   /**
@@ -1902,7 +1911,7 @@ export interface AnalyzeRequest {
   /**
    * Original timestamp when the content was produced. Used as the `published_at` timestamp on per-content log entries that surface in `matched_contents` on aggregation-rule webhooks.
    */
-  content_published_at?: Date;
+  content_published_at?: Date | string;
   /**
    * @deprecated
    * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE). Ignored when country_codes is set, but an invalid value is still rejected with 400.
@@ -2125,6 +2134,10 @@ export interface AppResponseFields {
    * Settings for the moderation agent reviewer, which reviews moderation outcomes and proposes or applies an action.
    */
   effective_agent_review?: AgentReviewSettingsPayload;
+  /**
+   * The app's message marks policy: the mark types it defines or overrides, and the privacy switch. The channel type's mark_types says which of them are on in its channels.
+   */
+  message_marks?: MessageMarksConfig;
   moderation_dashboard_preferences?: ModerationDashboardPreferences;
 }
 
@@ -2450,6 +2463,22 @@ export interface Attachment {
   actions?: Array<Action>;
   fields?: Array<Field>;
   giphy?: Images;
+  voice_transcript?: AttachmentTranscriptResponse;
+}
+
+export interface AttachmentTranscriptResponse {
+  /**
+   * Why the recording could not be transcribed: unsupported_format, too_large, blocked_url, fetch_failed or invalid_response
+   */
+  error?: string;
+  /**
+   * Transcribed text of the recording
+   */
+  text?: string;
+  /**
+   * Languages detected in the recording
+   */
+  languages?: Array<TranscriptLanguageResponse>;
 }
 
 export interface Audience {
@@ -3962,7 +3991,7 @@ export interface CallReportResponse {
 export interface CallRequest {
   channel_cid?: string;
   created_by_id?: string;
-  starts_at?: Date;
+  starts_at?: Date | string;
   team?: string;
   video?: boolean;
   members?: Array<MemberRequest>;
@@ -4888,7 +4917,7 @@ export interface ChannelBatchUpdateRequest {
   /**
    * Required with the `addMembersHideHistory` operation, and rejected with every other operation including `addMembers`. Hides each matched channel's history before this time from the members the operation adds. Members that already belong to a matched channel are never affected. Must be in RFC3339 format (e.g., "2024-01-01T10:00:00Z") and in the past.
    */
-  hide_history_before?: Date;
+  hide_history_before?: Date | string;
   /**
    * For updateData and hide only. Requires a root cids $eq or $in filter with at most 100 CIDs and no root $or/$and. A synchronous hide also requires 1 to 10 distinct member user IDs. Split larger selections into requests of at most 100 CIDs. A success_channels_count response means the database update completed; a task_id response means it was queued and must be polled, including on older API nodes.
    */
@@ -4951,6 +4980,7 @@ export interface ChannelConfig {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   /**
    * List of commands that channel supports
    */
@@ -4968,6 +4998,7 @@ export interface ChannelConfig {
   push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -5026,6 +5057,10 @@ export interface ChannelConfigOverrides {
    */
   user_message_reminders?: boolean;
   /**
+   * Enables or disables transcription of voice recordings
+   */
+  voice_transcription?: boolean;
+  /**
    * List of commands that channel supports
    */
   commands?: Array<string>;
@@ -5067,6 +5102,7 @@ export interface ChannelConfigWithInfo {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   commands: Array<Command>;
   blocklist?: string;
   /**
@@ -5097,6 +5133,7 @@ export interface ChannelConfigWithInfo {
   scheduled_messages_min_lead_time_seconds?: number;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -5226,11 +5263,11 @@ export interface ChannelExport {
   /**
    * Date to export messages since
    */
-  messages_since?: Date;
+  messages_since?: Date | string;
   /**
    * Date to export messages until
    */
-  messages_until?: Date;
+  messages_until?: Date | string;
   /**
    * Channel type
    */
@@ -5712,6 +5749,7 @@ export const ChannelOwnCapability = {
   SEND_CUSTOM_EVENTS: 'send-custom-events',
   SEND_LINKS: 'send-links',
   SEND_MESSAGE: 'send-message',
+  SEND_MESSAGE_MARK: 'send-message-mark',
   SEND_POLL: 'send-poll',
   SEND_REACTION: 'send-reaction',
   SEND_REPLY: 'send-reply',
@@ -6133,6 +6171,7 @@ export interface ChannelTypeConfig {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   commands: Array<Command>;
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
@@ -6149,6 +6188,7 @@ export interface ChannelTypeConfig {
   push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -6320,6 +6360,16 @@ export interface ChatDraftResponse {
   quoted_message?: ChatMessageResponse;
 }
 
+export interface ChatMarkGroupResponse {
+  count: number;
+  latest_by: Array<ChatMessageMarkerResponse>;
+}
+
+export interface ChatMessageMarkerResponse {
+  created_at: TimestampNS;
+  user_id: string;
+}
+
 export interface ChatMessageResponse {
   cid: string;
   created_at: TimestampNS;
@@ -6361,10 +6411,12 @@ export interface ChatMessageResponse {
   mentioned_group_ids?: Array<string>;
   mentioned_groups?: Array<UserGroupResponse>;
   mentioned_roles?: Array<string>;
+  own_marks?: Array<ChatOwnMarkResponse>;
   thread_participants?: Array<UserResponse>;
   draft?: ChatDraftResponse;
   i18n?: Record<string, string>;
   image_labels?: Record<string, Array<string>>;
+  mark_groups?: Record<string, ChatMarkGroupResponse>;
   member?: ChannelMemberPartialResponse;
   moderation?: ChatModerationV2Response;
   /**
@@ -6387,6 +6439,11 @@ export interface ChatModerationV2Response {
   blocklists_matched?: Array<string>;
   image_harms?: Array<string>;
   text_harms?: Array<string>;
+}
+
+export interface ChatOwnMarkResponse {
+  created_at: TimestampNS;
+  type: string;
 }
 
 export interface ChatPreferences {
@@ -6615,7 +6672,7 @@ export interface CheckRequest {
   /**
    * Original timestamp when the content was produced (for correlating flagged content with source video timeline)
    */
-  content_published_at?: Date;
+  content_published_at?: Date | string;
   /**
    * @deprecated
    * ISO 3166-1 alpha-2 country the content is aimed at (e.g. US, DE). Ignored when country_codes is set, but an invalid value is still rejected with 400.
@@ -6850,7 +6907,7 @@ export interface ClientEvent {
   /**
    * UTC timestamp at which the ICE connection was established earlier in the session, when applicable
    */
-  previously_connected_timestamp?: Date;
+  previously_connected_timestamp?: Date | string;
   /**
    * Total in-stage retries the client made before resolving (0–1000). Required on completed join events.
    */
@@ -6890,7 +6947,7 @@ export interface ClientEvent {
   /**
    * UTC timestamp at which the event was recorded
    */
-  timestamp?: Date;
+  timestamp?: Date | string;
   /**
    * Identifier of the media track the frame belongs to. Required on FirstVideoFrame; optional on FirstAudioFrame.
    */
@@ -7414,6 +7471,10 @@ export interface ConfigOverridesRequest {
    */
   user_message_reminders?: boolean;
   /**
+   * Enable/disable transcription of voice recordings in this channel
+   */
+  voice_transcription?: boolean;
+  /**
    * List of available commands
    */
   commands?: Array<string>;
@@ -7466,8 +7527,17 @@ export interface ConfigResponse {
   ai_image_subclassifications?: Record<string, Array<string>>;
   ai_text_config?: AITextConfig;
   ai_video_config?: AIVideoConfigResponse;
+  /**
+   * @deprecated
+   */
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
+  /**
+   * @deprecated
+   */
   automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
+  /**
+   * @deprecated
+   */
   automod_toxicity_config?: AutomodToxicityConfig;
   block_list_config?: BlockListConfig;
   engine?: ModerationEngineConfigResponse;
@@ -7601,6 +7671,10 @@ export interface CreateBlockListRequest {
     | 'word'
     | 'word_allowlist';
   user_id?: string;
+  /**
+   * For regex block lists, reject any rule that matches 50% or more of a built-in sample dataset as too broad
+   */
+  validate?: boolean;
   /**
    * User request object
    */
@@ -7830,6 +7904,10 @@ export interface CreateChannelTypeRequest {
   url_enrichment?: boolean;
   user_message_reminders?: boolean;
   /**
+   * Transcribe voice recording attachments.
+   */
+  voice_transcription?: boolean;
+  /**
    * Blocklists
    */
   blocklists?: Array<BlockListOptions>;
@@ -7837,6 +7915,10 @@ export interface CreateChannelTypeRequest {
    * List of commands that channel supports
    */
   commands?: Array<string>;
+  /**
+   * Message mark types members can send in channels of this type, for example played
+   */
+  mark_types?: Array<string>;
   /**
    * List of permissions for the channel type
    */
@@ -7890,6 +7972,7 @@ export interface CreateChannelTypeResponse {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   commands: Array<string>;
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
@@ -7906,6 +7989,7 @@ export interface CreateChannelTypeResponse {
   push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -7989,6 +8073,21 @@ export interface CreateDeviceRequest {
    * User request object
    */
   user?: UserRequest;
+}
+
+export interface CreateDraftRequest {
+  /**
+   * Message data for creating or updating a message
+   */
+  message: MessageRequest;
+}
+
+export interface CreateDraftResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  draft: DraftResponse;
 }
 
 export interface CreateExternalStorageRequest {
@@ -8212,6 +8311,30 @@ export interface CreateMembershipLevelResponse {
   membership_level: MembershipLevelResponse;
 }
 
+export interface CreateMessageMarkRequest {
+  /**
+   * The mark type: a built-in type such as played (the acting user played the message's audio, voiceRecording or video attachment) or a type the app defines in its message_marks settings
+   */
+  type: string;
+  user_id?: string;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface CreateMessageMarkResponse {
+  /**
+   * Whether this request wrote the mark. False on a repeat and on the author's own mark
+   */
+  created: boolean;
+  duration: string;
+  /**
+   * A mark one user put on one message, for example played on a voice note. A mark is written once and never removed by users.
+   */
+  mark: MessageMarkResponse;
+}
+
 export interface CreatePermissionRequest {
   /**
    * Action name this permission is for (e.g. SendMessage)
@@ -8385,8 +8508,8 @@ export interface CreateQueueRequest {
 }
 
 export interface CreateReminderRequest {
-  expires_at?: Date;
-  remind_at?: Date;
+  expires_at?: Date | string;
+  remind_at?: Date | string;
   user_id?: string;
   /**
    * User request object
@@ -9338,6 +9461,19 @@ export interface DeleteUsersRequest {
    * * hard - deletes user completely. Requires 'hard' option for messages, and 'hard' or 'keep' option for conversations
    */
   user?: 'soft' | 'pruning' | 'hard';
+  /**
+   * Channel CIDs (type:id) to keep intact. Applies to every user in user_ids.
+   * Channels listed here keep their rows, messages, memberships, thread participation and reactions, and are not deleted as conversations,
+   * whatever the messages and conversations modes say. Everything else is deleted as usual.
+   * * Maximum 1000 entries, duplicates included. Duplicates are then ignored.
+   * * Cannot be combined with user 'hard' (400).
+   * * Cannot be combined with files true (400).
+   * * A malformed CID is rejected with 400.
+   * * A well-formed CID that does not exist is accepted and excludes nothing.
+   * * Scheduled messages are not channel-scoped: with user 'pruning' the user's scheduled messages are still removed in every channel, excluded ones included.
+   * * The user.deleted event does not list the kept channels. A consumer that mirrors deletions must skip them itself.
+   */
+  exclude_channel_cids?: Array<string>;
 }
 
 export interface DeleteUsersResponse {
@@ -9987,11 +10123,11 @@ export interface ExportFeedsByTypeRequest {
   /**
    * Only export rows created at or after this time. On reactions it requires user_id or activity_ids, on follows user_id; on comments without activity_ids soft-deleted rows are left out
    */
-  created_at_from?: Date;
+  created_at_from?: Date | string;
   /**
    * Only export rows created before this time. On reactions it requires user_id or activity_ids, on follows user_id; on comments without activity_ids soft-deleted rows are left out
    */
-  created_at_to?: Date;
+  created_at_to?: Date | string;
   /**
    * Whether soft-deleted activities and comments are exported. Defaults to false; true cannot be combined with user_id on activities or comments
    */
@@ -11426,6 +11562,10 @@ export interface ForYouConfig {
    * Name of a registered ranking preset that stands in for 'score' when score is empty. One of: for_you_v2, hot
    */
   preset?: string;
+  /**
+   * Tracks trending tags and turns on the topic_trend ranking variable (0-1, the highest trend over a post's interest tags). Requires enabled
+   */
+  trending?: boolean;
   dwell?: ForYouDwellConfig;
   exploration?: ForYouExplorationConfig;
 }
@@ -11774,9 +11914,13 @@ export interface GetBlockedUsersResponse {
    */
   duration: string;
   /**
-   * Array of blocked user object
+   * Blocked users on this page, oldest block first
    */
   blocks: Array<BlockedUserResponse>;
+  /**
+   * Cursor for the next page. Absent on the last page
+   */
+  next?: string;
 }
 
 export interface GetCallParticipantSessionMetricsResponse {
@@ -11891,6 +12035,7 @@ export interface GetChannelTypeResponse {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   commands: Array<Command>;
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
@@ -11907,6 +12052,7 @@ export interface GetChannelTypeResponse {
   push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -11950,7 +12096,7 @@ export interface GetCommentsResponse {
   comment_count: number;
   duration: string;
   /**
-   * Sort order used for the comments (first, last, top, best, controversial)
+   * Sort order used for the comments (first, last, top, best, controversial, popular, mutuals)
    */
   sort: string;
   /**
@@ -12181,6 +12327,14 @@ export interface GetHistoryWindowTeamsResponse {
   teams: Array<HistoryWindowTeam>;
 }
 
+export interface GetHookEventsResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  events: Array<HookEvents>;
+}
+
 export interface GetImportResponse {
   /**
    * Duration of the request in milliseconds
@@ -12306,6 +12460,7 @@ export interface GetOGResponse {
   actions?: Array<Action>;
   fields?: Array<Field>;
   giphy?: Images;
+  voice_transcript?: AttachmentTranscriptResponse;
 }
 
 export interface GetOrCreateCallRequest {
@@ -12678,6 +12833,14 @@ export interface GetThreadResponse {
   thread: ThreadStateResponse;
 }
 
+export interface GetTrendingTopicsResponse {
+  duration: string;
+  /**
+   * Topics by descending score, then ascending tag
+   */
+  topics: Array<TrendingTopicResponse>;
+}
+
 export interface GetUserGroupResponse {
   duration: string;
   user_group?: UserGroupResponse;
@@ -12862,6 +13025,12 @@ export interface HistoryWindowTeam {
    * Date/time the team was last marked
    */
   updated_at: TimestampNS;
+}
+
+export interface HookEvents {
+  description: string;
+  name: string;
+  products: Array<string>;
 }
 
 export interface HuaweiConfig {
@@ -13830,6 +13999,14 @@ export interface ListPermissionsResponse {
   permissions: Array<Permission>;
 }
 
+export interface ListPromotedTopicsResponse {
+  duration: string;
+  /**
+   * The active promotions, oldest first
+   */
+  promoted_topics: Array<PromotedTopicResponse>;
+}
+
 export interface ListPushProvidersResponse {
   /**
    * Duration of the request in milliseconds
@@ -13948,6 +14125,10 @@ export interface MarkActivityRequest {
 export interface MarkChannelsReadRequest {
   user_id?: string;
   /**
+   * Filter conditions to apply to the query
+   */
+  filter_conditions?: Record<string, any>;
+  /**
    * Map of channel ID to last read message ID
    */
   read_by_channel?: Record<string, string>;
@@ -13966,6 +14147,24 @@ export interface MarkDeliveredResponse {
    * Duration of the request in milliseconds
    */
   duration: string;
+}
+
+export interface MarkGroupResponse {
+  /**
+   * Number of users who marked the message with this type
+   */
+  count: number;
+  /**
+   * The users who marked the message with this type, newest first, at most 100
+   */
+  latest_by: Array<MessageMarkerResponse>;
+}
+
+export interface MarkPrivacyConfig {
+  /**
+   * When true, a mark by a user whose read receipts are off is kept for that user only: the author gets no event and does not see it in mark_groups or in the marks listing. Decided when the mark is written; changing the switch does not rewrite earlier marks. Defaults to false
+   */
+  respect_read_receipts?: boolean;
 }
 
 export interface MarkReadRequest {
@@ -14028,17 +14227,28 @@ export interface MarkReviewedRequestPayload {
   reason?: string;
 }
 
+export interface MarkTypeConfig {
+  /**
+   * Channel size above which the type is off, 1 to 100. Defaults to 100
+   */
+  max_members?: number;
+  /**
+   * Attachment types that qualify a message for the mark, any one of them; 1 to 10 entries, required for a custom type. For a built-in type the list replaces the default, and leaving it out keeps the default
+   */
+  requires?: Array<string>;
+}
+
 export interface MarkUnreadRequest {
   /**
-   * ID of the message from where the channel is marked unread
+   * ID of the message from where the channel is marked unread. Omit message_id, message_timestamp and thread_id to mark the whole channel soft unread: a dot without a counter
    */
   message_id?: string;
   /**
-   * Timestamp of the message from where the channel is marked unread
+   * Timestamp of the message from where the channel is marked unread. Omit message_id, message_timestamp and thread_id to mark the whole channel soft unread
    */
-  message_timestamp?: Date;
+  message_timestamp?: Date | string;
   /**
-   * Mark a thread unread, specify one of the thread, message timestamp, or message id
+   * Mark a thread unread. Specify at most one of thread_id, message_timestamp, or message_id; omit all three to mark the channel soft unread
    */
   thread_id?: string;
   user_id?: string;
@@ -14527,6 +14737,70 @@ export interface MessageHistoryEntryResponse {
   custom: Record<string, any>;
 }
 
+export interface MessageMarkResponse {
+  /**
+   * When the mark was written
+   */
+  created_at: TimestampNS;
+  /**
+   * The marked message
+   */
+  message_id: string;
+  /**
+   * The mark type, for example played
+   */
+  type: string;
+  /**
+   * The user who marked the message
+   */
+  user_id: string;
+}
+
+export interface MessageMarkWithUserResponse {
+  /**
+   * When the mark was written
+   */
+  created_at: TimestampNS;
+  /**
+   * The marked message
+   */
+  message_id: string;
+  /**
+   * The mark type, for example played
+   */
+  type: string;
+  /**
+   * The user who marked the message
+   */
+  user_id: string;
+  /**
+   * User response object
+   */
+  user: UserResponse;
+}
+
+export interface MessageMarkerResponse {
+  /**
+   * When the mark was written
+   */
+  created_at: TimestampNS;
+  /**
+   * The user who marked the message
+   */
+  user_id: string;
+}
+
+export interface MessageMarksConfig {
+  /**
+   * How marks follow the marker's privacy settings.
+   */
+  privacy?: MarkPrivacyConfig;
+  /**
+   * Mark type definitions by name. A built-in name such as played overrides its defaults; a custom name must be namespaced, for example acme.viewed. At most 20 types
+   */
+  types?: Record<string, MarkTypeConfig>;
+}
+
 export interface MessageModerationResult {
   /**
    * Action taken by automod
@@ -14650,23 +14924,23 @@ export interface MessagePaginationParams {
   /**
    * The timestamp to get messages with a created_at timestamp greater than
    */
-  created_at_after?: Date;
+  created_at_after?: Date | string;
   /**
    * The timestamp to get messages with a created_at timestamp greater than or equal to
    */
-  created_at_after_or_equal?: Date;
+  created_at_after_or_equal?: Date | string;
   /**
    * The result will be a set of messages, that are both older and newer than the created_at timestamp provided, distributed evenly around the timestamp
    */
-  created_at_around?: Date;
+  created_at_around?: Date | string;
   /**
    * The timestamp to get messages with a created_at timestamp smaller than
    */
-  created_at_before?: Date;
+  created_at_before?: Date | string;
   /**
    * The timestamp to get messages with a created_at timestamp smaller than or equal to
    */
-  created_at_before_or_equal?: Date;
+  created_at_before_or_equal?: Date | string;
   /**
    * The result will be a set of messages, that are both older and newer than the message with the provided ID, and the message with the ID provided will be in the middle of the set
    */
@@ -14763,7 +15037,7 @@ export interface MessageRequest {
   /**
    * Date when pinned message expires
    */
-  pin_expires?: Date | null;
+  pin_expires?: Date | string | null;
   /**
    * Whether message is pinned or not
    */
@@ -14771,7 +15045,7 @@ export interface MessageRequest {
   /**
    * Date when message got pinned
    */
-  pinned_at?: Date | null;
+  pinned_at?: Date | string | null;
   /**
    * Identifier of the poll to include in the message
    */
@@ -14954,6 +15228,10 @@ export interface MessageResponse {
    */
   mentioned_roles?: Array<string>;
   /**
+   * The viewer's own marks on this message, for example played. Omitted when marks are off for the channel type
+   */
+  own_marks?: Array<OwnMarkResponse>;
+  /**
    * List of users who participate in thread
    */
   thread_participants?: Array<UserResponse>;
@@ -14966,6 +15244,10 @@ export interface MessageResponse {
    * Contains image moderation information
    */
   image_labels?: Record<string, Array<string>>;
+  /**
+   * On the viewer's own messages: who marked them, per mark type (for example played). Omitted when marks are off for the channel type
+   */
+  mark_groups?: Record<string, MarkGroupResponse>;
   member?: ChannelMemberPartialResponse;
   /**
    * Channel member data for the users mentioned in the message, keyed by user id. Only present when the app has member custom on mentioned users enabled, and only for the first two mentioned users of each message
@@ -15245,6 +15527,10 @@ export interface MessageWithChannelResponse {
    */
   mentioned_roles?: Array<string>;
   /**
+   * The viewer's own marks on this message, for example played. Omitted when marks are off for the channel type
+   */
+  own_marks?: Array<OwnMarkResponse>;
+  /**
    * List of users who participate in thread
    */
   thread_participants?: Array<UserResponse>;
@@ -15257,6 +15543,10 @@ export interface MessageWithChannelResponse {
    * Contains image moderation information
    */
   image_labels?: Record<string, Array<string>>;
+  /**
+   * On the viewer's own messages: who marked them, per mark type (for example played). Omitted when marks are off for the channel type
+   */
+  mark_groups?: Record<string, MarkGroupResponse>;
   member?: ChannelMemberPartialResponse;
   /**
    * Channel member data for the users mentioned in the message, keyed by user id. Only present when the app has member custom on mentioned users enabled, and only for the first two mentioned users of each message
@@ -15438,11 +15728,11 @@ export interface ModerationCheckCompletedEvent {
 
 export interface ModerationConfig {
   async?: boolean;
-  created_at?: Date;
+  created_at?: Date | string;
   key?: string;
   published_version?: number;
   team?: string;
-  updated_at?: Date;
+  updated_at?: Date | string;
   supported_video_call_harm_types?: Array<string>;
   ai_image_config?: AIImageConfig;
   ai_image_lite_config?: BodyguardImageAnalysisConfig;
@@ -15509,7 +15799,8 @@ export interface ModerationEngineConfigRequest {
     | 'gpt-4o'
     | 'gpt-6-luna'
     | 'stream-mammoth-1'
-    | 'stream-elephant-1';
+    | 'stream-elephant-1'
+    | 'stream-whale-1';
   /**
    * llm, nlp or stream. Empty follows the app's LLM moderation setting
    */
@@ -16235,6 +16526,10 @@ export interface NotificationMarkUnreadEvent {
   last_read_message_id?: string;
   received_at?: TimestampNS;
   /**
+   * True when the channel was marked unread without a message: an unread dot with no counter
+   */
+  soft_unread?: boolean;
+  /**
    * The team ID
    */
   team?: string;
@@ -16508,6 +16803,7 @@ export const OwnCapability = {
   SCREENSHARE: 'screenshare',
   SEND_AUDIO: 'send-audio',
   SEND_CLOSED_CAPTIONS_CALL: 'send-closed-captions-call',
+  SEND_DATA: 'send-data',
   SEND_VIDEO: 'send-video',
   START_BROADCAST_CALL: 'start-broadcast-call',
   START_CLOSED_CAPTIONS_CALL: 'start-closed-captions-call',
@@ -16530,6 +16826,17 @@ export const OwnCapability = {
 } as const;
 
 export type OwnCapability = (typeof OwnCapability)[keyof typeof OwnCapability];
+
+export interface OwnMarkResponse {
+  /**
+   * When the mark was written
+   */
+  created_at: TimestampNS;
+  /**
+   * The mark type, for example played
+   */
+  type: string;
+}
 
 export interface OwnUserResponse {
   banned: boolean;
@@ -17357,6 +17664,52 @@ export interface PrivacySettingsResponse {
   typing_indicators?: TypingIndicatorsResponse;
 }
 
+export interface PromoteTopicsRequest {
+  /**
+   * How long the promotion lasts, in seconds (60-86400)
+   */
+  ttl: number;
+  /**
+   * The tags to promote (1-10, each at most 255 characters)
+   */
+  tags: Array<string>;
+  /**
+   * The trend weight of the tags, above 0 and at most 1. Defaults to 1
+   */
+  weight?: number;
+}
+
+export interface PromoteTopicsResponse {
+  duration: string;
+  /**
+   * A set of topics promoted for the For You trend signal until it expires
+   */
+  promoted_topic: PromotedTopicResponse;
+}
+
+export interface PromotedTopicResponse {
+  /**
+   * When the promotion expires
+   */
+  expires_at: TimestampNS;
+  /**
+   * The ID of the promotion
+   */
+  id: string;
+  /**
+   * When the promotion started
+   */
+  starts_at: TimestampNS;
+  /**
+   * The trend weight the tags get, between 0 and 1
+   */
+  weight: number;
+  /**
+   * The promoted topic tags
+   */
+  tags: Array<string>;
+}
+
 export interface PublishConfigVersionRequest {
   /**
    * Team associated with the configuration
@@ -17501,7 +17854,7 @@ export interface PushPreferenceInput {
   /**
    * Disable push notifications till a certain time
    */
-  disabled_until?: Date;
+  disabled_until?: Date | string;
   /**
    * Set the level of feeds push notifications for the user. One of: all, none, default
    */
@@ -17590,7 +17943,7 @@ export interface PushProviderRequest {
   apn_team_id?: string;
   apn_topic?: string;
   description?: string;
-  disabled_at?: Date;
+  disabled_at?: Date | string;
   disabled_reason?: string;
   firebase_apn_template?: string;
   firebase_credentials?: string;
@@ -17824,6 +18177,10 @@ export interface QueryAggregateCallStatsResponse {
 }
 
 export interface QueryAppealsRequest {
+  /**
+   * Whether to also return the number of appeals matching the filter (total and capped). Set limit to 0 to get only the count. Not returned for team-scoped moderators, or when the count fails.
+   */
+  include_count?: boolean;
   limit?: number;
   next?: string;
   prev?: string;
@@ -17848,8 +18205,16 @@ export interface QueryAppealsResponse {
    * List of Appeal Items
    */
   items: Array<AppealItemResponse>;
+  /**
+   * Whether more appeals match than are counted exactly (1,000), so total is a lower bound. Returned when include_count is set.
+   */
+  capped?: boolean;
   next?: string;
   prev?: string;
+  /**
+   * Number of appeals matching the filter, returned when include_count is set. When capped is true, at least this many appeals match.
+   */
+  total?: number;
 }
 
 export interface QueryBannedUsersPayload {
@@ -17857,10 +18222,10 @@ export interface QueryBannedUsersPayload {
    * Filter conditions to apply to the query
    */
   filter_conditions: Record<string, any>;
-  created_at_after?: Date;
-  created_at_after_or_equal?: Date;
-  created_at_before?: Date;
-  created_at_before_or_equal?: Date;
+  created_at_after?: Date | string;
+  created_at_after_or_equal?: Date | string;
+  created_at_before?: Date | string;
+  created_at_before_or_equal?: Date | string;
   /**
    * Whether to exclude expired bans or not
    */
@@ -18693,10 +19058,10 @@ export interface QueryFollowsResponse {
 }
 
 export interface QueryFutureChannelBansPayload {
-  created_at_after?: Date;
-  created_at_after_or_equal?: Date;
-  created_at_before?: Date;
-  created_at_before_or_equal?: Date;
+  created_at_after?: Date | string;
+  created_at_after_or_equal?: Date | string;
+  created_at_before?: Date | string;
+  created_at_before_or_equal?: Date | string;
   /**
    * Whether to exclude expired bans or not
    */
@@ -18749,7 +19114,7 @@ export interface QueryLabelResultsRequest {
    */
   sort?: Array<SortParamRequest>;
   /**
-   * Filter conditions
+   * Filter conditions. keyword searches the moderated content: "$q" matches whole words, while "$contains" is a case-insensitive substring match (text inside unspaced CJK sentences, word roots, emoji and symbols). "$contains" requires a date_range or created_at window within the last 7 days, at most 1 day long, or 7 days when the filter also narrows language to at most 3 non-empty values. The 7-day window is best effort: a language that covers most of an app's results can still time out.
    */
   filter?: Record<string, any>;
   /**
@@ -18770,10 +19135,10 @@ export interface QueryLabelResultsResponse {
 
 export interface QueryMembersPayload {
   type: string;
-  created_at_after?: Date;
-  created_at_after_or_equal?: Date;
-  created_at_before?: Date;
-  created_at_before_or_equal?: Date;
+  created_at_after?: Date | string;
+  created_at_after_or_equal?: Date | string;
+  created_at_before?: Date | string;
+  created_at_before_or_equal?: Date | string;
   id?: string;
   limit?: number;
   offset?: number;
@@ -18882,6 +19247,48 @@ export interface QueryMessageHistoryResponse {
   message_history: Array<MessageHistoryEntryResponse>;
   next?: string;
   prev?: string;
+}
+
+export interface QueryMessageMarksFilter {
+  /**
+   * Only marks of this type, for example played
+   */
+  type?: string;
+}
+
+export interface QueryMessageMarksRequest {
+  /**
+   * Page size, 1 to 100. Defaults to 25
+   */
+  limit?: number;
+  /**
+   * Cursor from the previous page's next field. The order is fixed: newest first
+   */
+  next?: string;
+  user_id?: string;
+  /**
+   * Filter for listing the marks on a message
+   */
+  filter?: QueryMessageMarksFilter;
+  /**
+   * User request object
+   */
+  user?: UserRequest;
+}
+
+export interface QueryMessageMarksResponse {
+  /**
+   * Duration of the request in milliseconds
+   */
+  duration: string;
+  /**
+   * The marks of this page, newest first
+   */
+  marks: Array<MessageMarkWithUserResponse>;
+  /**
+   * Cursor for the next page; absent on the last page
+   */
+  next?: string;
 }
 
 export interface QueryModerationConfigsRequest {
@@ -19922,7 +20329,7 @@ export interface ReactionRequest {
   /**
    * Date/time of creation
    */
-  created_at?: Date;
+  created_at?: Date | string;
   /**
    * Reaction score. If not specified reaction has score of 1
    */
@@ -19930,7 +20337,7 @@ export interface ReactionRequest {
   /**
    * Date/time of the last update
    */
-  updated_at?: Date;
+  updated_at?: Date | string;
   user_id?: string;
   custom?: Record<string, any>;
   /**
@@ -20095,6 +20502,7 @@ export interface ReadStateResponse {
   last_delivered_at?: TimestampNS;
   last_delivered_message_id?: string;
   last_read_message_id?: string;
+  soft_unread?: boolean;
 }
 
 export interface RecordSettings {
@@ -21463,8 +21871,17 @@ export interface SaveConfigVersionRequest {
   ai_image_config?: AIImageConfig;
   ai_text_config?: AITextConfig;
   ai_video_config?: AIVideoConfigRequest;
+  /**
+   * @deprecated
+   */
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
+  /**
+   * @deprecated
+   */
   automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
+  /**
+   * @deprecated
+   */
   automod_toxicity_config?: AutomodToxicityConfig;
   aws_rekognition_config?: AIImageConfig;
   block_list_config?: BlockListConfig;
@@ -21537,11 +21954,11 @@ export interface ScheduleActivityRequest {
   /**
    * Controls who can add comments/replies to this activity. One of: everyone, people_i_follow, nobody
    */
-  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies?: RestrictReplies;
   /**
    * When to publish the activity, an RFC 3339 time. A time less than a minute ahead or in the past is moved to one minute from now, and the time is rounded up to a whole minute.
    */
-  scheduled_at?: Date;
+  scheduled_at?: Date | string;
   /**
    * Whether to skip URL enrichment for the activity
    */
@@ -21561,7 +21978,7 @@ export interface ScheduleActivityRequest {
   /**
    * Visibility setting for the activity. One of: public, private, tag
    */
-  visibility?: 'public' | 'private' | 'tag';
+  visibility?: ActivityVisibility;
   /**
    * If visibility is 'tag', this is the tag name and is required
    */
@@ -21670,7 +22087,7 @@ export interface ScheduledActivityPreview {
   /**
    * Who may reply to the activity
    */
-  restrict_replies?: 'everyone' | 'people_i_follow' | 'nobody';
+  restrict_replies?: RestrictReplies;
   /**
    * Text content of the activity
    */
@@ -21678,7 +22095,7 @@ export interface ScheduledActivityPreview {
   /**
    * Visibility of the activity
    */
-  visibility?: 'public' | 'private' | 'tag';
+  visibility?: ActivityVisibility;
   /**
    * Visibility tag of the activity
    */
@@ -21787,9 +22204,17 @@ export interface ScheduledMessageChannelResponse {
    */
   id: string;
   /**
+   * Number of members of the channel. 0 when the channel is deleted
+   */
+  member_count: number;
+  /**
    * Channel type
    */
   type: string;
+  /**
+   * Up to 4 members of the channel, oldest first. Empty when the channel is deleted
+   */
+  members: Array<ChannelMemberResponse>;
   /**
    * Channel image, from its custom data
    */
@@ -21871,6 +22296,10 @@ export interface ScheduledMessageContentResponse {
    * IDs of the users the message will be visible to
    */
   restricted_visibility?: Array<string>;
+  /**
+   * Represents any chat message
+   */
+  quoted_message?: MessageResponse;
   /**
    * The location a scheduled message will share
    */
@@ -22047,7 +22476,7 @@ export interface SearchAllChannelsSection {
    */
   next?: string;
   /**
-   * Channels the caller is a member of whose name starts with the query, in the same shape as the query channels endpoint's results but without messages or members
+   * Channels the caller is a member of whose name starts with the query, in the same shape as the query channels endpoint's results, without messages and with up to 4 members, oldest first. channel.member_count is the channel's total member count
    */
   channels?: Array<ChannelStateResponseFields>;
   error?: SearchAllSectionError;
@@ -22231,6 +22660,7 @@ export interface SearchResultMessage {
   mentioned_group_ids?: Array<string>;
   mentioned_groups?: Array<UserGroupResponse>;
   mentioned_roles?: Array<string>;
+  own_marks?: Array<OwnMarkResponse>;
   thread_participants?: Array<UserResponse>;
   /**
    * Represents channel in chat
@@ -22239,6 +22669,7 @@ export interface SearchResultMessage {
   draft?: DraftResponse;
   i18n?: Record<string, string>;
   image_labels?: Record<string, Array<string>>;
+  mark_groups?: Record<string, MarkGroupResponse>;
   member?: ChannelMemberPartialResponse;
   mentioned_channel_members?: Record<string, ChannelMemberPartialResponse>;
   moderation?: ModerationV2Response;
@@ -22355,10 +22786,10 @@ export interface SendCallEventResponse {
 export interface SendClosedCaptionRequest {
   speaker_id: string;
   text: string;
-  end_time?: Date;
+  end_time?: Date | string;
   language?: string;
   service?: string;
-  start_time?: Date;
+  start_time?: Date | string;
   translated?: boolean;
   user_id?: string;
   /**
@@ -22394,7 +22825,7 @@ export interface SendMessageRequest {
   /**
    * When set to a future time, the message is not sent now: it is stored and sent at that time (UTC), rounded up to the first whole minute that is at least 1 minute from now, never earlier than requested. The response then carries scheduled_message with the rounded time. Must be at most the app's maximum lead time (120 days by default) from now. A time that is now or in the past sends the message now as if scheduled_at was not set, unless the request's message ID belongs to a scheduled message that was canceled or already sent. Slash commands cannot be scheduled
    */
-  scheduled_at?: Date;
+  scheduled_at?: Date | string;
   skip_enrich_url?: boolean;
   skip_push?: boolean;
   pending_message_metadata?: Record<string, string>;
@@ -22592,7 +23023,7 @@ export interface SharedLocation {
   latitude: number;
   longitude: number;
   created_by_device_id?: string;
-  end_at?: Date;
+  end_at?: Date | string;
 }
 
 export interface SharedLocationResponse {
@@ -22794,8 +23225,8 @@ export interface SpeechSegmentConfig {
 }
 
 export interface StartCampaignRequest {
-  scheduled_for?: Date;
-  stop_at?: Date;
+  scheduled_for?: Date | string;
+  stop_at?: Date | string;
 }
 
 export interface StartCampaignResponse {
@@ -23835,6 +24266,13 @@ export interface TrackStatsResponse {
   track_type: string;
 }
 
+export interface TranscriptLanguageResponse {
+  /**
+   * Language code, e.g. en
+   */
+  code: string;
+}
+
 export type TranscriptionLanguage =
   | 'auto'
   | 'en'
@@ -24035,6 +24473,21 @@ export interface TranslationSettings {
   languages?: Array<string>;
 }
 
+export interface TrendingTopicResponse {
+  /**
+   * Whether an active promotion contains the tag
+   */
+  promoted: boolean;
+  /**
+   * The trend of the tag scaled by the user's interest in it
+   */
+  score: number;
+  /**
+   * The topic tag
+   */
+  tag: string;
+}
+
 export interface TriggeredRuleResponse {
   /**
    * ID of the moderation rule that triggered
@@ -24071,7 +24524,7 @@ export interface TruncateChannelRequest {
   /**
    * Truncate channel data up to `truncated_at`. The system message (if provided) creation time is always greater than `truncated_at`
    */
-  truncated_at?: Date;
+  truncated_at?: Date | string;
   user_id?: string;
   /**
    * List of member IDs to hide message history for. If empty, truncates the channel for all members
@@ -24332,6 +24785,10 @@ export interface UnpinResponse {
   duration: string;
 }
 
+export interface UnpromoteTopicsResponse {
+  duration: string;
+}
+
 export interface UnreadCountsBatchRequest {
   user_ids: Array<string>;
 }
@@ -24350,7 +24807,7 @@ export interface UnreadCountsChannel {
    */
   channel_id: string;
   /**
-   * Whether the channel has messages newer than the user's last read. Large channels have no unread_count and only report this.
+   * Whether the channel counts as unread for the user: it has messages newer than the user's last read, or the user marked it unread without a message (soft_unread). It is true for soft-unread channels even though unread_count is 0. Large channels have no unread_count and only report this.
    */
   has_unread: boolean;
   /**
@@ -24361,6 +24818,10 @@ export interface UnreadCountsChannel {
    * The number of unread messages inside the channel.
    */
   unread_count: number;
+  /**
+   * True when the user marked the channel unread without a message. unread_count stays 0, and the channel adds 1 to total_unread_count; clients should key off has_unread and this field rather than unread_count > 0.
+   */
+  soft_unread?: boolean;
 }
 
 export interface UnreadCountsChannelType {
@@ -24504,7 +24965,7 @@ export interface UpdateActivityRequest {
   /**
    * Time when the activity will expire
    */
-  expires_at?: Date;
+  expires_at?: Date | string;
   /**
    * If true, forces moderation to run for server-side requests. By default, server-side requests skip moderation. Client-side requests always run moderation regardless of this field.
    */
@@ -24635,7 +25096,7 @@ export interface UpdateAppRequest {
   /**
    * Revokes tokens issued before this date
    */
-  revoke_tokens_issued_before?: Date | null;
+  revoke_tokens_issued_before?: Date | string | null;
   sns_key?: string;
   sns_secret?: string;
   sns_topic_arn?: string;
@@ -24672,6 +25133,10 @@ export interface UpdateAppRequest {
   grants?: Record<string, Array<string>> | null;
   huawei_config?: HuaweiConfig;
   image_upload_config?: FileUploadConfig;
+  /**
+   * The app's message marks policy: the mark types it defines or overrides, and the privacy switch. The channel type's mark_types says which of them are on in its channels.
+   */
+  message_marks?: MessageMarksConfig;
   moderation_dashboard_preferences?: ModerationDashboardPreferences;
   push_config?: PushConfig;
   xiaomi_config?: XiaomiConfig;
@@ -24684,6 +25149,10 @@ export interface UpdateBlockListRequest {
   is_substring_matching_enabled?: boolean;
   team?: string;
   user_id?: string;
+  /**
+   * For regex block lists, reject any rule that matches 50% or more of a built-in sample dataset as too broad
+   */
+  validate?: boolean;
   /**
    * List of words to block
    */
@@ -24775,7 +25244,7 @@ export interface UpdateCallRequest {
   /**
    * the time the call is scheduled to start
    */
-  starts_at?: Date;
+  starts_at?: Date | string;
   /**
    * Custom data for this object
    */
@@ -24899,7 +25368,7 @@ export interface UpdateChannelRequest {
   /**
    * If set, hides channel's history before this time when adding new members. Takes precedence over `hide_history` when both are provided. Must be in RFC3339 format (e.g., "2024-01-01T10:00:00Z") and in the past.
    */
-  hide_history_before?: Date;
+  hide_history_before?: Date | string;
   /**
    * Set to `true` to reject the invite
    */
@@ -25013,12 +25482,14 @@ export interface UpdateChannelTypeRequest {
   uploads?: boolean;
   url_enrichment?: boolean;
   user_message_reminders?: boolean;
+  voice_transcription?: boolean;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
   /**
    * List of commands that channel supports
    */
   commands?: Array<string>;
+  mark_types?: Array<string>;
   permissions?: Array<PolicyRequest>;
   /**
    * Sets thresholds for AI moderation
@@ -25066,6 +25537,7 @@ export interface UpdateChannelTypeResponse {
   uploads: boolean;
   url_enrichment: boolean;
   user_message_reminders: boolean;
+  voice_transcription: boolean;
   commands: Array<string>;
   permissions: Array<PolicyRequest>;
   grants: Record<string, Array<string>>;
@@ -25082,6 +25554,7 @@ export interface UpdateChannelTypeResponse {
   push_level?: PushLevel;
   allowed_flag_reasons?: Array<string>;
   blocklists?: Array<BlockListOptions>;
+  mark_types?: Array<string>;
   /**
    * Sets thresholds for AI moderation
    */
@@ -25485,7 +25958,7 @@ export interface UpdateLiveLocationRequest {
   /**
    * Time when the live location expires
    */
-  end_at?: Date;
+  end_at?: Date | string;
   /**
    * Latitude coordinate
    */
@@ -25746,8 +26219,8 @@ export interface UpdateQueueRequest {
 }
 
 export interface UpdateReminderRequest {
-  expires_at?: Date;
-  remind_at?: Date;
+  expires_at?: Date | string;
+  remind_at?: Date | string;
   user_id?: string;
   /**
    * User request object
@@ -25841,7 +26314,7 @@ export interface UpdateScheduledActivityRequest {
   /**
    * When to publish the activity, an RFC 3339 time. A time less than a minute ahead or in the past is moved to one minute from now, and the time is rounded up to a whole minute.
    */
-  scheduled_at?: Date;
+  scheduled_at?: Date | string;
   activity?: ActivityRequest;
 }
 
@@ -25857,7 +26330,7 @@ export interface UpdateScheduledMessageRequest {
   /**
    * New send time (UTC). Must be in the future and at most the app's maximum lead time from now. Rounded up to the first whole minute that is at least 1 minute from now, never earlier than requested. Resending the stored time leaves it unchanged
    */
-  scheduled_at?: Date;
+  scheduled_at?: Date | string;
   /**
    * Message data for creating or updating a message
    */
@@ -26120,6 +26593,10 @@ export interface UpsertActivitiesRequest {
    */
   activities: Array<ActivityRequest>;
   /**
+   * Server-side only. If true, a missing feed whose id is not a user id (e.g. game:123) is created as a system feed with no user owner. Missing feeds named after an existing user are created either way. Built-in groups (such as user, timeline and notification) and notification groups still require a user. Default: false.
+   */
+  create_system_feeds?: boolean;
+  /**
    * Server-side only. If true, auto-creates users referenced by activity user_id values that don't already exist. Default: false.
    */
   create_users?: boolean;
@@ -26189,8 +26666,17 @@ export interface UpsertConfigRequest {
   ai_image_config?: AIImageConfig;
   ai_text_config?: AITextConfig;
   ai_video_config?: AIVideoConfigRequest;
+  /**
+   * @deprecated
+   */
   automod_platform_circumvention_config?: AutomodPlatformCircumventionConfig;
+  /**
+   * @deprecated
+   */
   automod_semantic_filters_config?: AutomodSemanticFiltersConfig;
+  /**
+   * @deprecated
+   */
   automod_toxicity_config?: AutomodToxicityConfig;
   aws_rekognition_config?: AIImageConfig;
   block_list_config?: BlockListConfig;
@@ -26777,7 +27263,7 @@ export interface UserIdenticalImageCountParameters {
 
 export interface UserInterestRequest {
   /**
-   * The interest tag; trimmed and lower-cased like activity interest_tags
+   * The interest tag; trimmed and lower-cased like activity interest_tags. Avoid commas: removing interests takes a comma-separated list, so a tag that contains a comma cannot be removed
    */
   tag: string;
   /**

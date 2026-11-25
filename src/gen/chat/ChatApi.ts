@@ -12,6 +12,10 @@ import {
   CreateChannelTypeResponse,
   CreateCommandRequest,
   CreateCommandResponse,
+  CreateDraftRequest,
+  CreateDraftResponse,
+  CreateMessageMarkRequest,
+  CreateMessageMarkResponse,
   CreatePredefinedFilterRequest,
   CreatePredefinedFilterResponse,
   CreateReminderRequest,
@@ -92,6 +96,8 @@ import {
   QueryMessageFlagsResponse,
   QueryMessageHistoryRequest,
   QueryMessageHistoryResponse,
+  QueryMessageMarksRequest,
+  QueryMessageMarksResponse,
   QueryPredefinedFiltersResponse,
   QueryReactionsRequest,
   QueryReactionsResponse,
@@ -522,6 +528,7 @@ export class ChatApi {
   ): Promise<StreamResponse<MarkReadResponse>> {
     const body = {
       user_id: request?.user_id,
+      filter_conditions: request?.filter_conditions,
       read_by_channel: request?.read_by_channel,
       user: request?.user,
     };
@@ -792,6 +799,30 @@ export class ChatApi {
     );
 
     decoders['GetDraftResponse']?.(response);
+
+    return response;
+  }
+
+  async createDraft(
+    request: CreateDraftRequest & { type: string; id: string },
+  ): Promise<StreamResponse<CreateDraftResponse>> {
+    const pathParams = {
+      type: request?.type,
+      id: request?.id,
+    };
+    const body = {
+      message: request?.message,
+    };
+
+    const response = await this.apiClient.sendRequest<CreateDraftResponse>(
+      'POST',
+      '/api/v2/chat/channels/{type}/{id}/draft',
+      pathParams,
+      undefined,
+      body,
+    );
+
+    decoders['CreateDraftResponse']?.(response);
 
     return response;
   }
@@ -1106,12 +1137,12 @@ export class ChatApi {
     id_gt?: string;
     id_lte?: string;
     id_lt?: string;
-    pinned_at_after_or_equal?: Date;
-    pinned_at_after?: Date;
-    pinned_at_before_or_equal?: Date;
-    pinned_at_before?: Date;
+    pinned_at_after_or_equal?: Date | string;
+    pinned_at_after?: Date | string;
+    pinned_at_before_or_equal?: Date | string;
+    pinned_at_before?: Date | string;
     id_around?: string;
-    pinned_at_around?: Date;
+    pinned_at_around?: Date | string;
     user_id?: string;
     sort?: Array<SortParamRequest>;
     member_custom_include?: Array<string>;
@@ -1369,8 +1400,10 @@ export class ChatApi {
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
       user_message_reminders: request?.user_message_reminders,
+      voice_transcription: request?.voice_transcription,
       blocklists: request?.blocklists,
       commands: request?.commands,
+      mark_types: request?.mark_types,
       permissions: request?.permissions,
       automod_thresholds: request?.automod_thresholds,
       chat_preferences: request?.chat_preferences,
@@ -1466,9 +1499,11 @@ export class ChatApi {
       uploads: request?.uploads,
       url_enrichment: request?.url_enrichment,
       user_message_reminders: request?.user_message_reminders,
+      voice_transcription: request?.voice_transcription,
       allowed_flag_reasons: request?.allowed_flag_reasons,
       blocklists: request?.blocklists,
       commands: request?.commands,
+      mark_types: request?.mark_types,
       permissions: request?.permissions,
       automod_thresholds: request?.automod_thresholds,
       chat_preferences: request?.chat_preferences,
@@ -1916,6 +1951,60 @@ export class ChatApi {
       );
 
     decoders['UpdateMessagePartialResponse']?.(response);
+
+    return response;
+  }
+
+  async createMessageMark(
+    request: CreateMessageMarkRequest & { id: string },
+  ): Promise<StreamResponse<CreateMessageMarkResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      type: request?.type,
+      user_id: request?.user_id,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<CreateMessageMarkResponse>(
+        'POST',
+        '/api/v2/chat/messages/{id}/marks',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['CreateMessageMarkResponse']?.(response);
+
+    return response;
+  }
+
+  async queryMessageMarks(
+    request: QueryMessageMarksRequest & { id: string },
+  ): Promise<StreamResponse<QueryMessageMarksResponse>> {
+    const pathParams = {
+      id: request?.id,
+    };
+    const body = {
+      limit: request?.limit,
+      next: request?.next,
+      user_id: request?.user_id,
+      filter: request?.filter,
+      user: request?.user,
+    };
+
+    const response =
+      await this.apiClient.sendRequest<QueryMessageMarksResponse>(
+        'POST',
+        '/api/v2/chat/messages/{id}/marks/query',
+        pathParams,
+        undefined,
+        body,
+      );
+
+    decoders['QueryMessageMarksResponse']?.(response);
 
     return response;
   }

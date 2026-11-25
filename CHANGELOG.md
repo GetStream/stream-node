@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.7](https://github.com/GetStream/stream-node/compare/v0.9.6...v0.9.7) (2026-11-25)
+
+
+### Features
+
+* **feeds:** add create_system_feeds to AddActivity and UpsertActivities ([#413](https://github.com/GetStream/stream-node/issues/413)) ([f3309c5](https://github.com/GetStream/stream-node/commit/f3309c57fdafd75abca98fcb9b850a621a38e4d6))
+* regenerate OpenAPI clients from chat v241.21.0 ([#410](https://github.com/GetStream/stream-node/issues/410)) ([e07dbb4](https://github.com/GetStream/stream-node/commit/e07dbb41d17d4e5aaa2e7f4c398916cbb023cbf9))
+
 ## [0.9.6](https://github.com/GetStream/stream-node/compare/v0.9.5...v0.9.6) (2026-11-19)
 
 
