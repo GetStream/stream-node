@@ -46,29 +46,85 @@ export class StreamCall extends CallApi {
     return response;
   };
 
+  /**
+   * Creates the SRT address an encoder (OBS, ffmpeg, ...) uses to publish into this call.
+   *
+   * The address embeds a user token that can only join this call and expires after
+   * `validity_in_seconds` (24 hours by default). The token is checked again whenever the
+   * stream reconnects, and at least every 6 hours during a stream, so it must stay valid until
+   * the stream ends. Treat the address as a secret.
+   *
+   * @param userID the user the encoder publishes as
+   * @param options.validity_in_seconds how long the address works, 24 hours by default
+   */
   createSRTCredentials = (
     userID: string,
-  ): {
-    address: string;
-  } => {
+    options?: { validity_in_seconds?: number },
+  ): SRTCredentials => {
     if (!this.data) {
       throw new Error(
         'Object is not initialized, call get() or getOrCreate() first',
       );
     }
 
-    const token = this.streamClient.generatePermanentUserToken({
+    const validity =
+      options?.validity_in_seconds ?? DEFAULT_SRT_TOKEN_VALIDITY_IN_SECONDS;
+    if (!Number.isFinite(validity) || validity <= 0) {
+      throw new Error('validity_in_seconds must be a positive number');
+    }
+
+    const iat = Math.floor((Date.now() - 1000) / 1000);
+    const exp = iat + Math.ceil(validity);
+    const token = this.streamClient.generateUserToken({
       user_id: userID,
+      iat,
+      exp,
+      scoped_call_cid: this.cid,
     });
     const segments = token.split('.');
     if (segments.length !== 3) {
       throw new Error('Invalid token format');
     }
 
-    return {
-      address: this.data.ingress.srt.address
-        .replace('{passphrase}', segments[2])
-        .replace('{token}', token),
+    const address = this.data.ingress.srt.address
+      .replace('{passphrase}', segments[2])
+      .replace('{token}', token);
+    const streamID = /[?&]streamid=([^&]*)/.exec(address)?.[1];
+    if (streamID && Buffer.byteLength(streamID) > MAX_SRT_STREAM_ID_BYTES) {
+      throw new Error(
+        `The SRT stream id is ${Buffer.byteLength(streamID)} bytes, over the ${MAX_SRT_STREAM_ID_BYTES}-byte SRT limit. Use a shorter user ID or call ID.`,
+      );
+    }
+
+    const credentials: SRTCredentials = {
+      address,
+      expires_at: new Date(exp * 1000),
     };
+    // Keep the address, which holds a user token, out of console.log and util.inspect output.
+    Object.defineProperty(
+      credentials,
+      Symbol.for('nodejs.util.inspect.custom'),
+      {
+        value: () => ({
+          address: '[redacted]',
+          expires_at: credentials.expires_at,
+        }),
+        enumerable: false,
+      },
+    );
+    return credentials;
   };
 }
+
+/** Default lifetime of the token in an SRT address: 24 hours. */
+const DEFAULT_SRT_TOKEN_VALIDITY_IN_SECONDS = 24 * 60 * 60;
+
+/** SRT caps the stream id at 512 bytes; encoders refuse a longer one. */
+const MAX_SRT_STREAM_ID_BYTES = 512;
+
+export type SRTCredentials = {
+  /** The SRT address for the encoder. It contains a user token, so keep it secret. */
+  address: string;
+  /** When the token in the address expires. */
+  expires_at: Date;
+};
