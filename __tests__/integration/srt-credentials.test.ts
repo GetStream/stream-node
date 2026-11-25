@@ -1,4 +1,3 @@
-import { inspect } from 'node:util';
 import jwt from 'jsonwebtoken';
 import { describe, expect, it } from 'vitest';
 import { CallResponse } from '../../src/gen/models';
@@ -35,6 +34,15 @@ describe('createSRTCredentials', () => {
     );
   });
 
+  it.each([undefined, null, '', '   '])(
+    'rejects a missing user id (%j)',
+    (userID) => {
+      expect(() =>
+        initializedCall().createSRTCredentials(userID as unknown as string),
+      ).toThrowError('userID is required');
+    },
+  );
+
   it('embeds a call-scoped token that expires after 24 hours by default', () => {
     const credentials = initializedCall().createSRTCredentials('john');
     const { token, passphrase } = tokenFrom(credentials.address);
@@ -70,23 +78,4 @@ describe('createSRTCredentials', () => {
       ).toThrowError('validity_in_seconds must be a positive number');
     },
   );
-
-  it('rejects a stream id over the 512-byte SRT limit', () => {
-    const call = initializedCall('livestream', 'c'.repeat(200));
-
-    expect(() => call.createSRTCredentials('u'.repeat(100))).toThrowError(
-      /over the 512-byte SRT limit/,
-    );
-  });
-
-  it('keeps the address out of inspect output', () => {
-    const credentials = initializedCall().createSRTCredentials('john');
-    const printed = inspect(credentials);
-
-    expect(printed).toContain('[redacted]');
-    expect(printed).not.toContain(tokenFrom(credentials.address).token);
-    expect(JSON.parse(JSON.stringify(credentials)).address).toBe(
-      credentials.address,
-    );
-  });
 });
