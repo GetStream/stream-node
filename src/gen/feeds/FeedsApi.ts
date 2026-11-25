@@ -222,6 +222,7 @@ export class FeedsApi {
       feeds: request?.feeds,
       copy_custom_to_notification: request?.copy_custom_to_notification,
       create_notification_activity: request?.create_notification_activity,
+      create_system_feeds: request?.create_system_feeds,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       expires_at: request?.expires_at,
@@ -266,6 +267,7 @@ export class FeedsApi {
   ): Promise<StreamResponse<UpsertActivitiesResponse>> {
     const body = {
       activities: request?.activities,
+      create_system_feeds: request?.create_system_feeds,
       create_users: request?.create_users,
       enrich_own_fields: request?.enrich_own_fields,
       force_moderation: request?.force_moderation,
