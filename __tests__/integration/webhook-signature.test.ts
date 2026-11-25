@@ -1,10 +1,26 @@
 import crypto from 'crypto';
 import { describe, expect, it } from 'vitest';
 import { StreamClient } from '../../src/StreamClient';
-import { verifySignature } from '../../src/utils/webhook';
+import {
+  InvalidWebhookError,
+  InvalidWebhookErrorMessages,
+  verifyAndParseWebhook,
+  verifySignature,
+} from '../../src/utils/webhook';
 
 describe('webhook signature empty secret & signature guards', () => {
   const payload = JSON.stringify({ type: 'message.new' });
+
+  it('reports a missing secret, not a signature mismatch, in verifyAndParseWebhook', () => {
+    const forged = crypto
+      .createHmac('sha256', Buffer.from('', 'utf8'))
+      .update(payload)
+      .digest('hex');
+
+    const verify = () => verifyAndParseWebhook(payload, forged, '');
+    expect(verify).toThrow(InvalidWebhookError);
+    expect(verify).toThrow(InvalidWebhookErrorMessages.missingSecret);
+  });
 
   it('rejects an empty secret even with a matching HMAC', () => {
     const forged = crypto

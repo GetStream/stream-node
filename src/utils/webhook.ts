@@ -14,6 +14,7 @@ export const InvalidWebhookErrorMessages = {
   invalidBase64: 'invalid base64 encoding',
   gzipFailed: 'gzip decompression failed',
   invalidJson: 'invalid JSON payload',
+  missingSecret: 'cannot verify webhook signature without an API secret',
 } as const;
 
 /**
@@ -146,6 +147,10 @@ function extractSnsMessage(notificationBody: string): string | null {
  * decoded a gzipped or base64-wrapped payload must pass the inflated
  * bytes here.
  *
+ * Always returns `false` when `secret` or `signature` is empty, even if
+ * the HMAC would otherwise match, so a missing secret can never be used
+ * to forge a valid signature.
+ *
  * The legacy `client.verifyWebhook` helper wraps this function, so
  * callers that have already migrated to `verifyAndParseWebhook`,
  * `parseSqs`, or `parseSns` rarely need to invoke this directly.
@@ -201,14 +206,17 @@ function verifyAndParse(
  * @param rawBody Raw HTTP request body bytes Stream signed
  * @param signature Value of the `X-Signature` header
  * @param secret Your app's API secret
- * @throws {InvalidWebhookError} When the signature does not match or
- *   the gzip / base64 / JSON envelope is malformed.
+ * @throws {InvalidWebhookError} When `secret` is empty, the signature
+ *   does not match, or the gzip / base64 / JSON envelope is malformed.
  */
 export function verifyAndParseWebhook(
   rawBody: string | Buffer,
   signature: string,
   secret: string,
 ): WHEvent {
+  if (!secret) {
+    throw new InvalidWebhookError(InvalidWebhookErrorMessages.missingSecret);
+  }
   return verifyAndParse(gunzipPayload(rawBody), signature, secret);
 }
 
