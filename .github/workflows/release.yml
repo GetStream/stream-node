@@ -25,7 +25,7 @@ jobs:
     environment: npm
     permissions:
       id-token: write # Required for OIDC
-      contents: write # required for committing the version bump
+      contents: read
     steps:
       - uses: actions/checkout@v7
         with:
