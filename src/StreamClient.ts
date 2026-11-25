@@ -22,7 +22,13 @@ import { StreamFeedsClient } from './StreamFeedsClient';
 import { File } from 'buffer';
 
 export interface StreamClientOptions {
+  /** The timeout for requests in milliseconds. The default is 3000. */
   timeout?: number;
+  /**
+   * The timeout for multipart (file and image) uploads in milliseconds.
+   * Defaults to the larger of `timeout` and 60000.
+   */
+  uploadTimeout?: number;
   basePath?: string;
   // We use unknown here because RequestInit['dispatcher'] is different between Node versions
   /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
@@ -59,6 +65,7 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: chatBaseUrl,
       timeout,
+      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
@@ -67,6 +74,7 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: videoBaseUrl,
       timeout,
+      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 
@@ -75,6 +83,7 @@ export class StreamClient extends CommonApi {
       token,
       baseUrl: feedsBaseUrl,
       timeout,
+      uploadTimeout: config?.uploadTimeout,
       agent: config?.agent as RequestInit['dispatcher'],
     });
 

@@ -4,11 +4,18 @@ import { APIError } from './gen/models';
 import { getRateLimitFromResponseHeader } from './utils/rate-limit';
 import { isScalar, stringifyArrayParam } from './utils/query-params';
 
+/** Default multipart upload timeout in milliseconds, see `ApiConfig.uploadTimeout`. */
+export const DEFAULT_UPLOAD_TIMEOUT = 60_000;
+
 export class ApiClient {
   private readonly dispatcher?: RequestInit['dispatcher'];
+  private readonly uploadTimeout: number;
 
   constructor(public readonly apiConfig: ApiConfig) {
     this.dispatcher = this.apiConfig.agent;
+    this.uploadTimeout =
+      this.apiConfig.uploadTimeout ??
+      Math.max(this.apiConfig.timeout, DEFAULT_UPLOAD_TIMEOUT);
   }
 
   /**
@@ -45,22 +52,24 @@ export class ApiClient {
       'x-client-request-id': clientRequestId,
     };
 
+    const isMultipart = requestContentType === 'multipart/form-data';
     // https://stackoverflow.com/questions/39280438/fetch-missing-boundary-in-multipart-form-data-post
-    if (requestContentType !== 'multipart/form-data') {
+    if (!isMultipart) {
       headers['Content-Type'] = requestContentType ?? 'application/json';
     }
 
-    const signal = AbortSignal.timeout(this.apiConfig.timeout);
+    // Uploads get their own, larger timeout so big files still go through,
+    // but never an unbounded one: a stalled upload must not hang forever.
+    const timeout = isMultipart ? this.uploadTimeout : this.apiConfig.timeout;
+    const signal = AbortSignal.timeout(timeout);
 
-    const encodedBody =
-      requestContentType === 'multipart/form-data'
-        ? this.multipartBodyStringify(body as Record<string, any>)
-        : JSON.stringify(body);
+    const encodedBody = isMultipart
+      ? this.multipartBodyStringify(body as Record<string, any>)
+      : JSON.stringify(body);
 
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
-        signal:
-          requestContentType === 'multipart/form-data' ? undefined : signal,
+        signal,
         method,
         body: encodedBody,
         headers,
@@ -109,7 +118,7 @@ export class ApiClient {
       };
       if (error.name === 'AbortError' || error.name === 'TimeoutError') {
         throw new StreamError(
-          `The request was aborted due to to the ${this.apiConfig.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
+          `The request was aborted due to to the ${timeout}ms timeout, you can set the ${isMultipart ? 'uploadTimeout' : 'timeout'} in the StreamClient constructor`,
           metadata,
           undefined,
           { cause: error },

@@ -8,6 +8,11 @@ export interface ApiConfig {
   baseUrl: string;
   /** The timeout for requests in milliseconds. The default is 3000. */
   timeout: number;
+  /**
+   * The timeout for multipart (file and image) uploads in milliseconds.
+   * Defaults to the larger of `timeout` and 60000.
+   */
+  uploadTimeout?: number;
   agent?: RequestInit['dispatcher'];
   secret?: string;
 }
