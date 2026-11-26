@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.8](https://github.com/GetStream/stream-node/compare/v0.9.7...v0.9.8) (2026-11-26)
+
+
+### Bug Fixes
+
+* **http:** reject empty and dot-segment path parameters ([#407](https://github.com/GetStream/stream-node/issues/407)) ([82aac97](https://github.com/GetStream/stream-node/commit/82aac97181dbf825ecfb38397dc7876c99eff51b))
+* **security:** drop unused release write permission and scope CI secrets [SEC-2544] ([#414](https://github.com/GetStream/stream-node/issues/414)) ([4f3b2df](https://github.com/GetStream/stream-node/commit/4f3b2df31283dae1d0fe172227db6fd816f2a782))
+* **security:** keep response metadata on timeout errors, document upload timeouts [SEC-2535] ([#416](https://github.com/GetStream/stream-node/issues/416)) ([055157c](https://github.com/GetStream/stream-node/commit/055157ca86c28cc75f11107f294c352884bb2f9a))
+* **security:** keep the postinstall hook out of the published package [SEC-2534] ([#415](https://github.com/GetStream/stream-node/issues/415)) ([40540ac](https://github.com/GetStream/stream-node/commit/40540ac749f884b509a9e7b3a84dd6bf58f0e261))
+* **security:** reject reserved claims in user tokens [SEC-2525] ([#418](https://github.com/GetStream/stream-node/issues/418)) ([d063d6a](https://github.com/GetStream/stream-node/commit/d063d6abc94b93fed401fdbf345ee695af3f9e76))
+* **security:** scope and expire SRT ingest tokens [SEC-2523] ([#417](https://github.com/GetStream/stream-node/issues/417)) ([d561699](https://github.com/GetStream/stream-node/commit/d5616991e0e5a2d797da98a35dd662bd23484dbf))
+* **webhook:** reject empty secret or signature in HMAC verification ([#408](https://github.com/GetStream/stream-node/issues/408)) ([95da730](https://github.com/GetStream/stream-node/commit/95da7304bd105356761acc5c0b87a0dddc6271ff))
+
 ## [0.9.7](https://github.com/GetStream/stream-node/compare/v0.9.6...v0.9.7) (2026-11-25)
 
 
