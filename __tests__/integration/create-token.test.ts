@@ -108,6 +108,30 @@ describe('creating tokens', () => {
       expect(decodedToken.iat).toBe(iat);
       expect(decodedToken.exp).toBeDefined();
     });
+
+    it('should reject an empty or missing user_id', () => {
+      expect(() => client.generateUserToken({ user_id: '' })).toThrow(
+        /user_id/,
+      );
+      expect(() =>
+        client.generateUserToken({ user_id: undefined as any }),
+      ).toThrow(/user_id/);
+      expect(() => client.generatePermanentUserToken({ user_id: '' })).toThrow(
+        /user_id/,
+      );
+      expect(() => client.createToken('')).toThrow(/user_id/);
+    });
+
+    it('should reject a server claim', () => {
+      for (const server of [true, false]) {
+        expect(() =>
+          client.generateUserToken({ user_id: userId, server }),
+        ).toThrow(/server/);
+        expect(() =>
+          client.generatePermanentUserToken({ user_id: userId, server }),
+        ).toThrow(/server/);
+      }
+    });
   });
 
   describe('call token', () => {
@@ -203,6 +227,16 @@ describe('creating tokens', () => {
 
       expect(decodedToken.iat).toBe(iat);
       expect(decodedToken.exp).toBeDefined();
+    });
+
+    it('should reject an empty user_id or a server claim', () => {
+      expect(() =>
+        client.generateCallToken({ user_id: '', call_cids }),
+      ).toThrow(/user_id/);
+      expect(() =>
+        client.generateCallToken({ user_id: userId, call_cids, server: true }),
+      ).toThrow(/server/);
+      expect(() => client.createCallToken('', call_cids)).toThrow(/user_id/);
     });
   });
 });

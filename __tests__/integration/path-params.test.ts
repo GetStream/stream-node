@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiClient } from '../../src/ApiClient';
+import { StreamError } from '../../src/types';
 
 const createApiClient = () =>
   new ApiClient({
@@ -71,4 +72,26 @@ describe('path param serialization', () => {
       '/api/v2/moderation/config/chat%3Amessaging/versions/3',
     );
   });
+
+  it.each([
+    '',
+    '.',
+    '..',
+    undefined as unknown as string,
+    null as unknown as string,
+  ])(
+    'rejects empty, missing or dot-segment path parameter %j',
+    async (badValue) => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch');
+
+      const request = createApiClient().sendRequest(
+        'GET',
+        '/api/v2/chat/messages/{id}',
+        { id: badValue },
+      );
+      await expect(request).rejects.toBeInstanceOf(StreamError);
+      await expect(request).rejects.toThrow("Invalid path parameter 'id'");
+      expect(fetchSpy).not.toHaveBeenCalled();
+    },
+  );
 });

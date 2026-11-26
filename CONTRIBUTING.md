@@ -10,6 +10,16 @@ We welcome code changes that improve this library or fix a problem, please make 
 $ yarn install
 ```
 
+### Install the git hooks
+
+The pre-commit hook formats staged files with Prettier. Install it once per clone:
+
+```shell
+$ yarn husky
+```
+
+The package declares no `postinstall` script, so installing dependencies does not set up the hooks.
+
 ### Run tests
 
 ```shell

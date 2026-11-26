@@ -28,10 +28,18 @@ export class ApiClient {
     const encodedParams = this.queryParamsStringify(queryParams);
     if (pathParams) {
       Object.keys(pathParams).forEach((paramName) => {
-        url = url.replace(
-          `{${paramName}}`,
-          encodeURIComponent(pathParams[paramName]),
-        );
+        const value: unknown = pathParams[paramName];
+        const rawValue =
+          typeof value === 'string' || typeof value === 'number'
+            ? String(value)
+            : '';
+        if (rawValue === '' || rawValue === '.' || rawValue === '..') {
+          throw new StreamError(
+            `Invalid path parameter '${paramName}': must not be empty or a dot-segment`,
+            {},
+          );
+        }
+        url = url.replace(`{${paramName}}`, encodeURIComponent(rawValue));
       });
     }
 
@@ -45,22 +53,27 @@ export class ApiClient {
       'x-client-request-id': clientRequestId,
     };
 
+    const isMultipart = requestContentType === 'multipart/form-data';
     // https://stackoverflow.com/questions/39280438/fetch-missing-boundary-in-multipart-form-data-post
-    if (requestContentType !== 'multipart/form-data') {
+    if (!isMultipart) {
       headers['Content-Type'] = requestContentType ?? 'application/json';
     }
 
-    const signal = AbortSignal.timeout(this.apiConfig.timeout);
+    // Uploads are bounded by the agent's timeouts, see `StreamClientOptions.timeout`.
+    const signal = isMultipart
+      ? undefined
+      : AbortSignal.timeout(this.apiConfig.timeout);
 
-    const encodedBody =
-      requestContentType === 'multipart/form-data'
-        ? this.multipartBodyStringify(body as Record<string, any>)
-        : JSON.stringify(body);
+    const encodedBody = isMultipart
+      ? this.multipartBodyStringify(body as Record<string, any>)
+      : JSON.stringify(body);
+
+    // Set once headers arrive, so later errors keep the response status.
+    let metadata: RequestMetadata | undefined;
 
     try {
       const response = await fetch(`${this.apiConfig.baseUrl}${url}`, {
-        signal:
-          requestContentType === 'multipart/form-data' ? undefined : signal,
+        signal,
         method,
         body: encodedBody,
         headers,
@@ -69,7 +82,7 @@ export class ApiClient {
 
       const responseHeaders = response.headers;
 
-      const metadata: RequestMetadata = {
+      metadata = {
         clientRequestId,
         responseHeaders,
         responseCode: response.status,
@@ -80,11 +93,14 @@ export class ApiClient {
         let error: APIError;
         try {
           error = (await response.json()) as APIError;
-        } catch {
+        } catch (bodyError: any) {
+          // Report a timeout while reading the body as a timeout.
+          if (isAbortError(bodyError)) throw bodyError;
           throw new StreamError(
             `Stream error: ${response.status} - ${response.statusText}`,
             metadata,
             response.status,
+            { cause: bodyError },
           );
         }
         throw new StreamError(
@@ -103,21 +119,21 @@ export class ApiClient {
       if (error instanceof StreamError) {
         throw error;
       }
-      const metadata: Partial<RequestMetadata> = {
+      const errorMetadata: Partial<RequestMetadata> = metadata ?? {
         clientRequestId,
         responseCode: error.status,
       };
-      if (error.name === 'AbortError' || error.name === 'TimeoutError') {
+      if (isAbortError(error)) {
         throw new StreamError(
           `The request was aborted due to to the ${this.apiConfig.timeout}ms timeout, you can set the timeout in the StreamClient constructor`,
-          metadata,
+          errorMetadata,
           undefined,
           { cause: error },
         );
       } else {
         throw new StreamError(
           `The request failed due to an unexpected error`,
-          metadata,
+          errorMetadata,
           undefined,
           { cause: error },
         );
@@ -163,3 +179,7 @@ export class ApiClient {
     return newParams.join('&');
   };
 }
+
+const isAbortError = (error: unknown) =>
+  error instanceof Error &&
+  (error.name === 'AbortError' || error.name === 'TimeoutError');

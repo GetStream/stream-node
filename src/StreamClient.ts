@@ -4,10 +4,10 @@ import {
   parseSns as parseSnsHelper,
   parseSqs as parseSqsHelper,
   verifyAndParseWebhook as verifyAndParseWebhookHelper,
+  verifySignature,
 } from './utils/webhook';
 import { CommonApi } from './gen/common/CommonApi';
 import { StreamVideoClient } from './StreamVideoClient';
-import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import {
@@ -22,10 +22,18 @@ import { StreamFeedsClient } from './StreamFeedsClient';
 import { File } from 'buffer';
 
 export interface StreamClientOptions {
+  /**
+   * The timeout for requests in milliseconds. The default is 3000.
+   * File and image uploads are bounded by the `agent`'s timeouts instead
+   * (undici's `headersTimeout` and `bodyTimeout`, 300000 by default).
+   */
   timeout?: number;
   basePath?: string;
   // We use unknown here because RequestInit['dispatcher'] is different between Node versions
-  /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
+  /**
+   * The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use.
+   * Its timeouts also apply to uploads.
+   */
   agent?: unknown;
 }
 
@@ -124,6 +132,9 @@ export class StreamClient extends CommonApi {
    * - validity_in_seconds - how many seconds is the token valid for (starting from issued at), by default it's 1 hour, dicarded if exp is provided
    * - exp - when the token expires, unix timestamp in seconds
    * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
+   *
+   * Any other property is added to the token as a custom claim. `user_id` must be a
+   * non-empty string and the reserved `server` claim is rejected.
    */
   generateUserToken = (
     payload: {
@@ -244,17 +255,7 @@ export class StreamClient extends CommonApi {
   };
 
   verifyWebhook = (requestBody: string | Buffer, xSignature: string) => {
-    const key = Buffer.from(this.secret, 'utf8');
-    const hash = crypto
-      .createHmac('sha256', key)
-      .update(requestBody)
-      .digest('hex');
-
-    try {
-      return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(xSignature));
-    } catch {
-      return false;
-    }
+    return verifySignature(requestBody, xSignature, this.secret);
   };
 
   /**
