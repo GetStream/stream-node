@@ -863,8 +863,8 @@ export class VideoApi {
     session: string;
     user: string;
     user_session: string;
-    since?: Date;
-    until?: Date;
+    since?: Date | string;
+    until?: Date | string;
   }): Promise<StreamResponse<GetCallParticipantSessionMetricsResponse>> {
     const queryParams = {
       since: request?.since,
@@ -1351,8 +1351,8 @@ export class VideoApi {
     call_type: string;
     call_id: string;
     session: string;
-    start_time?: Date;
-    end_time?: Date;
+    start_time?: Date | string;
+    end_time?: Date | string;
     exclude_publishers?: boolean;
     exclude_subscribers?: boolean;
     exclude_sfus?: boolean;

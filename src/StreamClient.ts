@@ -4,10 +4,10 @@ import {
   parseSns as parseSnsHelper,
   parseSqs as parseSqsHelper,
   verifyAndParseWebhook as verifyAndParseWebhookHelper,
+  verifySignature,
 } from './utils/webhook';
 import { CommonApi } from './gen/common/CommonApi';
 import { StreamVideoClient } from './StreamVideoClient';
-import crypto from 'crypto';
 import { StreamChatClient } from './StreamChatClient';
 import { CallTokenPayload, UserTokenPayload } from './types';
 import {
@@ -244,17 +244,7 @@ export class StreamClient extends CommonApi {
   };
 
   verifyWebhook = (requestBody: string | Buffer, xSignature: string) => {
-    const key = Buffer.from(this.secret, 'utf8');
-    const hash = crypto
-      .createHmac('sha256', key)
-      .update(requestBody)
-      .digest('hex');
-
-    try {
-      return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(xSignature));
-    } catch {
-      return false;
-    }
+    return verifySignature(requestBody, xSignature, this.secret);
   };
 
   /**

@@ -407,6 +407,7 @@ export class ModerationApi {
     request?: QueryAppealsRequest,
   ): Promise<StreamResponse<QueryAppealsResponse>> {
     const body = {
+      include_count: request?.include_count,
       limit: request?.limit,
       next: request?.next,
       prev: request?.prev,
