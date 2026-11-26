@@ -54,6 +54,7 @@ import {
   GetBlockedUsersResponse,
   GetCustomPermissionResponse,
   GetExternalStorageResponse,
+  GetHookEventsResponse,
   GetImportResponse,
   GetImportV2TaskResponse,
   GetOGResponse,
@@ -209,6 +210,7 @@ export class CommonApi {
       grants: request?.grants,
       huawei_config: request?.huawei_config,
       image_upload_config: request?.image_upload_config,
+      message_marks: request?.message_marks,
       moderation_dashboard_preferences:
         request?.moderation_dashboard_preferences,
       push_config: request?.push_config,
@@ -264,6 +266,7 @@ export class CommonApi {
       team: request?.team,
       type: request?.type,
       user_id: request?.user_id,
+      validate: request?.validate,
       user: request?.user,
     };
 
@@ -365,6 +368,7 @@ export class CommonApi {
       is_substring_matching_enabled: request?.is_substring_matching_enabled,
       team: request?.team,
       user_id: request?.user_id,
+      validate: request?.validate,
       words: request?.words,
       user: request?.user,
     };
@@ -692,6 +696,25 @@ export class CommonApi {
     );
 
     decoders['CreateGuestResponse']?.(response);
+
+    return response;
+  }
+
+  async getHookEvents(request?: {
+    product?: Array<string>;
+  }): Promise<StreamResponse<GetHookEventsResponse>> {
+    const queryParams = {
+      product: request?.product,
+    };
+
+    const response = await this.apiClient.sendRequest<GetHookEventsResponse>(
+      'GET',
+      '/api/v2/hook/events',
+      undefined,
+      queryParams,
+    );
+
+    decoders['GetHookEventsResponse']?.(response);
 
     return response;
   }
@@ -1982,9 +2005,13 @@ export class CommonApi {
 
   async getBlockedUsers(request?: {
     user_id?: string;
+    limit?: number;
+    next?: string;
   }): Promise<StreamResponse<GetBlockedUsersResponse>> {
     const queryParams = {
       user_id: request?.user_id,
+      limit: request?.limit,
+      next: request?.next,
     };
 
     const response = await this.apiClient.sendRequest<GetBlockedUsersResponse>(
@@ -2077,6 +2104,7 @@ export class CommonApi {
       new_call_owner_id: request?.new_call_owner_id,
       new_channel_owner_id: request?.new_channel_owner_id,
       user: request?.user,
+      exclude_channel_cids: request?.exclude_channel_cids,
     };
 
     const response = await this.apiClient.sendRequest<DeleteUsersResponse>(
