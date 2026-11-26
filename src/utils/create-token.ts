@@ -16,6 +16,17 @@ export function JWTUserToken(
     );
   }
 
+  // The backend treats a token without a user_id as a server token, so an
+  // empty user_id would mint a token with full API access.
+  if (typeof payload.user_id !== 'string' || payload.user_id === '') {
+    throw new Error('user_id is required and must be a non-empty string');
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, 'server')) {
+    throw new Error(
+      'The "server" claim is reserved and cannot be set on a user token',
+    );
+  }
+
   const opts: SignOptions = {
     algorithm: 'HS256',
     noTimestamp: true,
