@@ -22,10 +22,18 @@ import { StreamFeedsClient } from './StreamFeedsClient';
 import { File } from 'buffer';
 
 export interface StreamClientOptions {
+  /**
+   * The timeout for requests in milliseconds. The default is 3000.
+   * File and image uploads are bounded by the `agent`'s timeouts instead
+   * (undici's `headersTimeout` and `bodyTimeout`, 300000 by default).
+   */
   timeout?: number;
   basePath?: string;
   // We use unknown here because RequestInit['dispatcher'] is different between Node versions
-  /** The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use. */
+  /**
+   * The [HTTP Agent](https://undici.nodejs.org/#/docs/api/Agent.md) to use.
+   * Its timeouts also apply to uploads.
+   */
   agent?: unknown;
 }
 

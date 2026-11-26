@@ -6,7 +6,9 @@ export interface ApiConfig {
   apiKey: string;
   token: string;
   baseUrl: string;
-  /** The timeout for requests in milliseconds. The default is 3000. */
+  /**
+   * The timeout for requests in milliseconds, see `StreamClientOptions.timeout`.
+   */
   timeout: number;
   agent?: RequestInit['dispatcher'];
   secret?: string;
