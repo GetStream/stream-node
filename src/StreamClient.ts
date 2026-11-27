@@ -134,7 +134,10 @@ export class StreamClient extends CommonApi {
    * - iat - issued at date of the token, unix timestamp in seconds, by default it's now
    *
    * Any other property is added to the token as a custom claim. `user_id` must be a
-   * non-empty string and the reserved `server` claim is rejected.
+   * non-empty string, and `iat` a positive unix timestamp that is not in the future.
+   * The reserved `server` and `egress` claims are rejected, as is any other spelling
+   * (such as `User_ID`) of a claim the backend reads, since the backend matches
+   * claim names case-insensitively.
    */
   generateUserToken = (
     payload: {

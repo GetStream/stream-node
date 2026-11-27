@@ -2,6 +2,7 @@ import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { StreamClient } from '../../src/StreamClient';
+import { JWTUserToken } from '../../src/utils/create-token';
 import { createTestClient } from './create-test-client';
 
 const secret = process.env.STREAM_SECRET!;
@@ -101,7 +102,7 @@ describe('creating tokens', () => {
     });
 
     it('with iat provided', () => {
-      const iat = Math.round(new Date().getTime() / 1000) + 60 * 60;
+      const iat = Math.round(new Date().getTime() / 1000) - 60;
       const token = client.generateUserToken({ user_id: userId, iat });
       const decodedToken = jwt.verify(token, secret) as any;
 
@@ -131,6 +132,83 @@ describe('creating tokens', () => {
           client.generatePermanentUserToken({ user_id: userId, server }),
         ).toThrow(/server/);
       }
+    });
+
+    it('should reject an egress claim', () => {
+      expect(() =>
+        client.generateUserToken({ user_id: userId, egress: true }),
+      ).toThrow(/egress/);
+    });
+
+    it('should reject other spellings of claims the backend reads', () => {
+      // The backend's JSON decoder matches claim names case-insensitively,
+      // including the Kelvin sign (folds to k) and the long s (folds to s).
+      for (const key of [
+        'User_ID',
+        'USER_ID',
+        'u\u017Fer_id',
+        'Server',
+        'EGRESS',
+        'egre\u017F\u017F',
+        'IAT',
+        'Exp',
+        'Call_CIDs',
+        'ROLE',
+        'stream_chec\u212A_writes',
+      ]) {
+        expect(
+          () => client.generateUserToken({ user_id: userId, [key]: '' }),
+          key,
+        ).toThrow(/read by the backend/);
+      }
+    });
+
+    it('should reject a missing, zero or future iat', () => {
+      const now = Math.floor(Date.now() / 1000);
+      for (const iat of [0, -1, 1.5, now + 60 * 60]) {
+        expect(
+          () => client.generateUserToken({ user_id: userId, iat }),
+          String(iat),
+        ).toThrow(/iat/);
+      }
+      expect(() => client.createToken(userId, now + 3600, 0)).toThrow(/iat/);
+      expect(() => JWTUserToken(secret, { user_id: userId } as any)).toThrow(
+        /iat/,
+      );
+    });
+
+    it('should reject serialization hooks on the payload', () => {
+      expect(() =>
+        client.generateUserToken({
+          user_id: userId,
+          toJSON: () => ({ server: true }),
+        }),
+      ).toThrow(/toJSON/);
+      expect(() =>
+        client.generateUserToken(
+          JSON.parse(`{"user_id":"${userId}","__proto__":{"server":true}}`),
+        ),
+      ).toThrow(/__proto__/);
+    });
+
+    it('should sign the claims it checked', () => {
+      // A getter could return a valid user_id when checked and an empty one
+      // when the payload is serialized for signing.
+      let reads = 0;
+      const payload = {
+        get user_id() {
+          return reads++ === 0 ? userId : '';
+        },
+        iat: Math.floor(Date.now() / 1000) - 1,
+        role: 'user',
+      };
+      const token = JWTUserToken(secret, payload);
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      expect(decodedToken.user_id).toBe(userId);
+      expect(decodedToken.role).toBe('user');
+      expect(decodedToken).not.toHaveProperty('server');
+      expect(reads).toBe(1);
     });
   });
 
@@ -217,7 +295,7 @@ describe('creating tokens', () => {
     });
 
     it('with iat provided', () => {
-      const iat = Math.round(new Date().getTime() / 1000) + 60 * 60;
+      const iat = Math.round(new Date().getTime() / 1000) - 60;
       const token = client.generateCallToken({
         user_id: userId,
         call_cids,
